@@ -1,5 +1,5 @@
 .introjs-overlay {
-  position: absolute;
+  position: fixed;
   z-index: 999999;
   background-color:rgb(0, 0, 0);
   opacity: 0;
