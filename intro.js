@@ -77,8 +77,8 @@
             //right arrow
             _nextStep.call(self);
           }
-        };
-      }
+        }
+      };
     }
     return false;
   }
@@ -111,8 +111,9 @@
    * @method _nextStep
    */
   function _previousStep() {
-    if(this._currentStep == 0)
+    if(this._currentStep == 0){
       return;
+    }
 
     _showElement.call(this, this._introItems[--this._currentStep].element);
   }
@@ -158,13 +159,14 @@
         tooltipLayer.style.right = "-" + (tooltipLayerPosition.width + 10) + "px";
         arrowLayer.className = 'introjs-arrow left';
         break;
-      case 'bottom':
-        tooltipLayer.style.bottom = "-" + (tooltipLayerPosition.height + 10) + "px";
-        arrowLayer.className = 'introjs-arrow top';
-        break;
       case 'left':
         tooltipLayer.style.left = "-" + (tooltipLayerPosition.width + 10) + "px";
         arrowLayer.className = 'introjs-arrow right';
+        break;
+      case 'bottom':
+      default:
+        tooltipLayer.style.bottom = "-" + (tooltipLayerPosition.height + 10) + "px";
+        arrowLayer.className = 'introjs-arrow top';
         break;
     }
   }
