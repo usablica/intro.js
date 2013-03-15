@@ -8,6 +8,10 @@ Intro.js can be added to your site in three simple steps:
 
 **1)** Include `intro.js` and `introjs.css` (or the minified version for production) in your page.
 
+**Rails**
+
+If you are using the rails asset pipeline you can use the [introjs-rails](https://github.com/heelhook/intro.js-rails) gem.
+
 **2)** Add `data-intro` and `data-step` to your HTML elements.  
 For example: 
 ```html
