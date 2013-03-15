@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Intro.js | A better way for new feature introduction and step-by-step users guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Intro.js - A better way for new feature introduction and step-by-step users guide for your website and project.">
+    <meta name="author" content="Afshin Mehrabani (@afshinmeh) in usabli.ca group">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- Add IntroJs style -->
+    <link href="minified/introjs.min.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        font-family: "Myriad Pro", Verdana, Arial, Tahoma;
+        padding-bottom: 40px;
+      }
+
+      /* Custom container */
+      .container-narrow {
+        margin: 0 auto;
+        max-width: 700px;
+      }
+      .container-narrow > hr {
+        margin: 30px 0;
+      }
+
+      /* Main marketing message and sign up button */
+      .jumbotron {
+        margin: 60px 0;
+        text-align: center;
+      }
+      .jumbotron h1 {
+        font-size: 72px;
+        line-height: 1;
+      }
+      .jumbotron .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+      }
+
+      /* Supporting marketing content */
+      .marketing {
+        margin: 60px 0;
+      }
+      .marketing p + h4 {
+        margin-top: 28px;
+      }
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <div class="container-narrow">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right" data-step="5" data-intro="Get it, use it.">
+          <li><a href="https://github.com/usablica/intro.js"><i class='icon-black icon-download-alt'></i> Download</a></li>
+          <li><a href="https://github.com/usablica/intro.js">Github</a></li>
+          <li><a href="https://twitter.com/usablica">@usablica</a></li>
+        </ul>
+        <h3 class="muted">Intro.js</h3>
+      </div>
+
+      <hr>
+
+      <div class="jumbotron">
+        <h1 data-step="1" data-intro="Hello all! :) This is the name of project, IntroJs.">Intro<span style="font-weight: normal;">.js</span></h1>
+        <p class="lead" data-step="4" data-intro="Let's try it. It's free and open-source.">A better way for new feature introduction and step-by-step users guide for your website and project.</p>
+        <a class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:introJs().start();">Show me how</a>
+      </div>
+
+      <hr>
+
+      <div class="row-fluid marketing">
+        <div class="span6" data-step="2" data-intro="Ok, wasn't that fun?">
+          <h4>Easy to Use</h4>
+          <p>Just include the js and css files and add <code>data-step</code> and <code>data-intro</code> to your code.</p>
+
+          <h4>Fast & Small</h4>
+          <p><strong>4 KB</strong> JavaScript and <strong>2 KB</strong> CSS. That's all.</p>
+
+          <h4>Free & Open-Source</h4>
+          <p>Free and open-source to commercial use. Published under MIT license.</p>
+        </div>
+
+        <div class="span6" data-step="3" data-intro="More features, more fun.">
+          <h4>Keyboard + Mouse navigating</h4>
+          <p>Ability to navigating with Mouse and Keyboard arrows, <code>←</code>, <code>→</code> and <code>ESC</code> to exit.</p>
+
+          <h4>Browsers Compatibllity</h4>
+          <p>Currently for Modern Browsers only, but I'll try to make it compatible for old browsers also in next versions.</p>
+
+          <h4>Developed with <3</h4>
+          <p>With <3 in <a href='http://usabli.ca/' target="_blank" title="usabli.ca group">usabli.ca</a>, Tehran.</p>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="footer">
+        <p>&copy; <a href='http://usabli.ca/' target="_blank" title="usabli.ca group">usabli.ca</a> 2013 - A weekend project by <a href="http://afshinm.name/" target="_blank">Afshin Mehrabani</a></p>
+      </div>
+
+    </div>
+    <script type="text/javascript" src="minified/intro.min.js"></script>
+  </body>
+</html>
