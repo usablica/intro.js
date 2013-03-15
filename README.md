@@ -1,12 +1,12 @@
 Intro.js
 ========
 
-A better way for new feature introduction and step-by-step users guide for your website and project.
+Better introductions for websites and features with a step-by-step guide for your projects.
 
 ##How to use
-Simple 3 steps.
+Intro.js can be added to your site in three simple steps:
 
-**1)** Include `intro.js` and `introjs.css` (or minified version for production) in your page.
+**1)** Include `intro.js` and `introjs.css` (or the minified version for production) in your page.
 
 **2)** Add `data-intro` and `data-step` to your HTML elements.  
 For example: 
@@ -19,13 +19,14 @@ For example:
 introJs().start();
 ````
  
-Also you can pass one parameter to `introJs` function to limit the presentation section, for example `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
+Optionally, pass one parameter to `introJs` function to limit the presentation section, for example `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
 
 ##Roadmap
-- Browsers compatibility
+- More browser compatibility
 
 ##Contributors
 - [Afshin Mehrabani](http://afshinm.name/)  
+- [@voltagex](http://github.com/voltagex)
 
 ##License
 
