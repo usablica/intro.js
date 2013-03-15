@@ -1,0 +1,88 @@
+.introjs-overlay {
+  position: absolute;
+  z-index: 999999;
+  background-color:rgb(0, 0, 0);
+  opacity: 0;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  -ms-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+.introjs-showElement {
+  z-index: 9999999;
+  position: relative;
+}
+.introjs-helperLayer {
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 9999998;
+  position: absolute;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 2px 15px rgba(0,0,0,0.4);
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  -ms-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+.introjs-helperNumberLayer {
+  z-index: 9999999999 !important;
+  padding: 2px;
+  background: #ff3019; /* Old browsers */
+  background: -moz-linear-gradient(top, #ff3019 0%, #cf0404 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff3019), color-stop(100%,#cf0404)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #ff3019 0%,#cf0404 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3019', endColorstr='#cf0404',GradientType=0 ); /* IE6-9 */  color: white;
+  position: absolute;
+  border-radius: 50%;
+  font-family: Arial, verdana, tahoma;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: center;
+  width: 20px;
+  border: 3px solid white;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.4);
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+  left: -16px;
+  top: -16px;
+}
+.introjs-tooltip:before {
+  border: 5px solid white;
+	content:'';
+	border-top-color:transparent;
+	border-right-color:transparent;
+	border-bottom-color:white;
+	border-left-color:transparent;
+	position: absolute;
+	top: -10px;
+
+}
+.introjs-tooltip {
+  position: absolute;
+  padding: 10px;
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: 0px 1px 10px rgba(0,0,0,0.4);
+  -webkit-transition: all 0.1s ease-out;
+  -moz-transition: all 0.1s ease-out;
+  -o-transition: all 0.1s ease-out;
+  -ms-transition: all 0.1s ease-out;
+  transition: all 0.1s ease-out;
+}
+.introjs-tooltipbuttons {
+  font-size: 10px;
+  text-align: right;
+}
+.introjs-tooltipbuttons .introjs-skipbutton {
+  margin-right: 5px;
+  color: gray;
+}
+.introjs-tooltipbuttons .introjs-nextbutton {
+  font-weight: bold;
+  color: #2071d3;
+  font-size: 11px;
+}
