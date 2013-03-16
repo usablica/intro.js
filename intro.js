@@ -6,7 +6,7 @@
  * Copyright (C) 2013 usabli.ca - A weekend project by Afshin Mehrabani (@afshinmeh)
  */ 
 
-(function () {
+(function (doc) {
 
   //Default config/variables
   var VERSION = "0.1.0";
@@ -135,7 +135,7 @@
     var helperLayer = targetElement.querySelector(".introjs-helperLayer");
     helperLayer.parentNode.removeChild(helperLayer);
     //remove `introjs-showElement` class from the element
-    var showElement = document.querySelector(".introjs-showElement");
+    var showElement = doc.querySelector(".introjs-showElement");
     showElement.className = showElement.className.replace(/introjs-showElement/,'').trim();
     //clean listeners
     targetElement.onkeydown = null;
@@ -151,7 +151,7 @@
   function _showElement(targetElement) {
   
     var self = this,
-        oldHelperLayer = document.querySelector(".introjs-helperLayer"),
+        oldHelperLayer = doc.querySelector(".introjs-helperLayer"),
         elementPosition = _getOffset(targetElement);
 
     //targetElement.scrollIntoView();
@@ -169,7 +169,7 @@
       oldHelperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
       //set current tooltip text
       oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro");
-      var oldShowElement = document.querySelector(".introjs-showElement");
+      var oldShowElement = doc.querySelector(".introjs-showElement");
       oldShowElement.className = oldShowElement.className.replace(/introjs-showElement/,'').trim();
       //change to new intro item
       targetElement.className += " introjs-showElement";
@@ -182,9 +182,9 @@
     } else {
       targetElement.className += " introjs-showElement";
 
-      var helperLayer = document.createElement("div"),
-          helperNumberLayer = document.createElement("span"),
-          tooltipLayer = document.createElement("div");
+      var helperLayer = doc.createElement("div"),
+          helperNumberLayer = doc.createElement("span"),
+          tooltipLayer = doc.createElement("div");
 
       helperLayer.className = "introjs-helperLayer";
       helperLayer.setAttribute("style", "width: " + (elementPosition.width + 10) + "px; " +
@@ -192,7 +192,7 @@
                                         "top:" + (elementPosition.top - 5) + "px;" +
                                         "left: " + (elementPosition.left - 5) + "px;");
 
-      document.body.appendChild(helperLayer);
+      doc.body.appendChild(helperLayer);
       
       helperNumberLayer.className = "introjs-helperNumberLayer";
       tooltipLayer.className = "introjs-tooltip";
@@ -202,12 +202,12 @@
       helperLayer.appendChild(helperNumberLayer);
       helperLayer.appendChild(tooltipLayer);
 
-      var skipTooltipButton = document.createElement("a");
+      var skipTooltipButton = doc.createElement("a");
       skipTooltipButton.className = "introjs-skipbutton";
       skipTooltipButton.href = "javascript:void(0);";
       skipTooltipButton.innerHTML = "Skip";
 
-      var nextTooltipButton = document.createElement("a");
+      var nextTooltipButton = doc.createElement("a");
 
       nextTooltipButton.onclick = function() {
         _nextStep.call(self);
@@ -246,7 +246,7 @@
    * @param {Object} targetElm
    */
   function _addOverlayLayer(targetElm) {
-    var overlayLayer = document.createElement("div"),
+    var overlayLayer = doc.createElement("div"),
         styleText = "";
     //set css class name
     overlayLayer.className = "introjs-overlay";
@@ -312,7 +312,7 @@
 
     } else if (typeof (targetElm) === "string") {
       //select the target element with query selector
-      var targetElement = document.querySelector(targetElm);
+      var targetElement = doc.querySelector(targetElm);
 
       if(targetElement) {
         return new IntroJs(targetElement);
@@ -320,7 +320,7 @@
         throw new Error("There's no element with given selector.");
       }
     } else {
-      return new IntroJs(document.body);
+      return new IntroJs(doc.body);
     }
   };
 
@@ -343,4 +343,4 @@
   };
 
   this['introJs'] = introJs;
-})();
+})(document);
