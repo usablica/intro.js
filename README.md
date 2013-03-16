@@ -1,13 +1,14 @@
-# Intro.js
-> Better introductions for websites and features with a step-by-step guide for your projects.
+Intro.js
+========
 
-## How to use
+Better introductions for websites and features with a step-by-step guide for your projects.
+
+##How to use
 Intro.js can be added to your site in three simple steps:
 
 **1)** Include `intro.js` and `introjs.css` (or the minified version for production) in your page.
 
 **2)** Add `data-intro` and `data-step` to your HTML elements.  
-
 For example: 
 ```html
 <a href='http://google.com/' data-intro='Hello step one!' data-step='1'></a>
@@ -20,14 +21,15 @@ introJs().start();
  
 Optionally, pass one parameter to `introJs` function to limit the presentation section, for example `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
 
-## Roadmap
+##Roadmap
 - More browser compatibility
 
-## Contributors
+##Main Contributors
 - [Afshin Mehrabani](http://afshinm.name/)  
-- [@voltagex](http://github.com/voltagex)
 
-## License
+other contributors: https://github.com/usablica/intro.js/contributors
+
+##License
 
     Copyright (C) 2012 Afshin Mehrabani (afshin.meh@gmail.com)
     
