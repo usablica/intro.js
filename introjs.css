@@ -1,7 +1,7 @@
 .introjs-overlay {
   position: absolute;
   z-index: 999999;
-  background-color:rgb(0, 0, 0);
+  background-color: rgb(0, 0, 0);
   opacity: 0;
   -webkit-transition: all 0.3s ease-out;
   -moz-transition: all 0.3s ease-out;
@@ -19,7 +19,7 @@
   position: absolute;
   border-radius: 4px;
   border: 1px solid rgba(0, 0, 0, 0.5);
-  box-shadow: 0px 2px 15px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
   -webkit-transition: all 0.3s ease-out;
   -moz-transition: all 0.3s ease-out;
   -o-transition: all 0.3s ease-out;
@@ -36,16 +36,17 @@
   background: -o-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* Opera 11.10+ */
   background: -ms-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* IE10+ */
   background: linear-gradient(to bottom, #ff3019 0%,#cf0404 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3019', endColorstr='#cf0404',GradientType=0 ); /* IE6-9 */  color: white;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0); /* IE6-9 */
+  color: white;
   position: absolute;
   border-radius: 50%;
-  font-family: Arial, verdana, tahoma;
+  font-family: Arial, verdana, tahoma, sans-serif;
   font-size: 13px;
   font-weight: bold;
   text-align: center;
   width: 20px;
   border: 3px solid white;
-  box-shadow: 0px 2px 5px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
   text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
   filter: progid:DXImageTransform.Microsoft.Shadow(direction=135,strength=2,color=ff0000);
   left: -16px;
@@ -53,21 +54,20 @@
 }
 .introjs-tooltip:before {
   border: 5px solid white;
-	content:'';
-	border-top-color:transparent;
-	border-right-color:transparent;
-	border-bottom-color:white;
-	border-left-color:transparent;
-	position: absolute;
-	top: -10px;
-
+  content: '';
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: white;
+  border-left-color: transparent;
+  position: absolute;
+  top: -10px;
 }
 .introjs-tooltip {
   position: absolute;
   padding: 10px;
   background-color: white;
   border-radius: 3px;
-  box-shadow: 0px 1px 10px rgba(0,0,0,0.4);
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
   -webkit-transition: all 0.1s ease-out;
   -moz-transition: all 0.1s ease-out;
   -o-transition: all 0.1s ease-out;
