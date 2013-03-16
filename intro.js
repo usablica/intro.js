@@ -68,15 +68,14 @@
           //escape key pressed, exit the intro
           _exitIntro(targetElm);
         }
-        if([37, 39].indexOf(e.keyCode) >= 0) {
-          if(e.keyCode == 37) {
-            //left arrow
-            _previousStep.call(self);
-          } else if (e.keyCode == 39) {
-            //right arrow
-            _nextStep.call(self);
-          }
-        };
+        else if (e.keyCode == 37) {
+          //left arrow
+          _previousStep.call(self);
+        }
+        else if (e.keyCode == 39) {
+          //right arrow
+          _nextStep.call(self);
+        }
       }
     }
     return false;
