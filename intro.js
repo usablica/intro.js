@@ -9,7 +9,7 @@
 (function () {
 
   //Default config/variables
-  var VERSION = "0.1.0";
+  var VERSION = "0.1.1";
 
   /**
    * IntroJs main class
@@ -96,6 +96,10 @@
     }
     if((this._introItems.length) <= this._currentStep) {
       //end of the intro
+      //check if any callback is defined
+      if (this._introCompleteCallback != undefined){
+        this._introCompleteCallback();
+      }
       _exitIntro(this._targetElement);
       return;
     }
@@ -339,6 +343,13 @@
     },
     start: function () {
       return _introForElement.call(this, this._targetElement);
+    },
+    complete: function( providedCallback ) {
+      if (typeof (providedCallback) === "function") {
+        this._introCompleteCallback = providedCallback;
+      } else {
+        throw new Error("Provided callback was not a function");
+      }
     }
   };
 

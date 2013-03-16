@@ -21,6 +21,13 @@ introJs().start();
  
 Optionally, pass one parameter to `introJs` function to limit the presentation section, for example `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
 
+A complete method is provided to define a function to run when intro.js is done.
+```javascript
+introJs().complete( function(){
+  alert('The last data-step has been executed...');
+});
+````
+
 ##Roadmap
 - More browser compatibility
 
