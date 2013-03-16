@@ -21,10 +21,14 @@ introJs().start();
  
 Optionally, pass one parameter to `introJs` function to limit the presentation section, for example `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
 
------------
+##Using with:
+
 ###Rails
 
 If you are using the rails asset pipeline you can use the [introjs-rails](https://github.com/heelhook/intro.js-rails) gem.
+
+###Yii framework
+You can simply use this project for Yii framework: https://github.com/moein7tl/Yii-IntroJS
 
 ##Roadmap
 - More browser compatibility
