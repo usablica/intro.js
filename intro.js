@@ -129,14 +129,20 @@
     //for fade-out animation
     overlayLayer.style.opacity = 0;
     setTimeout(function () {
-      overlayLayer.parentNode.removeChild(overlayLayer);
+      if (overlayLayer.parentNode) {
+        overlayLayer.parentNode.removeChild(overlayLayer);
+      }
     }, 500);
     //remove all helper layers
     var helperLayer = targetElement.querySelector(".introjs-helperLayer");
-    helperLayer.parentNode.removeChild(helperLayer);
+    if (helperLayer) {
+      helperLayer.parentNode.removeChild(helperLayer);
+    }
     //remove `introjs-showElement` class from the element
     var showElement = document.querySelector(".introjs-showElement");
-    showElement.className = showElement.className.replace(/introjs-showElement/,'').trim();
+    if (showElement) {
+      showElement.className = showElement.className.replace(/introjs-showElement/,'').trim();
+    }
     //clean listeners
     targetElement.onkeydown = null;
   }
