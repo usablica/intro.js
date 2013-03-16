@@ -34,6 +34,10 @@ If you are using the rails asset pipeline you can use the [introjs-rails](https:
 
 other contributors: https://github.com/usablica/intro.js/contributors
 
+##Support/Discussion
+
+- [Google group](https://groups.google.com/d/forum/introjs)
+
 ##License
 
     Copyright (C) 2012 Afshin Mehrabani (afshin.meh@gmail.com)
