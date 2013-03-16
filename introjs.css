@@ -47,6 +47,7 @@
   border: 3px solid white;
   box-shadow: 0px 2px 5px rgba(0,0,0,0.4);
   text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+  filter: progid:DXImageTransform.Microsoft.Shadow(direction=135,strength=2,color=ff0000);
   left: -16px;
   top: -16px;
 }
