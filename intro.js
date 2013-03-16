@@ -4,7 +4,7 @@
  * MIT licensed
  *
  * Copyright (C) 2013 usabli.ca - A weekend project by Afshin Mehrabani (@afshinmeh)
- */ 
+ */
 
 (function () {
 
@@ -34,8 +34,8 @@
         self = this;
 
     //if there's no element to intro
-    if(allIntroSteps.length < 1) {
-      return;
+    if (allIntroSteps.length < 1) {
+      return false;
     }
 
     for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
@@ -43,7 +43,7 @@
       introItems.push({
         element: currentElement,
         intro: currentElement.getAttribute("data-intro"),
-        step: parseInt(currentElement.getAttribute("data-step"))
+        step: parseInt(currentElement.getAttribute("data-step"), 10)
       });
     }
 
@@ -69,15 +69,15 @@
           _exitIntro(targetElm);
         }
         if([37, 39].indexOf(e.keyCode) >= 0) {
-          if(e.keyCode == 37) {
+          if (e.keyCode == 37) {
             //left arrow
             _previousStep.call(self);
           } else if (e.keyCode == 39) {
             //right arrow
             _nextStep.call(self);
           }
-        };
-      }
+        }
+      };
     }
     return false;
   }
@@ -89,7 +89,7 @@
    * @method _nextStep
    */
   function _nextStep() {
-    if(this._currentStep == undefined) {
+    if (typeof(this._currentStep) === 'undefined') {
       this._currentStep = 0;
     } else {
       ++this._currentStep;
@@ -110,8 +110,9 @@
    * @method _nextStep
    */
   function _previousStep() {
-    if(this._currentStep == 0)
+    if (this._currentStep === 0) {
       return;
+    }
 
     _showElement.call(this, this._introItems[--this._currentStep].element);
   }
@@ -149,16 +150,16 @@
    * @param {Object} targetElement
    */
   function _showElement(targetElement) {
-  
+
     var self = this,
         oldHelperLayer = document.querySelector(".introjs-helperLayer"),
         elementPosition = _getOffset(targetElement);
 
     //targetElement.scrollIntoView();
-    if(oldHelperLayer != null) {
+    if (oldHelperLayer !== null) {
       var oldHelperNumberLayer = oldHelperLayer.querySelector(".introjs-helperNumberLayer"),
           oldtooltipLayer = oldHelperLayer.querySelector(".introjs-tooltiptext"),
-          oldtooltipContainer = oldHelperLayer.querySelector(".introjs-tooltip")
+          oldtooltipContainer = oldHelperLayer.querySelector(".introjs-tooltip");
 
       //set new position to helper layer
       oldHelperLayer.setAttribute("style", "width: " + (elementPosition.width + 10) + "px; " +
@@ -193,7 +194,7 @@
                                         "left: " + (elementPosition.left - 5) + "px;");
 
       document.body.appendChild(helperLayer);
-      
+
       helperNumberLayer.className = "introjs-helperNumberLayer";
       tooltipLayer.className = "introjs-tooltip";
 
@@ -224,14 +225,13 @@
       var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
       tooltipButtonsLayer.appendChild(skipTooltipButton);
       tooltipButtonsLayer.appendChild(nextTooltipButton);
-      
-      
+
       //set proper position
       tooltipLayer.style.bottom = "-" + (_getOffset(tooltipLayer).height + 10) + "px";
     }
 
     //scroll the page to the element position
-    if(typeof(targetElement.scrollIntoViewIfNeeded) === "function") {
+    if (typeof(targetElement.scrollIntoViewIfNeeded) === "function") {
       //awesome method guys: https://bugzilla.mozilla.org/show_bug.cgi?id=403510
       //but I think this method has some problems with IE < 7.0, I should find a proper failover way
       targetElement.scrollIntoViewIfNeeded();
@@ -250,7 +250,7 @@
         styleText = "";
     //set css class name
     overlayLayer.className = "introjs-overlay";
-    
+
     //set overlay layer position
     var elementPosition = _getOffset(targetElm);
     if(elementPosition) {
@@ -263,7 +263,7 @@
     overlayLayer.onclick = function() {
       _exitIntro(targetElm);
     };
-    
+
     setTimeout(function() {
       styleText += "opacity: .5;";
       overlayLayer.setAttribute("style", styleText);
@@ -293,9 +293,9 @@
     var _x = 0;
     var _y = 0;
     while(element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
-        _x += element.offsetLeft;
-        _y += element.offsetTop;
-        element = element.offsetParent;
+      _x += element.offsetLeft;
+      _y += element.offsetTop;
+      element = element.offsetParent;
     }
     //set top
     elementPosition.top = _y;
@@ -314,7 +314,7 @@
       //select the target element with query selector
       var targetElement = document.querySelector(targetElm);
 
-      if(targetElement) {
+      if (targetElement) {
         return new IntroJs(targetElement);
       } else {
         throw new Error("There's no element with given selector.");
@@ -335,12 +335,12 @@
   //Prototype
   introJs.fn = IntroJs.prototype = {
     clone: function () {
-      return IntroJs(this);
+      return new IntroJs(this);
     },
     start: function () {
       return _introForElement.call(this, this._targetElement);
     }
   };
 
-  this['introJs'] = introJs;
+  window.introJs = introJs;
 })();
