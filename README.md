@@ -24,9 +24,10 @@ Optionally, pass one parameter to `introJs` function to limit the presentation s
 ##Roadmap
 - More browser compatibility
 
-##Contributors
+##Main Contributors
 - [Afshin Mehrabani](http://afshinm.name/)  
-- [@voltagex](http://github.com/voltagex)
+
+other contributors: https://github.com/usablica/intro.js/contributors
 
 ##License
 
