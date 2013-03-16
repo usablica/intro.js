@@ -36,7 +36,7 @@ other contributors: https://github.com/usablica/intro.js/contributors
 
 ##Support/Discussion
 
-- [Google group](https://groups.google.com/d/forum/introjs)
+- [Google Group](https://groups.google.com/d/forum/introjs)
 
 ##License
 
