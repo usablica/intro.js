@@ -9,7 +9,7 @@
 (function () {
 
   //Default config/variables
-  var VERSION = "0.1.1";
+  var VERSION = "0.1.0";
 
   /**
    * IntroJs main class
