@@ -32,6 +32,10 @@ You can simply use this project for Yii framework: https://github.com/moein7tl/Y
 
 ##Roadmap
 - More browser compatibility
+- Adding ability to define tooltip position in each step, `top`, `left,` `right` and `bottom`
+- Fix overlay layer bug while using it in wide monitors and `document` object
+- Change `Next` and `Skip` buttons
+- Add complete introduction callback
 
 ##Main Contributors
 - [Afshin Mehrabani](http://afshinm.name/)  
