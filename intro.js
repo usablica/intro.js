@@ -6,8 +6,10 @@
  * Copyright (C) 2013 usabli.ca - A weekend project by Afshin Mehrabani (@afshinmeh)
  */ 
 
-(function () {
-
+(function (doc) {
+  
+  "use strict";
+  
   //Default config/variables
   var VERSION = "0.1.0";
 
@@ -135,8 +137,8 @@
     var helperLayer = targetElement.querySelector(".introjs-helperLayer");
     helperLayer.parentNode.removeChild(helperLayer);
     //remove `introjs-showElement` class from the element
-    var showElement = document.querySelector(".introjs-showElement");
-    showElement.className = showElement.className.replace(/introjs-showElement/,'').trim();
+    var showElement = doc.querySelector(".introjs-showElement");
+    showElement.className = showElement.className.replace(/introjs-showElement/,'');
     //clean listeners
     targetElement.onkeydown = null;
   }
@@ -151,84 +153,44 @@
   function _showElement(targetElement) {
   
     var self = this,
-        oldHelperLayer = document.querySelector(".introjs-helperLayer"),
-        elementPosition = _getOffset(targetElement);
+        helperLayer = doc.querySelector(".introjs-helperLayer"),
+        elementPosition = _getOffset(targetElement),
+        helperNumberLayer,
+        tooltipTextLayer,
+        tooltipContainer,
+        oldTargetElement;
 
-    //targetElement.scrollIntoView();
-    if(oldHelperLayer != null) {
-      var oldHelperNumberLayer = oldHelperLayer.querySelector(".introjs-helperNumberLayer"),
-          oldtooltipLayer = oldHelperLayer.querySelector(".introjs-tooltiptext"),
-          oldtooltipContainer = oldHelperLayer.querySelector(".introjs-tooltip")
-
-      //set new position to helper layer
-      oldHelperLayer.setAttribute("style", "width: " + (elementPosition.width + 10) + "px; " +
-                                  "height:" + (elementPosition.height + 10) + "px; " +
-                                  "top:" + (elementPosition.top - 5) + "px;" +
-                                  "left: " + (elementPosition.left - 5) + "px;");
-      //set current step to the label
-      oldHelperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
-      //set current tooltip text
-      oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro");
-      var oldShowElement = document.querySelector(".introjs-showElement");
-      oldShowElement.className = oldShowElement.className.replace(/introjs-showElement/,'').trim();
-      //change to new intro item
-      targetElement.className += " introjs-showElement";
-
-      //wait until the animation is completed
-      setTimeout(function() {
-        oldtooltipContainer.style.bottom = "-" + (_getOffset(oldtooltipContainer).height + 10) + "px";
-      }, 300);
-
-    } else {
-      targetElement.className += " introjs-showElement";
-
-      var helperLayer = document.createElement("div"),
-          helperNumberLayer = document.createElement("span"),
-          tooltipLayer = document.createElement("div");
-
-      helperLayer.className = "introjs-helperLayer";
-      helperLayer.setAttribute("style", "width: " + (elementPosition.width + 10) + "px; " +
-                                        "height:" + (elementPosition.height + 10) + "px; " +
-                                        "top:" + (elementPosition.top - 5) + "px;" +
-                                        "left: " + (elementPosition.left - 5) + "px;");
-
-      document.body.appendChild(helperLayer);
-      
-      helperNumberLayer.className = "introjs-helperNumberLayer";
-      tooltipLayer.className = "introjs-tooltip";
-
-      helperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
-      tooltipLayer.innerHTML = "<div class='introjs-tooltiptext'>" + targetElement.getAttribute("data-intro") + "</div><div class='introjs-tooltipbuttons'></div>";
-      helperLayer.appendChild(helperNumberLayer);
-      helperLayer.appendChild(tooltipLayer);
-
-      var skipTooltipButton = document.createElement("a");
-      skipTooltipButton.className = "introjs-skipbutton";
-      skipTooltipButton.href = "javascript:void(0);";
-      skipTooltipButton.innerHTML = "Skip";
-
-      var nextTooltipButton = document.createElement("a");
-
-      nextTooltipButton.onclick = function() {
-        _nextStep.call(self);
-      };
-
-      nextTooltipButton.className = "introjs-nextbutton";
-      nextTooltipButton.href = "javascript:void(0);";
-      nextTooltipButton.innerHTML = "Next →";
-
-      skipTooltipButton.onclick = function() {
-        _exitIntro(self._targetElement);
-      };
-
-      var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
-      tooltipButtonsLayer.appendChild(skipTooltipButton);
-      tooltipButtonsLayer.appendChild(nextTooltipButton);
-      
-      
-      //set proper position
-      tooltipLayer.style.bottom = "-" + (_getOffset(tooltipLayer).height + 10) + "px";
+    if(!helperLayer) {
+      helperLayer = _addHelperLayer.call(self);
     }
+
+    helperNumberLayer = helperLayer.querySelector(".introjs-helperNumberLayer");
+    tooltipTextLayer = helperLayer.querySelector(".introjs-tooltiptext");
+    tooltipContainer = helperLayer.querySelector(".introjs-tooltip");
+
+    //set new position to helper layer
+    helperLayer.setAttribute("style", "width: " + (elementPosition.width + 10) + "px; " +
+                                "height:" + (elementPosition.height + 10) + "px; " +
+                                "top:" + (elementPosition.top - 5) + "px;" +
+                                "left: " + (elementPosition.left - 5) + "px;");
+
+    //set current step to the label
+    helperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
+    //set current tooltip text
+    tooltipTextLayer.innerHTML = targetElement.getAttribute("data-intro");
+
+    oldTargetElement = doc.querySelector(".introjs-showElement");
+    if (oldTargetElement) {
+      oldTargetElement.className = oldTargetElement.className.replace(/introjs-showElement/,'');
+    }
+
+    //change to new intro item
+    targetElement.className += " introjs-showElement";
+
+    //wait until the animation is completed
+    setTimeout(function() {
+      tooltipContainer.style.bottom = "-" + (_getOffset(tooltipContainer).height + 10) + "px";
+    }, 300);
 
     //scroll the page to the element position
     if(typeof(targetElement.scrollIntoViewIfNeeded) === "function") {
@@ -239,6 +201,48 @@
   }
 
   /**
+   * Add helper layer to the page
+   *
+   * @api private
+   * @method _addHelperLayer
+   */
+  function _addHelperLayer() {
+    var skipTooltipButton,
+        nextTooltipButton,
+        tooltipLayer,
+        self = this,
+        helperLayer = doc.createElement("div");
+    helperLayer.innerHTML = 
+      '<span class="introjs-helperNumberLayer"></span>' + 
+      '<div class="introjs-tooltip"><div class="introjs-tooltipbuttons">' + 
+        '<a class="introjs-skipbutton"></a>' + 
+        '<a class="introjs-nextbutton"></a>' + 
+      '</div><div class="introjs-tooltiptext"></div></div>';
+    helperLayer.className = "introjs-helperLayer";
+    doc.body.appendChild(helperLayer);
+
+    skipTooltipButton = helperLayer.querySelector(".introjs-skipbutton");
+    skipTooltipButton.innerHTML = "Skip";
+    skipTooltipButton.onclick = function() {
+      _exitIntro(self._targetElement);
+      return false;
+    };
+
+    nextTooltipButton = helperLayer.querySelector(".introjs-nextbutton");
+    nextTooltipButton.innerHTML = "Next →";
+    nextTooltipButton.onclick = function() {
+      _nextStep.call(self);
+      return false;
+    };
+
+    //set proper position
+    tooltipLayer = helperLayer.querySelector(".introjs-tooltip");
+    tooltipLayer.style.bottom = "-" + (_getOffset(tooltipLayer).height + 10) + "px";
+
+    return helperLayer;
+  }
+
+  /**
    * Add overlay layer to the page
    *
    * @api private
@@ -246,7 +250,7 @@
    * @param {Object} targetElm
    */
   function _addOverlayLayer(targetElm) {
-    var overlayLayer = document.createElement("div"),
+    var overlayLayer = doc.createElement("div"),
         styleText = "";
     //set css class name
     overlayLayer.className = "introjs-overlay";
@@ -312,7 +316,7 @@
 
     } else if (typeof (targetElm) === "string") {
       //select the target element with query selector
-      var targetElement = document.querySelector(targetElm);
+      var targetElement = doc.querySelector(targetElm);
 
       if(targetElement) {
         return new IntroJs(targetElement);
@@ -320,7 +324,7 @@
         throw new Error("There's no element with given selector.");
       }
     } else {
-      return new IntroJs(document.body);
+      return new IntroJs(doc.body);
     }
   };
 
@@ -342,5 +346,5 @@
     }
   };
 
-  this['introJs'] = introJs;
-})();
+  window['introJs'] = introJs;
+})(document);
