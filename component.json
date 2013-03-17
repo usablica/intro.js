@@ -5,7 +5,7 @@
   "keywords": ["demo", "intro"],
   "homepage": "http://usablica.github.com/intro.js/",
   "author": "Usablica",
-  "main": ["intro.js","intro.css"],
+  "main": ["intro.js","introjs.css"],
   "dependencies": {
   }
 }
