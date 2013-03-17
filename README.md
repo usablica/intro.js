@@ -21,6 +21,8 @@ introJs().start();
  
 Optionally, pass one parameter to `introJs` function to limit the presentation section, for example `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
 
+<p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.jpg"></p>  
+
 ##Using with:
 
 ###Rails
@@ -36,6 +38,12 @@ You can simply use this project for Yii framework: https://github.com/moein7tl/Y
 - Fix overlay layer bug while using it in wide monitors and `document` object
 - Change `Next` and `Skip` buttons
 - Add complete introduction callback
+
+##History
+
+###v0.1.0 - March 16, 2013
+First version
+
 
 ##Main Contributors
 - [Afshin Mehrabani](http://afshinm.name/)  
