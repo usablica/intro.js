@@ -16,8 +16,9 @@
    *
    * @class IntroJs
    */
-  function IntroJs(obj) {
+  function IntroJs(obj, skipCallback) {
     this._targetElement = obj;
+    this._skipCallback = skipCallback;
   }
 
   /**
@@ -219,6 +220,9 @@
 
       skipTooltipButton.onclick = function() {
         _exitIntro(self._targetElement);
+        if(self._skipCallback){
+            self._skipCallback(self._targetElement);
+        }
       };
 
       var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
@@ -305,22 +309,22 @@
     return elementPosition;
   }
 
-  var introJs = function (targetElm) {
+  var introJs = function (targetElm, skipCallback) {
     if (typeof (targetElm) === "object") {
       //Ok, create a new instance
-      return new IntroJs(targetElm);
+      return new IntroJs(targetElm, skipCallback);
 
     } else if (typeof (targetElm) === "string") {
       //select the target element with query selector
-      var targetElement = document.querySelector(targetElm);
+      var targetElement = document.querySelector(targetElm, skipCallback);
 
       if(targetElement) {
-        return new IntroJs(targetElement);
+        return new IntroJs(targetElement, skipCallback);
       } else {
         throw new Error("There's no element with given selector.");
       }
     } else {
-      return new IntroJs(document.body);
+      return new IntroJs(document.body, skipCallback);
     }
   };
 
@@ -338,7 +342,7 @@
       return IntroJs(this);
     },
     start: function () {
-      return _introForElement.call(this, this._targetElement);
+      return _introForElement.call(this, this._targetElement, this._skipCallback);
     }
   };
 

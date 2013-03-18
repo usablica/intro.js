@@ -21,6 +21,11 @@ introJs().start();
  
 Optionally, pass one parameter to `introJs` function to limit the presentation section, for example `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
 
+As a second parameter it is possible to define a callback function for the "skip" button:
+```javascript
+introJs(element, function(targetElement){}).start();
+````
+
 <p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.jpg"></p>  
 
 ##Using with:
