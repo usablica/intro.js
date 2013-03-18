@@ -1,0 +1,16 @@
+{
+    "browser"       : true,
+    "node"          : false,
+    "rhino"         : false,
+    "couch"         : false,
+    "wsh"           : false,
+
+    "scripturl"     : true,
+
+    "es5"           : true,
+    "strict"        : false,
+    "globalstrict"  : false,
+
+    "trailing"      : true,
+    "indent"        : 2
+}
