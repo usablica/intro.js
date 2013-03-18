@@ -56,7 +56,7 @@
     self._introItems = introItems;
 
     //add overlay layer to the page
-    if(_addOverlayLayer(targetElm)) {
+    if(_addOverlayLayer.call(self, targetElm)) {
       //then, start the show
       _nextStep.call(self);
 
@@ -66,7 +66,7 @@
       targetElm.onkeydown = function(e) {
         if(e.keyCode == 27) {
           //escape key pressed, exit the intro
-          _exitIntro(targetElm);
+          _exitIntro.call(self, targetElm);
         }
         if([37, 39].indexOf(e.keyCode) >= 0) {
           if(e.keyCode == 37) {
@@ -96,7 +96,11 @@
     }
     if((this._introItems.length) <= this._currentStep) {
       //end of the intro
-      _exitIntro(this._targetElement);
+      //check if any callback is defined
+      if (this._introCompleteCallback != undefined){
+        this._introCompleteCallback.call(this);
+      }
+      _exitIntro.call(this, this._targetElement);
       return;
     }
     _showElement.call(this, this._introItems[this._currentStep].element);
@@ -139,6 +143,10 @@
     showElement.className = showElement.className.replace(/introjs-showElement/,'').trim();
     //clean listeners
     targetElement.onkeydown = null;
+    //check if any callback is defined
+    if (this._introExitCallback != undefined){
+      this._introExitCallback.call(this);
+    }
   }
 
   /**
@@ -218,7 +226,7 @@
       nextTooltipButton.innerHTML = "Next →";
 
       skipTooltipButton.onclick = function() {
-        _exitIntro(self._targetElement);
+        _exitIntro.call(self, self._targetElement);
       };
 
       var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
@@ -247,7 +255,9 @@
    */
   function _addOverlayLayer(targetElm) {
     var overlayLayer = document.createElement("div"),
-        styleText = "";
+        styleText = "",
+        self = this;
+
     //set css class name
     overlayLayer.className = "introjs-overlay";
     
@@ -261,9 +271,9 @@
     targetElm.appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
-      _exitIntro(targetElm);
+      _exitIntro.call(self, targetElm);
     };
-    
+
     setTimeout(function() {
       styleText += "opacity: .5;";
       overlayLayer.setAttribute("style", styleText);
@@ -338,7 +348,24 @@
       return IntroJs(this);
     },
     start: function () {
-      return _introForElement.call(this, this._targetElement);
+      _introForElement.call(this, this._targetElement);
+      return this;
+    },
+    oncomplete: function(providedCallback) {
+      if (typeof (providedCallback) === "function") {
+        this._introCompleteCallback = providedCallback;
+      } else {
+        throw new Error("Provided callback for oncomplete was not a function.");
+      }
+      return this;
+    },
+    onexit: function(providedCallback) {
+      if (typeof (providedCallback) === "function") {
+        this._introExitCallback = providedCallback;
+      } else {
+        throw new Error("Provided callback for onexit was not a function.");
+      }
+      return this;
     }
   };
 
