@@ -10,7 +10,7 @@
     <!-- Le styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <!-- Add IntroJs style -->
-    <link href="../minified/introjs.min.css" rel="stylesheet">
+    <link href="../introjs.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 20px;
@@ -71,7 +71,7 @@
       <div class="jumbotron">
         <h1 data-step="1" data-intro="Hello all! :) This project's called Intro.js.">Intro<span style="font-weight: normal;">.js</span></h1>
         <p class="lead" data-step="4" data-intro="Let's try it. It's free and open-source.">Better introductions for websites and features with a step-by-step guide for your projects.</p>
-        <a class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:introJs().start();">Show me how</a>
+        <a class="btn btn-large btn-success" id="showme">Show me how</a>
       </div>
 
       <hr>
@@ -106,6 +106,11 @@
       </div>
 
     </div>
-    <script type="text/javascript" src="../minified/intro.min.js"></script>
+    <script type="text/javascript" src="../intro.js"></script>
+    <script type="text/javascript">
+      document.getElementById("showme").onclick = function( event ) {
+        introJs();
+      }
+    </script>
   </body>
 </html>
