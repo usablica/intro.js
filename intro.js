@@ -254,7 +254,7 @@
     //set overlay layer position
     var elementPosition = _getOffset(targetElm);
     if(elementPosition) {
-      styleText += "width: " + elementPosition.width + "px; height:" + elementPosition.height + "px; top:" + elementPosition.top + "px;left: " + elementPosition.left + "px;";
+      // styleText += "width: " + elementPosition.width + "px; height:" + elementPosition.height + "px; top:" + elementPosition.top + "px;left: " + elementPosition.left + "px;";
       overlayLayer.setAttribute("style", styleText);
     }
 
