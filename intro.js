@@ -268,7 +268,7 @@
 
       nextTooltipButton.className = "introjs-nextbutton";
       nextTooltipButton.href = "javascript:void(0);";
-      nextTooltipButton.innerHTML = "Next →";
+      nextTooltipButton.innerHTML = "Next &rarr;";
 
       skipTooltipButton.onclick = function() {
         _exitIntro.call(self, self._targetElement);
