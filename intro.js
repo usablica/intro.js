@@ -145,7 +145,7 @@
     //remove `introjs-showElement` class from the element
     var showElement = document.querySelector(".introjs-showElement");
     if (showElement) {
-      showElement.className = showElement.className.replace(/introjs-showElement/,'').trim();
+      showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
     }
     //clean listeners
     targetElement.onkeydown = null;
@@ -226,13 +226,9 @@
       //set current tooltip text
       oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro");
       var oldShowElement = document.querySelector(".introjs-showElement");
-      oldShowElement.className = oldShowElement.className.replace(/introjs-showElement/,'').trim();
-      //change to new intro item
-      targetElement.className += " introjs-showElement";
+      oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
       _placeTooltip(targetElement, oldtooltipContainer, oldArrowLayer);
     } else {
-      targetElement.className += " introjs-showElement";
-
       var helperLayer = document.createElement("div"),
           helperNumberLayer = document.createElement("span"),
           arrowLayer = document.createElement("div"),
@@ -282,6 +278,24 @@
 
       //set proper position
       _placeTooltip(targetElement, tooltipLayer, arrowLayer);
+    }
+
+    //add target element position style
+    targetElement.className += " introjs-showElement";
+
+    //Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
+    var currentElementPosition = "";
+    if (targetElement.currentStyle) { //IE
+      currentElementPosition = targetElement.currentStyle["position"];
+    } else if (document.defaultView && document.defaultView.getComputedStyle) { //Firefox
+      currentElementPosition = document.defaultView.getComputedStyle(targetElement, null).getPropertyValue("position");
+    }
+
+    //I don't know is this necessary or not, but I clear the position for better comparing
+    currentElementPosition = currentElementPosition.toLowerCase();
+    if (currentElementPosition != "absolute" && currentElementPosition != "relative") {
+      //change to new intro item
+      targetElement.className += " introjs-relativePosition";
     }
 
     //scroll the page to the element position

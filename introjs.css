@@ -11,8 +11,11 @@
 }
 
 .introjs-showElement {
-  position: relative;
   z-index: 9999999;
+}
+
+.introjs-relativePosition {
+  position: relative;
 }
 
 .introjs-helperLayer {
