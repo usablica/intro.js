@@ -9,8 +9,7 @@
 (function (doc) {
 
       //main variables
-  var intro,
-      overlay,
+  var overlay,
       helper,
       helperNumber,
       tooltip,
@@ -32,7 +31,6 @@
     var allIntroSteps = doc.querySelectorAll("*[data-intro]"),
         i, elementPosition;
 
-    intro = {};
     introItems = [];
 
     //if there's no element to intro
