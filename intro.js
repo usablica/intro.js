@@ -253,20 +253,33 @@
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
 
-      var skipTooltipButton = document.createElement("a");
-      skipTooltipButton.className = "introjs-skipbutton";
-      skipTooltipButton.href = "javascript:void(0);";
-      skipTooltipButton.innerHTML = "Skip";
-
+      //next button
       var nextTooltipButton = document.createElement("a");
 
       nextTooltipButton.onclick = function() {
         _nextStep.call(self);
       };
 
-      nextTooltipButton.className = "introjs-nextbutton";
+      nextTooltipButton.className = "introjs-button introjs-nextbutton";
       nextTooltipButton.href = "javascript:void(0);";
       nextTooltipButton.innerHTML = "Next &rarr;";
+
+      //previous button
+      var prevTooltipButton = document.createElement("a");
+
+      prevTooltipButton.onclick = function() {
+        _previousStep.call(self);
+      };
+
+      prevTooltipButton.className = "introjs-button introjs-prevbutton";
+      prevTooltipButton.href = "javascript:void(0);";
+      prevTooltipButton.innerHTML = "&larr; Back";
+
+      //skip button
+      var skipTooltipButton = document.createElement("a");
+      skipTooltipButton.className = "introjs-button introjs-skipbutton";
+      skipTooltipButton.href = "javascript:void(0);";
+      skipTooltipButton.innerHTML = "Skip";
 
       skipTooltipButton.onclick = function() {
         _exitIntro.call(self, self._targetElement);
@@ -274,6 +287,7 @@
 
       var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
       tooltipButtonsLayer.appendChild(skipTooltipButton);
+      tooltipButtonsLayer.appendChild(prevTooltipButton);
       tooltipButtonsLayer.appendChild(nextTooltipButton);
 
       //set proper position
