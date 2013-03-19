@@ -149,6 +149,8 @@
     }
     //clean listeners
     targetElement.onkeydown = null;
+    //set the step to zero
+    this._currentStep = undefined;
     //check if any callback is defined
     if (this._introExitCallback != undefined) {
       this._introExitCallback.call(this);
