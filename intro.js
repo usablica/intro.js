@@ -26,20 +26,23 @@
    * @api private
    * @method _introForElement
    * @param {Object} targetElm
+   * @param {Integer} start position (optional)
    * @returns {Boolean} Success or not?
    */
-  function _introForElement(targetElm) {
+  function _introForElement(targetElm, start) {
     var allIntroSteps = targetElm.querySelectorAll("*[data-intro]"),
         introItems = [],
-        self = this;
+        self = this
+        start = start || 0;
 
     //if there's no element to intro
-    if(allIntroSteps.length < 1) {
+    if(allIntroSteps.length < 1 || start > allIntroSteps.length) {
       return false;
     }
 
     for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
       var currentElement = allIntroSteps[i];
+      
       introItems.push({
         element: currentElement,
         intro: currentElement.getAttribute("data-intro"),
@@ -55,6 +58,11 @@
 
     //set it to the introJs object
     self._introItems = introItems;
+    
+    //set current start step
+    if (start > 1) {
+      this._currentStep = start-2;
+    }
 
     //add overlay layer to the page
     if(_addOverlayLayer.call(self, targetElm)) {
@@ -397,8 +405,8 @@
     clone: function () {
       return new IntroJs(this);
     },
-    start: function () {
-      _introForElement.call(this, this._targetElement);
+    start: function ( start ) {
+      _introForElement.call(this, this._targetElement, start);
       return this;
     },
     oncomplete: function(providedCallback) {
