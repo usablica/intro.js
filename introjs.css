@@ -114,6 +114,10 @@
   text-align: right;
 }
 
+/* 
+ Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/ 
+ Changed by Afshin Mehrabani
+*/
 .introjs-button {
   position: relative;
   overflow: visible;
