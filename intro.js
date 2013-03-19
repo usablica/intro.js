@@ -224,7 +224,7 @@
       //set current step to the label
       oldHelperNumberLayer.innerHTML = targetElement.getAttribute("data-intro-step");
       //set current tooltip text
-      oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro-intro");
+      oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro");
       var oldShowElement = document.querySelector(".introjs-showElement");
       oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
       _placeTooltip(targetElement, oldtooltipContainer, oldArrowLayer);
