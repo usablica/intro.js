@@ -64,7 +64,7 @@
       var skipButton = targetElm.querySelector(".introjs-skipbutton"),
           nextStepButton = targetElm.querySelector(".introjs-nextbutton");
 
-      targetElm.onkeydown = function(e) {
+      window.onkeydown = function(e) {
         if (e.keyCode == 27) {
           //escape key pressed, exit the intro
           _exitIntro.call(self, targetElm);
@@ -96,7 +96,7 @@
     if((this._introItems.length) <= this._currentStep) {
       //end of the intro
       //check if any callback is defined
-      if (this._introCompleteCallback != undefined){
+      if (this._introCompleteCallback != undefined) {
         this._introCompleteCallback.call(this);
       }
       _exitIntro.call(this, this._targetElement);
@@ -113,7 +113,7 @@
    * @method _nextStep
    */
   function _previousStep() {
-    if (this._currentStep == 0){
+    if (this._currentStep == 0) {
       return false;
     }
 
@@ -150,7 +150,7 @@
     //clean listeners
     targetElement.onkeydown = null;
     //check if any callback is defined
-    if (this._introExitCallback != undefined){
+    if (this._introExitCallback != undefined) {
       this._introExitCallback.call(this);
     }
   }
@@ -215,10 +215,10 @@
           oldtooltipContainer = oldHelperLayer.querySelector(".introjs-tooltip")
 
       //set new position to helper layer
-      oldHelperLayer.setAttribute("style", "width: " + (elementPosition.width + 10) + "px; " +
-                                  "height:" + (elementPosition.height + 10) + "px; " +
-                                  "top:" + (elementPosition.top - 5) + "px;" +
-                                  "left: " + (elementPosition.left - 5) + "px;");
+      oldHelperLayer.setAttribute("style", "width: " + (elementPosition.width + 10)  + "px; " +
+                                           "height:" + (elementPosition.height + 10) + "px; " +
+                                           "top:"    + (elementPosition.top - 5)     + "px;" +
+                                           "left: "  + (elementPosition.left - 5)    + "px;");
       //set current step to the label
       oldHelperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
       //set current tooltip text
@@ -237,13 +237,14 @@
           tooltipLayer = document.createElement("div");
 
       helperLayer.className = "introjs-helperLayer";
-      helperLayer.setAttribute("style", "width: " + (elementPosition.width + 10) + "px; " +
+      helperLayer.setAttribute("style", "width: " + (elementPosition.width + 10)  + "px; " +
                                         "height:" + (elementPosition.height + 10) + "px; " +
-                                        "top:" + (elementPosition.top - 5) + "px;" +
-                                        "left: " + (elementPosition.left - 5) + "px;");
+                                        "top:"    + (elementPosition.top - 5)     + "px;" +
+                                        "left: "  + (elementPosition.left - 5)    + "px;");
 
-      document.body.appendChild(helperLayer);
-      
+      //add helper layer to target element
+      this._targetElement.appendChild(helperLayer);
+
       helperNumberLayer.className = "introjs-helperNumberLayer";
       arrowLayer.className = 'introjs-arrow';
       tooltipLayer.className = "introjs-tooltip";
@@ -282,7 +283,7 @@
     }
 
     //scroll the page to the element position
-    if(typeof(targetElement.scrollIntoViewIfNeeded) === "function") {
+    if (typeof(targetElement.scrollIntoViewIfNeeded) === "function") {
       //awesome method guys: https://bugzilla.mozilla.org/show_bug.cgi?id=403510
       //but I think this method has some problems with IE < 7.0, I should find a proper failover way
       targetElement.scrollIntoViewIfNeeded();
@@ -304,11 +305,17 @@
     //set css class name
     overlayLayer.className = "introjs-overlay";
 
-    //set overlay layer position
-    var elementPosition = _getOffset(targetElm);
-    if(elementPosition) {
-      styleText += "width: " + elementPosition.width + "px; height:" + elementPosition.height + "px; top:" + elementPosition.top + "px;left: " + elementPosition.left + "px;";
+    //check if the target element is body, we should calculate the size of overlay layer in a better way
+    if (targetElm.tagName.toLowerCase() == "body") {
+      styleText += "top: 0;bottom: 0; left: 0;right: 0;position: fixed;";
       overlayLayer.setAttribute("style", styleText);
+    } else {
+      //set overlay layer position
+      var elementPosition = _getOffset(targetElm);
+      if(elementPosition) {
+        styleText += "width: " + elementPosition.width + "px; height:" + elementPosition.height + "px; top:" + elementPosition.top + "px;left: " + elementPosition.left + "px;";
+        overlayLayer.setAttribute("style", styleText);
+      }
     }
 
     targetElm.appendChild(overlayLayer);
