@@ -50,8 +50,9 @@ You can simply use this project for Yii framework: https://github.com/moein7tl/Y
 ## Author
 **Afshin Mehrabani**
 
-+ [https://github.com/afshinm](https://github.com/afshinm)
-- [http://afshinm.name/](http://afshinm.name/)  
+- [Twitter](https://twitter.com/afshinmeh)
+- [Github](https://github.com/afshinm)
+- [Personal page](http://afshinm.name/)  
 
 [Other contributors](https://github.com/usablica/intro.js/graphs/contributors)
 
