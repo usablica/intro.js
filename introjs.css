@@ -78,14 +78,17 @@
 .introjs-tooltipbuttons {
   font-size: 10px;
   text-align: right;
-  cursor: pointer;
 }
 .introjs-tooltipbuttons .introjs-skipbutton {
   margin-right: 5px;
   color: gray;
+  display: inline;
+  cursor: pointer;
 }
 .introjs-tooltipbuttons .introjs-nextbutton {
   font-weight: bold;
   color: #2071d3;
   font-size: 11px;
+  display: inline;
+  cursor: pointer;
 }

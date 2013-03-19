@@ -52,7 +52,7 @@
     });
 
     //add overlay layer to the page
-    overlay = _createElement("div", "overlay", doc.body, _exitIntro);
+    overlay = _createElement("overlay", doc.body, _exitIntro);
     //set overlay layer size
     elementPosition = _getOffset(doc.body);
     overlay.setAttribute("style", "width:"  + elementPosition.width  + "px;" +
@@ -60,13 +60,13 @@
     overlay.style.opacity = 0.5;
 
     //add helper layer to the page
-    helper         = _createElement("div",  "helper",         doc.body);
-    helperNumber   = _createElement("span", "helperNumber",   helper);
-    tooltip        = _createElement("div",  "tooltip",        helper);
-    tooltipButtons = _createElement("div",  "tooltipbuttons", tooltip);
-    tooltipText    = _createElement("div",  "tooltiptext",    tooltip);
-                     _createElement("a",    "skipbutton",     tooltipButtons, _exitIntro, "Skip");
-                     _createElement("a",    "nextbutton",     tooltipButtons, _nextStep,  "Next →");
+    helper         = _createElement("helper",         doc.body);
+    helperNumber   = _createElement("helperNumber",   helper);
+    tooltip        = _createElement("tooltip",        helper);
+    tooltipButtons = _createElement("tooltipbuttons", tooltip);
+    tooltipText    = _createElement("tooltiptext",    tooltip);
+                     _createElement("skipbutton",     tooltipButtons, _exitIntro, "Skip");
+                     _createElement("nextbutton",     tooltipButtons, _nextStep,  "Next →");
     //set proper tooltip position
     tooltip.style.bottom = "-" + (_getOffset(tooltip).height + 10) + "px";
 
@@ -185,7 +185,7 @@
    * Remove the introjs-showElement class from the current element
    *
    * @api private
-   * @method _createElement
+   * @method _removeElement
    */
   function _removeClassFromCurrent() {
     currentElement.className = currentElement.className.replace(new RegExp(showElement),'');
@@ -197,15 +197,14 @@
    *
    * @api private
    * @method _createElement
-   * @param {Object} type 
    * @param {Object} className
    * @param {Object} parent
    * @param {Object} clickfunction
    * @param {Object} text
    * @returns The created element
    */
-  function _createElement(type, className, parent, clickfunction, text) {
-    var element = doc.createElement(type);
+  function _createElement(className, parent, clickfunction, text) {
+    var element = doc.createElement("div");
     element.className = cssPrefix + className;
     parent.appendChild(element);
     if (clickfunction) element.onclick = clickfunction;
