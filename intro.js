@@ -157,14 +157,16 @@
     }
   }
 
-  function _placeTooltip(targetElement, tooltipLayer, arrowLayer){
+  function _placeTooltip(targetElement, tooltipLayer, arrowLayer) {
     var tooltipLayerPosition = _getOffset(tooltipLayer);
+    //reset the old style
     tooltipLayer.style.top = null;
     tooltipLayer.style.right = null;
     tooltipLayer.style.bottom = null;
     tooltipLayer.style.left = null;
     switch(targetElement.getAttribute('data-position')){
       case 'top':
+        tooltipLayer.style.left = "15px";
         tooltipLayer.style.top = "-" + (tooltipLayerPosition.height + 10) + "px";
         arrowLayer.className = 'introjs-arrow bottom';
         break;
@@ -174,6 +176,7 @@
         arrowLayer.className = 'introjs-arrow left';
         break;
       case 'left':
+        tooltipLayer.style.top = "15px";
         tooltipLayer.style.left = "-" + (tooltipLayerPosition.width + 10) + "px";
         arrowLayer.className = 'introjs-arrow right';
         break;
@@ -198,7 +201,6 @@
         oldHelperLayer = document.querySelector(".introjs-helperLayer"),
         elementPosition = _getOffset(targetElement);
 
-    //targetElement.scrollIntoView();
     if(oldHelperLayer != null) {
       var oldHelperNumberLayer = oldHelperLayer.querySelector(".introjs-helperNumberLayer"),
           oldtooltipLayer = oldHelperLayer.querySelector(".introjs-tooltiptext"),

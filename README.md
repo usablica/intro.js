@@ -8,10 +8,10 @@ Intro.js can be added to your site in three simple steps:
 
 **1)** Include `intro.js` and `introjs.css` (or the minified version for production) in your page.
 
-**2)** Add `data-intro` and `data-step` to your HTML elements. You can optionally set the tooltip's position by adding `data-position`. The default position is 'bottom'.
+**2)** Add `data-intro` and `data-step` to your HTML elements.  
 For example: 
 ```html
-<a href='http://google.com/' data-intro='Hello step one!' data-step='1' data-position='right'></a>
+<a href='http://google.com/' data-intro='Hello step one!' data-step='1'></a>
 ````
   
 **3)** Call this JavaScript function:
