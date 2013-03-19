@@ -167,12 +167,14 @@
    * @param {Object} arrowLayer
    */
   function _placeTooltip(targetElement, tooltipLayer, arrowLayer) {
-    var tooltipLayerPosition = _getOffset(tooltipLayer);
     //reset the old style
     tooltipLayer.style.top = null;
     tooltipLayer.style.right = null;
     tooltipLayer.style.bottom = null;
     tooltipLayer.style.left = null;
+    
+    var tooltipLayerPosition = _getOffset(tooltipLayer);
+    
     switch (targetElement.getAttribute('data-position')) {
       case 'top':
         tooltipLayer.style.left = "15px";
