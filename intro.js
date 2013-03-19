@@ -4,7 +4,7 @@
  * MIT licensed
  *
  * Copyright (C) 2013 usabli.ca - A weekend project by Afshin Mehrabani (@afshinmeh)
- */ 
+ */
 
 (function () {
 
@@ -35,7 +35,7 @@
 
     //if there's no element to intro
     if(allIntroSteps.length < 1) {
-      return;
+      return false;
     }
 
     for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
@@ -43,7 +43,7 @@
       introItems.push({
         element: currentElement,
         intro: currentElement.getAttribute("data-intro"),
-        step: parseInt(currentElement.getAttribute("data-step")),
+        step: parseInt(currentElement.getAttribute("data-step"), 10),
         position: currentElement.getAttribute("data-position") || 'bottom'
       });
     }
@@ -65,7 +65,7 @@
           nextStepButton = targetElm.querySelector(".introjs-nextbutton");
 
       targetElm.onkeydown = function(e) {
-        if(e.keyCode == 27) {
+        if (e.keyCode == 27) {
           //escape key pressed, exit the intro
           _exitIntro.call(self, targetElm);
         } else if(e.keyCode == 37) {
@@ -87,11 +87,12 @@
    * @method _nextStep
    */
   function _nextStep() {
-    if(this._currentStep == undefined) {
+    if (typeof(this._currentStep) === 'undefined') {
       this._currentStep = 0;
     } else {
       ++this._currentStep;
     }
+
     if((this._introItems.length) <= this._currentStep) {
       //end of the intro
       //check if any callback is defined
@@ -101,8 +102,8 @@
       _exitIntro.call(this, this._targetElement);
       return;
     }
-    _showElement.call(this, this._introItems[this._currentStep].element);
 
+    _showElement.call(this, this._introItems[this._currentStep].element);
   }
 
   /**
@@ -112,8 +113,8 @@
    * @method _nextStep
    */
   function _previousStep() {
-    if(this._currentStep == 0){
-      return;
+    if (this._currentStep == 0){
+      return false;
     }
 
     _showElement.call(this, this._introItems[--this._currentStep].element);
@@ -154,6 +155,15 @@
     }
   }
 
+  /**
+   * Render tooltip box in the page
+   *
+   * @api private
+   * @method _placeTooltip
+   * @param {Object} targetElement
+   * @param {Object} tooltipLayer
+   * @param {Object} arrowLayer
+   */
   function _placeTooltip(targetElement, tooltipLayer, arrowLayer) {
     var tooltipLayerPosition = _getOffset(tooltipLayer);
     //reset the old style
@@ -161,7 +171,7 @@
     tooltipLayer.style.right = null;
     tooltipLayer.style.bottom = null;
     tooltipLayer.style.left = null;
-    switch(targetElement.getAttribute('data-position')){
+    switch (targetElement.getAttribute('data-position')) {
       case 'top':
         tooltipLayer.style.left = "15px";
         tooltipLayer.style.top = "-" + (tooltipLayerPosition.height + 10) + "px";
@@ -193,7 +203,7 @@
    * @param {Object} targetElement
    */
   function _showElement(targetElement) {
-  
+
     var self = this,
         oldHelperLayer = document.querySelector(".introjs-helperLayer"),
         elementPosition = _getOffset(targetElement);
@@ -293,7 +303,7 @@
 
     //set css class name
     overlayLayer.className = "introjs-overlay";
-    
+
     //set overlay layer position
     var elementPosition = _getOffset(targetElm);
     if(elementPosition) {
@@ -336,9 +346,9 @@
     var _x = 0;
     var _y = 0;
     while(element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
-        _x += element.offsetLeft;
-        _y += element.offsetTop;
-        element = element.offsetParent;
+      _x += element.offsetLeft;
+      _y += element.offsetTop;
+      element = element.offsetParent;
     }
     //set top
     elementPosition.top = _y;
@@ -357,7 +367,7 @@
       //select the target element with query selector
       var targetElement = document.querySelector(targetElm);
 
-      if(targetElement) {
+      if (targetElement) {
         return new IntroJs(targetElement);
       } else {
         throw new Error("There's no element with given selector.");
@@ -378,7 +388,7 @@
   //Prototype
   introJs.fn = IntroJs.prototype = {
     clone: function () {
-      return IntroJs(this);
+      return new IntroJs(this);
     },
     start: function () {
       _introForElement.call(this, this._targetElement);
@@ -402,5 +412,5 @@
     }
   };
 
-  this['introJs'] = introJs;
+  window['introJs'] = introJs;
 })();
