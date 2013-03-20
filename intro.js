@@ -180,7 +180,6 @@
         arrowLayer.className = 'introjs-arrow bottom';
         break;
       case 'right':
-        console.log(tooltipLayerPosition);
         tooltipLayer.style.right = "-" + (tooltipLayerPosition.width + 10) + "px";
         arrowLayer.className = 'introjs-arrow left';
         break;
