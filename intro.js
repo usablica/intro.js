@@ -142,11 +142,6 @@
     if (helperLayer) {
       helperLayer.parentNode.removeChild(helperLayer);
     }
-    //remove `introjs-showElement` class from the element
-    var showElement = document.querySelector(".introjs-showElement");
-    if (showElement) {
-      showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
-    }
     //clean listeners
     window.onkeydown = null;
     //set the step to zero
@@ -180,7 +175,6 @@
         arrowLayer.className = 'introjs-arrow bottom';
         break;
       case 'right':
-        console.log(tooltipLayerPosition);
         tooltipLayer.style.right = "-" + (tooltipLayerPosition.width + 10) + "px";
         arrowLayer.className = 'introjs-arrow left';
         break;
@@ -211,25 +205,32 @@
         elementPosition = _getOffset(targetElement);
 
     if(oldHelperLayer != null) {
-      var oldHelperNumberLayer = oldHelperLayer.querySelector(".introjs-helperNumberLayer"),
+      var oldHelperContentLayer = oldHelperLayer.querySelector(".introjs-helperContentLayer"),
+          oldHelperNumberLayer = oldHelperLayer.querySelector(".introjs-helperNumberLayer"),
           oldtooltipLayer = oldHelperLayer.querySelector(".introjs-tooltiptext"),
           oldArrowLayer = oldHelperLayer.querySelector(".introjs-arrow"),
-          oldtooltipContainer = oldHelperLayer.querySelector(".introjs-tooltip")
+          oldtooltipContainer = oldHelperLayer.querySelector(".introjs-tooltip");
 
       //set new position to helper layer
       oldHelperLayer.setAttribute("style", "width: " + (elementPosition.width + 10)  + "px; " +
                                            "height:" + (elementPosition.height + 10) + "px; " +
                                            "top:"    + (elementPosition.top - 5)     + "px;" +
                                            "left: "  + (elementPosition.left - 5)    + "px;");
+
+      // Copy targetElement content into new layer and display it when the highlight has finished moving
+      oldHelperContentLayer.innerHTML = '';
+      setTimeout(function(){
+        oldHelperContentLayer.innerHTML = _cloneWithStyles(targetElement).outerHTML;
+      }, 300);
+      
       //set current step to the label
       oldHelperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
       //set current tooltip text
       oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro");
-      var oldShowElement = document.querySelector(".introjs-showElement");
-      oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
       _placeTooltip(targetElement, oldtooltipContainer, oldArrowLayer);
     } else {
       var helperLayer = document.createElement("div"),
+          helperContentLayer = document.createElement("div"),
           helperNumberLayer = document.createElement("span"),
           arrowLayer = document.createElement("div"),
           tooltipLayer = document.createElement("div");
@@ -243,12 +244,17 @@
       //add helper layer to target element
       this._targetElement.appendChild(helperLayer);
 
+      helperContentLayer.className = "introjs-helperContentLayer";
       helperNumberLayer.className = "introjs-helperNumberLayer";
       arrowLayer.className = 'introjs-arrow';
       tooltipLayer.className = "introjs-tooltip";
 
+      // Copy targetElement content into new layer 
+      helperContentLayer.innerHTML = _cloneWithStyles(targetElement).outerHTML;
+
       helperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
       tooltipLayer.innerHTML = "<div class='introjs-tooltiptext'>" + targetElement.getAttribute("data-intro") + "</div><div class='introjs-tooltipbuttons'></div>";
+      helperLayer.appendChild(helperContentLayer);
       helperLayer.appendChild(helperNumberLayer);
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
@@ -293,9 +299,6 @@
       //set proper position
       _placeTooltip(targetElement, tooltipLayer, arrowLayer);
     }
-
-    //add target element position style
-    targetElement.className += " introjs-showElement";
 
     //Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
     var currentElementPosition = "";
@@ -421,6 +424,100 @@
 
     return elementPosition;
   }
+
+  /**
+   * Clones an element and its children, including computed styles
+   *
+   * @api private
+   * @method _cloneWithStyles
+   * @param {Object} element
+   * @param {Number} depth
+   * @returns A copy of the element and its children
+   */
+  function _cloneWithStyles(element, depth){
+    if (typeof(depth) == 'undefined'){
+      depth = 0;
+    }
+    var newNode = element.cloneNode(false);
+    _copyComputedStyle(element, newNode);
+
+    for(var i = 0; i < element.childNodes.length; i++){
+      newNode.appendChild(_cloneWithStyles(element.childNodes[i], depth + 1));
+    }
+    newNode.className = '';
+
+    if (depth === 0){
+      // Need to adjust for padding/margin/border of the helperLayer
+      var sourcePadding = element.style.padding.match(/\d+/);
+      var sourceMargin = element.style.margin.match(/\d+/);
+      newNode.style.padding = Math.max(-1, parseInt(sourcePadding ? sourcePadding[0] : 0) - 11) + 'px';
+      newNode.style.margin = Math.max(-1, parseInt(sourceMargin ? sourceMargin[0] : 0) - 11) + 'px';
+      newNode.style.position = 'static';
+    }
+
+    return newNode;
+  }
+
+  /**
+   * Retrieves the computed style of the passed element
+   * via: http://stackoverflow.com/q/1848445/
+   *
+   * @api private
+   * @method _getComputedStyle
+   * @param {Object} el
+   * @param {String} style
+   * @returns Style value or array of all styles
+   */
+
+  function _getComputedStyle(el, style) {
+    var computedStyle;
+    if ( typeof el.currentStyle != 'undefined' ) {
+      computedStyle = el.currentStyle;
+    } else {
+      computedStyle = document.defaultView.getComputedStyle(el, null);
+    }
+    if(computedStyle === null || typeof computedStyle == 'undefined'){
+      return '';
+    } else {
+      return style ? computedStyle[style] : computedStyle;
+    }
+  }
+
+  /**
+   * Copies the styles from a src element to a dest element
+   * Only looks at styles in the list below in order to avoid copying default browser styles
+   *
+   * @api private
+   * @method _copyComputedStyle
+   * @param {Object} src
+   * @param {Object} dest
+   * @returns null
+   */
+
+  function _copyComputedStyle(src, dest) {
+    var copyableStyles = ['font-family','font-size','font-weight','font-style','color',
+        'text-transform','text-decoration','letter-spacing','word-spacing',
+        'line-height','text-align','vertical-align','direction','background-color',
+        'background-image','background-repeat','background-position',
+        'background-attachment','opacity','width','height','top','right','bottom',
+        'left','margin-top','margin-right','margin-bottom','margin-left',
+        'padding-top','padding-right','padding-bottom','padding-left',
+        'border-top-width','border-right-width','border-bottom-width',
+        'border-left-width','border-top-color','border-right-color',
+        'border-bottom-color','border-left-color','border-top-style',
+        'border-right-style','border-bottom-style','border-left-style','position',
+        'display','visibility','z-index','overflow-x','overflow-y','white-space',
+        'clip','float','clear','cursor','list-style-image','list-style-position',
+        'list-style-type','marker-offset'];
+    for ( var i = 0; i < copyableStyles.length; i++) {
+      var style = copyableStyles[i];    
+      var s = _getComputedStyle(src, style);
+      try {
+        dest.style[style] = typeof(s) == 'undefined' ? '' : s;
+      } catch(e){}
+    }
+  }
+
 
   var introJs = function (targetElm) {
     if (typeof (targetElm) === "object") {

@@ -10,10 +10,6 @@
           transition: all 0.3s ease-out;
 }
 
-.introjs-showElement {
-  z-index: 9999999;
-}
-
 .introjs-relativePosition {
   position: relative;
 }
@@ -30,6 +26,11 @@
       -ms-transition: all 0.3s ease-out;
        -o-transition: all 0.3s ease-out;
           transition: all 0.3s ease-out;
+}
+
+.introjs-helperContentLayer {
+  position: absolute;
+  margin: 5px;
 }
 
 .introjs-helperNumberLayer {
