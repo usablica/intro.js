@@ -15,6 +15,8 @@ For example:
 ```html
 <a href='http://google.com/' data-intro='Hello step one!' data-step='1'></a>
 ````
+
+Optionally you can define `data-position` attribute to define the position of tooltip with values `top`, `right`, `left` and `bottom`. Default value is `bottom`.
   
 **3)** Call this JavaScript function:
 ```javascript
