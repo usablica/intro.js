@@ -38,14 +38,22 @@ You can simply use this project for Yii framework: https://github.com/moein7tl/Y
 
 ## Roadmap
 - More browser compatibility
-- Adding ability to define tooltip position in each step, `top`, `left,` `right` and `bottom`
-- Fix overlay layer bug while using it in wide monitors and `document` object
-- Change `Next` and `Skip` buttons
-- Add complete introduction callback
 
 
 ## Release History
- * 2013-03-16   v0.1.0   First commit. 
+ * **v0.2.0** - 2013-03-20
+   - Ability to define tooltip position with `data-position` attribute
+   - Add `onexit` and `oncomplete` callback
+   - Better scrolling functionality
+   - Redesign navigating buttons + add previous button
+   - Fix overlay layer bug in wide monitors
+   - Fix show element for elements with position `absolute` or `relative`
+   - Add `enter` key for navigating in steps
+   - Code refactoring
+  
+  
+ * **v0.1.0** - 2013-03-16 
+   - First commit. 
 
 ## Author
 **Afshin Mehrabani**
