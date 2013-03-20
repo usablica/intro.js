@@ -29,7 +29,7 @@
    * @returns {Boolean} Success or not?
    */
   function _introForElement(targetElm) {
-    var allIntroSteps = targetElm.querySelectorAll("*[data-intro]"),
+    var allIntroSteps = targetElm.querySelectorAll("*[data-intro-text]"),
         introItems = [],
         self = this;
 
@@ -42,7 +42,7 @@
       var currentElement = allIntroSteps[i];
       introItems.push({
         element: currentElement,
-        intro: currentElement.getAttribute("data-intro"),
+        intro: currentElement.getAttribute("data-intro-text"),
         step: parseInt(currentElement.getAttribute("data-intro-step"), 10),
         position: currentElement.getAttribute("data-intro-position") || 'bottom'
       });
@@ -224,7 +224,7 @@
       //set current step to the label
       oldHelperNumberLayer.innerHTML = targetElement.getAttribute("data-intro-step");
       //set current tooltip text
-      oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro");
+      oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro-text");
       var oldShowElement = document.querySelector(".introjs-showElement");
       oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
       _placeTooltip(targetElement, oldtooltipContainer, oldArrowLayer);
@@ -248,7 +248,7 @@
       tooltipLayer.className = "introjs-tooltip";
 
       helperNumberLayer.innerHTML = targetElement.getAttribute("data-intro-step");
-      tooltipLayer.innerHTML = "<div class='introjs-tooltiptext'>" + targetElement.getAttribute("data-intro") + "</div><div class='introjs-tooltipbuttons'></div>";
+      tooltipLayer.innerHTML = "<div class='introjs-tooltiptext'>" + targetElement.getAttribute("data-intro-text") + "</div><div class='introjs-tooltipbuttons'></div>";
       helperLayer.appendChild(helperNumberLayer);
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
