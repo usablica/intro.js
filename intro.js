@@ -148,7 +148,7 @@
       showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
     }
     //clean listeners
-    targetElement.onkeydown = null;
+    window.onkeydown = null;
     //set the step to zero
     this._currentStep = undefined;
     //check if any callback is defined
