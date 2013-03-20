@@ -27,6 +27,78 @@ Optionally, pass one parameter to `introJs` function to limit the presentation s
 
 <p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.png"></p>  
 
+## API
+
+###introJs([targetElm])
+
+Creating an introJs object.
+
+**Available since**: v0.1.0
+
+**Parameters:**
+ - targetElm : String (optional)
+   Should be defined to start introduction for specific element, for example: `#intro-farm`.
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs() //without selector, start introduction for whole page
+introJs("#intro-farm") //start introduction for element id='intro-farm'
+````
+    
+###introJs.start()
+
+Start the introduction for defined element(s).
+
+**Available since**: v0.1.0
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().start()
+````
+
+###introJs.oncomplete(providedCallback)
+
+Set callback for when introduction completed.
+
+**Available since**: v0.2.0
+
+**Parameters:**
+ - providedCallback : Function
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().oncomplete(function() {
+  alert("end of introduction");
+});
+````
+
+###introJs.onexit(providedCallback)
+
+Set callback to exit of introduction. Exit also means pressing `ESC` key and clicking on the overlay layer by the user.  
+
+**Available since:** v0.2.0
+
+**Parameters:**
+ - providedCallback : Function
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().onexit(function() {
+  alert("exit of introduction");
+});
+````
 
 ## Using with:
 
