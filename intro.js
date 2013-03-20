@@ -145,10 +145,12 @@
     //remove `introjs-showElement` class from the element
     var showElement = document.querySelector(".introjs-showElement");
     if (showElement) {
-      showElement.className = showElement.className.replace(/introjs-showElement/,'').trim();
+      showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
     }
     //clean listeners
     targetElement.onkeydown = null;
+    //set the step to zero
+    this._currentStep = undefined;
     //check if any callback is defined
     if (this._introExitCallback != undefined) {
       this._introExitCallback.call(this);
@@ -224,13 +226,9 @@
       //set current tooltip text
       oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro");
       var oldShowElement = document.querySelector(".introjs-showElement");
-      oldShowElement.className = oldShowElement.className.replace(/introjs-showElement/,'').trim();
-      //change to new intro item
-      targetElement.className += " introjs-showElement";
+      oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
       _placeTooltip(targetElement, oldtooltipContainer, oldArrowLayer);
     } else {
-      targetElement.className += " introjs-showElement";
-
       var helperLayer = document.createElement("div"),
           helperNumberLayer = document.createElement("span"),
           arrowLayer = document.createElement("div"),
@@ -255,31 +253,63 @@
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
 
-      var skipTooltipButton = document.createElement("a");
-      skipTooltipButton.className = "introjs-skipbutton";
-      skipTooltipButton.href = "javascript:void(0);";
-      skipTooltipButton.innerHTML = "Skip";
-
+      //next button
       var nextTooltipButton = document.createElement("a");
 
       nextTooltipButton.onclick = function() {
         _nextStep.call(self);
       };
 
-      nextTooltipButton.className = "introjs-nextbutton";
+      nextTooltipButton.className = "introjs-button introjs-nextbutton";
       nextTooltipButton.href = "javascript:void(0);";
       nextTooltipButton.innerHTML = "Next &rarr;";
 
+      //previous button
+      var prevTooltipButton = document.createElement("a");
+
+      prevTooltipButton.onclick = function() {
+        _previousStep.call(self);
+      };
+
+      prevTooltipButton.className = "introjs-button introjs-prevbutton";
+      prevTooltipButton.href = "javascript:void(0);";
+      prevTooltipButton.innerHTML = "&larr; Back";
+
+      //skip button
+      var skipTooltipButton = document.createElement("a");
+      skipTooltipButton.className = "introjs-button introjs-skipbutton";
+      skipTooltipButton.href = "javascript:void(0);";
+      skipTooltipButton.innerHTML = "Skip";
+
       skipTooltipButton.onclick = function() {
-        _exitIntro.call(self, self._targetElement);
+      _exitIntro.call(self, self._targetElement);
       };
 
       var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
       tooltipButtonsLayer.appendChild(skipTooltipButton);
+      tooltipButtonsLayer.appendChild(prevTooltipButton);
       tooltipButtonsLayer.appendChild(nextTooltipButton);
 
       //set proper position
       _placeTooltip(targetElement, tooltipLayer, arrowLayer);
+    }
+
+    //add target element position style
+    targetElement.className += " introjs-showElement";
+
+    //Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
+    var currentElementPosition = "";
+    if (targetElement.currentStyle) { //IE
+      currentElementPosition = targetElement.currentStyle["position"];
+    } else if (document.defaultView && document.defaultView.getComputedStyle) { //Firefox
+      currentElementPosition = document.defaultView.getComputedStyle(targetElement, null).getPropertyValue("position");
+    }
+
+    //I don't know is this necessary or not, but I clear the position for better comparing
+    currentElementPosition = currentElementPosition.toLowerCase();
+    if (currentElementPosition != "absolute" && currentElementPosition != "relative") {
+      //change to new intro item
+      targetElement.className += " introjs-relativePosition";
     }
 
     //scroll the page to the element position
@@ -374,7 +404,7 @@
       //select the target element with query selector
       var targetElement = document.querySelector(targetElm);
 
-      if (targetElement) {
+      if(targetElement) {
         return new IntroJs(targetElement);
       } else {
         throw new Error("There's no element with given selector.");
