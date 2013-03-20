@@ -113,6 +113,9 @@ You can simply use this project for Yii framework: https://github.com/moein7tl/Y
 
 
 ## Release History
+ * **v0.2.1** - 2013-03-20
+   - Fix keydown event unbinding bug.
+
  * **v0.2.0** - 2013-03-20
    - Ability to define tooltip position with `data-position` attribute
    - Add `onexit` and `oncomplete` callback
