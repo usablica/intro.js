@@ -311,27 +311,34 @@
       //change to new intro item
       targetElement.className += " introjs-relativePosition";
     }
-    
-    if (!elementInViewport(targetElement)) {
+
+    if (!_elementInViewport(targetElement)) {
       var rect = targetElement.getBoundingClientRect()
-          top = rect.bottom-rect.height,
-          bottom = rect.bottom-window.innerHeight;
-      
+          top = rect.bottom - rect.height,
+          bottom = rect.bottom - window.innerHeight;
+
       // Scroll up
       if (top < 0) {
-        window.scrollBy(0, top-30); // 30px padding from edge to look nice
-      
+        window.scrollBy(0, top - 30); // 30px padding from edge to look nice
+
       // Scroll down
       } else {
-        window.scrollBy(0, bottom+100); // 70px + 30px padding from edge to look nice
+        window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
       }
-    }    
+    }
   }
-  
-  // http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
-  function elementInViewport(el) {
+
+  /**
+   * Add overlay layer to the page
+   * http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+   *
+   * @api private
+   * @method _elementInViewport
+   * @param {Object} el
+   */
+  function _elementInViewport(el) {
     var rect = el.getBoundingClientRect();
-    
+
     return (
       rect.top >= 0 &&
       rect.left >= 0 &&
