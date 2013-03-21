@@ -223,7 +223,7 @@
       //set current step to the label
       oldHelperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
       //set current tooltip text
-      oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro");
+      oldtooltipLayer.innerHTML = _getToolTipContent(targetElement);
       var oldShowElement = document.querySelector(".introjs-showElement");
       oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
       _placeTooltip(targetElement, oldtooltipContainer, oldArrowLayer);
@@ -247,7 +247,7 @@
       tooltipLayer.className = "introjs-tooltip";
 
       helperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
-      tooltipLayer.innerHTML = "<div class='introjs-tooltiptext'>" + targetElement.getAttribute("data-intro") + "</div><div class='introjs-tooltipbuttons'></div>";
+      tooltipLayer.innerHTML = "<div class='introjs-tooltiptext'>" + _getToolTipContent(targetElement) + "</div><div class='introjs-tooltipbuttons'></div>";
       helperLayer.appendChild(helperNumberLayer);
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
@@ -419,6 +419,25 @@
     elementPosition.left = _x;
 
     return elementPosition;
+  }
+
+  /**
+   * Returns matching element contents or data-into value
+   * if not found
+   * @api private
+   * @method _getToolTipContent
+   * @param {Object} element
+   * @returns Element's data-intro attribute text or element with matching id
+   */
+  function _getToolTipContent(element) {
+    var dataIntroAttr = element.getAttribute("data-intro");
+    var originalContent = document.getElementById(dataIntroAttr);
+    if (originalContent) {
+      var introContent = originalContent.cloneNode(true);
+      introContent.style.visibility = 'visible'
+      return introContent.innerHTML;
+    }
+    return dataIntroAttr;
   }
 
   var introJs = function (targetElm) {
