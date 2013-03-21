@@ -145,7 +145,7 @@
     //remove `introjs-showElement` class from the element
     var showElement = document.querySelector(".introjs-showElement");
     if (showElement) {
-      showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
+      showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, ''); // This is a manual trim.
     }
     //clean listeners
     window.onkeydown = null;
@@ -225,7 +225,7 @@
       //set current tooltip text
       oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro");
       var oldShowElement = document.querySelector(".introjs-showElement");
-      oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
+      oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, ''); // This is a manual trim
       _placeTooltip(targetElement, oldtooltipContainer, oldArrowLayer);
     } else {
       var helperLayer = document.createElement("div"),
@@ -312,9 +312,9 @@
     }
 
     if (!_elementInViewport(targetElement)) {
-      var rect = targetElement.getBoundingClientRect()
-          top = rect.bottom - rect.height,
-          bottom = rect.bottom - window.innerHeight;
+      var rect = targetElement.getBoundingClientRect(),
+          top = rect.bottom - (rect.bottom - rect.top),
+          bottom = rect.bottom - _getWinSize().height;
 
       // Scroll up
       if (top < 0) {
@@ -324,6 +324,26 @@
       } else {
         window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
       }
+    }
+  }
+
+  /**
+   * Provides a cross-browser way to get the screen dimensions
+   * via: http://stackoverflow.com/questions/5864467/internet-explorer-innerheight
+   *
+   * @api private
+   * @method _getWinSize
+   * @returns {Object} with width and height attributes
+   */
+  function _getWinSize(){
+    if(window.innerWidth!= undefined){
+      return {width: window.innerWidth, height: window.innerHeight};
+    }
+    else{
+      var B = document.body, 
+          D = document.documentElement;
+      return {width: Math.max(D.clientWidth, B.clientWidth),
+              height: Math.max(D.clientHeight, B.clientHeight)};
     }
   }
 
