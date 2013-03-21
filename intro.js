@@ -18,6 +18,12 @@
    */
   function IntroJs(obj) {
     this._targetElement = obj;
+    
+    this._options = {
+      nextLabel: 'Next &rarr;',
+      prevLabel: '&larr; Back',
+      skipLabel: 'Skip'
+    }
   }
 
   /**
@@ -261,7 +267,7 @@
 
       nextTooltipButton.className = "introjs-button introjs-nextbutton";
       nextTooltipButton.href = "javascript:void(0);";
-      nextTooltipButton.innerHTML = "Next &rarr;";
+      nextTooltipButton.innerHTML = this._options.nextLabel;
 
       //previous button
       var prevTooltipButton = document.createElement("a");
@@ -272,13 +278,13 @@
 
       prevTooltipButton.className = "introjs-button introjs-prevbutton";
       prevTooltipButton.href = "javascript:void(0);";
-      prevTooltipButton.innerHTML = "&larr; Back";
+      prevTooltipButton.innerHTML = this._options.prevLabel;
 
       //skip button
       var skipTooltipButton = document.createElement("a");
       skipTooltipButton.className = "introjs-button introjs-skipbutton";
       skipTooltipButton.href = "javascript:void(0);";
-      skipTooltipButton.innerHTML = "Skip";
+      skipTooltipButton.innerHTML = this._options.skipLabel;
 
       skipTooltipButton.onclick = function() {
         _exitIntro.call(self, self._targetElement);
@@ -421,6 +427,20 @@
     return elementPosition;
   }
 
+  /**
+   * Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
+   * via: http://stackoverflow.com/questions/171251/how-can-i-merge-properties-of-two-javascript-objects-dynamically
+   * @param obj1
+   * @param obj2
+   * @returns obj3 a new object based on obj1 and obj2
+   */
+  function _mergeOptions(obj1,obj2){
+    var obj3 = {};
+    for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+    for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+    return obj3;
+  }
+
   var introJs = function (targetElm) {
     if (typeof (targetElm) === "object") {
       //Ok, create a new instance
@@ -452,6 +472,14 @@
   introJs.fn = IntroJs.prototype = {
     clone: function () {
       return new IntroJs(this);
+    },
+    setoption: function(option, value){
+      this._options[option] = value;
+      return this;
+    },
+    setoptions: function(options){
+      this._options = _mergeOptions(this._options, options);
+      return this;
     },
     start: function () {
       _introForElement.call(this, this._targetElement);
