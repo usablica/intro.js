@@ -29,7 +29,7 @@
    * @returns {Boolean} Success or not?
    */
   function _introForElement(targetElm) {
-    var allIntroSteps = targetElm.querySelectorAll("*[data-intro]"),
+    var allIntroSteps = targetElm.querySelectorAll("*[data-intro-text]"),
         introItems = [],
         self = this;
 
@@ -42,9 +42,9 @@
       var currentElement = allIntroSteps[i];
       introItems.push({
         element: currentElement,
-        intro: currentElement.getAttribute("data-intro"),
-        step: parseInt(currentElement.getAttribute("data-step"), 10),
-        position: currentElement.getAttribute("data-position") || 'bottom'
+        intro: currentElement.getAttribute("data-intro-text"),
+        step: parseInt(currentElement.getAttribute("data-intro-step"), 10),
+        position: currentElement.getAttribute("data-intro-position") || 'bottom'
       });
     }
 
@@ -173,7 +173,7 @@
     tooltipLayer.style.right = null;
     tooltipLayer.style.bottom = null;
     tooltipLayer.style.left = null;
-    switch (targetElement.getAttribute('data-position')) {
+    switch (targetElement.getAttribute('data-intro-position')) {
       case 'top':
         tooltipLayer.style.left = "15px";
         tooltipLayer.style.top = "-" + (tooltipLayerPosition.height + 10) + "px";
@@ -221,9 +221,9 @@
                                            "top:"    + (elementPosition.top - 5)     + "px;" +
                                            "left: "  + (elementPosition.left - 5)    + "px;");
       //set current step to the label
-      oldHelperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
+      oldHelperNumberLayer.innerHTML = targetElement.getAttribute("data-intro-step");
       //set current tooltip text
-      oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro");
+      oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro-text");
       var oldShowElement = document.querySelector(".introjs-showElement");
       oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
       _placeTooltip(targetElement, oldtooltipContainer, oldArrowLayer);
@@ -246,8 +246,8 @@
       arrowLayer.className = 'introjs-arrow';
       tooltipLayer.className = "introjs-tooltip";
 
-      helperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
-      tooltipLayer.innerHTML = "<div class='introjs-tooltiptext'>" + targetElement.getAttribute("data-intro") + "</div><div class='introjs-tooltipbuttons'></div>";
+      helperNumberLayer.innerHTML = targetElement.getAttribute("data-intro-step");
+      tooltipLayer.innerHTML = "<div class='introjs-tooltiptext'>" + targetElement.getAttribute("data-intro-text") + "</div><div class='introjs-tooltipbuttons'></div>";
       helperLayer.appendChild(helperNumberLayer);
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
@@ -281,7 +281,7 @@
       skipTooltipButton.innerHTML = "Skip";
 
       skipTooltipButton.onclick = function() {
-        _exitIntro.call(self, self._targetElement);
+      _exitIntro.call(self, self._targetElement);
       };
 
       var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
@@ -430,7 +430,7 @@
       //select the target element with query selector
       var targetElement = document.querySelector(targetElm);
 
-      if (targetElement) {
+      if(targetElement) {
         return new IntroJs(targetElement);
       } else {
         throw new Error("There's no element with given selector.");
