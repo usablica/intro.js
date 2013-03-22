@@ -281,7 +281,7 @@
       skipTooltipButton.innerHTML = "Skip";
 
       skipTooltipButton.onclick = function() {
-        _exitIntro.call(self, self._targetElement);
+      _exitIntro.call(self, self._targetElement);
       };
 
       var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
@@ -430,7 +430,7 @@
       //select the target element with query selector
       var targetElement = document.querySelector(targetElm);
 
-      if (targetElement) {
+      if(targetElement) {
         return new IntroJs(targetElement);
       } else {
         throw new Error("There's no element with given selector.");
