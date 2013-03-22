@@ -211,22 +211,33 @@
 
     if(oldHelperLayer != null) {
       var oldHelperNumberLayer = oldHelperLayer.querySelector(".introjs-helperNumberLayer"),
-          oldtooltipLayer = oldHelperLayer.querySelector(".introjs-tooltiptext"),
-          oldArrowLayer = oldHelperLayer.querySelector(".introjs-arrow"),
-          oldtooltipContainer = oldHelperLayer.querySelector(".introjs-tooltip")
+          oldtooltipLayer      = oldHelperLayer.querySelector(".introjs-tooltiptext"),
+          oldArrowLayer        = oldHelperLayer.querySelector(".introjs-arrow"),
+          oldtooltipContainer  = oldHelperLayer.querySelector(".introjs-tooltip")
+
+      //hide the tooltip
+      oldtooltipContainer.style.opacity = 0;
 
       //set new position to helper layer
       oldHelperLayer.setAttribute("style", "width: " + (elementPosition.width + 10)  + "px; " +
                                            "height:" + (elementPosition.height + 10) + "px; " +
                                            "top:"    + (elementPosition.top - 5)     + "px;" +
                                            "left: "  + (elementPosition.left - 5)    + "px;");
-      //set current step to the label
-      oldHelperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
-      //set current tooltip text
-      oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro");
+      //remove old classes
       var oldShowElement = document.querySelector(".introjs-showElement");
       oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
-      _placeTooltip(targetElement, oldtooltipContainer, oldArrowLayer);
+      //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
+      setTimeout(function() {
+        //set current step to the label
+        oldHelperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
+        //set current tooltip text
+        oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro");
+        //set the tooltip position
+        _placeTooltip(targetElement, oldtooltipContainer, oldArrowLayer);
+        //show the tooltip
+        oldtooltipContainer.style.opacity = 1;
+      }, 350);
+
     } else {
       var helperLayer = document.createElement("div"),
           helperNumberLayer = document.createElement("span"),

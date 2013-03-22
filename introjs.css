@@ -103,11 +103,11 @@
   background-color: white;
   border-radius: 3px;
   box-shadow: 0 1px 10px rgba(0,0,0,.4);
-  -webkit-transition: all 0.1s ease-out;
-     -moz-transition: all 0.1s ease-out;
-      -ms-transition: all 0.1s ease-out;
-       -o-transition: all 0.1s ease-out;
-          transition: all 0.1s ease-out;
+  -webkit-transition: opacity 0.1s ease-out;
+     -moz-transition: opacity 0.1s ease-out;
+      -ms-transition: opacity 0.1s ease-out;
+       -o-transition: opacity 0.1s ease-out;
+          transition: opacity 0.1s ease-out;
 }
 
 .introjs-tooltipbuttons {
