@@ -110,6 +110,16 @@ If you are using the rails asset pipeline you can use the [introjs-rails](https:
 ### Yii framework
 You can simply use this project for Yii framework: https://github.com/moein7tl/Yii-IntroJS
 
+
+## Build
+
+First you should install `nodejs` and `npm`, then first run this command: `npm install` to install all dependencies.
+
+Now you can run this command to minify all static resources:
+
+    make build
+
+
 ## Roadmap
 - More browser compatibility
 
