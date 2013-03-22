@@ -17,6 +17,8 @@ For example:
 ```html
 <a href='http://google.com/' data-intro-text='Hello step one!' data-intro-step='1' data-intro-position='top'>Google</a>
 ````
+
+Optionally you can define `data-position` attribute to define the position of tooltip with values `top`, `right`, `left` and `bottom`. Default value is `bottom`.
   
 **4)** Call this JavaScript function:
 ```javascript
@@ -27,8 +29,80 @@ Optionally, pass one parameter to `introJs` function to limit the presentation s
 
 **For example** `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
 
-<p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.jpg"></p>  
+<p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.png"></p>  
 
+## API
+
+###introJs([targetElm])
+
+Creating an introJs object.
+
+**Available since**: v0.1.0
+
+**Parameters:**
+ - targetElm : String (optional)
+   Should be defined to start introduction for specific element, for example: `#intro-farm`.
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs() //without selector, start introduction for whole page
+introJs("#intro-farm") //start introduction for element id='intro-farm'
+````
+    
+###introJs.start()
+
+Start the introduction for defined element(s).
+
+**Available since**: v0.1.0
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().start()
+````
+
+###introJs.oncomplete(providedCallback)
+
+Set callback for when introduction completed.
+
+**Available since**: v0.2.0
+
+**Parameters:**
+ - providedCallback : Function
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().oncomplete(function() {
+  alert("end of introduction");
+});
+````
+
+###introJs.onexit(providedCallback)
+
+Set callback to exit of introduction. Exit also means pressing `ESC` key and clicking on the overlay layer by the user.  
+
+**Available since:** v0.2.0
+
+**Parameters:**
+ - providedCallback : Function
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().onexit(function() {
+  alert("exit of introduction");
+});
+````
 
 ## Using with:
 
@@ -40,14 +114,25 @@ You can simply use this project for Yii framework: https://github.com/moein7tl/Y
 
 ## Roadmap
 - More browser compatibility
-- Adding ability to define tooltip position in each step, `top`, `left,` `right` and `bottom`
-- Fix overlay layer bug while using it in wide monitors and `document` object
-- Change `Next` and `Skip` buttons
-- Add complete introduction callback
 
 
 ## Release History
- * 2013-03-16   v0.1.0   First commit. 
+ * **v0.2.1** - 2013-03-20
+   - Fix keydown event unbinding bug.
+
+ * **v0.2.0** - 2013-03-20
+   - Ability to define tooltip position with `data-position` attribute
+   - Add `onexit` and `oncomplete` callback
+   - Better scrolling functionality
+   - Redesign navigating buttons + add previous button
+   - Fix overlay layer bug in wide monitors
+   - Fix show element for elements with position `absolute` or `relative`
+   - Add `enter` key for navigating in steps
+   - Code refactoring
+  
+  
+ * **v0.1.0** - 2013-03-16 
+   - First commit. 
 
 ## Author
 **Afshin Mehrabani**

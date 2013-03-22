@@ -1,5 +1,5 @@
 /**
- * Intro.js v0.1.0
+ * Intro.js v0.2.1
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -9,7 +9,7 @@
 (function () {
 
   //Default config/variables
-  var VERSION = "0.1.0";
+  var VERSION = "0.2.1";
 
   /**
    * IntroJs main class
@@ -148,7 +148,7 @@
       showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
     }
     //clean listeners
-    targetElement.onkeydown = null;
+    window.onkeydown = null;
     //set the step to zero
     this._currentStep = undefined;
     //check if any callback is defined
@@ -180,7 +180,6 @@
         arrowLayer.className = 'introjs-arrow bottom';
         break;
       case 'right':
-        console.log(tooltipLayerPosition);
         tooltipLayer.style.right = "-" + (tooltipLayerPosition.width + 10) + "px";
         arrowLayer.className = 'introjs-arrow left';
         break;
@@ -312,12 +311,39 @@
       targetElement.className += " introjs-relativePosition";
     }
 
-    //scroll the page to the element position
-    if (typeof(targetElement.scrollIntoViewIfNeeded) === "function") {
-      //awesome method guys: https://bugzilla.mozilla.org/show_bug.cgi?id=403510
-      //but I think this method has some problems with IE < 7.0, I should find a proper failover way
-      targetElement.scrollIntoViewIfNeeded();
+    if (!_elementInViewport(targetElement)) {
+      var rect = targetElement.getBoundingClientRect()
+          top = rect.bottom - rect.height,
+          bottom = rect.bottom - window.innerHeight;
+
+      // Scroll up
+      if (top < 0) {
+        window.scrollBy(0, top - 30); // 30px padding from edge to look nice
+
+      // Scroll down
+      } else {
+        window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
+      }
     }
+  }
+
+  /**
+   * Add overlay layer to the page
+   * http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+   *
+   * @api private
+   * @method _elementInViewport
+   * @param {Object} el
+   */
+  function _elementInViewport(el) {
+    var rect = el.getBoundingClientRect();
+
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
+      rect.right <= window.innerWidth 
+    );
   }
 
   /**
