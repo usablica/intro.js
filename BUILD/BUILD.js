@@ -11,7 +11,7 @@ new compressor.minify({
     if (err) {
       console.log(err);
     } else {
-      console.log("JS minified");
+      console.log("JS minified successfully.");
     }
   }
 });
@@ -24,7 +24,7 @@ new compressor.minify({
     if (err) {
       console.log(err);
     } else {
-      console.log("CSS minified");
+      console.log("CSS minified successfully.");
     }
   }
 });
