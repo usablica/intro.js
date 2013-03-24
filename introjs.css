@@ -34,6 +34,9 @@
 
 .introjs-helperNumberLayer {
   position: absolute;
+  -webkit-box-sizing: content-box;
+     -moz-box-sizing: content-box;
+          box-sizing: content-box;
   top: -16px;
   left: -16px;
   z-index: 9999999999 !important;

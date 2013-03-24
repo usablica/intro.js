@@ -28,7 +28,7 @@
    * @param {Object} targetElm
    * @returns {Boolean} Success or not?
    */
-  function _introForElement(targetElm) {
+  function _introForElement(targetElm, group) {
     var allIntroSteps = targetElm.querySelectorAll("*[data-intro]"),
         introItems = [],
         self = this;
@@ -40,12 +40,15 @@
 
     for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
       var currentElement = allIntroSteps[i];
+      if (!group || (currentElement.getAttribute("data-intro-group") == group)) {
       introItems.push({
-        element: currentElement,
-        intro: currentElement.getAttribute("data-intro"),
-        step: parseInt(currentElement.getAttribute("data-step"), 10),
-        position: currentElement.getAttribute("data-position") || 'bottom'
-      });
+              element: currentElement,
+              intro: currentElement.getAttribute("data-intro"),
+              step: parseInt(currentElement.getAttribute("data-step   "), 10),
+              position: currentElement.getAttribute("data-position") || 'bottom'
+            });
+      }
+
     }
 
     //Ok, sort all items with given steps
@@ -464,9 +467,12 @@
     clone: function () {
       return new IntroJs(this);
     },
-    start: function () {
-      _introForElement.call(this, this._targetElement);
+    start: function (group) {
+      _introForElement.call(this, this._targetElement, group);
       return this;
+    },
+    exit: function() {
+      _exitIntro.call(this, this._targetElement);
     },
     oncomplete: function(providedCallback) {
       if (typeof (providedCallback) === "function") {
