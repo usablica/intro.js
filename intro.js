@@ -45,8 +45,8 @@
    * @param {Object} targetElm
    * @returns {Boolean} Success or not?
    */
-  function _introForElement(targetElm) {
-    var allIntroSteps = targetElm.querySelectorAll('*[data-intro]'),
+  function _introForElement(targetElm, group) {
+    var allIntroSteps = targetElm.querySelectorAll("*[data-intro]"),
         introItems = [],
         self = this;
 
@@ -57,12 +57,14 @@
 
     for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
       var currentElement = allIntroSteps[i];
-      introItems.push({
-        element: currentElement,
-        intro: currentElement.getAttribute('data-intro'),
-        step: parseInt(currentElement.getAttribute('data-step'), 10),
-        position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
-      });
+      if (!group || (currentElement.getAttribute("data-intro-group") == group)) {
+        introItems.push({
+          element: currentElement,
+          intro: currentElement.getAttribute('data-intro'),
+          step: parseInt(currentElement.getAttribute('data-step'), 10),
+          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+        });
+      }
     }
 
     //Ok, sort all items with given steps
@@ -561,8 +563,8 @@
       this._options = _mergeOptions(this._options, options);
       return this;
     },
-    start: function () {
-      _introForElement.call(this, this._targetElement);
+    start: function (group) {
+      _introForElement.call(this, this._targetElement, group);
       return this;
     },
     goToStep: function(step) {
