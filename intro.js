@@ -1,5 +1,5 @@
 /**
- * Intro.js v0.2.1
+ * Intro.js v0.2.2
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -9,7 +9,7 @@
 (function () {
 
   //Default config/variables
-  var VERSION = "0.2.1";
+  var VERSION = "0.2.2";
 
   /**
    * IntroJs main class
@@ -64,7 +64,7 @@
       var skipButton = targetElm.querySelector(".introjs-skipbutton"),
           nextStepButton = targetElm.querySelector(".introjs-nextbutton");
 
-      window.onkeydown = function(e) {
+      self._onKeyDown = function(e) {
         if (e.keyCode == 27) {
           //escape key pressed, exit the intro
           _exitIntro.call(self, targetElm);
@@ -76,6 +76,12 @@
           _nextStep.call(self);
         }
       };
+
+      if (window.addEventListener) {
+        window.addEventListener("keydown", self._onKeyDown, true);
+      } else if (document.attachEvent) { //IE
+        document.attachEvent("onkeydown", self._onKeyDown);
+      }
     }
     return false;
   }
@@ -145,10 +151,14 @@
     //remove `introjs-showElement` class from the element
     var showElement = document.querySelector(".introjs-showElement");
     if (showElement) {
-      showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
+      showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, ''); // This is a manual trim.
     }
     //clean listeners
-    window.onkeydown = null;
+    if (window.removeEventListener) {
+      window.removeEventListener("keydown", this._onKeyDown, true);
+    } else if (document.detachEvent) { //IE
+      document.detachEvent("onkeydown", this._onKeyDown);
+    }
     //set the step to zero
     this._currentStep = undefined;
     //check if any callback is defined
@@ -225,9 +235,12 @@
                                            "left: "  + (elementPosition.left - 5)    + "px;");
       //remove old classes
       var oldShowElement = document.querySelector(".introjs-showElement");
-      oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').trim();
+      oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, '');
       //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
-      setTimeout(function() {
+      if (self._lastShowElementTimer) {
+        clearTimeout(self._lastShowElementTimer);
+      }
+      self._lastShowElementTimer = setTimeout(function() {
         //set current step to the label
         oldHelperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
         //set current tooltip text
@@ -323,9 +336,9 @@
     }
 
     if (!_elementInViewport(targetElement)) {
-      var rect = targetElement.getBoundingClientRect()
-          top = rect.bottom - rect.height,
-          bottom = rect.bottom - window.innerHeight;
+      var rect = targetElement.getBoundingClientRect(),
+          top = rect.bottom - (rect.bottom - rect.top),
+          bottom = rect.bottom - _getWinSize().height;
 
       // Scroll up
       if (top < 0) {
@@ -335,6 +348,23 @@
       } else {
         window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
       }
+    }
+  }
+
+  /**
+   * Provides a cross-browser way to get the screen dimensions
+   * via: http://stackoverflow.com/questions/5864467/internet-explorer-innerheight
+   *
+   * @api private
+   * @method _getWinSize
+   * @returns {Object} width and height attributes
+   */
+  function _getWinSize() {
+    if (window.innerWidth != undefined) {
+      return { width: window.innerWidth, height: window.innerHeight };
+    } else {
+      var D = document.documentElement;
+      return { width: D.clientWidth, height: D.clientHeight };
     }
   }
 
