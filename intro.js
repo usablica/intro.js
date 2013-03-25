@@ -222,7 +222,11 @@
    * @param {Object} targetElement
    */
   function _showElement(targetElement) {
-
+    
+    if (typeof this._introChangeCallback !== 'undefined') {
+        this._introChangeCallback.call(this, targetElement);
+    }
+    
     var self = this,
         oldHelperLayer = document.querySelector(".introjs-helperLayer"),
         elementPosition = _getOffset(targetElement);
@@ -527,6 +531,14 @@
     },
     start: function () {
       _introForElement.call(this, this._targetElement);
+      return this;
+    },
+    oncchange: function(providedCallback) {
+      if (typeof (providedCallback) === "function") {
+        this._introChangeCallback = providedCallback;
+      } else {
+        throw new Error("Provided callback for oncchange was not a function.");
+      }
       return this;
     },
     oncomplete: function(providedCallback) {
