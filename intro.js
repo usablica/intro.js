@@ -207,6 +207,7 @@
         arrowLayer.className = 'introjs-arrow right';
         break;
       case 'bottom':
+      default:
         tooltipLayer.style.bottom = "-" + (tooltipLayerPosition.height + 10) + "px";
         arrowLayer.className = 'introjs-arrow top';
         break;
