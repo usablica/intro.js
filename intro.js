@@ -18,11 +18,12 @@
    */
   function IntroJs(obj) {
     this._targetElement = obj;
-    
+
     this._options = {
       nextLabel: 'Next &rarr;',
       prevLabel: '&larr; Back',
-      skipLabel: 'Skip'
+      skipLabel: 'Skip',
+      tooltipPosition: 'bottom'
     }
   }
 
@@ -50,7 +51,7 @@
         element: currentElement,
         intro: currentElement.getAttribute("data-intro"),
         step: parseInt(currentElement.getAttribute("data-step"), 10),
-        position: currentElement.getAttribute("data-position") || 'bottom'
+        position: currentElement.getAttribute("data-position") || this._options.tooltipPosition
       });
     }
 
@@ -185,11 +186,12 @@
   function _placeTooltip(targetElement, tooltipLayer, arrowLayer) {
     var tooltipLayerPosition = _getOffset(tooltipLayer);
     //reset the old style
-    tooltipLayer.style.top = null;
-    tooltipLayer.style.right = null;
-    tooltipLayer.style.bottom = null;
-    tooltipLayer.style.left = null;
-    switch (targetElement.getAttribute('data-position')) {
+    tooltipLayer.style.top     = null;
+    tooltipLayer.style.right   = null;
+    tooltipLayer.style.bottom  = null;
+    tooltipLayer.style.left    = null;
+    var currentTooltipPosition = this._introItems[this._currentStep].position;
+    switch (currentTooltipPosition) {
       case 'top':
         tooltipLayer.style.left = "15px";
         tooltipLayer.style.top = "-" + (tooltipLayerPosition.height + 10) + "px";
@@ -205,7 +207,6 @@
         arrowLayer.className = 'introjs-arrow right';
         break;
       case 'bottom':
-      default:
         tooltipLayer.style.bottom = "-" + (tooltipLayerPosition.height + 10) + "px";
         arrowLayer.className = 'introjs-arrow top';
         break;
@@ -252,7 +253,7 @@
         //set current tooltip text
         oldtooltipLayer.innerHTML = targetElement.getAttribute("data-intro");
         //set the tooltip position
-        _placeTooltip(targetElement, oldtooltipContainer, oldArrowLayer);
+        _placeTooltip.call(self, targetElement, oldtooltipContainer, oldArrowLayer);
         //show the tooltip
         oldtooltipContainer.style.opacity = 1;
       }, 350);
@@ -320,7 +321,7 @@
       tooltipButtonsLayer.appendChild(nextTooltipButton);
 
       //set proper position
-      _placeTooltip(targetElement, tooltipLayer, arrowLayer);
+      _placeTooltip.call(self, targetElement, tooltipLayer, arrowLayer);
     }
 
     //add target element position style
@@ -471,11 +472,12 @@
   /**
    * Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
    * via: http://stackoverflow.com/questions/171251/how-can-i-merge-properties-of-two-javascript-objects-dynamically
+   *
    * @param obj1
    * @param obj2
    * @returns obj3 a new object based on obj1 and obj2
    */
-  function _mergeOptions(obj1,obj2){
+  function _mergeOptions(obj1,obj2) {
     var obj3 = {};
     for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
     for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
@@ -514,11 +516,11 @@
     clone: function () {
       return new IntroJs(this);
     },
-    setoption: function(option, value){
+    setOption: function(option, value) {
       this._options[option] = value;
       return this;
     },
-    setoptions: function(options){
+    setOptions: function(options) {
       this._options = _mergeOptions(this._options, options);
       return this;
     },
