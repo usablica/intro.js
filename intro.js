@@ -23,7 +23,9 @@
       nextLabel: 'Next &rarr;',
       prevLabel: '&larr; Back',
       skipLabel: 'Skip',
-      tooltipPosition: 'bottom'
+      tooltipPosition: 'bottom',
+      groupClass:'',
+      fullScreen: true
     }
   }
 
@@ -36,9 +38,19 @@
    * @returns {Boolean} Success or not?
    */
   function _introForElement(targetElm) {
-    var allIntroSteps = targetElm.querySelectorAll("*[data-intro]"),
-        introItems = [],
-        self = this;
+   
+    //if there is a class group  
+    if(this._options.groupClass == ''){
+      var query = "*[data-intro]";
+    }
+    else
+    {
+      var query = "*[data-intro]"+this._options.groupClass;
+    }
+    
+    var introItems = [],
+      allIntroSteps = targetElm.querySelectorAll(query),
+      self = this;
 
     //if there's no element to intro
     if(allIntroSteps.length < 1) {
@@ -417,8 +429,15 @@
     } else {
       //set overlay layer position
       var elementPosition = _getOffset(targetElm);
+
+//      if !(this._options.fullScreen)
       if(elementPosition) {
-        styleText += "width: " + elementPosition.width + "px; height:" + elementPosition.height + "px; top:" + elementPosition.top + "px;left: " + elementPosition.left + "px;";
+        if(this._options.fullScreen) {
+          var h = document.body.clientHeight;
+          styleText += "width:100%!important;height:"+h+"px!important;top:0!important;left:0!important;position:absolute!important;";
+        }else{
+            styleText += "width: " + elementPosition.width + "px; height:" + elementPosition.height + "px; top:" + elementPosition.top + "px;left: " + elementPosition.left + "px;";
+        }
         overlayLayer.setAttribute("style", styleText);
       }
     }
