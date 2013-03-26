@@ -25,7 +25,7 @@
     <div class="container-narrow">
 
       <div class="masthead">
-        <ul class="nav nav-pills pull-right" data-step="5" data-intro="Get it, use it.">
+        <ul class="nav nav-pills pull-right group" data-step="5" data-intro="Get it, use it.">
           <li><a href="https://github.com/usablica/intro.js/tags"><i class='icon-black icon-download-alt'></i> Download</a></li>
           <li><a href="https://github.com/usablica/intro.js">Github</a></li>
           <li><a href="https://twitter.com/usablica">@usablica</a></li>
@@ -38,9 +38,25 @@
       <div class="jumbotron">
         <h1 data-step="1" data-intro="Hello all! :) This project's called Intro.js.">Intro<span style="font-weight: normal;">.js</span></h1>
         <p class="lead" data-step="4" data-intro="Let's try it. It's free and open-source." data-position='top'>Better introductions for websites and features with a step-by-step guide for your projects.</p>
-        <a class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:introJs().start();">Show me how</a>
+        <a class="btn btn-success" href="javascript:void(0);" onclick="javascript:introJs().start();">Show me how</a>
+        <a class="btn btn-success" href="javascript:void(0);" onclick="javascript:introJs('.marketing').setOptions({fullScreen:false,nextLabel: 'Next inside marketing div'}).start();">Show me helps in Marketing div AS-IS</a>
+        <hr>
+        <h3>New features</h3>
+        
+        <a class="btn btn-success" href="javascript:void(0);" onclick="javascript:introJs('.marketing').setOptions({nextLabel:'Next inside marketing div'}).start();">Show me helps in Marketing class div with Fullscreen Overlayer</a>
+        <hr>        
+        <a class="btn btn-success" href="javascript:void(0);" onclick="javascript:introJs().setOptions({groupClass:'.group',nextLabel: 'Next with same class'}).start();">Show me 'group' class - Main links</a>
+        
       </div>
-
+    <ul>
+        <h4>New options:</h4>
+      <li>
+        <h6>introJs().setOptions({groupClass:'.group'})<span><i> - Here we define which class will be searched for intro.js... </i><span></h6>
+      </li>
+      <li>
+        <h6>introJs().setOptions({fullScreen:false}) <span> <i>  - fullScreen is default true</i><span></h6>
+      </li>      
+    </ul>
       <hr>
 
       <div class="row-fluid marketing">
@@ -62,16 +78,18 @@
           <h4>Browser Compatibllity</h4>
           <p>Better compatibility is on the roadmap, but currently it should work in recent versions of Firefox and Chrome (probably IE10, too!)</p>
           <h4>Developed with &lt;3</h4>
-          <p>With &lt;3 in <a href='http://usabli.ca/' target="_blank" title="usabli.ca group">usabli.ca</a>, Tehran.</p>
+          <p>With &lt;3 in <a  href='http://usabli.ca/' target="_blank" title="usabli.ca group" >usabli.ca</a>, Tehran.</p>
         </div>
       </div>
 
       <hr>
 
       <div class="footer">
-        <p>&copy; <a href='http://usabli.ca/' target="_blank" title="usabli.ca group">usabli.ca</a> 2013 - A weekend project by <a href="http://afshinm.name/" target="_blank">Afshin Mehrabani</a></p>
+        <p>&copy; <a  class="group" data-intro="intro.js Group site. Good work dude" href='http://usabli.ca/' target="_blank" title="usabli.ca">usabli.ca</a> 2013 - A weekend project by <a  data-intro="intro.js Creator site. Good work dude" href="http://afshinm.name/" target="_blank" class="group">Afshin Mehrabani</a></p>
       </div>
 
+
+    
     </div>
     <script type="text/javascript" src="../intro.js"></script>
   </body>
