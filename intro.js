@@ -1,5 +1,5 @@
 /**
- * Intro.js v0.2.2
+ * Intro.js v0.3.0
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -7,20 +7,19 @@
  */
 
 (function (root, factory) {
-    if (typeof exports === 'object') {
-        // CommonJS
-        factory(exports);
-    } else if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['exports'], factory);
-    } else {
-        // Browser globals
-        factory(root);
-    }
-}(this, function (exports) {
-
+  if (typeof exports === 'object') {
+    // CommonJS
+    factory(exports);
+  } else if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(['exports'], factory);
+  } else {
+    // Browser globals
+    factory(root);
+  }
+} (this, function (exports) {
   //Default config/variables
-  var VERSION = '0.2.2';
+  var VERSION = '0.3.0';
 
   /**
    * IntroJs main class
@@ -310,8 +309,8 @@
 
       helperNumberLayer.innerHTML = targetElement.getAttribute('data-step');
       tooltipLayer.innerHTML = '<div class="introjs-tooltiptext">' +
-          targetElement.getAttribute('data-intro') +
-          '</div><div class="introjs-tooltipbuttons"></div>';
+                               targetElement.getAttribute('data-intro') +
+                               '</div><div class="introjs-tooltipbuttons"></div>';
       helperLayer.appendChild(helperNumberLayer);
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
@@ -573,10 +572,10 @@
       _exitIntro.call(this, this._targetElement);
     },
     onchange: function(providedCallback) {
-      if (typeof (providedCallback) === "function") {
+      if (typeof (providedCallback) === 'function') {
         this._introChangeCallback = providedCallback;
       } else {
-        throw new Error("Provided callback for onchange was not a function.");
+        throw new Error('Provided callback for onchange was not a function.');
       }
       return this;
     },
@@ -600,5 +599,4 @@
 
   exports.introJs = introJs;
   return introJs;
-
 }));
