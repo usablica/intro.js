@@ -214,6 +214,10 @@
     tooltipLayer.style.right   = null;
     tooltipLayer.style.bottom  = null;
     tooltipLayer.style.left    = null;
+
+    //prevent error when `this._currentStep` in undefined
+    if(!this._introItems[this._currentStep]) return;
+
     var currentTooltipPosition = this._introItems[this._currentStep].position;
     switch (currentTooltipPosition) {
       case 'top':
