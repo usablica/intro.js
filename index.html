@@ -11,8 +11,12 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/demo.css" rel="stylesheet">
 
-    <!-- Add IntroJs style -->
-    <link href="introjs.css?v=021" rel="stylesheet">
+    <!-- Add IntroJs styles -->
+    <link href="introjs.css?v=030" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link href="../introjs-ie.css?v=030" rel="stylesheet">
+    <!-- <![endif]-->
+
     <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
   </head>
 
@@ -33,7 +37,7 @@
 
       <div class="jumbotron">
         <h1 data-step="1" data-intro="Hello all! :) This project's called Intro.js.">Intro<span style="font-weight: normal;">.js</span></h1>
-        <p class="lead" data-step="4" data-intro="Let's try it. It's free and open-source." data-position='top'>Better introductions for websites and features with a step-by-step guide for your projects.</p>
+        <p class="lead" data-step="4" data-intro="Let's try it. It's free and open-source.">Better introductions for websites and features with a step-by-step guide for your projects.</p>
         <a class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:introJs().start();">Show me how</a>
 
         <div style="margin-top: 30px;">
@@ -64,7 +68,7 @@
           <p>Just include the js and css files and add <code>data-step</code> and <code>data-intro</code> to your code.</p>
 
           <h4>Fast &amp; Small</h4>
-          <p><strong>4 KB</strong> JavaScript and <strong>2 KB</strong> CSS. That's all.</p>
+          <p><strong>7 KB</strong> JavaScript and <strong>3 KB</strong> CSS. That's all.</p>
 
           <h4>Free &amp; Open-Source</h4>
           <p>Free and open-source (including commercial use). Published under MIT license.</p>
@@ -75,7 +79,7 @@
           <p>Ability to navigate with the mouse, or the keyboard - <code>←</code>, <code>→</code>, <code>ENTER</code> and <code>ESC</code> to exit.</p>
 
           <h4>Browser Compatibllity</h4>
-          <p>Better compatibility is on the roadmap, but currently it should work in recent versions of Firefox and Chrome (probably IE10, too!)</p>
+          <p>Better compatibility is on the roadmap, but currently it should work in recent versions of Firefox, Chrome and IE8 also.</p>
           <h4>Developed with &lt;3</h4>
           <p>With &lt;3 in <a href='http://usabli.ca/' target="_blank" title="usabli.ca group">usabli.ca</a>, Tehran.</p>
         </div>
@@ -88,6 +92,6 @@
       </div>
 
     </div>
-    <script type="text/javascript" src="intro.js?v=021"></script>
+    <script type="text/javascript" src="intro.js?v=030"></script>
   </body>
 </html>

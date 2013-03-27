@@ -1,0 +1,9 @@
+.introjs-overlay {
+  background-color: #000;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  filter: alpha(opacity=50);
+}
+.introjs-helperLayer {
+  background-color: #FFF;
+  border-color: #777;
+}
