@@ -112,7 +112,7 @@
   function _goToStep(step) {
     //because steps starts with zero
     this._currentStep = step - 2;
-    if(typeof(this._introItems) !== 'undefined') {
+    if(typeof (this._introItems) !== 'undefined') {
       _nextStep.call(this);
     }
   }
@@ -124,7 +124,7 @@
    * @method _nextStep
    */
   function _nextStep() {
-    if (typeof(this._currentStep) === 'undefined') {
+    if (typeof (this._currentStep) === 'undefined') {
       this._currentStep = 0;
     } else {
       ++this._currentStep;
@@ -133,7 +133,7 @@
     if((this._introItems.length) <= this._currentStep) {
       //end of the intro
       //check if any callback is defined
-      if (typeof this._introCompleteCallback === 'function') {
+      if (typeof (this._introCompleteCallback) === 'function') {
         this._introCompleteCallback.call(this);
       }
       _exitIntro.call(this, this._targetElement);
@@ -248,7 +248,7 @@
    */
   function _showElement(targetElement) {
     
-    if (typeof this._introChangeCallback !== 'undefined') {
+    if (typeof (this._introChangeCallback) !== 'undefined') {
         this._introChangeCallback.call(this, targetElement);
     }
     
@@ -362,7 +362,7 @@
     //Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
     var currentElementPosition = '';
     if (targetElement.currentStyle) { //IE
-      currentElementPosition = targetElement.currentStyle.position;
+      currentElementPosition = targetElement.currentStyle['position'];
     } else if (document.defaultView && document.defaultView.getComputedStyle) { //Firefox
       currentElementPosition = document.defaultView.getComputedStyle(targetElement, null).getPropertyValue('position');
     }
@@ -450,9 +450,7 @@
       //set overlay layer position
       var elementPosition = _getOffset(targetElm);
       if(elementPosition) {
-        styleText += 'width: ' + elementPosition.width + 'px; height:' +
-                     elementPosition.height + 'px; top:' + elementPosition.top +
-                     'px;left: ' + elementPosition.left + 'px;';
+        styleText += 'width: ' + elementPosition.width + 'px; height:' + elementPosition.height + 'px; top:' + elementPosition.top + 'px;left: ' + elementPosition.left + 'px;';
         overlayLayer.setAttribute('style', styleText);
       }
     }
@@ -513,10 +511,9 @@
    * @returns obj3 a new object based on obj1 and obj2
    */
   function _mergeOptions(obj1,obj2) {
-    var obj3 = {},
-        attrname;
-    for (attrname in obj1) { obj3[attrname] = obj1[attrname]; }
-    for (attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+    var obj3 = {};
+    for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+    for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
     return obj3;
   }
 
