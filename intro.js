@@ -529,6 +529,10 @@
       _introForElement.call(this, this._targetElement);
       return this;
     },
+    exit: function() {
+      _exitIntro.call(this, this._targetElement);
+      return this;
+    },
     oncomplete: function(providedCallback) {
       if (typeof (providedCallback) === "function") {
         this._introCompleteCallback = providedCallback;
