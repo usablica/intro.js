@@ -6,7 +6,15 @@
 ## How to use
 Intro.js can be added to your site in three simple steps:
 
-**1)** Include `intro.js` and `introjs.css` (or the minified version for production) in your page.
+**1)** Include `intro.js` and `introjs.css` (or the minified version for production) in your page. 
+
+> Note: if you need Internet Explorer compatiblity, you have to add introjs-ie.css to the page also:
+  
+```html
+<!--[if lte IE 8]>
+  <link href="../introjs-ie.css" rel="stylesheet">
+<!-- <![endif]-->
+````
 
 **2)** Add `data-intro` and `data-step` to your HTML elements.  
 
@@ -49,7 +57,9 @@ Creating an introJs object.
 introJs() //without selector, start introduction for whole page
 introJs("#intro-farm") //start introduction for element id='intro-farm'
 ````
-    
+
+-----
+
 ###introJs.start()
 
 Start the introduction for defined element(s).
@@ -63,6 +73,85 @@ Start the introduction for defined element(s).
 ```javascript
 introJs().start()
 ````
+-----
+
+###introJs.goToStep(step)
+
+Go to specific step of introduction.
+
+**Available since**: v0.3.0
+
+**Parameters:**
+ - step : Number
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().goToStep(2).start(); //starts introduction from step 2
+````
+
+-----
+
+###introJs.exit()
+
+Exit the introduction.
+
+**Available since**: v0.3.0
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().exit()
+````
+
+-----
+
+###introJs.setOption(option, value)
+
+Set a single option to introJs object.
+
+**Available since**: v0.3.0
+
+**Parameters:**
+ - option : String
+   Option key name.
+
+ - value : String/Number
+   Value of the option.
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().setOption("skipLabel", "Exit");
+````
+
+----
+
+###introJs.setOptions(options)
+
+Set a group of options to the introJs object.
+
+**Available since**: v0.3.0
+
+**Parameters:**
+ - options : Object
+   Object that contains option keys with values.
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().setOptions({ skipLabel: "Exit", tooltipPosition: "right" });
+````
+
+----
 
 ###introJs.oncomplete(providedCallback)
 
@@ -83,6 +172,8 @@ introJs().oncomplete(function() {
 });
 ````
 
+-----
+
 ###introJs.onexit(providedCallback)
 
 Set callback to exit of introduction. Exit also means pressing `ESC` key and clicking on the overlay layer by the user.  
@@ -99,6 +190,27 @@ Set callback to exit of introduction. Exit also means pressing `ESC` key and cli
 ```javascript
 introJs().onexit(function() {
   alert("exit of introduction");
+});
+````
+
+-----
+
+###introJs.onchange(providedCallback)
+
+Set callback to change of each step of introduction. Given callback function will be called after completing each step.
+
+**Available since:** v0.3.0
+
+**Parameters:**
+ - providedCallback : Function
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().onchange(function() {
+  alert("new step");
 });
 ````
 
@@ -121,10 +233,21 @@ Now you can run this command to minify all static resources:
 
 
 ## Roadmap
+- Multi-page introduction
 - More browser compatibility
 
 
 ## Release History
+ * **v0.3.0** - 2013-03-28
+   - Adding support for CommonJS, RequireJS AMD and Browser Globals.
+   - Add `goToStep` function to go to specific step of introduction.
+   - Add `onchange` callback.
+   - Add `exit` function to exit from introduction.
+   - Adding options with `setOption` and `setOptions` functions.
+   - More IE compatibility.
+   - Fix `min-width` bug with tooltip box.
+   - Code cleanup + Better coding style.
+
  * **v0.2.1** - 2013-03-20
    - Fix keydown event unbinding bug.
 
