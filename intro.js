@@ -24,7 +24,7 @@
       prevLabel: '&larr; Back',
       skipLabel: 'Skip',
       tooltipPosition: 'bottom',
-      groupClass:'',
+      group:'',
       fullScreen: true
     }
   }
@@ -40,12 +40,12 @@
   function _introForElement(targetElm) {
    
     //if there is a class group  
-    if(this._options.groupClass == ''){
+    if(this._options.group == ''){
       var query = "*[data-intro]";
     }
     else
     {
-      var query = "*[data-intro]"+this._options.groupClass;
+      var query = "*[data-intro]"+this._options.group;
     }
     
     var introItems = [],

@@ -39,19 +39,19 @@
         <h1 data-step="1" data-intro="Hello all! :) This project's called Intro.js.">Intro<span style="font-weight: normal;">.js</span></h1>
         <p class="lead" data-step="4" data-intro="Let's try it. It's free and open-source." data-position='top'>Better introductions for websites and features with a step-by-step guide for your projects.</p>
         <a class="btn btn-success" href="javascript:void(0);" onclick="javascript:introJs().start();">Show me how</a>
-        <a class="btn btn-success" href="javascript:void(0);" onclick="javascript:introJs('.marketing').setOptions({fullScreen:false,nextLabel: 'Next inside marketing div'}).start();">Show me helps in Marketing div AS-IS</a>
+        <a class="btn btn-success" href="javascript:void(0);" onclick="javascript:introJs('.marketing').setOptions({fullScreen:false,nextLabel: 'Next inside marketing div'}).start();">Show me helps in Marketing div before</a>
         <hr>
         <h3>New features</h3>
         
         <a class="btn btn-success" href="javascript:void(0);" onclick="javascript:introJs('.marketing').setOptions({nextLabel:'Next inside marketing div'}).start();">Show me helps in Marketing class div with Fullscreen Overlayer</a>
         <hr>        
-        <a class="btn btn-success" href="javascript:void(0);" onclick="javascript:introJs().setOptions({groupClass:'.group',nextLabel: 'Next with same class'}).start();">Show me 'group' class - Main links</a>
+        <a class="btn btn-success" href="javascript:void(0);" onclick="javascript:introJs().setOptions({group:'.group',nextLabel: 'Next with same class'}).start();">Show me 'group' class - Main links</a>
         
       </div>
     <ul>
         <h4>New options:</h4>
       <li>
-        <h6>introJs().setOptions({groupClass:'.group'})<span><i> - Here we define which class will be searched for intro.js... </i><span></h6>
+        <h6>introJs().setOptions({group:'.group'})<span><i> - Here we define which class will be searched for intro.js... </i><span></h6>
       </li>
       <li>
         <h6>introJs().setOptions({fullScreen:false}) <span> <i>  - fullScreen is default true</i><span></h6>
