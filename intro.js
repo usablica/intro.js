@@ -94,6 +94,20 @@
   }
 
   /**
+   * Go to specific step of introduction
+   *
+   * @api private
+   * @method _goToStep
+   */
+  function _goToStep(step) {
+    //because steps starts with zero
+    this._currentStep = step - 2;
+    if(typeof(this._introItems) !== 'undefined') {
+      _nextStep.call(this);
+    }
+  }
+
+  /**
    * Go to next step on intro
    *
    * @api private
@@ -531,6 +545,10 @@
     },
     start: function () {
       _introForElement.call(this, this._targetElement);
+      return this;
+    },
+    goToStep: function(step) {
+      _goToStep.call(this, step);
       return this;
     },
     exit: function() {
