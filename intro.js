@@ -261,6 +261,7 @@
       tooltipLayer.className = "introjs-tooltip";
 
       helperNumberLayer.innerHTML = targetElement.getAttribute("data-step");
+      helperNumberLayer.display = 'none';
       tooltipLayer.innerHTML = "<div class='introjs-tooltiptext'>" + targetElement.getAttribute("data-intro") + "</div><div class='introjs-tooltipbuttons'></div>";
       helperLayer.appendChild(helperNumberLayer);
       tooltipLayer.appendChild(arrowLayer);
@@ -356,7 +357,7 @@
       rect.top >= 0 &&
       rect.left >= 0 &&
       (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
-      rect.right <= window.innerWidth 
+      rect.right <= window.innerWidth
     );
   }
 
@@ -391,7 +392,8 @@
     targetElm.appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
-      _exitIntro.call(self, targetElm);
+      _nextStep.call(self);
+      //_exitIntro.call(self, targetElm);
     };
 
     setTimeout(function() {

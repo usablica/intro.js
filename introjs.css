@@ -33,6 +33,7 @@
 }
 
 .introjs-helperNumberLayer {
+  display: none;
   position: absolute;
   -webkit-box-sizing: content-box;
      -moz-box-sizing: content-box;
