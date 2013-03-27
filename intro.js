@@ -127,6 +127,7 @@
    */
   function _previousStep() {
     if (this._currentStep == 0) {
+      _exitIntro.call(this, this._targetElement);
       return false;
     }
 
