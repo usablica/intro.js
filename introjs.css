@@ -101,6 +101,7 @@
   position: absolute;
   padding: 10px;
   background-color: white;
+  min-width: 200px;
   border-radius: 3px;
   box-shadow: 0 1px 10px rgba(0,0,0,.4);
   -webkit-transition: opacity 0.1s ease-out;
