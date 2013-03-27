@@ -231,7 +231,7 @@
       var oldHelperNumberLayer = oldHelperLayer.querySelector(".introjs-helperNumberLayer"),
           oldtooltipLayer      = oldHelperLayer.querySelector(".introjs-tooltiptext"),
           oldArrowLayer        = oldHelperLayer.querySelector(".introjs-arrow"),
-          oldtooltipContainer  = oldHelperLayer.querySelector(".introjs-tooltip")
+          oldtooltipContainer  = oldHelperLayer.querySelector(".introjs-tooltip");
 
       //hide the tooltip
       oldtooltipContainer.style.opacity = 0;
