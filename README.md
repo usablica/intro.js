@@ -168,7 +168,7 @@ introJs().setOptions({ skipLabel: "Exit", tooltipPosition: "right" });
 
 If you want the intro just for a selector:
 ```javascript
-introJs().setOptions({groupClass:'.group'}).start();
+introJs().setOptions({group:'.group'}).start();
 ````
 
 
