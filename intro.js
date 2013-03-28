@@ -34,7 +34,6 @@
       prevLabel: '&larr; Back',
       skipLabel: 'Skip',
       tooltipPosition: 'bottom',
-//      group:'',
       fullScreen: true
     };
   }
