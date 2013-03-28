@@ -143,6 +143,21 @@ Set a group of options to the introJs object.
  - options : Object
    Object that contains option keys with values.
 
+**Options Keys and Values:**
+ - nextLabel : String
+   Sets the label in the next button
+ - prevLabel : String
+   Sets the label in the prev button
+ - skipLabel : String
+   Sets the label in the skip button
+ - tooltipPosition : String
+   Sets the tooltipPosition, values => "bottom", "right", "left", "top"
+ - fullScreen : boolean
+   Sets the fullScreen for the overlayer div, default is true
+ - group : String
+   Defines which selector group will be searched for intro.js
+   
+   
 **Returns:**
  - introJs object.
 
@@ -150,6 +165,12 @@ Set a group of options to the introJs object.
 ```javascript
 introJs().setOptions({ skipLabel: "Exit", tooltipPosition: "right" });
 ````
+
+If you want the intro just for a selector:
+```javascript
+introJs().setOptions({groupClass:'.group'}).start();
+````
+
 
 ----
 
