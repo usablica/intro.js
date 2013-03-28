@@ -33,7 +33,9 @@
       nextLabel: 'Next &rarr;',
       prevLabel: '&larr; Back',
       skipLabel: 'Skip',
-      tooltipPosition: 'bottom'
+      tooltipPosition: 'bottom',
+//      group:'',
+      fullScreen: true
     };
   }
 
@@ -46,7 +48,15 @@
    * @returns {Boolean} Success or not?
    */
   function _introForElement(targetElm) {
-    var allIntroSteps = targetElm.querySelectorAll('*[data-intro]'),
+      
+    //if there is a class group  
+    if(this._options.group == undefined){
+      var query = "*[data-intro]";
+    } else {
+      var query = "*[data-intro]"+this._options.group;
+    }
+    
+    var allIntroSteps = targetElm.querySelectorAll(query),
         introItems = [],
         self = this;
 
@@ -454,7 +464,12 @@
       //set overlay layer position
       var elementPosition = _getOffset(targetElm);
       if(elementPosition) {
-        styleText += 'width: ' + elementPosition.width + 'px; height:' + elementPosition.height + 'px; top:' + elementPosition.top + 'px;left: ' + elementPosition.left + 'px;';
+        //if !(this._options.fullScreen)
+        if(this._options.fullScreen) {
+          styleText += "width:100%!important;height:"+document.body.clientHeight+"px!important;top:0!important;left:0!important;position:absolute!important;";
+        } else {
+          styleText += 'width: ' + elementPosition.width + 'px; height:' + elementPosition.height + 'px; top:' + elementPosition.top + 'px;left: ' + elementPosition.left + 'px;';
+        }
         overlayLayer.setAttribute('style', styleText);
       }
     }
