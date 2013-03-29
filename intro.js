@@ -33,7 +33,8 @@
       nextLabel: 'Next &rarr;',
       prevLabel: '&larr; Back',
       skipLabel: 'Skip',
-      tooltipPosition: 'bottom'
+      tooltipPosition: 'bottom',
+      overlayOpacity: .5
     };
   }
 
@@ -466,7 +467,7 @@
     };
 
     setTimeout(function() {
-      styleText += 'opacity: .5;';
+      styleText += 'opacity: ' + this._options.overlayOpacity + ';';
       overlayLayer.setAttribute('style', styleText);
     }, 10);
     return true;
