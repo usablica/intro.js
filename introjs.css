@@ -101,6 +101,7 @@
   position: absolute;
   padding: 10px;
   background-color: white;
+  min-width: 200px;
   border-radius: 3px;
   box-shadow: 0 1px 10px rgba(0,0,0,.4);
   -webkit-transition: opacity 0.1s ease-out;
@@ -186,4 +187,18 @@
   -webkit-border-radius: 0 0.2em 0.2em 0;
   -moz-border-radius: 0 0.2em 0.2em 0;
   border-radius: 0 0.2em 0.2em 0;
+  border-right: none;
+}
+.introjs-ttsbutton {
+  -webkit-border-radius: 0 0.2em 0.2em 0;
+  -moz-border-radius: 0 0.2em 0.2em 0;
+  border-radius: 0 0.2em 0.2em 0;
+  background-position:0;
+  background-size:100%;
+  }
+.tts-on {
+background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAJiS0dEAP+Hj8y/AAAACXBIWXMAAABIAAAASABGyWs+AAABW0lEQVRYw+3UsUuVURzG8c8572u95iBGg0SkQ5tLOLU45NLY1OjYEBQNQXtzo39CRFBLzS5iS4jiFi7hhUAchECXsPu+p8FbXA281n0vNpzvdA4cnuc8P855yGQymUzmYghi3zqMwqA4JRvaNigFlO6oEDFtsq27x98JKg9s+OoKCqx52Vu1YsWUJ7YlyY4Kk1hy6OpwQwu47p55lRf2JI0fko7L+OQ+dj0aLkvAiuSjOUnSVaslHRN4axWvfRhkEs80SZhCrdGVFCfOvzGHLbfQnCVTDkzT9BL9efKbUnTgUu86/5jkV5pGkk5IBdx2qHHTwSCdwSYFxhSCum8oXTz2Dos2h3tdEc99tmzGvqRRO5J0VFhyzQ1HFtv5KQHTntqS1JIvqp7we+ttVEvsK8HSXa98t2scY3hm4VxD/8vmYtZD46MqyONnUJzaRyMhtlWImUwmk8n8d/wEav5NzUf4VP4AAAAldEVYdGRhdGU6Y3JlYXRlADIwMTMtMDMtMjlUMDE6NTg6MDEtMDQ6MDCpSqDyAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDEzLTAzLTI5VDAxOjU4OjAxLTA0OjAw2BcYTgAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAASUVORK5CYII=);
+}
+.tts-off {
+background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAAAXNSR0IArs4c6QAAAAJiS0dEAP+Hj8y/AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QMdBhoy+9CHKgAAAPBJREFUWMPt1aFOA0EQxvHf3h3hKKrBEBQeh8KieAIeAUl4Bp4FxysgsSS1NYQmJASDQ5DQ28GU4mho7orZv9psJvvNNzs7S6FQKBQK/0NSDS1QS8MKNBIaJ9r+c6+WDlrnHjwbDeOCsUtTITz16SThwJljrWuvQvYpzGz3K3In3DsSwlynE2Z2/3LM780YGKOTzYV6veZtVkbkhaNm/YKsziyQhVisfwrZo0iNLbWkk5e78/7KVclujUy8e7MnZN1QQyVh35WJ0AmPfb/4SlreQOPUjQ8vdoadXBy6GErkuw3qzfwn1aaECoVCoVDYOF9tdzVQUI8vhAAAAABJRU5ErkJggg==);
 }
