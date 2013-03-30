@@ -268,12 +268,13 @@
 
       //hide the tooltip
       oldtooltipContainer.style.opacity = 0;
+      
+      //set new position to helper layer      
+      oldHelperLayer.style.width    = (elementPosition.width + 10)  + 'px';
+      oldHelperLayer.style.height   = (elementPosition.height + 10)  + 'px';
+      oldHelperLayer.style.top      = (elementPosition.top - 5)  + 'px';
+      oldHelperLayer.style.left     = (elementPosition.left - 5)  + 'px';
 
-      //set new position to helper layer
-      oldHelperLayer.setAttribute('style', 'width: ' + (elementPosition.width + 10)  + 'px; ' +
-                                           'height:' + (elementPosition.height + 10) + 'px; ' +
-                                           'top:'    + (elementPosition.top - 5)     + 'px;' +
-                                           'left: '  + (elementPosition.left - 5)    + 'px;');
       //remove old classes
       var oldShowElement = document.querySelector('.introjs-showElement');
       oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, '');
@@ -290,6 +291,7 @@
         _placeTooltip.call(self, targetElement, oldtooltipContainer, oldArrowLayer);
         //show the tooltip
         oldtooltipContainer.style.opacity = 1;
+
       }, 350);
 
     } else {
@@ -303,6 +305,16 @@
                                         'height:' + (elementPosition.height + 10) + 'px; ' +
                                         'top:'    + (elementPosition.top - 5)     + 'px;' +
                                         'left: '  + (elementPosition.left - 5)    + 'px;');
+      //Option to dynamically set the tooltip and helper backgrounds to the color of the body background
+      switch (this._options.bg_color) {
+        case 'body':
+          var bodyColor = $('body').css("background-color");
+          tooltipLayer.style.backgroundColor = bodyColor;
+          helperLayer.style.backgroundColor = bodyColor;
+          break;
+        default:
+          break;
+      }
 
       //add helper layer to target element
       this._targetElement.appendChild(helperLayer);
