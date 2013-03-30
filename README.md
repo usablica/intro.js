@@ -277,7 +277,7 @@ Now you can run this command to minify all static resources:
 
 ## Support/Discussion
 - [Google Group](https://groups.google.com/d/forum/introjs)
-
+- [Stackoverflow](http://stackoverflow.com/questions/tagged/intro.js)
 
 ## License
 > Copyright (C) 2012 Afshin Mehrabani (afshin.meh@gmail.com)
