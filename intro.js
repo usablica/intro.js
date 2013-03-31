@@ -56,12 +56,8 @@
       allIntroSteps = [];
 
       for(var i = 0; i < this._options.steps.length; i++){
-        introItems.push({
-          element: this._options.steps[i].element,
-          intro: this._options.steps[i].intro,
-          step: i+1,
-          position: this._options.steps[i].position || this._options.tooltipPosition
-        });
+        this._options.steps[i].step = i+1; //set the step
+        introItems.push(this._options.steps[i]);
       }
 
     }else{
