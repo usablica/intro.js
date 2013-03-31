@@ -26,9 +26,8 @@
    *
    * @class IntroJs
    */
-  function IntroJs(obj, config) {
+  function IntroJs(obj) {
     this._targetElement = obj;
-    this._config = config;
 
     this._options = {
       nextLabel: 'Next &rarr;',
