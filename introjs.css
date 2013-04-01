@@ -188,3 +188,10 @@
   -moz-border-radius: 0 0.2em 0.2em 0;
   border-radius: 0 0.2em 0.2em 0;
 }
+
+.introjs-disabled, .introjs-disabled:hover {
+  color: #9a9a9a;
+  border-color: #d4d4d4;
+  box-shadow: none;
+  cursor: default;
+}
