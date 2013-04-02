@@ -139,8 +139,11 @@
       _exitIntro.call(this, this._targetElement);
       return;
     }
-
-    _showElement.call(this, this._introItems[this._currentStep].element);
+    if(_isVisible(this._introItems[this._currentStep].element)){
+  	  _showElement.call(this, this._introItems[this._currentStep].element);
+  	}else{
+	  	_nextStep.call(this);
+	  }
   }
 
   /**
@@ -153,8 +156,12 @@
     if (this._currentStep === 0) {
       return false;
     }
-
-    _showElement.call(this, this._introItems[--this._currentStep].element);
+    if(_isVisible(this._introItems[--this._currentStep].element)){
+      _showElement.call(this, this._introItems[this._currentStep].element);
+  	}else{
+	  	_previousStep.call(this);
+	  }
+    
   }
 
   /**
@@ -601,3 +608,21 @@
   exports.introJs = introJs;
   return introJs;
 }));
+
+  /**
+   * check for visability of element itself and all it's parents
+   * 
+   * @param htmlElement
+   * @type bool
+   */
+  function _isVisible(element){
+    if(((element.offsetHeight > 0)&&(element.offsetWidth > 0)&&(element.style.visibility != "hidden")&&(element.style.display != "none"))||(element == document)){
+  		if(element.parentNode){
+  			return _isVisible(element.parentNode);
+  		}else{
+  			return true;
+  		}
+  	}else{
+  		return false;
+  	}
+  }
