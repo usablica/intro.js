@@ -198,6 +198,7 @@ introJs().onexit(function() {
 ###introJs.onchange(providedCallback)
 
 Set callback to change of each step of introduction. Given callback function will be called after completing each step.
+The callback function receives the element of the new step as an argument.
 
 **Available since:** v0.3.0
 
@@ -209,7 +210,7 @@ Set callback to change of each step of introduction. Given callback function wil
 
 **Example:**
 ```javascript
-introJs().onchange(function() {
+introJs().onchange(function(targetElement) {  
   alert("new step");
 });
 ````
