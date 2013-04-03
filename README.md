@@ -211,7 +211,7 @@ The callback function receives the element of the new step as an argument.
 **Example:**
 ```javascript
 introJs().onchange(function(targetElement) {  
-  alert("new step: " + targetElement);
+  alert("new step");
 });
 ````
 
