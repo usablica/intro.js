@@ -29,13 +29,22 @@
   function IntroJs(obj) {
     this._targetElement = obj;
 
+    var language = window.navigator.userLanguage || window.navigator.language;
+    language = language.split('-')[0].toLowerCase();
+
     this._options = {
-      nextLabel: 'Next &rarr;',
-      prevLabel: '&larr; Back',
-      skipLabel: 'Skip',
-      tooltipPosition: 'bottom'
-    };
-  }
+      tooltipPosition: 'bottom',
+      language: 'en',
+      translations: { 'en': { nextLabel: 'Next &rarr;', prevLabel: '&larr; Back', skipLabel: 'Skip' },
+                      'ru': { nextLabel: 'Следующий &rarr;', prevLabel: '&larr; Предыдущий', skipLabel: 'Пропустить' }}
+    }
+
+    // Setting language to user's language if possible
+    if(language in this._options.translations) {
+      this._options.language = language;
+    }
+
+  };
 
   /**
    * Initiate a new introduction/guide from an element in the page
@@ -251,11 +260,11 @@
    * @param {Object} targetElement
    */
   function _showElement(targetElement) {
-    
+
     if (typeof (this._introChangeCallback) !== 'undefined') {
         this._introChangeCallback.call(this, targetElement);
     }
-    
+
     var self = this,
         oldHelperLayer = document.querySelector('.introjs-helperLayer'),
         elementPosition = _getOffset(targetElement);
@@ -328,7 +337,7 @@
 
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       nextTooltipButton.href = 'javascript:void(0);';
-      nextTooltipButton.innerHTML = this._options.nextLabel;
+      nextTooltipButton.innerHTML = this._options.translations[this._options.language].nextLabel;
 
       //previous button
       var prevTooltipButton = document.createElement('a');
@@ -339,13 +348,13 @@
 
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       prevTooltipButton.href = 'javascript:void(0);';
-      prevTooltipButton.innerHTML = this._options.prevLabel;
+      prevTooltipButton.innerHTML = this._options.translations[this._options.language].prevLabel;
 
       //skip button
       var skipTooltipButton = document.createElement('a');
       skipTooltipButton.className = 'introjs-button introjs-skipbutton';
       skipTooltipButton.href = 'javascript:void(0);';
-      skipTooltipButton.innerHTML = this._options.skipLabel;
+      skipTooltipButton.innerHTML = this._options.translations[this._options.language].skipLabel;
 
       skipTooltipButton.onclick = function() {
         _exitIntro.call(self, self._targetElement);
@@ -427,7 +436,7 @@
       rect.top >= 0 &&
       rect.left >= 0 &&
       (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
-      rect.right <= window.innerWidth 
+      rect.right <= window.innerWidth
     );
   }
 
