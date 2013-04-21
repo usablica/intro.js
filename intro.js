@@ -327,7 +327,9 @@
       var nextTooltipButton = document.createElement('a');
 
       nextTooltipButton.onclick = function() {
-        _nextStep.call(self);
+        if(self._introItems.length - 1 != self._currentStep) {
+          _nextStep.call(self);
+        }
       };
 
       nextTooltipButton.href = 'javascript:void(0);';
@@ -337,7 +339,9 @@
       var prevTooltipButton = document.createElement('a');
 
       prevTooltipButton.onclick = function() {
-        _previousStep.call(self);
+        if(self._currentStep != 0) {
+          _previousStep.call(self);
+        }
       };
 
       prevTooltipButton.href = 'javascript:void(0);';
@@ -365,15 +369,15 @@
     if (this._currentStep == 0) {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
-      skipTooltipButton.innerHTML = this._options.skipLabel
+      skipTooltipButton.innerHTML = this._options.skipLabel;
     } else if (this._introItems.length - 1 == this._currentStep) {
-      skipTooltipButton.innerHTML = this._options.doneLabel
+      skipTooltipButton.innerHTML = this._options.doneLabel;
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
     } else {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
-      skipTooltipButton.innerHTML = this._options.skipLabel
+      skipTooltipButton.innerHTML = this._options.skipLabel;
     }
 
     //add target element position style
