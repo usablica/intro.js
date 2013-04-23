@@ -1,5 +1,5 @@
 /**
- * Intro.js v0.3.0
+ * Intro.js v0.4.0
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -19,7 +19,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '0.3.0';
+  var VERSION = '0.4.0';
 
   /**
    * IntroJs main class
@@ -367,7 +367,7 @@
       skipTooltipButton.innerHTML = this._options.skipLabel;
 
       skipTooltipButton.onclick = function() {
-        _exitIntro.call(self, self._targetElement.element);
+        _exitIntro.call(self, self._targetElement);
       };
 
       var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
