@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Intro.js | Better introductions for websites and features with a step-by-step guide for your projects.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Intro.js - Better introductions for websites and features with a step-by-step guide for your projects.">
+    <meta name="author" content="Afshin Mehrabani (@afshinmeh) in usabli.ca group">
+
+    <!-- styles -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/demo.css" rel="stylesheet">
+
+    <!-- Add IntroJs styles -->
+    <link href="../introjs.css" rel="stylesheet">
+    <!--[if lte IE 8]>
+    <link href="../introjs-ie.css" rel="stylesheet">
+    <!-- <![endif]-->
+
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="container-narrow">
+
+      <div class="masthead">
+        <ul id="step5" class="nav nav-pills pull-right">
+          <li><a href="https://github.com/usablica/intro.js/tags"><i class='icon-black icon-download-alt'></i> Download</a></li>
+          <li><a href="https://github.com/usablica/intro.js">Github</a></li>
+          <li><a href="https://twitter.com/usablica">@usablica</a></li>
+        </ul>
+        <h3 class="muted">Intro.js</h3>
+      </div>
+
+      <hr>
+
+      <div class="jumbotron">
+        <h1 id="step1">Intro<span style="font-weight: normal;">.js</span></h1>
+        <p id="step4" class="lead">Better introductions for websites and features with a step-by-step guide for your projects.</p>
+        <a class="btn btn-large btn-success" href="javascript:void(0);" onclick="startIntro();">Show me how</a>
+      </div>
+
+      <hr>
+
+      <div class="row-fluid marketing">
+        <div id="step2" class="span6">
+          <h4>Easy to Use</h4>
+          <p>Just include the js and css files and add <code>data-step</code> and <code>data-intro</code> to your code.</p>
+
+          <h4>Fast &amp; Small</h4>
+          <p><strong>7 KB</strong> JavaScript and <strong>3 KB</strong> CSS. That's all.</p>
+
+          <h4>Free &amp; Open-Source</h4>
+          <p>Free and open-source (including commercial use). Published under MIT license.</p>
+        </div>
+
+        <div id="step3" class="span6">
+          <h4>Keyboard + Mouse navigation</h4>
+          <p>Ability to navigate with the mouse, or the keyboard - <code>←</code>, <code>→</code>, <code>ENTER</code> and <code>ESC</code> to exit.</p>
+
+          <h4>Browser Compatibllity</h4>
+          <p>Better compatibility is on the roadmap, but currently it should work in recent versions of Firefox, Chrome and IE8 also.</p>
+          <h4>Developed with &lt;3</h4>
+          <p>With &lt;3 in <a href='http://usabli.ca/' target="_blank" title="usabli.ca group">usabli.ca</a>, Tehran.</p>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="footer">
+        <p>&copy; <a href='http://usabli.ca/' target="_blank" title="usabli.ca group">usabli.ca</a> 2013 - A weekend project by <a href="http://afshinm.name/" target="_blank">Afshin Mehrabani</a></p>
+      </div>
+
+    </div>
+    <script type="text/javascript" src="../intro.js"></script>
+    <script type="text/javascript">
+      function startIntro(){
+        var intro = introJs();
+          intro.setOptions({
+            steps: [
+              {
+                element: document.getElementById('step1'),
+                intro: "Hello all! :) This project's called Intro.js."
+              },
+              {
+                element: document.getElementById('step2'),
+                intro: "Ok, wasn't that fun?",
+                position: 'right'
+              },
+              {
+                element: document.getElementById('step3'),
+                intro: 'More features, more fun.',
+                position: 'left'
+              },
+              {
+                element: document.getElementById('step4'),
+                intro: "Let's try it. It's free and open-source.",
+                position: 'left'
+              },
+              {
+                element: document.getElementById('step5'),
+                intro: 'Get it, use it.'
+              }
+            ]
+          });
+
+          intro.start();
+      }
+    </script>
+  </body>
+</html>
