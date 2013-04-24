@@ -1,5 +1,5 @@
 /**
- * Intro.js v0.4.0
+ * Intro.js v0.3.0
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -19,7 +19,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '0.4.0';
+  var VERSION = '0.3.0';
 
   /**
    * IntroJs main class
@@ -46,37 +46,29 @@
    * @param {Object} targetElm
    * @returns {Boolean} Success or not?
    */
-  function _introForElement(targetElm) {
+  function _introForElement(targetElm, attrId) {
     var allIntroSteps = targetElm.querySelectorAll('*[data-intro]'),
         introItems = [],
         self = this;
 
-    if(this._options.steps){
-      // use steps passed programmatically
-      allIntroSteps = [];
+    //if there's no element to intro
+    if(allIntroSteps.length < 1) {
+      return false;
+    }
 
-      for(var i = 0; i < this._options.steps.length; i++){
-        this._options.steps[i].step = i+1; //set the step
-        introItems.push(this._options.steps[i]);
-      }
+    var iUniqueSteps = {};
+    for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
+      var currentElement = allIntroSteps[i];
 
-    }else{
-      // use steps from data-* annotations
+      if(attrId && attrId!=currentElement.getAttribute('data-attrid'))
+        continue;
 
-      //if there's no element to intro
-      if(allIntroSteps.length < 1) {
-        return false;
-      }
-
-      for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
-        var currentElement = allIntroSteps[i];
-        introItems.push({
-          element: currentElement,
-          intro: currentElement.getAttribute('data-intro'),
-          step: parseInt(currentElement.getAttribute('data-step'), 10),
-          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
-        });
-      }
+      introItems.push({
+        element: currentElement,
+        intro: currentElement.getAttribute('data-intro'),
+        step: parseInt(currentElement.getAttribute('data-step'), 10),
+        position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+      });
     }
 
     //Ok, sort all items with given steps
@@ -154,7 +146,7 @@
       return;
     }
 
-    _showElement.call(this, this._introItems[this._currentStep]);
+    _showElement.call(this, this._introItems[this._currentStep].element);
   }
 
   /**
@@ -168,7 +160,7 @@
       return false;
     }
 
-    _showElement.call(this, this._introItems[--this._currentStep]);
+    _showElement.call(this, this._introItems[--this._currentStep].element);
   }
 
   /**
@@ -267,12 +259,12 @@
   function _showElement(targetElement) {
     
     if (typeof (this._introChangeCallback) !== 'undefined') {
-        this._introChangeCallback.call(this, targetElement.element);
+        this._introChangeCallback.call(this, targetElement);
     }
     
     var self = this,
         oldHelperLayer = document.querySelector('.introjs-helperLayer'),
-        elementPosition = _getOffset(targetElement.element);
+        elementPosition = _getOffset(targetElement);
 
     if(oldHelperLayer != null) {
       var oldHelperNumberLayer = oldHelperLayer.querySelector('.introjs-helperNumberLayer'),
@@ -300,11 +292,11 @@
       }
       self._lastShowElementTimer = setTimeout(function() {
         //set current step to the label
-        oldHelperNumberLayer.innerHTML = targetElement.step;
+        oldHelperNumberLayer.innerHTML = targetElement.getAttribute('data-step');
         //set current tooltip text
-        oldtooltipLayer.innerHTML = targetElement.intro;
+        oldtooltipLayer.innerHTML = targetElement.getAttribute('data-intro');
         //set the tooltip position
-        _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer);
+        _placeTooltip.call(self, targetElement, oldtooltipContainer, oldArrowLayer);
         //show the tooltip
         oldtooltipContainer.style.opacity = 1;
       }, 350);
@@ -328,9 +320,9 @@
       arrowLayer.className = 'introjs-arrow';
       tooltipLayer.className = 'introjs-tooltip';
 
-      helperNumberLayer.innerHTML = targetElement.step;
+      helperNumberLayer.innerHTML = targetElement.getAttribute('data-step');
       tooltipLayer.innerHTML = '<div class="introjs-tooltiptext">' +
-                               targetElement.intro +
+                               targetElement.getAttribute('data-intro') +
                                '</div><div class="introjs-tooltipbuttons"></div>';
       helperLayer.appendChild(helperNumberLayer);
       tooltipLayer.appendChild(arrowLayer);
@@ -376,7 +368,7 @@
       tooltipButtonsLayer.appendChild(nextTooltipButton);
 
       //set proper position
-      _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer);
+      _placeTooltip.call(self, targetElement, tooltipLayer, arrowLayer);
     }
 
     if (this._currentStep == 0) {
@@ -394,14 +386,14 @@
     }
 
     //add target element position style
-    targetElement.element.className += ' introjs-showElement';
+    targetElement.className += ' introjs-showElement';
 
     //Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
     var currentElementPosition = '';
-    if (targetElement.element.currentStyle) { //IE
-      currentElementPosition = targetElement.element.currentStyle['position'];
+    if (targetElement.currentStyle) { //IE
+      currentElementPosition = targetElement.currentStyle['position'];
     } else if (document.defaultView && document.defaultView.getComputedStyle) { //Firefox
-      currentElementPosition = document.defaultView.getComputedStyle(targetElement.element, null).getPropertyValue('position');
+      currentElementPosition = document.defaultView.getComputedStyle(targetElement, null).getPropertyValue('position');
     }
 
     //I don't know is this necessary or not, but I clear the position for better comparing
@@ -409,11 +401,11 @@
     if (currentElementPosition !== 'absolute' &&
         currentElementPosition !== 'relative') {
       //change to new intro item
-      targetElement.element.className += ' introjs-relativePosition';
+      targetElement.className += ' introjs-relativePosition';
     }
 
-    if (!_elementInViewport(targetElement.element)) {
-      var rect = targetElement.element.getBoundingClientRect(),
+    if (!_elementInViewport(targetElement)) {
+      var rect = targetElement.getBoundingClientRect(),
           top = rect.bottom - (rect.bottom - rect.top),
           bottom = rect.bottom - _getWinSize().height;
 
@@ -594,8 +586,8 @@
       this._options = _mergeOptions(this._options, options);
       return this;
     },
-    start: function () {
-      _introForElement.call(this, this._targetElement);
+    start: function (attrId) {
+      _introForElement.call(this, this._targetElement, attrId);
       return this;
     },
     goToStep: function(step) {
