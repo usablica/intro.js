@@ -44,7 +44,7 @@
       <hr>
 
       <div class="row-fluid marketing">
-        <div class="span6" data-step="2" data-intro="Ok, wasn't that fun?" data-position='right'>
+        <div class="span6" data-action="showBefore" data-step="2" data-intro="Ok, wasn't that fun?" data-position='right'>
           <h4>Easy to Use</h4>
           <p>Just include the js and css files and add <code>data-step</code> and <code>data-intro</code> to your code.</p>
 
@@ -74,5 +74,11 @@
 
     </div>
     <script type="text/javascript" src="../intro.js"></script>
+
+    <script>
+          window.showBefore = function () {
+            alert('before step');
+          };
+    </script>
   </body>
 </html>
