@@ -51,7 +51,7 @@
         introItems = [],
         self = this;
 
-    if(this._options.steps){
+    if(this._options.steps) {
       // use steps passed programmatically
       allIntroSteps = [];
 
@@ -60,7 +60,7 @@
         introItems.push(this._options.steps[i]);
       }
 
-    }else{
+    } else {
       // use steps from data-* annotations
 
       //if there's no element to intro
@@ -108,10 +108,18 @@
         }
       };
 
+      self._onResize = function(e) {
+        _setHelperLayerPosition.call(self, document.querySelector('.introjs-helperLayer'));
+      };
+
       if (window.addEventListener) {
         window.addEventListener('keydown', self._onKeyDown, true);
+        //for window resize
+        window.addEventListener("resize", self._onResize, true);
       } else if (document.attachEvent) { //IE
         document.attachEvent('onkeydown', self._onKeyDown);
+        //for window resize
+        document.attachEvent("onresize", self._onResize);
       }
     }
     return false;
@@ -258,6 +266,27 @@
   }
 
   /**
+   * Update the position of the helper layer on the screen
+   *
+   * @api private
+   * @method _setHelperLayerPosition
+   * @param {Object} helperLayer
+   */
+  function _setHelperLayerPosition(helperLayer) {
+    if(helperLayer) {
+      //prevent error when `this._currentStep` in undefined
+      if(!this._introItems[this._currentStep]) return;
+
+      var elementPosition = _getOffset(this._introItems[this._currentStep].element);
+      //set new position to helper layer
+      helperLayer.setAttribute('style', 'width: ' + (elementPosition.width  + 10)  + 'px; ' +
+                                        'height:' + (elementPosition.height + 10)  + 'px; ' +
+                                        'top:'    + (elementPosition.top    - 5)   + 'px;' +
+                                        'left: '  + (elementPosition.left   - 5)   + 'px;');
+    }
+  }
+
+  /**
    * Show an element on the page
    *
    * @api private
@@ -287,10 +316,8 @@
       oldtooltipContainer.style.opacity = 0;
 
       //set new position to helper layer
-      oldHelperLayer.setAttribute('style', 'width: ' + (elementPosition.width + 10)  + 'px; ' +
-                                           'height:' + (elementPosition.height + 10) + 'px; ' +
-                                           'top:'    + (elementPosition.top - 5)     + 'px;' +
-                                           'left: '  + (elementPosition.left - 5)    + 'px;');
+      _setHelperLayerPosition.call(self, oldHelperLayer);
+
       //remove old classes
       var oldShowElement = document.querySelector('.introjs-showElement');
       oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, '');
@@ -316,10 +343,9 @@
           tooltipLayer = document.createElement('div');
 
       helperLayer.className = 'introjs-helperLayer';
-      helperLayer.setAttribute('style', 'width: ' + (elementPosition.width + 10)  + 'px; ' +
-                                        'height:' + (elementPosition.height + 10) + 'px; ' +
-                                        'top:'    + (elementPosition.top - 5)     + 'px;' +
-                                        'left: '  + (elementPosition.left - 5)    + 'px;');
+
+      //set new position to helper layer
+      _setHelperLayerPosition.call(self, helperLayer);
 
       //add helper layer to target element
       this._targetElement.appendChild(helperLayer);
