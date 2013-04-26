@@ -265,14 +265,13 @@
    * @param {Object} targetElement
    */
   function _showElement(targetElement) {
-    
     if (typeof (this._introChangeCallback) !== 'undefined') {
         this._introChangeCallback.call(this, targetElement.element);
     }
-    
     var self = this,
         oldHelperLayer = document.querySelector('.introjs-helperLayer'),
-        elementPosition = _getOffset(targetElement.element);
+        elementPosition = _getOffset(targetElement.element),
+        elementCSSPosition = _getPosition(targetElement.element) === 'static' ? "" : _getPosition(targetElement.element);
 
     if(oldHelperLayer != null) {
       var oldHelperNumberLayer = oldHelperLayer.querySelector('.introjs-helperNumberLayer'),
@@ -287,10 +286,11 @@
       oldtooltipContainer.style.opacity = 0;
 
       //set new position to helper layer
-      oldHelperLayer.setAttribute('style', 'width: ' + (elementPosition.width + 10)  + 'px; ' +
-                                           'height:' + (elementPosition.height + 10) + 'px; ' +
-                                           'top:'    + (elementPosition.top - 5)     + 'px;' +
-                                           'left: '  + (elementPosition.left - 5)    + 'px;');
+      oldHelperLayer.setAttribute('style', 'position:' + elementCSSPosition + '; ' +
+                                          'width: ' + (elementPosition.width + 10)  + 'px; ' +
+                                          'height:' + (elementPosition.height + 10) + 'px; ' +
+                                          'top:'    + (elementPosition.top - 5)     + 'px;' +
+                                          'left: '  + (elementPosition.left - 5)    + 'px;');
       //remove old classes
       var oldShowElement = document.querySelector('.introjs-showElement');
       oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, '');
@@ -315,10 +315,12 @@
           arrowLayer = document.createElement('div'),
           tooltipLayer = document.createElement('div');
 
+
       helperLayer.className = 'introjs-helperLayer';
-      helperLayer.setAttribute('style', 'width: ' + (elementPosition.width + 10)  + 'px; ' +
+      helperLayer.setAttribute('style', 'position:' + elementCSSPosition + '; ' +
+                                        'width: ' + (elementPosition.width + 10)  + 'px; ' +
                                         'height:' + (elementPosition.height + 10) + 'px; ' +
-                                        'top:'    + (elementPosition.top - 5)     + 'px;' +
+                                        'top:'    + (elementPosition.top - 5)     + 'px; ' +
                                         'left: '  + (elementPosition.left - 5)    + 'px;');
 
       //add helper layer to target element
@@ -396,18 +398,11 @@
     //add target element position style
     targetElement.element.className += ' introjs-showElement';
 
-    //Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
-    var currentElementPosition = '';
-    if (targetElement.element.currentStyle) { //IE
-      currentElementPosition = targetElement.element.currentStyle['position'];
-    } else if (document.defaultView && document.defaultView.getComputedStyle) { //Firefox
-      currentElementPosition = document.defaultView.getComputedStyle(targetElement.element, null).getPropertyValue('position');
-    }
-
     //I don't know is this necessary or not, but I clear the position for better comparing
-    currentElementPosition = currentElementPosition.toLowerCase();
+    currentElementPosition = _getPosition(targetElement.element);
     if (currentElementPosition !== 'absolute' &&
-        currentElementPosition !== 'relative') {
+        currentElementPosition !== 'relative' &&
+        currentElementPosition !== 'fixed') {
       //change to new intro item
       targetElement.element.className += ' introjs-relativePosition';
     }
@@ -460,7 +455,7 @@
       rect.top >= 0 &&
       rect.left >= 0 &&
       (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
-      rect.right <= window.innerWidth 
+      rect.right <= window.innerWidth
     );
   }
 
@@ -503,6 +498,26 @@
       overlayLayer.setAttribute('style', styleText);
     }, 10);
     return true;
+  }
+
+  /**
+   * Get an element position(css property or style) on the page
+   * Thanks to Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
+   *
+   * @api private
+   * @method _getPosition
+   * @param {Object} element
+   * @returns Element's position(string either "static|absolute|fixed|relative|inherit" ) info
+   */
+  function _getPosition (element) {
+    var currentElementPosition = "";
+    if (element.currentStyle) { //IE
+      currentElementPosition = element.currentStyle['position'];
+    } else if (document.defaultView && document.defaultView.getComputedStyle) { //Firefox
+      currentElementPosition = document.defaultView.getComputedStyle(element, null).getPropertyValue('position');
+    }
+
+    return currentElementPosition.toLowerCase();
   }
 
   /**
