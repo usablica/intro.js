@@ -105,6 +105,8 @@
         } else if (e.keyCode === 39 || e.keyCode === 13) {
           //right arrow or enter
           _nextStep.call(self);
+          //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
+          e.preventDefault();
         }
       };
 
@@ -418,6 +420,9 @@
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
     }
+
+    //Set focus on "next" button, so that hitting Enter always moves you onto the next step
+    nextTooltipButton.focus();
 
     //add target element position style
     targetElement.element.className += ' introjs-showElement';
