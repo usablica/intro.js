@@ -105,6 +105,8 @@
         } else if (e.keyCode === 39 || e.keyCode === 13) {
           //right arrow or enter
           _nextStep.call(self);
+          //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
+          e.preventDefault();
         }
       };
 
