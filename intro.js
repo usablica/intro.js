@@ -522,11 +522,11 @@
 
     targetElm.appendChild(overlayLayer);
 
-    if(this._options.exitOnOverlayClick) {
-      overlayLayer.onclick = function() {
+    overlayLayer.onclick = function() {
+      if(self._options.exitOnOverlayClick) {
         _exitIntro.call(self, targetElm);
-      };
-    }
+      }
+    };
 
     setTimeout(function() {
       styleText += 'opacity: .5;';
