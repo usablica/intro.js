@@ -75,6 +75,7 @@
         introItems.push({
           element: currentElement,
           intro: currentElement.getAttribute('data-intro'),
+          action: currentElement.getAttribute('data-action'),
           step: parseInt(currentElement.getAttribute('data-step'), 10),
           position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
         });
@@ -169,6 +170,9 @@
       _exitIntro.call(this, this._targetElement);
       return;
     }
+
+    if (typeof window[ this._introItems[this._currentStep].action ] === 'function')
+        window[ this._introItems[this._currentStep].action ].call(null);
 
     _showElement.call(this, this._introItems[this._currentStep]);
   }
