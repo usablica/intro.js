@@ -98,7 +98,7 @@
           nextStepButton = targetElm.querySelector('.introjs-nextbutton');
 
       self._onKeyDown = function(e) {
-        if (e.keyCode === 27 && self._options.exitOnEsc) {
+        if (e.keyCode === 27 && self._options.exitOnEsc == true) {
           //escape key pressed, exit the intro
           _exitIntro.call(self, targetElm);
         } else if(e.keyCode === 37) {
@@ -532,7 +532,7 @@
     targetElm.appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
-      if(self._options.exitOnOverlayClick) {
+      if(self._options.exitOnOverlayClick == true) {
         _exitIntro.call(self, targetElm);
       }
     };
