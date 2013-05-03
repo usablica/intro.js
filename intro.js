@@ -214,6 +214,14 @@
     if (showElement) {
       showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, ''); // This is a manual trim.
     }
+
+    //remove `introjs-fixParent` class from the elements
+    var fixParents = document.querySelectorAll('.introjs-fixParent');
+    if (fixParents && fixParents.length > 0) {
+      for (var i = fixParents.length - 1; i >= 0; i--) {
+        fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
+      };
+    }
     //clean listeners
     if (window.removeEventListener) {
       window.removeEventListener('keydown', this._onKeyDown, true);
@@ -302,7 +310,7 @@
    * @param {Object} targetElement
    */
   function _showElement(targetElement) {
-    
+
     if (typeof (this._introChangeCallback) !== 'undefined') {
         this._introChangeCallback.call(this, targetElement.element);
     }
@@ -325,6 +333,14 @@
 
       //set new position to helper layer
       _setHelperLayerPosition.call(self, oldHelperLayer);
+
+      //remove `introjs-fixParent` class from the elements
+      var fixParents = document.querySelectorAll('.introjs-fixParent');
+      if (fixParents && fixParents.length > 0) {
+        for (var i = fixParents.length - 1; i >= 0; i--) {
+          fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
+        };
+      }
 
       //remove old classes
       var oldShowElement = document.querySelector('.introjs-showElement');
@@ -433,20 +449,22 @@
     //add target element position style
     targetElement.element.className += ' introjs-showElement';
 
-    //Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
-    var currentElementPosition = '';
-    if (targetElement.element.currentStyle) { //IE
-      currentElementPosition = targetElement.element.currentStyle['position'];
-    } else if (document.defaultView && document.defaultView.getComputedStyle) { //Firefox
-      currentElementPosition = document.defaultView.getComputedStyle(targetElement.element, null).getPropertyValue('position');
-    }
-
-    //I don't know is this necessary or not, but I clear the position for better comparing
-    currentElementPosition = currentElementPosition.toLowerCase();
+    var currentElementPosition = _getPropValue(targetElement.element, 'position');
     if (currentElementPosition !== 'absolute' &&
         currentElementPosition !== 'relative') {
       //change to new intro item
       targetElement.element.className += ' introjs-relativePosition';
+    }
+
+    var parentElm = targetElement.element.parentNode;
+    while(parentElm != null) {
+      if(parentElm.tagName.toLowerCase() === 'body') break;
+
+      var zIndex = _getPropValue(parentElm, 'z-index');
+      if(/[0-9]+/.test(zIndex)) {
+        parentElm.className += ' introjs-fixParent';
+      }
+      parentElm = parentElm.parentNode;
     }
 
     if (!_elementInViewport(targetElement.element)) {
@@ -462,6 +480,32 @@
       } else {
         window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
       }
+    }
+  }
+
+  /**
+   * Get an element CSS property on the page
+   * Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
+   *
+   * @api private
+   * @method _getPropValue
+   * @param {Object} element
+   * @param {String} propName
+   * @returns Element's property value
+   */
+  function _getPropValue (element, propName) {
+    var propValue = '';
+    if (element.currentStyle) { //IE
+      propValue = element.currentStyle[propName];
+    } else if (document.defaultView && document.defaultView.getComputedStyle) { //Others
+      propValue = document.defaultView.getComputedStyle(element, null).getPropertyValue(propName);
+    }
+
+    //Prevent exception in IE
+    if(propValue.toLowerCase) {
+      return propValue.toLowerCase();
+    } else {
+      return propValue;
     }
   }
 

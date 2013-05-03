@@ -12,6 +12,10 @@
           transition: all 0.3s ease-out;
 }
 
+.introjs-fixParent {
+  z-index: auto !important;
+}
+
 .introjs-showElement {
   z-index: 9999999;
 }
