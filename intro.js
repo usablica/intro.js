@@ -34,7 +34,9 @@
       prevLabel: '&larr; Back',
       skipLabel: 'Skip',
       doneLabel: 'Done',
-      tooltipPosition: 'bottom'
+      tooltipPosition: 'bottom',
+      exitOnEsc: true,
+      exitOnOverlayClick: true
     };
   }
 
@@ -96,7 +98,7 @@
           nextStepButton = targetElm.querySelector('.introjs-nextbutton');
 
       self._onKeyDown = function(e) {
-        if (e.keyCode === 27) {
+        if (e.keyCode === 27 && self._options.exitOnEsc) {
           //escape key pressed, exit the intro
           _exitIntro.call(self, targetElm);
         } else if(e.keyCode === 37) {
@@ -530,7 +532,9 @@
     targetElm.appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
-      _exitIntro.call(self, targetElm);
+      if(self._options.exitOnOverlayClick) {
+        _exitIntro.call(self, targetElm);
+      }
     };
 
     setTimeout(function() {
