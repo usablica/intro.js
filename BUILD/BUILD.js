@@ -28,16 +28,3 @@ new compressor.minify({
     }
   }
 });
-
-new compressor.minify({
-  type: 'yui-css',
-  fileIn: '../introjs-ie.css',
-  fileOut: '../minified/introjs-ie.min.css',
-  callback: function (err) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("IE bugfix CSS minified successfully.");
-    }
-  }
-});
