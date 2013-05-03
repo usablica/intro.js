@@ -106,7 +106,11 @@
           //right arrow or enter
           _nextStep.call(self);
           //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
-          e.preventDefault();
+          if(e.preventDefault) { 
+            e.preventDefault();
+          } else {
+            e.returnValue = false;
+          }
         }
       };
 
