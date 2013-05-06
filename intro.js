@@ -582,7 +582,7 @@
     };
 
     setTimeout(function() {
-      styleText += 'opacity: .5;';
+      styleText += 'opacity: .8;';
       overlayLayer.setAttribute('style', styleText);
     }, 10);
     return true;
