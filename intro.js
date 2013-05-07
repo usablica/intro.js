@@ -76,7 +76,8 @@
           element: currentElement,
           intro: currentElement.getAttribute('data-intro'),
           step: parseInt(currentElement.getAttribute('data-step'), 10),
-          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
+          target: document.querySelector(currentElement.getAttribute('data-target')) || null
         });
       }
     }
@@ -98,7 +99,7 @@
           nextStepButton = targetElm.querySelector('.introjs-nextbutton');
 
       self._onKeyDown = function(e) {
-        if (e.keyCode === 27 && self._options.exitOnEsc == true) {
+        if (e.keyCode === 27) {
           //escape key pressed, exit the intro
           _exitIntro.call(self, targetElm);
         } else if(e.keyCode === 37) {
@@ -107,12 +108,6 @@
         } else if (e.keyCode === 39 || e.keyCode === 13) {
           //right arrow or enter
           _nextStep.call(self);
-          //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
-          if(e.preventDefault) { 
-            e.preventDefault();
-          } else {
-            e.returnValue = false;
-          }
         }
       };
 
@@ -214,14 +209,6 @@
     if (showElement) {
       showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, ''); // This is a manual trim.
     }
-
-    //remove `introjs-fixParent` class from the elements
-    var fixParents = document.querySelectorAll('.introjs-fixParent');
-    if (fixParents && fixParents.length > 0) {
-      for (var i = fixParents.length - 1; i >= 0; i--) {
-        fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
-      };
-    }
     //clean listeners
     if (window.removeEventListener) {
       window.removeEventListener('keydown', this._onKeyDown, true);
@@ -294,6 +281,8 @@
       if(!this._introItems[this._currentStep]) return;
 
       var elementPosition = _getOffset(this._introItems[this._currentStep].element);
+      if (this._introItems[this._currentStep].target) elementPosition = _getOffset(this._introItems[this._currentStep].target);
+
       //set new position to helper layer
       helperLayer.setAttribute('style', 'width: ' + (elementPosition.width  + 10)  + 'px; ' +
                                         'height:' + (elementPosition.height + 10)  + 'px; ' +
@@ -310,7 +299,7 @@
    * @param {Object} targetElement
    */
   function _showElement(targetElement) {
-
+    
     if (typeof (this._introChangeCallback) !== 'undefined') {
         this._introChangeCallback.call(this, targetElement.element);
     }
@@ -333,14 +322,6 @@
 
       //set new position to helper layer
       _setHelperLayerPosition.call(self, oldHelperLayer);
-
-      //remove `introjs-fixParent` class from the elements
-      var fixParents = document.querySelectorAll('.introjs-fixParent');
-      if (fixParents && fixParents.length > 0) {
-        for (var i = fixParents.length - 1; i >= 0; i--) {
-          fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
-        };
-      }
 
       //remove old classes
       var oldShowElement = document.querySelector('.introjs-showElement');
@@ -442,71 +423,81 @@
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
     }
-
-    //Set focus on "next" button, so that hitting Enter always moves you onto the next step
-    nextTooltipButton.focus();
-
-    //add target element position style
-    targetElement.element.className += ' introjs-showElement';
-
-    var currentElementPosition = _getPropValue(targetElement.element, 'position');
-    if (currentElementPosition !== 'absolute' &&
-        currentElementPosition !== 'relative') {
-      //change to new intro item
-      targetElement.element.className += ' introjs-relativePosition';
+    
+    
+    if (this._introItems[this._currentStep].target){
+	    //add target element position style
+	    var targetElHolder = this._introItems[this._currentStep].target;
+	    targetElHolder.className += ' introjs-showElement';
+	
+	    //Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
+	    var currentElementPosition = '';
+	    if (targetElHolder.currentStyle) { //IE
+	      currentElementPosition = targetElHolder.currentStyle['position'];
+	    } else if (document.defaultView && document.defaultView.getComputedStyle) { //Firefox
+	      currentElementPosition = document.defaultView.getComputedStyle(targetElHolder, null).getPropertyValue('position');
+	    }
+	
+	    //I don't know is this necessary or not, but I clear the position for better comparing
+	    currentElementPosition = currentElementPosition.toLowerCase();
+	    if (currentElementPosition !== 'absolute' &&
+	        currentElementPosition !== 'relative') {
+	      //change to new intro item
+	      targetElHolder.className += ' introjs-relativePosition';
+	    }
+	
+	    if (!_elementInViewport(targetElHolder)) {
+	      var rect = targetElHolder.getBoundingClientRect(),
+	          top = rect.bottom - (rect.bottom - rect.top),
+	          bottom = rect.bottom - _getWinSize().height;
+	
+	      // Scroll up
+	      if (top < 0) {
+	        window.scrollBy(0, top - 30); // 30px padding from edge to look nice
+	
+	      // Scroll down
+	      } else {
+	        window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
+	      }
+	    }
+    }
+    else{
+	    //add target element position style
+	    targetElement.element.className += ' introjs-showElement';
+	
+	    //Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
+	    var currentElementPosition = '';
+	    if (targetElement.element.currentStyle) { //IE
+	      currentElementPosition = targetElement.element.currentStyle['position'];
+	    } else if (document.defaultView && document.defaultView.getComputedStyle) { //Firefox
+	      currentElementPosition = document.defaultView.getComputedStyle(targetElement.element, null).getPropertyValue('position');
+	    }
+	
+	    //I don't know is this necessary or not, but I clear the position for better comparing
+	    currentElementPosition = currentElementPosition.toLowerCase();
+	    if (currentElementPosition !== 'absolute' &&
+	        currentElementPosition !== 'relative') {
+	      //change to new intro item
+	      targetElement.element.className += ' introjs-relativePosition';
+	    }
+	
+	    if (!_elementInViewport(targetElement.element)) {
+	      var rect = targetElement.element.getBoundingClientRect(),
+	          top = rect.bottom - (rect.bottom - rect.top),
+	          bottom = rect.bottom - _getWinSize().height;
+	
+	      // Scroll up
+	      if (top < 0) {
+	        window.scrollBy(0, top - 30); // 30px padding from edge to look nice
+	
+	      // Scroll down
+	      } else {
+	        window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
+	      }
+	    }
     }
 
-    var parentElm = targetElement.element.parentNode;
-    while(parentElm != null) {
-      if(parentElm.tagName.toLowerCase() === 'body') break;
-
-      var zIndex = _getPropValue(parentElm, 'z-index');
-      if(/[0-9]+/.test(zIndex)) {
-        parentElm.className += ' introjs-fixParent';
-      }
-      parentElm = parentElm.parentNode;
-    }
-
-    if (!_elementInViewport(targetElement.element)) {
-      var rect = targetElement.element.getBoundingClientRect(),
-          top = rect.bottom - (rect.bottom - rect.top),
-          bottom = rect.bottom - _getWinSize().height;
-
-      // Scroll up
-      if (top < 0) {
-        window.scrollBy(0, top - 30); // 30px padding from edge to look nice
-
-      // Scroll down
-      } else {
-        window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
-      }
-    }
-  }
-
-  /**
-   * Get an element CSS property on the page
-   * Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
-   *
-   * @api private
-   * @method _getPropValue
-   * @param {Object} element
-   * @param {String} propName
-   * @returns Element's property value
-   */
-  function _getPropValue (element, propName) {
-    var propValue = '';
-    if (element.currentStyle) { //IE
-      propValue = element.currentStyle[propName];
-    } else if (document.defaultView && document.defaultView.getComputedStyle) { //Others
-      propValue = document.defaultView.getComputedStyle(element, null).getPropertyValue(propName);
-    }
-
-    //Prevent exception in IE
-    if(propValue.toLowerCase) {
-      return propValue.toLowerCase();
-    } else {
-      return propValue;
-    }
+	
   }
 
   /**
@@ -576,9 +567,7 @@
     targetElm.appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
-      if(self._options.exitOnOverlayClick == true) {
-        _exitIntro.call(self, targetElm);
-      }
+      _exitIntro.call(self, targetElm);
     };
 
     setTimeout(function() {
