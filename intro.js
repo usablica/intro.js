@@ -48,7 +48,7 @@
    * @param {Object} targetElm
    * @returns {Boolean} Success or not?
    */
-  function _introForElement(targetElm) {
+  function _introForElement(targetElm, attrId) {
     var allIntroSteps = targetElm.querySelectorAll('*[data-intro]'),
         introItems = [],
         self = this;
@@ -72,6 +72,10 @@
 
       for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
         var currentElement = allIntroSteps[i];
+
+      if(attrId && attrId!=currentElement.getAttribute('data-attrid'))
+        continue;
+
         introItems.push({
           element: currentElement,
           intro: currentElement.getAttribute('data-intro'),
@@ -677,8 +681,8 @@
       this._options = _mergeOptions(this._options, options);
       return this;
     },
-    start: function () {
-      _introForElement.call(this, this._targetElement);
+    start: function (attrId) {
+      _introForElement.call(this, this._targetElement, attrId);
       return this;
     },
     goToStep: function(step) {
