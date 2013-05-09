@@ -76,7 +76,8 @@
           element: currentElement,
           intro: currentElement.getAttribute('data-intro'),
           step: parseInt(currentElement.getAttribute('data-step'), 10),
-          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
+          tooltipStyle: currentElement.getAttribute('data-tooltip-style')
         });
       }
     }
@@ -240,14 +241,15 @@
    * Render tooltip box in the page
    *
    * @api private
-   * @method _placeTooltip
+   * @method _renderTooltip
    * @param {Object} targetElement
    * @param {Object} tooltipLayer
    * @param {Object} arrowLayer
    */
-  function _placeTooltip(targetElement, tooltipLayer, arrowLayer) {
+  function _renderTooltip(targetElement, tooltipLayer, arrowLayer) {
     var tooltipLayerPosition = _getOffset(tooltipLayer);
     //reset the old style
+    tooltipLayer.style.cssText = null;
     tooltipLayer.style.top     = null;
     tooltipLayer.style.right   = null;
     tooltipLayer.style.bottom  = null;
@@ -279,6 +281,9 @@
         arrowLayer.className = 'introjs-arrow top';
         break;
     }
+
+    var currentTooltipStyle = this._introItems[this._currentStep].tooltipStyle;
+    tooltipLayer.style.cssText += currentTooltipStyle;
   }
 
   /**
@@ -354,8 +359,8 @@
         oldHelperNumberLayer.innerHTML = targetElement.step;
         //set current tooltip text
         oldtooltipLayer.innerHTML = targetElement.intro;
-        //set the tooltip position
-        _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer);
+        //set the tooltip position and add custom styles
+        _renderTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer);
         //show the tooltip
         oldtooltipContainer.style.opacity = 1;
       }, 350);
@@ -425,8 +430,8 @@
       tooltipButtonsLayer.appendChild(prevTooltipButton);
       tooltipButtonsLayer.appendChild(nextTooltipButton);
 
-      //set proper position
-      _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer);
+      //set proper position and add custom styles
+      _renderTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer);
     }
 
     if (this._currentStep == 0) {
