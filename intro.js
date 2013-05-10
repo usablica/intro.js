@@ -367,8 +367,8 @@
       }, 350);
 
     } else {
-      var helperLayer = document.createElement('div'),
-          arrowLayer = document.createElement('div'),
+      var helperLayer  = document.createElement('div'),
+          arrowLayer   = document.createElement('div'),
           tooltipLayer = document.createElement('div');
 
       helperLayer.className = 'introjs-helperLayer';
