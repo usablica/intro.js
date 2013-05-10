@@ -247,36 +247,35 @@
    * @param {Object} arrowLayer
    */
   function _placeTooltip(targetElement, tooltipLayer, arrowLayer) {
-    var tooltipLayerPosition = _getOffset(tooltipLayer);
     //reset the old style
     tooltipLayer.style.top     = null;
     tooltipLayer.style.right   = null;
     tooltipLayer.style.bottom  = null;
     tooltipLayer.style.left    = null;
 
-    //prevent error when `this._currentStep` in undefined
+    //prevent error when `this._currentStep` is undefined
     if(!this._introItems[this._currentStep]) return;
 
     var currentTooltipPosition = this._introItems[this._currentStep].position;
     switch (currentTooltipPosition) {
       case 'top':
         tooltipLayer.style.left = '15px';
-        tooltipLayer.style.top = '-' + (tooltipLayerPosition.height + 10) + 'px';
+        tooltipLayer.style.top = '-' + (_getOffset(tooltipLayer).height + 10) + 'px';
         arrowLayer.className = 'introjs-arrow bottom';
         break;
       case 'right':
-        tooltipLayer.style.right = '-' + (tooltipLayerPosition.width + 10) + 'px';
+        tooltipLayer.style.left = (_getOffset(targetElement).width + 20) + 'px';
         arrowLayer.className = 'introjs-arrow left';
         break;
       case 'left':
         tooltipLayer.style.top = '15px';
-        tooltipLayer.style.left = '-' + (tooltipLayerPosition.width + 10) + 'px';
+        tooltipLayer.style.right = (_getOffset(targetElement).width + 20) + 'px';
         arrowLayer.className = 'introjs-arrow right';
         break;
       case 'bottom':
       // Bottom going to follow the default behavior
       default:
-        tooltipLayer.style.bottom = '-' + (tooltipLayerPosition.height + 10) + 'px';
+        tooltipLayer.style.bottom = '-' + (_getOffset(tooltipLayer).height + 10) + 'px';
         arrowLayer.className = 'introjs-arrow top';
         break;
     }
