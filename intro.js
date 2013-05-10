@@ -50,24 +50,28 @@
    * @returns {Boolean} Success or not?
    */
   function _introForElement(targetElm) {
-    var allIntroSteps = targetElm.querySelectorAll('*[data-intro]'),
-        introItems = [],
+    var introItems = [],
         self = this;
 
-    if(this._options.steps) {
-      // use steps passed programmatically
-      allIntroSteps = [];
+    if (this._options.steps) {
+      //use steps passed programmatically
+      var allIntroSteps = [];
 
-      for(var i = 0; i < this._options.steps.length; i++){
-        this._options.steps[i].step = i+1; //set the step
-        introItems.push(this._options.steps[i]);
+      for (var i = 0, stepsLength = this._options.steps.length; i < stepsLength; i++) {
+        var currentItem = this._options.steps[i];
+        //set the step
+        currentItem.step = i + 1;
+        //grab the element with given selector from the page
+        currentItem.element = document.querySelector(currentItem.element);
+        introItems.push(currentItem);
       }
 
     } else {
-      // use steps from data-* annotations
+      //use steps from data-* annotations
 
+      var allIntroSteps = targetElm.querySelectorAll('*[data-intro]');
       //if there's no element to intro
-      if(allIntroSteps.length < 1) {
+      if (allIntroSteps.length < 1) {
         return false;
       }
 
@@ -424,6 +428,9 @@
       skipTooltipButton.innerHTML = this._options.skipLabel;
 
       skipTooltipButton.onclick = function() {
+        if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
+          self._introCompleteCallback.call(self);
+        }
         _exitIntro.call(self, self._targetElement);
       };
 
