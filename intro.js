@@ -36,7 +36,8 @@
       doneLabel: 'Done',
       tooltipPosition: 'bottom',
       exitOnEsc: true,
-      exitOnOverlayClick: true
+      exitOnOverlayClick: true,
+      showStepNumbers: true
     };
   }
 
@@ -351,7 +352,9 @@
       }
       self._lastShowElementTimer = setTimeout(function() {
         //set current step to the label
-        oldHelperNumberLayer.innerHTML = targetElement.step;
+        if(oldHelperNumberLayer != null) {
+          oldHelperNumberLayer.innerHTML = targetElement.step;
+        }
         //set current tooltip text
         oldtooltipLayer.innerHTML = targetElement.intro;
         //set the tooltip position
@@ -362,7 +365,6 @@
 
     } else {
       var helperLayer = document.createElement('div'),
-          helperNumberLayer = document.createElement('span'),
           arrowLayer = document.createElement('div'),
           tooltipLayer = document.createElement('div');
 
@@ -374,15 +376,21 @@
       //add helper layer to target element
       this._targetElement.appendChild(helperLayer);
 
-      helperNumberLayer.className = 'introjs-helperNumberLayer';
       arrowLayer.className = 'introjs-arrow';
       tooltipLayer.className = 'introjs-tooltip';
 
-      helperNumberLayer.innerHTML = targetElement.step;
+      
       tooltipLayer.innerHTML = '<div class="introjs-tooltiptext">' +
                                targetElement.intro +
                                '</div><div class="introjs-tooltipbuttons"></div>';
-      helperLayer.appendChild(helperNumberLayer);
+
+      //add helper layer number
+      if (this._options.showStepNumbers) {
+        var helperNumberLayer = document.createElement('span');
+        helperNumberLayer.className = 'introjs-helperNumberLayer';
+        helperNumberLayer.innerHTML = targetElement.step;
+        helperLayer.appendChild(helperNumberLayer);
+      }
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
 
