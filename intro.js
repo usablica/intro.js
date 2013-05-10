@@ -692,6 +692,9 @@
       _goToStep.call(this, step);
       return this;
     },
+    refresh: function() {
+      _setHelperLayerPosition.call(this, document.querySelector('.introjs-helperLayer'));
+    },
     exit: function() {
       _exitIntro.call(this, this._targetElement);
     },
