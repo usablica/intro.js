@@ -159,6 +159,10 @@
    * @method _nextStep
    */
   function _nextStep() {
+    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
+      this._introBeforeChangeCallback.call(this, this._targetElement);
+    }
+
     if (typeof (this._currentStep) === 'undefined') {
       this._currentStep = 0;
     } else {
@@ -187,6 +191,10 @@
   function _previousStep() {
     if (this._currentStep === 0) {
       return false;
+    }
+
+    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
+      this._introBeforeChangeCallback.call(this, this._targetElement);
     }
 
     _showElement.call(this, this._introItems[--this._currentStep]);
@@ -701,6 +709,14 @@
     },
     exit: function() {
       _exitIntro.call(this, this._targetElement);
+    },
+    onbeforechange: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._introBeforeChangeCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onbeforechange was not a function');
+      }
+      return this;
     },
     onchange: function(providedCallback) {
       if (typeof (providedCallback) === 'function') {
