@@ -67,22 +67,35 @@
       }
 
     } else {
-      //use steps from data-* annotations
+      //use steps from the list #tourContent 
 
-      var allIntroSteps = targetElm.querySelectorAll('*[data-intro]');
+      var allIntroSteps = targetElm.querySelectorAll('#tourContent > li');
       //if there's no element to intro
       if (allIntroSteps.length < 1) {
         return false;
       }
 
+      var cont = 1;
       for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
         var currentElement = allIntroSteps[i];
+
+        var currentId = currentElement.getAttribute("data-id");
+        var currentClass = currentElement.getAttribute("data-class");
+
+        if(currentId && currentId!= 'undefined'){
+            var currentDiv = document.getElementById(currentId);
+        }else{
+            var currentDiv = $('.'+currentClass).get(0);  // WARNING use of jQuery
+        }
+
+
         introItems.push({
-          element: currentElement,
-          intro: currentElement.getAttribute('data-intro'),
-          step: parseInt(currentElement.getAttribute('data-step'), 10),
-          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+          element: currentDiv,
+          intro: currentElement.innerHTML,
+          step: cont,
+          position: currentElement.getAttribute("data-position")
         });
+        cont++;
       }
     }
 
