@@ -8,14 +8,6 @@ Intro.js can be added to your site in three simple steps:
 
 **1)** Include `intro.js` and `introjs.css` (or the minified version for production) in your page. 
 
-> Note: if you need Internet Explorer compatiblity, you have to add introjs-ie.css to the page also:
-  
-```html
-<!--[if lte IE 8]>
-  <link href="../introjs-ie.css" rel="stylesheet">
-<!-- <![endif]-->
-````
-
 **2)** Add `data-intro` and `data-step` to your HTML elements.  
 
 For example: 
@@ -215,6 +207,43 @@ introJs().onchange(function(targetElement) {
 });
 ````
 
+-----
+
+###introJs.onbeforechange(providedCallback)
+
+Given callback function will be called before starting a new step of introduction. The callback function receives the element of the new step as an argument.
+
+**Available since:** v0.4.0
+
+**Parameters:**
+ - providedCallback : Function
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().onbeforechange(function(targetElement) {  
+  alert("before new step");
+});
+````
+
+-----
+
+###Options:
+
+ - `steps`: For defining steps using JSON configuration (see [this](https://github.com/usablica/intro.js/blob/master/example/programmatic/index.html) example)
+ - `nextLabel`: Next button label
+ - `prevLabel`: Previous button label
+ - `skipLabel`: Skip button label
+ - `doneLabel`: Done button label
+ - `tooltipPosition`: Default tooltip position
+ - `exitOnEsc`: Exit introduction when pressing Escape button, `true` or `false`
+ - `exitOnOverlayClick`: Exit introduction when clicking on overlay layer, `true` or `false`
+ - `showStepNumbers`: Show steps number in the red circle or not, `true` of `false`
+
+See [setOption](https://github.com/usablica/intro.js/edit/master/README.md#introjssetoptionoption-value) to see an example.
+
 ## Using with:
 
 ### Rails
@@ -234,11 +263,26 @@ Now you can run this command to minify all static resources:
 
 
 ## Roadmap
-- Multi-page introduction
 - More browser compatibility
-
+- Provide more examples
 
 ## Release History
+
+ * **v0.4.0** - 2013-05-20
+   - Add multi-page introduction example
+   - Add programmatic introduction definition
+   - Cooler introduction background!
+   - Remove IE specific css file and embed IE support to main css file (property fallback)
+   - Update introduction position on window resize (Also support tablet/mobile devices rotation)
+   - Disable buttons on the first and start of introduction (Skip and Done button)
+   - Add `onbeforechange` callback
+   - Add `showStepNumbers` option to show/hide step numbers
+   - Add `exitOnEsc` and `exitOnOverlayClick` options
+   - Fix bad tooltip position calculating problem
+   - Fix a bug when using `!important` in element css properties
+   - Fix a bug in `onexit` behavior
+   - Code refactoring
+
  * **v0.3.0** - 2013-03-28
    - Adding support for CommonJS, RequireJS AMD and Browser Globals.
    - Add `goToStep` function to go to specific step of introduction.
