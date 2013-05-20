@@ -3,6 +3,15 @@
   z-index: 999999;
   background-color: #000;
   opacity: 0;
+  background: -moz-radial-gradient(center,ellipse cover,rgba(0,0,0,0.4) 0,rgba(0,0,0,0.9) 100%);
+  background: -webkit-gradient(radial,center center,0px,center center,100%,color-stop(0%,rgba(0,0,0,0.4)),color-stop(100%,rgba(0,0,0,0.9)));
+  background: -webkit-radial-gradient(center,ellipse cover,rgba(0,0,0,0.4) 0,rgba(0,0,0,0.9) 100%);
+  background: -o-radial-gradient(center,ellipse cover,rgba(0,0,0,0.4) 0,rgba(0,0,0,0.9) 100%);
+  background: -ms-radial-gradient(center,ellipse cover,rgba(0,0,0,0.4) 0,rgba(0,0,0,0.9) 100%);
+  background: radial-gradient(center,ellipse cover,rgba(0,0,0,0.4) 0,rgba(0,0,0,0.9) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#66000000',endColorstr='#e6000000',GradientType=1);
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  filter: alpha(opacity=50);
   -webkit-transition: all 0.3s ease-out;
      -moz-transition: all 0.3s ease-out;
       -ms-transition: all 0.3s ease-out;
@@ -10,8 +19,12 @@
           transition: all 0.3s ease-out;
 }
 
+.introjs-fixParent {
+  z-index: auto !important;
+}
+
 .introjs-showElement {
-  z-index: 9999999;
+  z-index: 9999999 !important;
 }
 
 .introjs-relativePosition {
@@ -21,7 +34,9 @@
 .introjs-helperLayer {
   position: absolute;
   z-index: 9999998;
+  background-color: #FFF;
   background-color: rgba(255,255,255,.9);
+  border: 1px solid #777;
   border: 1px solid rgba(0,0,0,.5);
   border-radius: 4px;
   box-shadow: 0 2px 15px rgba(0,0,0,.4);
@@ -102,6 +117,7 @@
   padding: 10px;
   background-color: white;
   min-width: 200px;
+  max-width: 300px;
   border-radius: 3px;
   box-shadow: 0 1px 10px rgba(0,0,0,.4);
   -webkit-transition: opacity 0.1s ease-out;
@@ -187,4 +203,14 @@
   -webkit-border-radius: 0 0.2em 0.2em 0;
   -moz-border-radius: 0 0.2em 0.2em 0;
   border-radius: 0 0.2em 0.2em 0;
+}
+
+.introjs-disabled, .introjs-disabled:hover, .introjs-disabled:focus {
+  color: #9a9a9a;
+  border-color: #d4d4d4;
+  box-shadow: none;
+  cursor: default;
+  background-color: #f4f4f4;
+  background-image: none;
+  text-decoration: none;
 }
