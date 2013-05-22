@@ -37,7 +37,8 @@
       tooltipPosition: 'bottom',
       exitOnEsc: true,
       exitOnOverlayClick: true,
-      showStepNumbers: true
+      showStepNumbers: true,
+      buttonCls: null
     };
   }
 
@@ -331,6 +332,8 @@
         oldHelperLayer = document.querySelector('.introjs-helperLayer'),
         elementPosition = _getOffset(targetElement.element);
 
+    var buttonCls = this._options.buttonCls ? this._options.buttonCls : 'introjs-button';
+
     if(oldHelperLayer != null) {
       var oldHelperNumberLayer = oldHelperLayer.querySelector('.introjs-helperNumberLayer'),
           oldtooltipLayer      = oldHelperLayer.querySelector('.introjs-tooltiptext'),
@@ -457,16 +460,16 @@
     }
 
     if (this._currentStep == 0) {
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+      prevTooltipButton.className = buttonCls + ' introjs-prevbutton introjs-disabled';
+      nextTooltipButton.className = buttonCls + ' introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
     } else if (this._introItems.length - 1 == this._currentStep) {
       skipTooltipButton.innerHTML = this._options.doneLabel;
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+      prevTooltipButton.className = buttonCls + ' introjs-prevbutton';
+      nextTooltipButton.className = buttonCls + ' introjs-nextbutton introjs-disabled';
     } else {
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+      prevTooltipButton.className = buttonCls + ' introjs-prevbutton';
+      nextTooltipButton.className = buttonCls + ' introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
     }
 
