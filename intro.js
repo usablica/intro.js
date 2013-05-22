@@ -105,7 +105,7 @@
       self._onKeyDown = function(e) {
         if (e.keyCode === 27 && self._options.exitOnEsc == true) {
           //escape key pressed, exit the intro
-          _exitIntro.call(self, targetElm);
+          _exitIntro.call(self, document.getElementsByTagName('body')[0]);
           //check if any callback is defined
           if (self._introExitCallback != undefined) {
             self._introExitCallback.call(self);
@@ -179,7 +179,7 @@
       if (typeof (this._introCompleteCallback) === 'function') {
         this._introCompleteCallback.call(this);
       }
-      _exitIntro.call(this, this._targetElement);
+      _exitIntro.call(this, document.getElementsByTagName('body')[0]);
       return;
     }
 
@@ -385,7 +385,7 @@
       _setHelperLayerPosition.call(self, helperLayer);
 
       //add helper layer to target element
-      this._targetElement.appendChild(helperLayer);
+      document.getElementsByTagName('body')[0].appendChild(helperLayer);
 
       arrowLayer.className = 'introjs-arrow';
       tooltipLayer.className = 'introjs-tooltip';
@@ -444,7 +444,7 @@
           self._introExitCallback.call(self);
         }
 
-        _exitIntro.call(self, self._targetElement);
+        _exitIntro.call(self, document.getElementsByTagName('body')[0]);
       };
 
       var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
@@ -600,11 +600,11 @@
       }
     }
 
-    targetElm.appendChild(overlayLayer);
+    document.getElementsByTagName('body')[0].appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
       if(self._options.exitOnOverlayClick == true) {
-        _exitIntro.call(self, targetElm);
+        _exitIntro.call(self, document.getElementsByTagName('body')[0]);
       }
       //check if any callback is defined
       if (self._introExitCallback != undefined) {
@@ -717,7 +717,7 @@
       return this;
     },
     exit: function() {
-      _exitIntro.call(this, this._targetElement);
+      _exitIntro.call(this, document.getElementsByTagName('body')[0]);
     },
     onbeforechange: function(providedCallback) {
       if (typeof (providedCallback) === 'function') {
