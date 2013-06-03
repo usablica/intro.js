@@ -163,6 +163,7 @@
    * @method _nextStep
    */
   function _nextStep() {
+    this._direction = 1;
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
       this._introBeforeChangeCallback.call(this, this._targetElement);
     }
@@ -197,6 +198,7 @@
       return false;
     }
 
+    this._direction = -1;
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
       this._introBeforeChangeCallback.call(this, this._targetElement);
     }
