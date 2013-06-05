@@ -164,7 +164,7 @@
    */
   function _nextStep() {
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, this._targetElement);
+      this._introBeforeChangeCallback.call(this, this._targetElement.element);
     }
 
     if (typeof (this._currentStep) === 'undefined') {
