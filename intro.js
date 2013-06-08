@@ -527,8 +527,12 @@
     } else if (document.defaultView && document.defaultView.getComputedStyle) { //Others
       propValue = document.defaultView.getComputedStyle(element, null).getPropertyValue(propName);
     }
-
+    
+    if (propName == 'z-index' && typeof (propValue) === 'undefined' ){
+      return '0';
+    }
     //Prevent exception in IE
+	
     if(propValue.toLowerCase) {
       return propValue.toLowerCase();
     } else {
@@ -604,11 +608,11 @@
 
     overlayLayer.onclick = function() {
       if(self._options.exitOnOverlayClick == true) {
+        //check if any callback is defined
+        if (self._introExitCallback != undefined) {
+          self._introExitCallback.call(self);
+        }
         _exitIntro.call(self, targetElm);
-      }
-      //check if any callback is defined
-      if (self._introExitCallback != undefined) {
-        self._introExitCallback.call(self);
       }
     };
 
