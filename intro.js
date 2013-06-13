@@ -532,7 +532,6 @@
       return '0';
     }
     //Prevent exception in IE
-	
     if(propValue.toLowerCase) {
       return propValue.toLowerCase();
     } else {
@@ -607,13 +606,14 @@
     targetElm.appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
-      if(self._options.exitOnOverlayClick == true) {
-        //check if any callback is defined
-        if (self._introExitCallback != undefined) {
-          self._introExitCallback.call(self);
-        }
-        _exitIntro.call(self, targetElm);
+      if(!self._options.exitOnOverlayClick) {
+        return;
       }
+      //check if any callback is defined
+      if (self._introExitCallback != undefined) {
+        self._introExitCallback.call(self);
+      }
+      _exitIntro.call(self, targetElm);
     };
 
     setTimeout(function() {
