@@ -28,3 +28,16 @@ new compressor.minify({
     }
   }
 });
+
+new compressor.minify({
+  type: 'yui-css',
+  fileIn: '../introjs-rtl.css',
+  fileOut: '../minified/introjs-rtl.min.css',
+  callback: function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("RTL CSS minified successfully.");
+    }
+  }
+});
