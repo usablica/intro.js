@@ -37,7 +37,7 @@
       tooltipPosition: 'bottom',
       exitOnEsc: true,
       exitOnOverlayClick: true,
-      showStepNumbers: true
+      showStepNumbers: 'none'
     };
   }
 
@@ -364,7 +364,17 @@
       self._lastShowElementTimer = setTimeout(function() {
         //set current step to the label
         if(oldHelperNumberLayer != null) {
-          oldHelperNumberLayer.innerHTML = targetElement.step;
+          switch(self._options.showStepNumbers) {
+            case 'inset': {
+              oldHelperNumberLayer.innerHTML = targetElement.step + '/' + self._options.steps.length;
+              break;
+            }
+            case 'outset': {
+              oldHelperNumberLayer.innerHTML = targetElement.step;
+              break;
+            }
+          }
+
         }
         //set current tooltip text
         oldtooltipLayer.innerHTML = targetElement.intro;
@@ -396,12 +406,25 @@
                                '</div><div class="introjs-tooltipbuttons"></div>';
 
       //add helper layer number
-      if (this._options.showStepNumbers) {
-        var helperNumberLayer = document.createElement('span');
-        helperNumberLayer.className = 'introjs-helperNumberLayer';
-        helperNumberLayer.innerHTML = targetElement.step;
-        helperLayer.appendChild(helperNumberLayer);
+      switch (this._options.showStepNumbers) {
+        case 'none': break;
+        case 'outset': {
+          var helperNumberLayer = document.createElement('span');
+          helperNumberLayer.className = 'introjs-helperNumberLayer outset';
+          helperNumberLayer.innerHTML = targetElement.step;
+          helperLayer.appendChild(helperNumberLayer);
+          break;
+        }
+        case 'inset': {
+          var helperNumberLayer = document.createElement('div');
+          helperNumberLayer.className = 'introjs-helperNumberLayer inset';
+          helperNumberLayer.innerHTML = targetElement.step + '/' + this._options.steps.length;
+          tooltipLayer.insertBefore(helperNumberLayer, tooltipLayer.firstChild);
+          break;
+        }
+        default: break;
       }
+
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
 
