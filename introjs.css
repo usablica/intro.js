@@ -214,3 +214,8 @@
   background-image: none;
   text-decoration: none;
 }
+
+.introjs-hidden {
+  visibility: hidden;
+  display: none;
+}
