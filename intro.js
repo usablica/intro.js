@@ -465,6 +465,8 @@
     } else {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+      skipTooltipButton.className = 'introjs-button introjs-skipbutton'
+      nextTooltipButton.innerHTML = this._options.nextLabel;
       skipTooltipButton.innerHTML = this._options.skipLabel;
     }
 
