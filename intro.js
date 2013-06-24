@@ -33,7 +33,7 @@
       nextLabel: 'Next &rarr;',
       prevLabel: '&larr; Back',
       skipLabel: 'Skip',
-      doneLabel: 'Done',
+      doneLabel: 'Done &rarr;',
       tooltipPosition: 'bottom',
       exitOnEsc: true,
       exitOnOverlayClick: true,
