@@ -198,7 +198,7 @@
     }
 
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, this._targetElement);
+      this._introBeforeChangeCallback.call(this, this._targetElement.element);
     }
 
     _showElement.call(this, this._introItems[--this._currentStep]);
