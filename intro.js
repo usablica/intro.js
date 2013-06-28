@@ -456,22 +456,25 @@
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer);
     }
 
-    if (this._currentStep == 0) {
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
-      skipTooltipButton.innerHTML = this._options.skipLabel;
-    } else if (this._introItems.length - 1 == this._currentStep) {
+
+    prevTooltipButton.className = 'introjs-button introjs-prevbutton';
+    nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+
+    if (this._currentStep === this._introItems.length - 1) {
+      /* no next */
+      nextTooltipButton.className += ' introjs-disabled';
       skipTooltipButton.innerHTML = this._options.doneLabel;
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+      skipTooltipButton.focus();
     } else {
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
+      nextTooltipButton.focus();
     }
 
-    //Set focus on "next" button, so that hitting Enter always moves you onto the next step
-    nextTooltipButton.focus();
+    if (this._currentStep === 0) {
+      /* no previous */
+      prevTooltipButton.className += ' introjs-disabled';
+    }
+
 
     //add target element position style
     targetElement.element.className += ' introjs-showElement';
