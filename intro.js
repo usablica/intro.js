@@ -529,7 +529,7 @@
     }
 
     //Prevent exception in IE
-    if(propValue.toLowerCase) {
+    if(propValue && propValue.toLowerCase) {
       return propValue.toLowerCase();
     } else {
       return propValue;
