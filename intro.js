@@ -719,6 +719,10 @@
     exit: function() {
       _exitIntro.call(this, this._targetElement);
     },
+    refresh: function() {
+      _setHelperLayerPosition.call(this, document.querySelector('.introjs-helperLayer'));
+      return this;
+    },
     onbeforechange: function(providedCallback) {
       if (typeof (providedCallback) === 'function') {
         this._introBeforeChangeCallback = providedCallback;
