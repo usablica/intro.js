@@ -33,7 +33,7 @@
       nextLabel: 'Next &rarr;',
       prevLabel: '&larr; Back',
       skipLabel: 'Skip',
-      doneLabel: 'Done',
+      doneLabel: 'Done &rarr;',
       tooltipPosition: 'bottom',
       exitOnEsc: true,
       exitOnOverlayClick: true,
@@ -409,9 +409,7 @@
       var nextTooltipButton = document.createElement('a');
 
       nextTooltipButton.onclick = function() {
-        if(self._introItems.length - 1 != self._currentStep) {
-          _nextStep.call(self);
-        }
+        _nextStep.call(self);
       };
 
       nextTooltipButton.href = 'javascript:void(0);';
@@ -461,12 +459,14 @@
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
     } else if (this._introItems.length - 1 == this._currentStep) {
-      skipTooltipButton.innerHTML = this._options.doneLabel;
+      nextTooltipButton.innerHTML = this._options.doneLabel;
+      skipTooltipButton.className = 'introjs-button introjs-skipbutton introjs-hidden'
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
     } else {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+      skipTooltipButton.className = 'introjs-button introjs-skipbutton'
+      nextTooltipButton.innerHTML = this._options.nextLabel;
       skipTooltipButton.innerHTML = this._options.skipLabel;
     }
 
