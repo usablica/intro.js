@@ -365,10 +365,13 @@
         //set current step to the label
         if(oldHelperNumberLayer != null) {
           switch(self._options.showStepNumbers) {
+            case false: break;
+            case 'none': break;
             case 'inset': {
               oldHelperNumberLayer.innerHTML = targetElement.step + '/' + self._options.steps.length;
               break;
             }
+            case true:
             case 'outset': {
               oldHelperNumberLayer.innerHTML = targetElement.step;
               break;
@@ -407,7 +410,9 @@
 
       //add helper layer number
       switch (this._options.showStepNumbers) {
+        case false: break;
         case 'none': break;
+        case true:
         case 'outset': {
           var helperNumberLayer = document.createElement('span');
           helperNumberLayer.className = 'introjs-helperNumberLayer outset';
