@@ -47,7 +47,7 @@
           transition: all 0.3s ease-out;
 }
 
-.introjs-helperNumberLayer {
+.introjs-helperNumberLayer.outset {
   position: absolute;
   top: -16px;
   left: -16px;
@@ -75,6 +75,13 @@
   filter: progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000); /* IE10 text shadows */
   box-shadow: 0 2px 5px rgba(0,0,0,.4);
 }
+
+.introjs-helperNumberLayer.inset {
+    color: #9b9b9b;
+    font-size: 11px;
+    margin-bottom: 10px;
+}
+
 
 .introjs-arrow {
   border: 5px solid white;
