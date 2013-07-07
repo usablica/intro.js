@@ -37,7 +37,7 @@
       tooltipPosition: 'bottom',
       exitOnEsc: true,
       exitOnOverlayClick: true,
-      showStepNumbers: 'none'
+      showStepNumbers: true
     };
   }
 
