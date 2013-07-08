@@ -62,7 +62,7 @@
         //set the step
         currentItem.step = i + 1;
         //grab the element with given selector from the page
-        currentItem.element = document.querySelector(currentItem.element);
+        currentItem.element = document.querySelector(currentItem.selector);
         introItems.push(currentItem);
       }
 
