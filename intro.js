@@ -63,7 +63,7 @@
         currentItem.step = i + 1;
         //grab the element with given selector from the page
         currentItem.element = document.querySelector(currentItem.element);
-        introItems.push(currentItem);
+        if (currentItem.element) introItems.push(currentItem);
       }
 
     } else {
