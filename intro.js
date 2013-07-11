@@ -37,7 +37,8 @@
       tooltipPosition: 'bottom',
       exitOnEsc: true,
       exitOnOverlayClick: true,
-      showStepNumbers: true
+      showStepNumbers: true,
+      jQuerySelector: false
     };
   }
 
@@ -62,8 +63,12 @@
         //set the step
         currentItem.step = i + 1;
         //grab the element with given selector from the page
-        currentItem.element = document.querySelector(currentItem.element);
-        introItems.push(currentItem);
+        //is _options.jQuerySelector is true uses jQuery selector, otherwise uses document.querySelector
+        currentItem.element = _elementSelector.call(this, currentItem.element);
+        //pushes to introItems only if element was found on the page
+        if ( currentItem.element ) {
+          introItems.push(currentItem);
+        }        
       }
 
     } else {
@@ -668,6 +673,32 @@
     return obj3;
   }
 
+  /**
+  * Selects element defined in steps using on the DOM selector defined in options
+  * _options.jQuerySelector ? jQuery : document.querySelector;
+  * @api private
+  * @author LukasHlavacka
+  * @method _elementSelector
+  * @param {String} selectorString
+  * @returns {Object} element using selector from options
+  */
+  function _elementSelector(selectorString) {
+    if (this._options.jQuerySelector) {
+      if(typeof jQuery == "undefined"){
+        throw new Error('To use jQuery selector you need to include jQuery.');
+      } else {
+        var elements = jQuery(selectorString);
+        if (elements.length == 0) {
+          return;
+        } else {
+          return elements.get(0);
+        }
+      }
+    } else {
+      document.querySelector(selectorString);
+    }
+  }
+
   var introJs = function (targetElm) {
     if (typeof (targetElm) === 'object') {
       //Ok, create a new instance
@@ -675,7 +706,7 @@
 
     } else if (typeof (targetElm) === 'string') {
       //select the target element with query selector
-      var targetElement = document.querySelector(targetElm);
+      var targetElement = _elementSelector.call(this, targetElm);
 
       if (targetElement) {
         return new IntroJs(targetElement);
