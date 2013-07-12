@@ -75,11 +75,11 @@
           intro.setOptions({
             steps: [
               {
-                element: '#step1',
+                element: document.querySelector('#step1'),
                 intro: "This is a tooltip."
               },
               {
-                element: '#step2',
+                element: document.querySelectorAll('#step2')[0],
                 intro: "Ok, wasn't that fun?",
                 position: 'right'
               },

@@ -1,5 +1,5 @@
 /**
- * Intro.js v0.4.0
+ * Intro.js v0.5.0
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -19,7 +19,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '0.4.0';
+  var VERSION = '0.5.0';
 
   /**
    * IntroJs main class
@@ -61,8 +61,11 @@
         var currentItem = this._options.steps[i];
         //set the step
         currentItem.step = i + 1;
-        //grab the element with given selector from the page
-        currentItem.element = document.querySelector(currentItem.element);
+        //use querySelector function only when developer used CSS selector
+        if (typeof(currentItem.element) === 'string') {
+          //grab the element with given selector from the page
+          currentItem.element = document.querySelector(currentItem.element);
+        }
         introItems.push(currentItem);
       }
 
