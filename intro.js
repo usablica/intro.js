@@ -452,8 +452,11 @@
 
       var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
       tooltipButtonsLayer.appendChild(skipTooltipButton);
-      tooltipButtonsLayer.appendChild(prevTooltipButton);
-      tooltipButtonsLayer.appendChild(nextTooltipButton);
+      
+      if(this._introItems.length > 1) {
+        tooltipButtonsLayer.appendChild(prevTooltipButton);
+        tooltipButtonsLayer.appendChild(nextTooltipButton);
+      }
 
       //set proper position
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer);
