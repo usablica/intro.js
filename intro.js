@@ -452,8 +452,9 @@
 
       var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
       tooltipButtonsLayer.appendChild(skipTooltipButton);
-      
-      if(this._introItems.length > 1) {
+
+      //in order to prevent displaying next/previous button always
+      if (this._introItems.length > 1) {
         tooltipButtonsLayer.appendChild(prevTooltipButton);
         tooltipButtonsLayer.appendChild(nextTooltipButton);
       }
