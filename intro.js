@@ -30,13 +30,23 @@
     this._targetElement = obj;
 
     this._options = {
+      /* Next button label in tooltip box */
       nextLabel: 'Next &rarr;',
+      /* Previous button label in tooltip box */
       prevLabel: '&larr; Back',
+      /* Skip button label in tooltip box */
       skipLabel: 'Skip',
+      /* Done button label in tooltip box */
       doneLabel: 'Done',
+      /* Default tooltip box position */
       tooltipPosition: 'bottom',
+      /* Next CSS class for tooltip boxes */
+      tooltipClass: '',
+      /* Close introduction when pressing Escape button? */
       exitOnEsc: true,
+      /* Close introduction when clicking on overlay layer? */
       exitOnOverlayClick: true,
+      /* Show step numbers in introduction? */
       showStepNumbers: true
     };
   }
@@ -84,6 +94,7 @@
           element: currentElement,
           intro: currentElement.getAttribute('data-intro'),
           step: parseInt(currentElement.getAttribute('data-step'), 10),
+	  tooltipClass: currentElement.getAttribute('data-tooltipClass'),
           position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
         });
       }
@@ -271,6 +282,21 @@
     //prevent error when `this._currentStep` is undefined
     if(!this._introItems[this._currentStep]) return;
 
+    var tooltipCssClass = '';
+
+    //if we have a custom css class for each step
+    var currentStepObj = this._introItems[this._currentStep];
+    if (typeof (currentStepObj.tooltipClass) === 'string') {
+      tooltipCssClass = currentStepObj.tooltipClass;
+    } else {
+      tooltipCssClass = this._options.tooltipClass;
+    }
+
+    tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
+
+    //custom css class for tooltip boxes
+    var tooltipCssClass = this._options.tooltipClass;
+
     var currentTooltipPosition = this._introItems[this._currentStep].position;
     switch (currentTooltipPosition) {
       case 'top':
@@ -329,7 +355,7 @@
     if (typeof (this._introChangeCallback) !== 'undefined') {
         this._introChangeCallback.call(this, targetElement.element);
     }
-    
+
     var self = this,
         oldHelperLayer = document.querySelector('.introjs-helperLayer'),
         elementPosition = _getOffset(targetElement.element);
@@ -391,9 +417,7 @@
       this._targetElement.appendChild(helperLayer);
 
       arrowLayer.className = 'introjs-arrow';
-      tooltipLayer.className = 'introjs-tooltip';
 
-      
       tooltipLayer.innerHTML = '<div class="introjs-tooltiptext">' +
                                targetElement.intro +
                                '</div><div class="introjs-tooltipbuttons"></div>';
