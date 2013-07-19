@@ -16,7 +16,7 @@ For example:
 <a href='http://google.com/' data-intro='Hello step one!' data-step='1'></a>
 ````
 
-Optionally you can define `data-position` attribute to define the position of tooltip with values `top`, `right`, `left` and `bottom`. Default value is `bottom`.
+See all attributes [here](https://github.com/usablica/intro.js/#attributes).
   
 **3)** Call this JavaScript function:
 ```javascript
@@ -145,6 +145,23 @@ introJs().setOptions({ skipLabel: "Exit", tooltipPosition: "right" });
 
 ----
 
+###introJs.refresh()
+
+To refresh and order layers manually
+
+**Available since**: v0.5.0
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().refresh();
+````
+
+----
+
+
 ###introJs.oncomplete(providedCallback)
 
 Set callback for when introduction completed.
@@ -230,6 +247,12 @@ introJs().onbeforechange(function(targetElement) {
 
 -----
 
+###Attributes:
+ - `data-intro`: The tooltip text of step
+ - `data-step`: The number of step
+ - `data-tooltipClass`: Optionally define a CSS class for tooltip
+ - `data-position`: Optionally define the position of tooltip, `top`, `left`, `right` or `bottom`. Default is `bottom`
+
 ###Options:
 
  - `steps`: For defining steps using JSON configuration (see [this](https://github.com/usablica/intro.js/blob/master/example/programmatic/index.html) example)
@@ -238,11 +261,12 @@ introJs().onbeforechange(function(targetElement) {
  - `skipLabel`: Skip button label
  - `doneLabel`: Done button label
  - `tooltipPosition`: Default tooltip position
+ - `tooltipClass`: Adding CSS class to all tooltips
  - `exitOnEsc`: Exit introduction when pressing Escape button, `true` or `false`
  - `exitOnOverlayClick`: Exit introduction when clicking on overlay layer, `true` or `false`
  - `showStepNumbers`: Show steps number in the red circle or not, `true` of `false`
 
-See [setOption](https://github.com/usablica/intro.js/edit/master/README.md#introjssetoptionoption-value) to see an example.
+See [setOption](https://github.com/usablica/intro.js/#introjssetoptionoption-value) to see an example.
 
 ## Using with:
 
@@ -264,9 +288,21 @@ Now you can run this command to minify all static resources:
 
 ## Roadmap
 - More browser compatibility
+- Fix problems with `position: fixed` and other positions
 - Provide more examples
 
 ## Release History
+
+ * **v0.5.0** - 2013-07-19
+   - Add CSS class option for tooltips (And tooltip buttons also)
+   - Add RTL version
+   - Ability to add HTML codes in tooltip content
+   - Ability to add DOM object and CSS selector in programmatic API (So you can use jQuery selector engine)
+   - Add `refresh()` method to refresh and order layers manually
+   - Show tooltip buttons only when introduction steps are more than one
+   - Fix `onbeforechange` event bug and pass correct object in parameters
+   - Fix `Null element exception` in some browsers
+   - And add more examples
 
  * **v0.4.0** - 2013-05-20
    - Add multi-page introduction example
