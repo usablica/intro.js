@@ -177,10 +177,6 @@
    * @method _nextStep
    */
   function _nextStep() {
-    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, this._targetElement.element);
-    }
-
     if (typeof (this._currentStep) === 'undefined') {
       this._currentStep = 0;
     } else {
@@ -197,7 +193,12 @@
       return;
     }
 
-    _showElement.call(this, this._introItems[this._currentStep]);
+    var nextStep = this._introItems[this._currentStep];
+    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
+      this._introBeforeChangeCallback.call(this, nextStep.element);
+    }
+
+    _showElement.call(this, nextStep);
   }
 
   /**
@@ -211,11 +212,12 @@
       return false;
     }
 
+    var nextStep = this._introItems[--this._currentStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, this._targetElement.element);
+      this._introBeforeChangeCallback.call(this, nextStep.element);
     }
 
-    _showElement.call(this, this._introItems[--this._currentStep]);
+    _showElement.call(this, nextStep);
   }
 
   /**
