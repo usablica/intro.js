@@ -47,7 +47,9 @@
       /* Close introduction when clicking on overlay layer? */
       exitOnOverlayClick: true,
       /* Show step numbers in introduction? */
-      showStepNumbers: true
+      showStepNumbers: true,
+      /* Should the current active element be locked? */
+      lockActiveElement: false
     };
   }
 
@@ -336,12 +338,24 @@
       //prevent error when `this._currentStep` in undefined
       if(!this._introItems[this._currentStep]) return;
 
-      var elementPosition = _getOffset(this._introItems[this._currentStep].element);
+      var elementPosition = _getOffset(this._introItems[this._currentStep].element),
+          self = this;
       //set new position to helper layer
       helperLayer.setAttribute('style', 'width: ' + (elementPosition.width  + 10)  + 'px; ' +
                                         'height:' + (elementPosition.height + 10)  + 'px; ' +
                                         'top:'    + (elementPosition.top    - 5)   + 'px;' +
                                         'left: '  + (elementPosition.left   - 5)   + 'px;');
+      
+      if(this._options.lockActiveElement && helperLayer.className != 'introjs-helperLockLayer'){
+    	  var helperLockLayer = document.querySelector('.introjs-helperLockLayer');
+
+    	  if(!helperLockLayer){
+    		  helperLockLayer = document.createElement('div');
+    		  helperLockLayer.className = 'introjs-helperLockLayer';
+    		  this._targetElement.appendChild(helperLockLayer);
+    	  }
+    	  _setHelperLayerPosition.call(self, helperLockLayer);
+      }
     }
   }
 
