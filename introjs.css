@@ -50,6 +50,12 @@
 .introjs-helperLockLayer {
   position: absolute;
   z-index: 9999999;
+  background-color: #fff;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=01)";
+  filter: alpha(opacity=01);
+  -moz-opacity: 0.01;
+  -khtml-opacity: 0.01;
+  opacity: 0.01;
 }
 
 .introjs-helperNumberLayer {
