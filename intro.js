@@ -244,6 +244,11 @@
     if (helperLayer) {
       helperLayer.parentNode.removeChild(helperLayer);
     }
+    // remove locking layer
+    var helperLockLayer = targetElement.querySelector('.introjs-helperLockLayer');
+    if (helperLockLayer) {
+      helperLockLayer.parentNode.removeChild(helperLockLayer);
+    }
     //remove `introjs-showElement` class from the element
     var showElement = document.querySelector('.introjs-showElement');
     if (showElement) {
