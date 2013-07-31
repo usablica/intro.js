@@ -6,27 +6,23 @@
 ## How to use
 Intro.js can be added to your site in three simple steps:
 
-**1)** Include `intro.js` and `introjs.css` (or the minified version for production) in your page. 
+**1)** Include files needed.<br>
+`intro.min.js` and `introjs.min.css` are the minium needed to run.  Use `introjs-rtl.min.css` for Right-to-Left language support.
+CDN hosted files are available at [jsDelivr](http://www.jsdelivr.com/#!intro.js) (click Show More) & [cdnjs](http://cdnjs.com/#introjs).
 
-**2)** Add `data-intro` and `data-step` to your HTML elements.  
-
-For example: 
-
+**2)** Add `data-intro` and `data-step` to your HTML elements.<br>
+For example:
 ```html
 <a href='http://google.com/' data-intro='Hello step one!' data-step='1'></a>
 ````
-
 See all attributes [here](https://github.com/usablica/intro.js/#attributes).
   
 **3)** Call this JavaScript function:
 ```javascript
 introJs().start();
 ````
- 
-Optionally, pass one parameter to `introJs` function to limit the presentation section.
-
+Optionally, pass one parameter to `introJs` function to limit the presentation section.<br>
 **For example** `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
-
 <p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.png"></p>  
 
 ## API
