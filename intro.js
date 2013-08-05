@@ -638,10 +638,11 @@
     overlayLayer.onclick = function() {
       if(self._options.exitOnOverlayClick == true) {
         _exitIntro.call(self, targetElm);
-      }
-      //check if any callback is defined
-      if (self._introExitCallback != undefined) {
-        self._introExitCallback.call(self);
+
+        //check if any callback is defined
+        if (self._introExitCallback != undefined) {
+          self._introExitCallback.call(self);
+        }
       }
     };
 
