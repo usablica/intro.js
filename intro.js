@@ -60,8 +60,10 @@
      * @returns {Boolean} Success or not?
      */
     function _introForElement(targetElm) {
+        var self = this;
+
         //initialize self_.introItem
-        _initIntroItems(targetElm);
+        _initIntroItems.call(self, targetElm);
 
         //add overlay layer to the page
         if (_addOverlayLayer.call(self, targetElm)) {
@@ -775,7 +777,7 @@
             return this;
         },
         refreshIntroItems: function() {
-            _refreshIntroItems.call(this, this._targetElement);
+            _initIntroItems.call(this, this._targetElement);
             return this;
         },
         onbeforechange: function (providedCallback) {
