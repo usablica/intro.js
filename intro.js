@@ -280,6 +280,7 @@
     tooltipLayer.style.right   = null;
     tooltipLayer.style.bottom  = null;
     tooltipLayer.style.left    = null;
+    tooltipLayer.style.display = null;
 
     //prevent error when `this._currentStep` is undefined
     if(!this._introItems[this._currentStep]) return;
@@ -314,6 +315,9 @@
         tooltipLayer.style.top = '15px';
         tooltipLayer.style.right = (_getOffset(targetElement).width + 20) + 'px';
         arrowLayer.className = 'introjs-arrow right';
+        break;
+      case 'none':
+        tooltipLayer.style.display = 'none';
         break;
       case 'bottom':
       // Bottom going to follow the default behavior
