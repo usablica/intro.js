@@ -440,12 +440,19 @@
 
       //next button
       var nextTooltipButton = document.createElement('a');
-
-      nextTooltipButton.onclick = function() {
+      var nextTooltipHandler = function() {
         if(self._introItems.length - 1 != self._currentStep) {
           _nextStep.call(self);
         }
       };
+      nextTooltipButton.onclick = nextTooltipHandler;
+      // click on items marked position=none
+      this._introItems.forEach(function (elem) {
+        if (elem.position === "none") {
+          elem.element.onclick = nextTooltipHandler;
+        }
+      });
+
 
       nextTooltipButton.href = 'javascript:void(0);';
       nextTooltipButton.innerHTML = this._options.nextLabel;
