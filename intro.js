@@ -26,8 +26,8 @@
    *
    * @class IntroJs
    */
-  function IntroJs(obj) {
-    this._targetElement = obj;
+  function IntroJs() {
+    this._targetElement = document.body;
 
     this._options = {
       /* Next button label in tooltip box */
@@ -47,7 +47,11 @@
       /* Close introduction when clicking on overlay layer? */
       exitOnOverlayClick: true,
       /* Show step numbers in introduction? */
-      showStepNumbers: true
+      showStepNumbers: true,
+      /* Parent element selector */
+      parentSelector: null,
+      /* Element selector */
+      selector: null
     };
   }
 
@@ -56,12 +60,12 @@
    *
    * @api private
    * @method _introForElement
-   * @param {Object} targetElm
    * @returns {Boolean} Success or not?
    */
-  function _introForElement(targetElm) {
+  function _introForElement() {
     var introItems = [],
         self = this;
+    var elem = document.body;
 
     if (this._options.steps) {
       //use steps passed programmatically
@@ -81,8 +85,21 @@
 
     } else {
       //use steps from data-* annotations
+      var allIntroSteps;
+      var query = '*[data-intro]';
 
-      var allIntroSteps = targetElm.querySelectorAll('*[data-intro]');
+      // Check if parent selector is defined
+      if(this._options.parentSelector && !this._options.selector) {
+        elem = document.querySelector(this._options.parentSelector);
+      }
+
+      // Handle query selectors for tips
+      if(this._options.selector) {
+        query = this._options.selector + '[data-intro]';
+      }
+
+      allIntroSteps = elem.querySelectorAll(query);
+
       //if there's no element to intro
       if (allIntroSteps.length < 1) {
         return false;
@@ -109,17 +126,17 @@
     self._introItems = introItems;
 
     //add overlay layer to the page
-    if(_addOverlayLayer.call(self, targetElm)) {
+    if(_addOverlayLayer.call(self, document.body)) {
       //then, start the show
       _nextStep.call(self);
 
-      var skipButton = targetElm.querySelector('.introjs-skipbutton'),
-          nextStepButton = targetElm.querySelector('.introjs-nextbutton');
+      var skipButton = elem.querySelector('.introjs-skipbutton'),
+          nextStepButton = elem.querySelector('.introjs-nextbutton');
 
       self._onKeyDown = function(e) {
         if (e.keyCode === 27 && self._options.exitOnEsc == true) {
           //escape key pressed, exit the intro
-          _exitIntro.call(self, targetElm);
+          _exitIntro.call(self, elem);
           //check if any callback is defined
           if (self._introExitCallback != undefined) {
             self._introExitCallback.call(self);
@@ -701,23 +718,8 @@
     return obj3;
   }
 
-  var introJs = function (targetElm) {
-    if (typeof (targetElm) === 'object') {
-      //Ok, create a new instance
-      return new IntroJs(targetElm);
-
-    } else if (typeof (targetElm) === 'string') {
-      //select the target element with query selector
-      var targetElement = document.querySelector(targetElm);
-
-      if (targetElement) {
-        return new IntroJs(targetElement);
-      } else {
-        throw new Error('There is no element with given selector.');
-      }
-    } else {
-      return new IntroJs(document.body);
-    }
+  var introJs = function () {
+    return new IntroJs();
   };
 
   /**

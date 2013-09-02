@@ -25,9 +25,11 @@ See all attributes [here](https://github.com/usablica/intro.js/#attributes).
 introJs().start();
 ````
  
-Optionally, pass one parameter to `introJs` function to limit the presentation section.
+Optionally, set option 'parentSelector' to limit the presentation section.
 
-**For example** `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
+**For example** `introJs().setOption('parentSelector', '#introduction-farm').start();` runs the introduction only for elements inside `id='introduction-farm'`.
+
+**For example** `introJs().setOption('selector', '.introduction-farm').start();` runs the introduction only for elements with `class='introduction-farm'`.
 
 <p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.png"></p>  
 
