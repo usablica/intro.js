@@ -131,7 +131,7 @@
           //right arrow or enter
           _nextStep.call(self);
           //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
-          if(e.preventDefault) { 
+          if(e.preventDefault) {
             e.preventDefault();
           } else {
             e.returnValue = false;
@@ -601,7 +601,7 @@
       rect.top >= 0 &&
       rect.left >= 0 &&
       (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
-      rect.right <= window.innerWidth 
+      rect.right <= window.innerWidth
     );
   }
 
@@ -749,6 +749,14 @@
       _goToStep.call(this, step);
       return this;
     },
+    nextStep: function() {
+      _nextStep.call(this);
+      return this;
+    }
+    previousStep: function() {
+      _previousStep.call(this);
+      return this;
+    }
     exit: function() {
       _exitIntro.call(this, this._targetElement);
     },
