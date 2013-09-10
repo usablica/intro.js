@@ -47,7 +47,11 @@
       /* Close introduction when clicking on overlay layer? */
       exitOnOverlayClick: true,
       /* Show step numbers in introduction? */
-      showStepNumbers: true
+      showStepNumbers: true,
+      /* Hide Next/Prev Buttons? */
+      hideNavigation: false,
+      /* Hide Skip Button? */
+      hideSkip: false
     };
   }
 
@@ -131,7 +135,7 @@
           //right arrow or enter
           _nextStep.call(self);
           //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
-          if(e.preventDefault) { 
+          if(e.preventDefault) {
             e.preventDefault();
           } else {
             e.returnValue = false;
@@ -477,10 +481,12 @@
       };
 
       var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
-      tooltipButtonsLayer.appendChild(skipTooltipButton);
+      if (!this._options.hideSkip) {
+        tooltipButtonsLayer.appendChild(skipTooltipButton);
+      }
 
       //in order to prevent displaying next/previous button always
-      if (this._introItems.length > 1) {
+      if (this._introItems.length > 1 && !this._options.hideNavigation) {
         tooltipButtonsLayer.appendChild(prevTooltipButton);
         tooltipButtonsLayer.appendChild(nextTooltipButton);
       }
@@ -601,7 +607,7 @@
       rect.top >= 0 &&
       rect.left >= 0 &&
       (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
-      rect.right <= window.innerWidth 
+      rect.right <= window.innerWidth
     );
   }
 
