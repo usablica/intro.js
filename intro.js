@@ -150,7 +150,13 @@
       } else if (document.attachEvent) { //IE
         document.attachEvent('onkeydown', self._onKeyDown);
         //for window resize
-        document.attachEvent("onresize", self._onResize);
+        var msie=navigator.appVersion.toLowerCase();
+        var ieVersion=(msie.indexOf('msie')>-1)?parseInt(msie.replace(/.*msie[ ]/,'').match(/^[0-9]+/)):0;
+        if (ieVersion <= 8) {
+          document.body.onresize = self._onResize;
+        }else{
+          document.attachEvent("onresize", self._onResize);
+        }
       }
     }
     return false;
@@ -231,7 +237,8 @@
     //remove overlay layer from the page
     var overlayLayer = targetElement.querySelector('.introjs-overlay');
     //for fade-out animation
-    overlayLayer.style.opacity = 0;
+    overlayLayer.style.visibility='hidden';
+
     setTimeout(function () {
       if (overlayLayer.parentNode) {
         overlayLayer.parentNode.removeChild(overlayLayer);
@@ -372,7 +379,8 @@
           nextTooltipButton    = oldHelperLayer.querySelector('.introjs-nextbutton');
 
       //hide the tooltip
-      oldtooltipContainer.style.opacity = 0;
+      oldtooltipContainer.style.visibility='hidden';
+
 
       //set new position to helper layer
       _setHelperLayerPosition.call(self, oldHelperLayer);
@@ -402,7 +410,11 @@
         //set the tooltip position
         _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer);
         //show the tooltip
-        oldtooltipContainer.style.opacity = 1;
+        oldtooltipContainer.style.visibility='visible';
+        //Set focus on "next" button, so that hitting Enter always moves you onto the next step
+        try{
+            nextTooltipButton.focus();//IE8 forcus method may throw exception when element is not visible
+        }catch(e){}
       }, 350);
 
     } else {
@@ -487,6 +499,10 @@
 
       //set proper position
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer);
+      //Set focus on "next" button, so that hitting Enter always moves you onto the next step
+      try{
+        nextTooltipButton.focus();//IE8 forcus method may throw exception when element is not visible
+      }catch(e){}
     }
 
     if (this._currentStep == 0) {
@@ -502,9 +518,6 @@
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
     }
-
-    //Set focus on "next" button, so that hitting Enter always moves you onto the next step
-    nextTooltipButton.focus();
 
     //add target element position style
     targetElement.element.className += ' introjs-showElement';
