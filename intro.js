@@ -47,7 +47,11 @@
       /* Close introduction when clicking on overlay layer? */
       exitOnOverlayClick: true,
       /* Show step numbers in introduction? */
-      showStepNumbers: true
+      showStepNumbers: true,
+      /* Hide Next/Prev Buttons? */
+      hideNavigation: false,
+      /* Hide Skip Button? */
+      hideSkipDone: false
     };
   }
 
@@ -131,7 +135,7 @@
           //right arrow or enter
           _nextStep.call(self);
           //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
-          if(e.preventDefault) { 
+          if(e.preventDefault) {
             e.preventDefault();
           } else {
             e.returnValue = false;
@@ -477,10 +481,12 @@
       };
 
       var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
-      tooltipButtonsLayer.appendChild(skipTooltipButton);
+      if (!this._options.hideSkipDone) {
+        tooltipButtonsLayer.appendChild(skipTooltipButton);
+      }
 
       //in order to prevent displaying next/previous button always
-      if (this._introItems.length > 1) {
+      if (this._introItems.length > 1 && !this._options.hideNavigation) {
         tooltipButtonsLayer.appendChild(prevTooltipButton);
         tooltipButtonsLayer.appendChild(nextTooltipButton);
       }
@@ -490,21 +496,35 @@
     }
 
     if (this._currentStep == 0) {
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
-      skipTooltipButton.innerHTML = this._options.skipLabel;
+      if(!this._options.hideNavigation) {
+        prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
+        nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+      }
+      if(!this._options.hideSkipDone) {
+        skipTooltipButton.innerHTML = this._options.skipLabel;
+      }
     } else if (this._introItems.length - 1 == this._currentStep) {
-      skipTooltipButton.innerHTML = this._options.doneLabel;
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+      if(!this._options.hideSkipDone) {
+        skipTooltipButton.innerHTML = this._options.doneLabel;
+      }
+      if(!this._options.hideNavigation) {
+        prevTooltipButton.className = 'introjs-button introjs-prevbutton';
+        nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+      }
     } else {
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
-      skipTooltipButton.innerHTML = this._options.skipLabel;
+      if(!this._options.hideNavigation) {
+        prevTooltipButton.className = 'introjs-button introjs-prevbutton';
+        nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+      }
+      if(!this._options.hideSkipDone) {
+        skipTooltipButton.innerHTML = this._options.skipLabel;
+      }
     }
 
     //Set focus on "next" button, so that hitting Enter always moves you onto the next step
-    nextTooltipButton.focus();
+    if(!this._options.hideNavigation) {
+      nextTooltipButton.focus();
+    }
 
     //add target element position style
     targetElement.element.className += ' introjs-showElement';
@@ -601,7 +621,7 @@
       rect.top >= 0 &&
       rect.left >= 0 &&
       (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
-      rect.right <= window.innerWidth 
+      rect.right <= window.innerWidth
     );
   }
 
