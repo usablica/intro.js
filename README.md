@@ -281,6 +281,9 @@ You can simply use this project for Yii framework: https://github.com/moein7tl/Y
 ### Drupal
 Here you can find an IntroJs integration for Drupal: https://drupal.org/sandbox/alexanderfb/2061829
 
+### AngularJS
+For AngularJS, you can use these [directives](http://code.mendhak.com/angular-intro.js/).
+
 ## Build
 
 First you should install `nodejs` and `npm`, then first run this command: `npm install` to install all dependencies.
