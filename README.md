@@ -267,6 +267,7 @@ introJs().onbeforechange(function(targetElement) {
  - `exitOnEsc`: Exit introduction when pressing Escape button, `true` or `false`
  - `exitOnOverlayClick`: Exit introduction when clicking on overlay layer, `true` or `false`
  - `showStepNumbers`: Show steps number in the red circle or not, `true` of `false`
+ - `createMask`: Create an invisible mask to disallow interaction with the page while the intro is displayed, `true` or `false`
 
 See [setOption](https://github.com/usablica/intro.js/#introjssetoptionoption-value) to see an example.
 
