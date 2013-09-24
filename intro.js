@@ -94,6 +94,8 @@
           element: currentElement,
           intro: currentElement.getAttribute('data-intro'),
           step: parseInt(currentElement.getAttribute('data-step'), 10),
+          before: currentElement.getAttribute('data-before'),
+          after: currentElement.getAttribute('data-after'),
 	  tooltipClass: currentElement.getAttribute('data-tooltipClass'),
           position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
         });
@@ -180,6 +182,8 @@
     if (typeof (this._currentStep) === 'undefined') {
       this._currentStep = 0;
     } else {
+      var prevStep = this._introItems[this._currentStep];
+      _callStepFunction.call(self, prevStep.after, prevStep);
       ++this._currentStep;
     }
 
@@ -194,6 +198,7 @@
     }
 
     var nextStep = this._introItems[this._currentStep];
+    _callStepFunction.call(self, nextStep.before, nextStep);
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
       this._introBeforeChangeCallback.call(this, nextStep.element);
     }
@@ -212,12 +217,40 @@
       return false;
     }
 
+    var prevStep = this._introItems[this._currentStep];
+    _callStepFunction.call(self, prevStep.after, prevStep);
     var nextStep = this._introItems[--this._currentStep];
+    _callStepFunction.call(self, nextStep.before, nextStep);
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
       this._introBeforeChangeCallback.call(this, nextStep.element);
     }
 
     _showElement.call(this, nextStep);
+  }
+
+  /**
+   * Call a step's 'before' or 'after' function, if it exists
+   *
+   * @api private
+   * @method _callStepFunction
+   */
+  function _callStepFunction(fn, elem, step) {
+    if (fn) {
+      if (typeof (fn) === 'function') {
+        fn.call(this, elem, step);
+      } else {
+        // 'fn' is a string callback retrieved from a data-before/after attribute.
+        // We want to support things like 'MyObj.MyNamespace.MyFunction',
+        // so we need to manipulate the string a little
+        var namespaces = fn.split('.');
+        var fnName = namespaces.pop();
+        var ctx = window;
+        for (var i = 0; i < namespaces.length; i++) {
+          ctx = ctx[namespaces[i]];
+        }
+        ctx[fnName].call(this, elem, step);
+      }
+    }
   }
 
   /**
