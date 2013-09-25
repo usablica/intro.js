@@ -141,7 +141,7 @@
 
       self._onResize = function(e) {
         _setHelperLayerPosition.call(self, document.querySelector('.introjs-helperLayer'));
-        if (this._options.createMask) {
+        if (self._options.createMask) {
           _setHelperLayerPosition.call(self, document.querySelector('.introjs-maskLayer'));
         }
       };
