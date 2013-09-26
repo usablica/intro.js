@@ -353,7 +353,6 @@
    * @param {Object} targetElement
    */
   function _showElement(targetElement) {
-
     if (typeof (this._introChangeCallback) !== 'undefined') {
         this._introChangeCallback.call(this, targetElement.element);
     }
@@ -527,19 +526,27 @@
       parentElm = parentElm.parentNode;
     }
 
-    if (!_elementInViewport(targetElement.element)) {
-      var rect = targetElement.element.getBoundingClientRect(),
-          top = rect.bottom - (rect.bottom - rect.top),
-          bottom = rect.bottom - _getWinSize().height;
+    _scrollToShow.call(this, targetElement.element);
+  }
 
-      // Scroll up
-      if (top < 0) {
-        window.scrollBy(0, top - 30); // 30px padding from edge to look nice
+  /**
+   * Scroll viewport if element or tooltip is not visible
+   *
+   * @api private
+   * @method _scrollToShow
+   * @param {Object} element
+   */
+  function _scrollToShow (element) {
+    var windowSize = _getWinSize();
+    var rect = element.getBoundingClientRect();
 
-      // Scroll down
-      } else {
-        window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
-      }
+    // TODO: Use actual height of tooltip
+    var tooltipHeight = (this._introItems[this._currentStep].position == 'top') ? 120 : 30;
+
+    if (rect.top > 0 && rect.top < windowSize.height && rect.bottom < windowSize.height) {
+      return false;
+    } else {
+      window.scrollBy(0, rect.top - tooltipHeight);
     }
   }
 
@@ -584,25 +591,6 @@
       var D = document.documentElement;
       return { width: D.clientWidth, height: D.clientHeight };
     }
-  }
-
-  /**
-   * Add overlay layer to the page
-   * http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
-   *
-   * @api private
-   * @method _elementInViewport
-   * @param {Object} el
-   */
-  function _elementInViewport(el) {
-    var rect = el.getBoundingClientRect();
-
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
-      rect.right <= window.innerWidth 
-    );
   }
 
   /**
