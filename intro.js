@@ -47,7 +47,9 @@
       /* Close introduction when clicking on overlay layer? */
       exitOnOverlayClick: true,
       /* Show step numbers in introduction? */
-      showStepNumbers: true
+      showStepNumbers: true,
+      /* Let user use keyboard to navigate the tour? */
+      keyboardNavigation: true
     };
   }
 
@@ -131,7 +133,7 @@
           //right arrow or enter
           _nextStep.call(self);
           //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
-          if(e.preventDefault) { 
+          if(e.preventDefault) {
             e.preventDefault();
           } else {
             e.returnValue = false;
@@ -144,11 +146,15 @@
       };
 
       if (window.addEventListener) {
-        window.addEventListener('keydown', self._onKeyDown, true);
+        if(this._options.keyboardNavigation) {
+          window.addEventListener('keydown', self._onKeyDown, true);
+        }
         //for window resize
         window.addEventListener("resize", self._onResize, true);
       } else if (document.attachEvent) { //IE
-        document.attachEvent('onkeydown', self._onKeyDown);
+        if(this._options.keyboardNavigation) {
+          document.attachEvent('onkeydown', self._onKeyDown);
+        }
         //for window resize
         document.attachEvent("onresize", self._onResize);
       }
@@ -601,7 +607,7 @@
       rect.top >= 0 &&
       rect.left >= 0 &&
       (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
-      rect.right <= window.innerWidth 
+      rect.right <= window.innerWidth
     );
   }
 
