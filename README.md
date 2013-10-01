@@ -254,10 +254,18 @@ introJs().onbeforechange(function(targetElement) {
  - `data-step`: The number of step
  - `data-tooltipClass`: Optionally define a CSS class for tooltip
  - `data-position`: Optionally define the position of tooltip, `top`, `left`, `right` or `bottom`. Default is `bottom`
+ - `data-before`: A globally reachable function reference string (i.e. `'MyObj.MyNamespace.MyFunc'`) to be executed before the step is entered
+ - `data-after`: A globally reachable function reference string (i.e. `'MyObj.MyNamespace.MyFunc'`) to be executed after the step is exited from
 
 ###Options:
 
- - `steps`: For defining steps using JSON configuration (see [this](https://github.com/usablica/intro.js/blob/master/example/programmatic/index.html) example)
+ - `steps`: For defining steps using JSON configuration (see [this](https://github.com/usablica/intro.js/blob/master/example/programmatic/index.html) example). Each step item can contain the following options:
+     - `element`: The DOM element to focus on, or a selector string that is used with `document.querySelector`
+     - `intro`: The tooltip text of step
+     - `position`: Optionally define the position of tooltip, `top`, `left`, `right` or `bottom`. Default is `bottom`
+     - `tooltipClass`: Optionally define a CSS class for tooltip
+     - `before`: A function, or globally reachable function reference string (i.e. `'MyObj.MyNamespace.MyFunc'`), to be executed before the step is entered
+     - `after`: A function, or globally reachable function reference string (i.e. `'MyObj.MyNamespace.MyFunc'`), to be executed after the step is exited from
  - `nextLabel`: Next button label
  - `prevLabel`: Previous button label
  - `skipLabel`: Skip button label
