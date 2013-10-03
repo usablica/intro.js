@@ -92,6 +92,10 @@
 
       for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
         var currentElement = allIntroSteps[i];
+        if(currentElement.style.display == 'none')
+        {
+        	continue
+        };
         introItems.push({
           element: currentElement,
           intro: currentElement.getAttribute('data-intro'),
