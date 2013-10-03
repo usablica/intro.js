@@ -94,7 +94,7 @@
         var currentElement = allIntroSteps[i];
         if(currentElement.style.display == 'none')
         {
-        	continue
+        	continue;
         };
         introItems.push({
           element: currentElement,
