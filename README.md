@@ -22,7 +22,7 @@ See all attributes [here](https://github.com/usablica/intro.js/#attributes).
   
 **3)** Call this JavaScript function:
 ```javascript
-introJs().start();
+var myIntro = introJs().start();
 ````
  
 Optionally, pass one parameter to `introJs` function to limit the presentation section.
@@ -48,8 +48,8 @@ Creating an introJs object.
 
 **Example:**
 ```javascript
-introJs() //without selector, start introduction for whole page
-introJs("#intro-farm") //start introduction for element id='intro-farm'
+var myIntro = introJs(); //without selector, start introduction for whole page
+var myIntro = introJs("#intro-farm"); //start introduction for element id='intro-farm'
 ````
 
 -----
@@ -65,7 +65,7 @@ Start the introduction for defined element(s).
 
 **Example:**
 ```javascript
-introJs().start()
+var myIntro = introJs().start();
 ````
 -----
 
@@ -83,7 +83,7 @@ Go to specific step of introduction.
 
 **Example:**
 ```javascript
-introJs().goToStep(2).start(); //starts introduction from step 2
+var myIntro = introJs().goToStep(2).start(); //starts introduction from step 2
 ````
 
 -----
@@ -99,7 +99,8 @@ Exit the introduction.
 
 **Example:**
 ```javascript
-introJs().exit()
+var myIntro = introJs();
+myIntro.exit();
 ````
 
 -----
@@ -122,7 +123,8 @@ Set a single option to introJs object.
 
 **Example:**
 ```javascript
-introJs().setOption("skipLabel", "Exit");
+var myIntro = introJs();
+myIntro.setOption("skipLabel", "Exit");
 ````
 
 ----
@@ -142,7 +144,8 @@ Set a group of options to the introJs object.
 
 **Example:**
 ```javascript
-introJs().setOptions({ skipLabel: "Exit", tooltipPosition: "right" });
+var myIntro = introJs();
+myIntro.setOptions({ skipLabel: "Exit", tooltipPosition: "right" });
 ````
 
 ----
@@ -158,7 +161,8 @@ To refresh and order layers manually
 
 **Example:**
 ```javascript
-introJs().refresh();
+var myIntro = introJs();
+myIntro.refresh();
 ````
 
 ----
@@ -178,7 +182,8 @@ Set callback for when introduction completed.
 
 **Example:**
 ```javascript
-introJs().oncomplete(function() {
+var myIntro = introJs();
+myIntro.oncomplete(function() {
   alert("end of introduction");
 });
 ````
@@ -199,7 +204,8 @@ Set callback to exit of introduction. Exit also means pressing `ESC` key and cli
 
 **Example:**
 ```javascript
-introJs().onexit(function() {
+var myIntro = introJs();
+myIntro.onexit(function() {
   alert("exit of introduction");
 });
 ````
@@ -221,7 +227,8 @@ The callback function receives the element of the new step as an argument.
 
 **Example:**
 ```javascript
-introJs().onchange(function(targetElement) {  
+var myIntro = introJs();
+myIntro.onchange(function(targetElement) {  
   alert("new step");
 });
 ````
@@ -242,7 +249,8 @@ Given callback function will be called before starting a new step of introductio
 
 **Example:**
 ```javascript
-introJs().onbeforechange(function(targetElement) {  
+var myIntro = introJs();
+myIntro.onbeforechange(function(targetElement) {  
   alert("before new step");
 });
 ````
