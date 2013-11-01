@@ -539,11 +539,11 @@
         top = rect.bottom - (rect.bottom - rect.top),
         bottom = rect.bottom - winHeight;
 
-      // Scroll up
+      //Scroll up
       if (top < 0 || targetElement.element.clientHeight > winHeight) {
         window.scrollBy(0, top - 30); // 30px padding from edge to look nice
 
-        // Scroll down
+      //Scroll down
       } else {
         window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
       }
@@ -569,7 +569,7 @@
     }
 
     //Prevent exception in IE
-    if(propValue && propValue.toLowerCase) {
+    if (propValue && propValue.toLowerCase) {
       return propValue.toLowerCase();
     } else {
       return propValue;
@@ -643,7 +643,7 @@
     targetElm.appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
-      if(self._options.exitOnOverlayClick == true) {
+      if (self._options.exitOnOverlayClick == true) {
         _exitIntro.call(self, targetElm);
       }
       //check if any callback is defined
