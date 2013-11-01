@@ -92,10 +92,12 @@
 
       for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
         var currentElement = allIntroSteps[i];
+        var step = parseInt(currentElement.getAttribute('data-step'), 10);
         introItems.push({
           element: currentElement,
           intro: currentElement.getAttribute('data-intro'),
-          step: parseInt(currentElement.getAttribute('data-step'), 10),
+          //if step==NaN set step to 100
+          step: step ? step : 100,
 	  tooltipClass: currentElement.getAttribute('data-tooltipClass'),
           position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
         });
