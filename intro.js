@@ -82,27 +82,58 @@
       }
 
     } else {
-      //use steps from data-* annotations
-
+       //use steps from data-* annotations
       var allIntroSteps = targetElm.querySelectorAll('*[data-intro]');
       //if there's no element to intro
       if (allIntroSteps.length < 1) {
         return false;
       }
 
+      //first add intro items with data-step
       for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
         var currentElement = allIntroSteps[i];
         var step = parseInt(currentElement.getAttribute('data-step'), 10);
-        introItems.push({
-          element: currentElement,
-          intro: currentElement.getAttribute('data-intro'),
-          //if step==NaN set step to 100
-          step: step ? step : 100,
-	  tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
-        });
+
+        if (step > 0) {
+          introItems[step - 1] = {
+            element: currentElement,
+            intro: currentElement.getAttribute('data-intro'),
+            step: parseInt(currentElement.getAttribute('data-step'), 10),
+	    tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+          };
+        }
+      }
+
+      //next add intro items without data-step
+      //todo: we need a cleanup here, two loops are redundant
+      var nextStep = 0;
+      for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
+        var currentElement = allIntroSteps[i];
+
+        if (currentElement.getAttribute('data-step') == null) {
+          
+          while(true) {
+            if (typeof introItems[nextStep] == 'undefined') {
+              break;
+            } else {
+              nextStep++;
+            }
+          }
+
+          introItems.push({
+            element: currentElement,
+            intro: currentElement.getAttribute('data-intro'),
+            step: nextStep + 1,
+	    tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+          });
+        }
       }
     }
+
+    //removing undefined/null elements
+    introItems = introItems.filter(function(n){ return n; });
 
     //Ok, sort all items with given steps
     introItems.sort(function (a, b) {
