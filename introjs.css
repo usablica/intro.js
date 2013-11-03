@@ -47,6 +47,14 @@
           transition: all 0.3s ease-out;
 }
 
+.introjs-maskLayer {
+  position: absolute;
+  z-index: 10000000;
+  border-radius: 4px;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+
 .introjs-helperNumberLayer {
   position: absolute;
   top: -16px;
