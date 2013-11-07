@@ -142,7 +142,7 @@ Set a group of options to the introJs object.
 
 **Example:**
 ```javascript
-introJs().setOptions({ skipLabel: "Exit", tooltipPosition: "right" });
+introJs().setOptions({ 'skipLabel': 'Exit', 'tooltipPosition': 'right' });
 ````
 
 ----
@@ -280,6 +280,9 @@ You can simply use this project for Yii framework: https://github.com/moein7tl/Y
 
 ### Drupal
 Here you can find an IntroJs integration for Drupal: https://drupal.org/sandbox/alexanderfb/2061829
+
+### AngularJS
+For AngularJS, you can use the directives in [angular-intro.js](http://code.mendhak.com/angular-intro.js/).
 
 ## Build
 
