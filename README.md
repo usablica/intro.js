@@ -142,7 +142,7 @@ Set a group of options to the introJs object.
 
 **Example:**
 ```javascript
-introJs().setOptions({ skipLabel: "Exit", tooltipPosition: "right" });
+introJs().setOptions({ 'skipLabel': 'Exit', 'tooltipPosition': 'right' });
 ````
 
 ----
