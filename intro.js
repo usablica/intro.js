@@ -1,5 +1,5 @@
 /**
- * Intro.js v0.5.0
+ * Intro.js v0.5.1
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -19,7 +19,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '0.5.0';
+  var VERSION = '0.5.1';
 
   /**
    * IntroJs main class
@@ -234,7 +234,7 @@
 
     var nextStep = this._introItems[this._currentStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
+      this._introBeforeChangeCallback.call(this, nextStep.element, nextStep);
     }
 
     _showElement.call(this, nextStep);
@@ -253,7 +253,7 @@
 
     var nextStep = this._introItems[--this._currentStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
+      this._introBeforeChangeCallback.call(this, nextStep.element, nextStep);
     }
 
     _showElement.call(this, nextStep);
@@ -394,7 +394,7 @@
   function _showElement(targetElement) {
 
     if (typeof (this._introChangeCallback) !== 'undefined') {
-        this._introChangeCallback.call(this, targetElement.element);
+        this._introChangeCallback.call(this, targetElement.element, targetElement);
     }
 
     var self = this,
