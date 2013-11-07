@@ -1,5 +1,5 @@
 /**
- * Intro.js v0.5.0
+ * Intro.js v0.6.0
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -19,7 +19,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '0.5.0';
+  var VERSION = '0.6.0';
 
   /**
    * IntroJs main class
@@ -113,7 +113,7 @@
 
         if (currentElement.getAttribute('data-step') == null) {
           
-          while(true) {
+          while (true) {
             if (typeof introItems[nextStep] == 'undefined') {
               break;
             } else {
@@ -148,7 +148,7 @@
       //then, start the show
       _nextStep.call(self);
 
-      var skipButton = targetElm.querySelector('.introjs-skipbutton'),
+      var skipButton     = targetElm.querySelector('.introjs-skipbutton'),
           nextStepButton = targetElm.querySelector('.introjs-nextbutton');
 
       self._onKeyDown = function(e) {
@@ -179,13 +179,13 @@
       };
 
       if (window.addEventListener) {
-        if(this._options.keyboardNavigation) {
+        if (this._options.keyboardNavigation) {
           window.addEventListener('keydown', self._onKeyDown, true);
         }
         //for window resize
         window.addEventListener("resize", self._onResize, true);
       } else if (document.attachEvent) { //IE
-        if(this._options.keyboardNavigation) {
+        if (this._options.keyboardNavigation) {
           document.attachEvent('onkeydown', self._onKeyDown);
         }
         //for window resize
@@ -204,7 +204,7 @@
   function _goToStep(step) {
     //because steps starts with zero
     this._currentStep = step - 2;
-    if(typeof (this._introItems) !== 'undefined') {
+    if (typeof (this._introItems) !== 'undefined') {
       _nextStep.call(this);
     }
   }
@@ -321,7 +321,7 @@
     tooltipLayer.style.left    = null;
 
     //prevent error when `this._currentStep` is undefined
-    if(!this._introItems[this._currentStep]) return;
+    if (!this._introItems[this._currentStep]) return;
 
     var tooltipCssClass = '';
 
@@ -371,9 +371,9 @@
    * @param {Object} helperLayer
    */
   function _setHelperLayerPosition(helperLayer) {
-    if(helperLayer) {
+    if (helperLayer) {
       //prevent error when `this._currentStep` in undefined
-      if(!this._introItems[this._currentStep]) return;
+      if (!this._introItems[this._currentStep]) return;
 
       var elementPosition = _getOffset(this._introItems[this._currentStep].element);
       //set new position to helper layer
@@ -401,7 +401,7 @@
         oldHelperLayer = document.querySelector('.introjs-helperLayer'),
         elementPosition = _getOffset(targetElement.element);
 
-    if(oldHelperLayer != null) {
+    if (oldHelperLayer != null) {
       var oldHelperNumberLayer = oldHelperLayer.querySelector('.introjs-helperNumberLayer'),
           oldtooltipLayer      = oldHelperLayer.querySelector('.introjs-tooltiptext'),
           oldArrowLayer        = oldHelperLayer.querySelector('.introjs-arrow'),
@@ -433,7 +433,7 @@
       }
       self._lastShowElementTimer = setTimeout(function() {
         //set current step to the label
-        if(oldHelperNumberLayer != null) {
+        if (oldHelperNumberLayer != null) {
           oldHelperNumberLayer.innerHTML = targetElement.step;
         }
         //set current tooltip text
@@ -477,7 +477,7 @@
       var nextTooltipButton = document.createElement('a');
 
       nextTooltipButton.onclick = function() {
-        if(self._introItems.length - 1 != self._currentStep) {
+        if (self._introItems.length - 1 != self._currentStep) {
           _nextStep.call(self);
         }
       };
@@ -489,7 +489,7 @@
       var prevTooltipButton = document.createElement('a');
 
       prevTooltipButton.onclick = function() {
-        if(self._currentStep != 0) {
+        if (self._currentStep != 0) {
           _previousStep.call(self);
         }
       };
@@ -556,11 +556,11 @@
     }
 
     var parentElm = targetElement.element.parentNode;
-    while(parentElm != null) {
-      if(parentElm.tagName.toLowerCase() === 'body') break;
+    while (parentElm != null) {
+      if (parentElm.tagName.toLowerCase() === 'body') break;
 
       var zIndex = _getPropValue(parentElm, 'z-index');
-      if(/[0-9]+/.test(zIndex)) {
+      if (/[0-9]+/.test(zIndex)) {
         parentElm.className += ' introjs-fixParent';
       }
       parentElm = parentElm.parentNode;
@@ -667,7 +667,7 @@
     } else {
       //set overlay layer position
       var elementPosition = _getOffset(targetElm);
-      if(elementPosition) {
+      if (elementPosition) {
         styleText += 'width: ' + elementPosition.width + 'px; height:' + elementPosition.height + 'px; top:' + elementPosition.top + 'px;left: ' + elementPosition.left + 'px;';
         overlayLayer.setAttribute('style', styleText);
       }
@@ -714,7 +714,7 @@
     //calculate element top and left
     var _x = 0;
     var _y = 0;
-    while(element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
+    while (element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
       _x += element.offsetLeft;
       _y += element.offsetTop;
       element = element.offsetParent;
