@@ -8,7 +8,7 @@ Intro.js can be added to your site in three simple steps:
 
 **1)** Include `intro.js` and `introjs.css` (or the minified version for production) in your page. Use `introjs-rtl.min.css` for Right-to-Left language support.
 
-> CDN hosted files are available at [jsDelivr](http://www.jsdelivr.com/#!intro.js) (click Show More) & [cdnjs](http://cdnjs.com/#introjs).
+> CDN hosted files are available at [jsDelivr](http://www.jsdelivr.com/#!intro.js) (click Show More), [cdnjs](http://cdnjs.com/#introjs) & [rawgithub](http://rawgithub.com/).
 
 **2)** Add `data-intro` and `data-step` to your HTML elements.  
 
