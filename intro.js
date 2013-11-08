@@ -49,7 +49,11 @@
       /* Show step numbers in introduction? */
       showStepNumbers: true,
       /* Let user use keyboard to navigate the tour? */
-      keyboardNavigation: true
+      keyboardNavigation: true,
+      /* Show tour control buttons? */
+      showButtons: true,
+      /* Show tour bullets? */
+      showBullets: true
     };
   }
 
@@ -222,7 +226,7 @@
       ++this._currentStep;
     }
 
-    if((this._introItems.length) <= this._currentStep) {
+    if ((this._introItems.length) <= this._currentStep) {
       //end of the intro
       //check if any callback is defined
       if (typeof (this._introCompleteCallback) === 'function') {
@@ -409,7 +413,7 @@
           skipTooltipButton    = oldHelperLayer.querySelector('.introjs-skipbutton'),
           prevTooltipButton    = oldHelperLayer.querySelector('.introjs-prevbutton'),
           nextTooltipButton    = oldHelperLayer.querySelector('.introjs-nextbutton');
-
+          
       //hide the tooltip
       oldtooltipContainer.style.opacity = 0;
 
@@ -440,14 +444,22 @@
         oldtooltipLayer.innerHTML = targetElement.intro;
         //set the tooltip position
         _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer);
+        
+        //change active bullet
+        oldHelperLayer.querySelector('.introjs-bullets li > a.active').className = '';
+        oldHelperLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
+
         //show the tooltip
         oldtooltipContainer.style.opacity = 1;
       }, 350);
 
     } else {
-      var helperLayer  = document.createElement('div'),
-          arrowLayer   = document.createElement('div'),
-          tooltipLayer = document.createElement('div');
+      var helperLayer       = document.createElement('div'),
+          arrowLayer        = document.createElement('div'),
+          tooltipLayer      = document.createElement('div'),
+          tooltipTextLayer  = document.createElement('div'),
+          bulletsLayer      = document.createElement('div'),
+          buttonsLayer      = document.createElement('div');
 
       helperLayer.className = 'introjs-helperLayer';
 
@@ -459,9 +471,45 @@
 
       arrowLayer.className = 'introjs-arrow';
 
-      tooltipLayer.innerHTML = '<div class="introjs-tooltiptext">' +
-                               targetElement.intro +
-                               '</div><div class="introjs-tooltipbuttons"></div>';
+      tooltipTextLayer.className = 'introjs-tooltiptext';
+      tooltipTextLayer.innerHTML = targetElement.intro;
+      
+      bulletsLayer.className = 'introjs-bullets';
+
+      if (this._options.showBullets === false) {
+        bulletsLayer.style.display = 'none';
+      }
+
+      var ulContainer = document.createElement('ul');
+
+      for (var i = 0, stepsLength = this._introItems.length; i < stepsLength; i++) {
+        var innerLi    = document.createElement('li');
+        var anchorLink = document.createElement('a');
+
+        anchorLink.onclick = function() {
+          self.goToStep(this.getAttribute('data-stepnumber'));
+        };
+
+        if (i === 0) anchorLink.className = "active";
+
+        anchorLink.href = 'javascript:void(0);';
+        anchorLink.innerHTML = "&nbsp;";
+        anchorLink.setAttribute('data-stepnumber', this._introItems[i].step);
+
+        innerLi.appendChild(anchorLink);
+        ulContainer.appendChild(innerLi);
+      }
+
+      bulletsLayer.appendChild(ulContainer);
+
+      buttonsLayer.className = 'introjs-tooltipbuttons';
+      if (this._options.showButtons === false) {
+        buttonsLayer.style.display = 'none';
+      }
+
+      tooltipLayer.className = 'introjs-tooltip';
+      tooltipLayer.appendChild(tooltipTextLayer);
+      tooltipLayer.appendChild(bulletsLayer);
 
       //add helper layer number
       if (this._options.showStepNumbers == true) {
@@ -515,14 +563,15 @@
         _exitIntro.call(self, self._targetElement);
       };
 
-      var tooltipButtonsLayer = tooltipLayer.querySelector('.introjs-tooltipbuttons');
-      tooltipButtonsLayer.appendChild(skipTooltipButton);
+      buttonsLayer.appendChild(skipTooltipButton);
 
       //in order to prevent displaying next/previous button always
       if (this._introItems.length > 1) {
-        tooltipButtonsLayer.appendChild(prevTooltipButton);
-        tooltipButtonsLayer.appendChild(nextTooltipButton);
+        buttonsLayer.appendChild(prevTooltipButton);
+        buttonsLayer.appendChild(nextTooltipButton);
       }
+
+      tooltipLayer.appendChild(buttonsLayer);
 
       //set proper position
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer);
