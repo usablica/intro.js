@@ -125,19 +125,24 @@
             }
           }
 
-          introItems.push({
+          introItems[nextStep] = {
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
             step: nextStep + 1,
 	    tooltipClass: currentElement.getAttribute('data-tooltipClass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
-          });
+          };
         }
       }
     }
 
     //removing undefined/null elements
-    introItems = introItems.filter(function(n){ return n; });
+    var tempIntroItems = [];
+    for (var z = 0; z < introItems.length; z++) {
+      introItems[z] && tempIntroItems.push(introItems[z]);  // copy non-empty values to the end of the array
+    }
+    
+    introItems = tempIntroItems;
 
     //Ok, sort all items with given steps
     introItems.sort(function (a, b) {
