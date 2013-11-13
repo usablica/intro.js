@@ -15,7 +15,7 @@ Intro.js can be added to your site in three simple steps:
 For example: 
 
 ```html
-<a href='http://google.com/' data-intro='Hello step one!' data-step='1'></a>
+<a href='http://google.com/' data-intro='Hello step one!'></a>
 ````
 
 See all attributes [here](https://github.com/usablica/intro.js/#attributes).
@@ -305,11 +305,21 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 </p>
 
 ## Roadmap
-- More browser compatibility
+- Add introduction without focusing on elements
 - Fix problems with `position: fixed` and other positions
 - Provide more examples
 
 ## Release History
+
+ * **v0.6.0** - 2013-11-13
+   - Add step bullets with navigating
+   - Add option to hide introduction navigating buttons
+   - Make keyboard navigation optional
+   - Making `data-step` optional with elements
+   - Fix scroll issue when scrolling down to elements bigger than window
+   - Fix Chrome version 30.0.1599.101 issue with hiding step numbers
+   - Fix incorrect calling onExit callback when user clicks on overlay layer
+   - Fix coding styles and improvement in performance
 
  * **v0.5.0** - 2013-07-19
    - Add CSS class option for tooltips (And tooltip buttons also)
