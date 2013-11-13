@@ -15,7 +15,7 @@ Intro.js can be added to your site in three simple steps:
 For example: 
 
 ```html
-<a href='http://google.com/' data-intro='Hello step one!' data-step='1'></a>
+<a href='http://google.com/' data-intro='Hello step one!'></a>
 ````
 
 See all attributes [here](https://github.com/usablica/intro.js/#attributes).
@@ -251,7 +251,7 @@ introJs().onbeforechange(function(targetElement) {
 
 ###Attributes:
  - `data-intro`: The tooltip text of step
- - `data-step`: The number of step
+ - `data-step`: Optionally define the number (priority) of step
  - `data-tooltipClass`: Optionally define a CSS class for tooltip
  - `data-position`: Optionally define the position of tooltip, `top`, `left`, `right` or `bottom`. Default is `bottom`
 
@@ -266,7 +266,10 @@ introJs().onbeforechange(function(targetElement) {
  - `tooltipClass`: Adding CSS class to all tooltips
  - `exitOnEsc`: Exit introduction when pressing Escape button, `true` or `false`
  - `exitOnOverlayClick`: Exit introduction when clicking on overlay layer, `true` or `false`
- - `showStepNumbers`: Show steps number in the red circle or not, `true` of `false`
+ - `showStepNumbers`: Show steps number in the red circle or not, `true` or `false`
+ - `keyboardNavigation`: Navigating with keyboard or not, `true` or `false`
+ - `showButtons`: Show introduction navigation buttons or not, `true` or `false`
+ - `showBullets`: Show introduction bullets or not, `true` or `false`
 
 See [setOption](https://github.com/usablica/intro.js/#introjssetoptionoption-value) to see an example.
 
@@ -305,11 +308,21 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 </p>
 
 ## Roadmap
-- More browser compatibility
+- Add introduction without focusing on elements
 - Fix problems with `position: fixed` and other positions
 - Provide more examples
 
 ## Release History
+
+ * **v0.6.0** - 2013-11-13
+   - Add step bullets with navigating
+   - Add option to hide introduction navigating buttons
+   - Make keyboard navigation optional
+   - Making `data-step` optional with elements
+   - Fix scroll issue when scrolling down to elements bigger than window
+   - Fix Chrome version 30.0.1599.101 issue with hiding step numbers
+   - Fix incorrect calling onExit callback when user clicks on overlay layer
+   - Fix coding styles and improvement in performance
 
  * **v0.5.0** - 2013-07-19
    - Add CSS class option for tooltips (And tooltip buttons also)
