@@ -53,7 +53,9 @@
       /* Show tour control buttons? */
       showButtons: true,
       /* Show tour bullets? */
-      showBullets: true
+      showBullets: true,
+	  /* previousStep and prevButton are disabled at checkpoints*/
+	  checkpoints: []
     };
   }
 
@@ -259,6 +261,13 @@
     if (this._currentStep === 0) {
       return false;
     }
+	
+	// check for checkpoints
+	for (var i = 0; i < this._options.checkpoints.length; i++) {
+	  if (this._currentStep === this._options.checkpoints[i]) {
+	    return false;
+	  }
+	}
 
     var nextStep = this._introItems[--this._currentStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
@@ -595,6 +604,12 @@
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
     }
+	// show disabled prev button on checkpoints
+	for (var i = 0; i < this._options.checkpoints.length; i++) {
+	  if (this._options.checkpoints[i] === this._currentStep) {
+	    prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
+	  }
+	}
 
     //Set focus on "next" button, so that hitting Enter always moves you onto the next step
     nextTooltipButton.focus();
