@@ -614,9 +614,11 @@
       if (parentElm.tagName.toLowerCase() === 'body') break;
 
       var zIndex = _getPropValue(parentElm, 'z-index');
-      if (/[0-9]+/.test(zIndex)) {
+	  var opacity = parseFloat(_getPropValue(parentElm, 'opacity'));
+      if (/[0-9]+/.test(zIndex) || opacity < 1) {
         parentElm.className += ' introjs-fixParent';
       }
+	  
       parentElm = parentElm.parentNode;
     }
 
