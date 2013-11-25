@@ -3,6 +3,16 @@
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
 
+## Where to get
+You can obtain your local copy of Intro.js from:
+
+**1)** This github repository, using ```git clone https://github.com/usablica/intro.js.git```
+
+**2)** Using bower ```bower install intro.js --save```
+
+**3)** Download it from CDN ([1](http://www.jsdelivr.com/#!intro.js), [2](http://cdnjs.com/#introjs))
+
+
 ## How to use
 Intro.js can be added to your site in three simple steps:
 
