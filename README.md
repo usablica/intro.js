@@ -270,6 +270,7 @@ introJs().onbeforechange(function(targetElement) {
  - `keyboardNavigation`: Navigating with keyboard or not, `true` or `false`
  - `showButtons`: Show introduction navigation buttons or not, `true` or `false`
  - `showBullets`: Show introduction bullets or not, `true` or `false`
+ - `scrollToElement`: Autoscoll to highlighted element, `true` or `false`
 
 See [setOption](https://github.com/usablica/intro.js/#introjssetoptionoption-value) to see an example.
 
