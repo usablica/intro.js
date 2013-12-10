@@ -74,7 +74,7 @@
       var allIntroSteps = [];
 
       for (var i = 0, stepsLength = this._options.steps.length; i < stepsLength; i++) {
-        var currentItem = this._options.steps[i];
+        var currentItem = _cloneObject(this._options.steps[i]);
         //set the step
         currentItem.step = i + 1;
         //use querySelector function only when developer used CSS selector
@@ -204,6 +204,21 @@
     return false;
   }
 
+ /*
+   * makes a copy of the object
+   * @api private
+   * @method _cloneObject
+  */
+  function _cloneObject(object) {
+      if (object == null || typeof (object) != 'object') {
+          return object;
+      }
+      var temp = {};
+      for (var key in object) {
+          temp[key] = _cloneObject(object[key]);
+      }
+      return temp;
+  }
   /**
    * Go to specific step of introduction
    *
