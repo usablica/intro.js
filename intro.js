@@ -290,6 +290,10 @@
     if (helperLayer) {
       helperLayer.parentNode.removeChild(helperLayer);
     }
+    var helperNumberLayer = targetElement.querySelector('.introjs-helperNumberLayer');
+    if (helperNumberLayer) {
+      helperNumberLayer.parentNode.removeChild(helperNumberLayer);
+    }
     //remove `introjs-showElement` class from the element
     var showElement = document.querySelector('.introjs-showElement');
     if (showElement) {
