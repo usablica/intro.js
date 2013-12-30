@@ -411,7 +411,7 @@
         elementPosition = _getOffset(targetElement.element);
 
     if (oldHelperLayer != null) {
-      var oldHelperNumberLayer = oldHelperLayer.querySelector('.introjs-helperNumberLayer'),
+      var oldHelperNumberLayer = oldHelperLayer.parentNode.querySelector('.introjs-helperNumberLayer'),
           oldtooltipLayer      = oldHelperLayer.querySelector('.introjs-tooltiptext'),
           oldArrowLayer        = oldHelperLayer.querySelector('.introjs-arrow'),
           oldtooltipContainer  = oldHelperLayer.querySelector('.introjs-tooltip'),
@@ -440,11 +440,14 @@
       if (self._lastShowElementTimer) {
         clearTimeout(self._lastShowElementTimer);
       }
+      //set current step to the label
+      if (oldHelperNumberLayer != null) {
+        oldHelperNumberLayer.innerHTML = targetElement.step;
+        offset = _getOffset(targetElement.element);
+        oldHelperNumberLayer.style.top = (offset.top-15) +  'px';
+        oldHelperNumberLayer.style.left = (offset.left-15) + 'px';
+      }
       self._lastShowElementTimer = setTimeout(function() {
-        //set current step to the label
-        if (oldHelperNumberLayer != null) {
-          oldHelperNumberLayer.innerHTML = targetElement.step;
-        }
         //set current tooltip text
         oldtooltipLayer.innerHTML = targetElement.intro;
         //set the tooltip position
@@ -521,7 +524,10 @@
         var helperNumberLayer = document.createElement('span');
         helperNumberLayer.className = 'introjs-helperNumberLayer';
         helperNumberLayer.innerHTML = targetElement.step;
-        helperLayer.appendChild(helperNumberLayer);
+        offset = _getOffset(helperLayer);
+        helperNumberLayer.style.top = (offset.top-10) +  'px';
+        helperNumberLayer.style.left = (offset.left-10) + 'px';
+        helperLayer.parentNode.appendChild(helperNumberLayer);
       }
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
