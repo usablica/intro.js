@@ -2,8 +2,6 @@
 
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
-<a href='https://pledgie.com/campaigns/23692'><img alt='Click here to lend your support to: IntroJS  and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/23692.png?skin_name=chrome' border='0' ></a>
-
 ## Where to get
 You can obtain your local copy of Intro.js from:
 
