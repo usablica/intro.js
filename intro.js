@@ -53,7 +53,9 @@
       /* Show tour control buttons? */
       showButtons: true,
       /* Show tour bullets? */
-      showBullets: true
+      showBullets: true,
+      /* Scroll to highlighted element? */
+      scrollToElement: true
     };
   }
 
@@ -116,7 +118,7 @@
         var currentElement = allIntroSteps[i];
 
         if (currentElement.getAttribute('data-step') == null) {
-          
+
           while (true) {
             if (typeof introItems[nextStep] == 'undefined') {
               break;
@@ -141,7 +143,7 @@
     for (var z = 0; z < introItems.length; z++) {
       introItems[z] && tempIntroItems.push(introItems[z]);  // copy non-empty values to the end of the array
     }
-    
+
     introItems = tempIntroItems;
 
     //Ok, sort all items with given steps
@@ -420,7 +422,7 @@
           skipTooltipButton    = oldHelperLayer.querySelector('.introjs-skipbutton'),
           prevTooltipButton    = oldHelperLayer.querySelector('.introjs-prevbutton'),
           nextTooltipButton    = oldHelperLayer.querySelector('.introjs-nextbutton');
-          
+
       //hide the tooltip
       oldtooltipContainer.style.opacity = 0;
 
@@ -451,7 +453,7 @@
         oldtooltipLayer.innerHTML = targetElement.intro;
         //set the tooltip position
         _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer);
-        
+
         //change active bullet
         oldHelperLayer.querySelector('.introjs-bullets li > a.active').className = '';
         oldHelperLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
@@ -480,7 +482,7 @@
 
       tooltipTextLayer.className = 'introjs-tooltiptext';
       tooltipTextLayer.innerHTML = targetElement.intro;
-      
+
       bulletsLayer.className = 'introjs-bullets';
 
       if (this._options.showBullets === false) {
@@ -622,7 +624,7 @@
       parentElm = parentElm.parentNode;
     }
 
-    if (!_elementInViewport(targetElement.element)) {
+    if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
       var rect = targetElement.element.getBoundingClientRect(),
         winHeight=_getWinSize().height,
         top = rect.bottom - (rect.bottom - rect.top),
