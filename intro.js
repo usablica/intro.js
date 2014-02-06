@@ -210,7 +210,7 @@
    * @method _cloneObject
   */
   function _cloneObject(object) {
-      if (object == null || typeof (object) != 'object') {
+      if (object == null || typeof (object) != 'object' || object.hasOwnProperty("nodeName") === true) {
           return object;
       }
       var temp = {};
