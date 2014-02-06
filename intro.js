@@ -359,7 +359,9 @@
         arrowLayer.className = 'introjs-arrow left';
         break;
       case 'left':
-        tooltipLayer.style.top = '15px';
+        if (this._options.showStepNumbers == true) {  
+          tooltipLayer.style.top = '15px';
+        }
         tooltipLayer.style.right = (_getOffset(targetElement).width + 20) + 'px';
         arrowLayer.className = 'introjs-arrow right';
         break;
