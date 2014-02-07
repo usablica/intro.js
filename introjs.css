@@ -21,6 +21,7 @@
 
 .introjs-fixParent {
   z-index: auto !important;
+  opacity: 1.0 !important;
 }
 
 .introjs-showElement {
