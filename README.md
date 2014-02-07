@@ -97,6 +97,38 @@ introJs().goToStep(2).start(); //starts introduction from step 2
 
 -----
 
+###introJs.nextStep()
+
+Go to next step of introduction.
+
+**Available since**: v0.7.0
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().start().nextStep();
+````
+
+-----
+
+###introJs.previousStep()
+
+Go to previous step of introduction.
+
+**Available since**: v0.7.0
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().goToStep(3).start().previousStep(); //starts introduction from step 2
+````
+
+-----
+
 ###introJs.exit()
 
 Exit the introduction.
@@ -258,6 +290,26 @@ introJs().onbeforechange(function(targetElement) {
 
 -----
 
+###introJs.onafterchange(providedCallback)
+
+Given callback function will be called after starting a new step of introduction. The callback function receives the element of the new step as an argument.
+
+**Available since:** v0.7.0
+
+**Parameters:**
+ - providedCallback : Function
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().onafterchange(function(targetElement) {  
+  alert("after new step");
+});
+````
+
+-----
 ###Attributes:
  - `data-intro`: The tooltip text of step
  - `data-step`: Optionally define the number (priority) of step
@@ -279,7 +331,7 @@ introJs().onbeforechange(function(targetElement) {
  - `keyboardNavigation`: Navigating with keyboard or not, `true` or `false`
  - `showButtons`: Show introduction navigation buttons or not, `true` or `false`
  - `showBullets`: Show introduction bullets or not, `true` or `false`
- - `scrollToElement`: Autoscoll to highlighted element, `true` or `false`
+ - `scrollToElement`: Auto scroll to highlighted element if it's outside of viewport, `true` or `false`
 
 See [setOption](https://github.com/usablica/intro.js/#introjssetoptionoption-value) to see an example.
 
@@ -323,6 +375,18 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 - Provide more examples
 
 ## Release History
+
+ * **v0.7.0** - 2014-02-07
+   - Add `onafterchange` event
+   - Add scrolling to element option
+   - Add `nextStep` and `previousStep` functions publicly
+   - Add `_cloneObject` method to prevent data overwriting
+   - Fix null elements problem with programmatic definition
+   - Fix issues with single-step introductions
+   - Fix top margin problem on hidden elements
+   - Fix stacking context problem caused by element opacity
+   - Fix call exit() on null elements
+   - Update documentation and add more details on CDN servers and RTL example
 
  * **v0.6.0** - 2013-11-13
    - Add step bullets with navigating
