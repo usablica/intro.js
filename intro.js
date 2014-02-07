@@ -878,6 +878,14 @@
       _goToStep.call(this, step);
       return this;
     },
+    nextStep: function() {
+      _nextStep.call(this);
+      return this;
+    },
+    previousStep: function() {
+      _previousStep.call(this);
+      return this;
+    },
     exit: function() {
       _exitIntro.call(this, this._targetElement);
     },
