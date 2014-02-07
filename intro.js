@@ -78,13 +78,16 @@
       for (var i = 0, stepsLength = this._options.steps.length; i < stepsLength; i++) {
         var currentItem = _cloneObject(this._options.steps[i]);
         //set the step
-        currentItem.step = i + 1;
+        currentItem.step = introItems.length + 1;
         //use querySelector function only when developer used CSS selector
         if (typeof(currentItem.element) === 'string') {
           //grab the element with given selector from the page
           currentItem.element = document.querySelector(currentItem.element);
         }
-        introItems.push(currentItem);
+
+        if (currentItem.element != null) {
+          introItems.push(currentItem);
+        }
       }
 
     } else {
