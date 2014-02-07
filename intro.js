@@ -105,7 +105,7 @@
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
             step: parseInt(currentElement.getAttribute('data-step'), 10),
-	    tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
           };
         }
@@ -131,7 +131,7 @@
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
             step: nextStep + 1,
-	    tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
           };
         }
