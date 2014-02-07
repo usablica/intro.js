@@ -296,7 +296,7 @@
     //remove overlay layer from the page
     var overlayLayer = targetElement.querySelector('.introjs-overlay');
     //return if intro already completed or skipped
-    if(overlayLayer == null){
+    if (overlayLayer == null) {
       return;
     }
     //for fade-out animation
