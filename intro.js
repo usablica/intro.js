@@ -471,8 +471,15 @@
         if (oldHelperNumberLayer != null) {
           oldHelperNumberLayer.innerHTML = targetElement.step;
         }
-        //set current tooltip text
-        oldtooltipLayer.innerHTML = targetElement.intro;
+      	//set current tooltip text
+      	try{
+      		var introItemFromSelector = document.querySelector(targetElement.intro);
+      		if (introItemFromSelector) {
+      			oldtooltipLayer.innerHTML = introItemFromSelector.innerHTML;
+      		}
+      	} catch (errr) {
+      		oldtooltipLayer.innerHTML = targetElement.intro;
+        }
         //set the tooltip position
         _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer);
 
@@ -503,7 +510,14 @@
       arrowLayer.className = 'introjs-arrow';
 
       tooltipTextLayer.className = 'introjs-tooltiptext';
-      tooltipTextLayer.innerHTML = targetElement.intro;
+    	try {
+    		var introItemFromSelector = document.querySelector(targetElement.intro);
+    		if (introItemFromSelector) {
+    			tooltipTextLayer.innerHTML = introItemFromSelector.innerHTML;
+    		}
+    	} catch (errr) {
+    		tooltipTextLayer.innerHTML = targetElement.intro;
+    	}
 
       bulletsLayer.className = 'introjs-bullets';
 
