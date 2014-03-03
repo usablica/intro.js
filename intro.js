@@ -472,12 +472,16 @@
           oldHelperNumberLayer.innerHTML = targetElement.step;
         }
       	//set current tooltip text
-      	try{
+      	try {
+					// this will try to run the intro as a selector. If it fails, it will just use the "intro" as the text.
       		var introItemFromSelector = document.querySelector(targetElement.intro);
       		if (introItemFromSelector) {
       			oldtooltipLayer.innerHTML = introItemFromSelector.innerHTML;
+      		} else {
+      			oldtooltipLayer.innerHTML = targetElement.intro;
       		}
       	} catch (errr) {
+					// it will throw an exception if it is not an actual selector.
       		oldtooltipLayer.innerHTML = targetElement.intro;
         }
         //set the tooltip position
@@ -510,12 +514,16 @@
       arrowLayer.className = 'introjs-arrow';
 
       tooltipTextLayer.className = 'introjs-tooltiptext';
+    	// this will try to run the intro as a selector. If it fails, it will just use the "intro" as the text.
     	try {
     		var introItemFromSelector = document.querySelector(targetElement.intro);
     		if (introItemFromSelector) {
     			tooltipTextLayer.innerHTML = introItemFromSelector.innerHTML;
+    		} else {
+    			tooltipTextLayer.innerHTML = targetElement.intro;
     		}
     	} catch (errr) {
+				// it will throw an exception if it is not a selector.
     		tooltipTextLayer.innerHTML = targetElement.intro;
     	}
 
