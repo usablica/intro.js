@@ -31,13 +31,17 @@
 
     this._options = {
       /* Next button label in tooltip box */
-      nextLabel: 'Next &rarr;',
-      /* Previous button label in tooltip box */
-      prevLabel: '&larr; Back',
+    	nextLabel: 'Next <i class="fa fa-arrow-right"></i>',
+      nextClass: 'btn btn-default',
+    	/* Previous button label in tooltip box */
+      prevLabel: '<i class="fa fa-arrow-left"></i> Back',
+			prevClass: 'btn btn-default',
       /* Skip button label in tooltip box */
       skipLabel: 'Skip',
+			skipClass: 'btn btn-warning',
       /* Done button label in tooltip box */
-      doneLabel: 'Done',
+			doneLabel: 'Done',
+			doneClass: 'btn btn-primary',
       /* Default tooltip box position */
       tooltipPosition: 'bottom',
       /* Next CSS class for tooltip boxes */
@@ -600,7 +604,7 @@
 
       //skip button
       var skipTooltipButton = document.createElement('a');
-      skipTooltipButton.className = 'introjs-button introjs-skipbutton';
+      skipTooltipButton.className = 'introjs-button introjs-skipbutton ' + this._options.skipClass;
       skipTooltipButton.href = 'javascript:void(0);';
       skipTooltipButton.innerHTML = this._options.skipLabel;
 
@@ -631,18 +635,21 @@
     }
 
     if (this._currentStep == 0 && this._introItems.length > 1) {
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+    	prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled ' + this._options.prevClass;
+    	nextTooltipButton.className = 'introjs-button introjs-nextbutton ' + this._options.nextClass;
       skipTooltipButton.innerHTML = this._options.skipLabel;
-    } else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
+      skipTooltipButton.className = 'introjs-button introjs-skipbutton ' + this._options.skipClass;
+		} else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
       skipTooltipButton.innerHTML = this._options.doneLabel;
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+      skipTooltipButton.className = 'introjs-button introjs-skipbutton ' + this._options.doneClass;
+      prevTooltipButton.className = 'introjs-button introjs-prevbutton ' + this._options.prevClass;
+      nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled ' + this._options.nextClass;
     } else {
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+    	prevTooltipButton.className = 'introjs-button introjs-prevbutton ' + this._options.prevClass;
+    	nextTooltipButton.className = 'introjs-button introjs-nextbutton ' + this._options.nextClass;
       skipTooltipButton.innerHTML = this._options.skipLabel;
-    }
+      skipTooltipButton.className = 'introjs-button introjs-skipbutton ' + this._options.skipClass;
+		}
 
     //Set focus on "next" button, so that hitting Enter always moves you onto the next step
     nextTooltipButton.focus();
