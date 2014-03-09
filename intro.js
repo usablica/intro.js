@@ -366,36 +366,9 @@
       tooltipCssClass = this._options.tooltipClass;
     }
 
-    tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
 
-    //custom css class for tooltip boxes
-    var tooltipCssClass = this._options.tooltipClass;
-
-    var currentTooltipPosition = this._introItems[this._currentStep].position;
-    switch (currentTooltipPosition) {
-      case 'top':
-        tooltipLayer.style.left = '15px';
-        tooltipLayer.style.top = '-' + (_getOffset(tooltipLayer).height + 10) + 'px';
-        arrowLayer.className = 'introjs-arrow bottom';
-        break;
-      case 'right':
-        tooltipLayer.style.left = (_getOffset(targetElement).width + 20) + 'px';
-        arrowLayer.className = 'introjs-arrow left';
-        break;
-      case 'left':
-        if (this._options.showStepNumbers == true) {  
-          tooltipLayer.style.top = '15px';
-        }
-        tooltipLayer.style.right = (_getOffset(targetElement).width + 20) + 'px';
-        arrowLayer.className = 'introjs-arrow right';
-        break;
-      case 'bottom':
-      // Bottom going to follow the default behavior
-      default:
-        tooltipLayer.style.bottom = '-' + (_getOffset(tooltipLayer).height + 10) + 'px';
-        arrowLayer.className = 'introjs-arrow top';
-        break;
-    }
+    var currentTooltipPosition = this._introItems[this._currentStep].position || 'bottom';
+    tooltipLayer.className = ('introjs-tooltip ' + currentTooltipPosition + ' ' + tooltipCssClass);
   }
 
   /**
@@ -639,14 +612,14 @@
     while (parentElm != null) {
       if (parentElm.tagName.toLowerCase() === 'body') break;
 
-      //fix The Stacking Contenxt problem. 
+      //fix The Stacking Contenxt problem.
       //More detail: https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context
       var zIndex = _getPropValue(parentElm, 'z-index');
       var opacity = parseFloat(_getPropValue(parentElm, 'opacity'));
       if (/[0-9]+/.test(zIndex) || opacity < 1) {
         parentElm.className += ' introjs-fixParent';
       }
-	  
+
       parentElm = parentElm.parentNode;
     }
 
@@ -665,7 +638,7 @@
         window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
       }
     }
-    
+
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
         this._introAfterChangeCallback.call(this, targetElement.element);
     }

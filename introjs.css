@@ -72,7 +72,7 @@
   line-height: 20px;
   border: 3px solid white;
   border-radius: 50%;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0); /* IE6-9 */ 
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0); /* IE6-9 */
   filter: progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000); /* IE10 text shadows */
   box-shadow: 0 2px 5px rgba(0,0,0,.4);
 }
@@ -82,14 +82,14 @@
   content:'';
   position: absolute;
 }
-.introjs-arrow.top {
+.introjs-tooltip.bottom .introjs-arrow {
   top: -10px;
   border-top-color:transparent;
   border-right-color:transparent;
   border-bottom-color:white;
   border-left-color:transparent;
 }
-.introjs-arrow.right {
+.introjs-tooltip.left .introjs-arrow {
   right: -10px;
   top: 10px;
   border-top-color:transparent;
@@ -97,14 +97,14 @@
   border-bottom-color:transparent;
   border-left-color:white;
 }
-.introjs-arrow.bottom {
+.introjs-tooltip.top .introjs-arrow {
   bottom: -10px;
   border-top-color:white;
   border-right-color:transparent;
   border-bottom-color:transparent;
   border-left-color:transparent;
 }
-.introjs-arrow.left {
+.introjs-tooltip.right .introjs-arrow {
   left: -10px;
   top: 10px;
   border-top-color:transparent;
@@ -128,12 +128,29 @@
           transition: opacity 0.1s ease-out;
 }
 
+.introjs-tooltip.top{
+  bottom:100%;
+  margin-bottom:10px;
+}
+.introjs-tooltip.bottom{
+  top:100%;
+  margin-top:10px;
+}
+.introjs-tooltip.left{
+  right:100%;
+  margin-right:10px;
+}
+.introjs-tooltip.right{
+  left:100%;
+  margin-left:10px;
+}
+
 .introjs-tooltipbuttons {
   text-align: right;
 }
 
-/* 
- Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/ 
+/*
+ Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/
  Changed by Afshin Mehrabani
 */
 .introjs-button {
@@ -170,7 +187,7 @@
 
 .introjs-button:hover {
   border-color: #bcbcbc;
-  text-decoration: none; 
+  text-decoration: none;
   box-shadow: 0px 1px 1px #e3e3e3;
 }
 
