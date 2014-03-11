@@ -1,5 +1,5 @@
 /**
- * Intro.js v0.7.0
+ * Intro.js v0.7.1
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -19,7 +19,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '0.7.0';
+  var VERSION = '0.7.1';
 
   /**
    * IntroJs main class
@@ -215,7 +215,7 @@
    * @method _cloneObject
   */
   function _cloneObject(object) {
-      if (object == null || typeof (object) != 'object' || object.hasOwnProperty("nodeName") === true) {
+      if (object == null || typeof (object) != 'object' || object.hasOwnProperty("nodeName") === true || typeof (object.nodeType) != 'undefined') {
           return object;
       }
       var temp = {};
@@ -646,7 +646,7 @@
       if (/[0-9]+/.test(zIndex) || opacity < 1) {
         parentElm.className += ' introjs-fixParent';
       }
-	  
+    
       parentElm = parentElm.parentNode;
     }
 
