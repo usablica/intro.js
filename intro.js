@@ -215,7 +215,7 @@
    * @method _cloneObject
   */
   function _cloneObject(object) {
-      if (object == null || typeof (object) != 'object' || object.hasOwnProperty("nodeName") === true || typeof (object.nodeType) != 'undefined') {
+      if (object == null || typeof (object) != 'object' || Object.prototype.hasOwnProperty.call(object, "nodeName") === true || typeof (object.nodeType) != 'undefined') {
           return object;
       }
       var temp = {};
