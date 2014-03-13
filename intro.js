@@ -55,7 +55,9 @@
       /* Show tour bullets? */
       showBullets: true,
       /* Scroll to highlighted element? */
-      scrollToElement: true
+      scrollToElement: true,
+      /* Overlay opacity */
+      overlayOpacity: 0.8
     };
   }
 
@@ -775,7 +777,7 @@
     };
 
     setTimeout(function() {
-      styleText += 'opacity: .8;';
+      styleText += 'opacity: ' + self._options.overlayOpacity.toString() + ';';
       overlayLayer.setAttribute('style', styleText);
     }, 10);
     return true;
