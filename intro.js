@@ -103,13 +103,18 @@
         var currentElement = allIntroSteps[i];
         var step = parseInt(currentElement.getAttribute('data-step'), 10);
 
+        var scrollToElement = currentElement.getAttribute('data-scroll-to-element');
+        if (!scrollToElement)
+          scrollToElement = (this._options.scrollToElement == "true");
+
         if (step > 0) {
           introItems[step - 1] = {
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
             step: parseInt(currentElement.getAttribute('data-step'), 10),
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
+            scrollToElement: scrollToElement
           };
         }
       }
@@ -130,12 +135,17 @@
             }
           }
 
+          var scrollToElement = currentElement.getAttribute('data-scroll-to-element');
+          if (!scrollToElement)
+            scrollToElement = (this._options.scrollToElement == "true");
+
           introItems[nextStep] = {
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
             step: nextStep + 1,
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
+            scrollToElement: scrollToElement
           };
         }
       }
@@ -383,7 +393,7 @@
         arrowLayer.className = 'introjs-arrow left';
         break;
       case 'left':
-        if (this._options.showStepNumbers == true) {  
+        if (this._options.showStepNumbers == true) {
           tooltipLayer.style.top = '15px';
         }
         tooltipLayer.style.right = (_getOffset(targetElement).width + 20) + 'px';
@@ -639,18 +649,20 @@
     while (parentElm != null) {
       if (parentElm.tagName.toLowerCase() === 'body') break;
 
-      //fix The Stacking Contenxt problem. 
+      //fix The Stacking Contenxt problem.
       //More detail: https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context
       var zIndex = _getPropValue(parentElm, 'z-index');
       var opacity = parseFloat(_getPropValue(parentElm, 'opacity'));
       if (/[0-9]+/.test(zIndex) || opacity < 1) {
         parentElm.className += ' introjs-fixParent';
       }
-    
+
       parentElm = parentElm.parentNode;
     }
 
-    if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
+    var scrollToElement = (this._introItems[this._currentStep].scrollToElement == "true");
+    if (!_elementInViewport(targetElement.element) &&
+      (this._options.scrollToElement === true || scrollToElement == true)) {
       var rect = targetElement.element.getBoundingClientRect(),
         winHeight=_getWinSize().height,
         top = rect.bottom - (rect.bottom - rect.top),
@@ -665,7 +677,7 @@
         window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
       }
     }
-    
+
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
         this._introAfterChangeCallback.call(this, targetElement.element);
     }

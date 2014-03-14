@@ -315,6 +315,7 @@ introJs().onafterchange(function(targetElement) {
  - `data-step`: Optionally define the number (priority) of step
  - `data-tooltipClass`: Optionally define a CSS class for tooltip
  - `data-position`: Optionally define the position of tooltip, `top`, `left`, `right` or `bottom`. Default is `bottom`
+ - `data-scroll-to-element`: Optionally define if auto scroll to highlighted element if it's outside of viewport, `true` or `false`
 
 ###Options:
 
