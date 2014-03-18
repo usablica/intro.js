@@ -660,9 +660,8 @@
       parentElm = parentElm.parentNode;
     }
 
-    var scrollToElement = (this._introItems[this._currentStep].scrollToElement == "true");
-    if (!_elementInViewport(targetElement.element) &&
-      (this._options.scrollToElement === true || scrollToElement == true)) {
+  if (this._introItems[this._currentStep].scrollToElement == "true")
+    if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
       var rect = targetElement.element.getBoundingClientRect(),
         winHeight=_getWinSize().height,
         top = rect.bottom - (rect.bottom - rect.top),
