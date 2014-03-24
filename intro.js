@@ -168,51 +168,44 @@
           nextStepButton = targetElm.querySelector('.introjs-nextbutton');
 
       self._onKeyDown = function(e) {
-
-        // If you have exitOnEsc enabled
-        if (e.keyCode === 27 && self._options.exitOnEsc) {
+        if (e.keyCode === 27 && self._options.exitOnEsc == true) {
           //escape key pressed, exit the intro
           _exitIntro.call(self, targetElm);
           //check if any callback is defined
           if (self._introExitCallback != undefined) {
             self._introExitCallback.call(self);
           }
-        }
-
-        // If you have keyboard navigation enabled
-        if (self._options.keyboardNavigation) {
-          if(e.keyCode === 37 && self._options.keyboardNavigation) {
-            //left arrow
-            _previousStep.call(self);
-          } else if ((e.keyCode === 39 || e.keyCode === 13) && self._options.keyboardNavigation) {
-            //right arrow or enter
-            _nextStep.call(self);
-            //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
-            if(e.preventDefault) {
-              e.preventDefault();
-            } else {
-              e.returnValue = false;
-            }
+        } else if(e.keyCode === 37) {
+          //left arrow
+          _previousStep.call(self);
+        } else if (e.keyCode === 39 || e.keyCode === 13) {
+          //right arrow or enter
+          _nextStep.call(self);
+          //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
+          if(e.preventDefault) {
+            e.preventDefault();
+          } else {
+            e.returnValue = false;
           }
         }
       };
 
-      self._onResize = function() {
+      self._onResize = function(e) {
         _setHelperLayerPosition.call(self, document.querySelector('.introjs-helperLayer'));
       };
 
       if (window.addEventListener) {
-        if (this._options.keyboardNavigation || self._options.exitOnEsc) {
+        if (this._options.keyboardNavigation) {
           window.addEventListener('keydown', self._onKeyDown, true);
         }
         //for window resize
-        window.addEventListener('resize', self._onResize, true);
+        window.addEventListener("resize", self._onResize, true);
       } else if (document.attachEvent) { //IE
-        if (this._options.keyboardNavigation || self._options.exitOnEsc) {
+        if (this._options.keyboardNavigation) {
           document.attachEvent('onkeydown', self._onKeyDown);
         }
         //for window resize
-        document.attachEvent('onresize', self._onResize);
+        document.attachEvent("onresize", self._onResize);
       }
     }
     return false;
@@ -224,7 +217,7 @@
    * @method _cloneObject
   */
   function _cloneObject(object) {
-      if (object == null || typeof (object) != 'object' || object.hasOwnProperty('nodeName') === true || typeof (object.nodeType) != 'undefined') {
+      if (object == null || typeof (object) != 'object' || object.hasOwnProperty("nodeName") === true || typeof (object.nodeType) != 'undefined') {
           return object;
       }
       var temp = {};
@@ -334,7 +327,7 @@
     if (fixParents && fixParents.length > 0) {
       for (var i = fixParents.length - 1; i >= 0; i--) {
         fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
-      }
+      };
     }
     //clean listeners
     if (window.removeEventListener) {
@@ -378,7 +371,7 @@
     tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
 
     //custom css class for tooltip boxes
-    tooltipCssClass = this._options.tooltipClass;
+    var tooltipCssClass = this._options.tooltipClass;
 
     var currentTooltipPosition = this._introItems[this._currentStep].position;
     switch (currentTooltipPosition) {
@@ -392,7 +385,7 @@
         arrowLayer.className = 'introjs-arrow left';
         break;
       case 'left':
-        if (this._options.showStepNumbers) {
+        if (this._options.showStepNumbers == true) {  
           tooltipLayer.style.top = '15px';
         }
         tooltipLayer.style.right = (_getOffset(targetElement).width + 20) + 'px';
@@ -465,7 +458,7 @@
       if (fixParents && fixParents.length > 0) {
         for (var i = fixParents.length - 1; i >= 0; i--) {
           fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
-        }
+        };
       }
 
       //remove old classes
@@ -530,10 +523,10 @@
           self.goToStep(this.getAttribute('data-stepnumber'));
         };
 
-        if (i === 0) anchorLink.className = 'active';
+        if (i === 0) anchorLink.className = "active";
 
         anchorLink.href = 'javascript:void(0);';
-        anchorLink.innerHTML = '&nbsp;';
+        anchorLink.innerHTML = "&nbsp;";
         anchorLink.setAttribute('data-stepnumber', this._introItems[i].step);
 
         innerLi.appendChild(anchorLink);
