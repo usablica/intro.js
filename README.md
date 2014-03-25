@@ -381,6 +381,9 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 
 ## Release History
 
+ * **v0.7.1** - 2014-03-11
+   - Fix "Too much recursion" issue with Firefox and Internet Explorer.
+
  * **v0.7.0** - 2014-02-07
    - Add `onafterchange` event
    - Add scrolling to element option
