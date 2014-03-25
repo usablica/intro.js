@@ -246,3 +246,10 @@
 .introjs-bullets ul li a.active {
   background: #999;
 }
+.introjsFloatingElement {
+  position: absolute;
+  height: 0;
+  width: 0;
+  left: 50%;
+  top: 50%;
+}
