@@ -554,7 +554,9 @@
 
         //show the tooltip
         oldtooltipContainer.style.opacity = 1;
-        oldHelperNumberLayer.style.opacity = 1;
+        if (oldHelperNumberLayer != null) {
+          oldHelperNumberLayer.style.opacity = 1;
+        }
       }, 350);
 
     } else {
