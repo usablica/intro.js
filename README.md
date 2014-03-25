@@ -375,11 +375,15 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 </p>
 
 ## Roadmap
-- Add introduction without focusing on elements
 - Fix problems with `position: fixed` and other positions
 - Provide more examples
 
 ## Release History
+
+ * **v0.8.0** - 2014-03-25
+   - Ability to define introductions without focusing on elements
+   - Fix Internet Explorer 8.0 issue
+   - Add `_direction` property
 
  * **v0.7.1** - 2014-03-11
    - Fix "Too much recursion" issue with Firefox and Internet Explorer.
