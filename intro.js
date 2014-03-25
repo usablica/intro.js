@@ -260,6 +260,8 @@
    * @method _nextStep
    */
   function _nextStep() {
+    this._direction = 'forward';
+
     if (typeof (this._currentStep) === 'undefined') {
       this._currentStep = 0;
     } else {
@@ -281,7 +283,6 @@
       this._introBeforeChangeCallback.call(this, nextStep.element);
     }
 
-    this._direction = 'forward';
     _showElement.call(this, nextStep);
   }
 
@@ -292,6 +293,8 @@
    * @method _nextStep
    */
   function _previousStep() {
+    this._direction = 'backward';
+    
     if (this._currentStep === 0) {
       return false;
     }
@@ -301,7 +304,6 @@
       this._introBeforeChangeCallback.call(this, nextStep.element);
     }
 
-    this._direction = 'backward';
     _showElement.call(this, nextStep);
   }
 
