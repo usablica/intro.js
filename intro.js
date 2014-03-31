@@ -55,7 +55,9 @@
       /* Show tour bullets? */
       showBullets: true,
       /* Scroll to highlighted element? */
-      scrollToElement: true
+      scrollToElement: true,
+      /* Disable an interaction with element? */
+      disableInteraction: false
     };
   }
 
@@ -343,6 +345,11 @@
       floatingElement.parentNode.removeChild(floatingElement);
     }
 
+    //remove element overlay
+    if (this._options.disableInteraction === true) {
+      document.querySelector('.introjs-elementOverlay').remove();
+    }
+
     //remove `introjs-showElement` class from the element
     var showElement = document.querySelector('.introjs-showElement');
     if (showElement) {
@@ -534,6 +541,12 @@
       //remove old classes
       var oldShowElement = document.querySelector('.introjs-showElement');
       oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, '');
+
+      //remove element overlay
+      if (this._options.disableInteraction === true) {
+        document.querySelector('.introjs-elementOverlay').remove();
+      }
+
       //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
       if (self._lastShowElementTimer) {
         clearTimeout(self._lastShowElementTimer);
@@ -697,6 +710,13 @@
 
     //Set focus on "next" button, so that hitting Enter always moves you onto the next step
     nextTooltipButton.focus();
+
+    //add inner div to prevent posibility interact with element (transparent overlay)
+    if (this._options.disableInteraction === true) {
+      var elementOverlay = document.createElement('div');
+      elementOverlay.className = 'introjs-elementOverlay';
+      targetElement.element.appendChild(elementOverlay);
+    }
 
     //add target element position style
     targetElement.element.className += ' introjs-showElement';
