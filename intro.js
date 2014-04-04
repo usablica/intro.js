@@ -410,9 +410,6 @@
 
     tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
 
-    //custom css class for tooltip boxes
-    var tooltipCssClass = this._options.tooltipClass;
-
     var currentTooltipPosition = this._introItems[this._currentStep].position;
     switch (currentTooltipPosition) {
       case 'top':
