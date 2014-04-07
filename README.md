@@ -310,6 +310,34 @@ introJs().onafterchange(function(targetElement) {
 ````
 
 -----
+
+###introJs.currentStep()
+
+Return the current step of the intro that is running.
+
+**Returns:**
+ - Number with current step
+
+**Example:**
+```javascript
+alert(introJs().currentStep());
+````
+
+-----
+
+###introJs.totalSteps()
+
+Return the total number of steps for the intro.
+
+**Returns:**
+ - The total number of steps
+
+**Example:**
+```javascript
+alert(introJs().totalSteps());
+````
+
+-----
 ###Attributes:
  - `data-intro`: The tooltip text of step
  - `data-step`: Optionally define the number (priority) of step
