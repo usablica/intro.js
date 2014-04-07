@@ -1,6 +1,6 @@
 .introjs-overlay {
   position: absolute;
-  z-index: 999999;
+  z-index: 2998;
   background-color: #000;
   opacity: 0;
   background: -moz-radial-gradient(center,ellipse cover,rgba(0,0,0,0.4) 0,rgba(0,0,0,0.9) 100%);
@@ -25,7 +25,7 @@
 }
 
 .introjs-showElement {
-  z-index: 9999999 !important;
+  z-index: 3000 !important;
 }
 
 .introjs-relativePosition {
@@ -34,7 +34,7 @@
 
 .introjs-helperLayer {
   position: absolute;
-  z-index: 9999998;
+  z-index: 2999;
   background-color: #FFF;
   background-color: rgba(255,255,255,.9);
   border: 1px solid #777;
@@ -52,7 +52,7 @@
   position: absolute;
   top: -16px;
   left: -16px;
-  z-index: 9999999999 !important;
+  z-index: 30000 !important;
   padding: 2px;
   font-family: Arial, verdana, tahoma;
   font-size: 13px;
