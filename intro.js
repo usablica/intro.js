@@ -281,7 +281,7 @@
 
     var nextStep = this._introItems[this._currentStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
+      this._introBeforeChangeCallback.call(this, nextStep.element, this._currentStep);
     }
 
     _showElement.call(this, nextStep);
@@ -302,7 +302,7 @@
 
     var nextStep = this._introItems[--this._currentStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
+      this._introBeforeChangeCallback.call(this, nextStep.element, this._currentStep);
     }
 
     _showElement.call(this, nextStep);
@@ -494,7 +494,7 @@
   function _showElement(targetElement) {
 
     if (typeof (this._introChangeCallback) !== 'undefined') {
-        this._introChangeCallback.call(this, targetElement.element);
+        this._introChangeCallback.call(this, targetElement.element, this._currentStep);
     }
 
     var self = this,
@@ -741,7 +741,7 @@
     }
     
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
-        this._introAfterChangeCallback.call(this, targetElement.element);
+        this._introAfterChangeCallback.call(this, targetElement.element, this._currentStep);
     }
   }
 
