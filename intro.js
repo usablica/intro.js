@@ -221,6 +221,7 @@
         document.attachEvent("onresize", self._onResize);
       }
     }
+    this.totalStepCount = introItems.length;
     return false;
   }
 
@@ -976,7 +977,7 @@
     },
     onchange: function(providedCallback) {
       if (typeof (providedCallback) === 'function') {
-        this._introChangeCallback = providedCallback;
+        this._introChangeCallback = providedCallback(this._currentStep + 1);
       } else {
         throw new Error('Provided callback for onchange was not a function.');
       }
@@ -1005,6 +1006,12 @@
         throw new Error('Provided callback for onexit was not a function.');
       }
       return this;
+    },
+    currentStep: function() {
+      return this._currentStep + 1;
+    },
+    totalSteps: function() {
+      return this.totalStepCount;
     }
   };
 
