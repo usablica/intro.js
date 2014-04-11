@@ -723,21 +723,41 @@
       parentElm = parentElm.parentNode;
     }
 
-    if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
-      var rect = targetElement.element.getBoundingClientRect(),
-        winHeight=_getWinSize().height,
-        top = rect.bottom - (rect.bottom - rect.top),
-        bottom = rect.bottom - winHeight;
-
-      //Scroll up
-      if (top < 0 || targetElement.element.clientHeight > winHeight) {
-        window.scrollBy(0, top - 30); // 30px padding from edge to look nice
-
-      //Scroll down
+    if (this._options.scrollToElement === true) {
+      // check if scrolling is needed
+      var rect = targetElement.element.getBoundingClientRect();
+  
+      // trying to determine the actual height is difficult, so we just set the maximum height to 200px
+      var tooltipHeight =  200; // document.getElementsByClassName('introjs-tooltip')[0].offsetHeight;
+      var currentTooltipPosition = this._introItems[this._currentStep].position;
+  
+      // adjusted top position
+      var top = rect.top - 30 - (currentTooltipPosition == 'top' ? tooltipHeight : 0);
+  
+      // adjusted bottom position
+      var bottom = rect.bottom + 30 + (currentTooltipPosition == 'bottom' ? tooltipHeight : 0);
+  
+      var winHeight=_getWinSize().height;
+  
+      // depending on the tooltip position, the top or bottom positions are more important
+      var scroll = 0;
+  
+      if (currentTooltipPosition == 'top') {
+        if (top < 0) scroll = top;
+        else if (bottom > winHeight) scroll = Math.min(bottom - winHeight, top); // if bottom is not visible, scroll, but not so much as to hide top
       } else {
-        window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
+        if (bottom > winHeight) scroll = bottom - winHeight;
+        else if (top < 0) scroll = Math.max(bottom - winHeight, top);
       }
+  
+      if (scroll != 0) window.scrollBy(0, scroll);
     }
+
+    
+    if (typeof (this._introAfterChangeCallback) !== 'undefined') {
+        this._introAfterChangeCallback.call(this, targetElement.element);
+    }
+  }
     
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
         this._introAfterChangeCallback.call(this, targetElement.element);
