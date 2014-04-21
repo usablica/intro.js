@@ -593,6 +593,7 @@
 
         anchorLink.onclick = function() {
           self.goToStep(this.getAttribute('data-stepnumber'));
+          return false;
         };
 
         if (i === 0) anchorLink.className = "active";
@@ -632,6 +633,7 @@
       nextTooltipButton.onclick = function() {
         if (self._introItems.length - 1 != self._currentStep) {
           _nextStep.call(self);
+          return false;
         }
       };
 
@@ -644,6 +646,7 @@
       prevTooltipButton.onclick = function() {
         if (self._currentStep != 0) {
           _previousStep.call(self);
+          return false;
         }
       };
 
@@ -659,6 +662,7 @@
       skipTooltipButton.onclick = function() {
         if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
           self._introCompleteCallback.call(self);
+          return false;
         }
 
         if (self._introItems.length - 1 != self._currentStep && typeof (self._introExitCallback) === 'function') {
