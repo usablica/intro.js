@@ -48,10 +48,16 @@
           transition: all 0.3s ease-out;
 }
 
+.introjs-tooltipReferenceLayer {
+  position: absolute;
+  z-index: 10000000;
+  background-color: transparent;
+}
+
 .introjs-helperNumberLayer {
   position: absolute;
   top: -16px;
-  left: -16px;
+  left: 16px;
   z-index: 9999999999 !important;
   padding: 2px;
   font-family: Arial, verdana, tahoma;
