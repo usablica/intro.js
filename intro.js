@@ -55,7 +55,9 @@
       /* Show tour bullets? */
       showBullets: true,
       /* Scroll to highlighted element? */
-      scrollToElement: true
+      scrollToElement: true,
+      /* Set the overlay opacity */
+      overlayOpacity: .8
     };
   }
 
@@ -554,7 +556,7 @@
 
         //show the tooltip
         oldtooltipContainer.style.opacity = 1;
-        oldHelperNumberLayer.style.opacity = 1;
+        if (oldHelperNumberLayer) oldHelperNumberLayer.style.opacity = 1;
       }, 350);
 
     } else {
@@ -848,9 +850,10 @@
     };
 
     setTimeout(function() {
-      styleText += 'opacity: .8;';
+      styleText += 'opacity: ' + self._options.overlayOpacity.toString() + ';';
       overlayLayer.setAttribute('style', styleText);
     }, 10);
+
     return true;
   }
 
