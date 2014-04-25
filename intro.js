@@ -294,7 +294,7 @@
    */
   function _previousStep() {
     this._direction = 'backward';
-    
+
     if (this._currentStep === 0) {
       return false;
     }
@@ -317,7 +317,7 @@
   function _exitIntro(targetElement) {
     //remove overlay layer from the page
     var overlayLayer = targetElement.querySelector('.introjs-overlay');
-    
+
     //return if intro already completed or skipped
     if (overlayLayer == null) {
       return;
@@ -363,7 +363,7 @@
     } else if (document.detachEvent) { //IE
       document.detachEvent('onkeydown', this._onKeyDown);
     }
-    
+
     //set the step to zero
     this._currentStep = undefined;
   }
@@ -423,7 +423,7 @@
         arrowLayer.className = 'introjs-arrow left';
         break;
       case 'left':
-        if (this._options.showStepNumbers == true) {  
+        if (this._options.showStepNumbers == true) {
           tooltipLayer.style.top = '15px';
         }
         tooltipLayer.style.right = (_getOffset(targetElement).width + 20) + 'px';
@@ -712,14 +712,15 @@
     while (parentElm != null) {
       if (parentElm.tagName.toLowerCase() === 'body') break;
 
-      //fix The Stacking Contenxt problem. 
+      //fix The Stacking Contenxt problem.
       //More detail: https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context
       var zIndex = _getPropValue(parentElm, 'z-index');
       var opacity = parseFloat(_getPropValue(parentElm, 'opacity'));
-      if (/[0-9]+/.test(zIndex) || opacity < 1) {
+      var transform = _getPropValue(parentElm, 'transform') || _getPropValue(parentElm, '-webkit-transform') || _getPropValue(parentElm, '-moz-transform') || _getPropValue(parentElm, '-ms-transform') || _getPropValue(parentElm, '-o-transform');
+      if (/[0-9]+/.test(zIndex) || opacity < 1 || transform !== 'none') {
         parentElm.className += ' introjs-fixParent';
       }
-    
+
       parentElm = parentElm.parentNode;
     }
 
@@ -738,7 +739,7 @@
         window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
       }
     }
-    
+
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
         this._introAfterChangeCallback.call(this, targetElement.element);
     }
