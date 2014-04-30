@@ -85,6 +85,11 @@
           currentItem.element = document.querySelector(currentItem.element);
         }
 
+        //If the intro item is a plain object that has an innerHTML property, reassign that objects html as the intro value.
+        if (currentItem.intro && (typeof(currentItem.intro) === 'object' && currentItem.constructor === Object) && currentItem.intro.hasOwnProperty('innerHTML')) {
+          currentItem.intro = currentItem.intro.innerHTML;
+        }
+
         //intro without element
         if (typeof(currentItem.element) === 'undefined' || currentItem.element == null) {
           var floatingElementQuery = document.querySelector(".introjsFloatingElement");
