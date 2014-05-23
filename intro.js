@@ -437,7 +437,7 @@
       case 'floating':
         arrowLayer.style.display = 'none';
 
-        //we have to adjust the top and left of layer manually for intro items without element{
+        //we have to adjust the top and left of layer manually for intro items without element
         tooltipOffset = _getOffset(tooltipLayer);
 
         tooltipLayer.style.left   = '50%';
@@ -452,16 +452,16 @@
 
         break;
       case 'bottom-right-aligned':
-        arrowLayer.className = 'introjs-arrow top-right';
-        tooltipLayer.style.right = '0px';
+        arrowLayer.className      = 'introjs-arrow top-right';
+        tooltipLayer.style.right  = '0px';
         tooltipLayer.style.bottom = '-' + (_getOffset(tooltipLayer).height + 10) + 'px';
         break;
       case 'bottom-middle-aligned':
         targetElementOffset = _getOffset(targetElement);
-        tooltipOffset = _getOffset(tooltipLayer);
+        tooltipOffset       = _getOffset(tooltipLayer);
 
-        arrowLayer.className = 'introjs-arrow top-middle';
-        tooltipLayer.style.left = (targetElementOffset.width/2 - tooltipOffset.width/2) + 'px';
+        arrowLayer.className      = 'introjs-arrow top-middle';
+        tooltipLayer.style.left   = (targetElementOffset.width / 2 - tooltipOffset.width / 2) + 'px';
         tooltipLayer.style.bottom = '-' + (tooltipOffset.height + 10) + 'px';
         break;
       case 'bottom-left-aligned':
