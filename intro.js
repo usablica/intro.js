@@ -57,7 +57,7 @@
       /* Scroll to highlighted element? */
       scrollToElement: true,
       /* Set the overlay opacity */
-      overlayOpacity: .8
+      overlayOpacity: 0.8
     };
   }
 
