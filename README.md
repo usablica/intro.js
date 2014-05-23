@@ -40,6 +40,20 @@ Optionally, pass one parameter to `introJs` function to limit the presentation s
 
 <p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.png"></p>  
 
+## Using templates
+
+IntroJS provides awesome templates and we are trying to update and add more templates for next versions. You can browse all templates here: https://github.com/usablica/intro.js/wiki/IntroJs-templates
+
+In order to use templates, all you need to do is appending the template stylesheet to your page, *after* IntroJS CSS file:
+
+```html
+<!-- Add IntroJs styles -->
+<link href="../../introjs.css" rel="stylesheet">
+
+<!-- Add Nazanin template -->
+<link href="../../themes/introjs-nazanin.css" rel="stylesheet">
+```
+
 ## API
 
 ###introJs([targetElm])
@@ -378,8 +392,14 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 ## Roadmap
 - Fix problems with `position: fixed` and other positions
 - Provide more examples
+- Add more templates
 
 ## Release History
+
+ * **v0.9.0** - 2014-05-23
+   - Add IntroJS templates
+   - Add more tooltip positions (bottom-right, bottom-middle, bottom-left)
+   - Fix table `tr` element's issue
 
  * **v0.8.0** - 2014-03-25
    - Ability to define introductions without focusing on elements
