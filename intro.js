@@ -58,6 +58,8 @@
       scrollToElement: true,
       /* Set the overlay opacity */
       overlayOpacity: .8
+      /* Show the skip button? */
+      showSkipButton: true
     };
   }
 
@@ -651,6 +653,11 @@
       nextTooltipButton.onclick = function() {
         if (self._introItems.length - 1 != self._currentStep) {
           _nextStep.call(self);
+        } else if(!self._options.showSkipButton) {
+          _exitIntro.call(self, self._targetElement);
+          if (typeof (self._introCompleteCallback) === 'function') {
+            self._introCompleteCallback.call(self);
+          }
         }
       };
 
@@ -670,24 +677,26 @@
       prevTooltipButton.innerHTML = this._options.prevLabel;
 
       //skip button
-      var skipTooltipButton = document.createElement('a');
-      skipTooltipButton.className = 'introjs-button introjs-skipbutton';
-      skipTooltipButton.href = 'javascript:void(0);';
-      skipTooltipButton.innerHTML = this._options.skipLabel;
+      if (this._options.showSkipButton) {
+        var skipTooltipButton = document.createElement('a');
+        skipTooltipButton.className = 'introjs-button introjs-skipbutton';
+        skipTooltipButton.href = 'javascript:void(0);';
+        skipTooltipButton.innerHTML = this._options.skipLabel;
 
-      skipTooltipButton.onclick = function() {
-        if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
-          self._introCompleteCallback.call(self);
-        }
+        skipTooltipButton.onclick = function() {
+          if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
+            self._introCompleteCallback.call(self);
+          }
 
-        if (self._introItems.length - 1 != self._currentStep && typeof (self._introExitCallback) === 'function') {
-          self._introExitCallback.call(self);
-        }
+          if (self._introItems.length - 1 != self._currentStep && typeof (self._introExitCallback) === 'function') {
+            self._introExitCallback.call(self);
+          }
 
-        _exitIntro.call(self, self._targetElement);
-      };
+          _exitIntro.call(self, self._targetElement);
+        };
 
-      buttonsLayer.appendChild(skipTooltipButton);
+        buttonsLayer.appendChild(skipTooltipButton);
+      }
 
       //in order to prevent displaying next/previous button always
       if (this._introItems.length > 1) {
@@ -704,15 +713,28 @@
     if (this._currentStep == 0 && this._introItems.length > 1) {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
-      skipTooltipButton.innerHTML = this._options.skipLabel;
+      if (this._options.showSkipButton) {
+        skipTooltipButton.innerHTML = this._options.skipLabel;
+      } else {
+        nextTooltipButton.innerHTML = this._options.nextLabel;
+      }
     } else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
-      skipTooltipButton.innerHTML = this._options.doneLabel;
+      if (this._options.showSkipButton) {
+        skipTooltipButton.innerHTML = this._options.doneLabel;
+        nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+      } else {
+        nextTooltipButton.innerHTML = this._options.doneLabel;
+        nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+      }
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
     } else {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
-      skipTooltipButton.innerHTML = this._options.skipLabel;
+      if (this._options.showSkipButton) {
+        skipTooltipButton.innerHTML = this._options.skipLabel;
+      } else {
+        nextTooltipButton.innerHTML = this._options.nextLabel;
+      }
     }
 
     //Set focus on "next" button, so that hitting Enter always moves you onto the next step
