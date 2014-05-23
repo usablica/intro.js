@@ -40,6 +40,20 @@ Optionally, pass one parameter to `introJs` function to limit the presentation s
 
 <p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.png"></p>  
 
+## Using templates
+
+IntroJS provides awesome templates and we are trying to update and add more templates for next versions. You can browse all templates here: https://github.com/usablica/intro.js/wiki/IntroJs-templates
+
+In order to use templates, all you need to do is appending the template stylesheet to your page, *after* IntroJS CSS file:
+
+```html
+<!-- Add IntroJs styles -->
+<link href="../../introjs.css" rel="stylesheet">
+
+<!-- Add Nazanin template -->
+<link href="../../themes/introjs-nazanin.css" rel="stylesheet">
+```
+
 ## API
 
 ###introJs([targetElm])
