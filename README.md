@@ -392,8 +392,14 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 ## Roadmap
 - Fix problems with `position: fixed` and other positions
 - Provide more examples
+- Add more templates
 
 ## Release History
+
+ * **v0.9.0** - 2014-05-23
+   - Add IntroJS templates
+   - Add more tooltip positions (bottom-right, bottom-middle, bottom-left)
+   - Fix table `tr` element's issue
 
  * **v0.8.0** - 2014-03-25
    - Ability to define introductions without focusing on elements
