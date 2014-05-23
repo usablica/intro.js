@@ -1,7 +1,7 @@
 {
     "name": "Intro.js",
     "description": "Better introductions for websites and features with a step-by-step guide for your projects",
-    "version": "0.8.0",
+    "version": "0.9.0",
     "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
     "repository": {
         "type": "git",
@@ -13,5 +13,9 @@
     "engine": [
         "node >=0.1.90"
     ],
-    "main": "intro.js"
+    "main": "intro.js",
+    "spm": {
+        "main": "intro.js",
+        "output": ["introjs.css"]
+    }
 }
