@@ -13,5 +13,9 @@
     "engine": [
         "node >=0.1.90"
     ],
-    "main": "intro.js"
+    "main": "intro.js",
+    "spm": {
+        "main": "intro.js",
+        "output": ["introjs.css"]
+    }
 }
