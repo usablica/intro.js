@@ -325,13 +325,17 @@
       return;
     }
 
-    //for fade-out animation
-    overlayLayer.style.opacity = 0;
-    setTimeout(function () {
-      if (overlayLayer.parentNode) {
+    if (self._options.overlayOpacity === 0) {
         overlayLayer.parentNode.removeChild(overlayLayer);
-      }
-    }, 500);
+    } else {
+        //for fade-out animation
+        overlayLayer.style.opacity = 0;
+        setTimeout(function () {
+            if (overlayLayer.parentNode) {
+                overlayLayer.parentNode.removeChild(overlayLayer);
+            }
+        }, 500);
+    }
 
     //remove all helper layers
     var helperLayer = targetElement.querySelector('.introjs-helperLayer');
