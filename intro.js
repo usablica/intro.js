@@ -31,9 +31,9 @@
 
     this._options = {
       /* Next button label in tooltip box */
-      nextLabel: 'Next &rarr;',
+      nextLabel: 'Next →',
       /* Previous button label in tooltip box */
-      prevLabel: '&larr; Back',
+      prevLabel: '← Back',
       /* Skip button label in tooltip box */
       skipLabel: 'Skip',
       /* Done button label in tooltip box */
@@ -617,7 +617,7 @@
         if (i === 0) anchorLink.className = "active";
 
         anchorLink.href = 'javascript:void(0);';
-        anchorLink.innerHTML = "&nbsp;";
+        anchorLink.innerHTML = " ";
         anchorLink.setAttribute('data-stepnumber', this._introItems[i].step);
 
         innerLi.appendChild(anchorLink);
