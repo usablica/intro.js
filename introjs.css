@@ -138,6 +138,7 @@ tr.introjs-showElement > th {
   position: absolute;
   padding: 10px;
   background-color: white;
+  color: black;
   min-width: 200px;
   max-width: 300px;
   border-radius: 3px;
