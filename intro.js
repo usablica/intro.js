@@ -207,6 +207,7 @@
 
       self._onResize = function(e) {
         _setHelperLayerPosition.call(self, document.querySelector('.introjs-helperLayer'));
+        _setHelperLayerPosition.call(self, document.querySelector('.introjs-clickblock'));
       };
 
       if (window.addEventListener) {
@@ -337,6 +338,11 @@
     var helperLayer = targetElement.querySelector('.introjs-helperLayer');
     if (helperLayer) {
       helperLayer.parentNode.removeChild(helperLayer);
+    }
+
+    var clickBlockLayer = targetElement.querySelector('.introjs-clickblock');
+    if (clickBlockLayer) {
+      clickBlockLayer.parentNode.removeChild(clickBlockLayer);
     }
 
     //remove intro floating element
@@ -518,6 +524,7 @@
 
     var self = this,
         oldHelperLayer = document.querySelector('.introjs-helperLayer'),
+        oldClickBlockLayer = document.querySelector('.introjs-clickblock'),
         elementPosition = _getOffset(targetElement.element);
 
     if (oldHelperLayer != null) {
@@ -542,6 +549,7 @@
 
       //set new position to helper layer
       _setHelperLayerPosition.call(self, oldHelperLayer);
+      _setHelperLayerPosition.call(self, oldClickBlockLayer);
 
       //remove `introjs-fixParent` class from the elements
       var fixParents = document.querySelectorAll('.introjs-fixParent');
@@ -579,6 +587,7 @@
 
     } else {
       var helperLayer       = document.createElement('div'),
+          clickBlockLayer   = document.createElement('div'),
           arrowLayer        = document.createElement('div'),
           tooltipLayer      = document.createElement('div'),
           tooltipTextLayer  = document.createElement('div'),
@@ -586,12 +595,19 @@
           buttonsLayer      = document.createElement('div');
 
       helperLayer.className = 'introjs-helperLayer';
+      clickBlockLayer.className = 'introjs-clickblock';
 
       //set new position to helper layer
       _setHelperLayerPosition.call(self, helperLayer);
+      _setHelperLayerPosition.call(self, clickBlockLayer);
 
       //add helper layer to target element
       this._targetElement.appendChild(helperLayer);
+      this._targetElement.appendChild(clickBlockLayer);
+
+      clickBlockLayer.onclick = function(e) {
+        e.stopPropagation();
+      };
 
       arrowLayer.className = 'introjs-arrow';
 
@@ -985,6 +1001,7 @@
     },
     refresh: function() {
       _setHelperLayerPosition.call(this, document.querySelector('.introjs-helperLayer'));
+      _setHelperLayerPosition.call(this, document.querySelector('.introjs-clickblock'));
       return this;
     },
     onbeforechange: function(providedCallback) {
