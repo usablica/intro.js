@@ -52,6 +52,11 @@ tr.introjs-showElement > th {
           transition: all 0.3s ease-out;
 }
 
+.introjs-clickBlockLayer {
+  position: absolute;
+  z-index: 9999999;
+}
+
 .introjs-helperNumberLayer {
   position: absolute;
   top: -16px;
