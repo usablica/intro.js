@@ -701,22 +701,15 @@
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
     }
 
-    if (this._currentStep == 0 && this._introItems.length > 1) {
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
-      skipTooltipButton.innerHTML = this._options.skipLabel;
-    } else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
-      skipTooltipButton.innerHTML = this._options.doneLabel;
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
-    } else {
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
-      skipTooltipButton.innerHTML = this._options.skipLabel;
+    if (prevTooltipButton) {
+        prevTooltipButton.className = _isIntroOnFirstStep(this) ? 'introjs-button introjs-prevbutton introjs-disabled' : 'introjs-button introjs-prevbutton';
     }
-
-    //Set focus on "next" button, so that hitting Enter always moves you onto the next step
-    nextTooltipButton.focus();
+    if (nextTooltipButton) {
+        nextTooltipButton.className = _isIntroOnLastStep(this) ? 'introjs-button introjs-nextbutton introjs-disabled' : 'introjs-button introjs-nextbutton';
+        //Set focus on "next" button, so that hitting Enter always moves you onto the next step
+        nextTooltipButton.focus();
+    }
+    skipTooltipButton.innerHTML = _isIntroOnLastStep(this) ? this._options.doneLabel : this._options.skipLabel;
 
     //add target element position style
     targetElement.element.className += ' introjs-showElement';
@@ -763,6 +756,29 @@
         this._introAfterChangeCallback.call(this, targetElement.element);
     }
   }
+
+	/**
+	* Check if the intro is on its first step
+	*
+	* @api private
+	* @method _isIntroOnFirstStep
+	* @param {Object} intro
+	* @returns Boolean value of true if the intro is on its first step
+	*/
+	function _isIntroOnFirstStep(intro) {
+	    return intro._currentStep == 0;
+	}
+	 /**
+	* Check if the intro is on its last step
+	*
+	* @api private
+	* @method _isIntroOnFirstStep
+	* @param {Object} intro
+	* @returns Boolean value of true if the intro is on its last step
+	*/
+	function _isIntroOnLastStep(intro) {
+	    return intro._introItems.length - 1 == intro._currentStep;
+	}
 
   /**
    * Get an element CSS property on the page
