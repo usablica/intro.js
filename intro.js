@@ -747,7 +747,7 @@
       var rect = targetElement.element.getBoundingClientRect(),
         winHeight=_getWinSize().height,
         top = rect.bottom - (rect.bottom - rect.top),
-        bottom = rect.bottom - winHeight;
+        bottom = Math.min(rect.bottom - winHeight, rect.top - 130); // do not overscroll the top + 30px padding
 
       //Scroll up
       if (top < 0 || targetElement.element.clientHeight > winHeight) {
