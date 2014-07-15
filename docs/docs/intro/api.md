@@ -67,6 +67,36 @@ introJs().goToStep(2).start(); //starts introduction from step 2
 
 -----
 
+###introJs.goToStepNumber(step)
+
+Go to specific step of introduction with the concrete step.
+This differs from `goToStep` in the way that `data-step`
+does not have be continuous to pick the desired element.
+
+**Available since**: v2.x
+
+**Parameters:**
+
+ - step : Number
+
+**Returns:**
+
+ - introJs object.
+
+**Example:**
+
+```html
+<div id="first" data-step='5'></div>
+<div id="second" data-step='9'></div>
+````
+
+```javascript
+//start introduction from step with data-step='9'
+introJs().goToStepNumber(9).start();
+````
+
+-----
+
 ##### introJs.addStep(options)
 
 Add a new step to introJs.
