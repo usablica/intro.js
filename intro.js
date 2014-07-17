@@ -614,7 +614,7 @@
           self.goToStep(this.getAttribute('data-stepnumber'));
         };
 
-        if (i === 0) anchorLink.className = "active";
+        if (i === (targetElement.step-1)) anchorLink.className = "active";
 
         anchorLink.href = 'javascript:void(0);';
         anchorLink.innerHTML = "&nbsp;";
