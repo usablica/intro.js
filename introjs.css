@@ -19,23 +19,6 @@
           transition: all 0.3s ease-out;
 }
 
-.introjs-fixParent {
-  z-index: auto !important;
-  opacity: 1.0 !important;
-}
-
-.introjs-showElement,
-tr.introjs-showElement > td,
-tr.introjs-showElement > th {
-  z-index: 9999999 !important;
-}
-
-.introjs-relativePosition,
-tr.introjs-showElement > td,
-tr.introjs-showElement > th {
-  position: relative;
-}
-
 .introjs-helperLayer {
   position: absolute;
   z-index: 9999998;
@@ -151,90 +134,6 @@ tr.introjs-showElement > th {
 
 .introjs-tooltipbuttons {
   text-align: right;
-}
-
-/*
- Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/
- Changed by Afshin Mehrabani
-*/
-.introjs-button {
-  position: relative;
-  overflow: visible;
-  display: inline-block;
-  padding: 0.3em 0.8em;
-  border: 1px solid #d4d4d4;
-  margin: 0;
-  text-decoration: none;
-  text-shadow: 1px 1px 0 #fff;
-  font: 11px/normal sans-serif;
-  color: #333;
-  white-space: nowrap;
-  cursor: pointer;
-  outline: none;
-  background-color: #ececec;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f4f4f4), to(#ececec));
-  background-image: -moz-linear-gradient(#f4f4f4, #ececec);
-  background-image: -o-linear-gradient(#f4f4f4, #ececec);
-  background-image: linear-gradient(#f4f4f4, #ececec);
-  -webkit-background-clip: padding;
-  -moz-background-clip: padding;
-  -o-background-clip: padding-box;
-  /*background-clip: padding-box;*/ /* commented out due to Opera 11.10 bug */
-  -webkit-border-radius: 0.2em;
-  -moz-border-radius: 0.2em;
-  border-radius: 0.2em;
-  /* IE hacks */
-  zoom: 1;
-  *display: inline;
-  margin-top: 10px;
-}
-
-.introjs-button:hover {
-  border-color: #bcbcbc;
-  text-decoration: none;
-  box-shadow: 0px 1px 1px #e3e3e3;
-}
-
-.introjs-button:focus,
-.introjs-button:active {
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ececec), to(#f4f4f4));
-  background-image: -moz-linear-gradient(#ececec, #f4f4f4);
-  background-image: -o-linear-gradient(#ececec, #f4f4f4);
-  background-image: linear-gradient(#ececec, #f4f4f4);
-}
-
-/* overrides extra padding on button elements in Firefox */
-.introjs-button::-moz-focus-inner {
-  padding: 0;
-  border: 0;
-}
-
-.introjs-skipbutton {
-  margin-right: 5px;
-  color: #7a7a7a;
-}
-
-.introjs-prevbutton {
-  -webkit-border-radius: 0.2em 0 0 0.2em;
-  -moz-border-radius: 0.2em 0 0 0.2em;
-  border-radius: 0.2em 0 0 0.2em;
-  border-right: none;
-}
-
-.introjs-nextbutton {
-  -webkit-border-radius: 0 0.2em 0.2em 0;
-  -moz-border-radius: 0 0.2em 0.2em 0;
-  border-radius: 0 0.2em 0.2em 0;
-}
-
-.introjs-disabled, .introjs-disabled:hover, .introjs-disabled:focus {
-  color: #9a9a9a;
-  border-color: #d4d4d4;
-  box-shadow: none;
-  cursor: default;
-  background-color: #f4f4f4;
-  background-image: none;
-  text-decoration: none;
 }
 
 .introjs-bullets {
