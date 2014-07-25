@@ -341,15 +341,16 @@
       helperLayer.parentNode.removeChild(helperLayer);
     }
 
+    //remove disableInteractionLayer
+    var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
+    if(disableInteractionLayer){
+      disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
+    }
+    
     //remove intro floating element
     var floatingElement = document.querySelector('.introjsFloatingElement');
     if (floatingElement) {
       floatingElement.parentNode.removeChild(floatingElement);
-    }
-
-    //remove element overlay
-    if (this._options.disableInteraction === true) {
-      document.querySelector('.introjs-elementOverlay').remove();
     }
 
     //remove `introjs-showElement` class from the element
@@ -510,6 +511,16 @@
     }
   }
 
+  function _disableInteraction(){
+    disableInteractionLayer = document.querySelector('.introjs-disableInteraction');
+    if (disableInteractionLayer === null){
+      disableInteractionLayer = document.createElement('div');
+      disableInteractionLayer.className = 'introjs-disableInteraction';
+      this._targetElement.appendChild(disableInteractionLayer);
+    }
+    _setHelperLayerPosition.call(this, disableInteractionLayer);
+
+  }
   /**
    * Show an element on the page
    *
@@ -562,11 +573,6 @@
       var oldShowElement = document.querySelector('.introjs-showElement');
       oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, '');
 
-      //remove element overlay
-      if (this._options.disableInteraction === true) {
-        document.querySelector('.introjs-elementOverlay').remove();
-      }
-
       //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
       if (self._lastShowElementTimer) {
         clearTimeout(self._lastShowElementTimer);
@@ -617,6 +623,7 @@
         bulletsLayer.style.display = 'none';
       }
 
+
       var ulContainer = document.createElement('ul');
 
       for (var i = 0, stepsLength = this._introItems.length; i < stepsLength; i++) {
@@ -655,6 +662,7 @@
         helperNumberLayer.innerHTML = targetElement.step;
         helperLayer.appendChild(helperNumberLayer);
       }
+
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
 
@@ -714,6 +722,10 @@
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
     }
 
+    //disable interaction
+    if (this._options.disableInteraction === true){
+      _disableInteraction.call(self);
+    }
     if (this._currentStep == 0 && this._introItems.length > 1) {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
@@ -730,13 +742,6 @@
 
     //Set focus on "next" button, so that hitting Enter always moves you onto the next step
     nextTooltipButton.focus();
-
-    //add inner div to prevent posibility interact with element (transparent overlay)
-    if (this._options.disableInteraction === true) {
-      var elementOverlay = document.createElement('div');
-      elementOverlay.className = 'introjs-elementOverlay';
-      targetElement.element.appendChild(elementOverlay);
-    }
 
     //add target element position style
     targetElement.element.className += ' introjs-showElement';

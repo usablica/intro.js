@@ -30,13 +30,9 @@ tr.introjs-showElement > th {
   z-index: 9999999 !important;
 }
 
-.introjs-elementOverlay {
+.introjs-disableInteraction {
   z-index: 99999999 !important;
   position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
 }
 
 .introjs-relativePosition,
