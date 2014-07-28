@@ -130,7 +130,8 @@
             intro: currentElement.getAttribute('data-intro'),
             step: parseInt(currentElement.getAttribute('data-step'), 10),
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
+            numberPosition: currentElement.getAttribute('data-numberPosition')
           };
         }
       }
@@ -156,7 +157,8 @@
             intro: currentElement.getAttribute('data-intro'),
             step: nextStep + 1,
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
+            numberPosition: currentElement.getAttribute('data-numberPosition')
           };
         }
       }
@@ -427,6 +429,14 @@
     }
 
     tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
+    
+    //get number position for element
+    var currentNumberPosition = this._introItems[this._currentStep].numberPosition;
+    helperNumberLayer.className = 'introjs-helperNumberLayer';
+    if (currentNumberPosition === undefined){
+      currentNumberPosition = 'left';
+    }
+    helperNumberLayer.classList.add(currentNumberPosition);
 
     //custom css class for tooltip boxes
     var tooltipCssClass = this._options.tooltipClass;
@@ -447,6 +457,9 @@
         arrowLayer.className = 'introjs-arrow bottom';
         break;
       case 'right':
+        if (this._options.showStepNumbers == true && (currentNumberPosition === 'right' || currentNumberPosition === 'top-right')) {
+          tooltipLayer.style.top = '15px';
+        }
         tooltipLayer.style.left = (_getOffset(targetElement).width + 20) + 'px';
         if (targetOffset.top + tooltipHeight > windowSize.height) {
           // In this case, right would have fallen below the bottom of the screen.
@@ -457,7 +470,7 @@
         arrowLayer.className = 'introjs-arrow left';
         break;
       case 'left':
-        if (this._options.showStepNumbers == true) {
+        if (this._options.showStepNumbers == true && (currentNumberPosition === 'left' || currentNumberPosition === 'top-left')) {
           tooltipLayer.style.top = '15px';
         }
 
@@ -492,7 +505,13 @@
         break;
       case 'bottom-right-aligned':
         arrowLayer.className      = 'introjs-arrow top-right';
-        tooltipLayer.style.right  = '0px';
+        
+        if (currentNumberPosition === 'bottom-right') {
+          tooltipLayer.style.right  = '15px';
+        }
+        else{
+          tooltipLayer.style.right  = '0x';
+        }
         tooltipLayer.style.bottom = '-' + (_getOffset(tooltipLayer).height + 10) + 'px';
         break;
       case 'bottom-middle-aligned':
@@ -508,6 +527,9 @@
       case 'bottom':
       // Bottom going to follow the default behavior
       default:
+        if (currentNumberPosition === 'bottom' || currentNumberPosition === 'bottom-left') {
+          tooltipLayer.style.left  = '15px';
+        }
         tooltipLayer.style.bottom = '-' + (_getOffset(tooltipLayer).height + 10) + 'px';
         tooltipLayer.style.left = (_getOffset(targetElement).width / 2 - _getOffset(tooltipLayer).width / 2) + 'px';
 

@@ -81,8 +81,6 @@ tr.introjs-showElement > th {
 
 .introjs-helperNumberLayer {
   position: absolute;
-  top: -16px;
-  left: 16px;
   z-index: 9999999999 !important;
   padding: 2px;
   font-family: Arial, verdana, tahoma;
@@ -107,7 +105,22 @@ tr.introjs-showElement > th {
   filter: progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000); /* IE10 text shadows */
   box-shadow: 0 2px 5px rgba(0,0,0,.4);
 }
-
+.introjs-helperNumberLayer.left, .introjs-helperNumberLayer.top-left {
+  top: -16px;
+  left: -16px;
+}
+.introjs-helperNumberLayer.right, .introjs-helperNumberLayer.top-right{
+  top: -16px;
+  right: -16px;
+}
+.introjs-helperNumberLayer.bottom, .introjs-helperNumberLayer.bottom-left {
+  bottom: -16px;
+  left: -16px;
+}
+.introjs-helperNumberLayer.bottom-right{
+  top: -16px;
+  right: -16px;
+}
 .introjs-arrow {
   border: 5px solid white;
   content:'';
