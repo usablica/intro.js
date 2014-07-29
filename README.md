@@ -6,6 +6,6 @@
 
 This is just a fork of the original IntroJs library by the Usablica team. Please refer to the the originial repo for documentaion. In order to use this dark theme simply do the following steps:
 
-1- Delete the defualt IntroJs css from your code.
-2- Add the dark-theme.css from this repo's theme folder.
+- Delete the defualt IntroJs css from your code.
+- Add the dark-theme.css from this repo's theme folder.
 
