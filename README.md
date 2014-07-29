@@ -9,3 +9,6 @@ This is just a fork of the original IntroJs library by the Usablica team. Please
 - Delete the defualt IntroJs css from your code.
 - Add the dark-theme.css from this repo's theme folder.
 
+![first_screen_shot](http://i.imgur.com/Mr1GuAG.png)
+
+![second_screen_shot](http://i.imgur.com/pjPLpSM.png)
