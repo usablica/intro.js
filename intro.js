@@ -432,11 +432,10 @@
     
     //get number position for element
     var currentNumberPosition = this._introItems[this._currentStep].numberPosition;
-    helperNumberLayer.className = 'introjs-helperNumberLayer';
     if (currentNumberPosition === undefined){
       currentNumberPosition = 'left';
     }
-    helperNumberLayer.classList.add(currentNumberPosition);
+    helperNumberLayer.className = 'introjs-helperNumberLayer '+currentNumberPosition;
 
     //custom css class for tooltip boxes
     var tooltipCssClass = this._options.tooltipClass;
