@@ -1,0 +1,243 @@
+/*
+Dark theme for IntroJs
+By: Khashayar Pourdeilami (http://kpourdeilami.github.io)
+for: IntroJs (https://github.com/usablica/intro.js)
+*/
+.introjs-overlay {
+  position: absolute;
+  z-index: 999999;
+  background:#fff;
+  -webkit-transition: all 0.3s ease-out;
+     -moz-transition: all 0.3s ease-out;
+      -ms-transition: all 0.3s ease-out;
+       -o-transition: all 0.3s ease-out;
+          transition: all 0.3s ease-out;
+}
+
+.introjs-fixParent {
+  z-index: auto !important;
+  opacity: 1.0 !important;
+}
+
+.introjs-showElement,
+tr.introjs-showElement > td,
+tr.introjs-showElement > th {
+  z-index: 9999999 !important;
+}
+
+.introjs-relativePosition,
+tr.introjs-showElement > td,
+tr.introjs-showElement > th {
+  position: relative;
+}
+
+.introjs-helperLayer {
+  position: absolute;
+  z-index: 9999998;
+  background:#656D78;
+  -webkit-transition: all 0.3s ease-out;
+     -moz-transition: all 0.3s ease-out;
+      -ms-transition: all 0.3s ease-out;
+       -o-transition: all 0.3s ease-out;
+          transition: all 0.3s ease-out;
+}
+
+.introjs-helperNumberLayer {
+  position: absolute;
+
+  z-index: 9999999999 !important;
+  padding: 10px;
+  font-family: Arial, verdana, tahoma;
+  font-size: 13px;
+  top:-40px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  background:#434A54;
+  width: 20px;
+  height:20px;
+  line-height: 20px;
+}
+
+.introjs-arrow {
+  border: 5px solid #434A54;
+  content:'';
+  position: absolute;
+}
+.introjs-arrow.top {
+  top: -10px;
+  border-top-color:transparent;
+  border-right-color:transparent;
+  border-bottom-color:#434A54;
+  border-left-color:transparent;
+}
+.introjs-arrow.top-right {
+  top: -10px;
+  right: 10px;
+  border-top-color:transparent;
+  border-right-color:transparent;
+  border-bottom-color:#434A54;
+  border-left-color:transparent;
+}
+.introjs-arrow.top-middle {
+  top: -10px;
+  left: 50%;
+  margin-left: -5px;
+  border-top-color:transparent;
+  border-right-color:transparent;
+  border-bottom-color:#434A54;
+  border-left-color:transparent;
+}
+.introjs-arrow.right {
+  right: -10px;
+  top: 10px;
+  border-top-color:transparent;
+  border-right-color:transparent;
+  border-bottom-color:transparent;
+  border-left-color:#434A54;
+}
+.introjs-arrow.bottom {
+  bottom: -10px;
+  border-top-color:#434A54;
+  border-right-color:transparent;
+  border-bottom-color:transparent;
+  border-left-color:transparent;
+}
+.introjs-arrow.left {
+  left: -10px;
+  top: 10px;
+  border-top-color:transparent;
+  border-right-color:#434A54;
+  border-bottom-color:transparent;
+  border-left-color:transparent;
+}
+
+.introjs-tooltip {
+  position: absolute;
+  padding: 10px;
+  background-color: #434A54;
+  min-width: 200px;
+  padding-top:30px;
+
+  max-width: 300px;
+  color:#fff;
+  -webkit-transition: opacity 0.1s ease-out;
+     -moz-transition: opacity 0.1s ease-out;
+      -ms-transition: opacity 0.1s ease-out;
+       -o-transition: opacity 0.1s ease-out;
+          transition: opacity 0.1s ease-out;
+}
+
+.introjs-tooltipbuttons {
+  text-align: right;
+  position:relative;
+  bottom:-44px;
+  margin-left:-10px;
+  margin-right:-10px;
+  padding:5px;
+  background:#656D78;
+}
+
+/*
+ Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/
+ Changed by Afshin Mehrabani
+ Further modified by: Khashayar P.
+*/
+.introjs-button {
+  position: relative;
+  overflow: visible;
+  display: inline-block;
+  padding: 0.3em 0.8em;
+  border: 2px solid #fff;
+  margin: 0;
+  text-decoration: none;
+  font: 11px/normal sans-serif;
+  color: #fff !important;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  -o-background-clip: padding-box;
+  /*background-clip: padding-box;*/ /* commented out due to Opera 11.10 bug */
+  /* IE hacks */
+  zoom: 1;
+  *display: inline;
+  margin-top: 10px;
+}
+
+.introjs-button:hover {
+  text-decoration: none;
+  color:#434A54 !important;
+  background:#fff;
+}
+
+.introjs-button:focus,
+.introjs-button:active {
+  background:#fff !important;
+  color:#434A54 !important;
+}
+
+/* overrides extra padding on button elements in Firefox */
+.introjs-button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+.introjs-skipbutton {
+  margin-right: 5px;
+  color: #fff;
+}
+
+.introjs-prevbutton {
+
+  border-right: none;
+}
+
+
+.introjs-disabled, .introjs-disabled:hover, .introjs-disabled:focus {
+  color: #fff;
+  box-shadow: none;
+  cursor: default;
+  background:transparent;
+  border-color:transparent;
+}
+
+.introjs-bullets {
+  text-align: center;
+  display:none;
+}
+.introjs-bullets ul {
+  clear: both;
+  margin: 15px auto 0;
+  padding: 0;
+  display: inline-block;
+}
+.introjs-bullets ul li {
+  list-style: none;
+  float: left;
+  margin: 0 2px;
+}
+.introjs-bullets ul li a {
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  text-decoration: none;
+}
+.introjs-bullets ul li a:hover {
+  background: rgba(255,255,255,0.2);
+}
+.introjs-bullets ul li a.active {
+  background: rgba(255,255,255,0.2);
+}
+.introjsFloatingElement {
+  position: absolute;
+  height: 0;
+  width: 0;
+  left: 50%;
+  top: 50%;
+}
