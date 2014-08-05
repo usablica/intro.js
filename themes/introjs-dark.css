@@ -1,3 +1,8 @@
+/*
+Dark theme for IntroJs
+By: Khashayar Pourdeilami (http://kpourdeilami.github.io)
+for: IntroJs (https://github.com/usablica/intro.js)
+*/
 .introjs-overlay {
   position: absolute;
   z-index: 999999;
@@ -113,7 +118,7 @@ tr.introjs-showElement > th {
   background-color: #434A54;
   min-width: 200px;
   padding-top:30px;
-  
+
   max-width: 300px;
   color:#fff;
   -webkit-transition: opacity 0.1s ease-out;

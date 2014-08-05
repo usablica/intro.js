@@ -1,7 +1,7 @@
 .introjs-overlay {
   position: absolute;
   z-index: 999999;
-  background: #525252;
+  background: #181818;
   opacity: 0;
   
   -webkit-transition: all 0.3s ease-out;
@@ -30,8 +30,8 @@
   background-color: #FFF;
   background-color: rgba(255,255,255,.9);
   border: 1px solid #777;
-  border: 3px solid rgba(211, 214, 209, 1);
-  border-radius: 0;
+  border: 2px solid rgba(117, 117, 117, 1);
+  border-radius: 4px;
   box-shadow: 0 5px 8px -3px rgba(0,0,0,.6);
   -webkit-transition: all 0.3s ease-out;
      -moz-transition: all 0.3s ease-out;
@@ -43,20 +43,34 @@
 .introjs-helperNumberLayer {
   position: absolute;
   top: -16px;
-  left: -16px;
+  left: -9px;
   z-index: 9999999999 !important;
   padding: 2px;
   font-family: Arial, verdana, tahoma;
   font-size: 13px;
   font-weight: bold;
-  color: white; /* Old browsers */ /* Chrome10+,Safari5.1+ */
-  background:#ff3019 ;
+  color: #fff; /* Old browsers */ /* Chrome10+,Safari5.1+ */
+  background: #DA4433;
   width: 20px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.35);
   height:20px;
   text-align: center;
   line-height: 20px;
-  border: 3px solid #DA4433;
-  border-radius: 10px 10px 0; /* IE6-9 */  /* IE10 text shadows */
+  border: 2px solid #DA4433;
+  border-radius: 0; /* IE6-9 */  /* IE10 text shadows */
+}
+
+.introjs-helperNumberLayer:after {
+  content:"";
+  width:0;
+  height:0;
+  position:absolute;
+  content:0;
+  left:-3px;
+  bottom:-10px;
+  border:4px solid transparent;
+  border-right-color:#900;
+  border-top-color:#900;
 }
 
 .introjs-arrow {
@@ -97,32 +111,37 @@
 
 .introjs-tooltip {
   position: absolute;
-  padding: 10px;
+  padding: 10px 10px;
   background-color: #ecf0f1;
   min-width: 200px;
   max-width: 300px;
+  border-radius: 3px;
   /* border-radius: 3px; */
-  box-shadow: 0 6px 7px -4px rgba(0,0,0,.4);
+  /* box-shadow: 0 6px 7px -4px rgba(0,0,0,.4); */
   -webkit-transition: opacity 0.1s ease-out;
      -moz-transition: opacity 0.1s ease-out;
       -ms-transition: opacity 0.1s ease-out;
        -o-transition: opacity 0.1s ease-out;
           transition: opacity 0.1s ease-out;
+  /* border: 5px double #0787AF; */
 }
 
 .introjs-tooltiptext {
     margin-left: -10px;
   
     margin-right: -10px;
-    border-top: 1px solid #FFFFFF;
-    background: #FAFAFA;
+    /* border-top: 1px solid #FFFFFF; */
+    /* background: #FAFAFA; */
     color: #2c3e50;
-    padding: 5px 10px;
-    border-bottom: 1px solid #FFFFFF;
+    padding: 25px 30px 15px;
+    /* border-bottom: 1px solid #FFFFFF; */
 }
 
 .introjs-tooltipbuttons {
   text-align: center;
+  /* background: rgba(0, 0, 0, 0.06); */
+  border-radius: 0 0 8px 8px;
+  padding-bottom: 10px;
 }
 
 /* 
@@ -134,13 +153,14 @@
   overflow: visible;
   display: inline-block;
   padding: 0.5em 0.8em;
-  box-shadow: 0 2px 0px -0px #306588;
+  /* box-shadow: 0 2px 0px -0px #306588; */
   margin: 0;
   outline: none;
-  background: #2980b9;
+  border: 2px solid;
+  background: transparent;
   text-decoration: none;
   font: 11px/normal sans-serif;
-  color: #fff !important;
+  color: ##2980b9 !important;
   white-space: nowrap;
   cursor: pointer;
   outline: none !important;
@@ -155,20 +175,27 @@
   zoom: 1;
   *display: inline;
   margin-top: 10px;
+  transition:all 0.25s ease;
+  -webkit-transition:all 0.25s ease;
+  -moz-transition:all 0.25s ease;
+  -ms-transition:all 0.25s ease;
+  -o-transition:all 0.25s ease;
 }
 
 .introjs-button:hover {
   color: #fff;
   background: #2671A2;
   text-decoration: none; 
-  box-shadow: 0 2px 0px -0px #235677;
+  border-color: #235677;
 }
 
 .introjs-button:focus,
 .introjs-button:active {
     background: #23587A;  text-decoration: none;  
+    color: #fff;
     /* bottom: -1px; */
-    box-shadow: 0 2px 0px 0px #173B53;
+    box-shadow: none;
+    border-color: #173B53;
 }
 
 /* overrides extra padding on button elements in Firefox */
@@ -179,19 +206,19 @@
 
 .introjs-skipbutton {
   margin-right: 5px;
-  color: #fff;
-  background: #e74c3c;
-  box-shadow: 0 2px 0px -0px #B91D0D;
+  color: #c00;
+  background: transparent;
 }
 
 .introjs-skipbutton:hover {
-    background: #EB1540;  box-shadow: 0 2px 0px -0px #B91D0D;
+    background: #EB1540;  
+    border-color: #B91D0D;
   
 }
 
 .introjs-skipbutton:active, .introjs-skipbutton:focus {
     background: #C02312;  
-    box-shadow: 0 1px 0px -0px #6F1309;
+    /* box-shadow: 0 1px 0px -0px #6F1309; */
   
 }
 
@@ -212,7 +239,7 @@
   color: #C2C2C2 !important;
   border-color: #d4d4d4;
   cursor: default;
-  box-shadow: 0 2px 0px -0px #CACED1;
+  /* box-shadow: 0 2px 0px -0px #CACED1; */
   background-color: #E6E6E6;
   background-image: none;
   text-decoration: none;
@@ -220,6 +247,10 @@
 
 .introjs-bullets {
   text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -5px;
 }
 .introjs-bullets ul {
   clear: both;
