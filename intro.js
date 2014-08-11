@@ -89,7 +89,7 @@
 
         //intro without element
         if (typeof(currentItem.element) === 'undefined' || currentItem.element == null) {
-          var floatingElementQuery = document.querySelector(".introjsFloatingElement");
+          var floatingElementQuery = document.querySelector('.introjsFloatingElement');
 
           if (floatingElementQuery == null) {
             floatingElementQuery = document.createElement('div');
@@ -214,13 +214,13 @@
           window.addEventListener('keydown', self._onKeyDown, true);
         }
         //for window resize
-        window.addEventListener("resize", self._onResize, true);
+        window.addEventListener('resize', self._onResize, true);
       } else if (document.attachEvent) { //IE
         if (this._options.keyboardNavigation) {
           document.attachEvent('onkeydown', self._onKeyDown);
         }
         //for window resize
-        document.attachEvent("onresize", self._onResize);
+        document.attachEvent('onresize', self._onResize);
       }
     }
     return false;
@@ -617,9 +617,9 @@
         if (i === (targetElement.step-1)) anchorLink.className = "active";
 
         anchorLink.href = 'javascript:void(0);';
-        anchorLink.innerHTML = "&nbsp;";
         anchorLink.setAttribute('data-stepnumber', this._introItems[i].step);
 
+        anchorLink.innerHTML = '&nbsp;';
         innerLi.appendChild(anchorLink);
         ulContainer.appendChild(innerLi);
       }
