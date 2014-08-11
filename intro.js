@@ -115,56 +115,20 @@
         return false;
       }
 
-      //first add intro items with data-step
+
       for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
-        var currentElement = allIntroSteps[i];
-        var step = parseInt(currentElement.getAttribute('data-step'), 10);
+        var currentElement = allIntroSteps[i]; 
+        var currentStep = parseInt(currentElement.getAttribute('data-step'), 10) || ( i + 1 );
 
-        if (step > 0) {
-          introItems[step - 1] = {
-            element: currentElement,
-            intro: currentElement.getAttribute('data-intro'),
-            step: parseInt(currentElement.getAttribute('data-step'), 10),
-            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
-          };
-        }
-      }
-
-      //next add intro items without data-step
-      //todo: we need a cleanup here, two loops are redundant
-      var nextStep = 0;
-      for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
-        var currentElement = allIntroSteps[i];
-
-        if (currentElement.getAttribute('data-step') == null) {
-
-          while (true) {
-            if (typeof introItems[nextStep] == 'undefined') {
-              break;
-            } else {
-              nextStep++;
-            }
-          }
-
-          introItems[nextStep] = {
-            element: currentElement,
-            intro: currentElement.getAttribute('data-intro'),
-            step: nextStep + 1,
-            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
-          };
-        }
+        introItems.push({
+          element: currentElement,
+          intro: currentElement.getAttribute('data-intro'),
+          step: currentStep,
+          tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+        });
       }
     }
-
-    //removing undefined/null elements
-    var tempIntroItems = [];
-    for (var z = 0; z < introItems.length; z++) {
-      introItems[z] && tempIntroItems.push(introItems[z]);  // copy non-empty values to the end of the array
-    }
-
-    introItems = tempIntroItems;
 
     //Ok, sort all items with given steps
     introItems.sort(function (a, b) {
@@ -298,6 +262,11 @@
     this._direction = 'backward';
 
     if (this._currentStep === 0) {
+      //end of the intro
+      //check if any callback is defined
+      if (typeof (this._introCompleteCallback) === 'function') {
+        this._introCompleteCallback.call(this);
+      }
       return false;
     }
 
@@ -569,8 +538,9 @@
         _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
 
         //change active bullet
-        oldHelperLayer.querySelector('.introjs-bullets li > a.active').className = '';
-        oldHelperLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
+        self._activeElement.className = '';
+        self._activeElement = targetElement.anchorLink;
+        self._activeElement.className = 'active';
 
         //show the tooltip
         oldtooltipContainer.style.opacity = 1;
@@ -609,17 +579,23 @@
       for (var i = 0, stepsLength = this._introItems.length; i < stepsLength; i++) {
         var innerLi    = document.createElement('li');
         var anchorLink = document.createElement('a');
+        var currentItem = this._introItems[i];
 
         anchorLink.onclick = function() {
-          self.goToStep(this.getAttribute('data-stepnumber'));
+          self.goToStep( parseInt(this.getAttribute('data-index'), 10) + 1 );
         };
 
-        if (i === (targetElement.step-1)) anchorLink.className = "active";
+
+        if (targetElement === currentItem) {
+          anchorLink.className = 'active';
+          self._activeElement = anchorLink;
+        }
 
         anchorLink.href = 'javascript:void(0);';
-        anchorLink.setAttribute('data-stepnumber', this._introItems[i].step);
-
         anchorLink.innerHTML = '&nbsp;';
+        anchorLink.setAttribute('data-stepnumber', currentItem.step);
+        anchorLink.setAttribute('data-index', i);
+        currentItem.anchorLink = anchorLink;
         innerLi.appendChild(anchorLink);
         ulContainer.appendChild(innerLi);
       }
