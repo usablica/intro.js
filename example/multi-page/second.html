@@ -33,7 +33,7 @@
       <hr>
 
       <div class="jumbotron">
-        <h1>Second Page</span></h1>
+        <h1>Second Page</h1>
         <p class="lead" data-step="4" data-intro="Another step.">Next page of introduction!</p>
       </div>
 
@@ -68,7 +68,7 @@
     <script type="text/javascript" src="../../intro.js"></script>
     <script type="text/javascript">
       if (RegExp('multipage', 'gi').test(window.location.search)) {
-        introJs().start();
+        introJs().oncomplete(function(){if(this._currentStep === 0) window.location.href = 'index.html?multipage=true'; }).start();
       }
     </script>
   </body>

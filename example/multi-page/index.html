@@ -63,10 +63,16 @@
     </div>
     <script type="text/javascript" src="../../intro.js"></script>
     <script type="text/javascript">
-      document.getElementById('startButton').onclick = function() {
-        introJs().setOption('doneLabel', 'Next page').start().oncomplete(function() {
-          window.location.href = 'second.html?multipage=true';
+      function init(){
+        return introJs().setOption('doneLabel', 'Next page').start().oncomplete(function() {
+          if(this._currentStep !== 0) window.location.href = 'second.html?multipage=true';
         });
+      }
+      if (RegExp('multipage', 'gi').test(window.location.search)) {
+        init().goToStep(3);
+      }
+      document.getElementById('startButton').onclick = function() {
+        init();
       };
     </script>
   </body>
