@@ -184,12 +184,19 @@
 
       self._onKeyDown = function(e) {
         if (e.keyCode === 27 && self._options.exitOnEsc == true) {
-          //escape key pressed, exit the intro
-          _exitIntro.call(self, targetElm);
+          propagate_exit = true;
+          
           //check if any callback is defined
           if (self._introExitCallback != undefined) {
-            self._introExitCallback.call(self);
+            propagate_exit = self._introExitCallback.call(self);
+            if (typeof(propagate_exit) == "undefined")
+              propagate_exit = true;
           }
+          
+          //escape key pressed, exit the intro
+          if (propagate_exit)
+            _exitIntro.call(self, targetElm);
+          
         } else if(e.keyCode === 37) {
           //left arrow
           _previousStep.call(self);
@@ -676,15 +683,22 @@
       skipTooltipButton.innerHTML = this._options.skipLabel;
 
       skipTooltipButton.onclick = function() {
+        propagate_exit = true;
+        
         if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
-          self._introCompleteCallback.call(self);
+          propagate_exit = self._introCompleteCallback.call(self);
+          if (typeof(propagate_exit) == "undefined")
+            propagate_exit = true;
         }
-
+        
         if (self._introItems.length - 1 != self._currentStep && typeof (self._introExitCallback) === 'function') {
-          self._introExitCallback.call(self);
+          propagate_exit = self._introExitCallback.call(self);
+          if (typeof(propagate_exit) == "undefined")
+            propagate_exit = true;
         }
-
-        _exitIntro.call(self, self._targetElement);
+        
+        if (propagate_exit)
+          _exitIntro.call(self, self._targetElement);
       };
 
       buttonsLayer.appendChild(skipTooltipButton);
