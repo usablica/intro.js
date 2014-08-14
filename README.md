@@ -9,7 +9,9 @@ You can obtain your local copy of Intro.js from:
 
 **2)** Using bower ```bower install intro.js --save```
 
-**3)** Download it from CDN ([1](http://www.jsdelivr.com/#!intro.js), [2](http://cdnjs.com/#introjs))
+**3)** Using npm ```npm install intro.js --save```
+
+**4)** Download it from CDN ([1](http://www.jsdelivr.com/#!intro.js), [2](http://cdnjs.com/#introjs))
 
 
 ## How to use
@@ -19,26 +21,40 @@ Intro.js can be added to your site in three simple steps:
 
 > CDN hosted files are available at [jsDelivr](http://www.jsdelivr.com/#!intro.js) (click Show More) & [cdnjs](http://cdnjs.com/#introjs).
 
-**2)** Add `data-intro` and `data-step` to your HTML elements.  
+**2)** Add `data-intro` and `data-step` to your HTML elements.
 
-For example: 
+For example:
 
 ```html
 <a href='http://google.com/' data-intro='Hello step one!'></a>
 ````
 
 See all attributes [here](https://github.com/usablica/intro.js/#attributes).
-  
+
 **3)** Call this JavaScript function:
 ```javascript
 introJs().start();
 ````
- 
+
 Optionally, pass one parameter to `introJs` function to limit the presentation section.
 
 **For example** `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
 
-<p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.png"></p>  
+<p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.png"></p>
+
+## Using templates
+
+IntroJS provides awesome templates and we are trying to update and add more templates for next versions. You can browse all templates here: https://github.com/usablica/intro.js/wiki/IntroJs-templates
+
+In order to use templates, all you need to do is appending the template stylesheet to your page, *after* IntroJS CSS file:
+
+```html
+<!-- Add IntroJs styles -->
+<link href="../../introjs.css" rel="stylesheet">
+
+<!-- Add Nazanin template -->
+<link href="../../themes/introjs-nazanin.css" rel="stylesheet">
+```
 
 ## API
 
@@ -228,7 +244,7 @@ introJs().oncomplete(function() {
 
 ###introJs.onexit(providedCallback)
 
-Set callback to exit of introduction. Exit also means pressing `ESC` key and clicking on the overlay layer by the user.  
+Set callback to exit of introduction. Exit also means pressing `ESC` key and clicking on the overlay layer by the user.
 
 **Available since:** v0.2.0
 
@@ -262,7 +278,7 @@ The callback function receives the element of the new step as an argument.
 
 **Example:**
 ```javascript
-introJs().onchange(function(targetElement) {  
+introJs().onchange(function(targetElement) {
   alert("new step");
 });
 ````
@@ -283,7 +299,7 @@ Given callback function will be called before starting a new step of introductio
 
 **Example:**
 ```javascript
-introJs().onbeforechange(function(targetElement) {  
+introJs().onbeforechange(function(targetElement) {
   alert("before new step");
 });
 ````
@@ -304,7 +320,7 @@ Given callback function will be called after starting a new step of introduction
 
 **Example:**
 ```javascript
-introJs().onafterchange(function(targetElement) {  
+introJs().onafterchange(function(targetElement) {
   alert("after new step");
 });
 ````
@@ -314,7 +330,7 @@ introJs().onafterchange(function(targetElement) {
  - `data-intro`: The tooltip text of step
  - `data-step`: Optionally define the number (priority) of step
  - `data-tooltipClass`: Optionally define a CSS class for tooltip
- - `data-position`: Optionally define the position of tooltip, `top`, `left`, `right` or `bottom`. Default is `bottom`
+ - `data-position`: Optionally define the position of tooltip, `top`, `left`, `right`, `bottom`, `bottom-left-aligned` (same as 'bottom'), 'bottom-middle-aligned' and 'bottom-right-aligned'. Default is `bottom`
 
 ###Options:
 
@@ -332,6 +348,7 @@ introJs().onafterchange(function(targetElement) {
  - `showButtons`: Show introduction navigation buttons or not, `true` or `false`
  - `showBullets`: Show introduction bullets or not, `true` or `false`
  - `scrollToElement`: Auto scroll to highlighted element if it's outside of viewport, `true` or `false`
+ - `overlayOpacity`: Adjust the overlay opacity, `Number`
 
 See [setOption](https://github.com/usablica/intro.js/#introjssetoptionoption-value) to see an example.
 
@@ -364,22 +381,35 @@ Now you can run this command to minify all static resources:
 
 ## Instant IntroJs
 
-Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publishing.  
+Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publishing.
 
 <p align="center">
   <a target='_blank' href="http://www.packtpub.com/create-useful-introductions-for-websites-and-applications-with-introjs-library/book"><img src='http://dgdsbygo8mp3h.cloudfront.net/sites/default/files/imagecache/productview_larger/2517OS_Instant%20IntroJS%20Starter.jpg' /></a>
-</p>  
+</p>
 
 <p align="center">
   <a target='_blank' href="http://www.packtpub.com/create-useful-introductions-for-websites-and-applications-with-introjs-library/book">Buy and Download</a>
 </p>
 
 ## Roadmap
-- Add introduction without focusing on elements
 - Fix problems with `position: fixed` and other positions
 - Provide more examples
+- Add more templates
 
 ## Release History
+
+ * **v0.9.0** - 2014-05-23
+   - Add IntroJS templates
+   - Add more tooltip positions (bottom-right, bottom-middle, bottom-left)
+   - Fix table `tr` element's issue
+
+ * **v0.8.0** - 2014-03-25
+   - Ability to define introductions without focusing on elements
+   - Fix Internet Explorer 8.0 issue
+   - Add `_direction` property
+
+ * **v0.7.1** - 2014-03-11
+   - Fix "Too much recursion" issue with Firefox and Internet Explorer.
 
  * **v0.7.0** - 2014-02-07
    - Add `onafterchange` event
@@ -451,17 +481,17 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
    - Fix show element for elements with position `absolute` or `relative`
    - Add `enter` key for navigating in steps
    - Code refactoring
-  
-  
- * **v0.1.0** - 2013-03-16 
-   - First commit. 
+
+
+ * **v0.1.0** - 2013-03-16
+   - First commit.
 
 ## Author
 **Afshin Mehrabani**
 
 - [Twitter](https://twitter.com/afshinmeh)
 - [Github](https://github.com/afshinm)
-- [Personal page](http://afshinm.name/)  
+- [Personal page](http://afshinm.name/)
 
 [Other contributors](https://github.com/usablica/intro.js/graphs/contributors)
 
@@ -473,15 +503,15 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 ## License
 > Copyright (C) 2012 Afshin Mehrabani (afshin.meh@gmail.com)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
 and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions 
+The above copyright notice and this permission notice shall be included in all copies or substantial portions
 of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED 
-TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
