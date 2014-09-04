@@ -451,6 +451,20 @@
         }
 
         break;
+      case 'right-middle-aligned':
+        targetElementOffset = _getOffset(targetElement);
+        tooltipOffset       = _getOffset(tooltipLayer);
+        arrowLayer.className = 'introjs-arrow left';
+        tooltipLayer.style.left = (_getOffset(targetElement).width + 17) + 'px';
+        tooltipLayer.style.top = (tooltipOffset.width + 10) + 'px';
+        break;
+      case 'left-middle-aligned':
+        targetElementOffset = _getOffset(targetElement);
+        tooltipOffset       = _getOffset(tooltipLayer);
+        arrowLayer.className = 'introjs-arrow right';
+        tooltipLayer.style.right = (_getOffset(targetElement).width + 17) + 'px';
+        tooltipLayer.style.top =  (tooltipOffset.width + 10) + 'px';
+        break;
       case 'bottom-right-aligned':
         arrowLayer.className      = 'introjs-arrow top-right';
         tooltipLayer.style.right  = '0px';
