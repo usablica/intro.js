@@ -559,10 +559,6 @@
         clearTimeout(self._lastShowElementTimer);
       }
       self._lastShowElementTimer = setTimeout(function() {
-        //set current step to the label
-        if (oldHelperNumberLayer != null) {
-          oldHelperNumberLayer.innerHTML = targetElement.step;
-        }
         //set current tooltip text
         oldtooltipLayer.innerHTML = targetElement.intro;
         //set the tooltip position
@@ -639,7 +635,6 @@
       if (this._options.showStepNumbers == true) {
         var helperNumberLayer = document.createElement('span');
         helperNumberLayer.className = 'introjs-helperNumberLayer';
-        helperNumberLayer.innerHTML = targetElement.step;
         helperLayer.appendChild(helperNumberLayer);
       }
       tooltipLayer.appendChild(arrowLayer);

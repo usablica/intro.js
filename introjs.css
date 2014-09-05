@@ -58,10 +58,11 @@ tr.introjs-showElement > th {
           transition: all 0.3s ease-out;
 }
 
-.introjs-helperNumberLayer {
+.introjs-showElement:before {
+  content: attr(data-step);
   position: absolute;
-  top: -16px;
-  left: -16px;
+  left: -20px;
+  top: -21px;
   z-index: 9999999999 !important;
   padding: 2px;
   font-family: Arial, verdana, tahoma;
