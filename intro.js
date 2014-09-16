@@ -31,13 +31,13 @@
 
     this._options = {
       /* Next button label in tooltip box */
-      nextLabel: 'Next &rarr;',
+      nextLabel: '&rarr;',
       /* Previous button label in tooltip box */
-      prevLabel: '&larr; Back',
+      prevLabel: '&larr;',
       /* Skip button label in tooltip box */
-      skipLabel: 'Skip',
+      skipLabel: 'X',
       /* Done button label in tooltip box */
-      doneLabel: 'Done',
+      doneLabel: 'X',
       /* Default tooltip box position */
       tooltipPosition: 'bottom',
       /* Next CSS class for tooltip boxes */
@@ -55,7 +55,7 @@
       /* Show tour bullets? */
       showBullets: true,
       /* Scroll to highlighted element? */
-      scrollToElement: true,
+      scrollToElement: false,
       /* Set the overlay opacity */
       overlayOpacity: 0.8
     };
