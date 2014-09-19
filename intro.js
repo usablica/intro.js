@@ -476,7 +476,7 @@
 
         arrowLayer.className      = 'introjs-arrow top-middle';
         tooltipLayer.style.left   = (targetElementOffset.width / 2 - tooltipOffset.width / 2) + 'px';
-        tooltipLayer.style.bottom = '-' + (tooltipOffset.height + 10) + 'px';
+        tooltipLayer.style.top =  (targetElementOffset.height + 10) + 'px';
         break;
       case 'bottom-left-aligned':
       // Bottom-left-aligned is the same as the default bottom
