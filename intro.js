@@ -983,6 +983,7 @@
     },
     exit: function() {
       _exitIntro.call(this, this._targetElement);
+      return this;
     },
     refresh: function() {
       _setHelperLayerPosition.call(this, document.querySelector('.introjs-helperLayer'));
