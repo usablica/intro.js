@@ -22,12 +22,23 @@
 .introjs-fixParent {
   z-index: auto !important;
   opacity: 1.0 !important;
+  position: absolute;
+  -webkit-transform: none !important;
+     -moz-transform: none !important;
+      -ms-transform: none !important;
+       -o-transform: none !important;
+          transform: none !important;
 }
 
 .introjs-showElement,
 tr.introjs-showElement > td,
 tr.introjs-showElement > th {
   z-index: 9999999 !important;
+}
+
+.introjs-disableInteraction {
+  z-index: 99999999 !important;
+  position: absolute;
 }
 
 .introjs-relativePosition,
@@ -56,6 +67,16 @@ tr.introjs-showElement > th {
   position: absolute;
   z-index: 10000000;
   background-color: transparent;
+}
+
+.introjs-helperLayer *,
+.introjs-helperLayer *:before,
+.introjs-helperLayer *:after {
+  -webkit-box-sizing: content-box;
+     -moz-box-sizing: content-box;
+      -ms-box-sizing: content-box;
+       -o-box-sizing: content-box;
+          box-sizing: content-box;
 }
 
 .introjs-helperNumberLayer {

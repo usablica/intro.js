@@ -9,7 +9,9 @@ You can obtain your local copy of Intro.js from:
 
 **2)** Using bower ```bower install intro.js --save```
 
-**3)** Download it from CDN ([1](http://www.jsdelivr.com/#!intro.js), [2](http://cdnjs.com/#introjs))
+**3)** Using npm ```npm install intro.js --save```
+
+**4)** Download it from CDN ([1](http://www.jsdelivr.com/#!intro.js), [2](http://cdnjs.com/#introjs))
 
 
 ## How to use
@@ -19,7 +21,7 @@ Intro.js can be added to your site in three simple steps:
 
 > CDN hosted files are available at [jsDelivr](http://www.jsdelivr.com/#!intro.js) (click Show More) & [cdnjs](http://cdnjs.com/#introjs).
 
-**2)** Add `data-intro` and `data-step` to your HTML elements.  
+**2)** Add `data-intro` and `data-step` to your HTML elements.
 
 For example:
 
@@ -38,7 +40,7 @@ Optionally, pass one parameter to `introJs` function to limit the presentation s
 
 **For example** `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
 
-<p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.png"></p>  
+<p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.png"></p>
 
 ## Using templates
 
@@ -242,7 +244,7 @@ introJs().oncomplete(function() {
 
 ###introJs.onexit(providedCallback)
 
-Set callback to exit of introduction. Exit also means pressing `ESC` key and clicking on the overlay layer by the user.  
+Set callback to exit of introduction. Exit also means pressing `ESC` key and clicking on the overlay layer by the user.
 
 **Available since:** v0.2.0
 
@@ -276,7 +278,7 @@ The callback function receives the element of the new step as an argument.
 
 **Example:**
 ```javascript
-introJs().onchange(function(targetElement) {  
+introJs().onchange(function(targetElement) {
   alert("new step");
 });
 ````
@@ -297,7 +299,7 @@ Given callback function will be called before starting a new step of introductio
 
 **Example:**
 ```javascript
-introJs().onbeforechange(function(targetElement) {  
+introJs().onbeforechange(function(targetElement) {
   alert("before new step");
 });
 ````
@@ -318,7 +320,7 @@ Given callback function will be called after starting a new step of introduction
 
 **Example:**
 ```javascript
-introJs().onafterchange(function(targetElement) {  
+introJs().onafterchange(function(targetElement) {
   alert("after new step");
 });
 ````
@@ -347,6 +349,7 @@ introJs().onafterchange(function(targetElement) {
  - `showBullets`: Show introduction bullets or not, `true` or `false`
  - `scrollToElement`: Auto scroll to highlighted element if it's outside of viewport, `true` or `false`
  - `overlayOpacity`: Adjust the overlay opacity, `Number`
+ - `disableInteraction`: Disable an interaction inside element or not, `true` or `false`
 
 See [setOption](https://github.com/usablica/intro.js/#introjssetoptionoption-value) to see an example.
 
@@ -379,11 +382,11 @@ Now you can run this command to minify all static resources:
 
 ## Instant IntroJs
 
-Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publishing.  
+Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publishing.
 
 <p align="center">
   <a target='_blank' href="http://www.packtpub.com/create-useful-introductions-for-websites-and-applications-with-introjs-library/book"><img src='http://dgdsbygo8mp3h.cloudfront.net/sites/default/files/imagecache/productview_larger/2517OS_Instant%20IntroJS%20Starter.jpg' /></a>
-</p>  
+</p>
 
 <p align="center">
   <a target='_blank' href="http://www.packtpub.com/create-useful-introductions-for-websites-and-applications-with-introjs-library/book">Buy and Download</a>
@@ -489,7 +492,7 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 
 - [Twitter](https://twitter.com/afshinmeh)
 - [Github](https://github.com/afshinm)
-- [Personal page](http://afshinm.name/)  
+- [Personal page](http://afshinm.name/)
 
 [Other contributors](https://github.com/usablica/intro.js/graphs/contributors)
 

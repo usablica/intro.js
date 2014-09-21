@@ -1,5 +1,5 @@
 /**
- * Intro.js v0.9.0
+ * Intro.js v1.0.0
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -19,7 +19,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '0.9.0';
+  var VERSION = '1.0.0';
 
   /**
    * IntroJs main class
@@ -59,7 +59,9 @@
       /* Set the overlay opacity */
       overlayOpacity: 0.8,
       /* Precedence of positions, when auto is enabled */
-      positionPrecedence: ["bottom", "top", "right", "left"]
+      positionPrecedence: ["bottom", "top", "right", "left"],
+      /* Disable an interaction with element? */
+      disableInteraction: false
     };
   }
 
@@ -217,13 +219,13 @@
           window.addEventListener('keydown', self._onKeyDown, true);
         }
         //for window resize
-        window.addEventListener("resize", self._onResize, true);
+        window.addEventListener('resize', self._onResize, true);
       } else if (document.attachEvent) { //IE
         if (this._options.keyboardNavigation) {
           document.attachEvent('onkeydown', self._onKeyDown);
         }
         //for window resize
-        document.attachEvent("onresize", self._onResize);
+        document.attachEvent('onresize', self._onResize);
       }
     }
     return false;
@@ -345,6 +347,11 @@
     var referenceLayer = targetElement.querySelector('.introjs-tooltipReferenceLayer');
     if (referenceLayer) {
       referenceLayer.parentNode.removeChild(referenceLayer);
+	}
+    //remove disableInteractionLayer
+    var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
+    if (disableInteractionLayer) {
+      disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
     }
 
     //remove intro floating element
@@ -616,6 +623,23 @@
   }
 
   /**
+   * Add disableinteraction layer and adjust the size and position of the layer
+   *
+   * @api private
+   * @method _disableInteraction
+   */
+  function _disableInteraction () {
+    var disableInteractionLayer = document.querySelector('.introjs-disableInteraction');
+    if (disableInteractionLayer === null) {
+      disableInteractionLayer = document.createElement('div');
+      disableInteractionLayer.className = 'introjs-disableInteraction';
+      this._targetElement.appendChild(disableInteractionLayer);
+    }
+
+    _setHelperLayerPosition.call(this, disableInteractionLayer);
+  }
+
+  /**
    * Show an element on the page
    *
    * @api private
@@ -669,6 +693,7 @@
       //remove old classes
       var oldShowElement = document.querySelector('.introjs-showElement');
       oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, '');
+
       //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
       if (self._lastShowElementTimer) {
         clearTimeout(self._lastShowElementTimer);
@@ -724,6 +749,7 @@
         bulletsLayer.style.display = 'none';
       }
 
+
       var ulContainer = document.createElement('ul');
 
       for (var i = 0, stepsLength = this._introItems.length; i < stepsLength; i++) {
@@ -734,7 +760,7 @@
           self.goToStep(this.getAttribute('data-stepnumber'));
         };
 
-        if (i === 0) anchorLink.className = "active";
+        if (i === (targetElement.step-1)) anchorLink.className = 'active';
 
         anchorLink.href = 'javascript:void(0);';
         anchorLink.innerHTML = "&nbsp;";
@@ -762,6 +788,7 @@
         helperNumberLayer.innerHTML = targetElement.step;
         referenceLayer.appendChild(helperNumberLayer);
       }
+
       tooltipLayer.appendChild(arrowLayer);
       referenceLayer.appendChild(tooltipLayer);
 
@@ -821,6 +848,11 @@
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
     }
 
+    //disable interaction
+    if (this._options.disableInteraction === true) {
+      _disableInteraction.call(self);
+    }
+
     if (this._currentStep == 0 && this._introItems.length > 1) {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
@@ -856,7 +888,8 @@
       //More detail: https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context
       var zIndex = _getPropValue(parentElm, 'z-index');
       var opacity = parseFloat(_getPropValue(parentElm, 'opacity'));
-      if (/[0-9]+/.test(zIndex) || opacity < 1) {
+      var transform = _getPropValue(parentElm, 'transform') || _getPropValue(parentElm, '-webkit-transform') || _getPropValue(parentElm, '-moz-transform') || _getPropValue(parentElm, '-ms-transform') || _getPropValue(parentElm, '-o-transform');
+      if (/[0-9]+/.test(zIndex) || opacity < 1 || transform !== 'none') {
         parentElm.className += ' introjs-fixParent';
       }
 
@@ -1102,6 +1135,7 @@
     },
     exit: function() {
       _exitIntro.call(this, this._targetElement);
+      return this;
     },
     refresh: function() {
       _setHelperLayerPosition.call(this, document.querySelector('.introjs-helperLayer'));
