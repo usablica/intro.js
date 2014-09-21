@@ -57,7 +57,9 @@
       /* Scroll to highlighted element? */
       scrollToElement: true,
       /* Set the overlay opacity */
-      overlayOpacity: 0.8
+      overlayOpacity: 0.8,
+      /* Disable an interaction with element? */
+      disableInteraction: false
     };
   }
 
@@ -339,6 +341,12 @@
       helperLayer.parentNode.removeChild(helperLayer);
     }
 
+    //remove disableInteractionLayer
+    var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
+    if(disableInteractionLayer){
+      disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
+    }
+    
     //remove intro floating element
     var floatingElement = document.querySelector('.introjsFloatingElement');
     if (floatingElement) {
@@ -503,6 +511,16 @@
     }
   }
 
+  function _disableInteraction(){
+    disableInteractionLayer = document.querySelector('.introjs-disableInteraction');
+    if (disableInteractionLayer === null){
+      disableInteractionLayer = document.createElement('div');
+      disableInteractionLayer.className = 'introjs-disableInteraction';
+      this._targetElement.appendChild(disableInteractionLayer);
+    }
+    _setHelperLayerPosition.call(this, disableInteractionLayer);
+
+  }
   /**
    * Show an element on the page
    *
@@ -554,6 +572,7 @@
       //remove old classes
       var oldShowElement = document.querySelector('.introjs-showElement');
       oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, '');
+
       //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
       if (self._lastShowElementTimer) {
         clearTimeout(self._lastShowElementTimer);
@@ -604,6 +623,7 @@
         bulletsLayer.style.display = 'none';
       }
 
+
       var ulContainer = document.createElement('ul');
 
       for (var i = 0, stepsLength = this._introItems.length; i < stepsLength; i++) {
@@ -642,6 +662,7 @@
         helperNumberLayer.innerHTML = targetElement.step;
         helperLayer.appendChild(helperNumberLayer);
       }
+
       tooltipLayer.appendChild(arrowLayer);
       helperLayer.appendChild(tooltipLayer);
 
@@ -701,6 +722,10 @@
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
     }
 
+    //disable interaction
+    if (this._options.disableInteraction === true){
+      _disableInteraction.call(self);
+    }
     if (this._currentStep == 0 && this._introItems.length > 1) {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';

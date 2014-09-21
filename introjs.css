@@ -36,6 +36,11 @@ tr.introjs-showElement > th {
   z-index: 9999999 !important;
 }
 
+.introjs-disableInteraction {
+  z-index: 99999999 !important;
+  position: absolute;
+}
+
 .introjs-relativePosition,
 tr.introjs-showElement > td,
 tr.introjs-showElement > th {
