@@ -31,13 +31,13 @@
 
     this._options = {
       /* Next button label in tooltip box */
-      nextLabel: 'Next &rarr;',
+      nextLabel: '&rarr;',
       /* Previous button label in tooltip box */
-      prevLabel: '&larr; Back',
+      prevLabel: '&larr;',
       /* Skip button label in tooltip box */
-      skipLabel: 'Skip',
+      skipLabel: 'X',
       /* Done button label in tooltip box */
-      doneLabel: 'Done',
+      doneLabel: 'X',
       /* Default tooltip box position */
       tooltipPosition: 'bottom',
       /* Next CSS class for tooltip boxes */
@@ -55,7 +55,7 @@
       /* Show tour bullets? */
       showBullets: true,
       /* Scroll to highlighted element? */
-      scrollToElement: true,
+      scrollToElement: false,
       /* Set the overlay opacity */
       overlayOpacity: 0.8
     };
@@ -451,6 +451,20 @@
         }
 
         break;
+      case 'right-middle-aligned':
+        targetElementOffset = _getOffset(targetElement);
+        tooltipOffset       = _getOffset(tooltipLayer);
+        arrowLayer.className = 'introjs-arrow left';
+        tooltipLayer.style.left = (_getOffset(targetElement).width + 17) + 'px';
+        tooltipLayer.style.top = (tooltipOffset.width + 10) + 'px';
+        break;
+      case 'left-middle-aligned':
+        targetElementOffset = _getOffset(targetElement);
+        tooltipOffset       = _getOffset(tooltipLayer);
+        arrowLayer.className = 'introjs-arrow right';
+        tooltipLayer.style.right = (_getOffset(targetElement).width + 17) + 'px';
+        tooltipLayer.style.top =  (tooltipOffset.width + 10) + 'px';
+        break;
       case 'bottom-right-aligned':
         arrowLayer.className      = 'introjs-arrow top-right';
         tooltipLayer.style.right  = '0px';
@@ -462,7 +476,7 @@
 
         arrowLayer.className      = 'introjs-arrow top-middle';
         tooltipLayer.style.left   = (targetElementOffset.width / 2 - tooltipOffset.width / 2) + 'px';
-        tooltipLayer.style.bottom = '-' + (tooltipOffset.height + 10) + 'px';
+        tooltipLayer.style.top =  (targetElementOffset.height + 10) + 'px';
         break;
       case 'bottom-left-aligned':
       // Bottom-left-aligned is the same as the default bottom
