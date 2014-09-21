@@ -1,5 +1,5 @@
 /**
- * Intro.js v0.9.0
+ * Intro.js v1.0.0
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -19,7 +19,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '0.9.0';
+  var VERSION = '1.0.0';
 
   /**
    * IntroJs main class
@@ -216,13 +216,13 @@
           window.addEventListener('keydown', self._onKeyDown, true);
         }
         //for window resize
-        window.addEventListener("resize", self._onResize, true);
+        window.addEventListener('resize', self._onResize, true);
       } else if (document.attachEvent) { //IE
         if (this._options.keyboardNavigation) {
           document.attachEvent('onkeydown', self._onKeyDown);
         }
         //for window resize
-        document.attachEvent("onresize", self._onResize);
+        document.attachEvent('onresize', self._onResize);
       }
     }
     return false;
@@ -343,10 +343,10 @@
 
     //remove disableInteractionLayer
     var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
-    if(disableInteractionLayer){
+    if (disableInteractionLayer) {
       disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
     }
-    
+
     //remove intro floating element
     var floatingElement = document.querySelector('.introjsFloatingElement');
     if (floatingElement) {
@@ -511,16 +511,23 @@
     }
   }
 
-  function _disableInteraction(){
-    disableInteractionLayer = document.querySelector('.introjs-disableInteraction');
-    if (disableInteractionLayer === null){
+  /**
+   * Add disableinteraction layer and adjust the size and position of the layer
+   *
+   * @api private
+   * @method _disableInteraction
+   */
+  function _disableInteraction () {
+    var disableInteractionLayer = document.querySelector('.introjs-disableInteraction');
+    if (disableInteractionLayer === null) {
       disableInteractionLayer = document.createElement('div');
       disableInteractionLayer.className = 'introjs-disableInteraction';
       this._targetElement.appendChild(disableInteractionLayer);
     }
-    _setHelperLayerPosition.call(this, disableInteractionLayer);
 
+    _setHelperLayerPosition.call(this, disableInteractionLayer);
   }
+
   /**
    * Show an element on the page
    *
@@ -634,7 +641,7 @@
           self.goToStep(this.getAttribute('data-stepnumber'));
         };
 
-        if (i === (targetElement.step-1)) anchorLink.className = "active";
+        if (i === (targetElement.step-1)) anchorLink.className = 'active';
 
         anchorLink.href = 'javascript:void(0);';
         anchorLink.innerHTML = "&nbsp;";
@@ -723,9 +730,10 @@
     }
 
     //disable interaction
-    if (this._options.disableInteraction === true){
+    if (this._options.disableInteraction === true) {
       _disableInteraction.call(self);
     }
+
     if (this._currentStep == 0 && this._introItems.length > 1) {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
