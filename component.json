@@ -1,0 +1,13 @@
+{
+  "name": "intro.js",
+  "repo": "usablica/intro.js",
+  "description": "Better introductions for websites and features with a step-by-step guide for your projects",
+  "version": "0.9.0",
+  "main": "intro.js",
+  "scripts": [
+    "intro.js"
+  ],
+  "styles": [
+    "introjs.css"
+  ]
+}

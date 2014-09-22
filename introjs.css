@@ -22,13 +22,28 @@
 .introjs-fixParent {
   z-index: auto !important;
   opacity: 1.0 !important;
+  position: absolute;
+  -webkit-transform: none !important;
+     -moz-transform: none !important;
+      -ms-transform: none !important;
+       -o-transform: none !important;
+          transform: none !important;
 }
 
-.introjs-showElement {
+.introjs-showElement,
+tr.introjs-showElement > td,
+tr.introjs-showElement > th {
   z-index: 9999999 !important;
 }
 
-.introjs-relativePosition {
+.introjs-disableInteraction {
+  z-index: 99999999 !important;
+  position: absolute;
+}
+
+.introjs-relativePosition,
+tr.introjs-showElement > td,
+tr.introjs-showElement > th {
   position: relative;
 }
 
@@ -46,6 +61,16 @@
       -ms-transition: all 0.3s ease-out;
        -o-transition: all 0.3s ease-out;
           transition: all 0.3s ease-out;
+}
+
+.introjs-helperLayer *,
+.introjs-helperLayer *:before,
+.introjs-helperLayer *:after {
+  -webkit-box-sizing: content-box;
+     -moz-box-sizing: content-box;
+      -ms-box-sizing: content-box;
+       -o-box-sizing: content-box;
+          box-sizing: content-box;
 }
 
 .introjs-helperNumberLayer {
@@ -72,7 +97,7 @@
   line-height: 20px;
   border: 3px solid white;
   border-radius: 50%;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0); /* IE6-9 */ 
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0); /* IE6-9 */
   filter: progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000); /* IE10 text shadows */
   box-shadow: 0 2px 5px rgba(0,0,0,.4);
 }
@@ -84,6 +109,23 @@
 }
 .introjs-arrow.top {
   top: -10px;
+  border-top-color:transparent;
+  border-right-color:transparent;
+  border-bottom-color:white;
+  border-left-color:transparent;
+}
+.introjs-arrow.top-right {
+  top: -10px;
+  right: 10px;
+  border-top-color:transparent;
+  border-right-color:transparent;
+  border-bottom-color:white;
+  border-left-color:transparent;
+}
+.introjs-arrow.top-middle {
+  top: -10px;
+  left: 50%;
+  margin-left: -5px;
   border-top-color:transparent;
   border-right-color:transparent;
   border-bottom-color:white;
@@ -133,8 +175,8 @@
   white-space: nowrap;
 }
 
-/* 
- Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/ 
+/*
+ Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/
  Changed by Afshin Mehrabani
 */
 .introjs-button {
@@ -171,7 +213,7 @@
 
 .introjs-button:hover {
   border-color: #bcbcbc;
-  text-decoration: none; 
+  text-decoration: none;
   box-shadow: 0px 1px 1px #e3e3e3;
 }
 
@@ -246,4 +288,11 @@
 }
 .introjs-bullets ul li a.active {
   background: #999;
+}
+.introjsFloatingElement {
+  position: absolute;
+  height: 0;
+  width: 0;
+  left: 50%;
+  top: 50%;
 }
