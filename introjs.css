@@ -172,6 +172,7 @@ tr.introjs-showElement > th {
 
 .introjs-tooltipbuttons {
   text-align: right;
+  white-space: nowrap;
 }
 
 /*
