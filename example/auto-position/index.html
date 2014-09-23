@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Auto Positioning</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Intro.js - Better introductions for websites and features with a step-by-step guide for your projects.">
+    <meta name="author" content="Afshin Mehrabani (@afshinmeh) in usabli.ca group">
+
+    <!-- styles -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/demo.css" rel="stylesheet">
+
+    <!-- Add IntroJs styles -->
+    <link href="../../introjs.css" rel="stylesheet">
+
+    <link href="../assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+	<script>
+		function startTour() {
+			var tour = introJs()
+			tour.setOption('tooltipPosition', 'auto');
+			tour.setOption('positionPrecedence', ['left', 'right', 'bottom', 'top'])
+			tour.start()
+		}
+	
+	</script>
+  </head>
+
+  <body>
+
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right" data-step="8" data-intro="Get it, use it.">
+          <li><a href="https://github.com/usablica/intro.js/tags"><i class='icon-black icon-download-alt'></i> Download</a></li>
+          <li><a href="https://github.com/usablica/intro.js">Github</a></li>
+          <li><a href="https://twitter.com/usablica">@usablica</a></li>
+        </ul>
+        <h3 class="muted">Intro.js</h3>
+      </div>
+
+      <hr>
+
+      <div class="jumbotron">
+        <h1 data-step="1" data-intro="This is a tooltip!">Auto Positioning</h1>
+        <p class="lead" data-step="7" data-intro="Another step.">This is IntroJs with <code>tooltipPosition</code> set to <code>auto</code>.</p>
+        <a class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:startTour();">Show me how</a>
+      </div>
+
+      <hr>
+
+      <div class="row-fluid marketing">
+        <div class="span6" data-step="2" data-intro="Ok, wasn't that fun?">
+          <h4>Section One</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+
+          <h4>Section Two</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+
+          <h4>Section Three</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+          </div>
+
+        <div class="span6" data-step="3" data-intro="More features, more fun.">
+          <h4>Section Four</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+
+          <h4>Section Five</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+
+          <h4>Section Six</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+
+        </div>
+		
+		<div style='height:1000px'></div>
+		<div class="span6" data-step="4" data-intro="A step we need to scroll to">
+			<h4>Section Seven</h4>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+		</div>
+		
+		<div style='height:1000px'></div>
+		<div class="span6" data-step="5" data-intro="We want this one to be on top" data-position="top">
+			<h4>Section Eight</h4>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+		</div>
+		
+		
+		<div style='height:1000px'></div>
+		<div class="span6" data-step="6" data-intro="We want this one to be on the left, but it won't fit" data-position="left">
+			<h4>Section Nine</h4>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+		</div>
+      </div>
+
+      <hr>
+    <script type="text/javascript" src="../../intro.js"></script>
+  </body>
+</html>
