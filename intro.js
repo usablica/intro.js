@@ -347,7 +347,7 @@
     var referenceLayer = targetElement.querySelector('.introjs-tooltipReferenceLayer');
     if (referenceLayer) {
       referenceLayer.parentNode.removeChild(referenceLayer);
-	}
+  }
     //remove disableInteractionLayer
     var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
     if (disableInteractionLayer) {
@@ -694,6 +694,9 @@
       var oldShowElement = document.querySelector('.introjs-showElement');
       oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, '');
 
+      oldHelperLayer.className = oldHelperLayer.className.replace(/introjs-helperLayer-step[0-9]/, 'introjs-helperLayer-step'+targetElement.step);
+
+
       //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
       if (self._lastShowElementTimer) {
         clearTimeout(self._lastShowElementTimer);
@@ -727,7 +730,7 @@
           bulletsLayer      = document.createElement('div'),
           buttonsLayer      = document.createElement('div');
 
-      helperLayer.className = 'introjs-helperLayer';
+      helperLayer.className = 'introjs-helperLayer introjs-helperLayer-step' + targetElement.step;
       referenceLayer.className = 'introjs-tooltipReferenceLayer';
 
       //set new position to helper layer
