@@ -350,6 +350,7 @@ introJs().onafterchange(function(targetElement) {
  - `scrollToElement`: Auto scroll to highlighted element if it's outside of viewport, `true` or `false`
  - `overlayOpacity`: Adjust the overlay opacity, `Number`
  - `disableInteraction`: Disable an interaction inside element or not, `true` or `false`
+ - `padding`: Adjust the amount of padding around the intro element, `Number`
 
 See [setOption](https://github.com/usablica/intro.js/#introjssetoptionoption-value) to see an example.
 
