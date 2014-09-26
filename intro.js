@@ -132,7 +132,7 @@
             intro: currentElement.getAttribute('data-intro'),
             step: parseInt(currentElement.getAttribute('data-step'), 10),
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            highlightClass: currentElement.getAttribute('data-highlightClass') || this._options.highlightClass,
+            highlightClass: currentElement.getAttribute('data-highlightClass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
           };
         }
@@ -159,7 +159,7 @@
             intro: currentElement.getAttribute('data-intro'),
             step: nextStep + 1,
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            highlightClass: currentElement.getAttribute('data-highlightClass') || this._options.highlightClass,
+            highlightClass: currentElement.getAttribute('data-highlightClass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
           };
         }
@@ -662,8 +662,13 @@
         highlightClass = 'introjs-helperLayer',
         elementPosition = _getOffset(targetElement.element);
 
-    if (targetElement.highlightClass) {
+    //check for a current step highlight class
+    if (typeof (targetElement.highlightClass) === 'string') {
       highlightClass += (' ' + targetElement.highlightClass);
+    }
+    //check for options highlight class
+    if (typeof (this._options.highlightClass) === 'string') {
+      highlightClass += (' ' + this._options.highlightClass);
     }
 
     if (oldHelperLayer != null) {
