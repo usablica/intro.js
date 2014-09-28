@@ -42,6 +42,8 @@
       tooltipPosition: 'bottom',
       /* Next CSS class for tooltip boxes */
       tooltipClass: '',
+      /* CSS class that is added to the helperLayer */
+      highlightClass: '',
       /* Close introduction when pressing Escape button? */
       exitOnEsc: true,
       /* Close introduction when clicking on overlay layer? */
@@ -130,6 +132,7 @@
             intro: currentElement.getAttribute('data-intro'),
             step: parseInt(currentElement.getAttribute('data-step'), 10),
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+            highlightClass: currentElement.getAttribute('data-highlightClass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
           };
         }
@@ -156,6 +159,7 @@
             intro: currentElement.getAttribute('data-intro'),
             step: nextStep + 1,
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+            highlightClass: currentElement.getAttribute('data-highlightClass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
           };
         }
@@ -515,7 +519,7 @@
         break;
     }
   }
-  
+
   /**
    * Determines the position of the tooltip based on the position precedence and availability
    * of screen space.
@@ -655,7 +659,17 @@
     var self = this,
         oldHelperLayer = document.querySelector('.introjs-helperLayer'),
         oldReferenceLayer = document.querySelector('.introjs-tooltipReferenceLayer'),
+        highlightClass = 'introjs-helperLayer',
         elementPosition = _getOffset(targetElement.element);
+
+    //check for a current step highlight class
+    if (typeof (targetElement.highlightClass) === 'string') {
+      highlightClass += (' ' + targetElement.highlightClass);
+    }
+    //check for options highlight class
+    if (typeof (this._options.highlightClass) === 'string') {
+      highlightClass += (' ' + this._options.highlightClass);
+    }
 
     if (oldHelperLayer != null) {
       var oldHelperNumberLayer = oldReferenceLayer.querySelector('.introjs-helperNumberLayer'),
@@ -666,6 +680,8 @@
           prevTooltipButton    = oldReferenceLayer.querySelector('.introjs-prevbutton'),
           nextTooltipButton    = oldReferenceLayer.querySelector('.introjs-nextbutton');
 
+      //update or reset the helper highlight class
+      oldHelperLayer.className = highlightClass;
       //hide the tooltip
       oldtooltipContainer.style.opacity = 0;
       oldtooltipContainer.style.display = "none";
@@ -727,7 +743,7 @@
           bulletsLayer      = document.createElement('div'),
           buttonsLayer      = document.createElement('div');
 
-      helperLayer.className = 'introjs-helperLayer';
+      helperLayer.className = highlightClass;
       referenceLayer.className = 'introjs-tooltipReferenceLayer';
 
       //set new position to helper layer
