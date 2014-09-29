@@ -191,12 +191,19 @@
           nextStepButton = targetElm.querySelector('.introjs-nextbutton');
 
       self._onKeyDown = function(e) {
+        //indication if last slide
+        var isLastSlide = self._introItems.length - 1 == self._currentStep || self._introItems.length == 1;
+
         if (e.keyCode === 27 && self._options.exitOnEsc == true) {
           //escape key pressed, exit the intro
           _exitIntro.call(self, targetElm);
           //check if any callback is defined
           if (self._introExitCallback != undefined) {
-            self._introExitCallback.call(self);
+            if (isLastSlide) {
+              self._introCompleteCallback.call(self);
+            } else {
+              self._introExitCallback.call(self);
+            }
           }
         } else if(e.keyCode === 37) {
           //left arrow
@@ -1026,12 +1033,19 @@
     targetElm.appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
+      //indication if last slide
+      var isLastSlide = self._introItems.length - 1 == self._currentStep || self._introItems.length == 1;
+
       if (self._options.exitOnOverlayClick == true) {
         _exitIntro.call(self, targetElm);
 
         //check if any callback is defined
         if (self._introExitCallback != undefined) {
-          self._introExitCallback.call(self);
+          if (isLastSlide) {
+            self._introCompleteCallback.call(self);
+          } else {
+            self._introExitCallback.call(self);
+          }
         }
       }
     };
