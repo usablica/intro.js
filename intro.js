@@ -203,9 +203,23 @@
         } else if(e.keyCode === 37) {
           //left arrow
           _previousStep.call(self);
-        } else if (e.keyCode === 39 || e.keyCode === 13) {
-          //right arrow or enter
+        } else if (e.keyCode === 39) {
+          //right arrow
           _nextStep.call(self);
+        } else if (e.keyCode === 13) {
+          //srcElement === ie
+          var target = e.target || e.srcElement;
+          if (target && target.className.indexOf('introjs-prevbutton') > 0) {
+            //user hit enter while focusing on previous button
+            _previousStep.call(self);
+          } else if (target && target.className.indexOf('introjs-skipbutton') > 0) {
+            //user hit enter while focusing on skip button
+            _exitIntro.call(self, targetElm);
+          } else {
+            //default behavior for responding to enter
+            _nextStep.call(self);
+          }
+
           //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
           if(e.preventDefault) {
             e.preventDefault();
@@ -736,6 +750,15 @@
         //show the tooltip
         oldtooltipContainer.style.opacity = 1;
         if (oldHelperNumberLayer) oldHelperNumberLayer.style.opacity = 1;
+
+        //reset button focus
+        if (nextTooltipButton.tabIndex === -1) {
+          //tabindex of -1 means we are at the end of the tour - focus on skip / done
+          skipTooltipButton.focus();
+        } else {
+          //still in the tour, focus on next
+          nextTooltipButton.focus();
+        }
       }, 350);
 
     } else {
@@ -886,14 +909,19 @@
       _disableInteraction.call(self);
     }
 
+    prevTooltipButton.removeAttribute('tabIndex');
+    nextTooltipButton.removeAttribute('tabIndex');
+
     if (this._currentStep == 0 && this._introItems.length > 1) {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
+      prevTooltipButton.tabIndex = '-1';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
     } else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
       skipTooltipButton.innerHTML = this._options.doneLabel;
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+      nextTooltipButton.tabIndex = '-1';
     } else {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
