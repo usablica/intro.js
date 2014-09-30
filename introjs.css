@@ -311,6 +311,24 @@ tr.introjs-showElement > th {
 .introjs-bullets ul li a.active {
   background: #999;
 }
+
+.introjs-progress {
+  overflow: hidden;
+  height: 10px;
+  margin: 10px 0 5px 0;
+  border-radius: 4px;
+  background-color: #ecf0f1
+}
+.introjs-progressbar {
+  float: left;
+  width: 0%;
+  height: 100%;
+  font-size: 10px;
+  line-height: 10px;
+  text-align: center;
+  background-color: #08c;
+}
+
 .introjsFloatingElement {
   position: absolute;
   height: 0;

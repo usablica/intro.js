@@ -349,6 +349,7 @@ introJs().onafterchange(function(targetElement) {
  - `keyboardNavigation`: Navigating with keyboard or not, `true` or `false`
  - `showButtons`: Show introduction navigation buttons or not, `true` or `false`
  - `showBullets`: Show introduction bullets or not, `true` or `false`
+ - `showProgress`: Show introduction progress or not, `true` or `false`
  - `scrollToElement`: Auto scroll to highlighted element if it's outside of viewport, `true` or `false`
  - `overlayOpacity`: Adjust the overlay opacity, `Number`
  - `disableInteraction`: Disable an interaction inside element or not, `true` or `false`

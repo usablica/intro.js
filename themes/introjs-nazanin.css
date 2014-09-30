@@ -3,7 +3,7 @@
   z-index: 999999;
   background: #525252;
   opacity: 0;
-  
+
   -webkit-transition: all 0.3s ease-out;
      -moz-transition: all 0.3s ease-out;
       -ms-transition: all 0.3s ease-out;
@@ -112,7 +112,7 @@
 
 .introjs-tooltiptext {
     margin-left: -10px;
-  
+
     margin-right: -10px;
     border-top: 1px solid #FFFFFF;
     background: #FAFAFA;
@@ -125,8 +125,8 @@
   text-align: center;
 }
 
-/* 
- Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/ 
+/*
+ Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/
  Changed by Afshin Mehrabani
 */
 .introjs-button {
@@ -160,13 +160,13 @@
 .introjs-button:hover {
   color: #fff;
   background: #2671A2;
-  text-decoration: none; 
+  text-decoration: none;
   box-shadow: 0 2px 0px -0px #235677;
 }
 
 .introjs-button:focus,
 .introjs-button:active {
-    background: #23587A;  text-decoration: none;  
+    background: #23587A;  text-decoration: none;
     /* bottom: -1px; */
     box-shadow: 0 2px 0px 0px #173B53;
 }
@@ -186,13 +186,13 @@
 
 .introjs-skipbutton:hover {
     background: #EB1540;  box-shadow: 0 2px 0px -0px #B91D0D;
-  
+
 }
 
 .introjs-skipbutton:active, .introjs-skipbutton:focus {
-    background: #C02312;  
+    background: #C02312;
     box-shadow: 0 1px 0px -0px #6F1309;
-  
+
 }
 
 .introjs-prevbutton {
@@ -248,6 +248,14 @@
 .introjs-bullets ul li a.active {
   background: #999;
 }
+
+.introjs-progress {
+  background-color: #FAFAFA;
+}
+.introjs-progressbar {
+  background-color: #2980b9;
+}
+
 .introjsFloatingElement {
   position: absolute;
   height: 0;
