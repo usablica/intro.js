@@ -206,7 +206,7 @@ introJs().setOptions({ 'skipLabel': 'Exit', 'tooltipPosition': 'right' });
 
 ###introJs.refresh()
 
-To refresh and order layers manually
+Refresh and order layers manually.
 
 **Available since**: v0.5.0
 
