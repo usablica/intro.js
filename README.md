@@ -396,11 +396,19 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 </p>
 
 ## Roadmap
-- Fix problems with `position: fixed` and other positions
 - Provide more examples
 - Add more templates
 
 ## Release History
+
+ * **v1.0.0** - 2014-10-17
+   - Auto-positioning feature for tooltip box
+   - Add progress-bar to tooltip box
+   - Fix `z-index` issue
+   - Add dark template
+   - Fix bad sizing with Bootstrap 3
+   - Add disable interaction ability
+   - Fix code styling issues and many minor bug fixes
 
  * **v0.9.0** - 2014-05-23
    - Add IntroJS templates
