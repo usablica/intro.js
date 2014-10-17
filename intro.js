@@ -42,6 +42,8 @@
       tooltipPosition: 'bottom',
       /* Next CSS class for tooltip boxes */
       tooltipClass: '',
+      /* CSS class that is added to the helperLayer */
+      highlightClass: '',
       /* Close introduction when pressing Escape button? */
       exitOnEsc: true,
       /* Close introduction when clicking on overlay layer? */
@@ -54,6 +56,8 @@
       showButtons: true,
       /* Show tour bullets? */
       showBullets: true,
+      /* Show tour progress? */
+      showProgress: false,
       /* Scroll to highlighted element? */
       scrollToElement: true,
       /* Set the overlay opacity */
@@ -130,6 +134,7 @@
             intro: currentElement.getAttribute('data-intro'),
             step: parseInt(currentElement.getAttribute('data-step'), 10),
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+            highlightClass: currentElement.getAttribute('data-highlightClass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
           };
         }
@@ -156,6 +161,7 @@
             intro: currentElement.getAttribute('data-intro'),
             step: nextStep + 1,
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+            highlightClass: currentElement.getAttribute('data-highlightClass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
           };
         }
@@ -197,9 +203,23 @@
         } else if(e.keyCode === 37) {
           //left arrow
           _previousStep.call(self);
-        } else if (e.keyCode === 39 || e.keyCode === 13) {
-          //right arrow or enter
+        } else if (e.keyCode === 39) {
+          //right arrow
           _nextStep.call(self);
+        } else if (e.keyCode === 13) {
+          //srcElement === ie
+          var target = e.target || e.srcElement;
+          if (target && target.className.indexOf('introjs-prevbutton') > 0) {
+            //user hit enter while focusing on previous button
+            _previousStep.call(self);
+          } else if (target && target.className.indexOf('introjs-skipbutton') > 0) {
+            //user hit enter while focusing on skip button
+            _exitIntro.call(self, targetElm);
+          } else {
+            //default behavior for responding to enter
+            _nextStep.call(self);
+          }
+
           //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
           if(e.preventDefault) {
             e.preventDefault();
@@ -515,7 +535,7 @@
         break;
     }
   }
-  
+
   /**
    * Determines the position of the tooltip based on the position precedence and availability
    * of screen space.
@@ -655,7 +675,17 @@
     var self = this,
         oldHelperLayer = document.querySelector('.introjs-helperLayer'),
         oldReferenceLayer = document.querySelector('.introjs-tooltipReferenceLayer'),
+        highlightClass = 'introjs-helperLayer',
         elementPosition = _getOffset(targetElement.element);
+
+    //check for a current step highlight class
+    if (typeof (targetElement.highlightClass) === 'string') {
+      highlightClass += (' ' + targetElement.highlightClass);
+    }
+    //check for options highlight class
+    if (typeof (this._options.highlightClass) === 'string') {
+      highlightClass += (' ' + this._options.highlightClass);
+    }
 
     if (oldHelperLayer != null) {
       var oldHelperNumberLayer = oldReferenceLayer.querySelector('.introjs-helperNumberLayer'),
@@ -666,6 +696,8 @@
           prevTooltipButton    = oldReferenceLayer.querySelector('.introjs-prevbutton'),
           nextTooltipButton    = oldReferenceLayer.querySelector('.introjs-nextbutton');
 
+      //update or reset the helper highlight class
+      oldHelperLayer.className = highlightClass;
       //hide the tooltip
       oldtooltipContainer.style.opacity = 0;
       oldtooltipContainer.style.display = "none";
@@ -713,9 +745,20 @@
         oldReferenceLayer.querySelector('.introjs-bullets li > a.active').className = '';
         oldReferenceLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
 
+        oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').setAttribute('style', 'width:' + _getProgress.call(self) + '%;');
+
         //show the tooltip
         oldtooltipContainer.style.opacity = 1;
         if (oldHelperNumberLayer) oldHelperNumberLayer.style.opacity = 1;
+
+        //reset button focus
+        if (nextTooltipButton.tabIndex === -1) {
+          //tabindex of -1 means we are at the end of the tour - focus on skip / done
+          skipTooltipButton.focus();
+        } else {
+          //still in the tour, focus on next
+          nextTooltipButton.focus();
+        }
       }, 350);
 
     } else {
@@ -725,9 +768,10 @@
           tooltipLayer      = document.createElement('div'),
           tooltipTextLayer  = document.createElement('div'),
           bulletsLayer      = document.createElement('div'),
+          progressLayer     = document.createElement('div'),
           buttonsLayer      = document.createElement('div');
 
-      helperLayer.className = 'introjs-helperLayer';
+      helperLayer.className = highlightClass;
       referenceLayer.className = 'introjs-tooltipReferenceLayer';
 
       //set new position to helper layer
@@ -772,6 +816,17 @@
 
       bulletsLayer.appendChild(ulContainer);
 
+      progressLayer.className = 'introjs-progress';
+
+      if (this._options.showProgress === false) {
+        progressLayer.style.display = 'none';
+      }
+      var progressBar = document.createElement('div');
+      progressBar.className = 'introjs-progressbar';
+      progressBar.setAttribute('style', 'width:' + _getProgress.call(this) + '%;');
+
+      progressLayer.appendChild(progressBar);
+
       buttonsLayer.className = 'introjs-tooltipbuttons';
       if (this._options.showButtons === false) {
         buttonsLayer.style.display = 'none';
@@ -780,6 +835,7 @@
       tooltipLayer.className = 'introjs-tooltip';
       tooltipLayer.appendChild(tooltipTextLayer);
       tooltipLayer.appendChild(bulletsLayer);
+      tooltipLayer.appendChild(progressLayer);
 
       //add helper layer number
       if (this._options.showStepNumbers == true) {
@@ -853,14 +909,19 @@
       _disableInteraction.call(self);
     }
 
+    prevTooltipButton.removeAttribute('tabIndex');
+    nextTooltipButton.removeAttribute('tabIndex');
+
     if (this._currentStep == 0 && this._introItems.length > 1) {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
+      prevTooltipButton.tabIndex = '-1';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
     } else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
       skipTooltipButton.innerHTML = this._options.doneLabel;
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+      nextTooltipButton.tabIndex = '-1';
     } else {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
@@ -1060,6 +1121,19 @@
     elementPosition.left = _x;
 
     return elementPosition;
+  }
+
+  /**
+   * Gets the current progress percentage
+   *
+   * @api private
+   * @method _getProgress
+   * @returns current progress percentage
+   */
+  function _getProgress() {
+    // Steps are 0 indexed
+    var currentStep = parseInt((this._currentStep + 1), 10);
+    return ((currentStep / this._introItems.length) * 100);
   }
 
   /**

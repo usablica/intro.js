@@ -330,6 +330,7 @@ introJs().onafterchange(function(targetElement) {
  - `data-intro`: The tooltip text of step
  - `data-step`: Optionally define the number (priority) of step
  - `data-tooltipClass`: Optionally define a CSS class for tooltip
+ - `data-highlightClass`: Optionally append a CSS class to the helperLayer
  - `data-position`: Optionally define the position of tooltip, `top`, `left`, `right`, `bottom`, `bottom-left-aligned` (same as 'bottom'), 'bottom-middle-aligned' and 'bottom-right-aligned'. Default is `bottom`
 
 ###Options:
@@ -341,12 +342,14 @@ introJs().onafterchange(function(targetElement) {
  - `doneLabel`: Done button label
  - `tooltipPosition`: Default tooltip position
  - `tooltipClass`: Adding CSS class to all tooltips
+ - `highlightClass`: Additional CSS class for the helperLayer
  - `exitOnEsc`: Exit introduction when pressing Escape button, `true` or `false`
  - `exitOnOverlayClick`: Exit introduction when clicking on overlay layer, `true` or `false`
  - `showStepNumbers`: Show steps number in the red circle or not, `true` or `false`
  - `keyboardNavigation`: Navigating with keyboard or not, `true` or `false`
  - `showButtons`: Show introduction navigation buttons or not, `true` or `false`
  - `showBullets`: Show introduction bullets or not, `true` or `false`
+ - `showProgress`: Show introduction progress or not, `true` or `false`
  - `scrollToElement`: Auto scroll to highlighted element if it's outside of viewport, `true` or `false`
  - `overlayOpacity`: Adjust the overlay opacity, `Number`
  - `disableInteraction`: Disable an interaction inside element or not, `true` or `false`
