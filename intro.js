@@ -367,7 +367,7 @@
     var referenceLayer = targetElement.querySelector('.introjs-tooltipReferenceLayer');
     if (referenceLayer) {
       referenceLayer.parentNode.removeChild(referenceLayer);
-	}
+    }
     //remove disableInteractionLayer
     var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
     if (disableInteractionLayer) {
@@ -965,11 +965,11 @@
 
       //Scroll up
       if (top < 0 || targetElement.element.clientHeight > winHeight) {
-        window.scrollBy(0, top - 30); // 30px padding from edge to look nice
+        _scrollTo(top - 70, 300); // 70px padding from edge
 
       //Scroll down
       } else {
-        window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
+        _scrollTo(bottom + 100, 300); // 100px padding from edge
       }
     }
 
@@ -977,6 +977,49 @@
       this._introAfterChangeCallback.call(this, targetElement.element);
     }
   }
+
+  /**
+   * Animates the scroll to the target element
+   *
+   * @api private
+   * @method _scrollTo
+   * @param {Int} to
+   * @param {Int} duration
+   * @returns null
+   */
+  function _scrollTo(to, duration) {
+      var start = window.pageYOffset,
+          currentTime = 0,
+          increment = 20;
+
+      var animateScroll = function(){
+          currentTime += increment;
+          var val = Math._easeInOutQuad(currentTime, start, to, duration);
+          window.scrollTo(0, val);
+          if(currentTime < duration) {
+              setTimeout(animateScroll, increment);
+          }
+      };
+      animateScroll();
+  }
+
+  /**
+   * Works out quad easing value
+   *
+   * @api private
+   * @method _easeInOutQuad
+   * @param {Int} t
+   * @param {Int} b
+   * @param {Int} c
+   * @param {Int} d
+   * @returns Int of value to scroll to based on quad easing calculation
+   */
+  Math._easeInOutQuad = function (t, b, c, d) {
+      t /= d/2;
+      if (t < 1) return c/2*t*t + b;
+      t--;
+      return -c/2 * (t*(t-2) - 1) + b;
+  };
 
   /**
    * Get an element CSS property on the page
