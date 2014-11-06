@@ -214,7 +214,7 @@
             _previousStep.call(self);
           } else if (target && target.className.indexOf('introjs-skipbutton') > 0) {
             //user hit enter while focusing on skip button
-            _exitIntro.call(self, targetElm);
+            _onSkipButtonHit.call(self);
           } else {
             //default behavior for responding to enter
             _nextStep.call(self);
@@ -878,17 +878,7 @@
       skipTooltipButton.href = 'javascript:void(0);';
       skipTooltipButton.innerHTML = this._options.skipLabel;
 
-      skipTooltipButton.onclick = function() {
-        if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
-          self._introCompleteCallback.call(self);
-        }
-
-        if (self._introItems.length - 1 != self._currentStep && typeof (self._introExitCallback) === 'function') {
-          self._introExitCallback.call(self);
-        }
-
-        _exitIntro.call(self, self._targetElement);
-      };
+      skipTooltipButton.onclick = function() { self._onSkipButtonHit.call(self); }
 
       buttonsLayer.appendChild(skipTooltipButton);
 
@@ -928,8 +918,13 @@
       skipTooltipButton.innerHTML = this._options.skipLabel;
     }
 
-    //Set focus on "next" button, so that hitting Enter always moves you onto the next step
-    nextTooltipButton.focus();
+    // If we're on the last step, set the focus to the 'done' button so that hitting Enter completes the intro.
+    // Otherwise set the focus to the 'next' button so that hitting Enter takes you to next stage.
+    if (nextTooltipButton.tabIndex === -1) {
+      skipTooltipButton.focus();
+    } else {
+      nextTooltipButton.focus();
+    }
 
     //add target element position style
     targetElement.element.className += ' introjs-showElement';
@@ -977,6 +972,20 @@
       this._introAfterChangeCallback.call(this, targetElement.element);
     }
   }
+
+  function _onSkipButtonHit() {
+    var isLastStep = this._introItems.length - 1 == this._currentStep;
+
+    if (isLastStep && typeof (this._introCompleteCallback) === 'function') {
+      this._introCompleteCallback.call(this);
+    }
+
+    if (!isLastStep && typeof (this._introExitCallback) === 'function') {
+      this._introExitCallback.call(this);
+    }
+
+    _exitIntro.call(this, this._targetElement);
+  };
 
   /**
    * Get an element CSS property on the page
