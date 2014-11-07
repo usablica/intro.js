@@ -878,7 +878,7 @@
       skipTooltipButton.href = 'javascript:void(0);';
       skipTooltipButton.innerHTML = this._options.skipLabel;
 
-      skipTooltipButton.onclick = function() { self._onSkipButtonHit.call(self); }
+      skipTooltipButton.onclick = function() { _onSkipButtonHit.call(self); }
 
       buttonsLayer.appendChild(skipTooltipButton);
 
