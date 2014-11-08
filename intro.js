@@ -504,9 +504,12 @@
         tooltipLayer.style.marginLeft = '-' + (tooltipOffset.width / 2)  + 'px';
         tooltipLayer.style.marginTop  = '-' + (tooltipOffset.height / 2) + 'px';
 
-        if (typeof(helperNumberLayer) != 'undefined' && helperNumberLayer != null) {
-          helperNumberLayer.style.left = '-' + ((tooltipOffset.width / 2) + 18) + 'px';
-          helperNumberLayer.style.top  = '-' + ((tooltipOffset.height / 2) + 18) + 'px';
+        if (targetElement.className.indexOf('introjsFloatingElement') !== -1) {
+          // If there's no target element, position the step number next to the tooltip.
+          if (typeof(helperNumberLayer) != 'undefined' && helperNumberLayer != null) {
+            helperNumberLayer.style.left = '-' + ((tooltipOffset.width / 2) + 16) + 'px';
+            helperNumberLayer.style.top  = '-' + ((tooltipOffset.height / 2) + 16) + 'px';
+          }
         }
 
         break;
