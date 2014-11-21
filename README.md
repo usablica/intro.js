@@ -10,26 +10,26 @@ Intro.js can be added to your site in three simple steps:
 
 > CDN hosted files are available at [jsDelivr](http://www.jsdelivr.com/#!intro.js) (click Show More) & [cdnjs](http://cdnjs.com/#introjs).
 
-**2)** Add `data-intro` and `data-step` to your HTML elements.  
+**2)** Add `data-intro` and `data-step` to your HTML elements.
 
-For example: 
+For example:
 
 ```html
 <a href='http://google.com/' data-intro='Hello step one!'></a>
 ````
 
 See all attributes [here](https://github.com/usablica/intro.js/#attributes).
-  
+
 **3)** Call this JavaScript function:
 ```javascript
 introJs().start();
 ````
- 
+
 Optionally, pass one parameter to `introJs` function to limit the presentation section.
 
 **For example** `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
 
-<p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.png"></p>  
+<p align="center"><img src="http://usablica.github.com/intro.js/img/introjs-demo.png"></p>
 
 ## API
 
@@ -187,7 +187,7 @@ introJs().oncomplete(function() {
 
 ###introJs.onexit(providedCallback)
 
-Set callback to exit of introduction. Exit also means pressing `ESC` key and clicking on the overlay layer by the user.  
+Set callback to exit of introduction. Exit also means pressing `ESC` key and clicking on the overlay layer by the user.
 
 **Available since:** v0.2.0
 
@@ -221,7 +221,7 @@ The callback function receives the element of the new step as an argument.
 
 **Example:**
 ```javascript
-introJs().onchange(function(targetElement) {  
+introJs().onchange(function(targetElement) {
   alert("new step");
 });
 ````
@@ -242,7 +242,7 @@ Given callback function will be called before starting a new step of introductio
 
 **Example:**
 ```javascript
-introJs().onbeforechange(function(targetElement) {  
+introJs().onbeforechange(function(targetElement) {
   alert("before new step");
 });
 ````
@@ -297,11 +297,11 @@ Now you can run this command to minify all static resources:
 
 ## Instant IntroJs
 
-Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publishing.  
+Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publishing.
 
 <p align="center">
   <a target='_blank' href="http://www.packtpub.com/create-useful-introductions-for-websites-and-applications-with-introjs-library/book"><img src='http://dgdsbygo8mp3h.cloudfront.net/sites/default/files/imagecache/productview_larger/2517OS_Instant%20IntroJS%20Starter.jpg' /></a>
-</p>  
+</p>
 
 <p align="center">
   <a target='_blank' href="http://www.packtpub.com/create-useful-introductions-for-websites-and-applications-with-introjs-library/book">Buy and Download</a>
@@ -313,6 +313,8 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 - Provide more examples
 
 ## Release History
+ * **v0.6.1** - 2014-11-21 (Remind)
+   - Add events for next, skip tour and done buttons.
 
  * **v0.6.0** - 2013-11-13
    - Add step bullets with navigating
@@ -372,17 +374,17 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
    - Fix show element for elements with position `absolute` or `relative`
    - Add `enter` key for navigating in steps
    - Code refactoring
-  
-  
- * **v0.1.0** - 2013-03-16 
-   - First commit. 
+
+
+ * **v0.1.0** - 2013-03-16
+   - First commit.
 
 ## Author
 **Afshin Mehrabani**
 
 - [Twitter](https://twitter.com/afshinmeh)
 - [Github](https://github.com/afshinm)
-- [Personal page](http://afshinm.name/)  
+- [Personal page](http://afshinm.name/)
 
 [Other contributors](https://github.com/usablica/intro.js/graphs/contributors)
 
@@ -394,15 +396,15 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 ## License
 > Copyright (C) 2012 Afshin Mehrabani (afshin.meh@gmail.com)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
 and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions 
+The above copyright notice and this permission notice shall be included in all copies or substantial portions
 of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED 
-TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
