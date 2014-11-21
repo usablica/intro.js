@@ -20,6 +20,7 @@
 } (this, function (exports) {
   //Default config/variables
   var VERSION = '0.6.0';
+  var tracker = new window.Tracking();
 
   /**
    * IntroJs main class
@@ -103,7 +104,7 @@
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
             step: parseInt(currentElement.getAttribute('data-step'), 10),
-	    tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
           };
         }
@@ -116,7 +117,7 @@
         var currentElement = allIntroSteps[i];
 
         if (currentElement.getAttribute('data-step') == null) {
-          
+
           while (true) {
             if (typeof introItems[nextStep] == 'undefined') {
               break;
@@ -129,7 +130,7 @@
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
             step: nextStep + 1,
-	    tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
           };
         }
@@ -141,7 +142,7 @@
     for (var z = 0; z < introItems.length; z++) {
       introItems[z] && tempIntroItems.push(introItems[z]);  // copy non-empty values to the end of the array
     }
-    
+
     introItems = tempIntroItems;
 
     //Ok, sort all items with given steps
@@ -418,7 +419,7 @@
           skipTooltipButton    = oldHelperLayer.querySelector('.introjs-skipbutton'),
           prevTooltipButton    = oldHelperLayer.querySelector('.introjs-prevbutton'),
           nextTooltipButton    = oldHelperLayer.querySelector('.introjs-nextbutton');
-          
+
       //hide the tooltip
       oldtooltipContainer.style.opacity = 0;
 
@@ -449,7 +450,7 @@
         oldtooltipLayer.innerHTML = targetElement.intro;
         //set the tooltip position
         _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer);
-        
+
         //change active bullet
         oldHelperLayer.querySelector('.introjs-bullets li > a.active').className = '';
         oldHelperLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
@@ -478,7 +479,7 @@
 
       tooltipTextLayer.className = 'introjs-tooltiptext';
       tooltipTextLayer.innerHTML = targetElement.intro;
-      
+
       bulletsLayer.className = 'introjs-bullets';
 
       if (this._options.showBullets === false) {
@@ -530,6 +531,20 @@
       var nextTooltipButton = document.createElement('a');
 
       nextTooltipButton.onclick = function() {
+        if (tracker) {
+          var step = self._currentStep + 1;
+          var eventScreenName = targetElement.screenName + '_step' + step;
+
+          if (window.App) {
+            var eventProperties = {
+              experiment: window.App.experiment(),
+              alternative: window.App.alternative()
+            };
+          }
+
+          tracker.tap(eventScreenName, 'next', null, eventProperties || {});
+        }
+
         if (self._introItems.length - 1 != self._currentStep) {
           _nextStep.call(self);
         }
@@ -557,6 +572,21 @@
       skipTooltipButton.innerHTML = this._options.skipLabel;
 
       skipTooltipButton.onclick = function() {
+        if (tracker) {
+          var step = self._currentStep + 1;
+          var eventScreenName = targetElement.screenName + '_step' + step;
+
+          if (window.App) {
+            var eventProperties = {
+              experiment: window.App.experiment(),
+              alternative: window.App.alternative()
+            };
+          }
+
+          var eventElementName = self._introItems.length -1 == self._currentStep ? 'finish' : 'skip_tour';
+          tracker.tap(eventScreenName, eventElementName, null, eventProperties || {});
+        }
+
         if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
           self._introCompleteCallback.call(self);
         }
