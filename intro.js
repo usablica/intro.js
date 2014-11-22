@@ -536,16 +536,7 @@
       nextTooltipButton.onclick = function() {
         if (tracker) {
           var step = self._currentStep + 1;
-          var eventScreenName = targetElement.screenName + '_step' + step;
-
-          if (window.App) {
-            var eventProperties = {
-              experiment: window.App.experiment(),
-              alternative: window.App.alternative()
-            };
-          }
-
-          tracker.tap(eventScreenName, 'next', null, eventProperties || {});
+          tracker.tap(targetElement.screenName + '_step' + step, 'next', null, {});
         }
 
         if (self._introItems.length - 1 != self._currentStep) {
@@ -578,16 +569,9 @@
         if (tracker) {
           var step = self._currentStep + 1;
           var eventScreenName = targetElement.screenName + '_step' + step;
-
-          if (window.App) {
-            var eventProperties = {
-              experiment: window.App.experiment(),
-              alternative: window.App.alternative()
-            };
-          }
-
           var eventElementName = self._introItems.length -1 == self._currentStep ? 'finish' : 'skip_tour';
-          tracker.tap(eventScreenName, eventElementName, null, eventProperties || {});
+
+          tracker.tap(eventScreenName, eventElementName, null, {});
         }
 
         if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
