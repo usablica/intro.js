@@ -3,7 +3,7 @@
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
- * Copyright (C) 2013 usabli.ca - A weekend project by Afshin Mehrabani (@afshinmeh)
+ * Copyright (C) 2014 usabli.ca - A weekend project by Afshin Mehrabani (@afshinmeh)
  */
 
 (function (root, factory) {
@@ -1208,6 +1208,9 @@
       return this;
     },
     exit: function() {
+      if (typeof (this._introExitCallback) === 'function') {
+        this._introExitCallback.call(this);
+      }
       _exitIntro.call(this, this._targetElement);
       return this;
     },
