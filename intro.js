@@ -280,6 +280,23 @@
     }
   }
 
+  function _resolveElementAndShow(step) {
+    if (typeof step.element === 'function') {
+      step.element = step.element();
+    }
+
+    if (step.element) {
+      if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
+        this._introBeforeChangeCallback.call(this, step.element);
+      }
+
+      _showElement.call(this, step);
+    }
+    else {
+      this.nextStep();
+    }
+  }
+
   /**
    * Go to next step on intro
    *
@@ -306,14 +323,7 @@
     }
 
     var nextStep = this._introItems[this._currentStep];
-    if (typeof nextStep.element === 'function') {
-      nextStep.element = nextStep.element();
-    }
-    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
-    }
-
-    _showElement.call(this, nextStep);
+    _resolveElementAndShow.call(this, nextStep);
   }
 
   /**
@@ -330,14 +340,7 @@
     }
 
     var nextStep = this._introItems[--this._currentStep];
-    if (typeof nextStep.element === 'function') {
-      nextStep.element = nextStep.element();
-    }
-    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
-    }
-
-    _showElement.call(this, nextStep);
+    _resolveElementAndShow.call(this, nextStep);
   }
 
   /**
