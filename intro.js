@@ -673,6 +673,7 @@
    * @param {Object} targetElement
    */
   function _showElement(targetElement) {
+
     if (typeof (this._introChangeCallback) !== 'undefined') {
       this._introChangeCallback.call(this, targetElement.element);
     }
