@@ -340,7 +340,7 @@ introJs().onafterchange(function(targetElement) {
  - `prevLabel`: Previous button label
  - `skipLabel`: Skip button label
  - `doneLabel`: Done button label
- - `tooltipPosition`: Default tooltip position
+ - `tooltipPosition`: Default tooltip position, supports also specifiying a callback (see [this](https://github.com/janposselt/intro.js/blob/introduce-position-callback/example/custom-position/index.html) example)
  - `tooltipClass`: Adding CSS class to all tooltips
  - `highlightClass`: Additional CSS class for the helperLayer
  - `exitOnEsc`: Exit introduction when pressing Escape button, `true` or `false`
