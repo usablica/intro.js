@@ -199,7 +199,7 @@ Set a group of options to the introJs object.
 
 **Example:**
 ```javascript
-introJs().setOptions({ 'skipLabel': 'Exit', 'tooltipPosition': 'right' });
+introJs().setOptions({ 'skipLabel': 'Exit', 'position': 'right' });
 ````
 
 ----
@@ -340,7 +340,7 @@ introJs().onafterchange(function(targetElement) {
  - `prevLabel`: Previous button label
  - `skipLabel`: Skip button label
  - `doneLabel`: Done button label
- - `tooltipPosition`: Default tooltip position
+ - `position`: Default tooltip position
  - `tooltipClass`: Adding CSS class to all tooltips
  - `highlightClass`: Additional CSS class for the helperLayer
  - `exitOnEsc`: Exit introduction when pressing Escape button, `true` or `false`
