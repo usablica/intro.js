@@ -214,7 +214,7 @@
             _previousStep.call(self);
           } else if (target && target.className.indexOf('introjs-skipbutton') > 0) {
             //user hit enter while focusing on skip button
-            _exitIntro.call(self, targetElm);
+            target.click();
           } else {
             //default behavior for responding to enter
             _nextStep.call(self);
@@ -280,20 +280,48 @@
     }
   }
 
-  function _resolveElementAndShow(step) {
+  function _resolveElementAndShow(step, direction) {
+    var self = this,
+        show = function() {
+          if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
+            self._introBeforeChangeCallback.call(self, step.element);
+          }
+
+        _showElement.call(self, step);
+      }
+
     if (typeof step.element === 'function') {
-      step.element = step.element();
+      step.selectorFunc = step.element;
+    }
+
+    // store the selector function so we can re-invoke if we hit this step again during the tour
+    if (step.selectorFunc) {
+      step.element = step.selectorFunc();
     }
 
     if (step.element) {
-      if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-        this._introBeforeChangeCallback.call(this, step.element);
-      }
+      // support for promissory element functions
+      if (step.element.then) {
+        step.element.then(
+          function resolved(resolvedElement) {
+              step.element = resolvedElement;
+              show();
+          },
 
-      _showElement.call(this, step);
+          function failed() {
+            direction === 'forward' ? self.nextStep() : self.previousStep();
+          }
+        );
+      }
+      else {
+        show();
+      }
+    }
+    else if (direction === 'forward') {
+      self.nextStep();
     }
     else {
-      this.nextStep();
+      self.previousStep();
     }
   }
 
@@ -323,7 +351,7 @@
     }
 
     var nextStep = this._introItems[this._currentStep];
-    _resolveElementAndShow.call(this, nextStep);
+    _resolveElementAndShow.call(this, nextStep, 'forward');
   }
 
   /**
@@ -340,7 +368,7 @@
     }
 
     var nextStep = this._introItems[--this._currentStep];
-    _resolveElementAndShow.call(this, nextStep);
+    _resolveElementAndShow.call(this, nextStep, 'reverse');
   }
 
   /**
