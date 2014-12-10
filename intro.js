@@ -132,6 +132,7 @@
           introItems[step - 1] = {
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
+            simulateClick: currentElement.getAttribute('data-click'),
             step: parseInt(currentElement.getAttribute('data-step'), 10),
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
             highlightClass: currentElement.getAttribute('data-highlightClass'),
@@ -159,6 +160,7 @@
           introItems[nextStep] = {
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
+            simulateClick: currentElement.getAttribute('data-click'),
             step: nextStep + 1,
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
             highlightClass: currentElement.getAttribute('data-highlightClass'),
@@ -367,7 +369,7 @@
     var referenceLayer = targetElement.querySelector('.introjs-tooltipReferenceLayer');
     if (referenceLayer) {
       referenceLayer.parentNode.removeChild(referenceLayer);
-	}
+  }
     //remove disableInteractionLayer
     var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
     if (disableInteractionLayer) {
@@ -696,8 +698,10 @@
           prevTooltipButton    = oldReferenceLayer.querySelector('.introjs-prevbutton'),
           nextTooltipButton    = oldReferenceLayer.querySelector('.introjs-nextbutton');
 
-      //update or reset the helper highlight class
+      //update or reset the helper highlight class and the reference class
       oldHelperLayer.className = highlightClass;
+      // This is needed to delete the introjs-click class
+      oldReferenceLayer.className = 'introjs-tooltipReferenceLayer'
       //hide the tooltip
       oldtooltipContainer.style.opacity = 0;
       oldtooltipContainer.style.display = "none";
@@ -735,6 +739,10 @@
         if (oldHelperNumberLayer != null) {
           oldHelperNumberLayer.innerHTML = targetElement.step;
         }
+        // Add a class to the helperLayer if the user want to simulate a click
+        if(targetElement.simulateClick != null){
+          oldReferenceLayer.className += ' introjs-click';
+        }
         //set current tooltip text
         oldtooltipLayer.innerHTML = targetElement.intro;
         //set the tooltip position
@@ -759,6 +767,10 @@
           //still in the tour, focus on next
           nextTooltipButton.focus();
         }
+        
+        if (typeof (this._introAfterChangeCallback) !== 'undefined') {
+          this._introAfterChangeCallback.call(this, targetElement.element);
+        }
       }, 350);
 
     } else {
@@ -773,6 +785,11 @@
 
       helperLayer.className = highlightClass;
       referenceLayer.className = 'introjs-tooltipReferenceLayer';
+
+      //Add a class to the helperLayer if the user want to simulate a click
+      if(targetElement.simulateClick != null){
+        referenceLayer.className += ' introjs-click';
+      }
 
       //set new position to helper layer
       _setHelperLayerPosition.call(self, helperLayer);

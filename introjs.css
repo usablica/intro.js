@@ -113,6 +113,43 @@ tr.introjs-showElement > th {
   box-shadow: 0 2px 5px rgba(0,0,0,.4);
 }
 
+@-webkit-keyframes pulse {
+  from { transform: none; opacity: 1; }
+  to { transform: scale(2); opacity: 0;}
+}
+
+@-moz-keyframes pulse {
+  from { transform: none; opacity: 1; }
+  to { transform: scale(2); opacity: 0;}
+}
+
+@-o-keyframes pulse {
+  from { transform: none; opacity: 1; }
+  to { transform: scale(2); opacity: 0;}
+}
+
+@keyframes pulse {
+  from { transform: none; opacity: 1; }
+  to { transform: scale(2); opacity: 0;}
+}
+
+.introjs-click::after {
+  content: "";
+  width: 26px;
+  height: 26px;
+  border: 3px solid #4093ed;
+  border-radius: 50%; 
+  opacity: 0;  
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -17px 0 0 -17px;
+  -webkit-animation:  pulse 1s; /* Safari 4+ */
+     -moz-animation:  pulse 1s; /* Fx 5+ */
+       -o-animation:  pulse 1s; /* Opera 12+ */
+          animation:  pulse 1s;
+}
+
 .introjs-arrow {
   border: 5px solid white;
   content:'';
