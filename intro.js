@@ -96,7 +96,7 @@
         }
 
         //intro without element
-        if (typeof(currentItem.element) === 'undefined' || currentItem.element == null) {
+        if (currentItem.element === undefined) {
           var floatingElementQuery = document.querySelector(".introjsFloatingElement");
 
           if (floatingElementQuery == null) {
@@ -251,20 +251,20 @@
     return false;
   }
 
- /*
+  /*
    * makes a copy of the object
    * @api private
    * @method _cloneObject
-  */
+   */
   function _cloneObject(object) {
-      if (object == null || typeof (object) != 'object' || typeof (object.nodeType) != 'undefined') {
-          return object;
-      }
-      var temp = {};
-      for (var key in object) {
-          temp[key] = _cloneObject(object[key]);
-      }
-      return temp;
+    if (object == null || typeof (object) != 'object' || typeof (object.nodeType) != 'undefined') {
+      return object;
+    }
+    var temp = {};
+    for (var key in object) {
+      temp[key] = _cloneObject(object[key]);
+    }
+    return temp;
   }
   /**
    * Go to specific step of introduction
@@ -287,8 +287,8 @@
             self._introBeforeChangeCallback.call(self, step.element);
           }
 
-        _showElement.call(self, step);
-      }
+          _showElement.call(self, step);
+        }
 
     if (typeof step.element === 'function') {
       step.selectorFunc = step.element;
@@ -303,14 +303,14 @@
       // support for promissory element functions
       if (step.element.then) {
         step.element.then(
-          function resolved(resolvedElement) {
+            function resolved(resolvedElement) {
               step.element = resolvedElement;
               show();
-          },
+            },
 
-          function failed() {
-            direction === 'forward' ? self.nextStep() : self.previousStep();
-          }
+            function failed() {
+              direction === 'forward' ? self.nextStep() : self.previousStep();
+            }
         );
       }
       else {
@@ -404,7 +404,7 @@
     var referenceLayer = targetElement.querySelector('.introjs-tooltipReferenceLayer');
     if (referenceLayer) {
       referenceLayer.parentNode.removeChild(referenceLayer);
-	}
+    }
     //remove disableInteractionLayer
     var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
     if (disableInteractionLayer) {
@@ -672,9 +672,9 @@
 
       //set new position to helper layer
       helperLayer.setAttribute('style', 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
-                                        'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
-                                        'top:'    + (elementPosition.top    - 5)   + 'px;' +
-                                        'left: '  + (elementPosition.left   - 5)   + 'px;');
+      'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
+      'top:'    + (elementPosition.top    - 5)   + 'px;' +
+      'left: '  + (elementPosition.left   - 5)   + 'px;');
 
     }
   }
@@ -996,15 +996,15 @@
 
     if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
       var rect = targetElement.element.getBoundingClientRect(),
-        winHeight = _getWinSize().height,
-        top = rect.bottom - (rect.bottom - rect.top),
-        bottom = rect.bottom - winHeight;
+          winHeight = _getWinSize().height,
+          top = rect.bottom - (rect.bottom - rect.top),
+          bottom = rect.bottom - winHeight;
 
       //Scroll up
       if (top < 0 || targetElement.element.clientHeight > winHeight) {
         window.scrollBy(0, top - 30); // 30px padding from edge to look nice
 
-      //Scroll down
+        //Scroll down
       } else {
         window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
       }
@@ -1070,10 +1070,10 @@
     var rect = el.getBoundingClientRect();
 
     return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
-      rect.right <= window.innerWidth
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
+    rect.right <= window.innerWidth
     );
   }
 
