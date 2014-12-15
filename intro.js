@@ -510,6 +510,14 @@
         }
 
         break;
+      case 'top-right-aligned':
+        targetElementOffset = _getOffset(targetElement);
+        tooltipOffset       = _getOffset(tooltipLayer);
+
+        arrowLayer.className = 'introjs-arrow bottom-right';
+        tooltipLayer.style.right = '0px';
+        tooltipLayer.style.top = '-' + (_getOffset(tooltipLayer).height + 10) + 'px';
+        break;
       case 'bottom-right-aligned':
         arrowLayer.className      = 'introjs-arrow top-right';
         tooltipLayer.style.right  = '0px';
