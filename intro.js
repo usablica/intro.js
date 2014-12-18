@@ -484,6 +484,7 @@
     }
 
     tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
+    tooltipLayer.className = tooltipLayer.className.replace(' floating', '');
 
     //custom css class for tooltip boxes
     var tooltipCssClass = this._options.tooltipClass;
@@ -536,10 +537,9 @@
         //we have to adjust the top and left of layer manually for intro items without element
         tooltipOffset = _getOffset(tooltipLayer);
 
-        tooltipLayer.style.left   = '50%';
-        tooltipLayer.style.top    = '50%';
         tooltipLayer.style.marginLeft = '-' + (tooltipOffset.width / 2)  + 'px';
-        tooltipLayer.style.marginTop  = '-' + (tooltipOffset.height / 2) + 'px';
+        tooltipLayer.style.top = ((document.documentElement.clientHeight / 2) - tooltipOffset.height) + 'px';
+        tooltipLayer.className += ' floating';
 
         if (typeof(helperNumberLayer) != 'undefined' && helperNumberLayer != null) {
           helperNumberLayer.style.left = '-' + ((tooltipOffset.width / 2) + 18) + 'px';
