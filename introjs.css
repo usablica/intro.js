@@ -341,3 +341,40 @@ tr.introjs-showElement > th {
   left: 50%;
   top: 50%;
 }
+
+.batman-helper {
+  z-index: 1 !important;
+  animation: POW .3s;
+  -webkit-animation: POW .3s;
+}
+
+.batman-helper:hover {
+  cursor: pointer;
+}
+
+.ka-boom {
+  animation: KA-BOOM .3s;
+  -webkit-animation: KA-BOOM .3s;
+}
+
+@-webkit-keyframes POW {
+  0% {-webkit-transform: scale(0.1, 0.1); opacity: 0.0;}
+  50% {-webkit-transform: scale(1.2, 1.2);opacity: .8;}
+  100% {-webkit-transform: scale(1, 1); opacity: 1.0;}
+}
+
+@-keyframes POW {
+  0% {-webkit-transform: scale(0.1, 0.1); opacity: 0.0;}
+  50% {-webkit-transform: scale(1.2, 1.2);opacity: .8;}
+  100% {-webkit-transform: scale(1, 1); opacity: 1.0;}
+}
+
+@-webkit-keyframes KA-BOOM {
+  0% {-webkit-transform: scale(1, 1); opacity: 1.0;}
+  100% {-webkit-transform: scale(1.3, 1.3); opacity: 0.0;}
+}
+
+@-keyframes KA-BOOM {
+  0% {-webkit-transform: scale(1, 1); opacity: 1.0;}
+  100% {-webkit-transform: scale(1.3, 1.3); opacity: 0.0;}
+}

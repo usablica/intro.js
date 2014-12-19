@@ -266,6 +266,81 @@
       }
       return temp;
   }
+
+
+  /**
+   * Toggle inline helpers
+   *
+   * @api private
+   * @method _batman
+   */
+  function _batman() {
+
+      var steps = document.querySelectorAll('*[data-intro]') || [],
+          helpers = document.querySelectorAll('.batman-helper');
+
+      function toggle() {
+          if (helpers.length == 0 && steps.length > 0) {
+              for (var i = 0; i < steps.length; i++) {
+
+                var step = steps[i],
+                    helper = document.createElement('span'),
+                    helperPosition = _getOffset(step),
+                    stepNumber = step.getAttribute("data-step"),
+                    helperNumber = document.createTextNode(stepNumber);
+
+                helper.className = "introjs-helperNumberLayer batman-helper";
+                helper.style.top = helperPosition.top - 16 - 5 + "px";
+                helper.style.left = helperPosition.left - 16 - 5 + "px";
+
+                helper.setAttribute('onclick', 'javascript:introJs().goToStep('+ stepNumber +').start();');
+                helper.appendChild(helperNumber);
+
+                addHelpers(step, helper);
+                helpers = document.querySelectorAll('.batman-helper');
+              }
+          } else if (helpers.length > 0 && steps.length > 0) {
+              for (var i = 0; i < helpers.length; i++) {
+
+                  var step = steps[i],
+                      helper = helpers[i];
+
+                  helper.className += " ka-boom";
+
+                 (function(a,b){
+                     setTimeout(function(){
+                         removeHelpers(a,b)
+                     }, 300);
+                 })(step, helper);
+
+              }
+          }
+      }
+
+      function addHelpers(step, helper){
+          step.parentNode.appendChild(helper);
+      }
+
+      function removeHelpers(step, helper){
+          step.parentNode.removeChild(helper);
+      }
+
+      window.addEventListener("resize", function(){
+          for (var i = 0; i < helpers.length; i++) {
+              var helper = helpers[i],
+                  step = steps[i],
+                  helperPosition = _getOffset(step);
+
+              helper.style.top = helperPosition.top - 16 - 5 + "px";
+              helper.style.left = helperPosition.left - 16 - 5 + "px";
+          }
+      });
+
+      toggle();
+
+  }
+
+
   /**
    * Go to specific step of introduction
    *
@@ -1191,8 +1266,12 @@
       this._options = _mergeOptions(this._options, options);
       return this;
     },
-    start: function () {
+    start: function() {
       _introForElement.call(this, this._targetElement);
+      return this;
+    },
+    batman: function() {
+      _batman.call(this);
       return this;
     },
     goToStep: function(step) {
