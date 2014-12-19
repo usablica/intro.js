@@ -274,7 +274,7 @@
    * @api private
    * @method _batman
    */
-  function _batman() {
+  function _batman(options) {
 
       var steps = document.querySelectorAll('*[data-intro]') || [],
           helpers = document.querySelectorAll('.batman-helper');
@@ -293,7 +293,7 @@
                 helper.style.top = helperPosition.top - 16 - 5 + 'px';
                 helper.style.left = helperPosition.left - 16 - 5 + 'px';
 
-                helper.setAttribute('onclick', 'javascript:introJs().goToStep('+ stepNumber +').start();');
+                helper.setAttribute('onclick', 'javascript:introJs().setOptions('+ JSON.stringify(options) +').goToStep('+ stepNumber +').start();');
                 helper.appendChild(helperNumber);
 
                 addHelpers(step, helper);
@@ -1269,8 +1269,8 @@
       _introForElement.call(this, this._targetElement);
       return this;
     },
-    batman: function() {
-      _batman.call(this);
+    batman: function(options) {
+      _batman.call(this, options);
       return this;
     },
     goToStep: function(step) {

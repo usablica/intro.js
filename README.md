@@ -148,8 +148,13 @@ introJs().goToStep(3).start().previousStep(); //starts introduction from step 2
 ###introJs.batman()
 
 Toggle clickable helpers for each available step of the introduction.
+You can set a group of options to the introJs object as you would with setOptions().
 
 **Available since**: v1.0.0
+
+**Parameters:**
+ - options : Object
+   Object that contains option keys with values.
 
 **Example:**
 ```javascript
