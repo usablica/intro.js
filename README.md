@@ -145,6 +145,19 @@ introJs().goToStep(3).start().previousStep(); //starts introduction from step 2
 
 -----
 
+###introJs.batman()
+
+Toggle clickable helpers for each available step of the introduction.
+
+**Available since**: v1.0.0
+
+**Example:**
+```javascript
+introJs().batman()
+````
+
+-----
+
 ###introJs.exit()
 
 Exit the introduction.
