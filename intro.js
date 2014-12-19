@@ -286,12 +286,12 @@
                 var step = steps[i],
                     helper = document.createElement('span'),
                     helperPosition = _getOffset(step),
-                    stepNumber = step.getAttribute("data-step"),
+                    stepNumber = step.getAttribute('data-step'),
                     helperNumber = document.createTextNode(stepNumber);
 
-                helper.className = "introjs-helperNumberLayer batman-helper";
-                helper.style.top = helperPosition.top - 16 - 5 + "px";
-                helper.style.left = helperPosition.left - 16 - 5 + "px";
+                helper.className = 'introjs-helperNumberLayer batman-helper';
+                helper.style.top = helperPosition.top - 16 - 5 + 'px';
+                helper.style.left = helperPosition.left - 16 - 5 + 'px';
 
                 helper.setAttribute('onclick', 'javascript:introJs().goToStep('+ stepNumber +').start();');
                 helper.appendChild(helperNumber);
@@ -305,7 +305,7 @@
                   var step = steps[i],
                       helper = helpers[i];
 
-                  helper.className += " ka-boom";
+                  helper.className += ' ka-boom';
 
                  (function(a,b){
                      setTimeout(function(){
@@ -325,19 +325,18 @@
           step.parentNode.removeChild(helper);
       }
 
-      window.addEventListener("resize", function(){
+      window.addEventListener('resize', function(){
           for (var i = 0; i < helpers.length; i++) {
               var helper = helpers[i],
                   step = steps[i],
                   helperPosition = _getOffset(step);
 
-              helper.style.top = helperPosition.top - 16 - 5 + "px";
-              helper.style.left = helperPosition.left - 16 - 5 + "px";
+              helper.style.top = helperPosition.top - 16 - 5 + 'px';
+              helper.style.left = helperPosition.left - 16 - 5 + 'px';
           }
       });
 
       toggle();
-
   }
 
 
