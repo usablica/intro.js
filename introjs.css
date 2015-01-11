@@ -76,7 +76,10 @@ tr.introjs-showElement > th {
 
 .introjs-helperLayer *,
 .introjs-helperLayer *:before,
-.introjs-helperLayer *:after {
+.introjs-helperLayer *:after,
+.introjs-tooltipReferenceLayer *,
+.introjs-tooltipReferenceLayer *:before,
+.introjs-tooltipReferenceLayer *:after {
   -webkit-box-sizing: content-box;
      -moz-box-sizing: content-box;
       -ms-box-sizing: content-box;
