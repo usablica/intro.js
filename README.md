@@ -409,6 +409,7 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
    - Fix bad sizing with Bootstrap 3
    - Add disable interaction ability
    - Fix code styling issues and many minor bug fixes
+   - Fix stage number positioning with bootstrap
 
  * **v0.9.0** - 2014-05-23
    - Add IntroJS templates
