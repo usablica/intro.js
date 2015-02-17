@@ -65,7 +65,9 @@
       /* Precedence of positions, when auto is enabled */
       positionPrecedence: ["bottom", "top", "right", "left"],
       /* Disable an interaction with element? */
-      disableInteraction: false
+      disableInteraction: false,
+      /* How much padding around the selected element? */
+      helperElementPadding: 10
     };
   }
 
@@ -627,7 +629,7 @@
 
       var currentElement  = this._introItems[this._currentStep],
           elementPosition = _getOffset(currentElement.element),
-          widthHeightPadding = 10;
+          widthHeightPadding = this._options.helperElementPadding;
 
       if (currentElement.position == 'floating') {
         widthHeightPadding = 0;
@@ -636,8 +638,8 @@
       //set new position to helper layer
       helperLayer.setAttribute('style', 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
                                         'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
-                                        'top:'    + (elementPosition.top    - 5)   + 'px;' +
-                                        'left: '  + (elementPosition.left   - 5)   + 'px;');
+                                        'top:'    + (elementPosition.top    - widthHeightPadding / 2)   + 'px;' +
+                                        'left: '  + (elementPosition.left   - widthHeightPadding / 2)   + 'px;');
 
     }
   }
