@@ -262,7 +262,11 @@
       }
       var temp = {};
       for (var key in object) {
-          temp[key] = _cloneObject(object[key]);
+          if (object[key] instanceof jQuery) {
+	          temp[key] = object[key];
+          } else {
+	          temp[key] = _cloneObject(object[key]);
+          }
       }
       return temp;
   }
