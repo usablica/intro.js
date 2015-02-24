@@ -28,6 +28,8 @@
    */
   function IntroJs(obj) {
     this._targetElement = obj;
+    this._introVisible = false;
+    this.modal = null;
 
     this._options = {
       /* Next button label in tooltip box */
@@ -192,8 +194,19 @@
       var skipButton     = targetElm.querySelector('.introjs-skipbutton'),
           nextStepButton = targetElm.querySelector('.introjs-nextbutton');
 
+      self._onFocus = function(event) {
+        if (self._introVisible && !self.modal.contains(event.target)) {
+          event.stopPropagation();
+          self.modal.querySelector('.introjs-nextbutton').focus();
+        }
+      };
+
       self._onKeyDown = function(e) {
-        if (e.keyCode === 27 && self._options.exitOnEsc == true) {
+        // Check to see if it is the tab or shift-tab, and if so do nothing.
+        if (e.keyCode === 9 && e.shiftKey === true || e.keyCode === 9) {
+          //Do nothing
+          return;
+        } else if (e.keyCode === 27 && self._options.exitOnEsc == true) {
           //escape key pressed, exit the intro
           _exitIntro.call(self, targetElm);
           //check if any callback is defined
@@ -237,16 +250,21 @@
       if (window.addEventListener) {
         if (this._options.keyboardNavigation) {
           window.addEventListener('keydown', self._onKeyDown, true);
+          window.addEventListener('focus', this._onFocus, true);
         }
         //for window resize
         window.addEventListener('resize', self._onResize, true);
       } else if (document.attachEvent) { //IE
         if (this._options.keyboardNavigation) {
           document.attachEvent('onkeydown', self._onKeyDown);
+          document.attachEvent('onfocus', this._onFocus, true);
         }
         //for window resize
         document.attachEvent('onresize', self._onResize);
       }
+
+      //document.addEventListener("keydown", this._onKeyDown, true);
+      //document.addEventListener("focus", this._onFocus, true);
     }
     return false;
   }
@@ -397,8 +415,12 @@
     //clean listeners
     if (window.removeEventListener) {
       window.removeEventListener('keydown', this._onKeyDown, true);
+      window.removeEventListener("focus", this._onFocus, true);
+      window.removeEventListener('resize', self._onResize, true);
     } else if (document.detachEvent) { //IE
-      document.detachEvent('onkeydown', this._onKeyDown);
+      document.detachEvent('onkeypress', this._onKeyDown);
+      document.detachEvent('onfocus', this._onFocus, true);
+      document.detachEvent('onresize', self._onResize);
     }
 
     //set the step to zero
@@ -833,6 +855,7 @@
       }
 
       tooltipLayer.className = 'introjs-tooltip';
+      tooltipLayer.id = 'introjs-tooltip';
       tooltipLayer.appendChild(tooltipTextLayer);
       tooltipLayer.appendChild(bulletsLayer);
       tooltipLayer.appendChild(progressLayer);
@@ -972,6 +995,8 @@
         window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
       }
     }
+    this._introVisible = true;
+    this.modal = document.getElementById('introjs-tooltip');
 
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
       this._introAfterChangeCallback.call(this, targetElement.element);
