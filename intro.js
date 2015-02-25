@@ -418,7 +418,7 @@
       window.removeEventListener("focus", this._onFocus, true);
       window.removeEventListener('resize', self._onResize, true);
     } else if (document.detachEvent) { //IE
-      document.detachEvent('onkeypress', this._onKeyDown);
+      document.detachEvent('onkeydown', this._onKeyDown);
       document.detachEvent('onfocus', this._onFocus, true);
       document.detachEvent('onresize', self._onResize);
     }
