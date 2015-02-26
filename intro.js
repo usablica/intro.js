@@ -89,11 +89,17 @@
         var currentItem = _cloneObject(this._options.steps[i]);
         //set the step
         currentItem.step = introItems.length + 1;
+        var givenElementNotFound = false;
         //use querySelector function only when developer used CSS selector
         if (typeof(currentItem.element) === 'string') {
           //grab the element with given selector from the page
           currentItem.element = document.querySelector(currentItem.element);
+          //element given cannot be found, so we mark it
+          if (currentItem.element == null) givenElementNotFound = true;
         }
+
+        //if the given element does not exist, exclude it from the steps
+        if (givenElementNotFound) continue;
 
         //intro without element
         if (typeof(currentItem.element) === 'undefined' || currentItem.element == null) {
