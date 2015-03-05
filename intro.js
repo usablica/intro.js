@@ -125,7 +125,11 @@
 
       //first add intro items with data-step
       for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
-        var currentElement = allIntroSteps[i];
+        // if element is hidden don't use it
+        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
+        if (allIntroSteps[i].offsetParent !== null) {
+          var currentElement = allIntroSteps[i];
+        }
         var step = parseInt(currentElement.getAttribute('data-step'), 10);
 
         if (step > 0) {
