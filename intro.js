@@ -1101,6 +1101,9 @@
   function _getOffset(element) {
     var elementPosition = {};
 
+    // Use document as element if not supplied
+    element = element || document;
+
     //set width
     elementPosition.width = element.offsetWidth;
 
