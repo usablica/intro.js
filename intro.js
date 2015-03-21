@@ -452,8 +452,8 @@
     var tooltipCssClass = this._options.tooltipClass;
 
     currentTooltipPosition = this._introItems[this._currentStep].position;
-    if ((currentTooltipPosition == "auto" || this._options.tooltipPosition == "auto")) {
-      if (currentTooltipPosition != "floating") { // Floating is always valid, no point in calculating
+    if ((this._options.tooltipPosition == "auto")) {
+      if (currentTooltipPosition == "auto" || currentTooltipPosition == null) {
         currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer, currentTooltipPosition)
       }
     }
