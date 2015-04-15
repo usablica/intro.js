@@ -2,6 +2,11 @@
 
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
+## Latest news
+
+Sorry for this long delay on releasing the new version of IntroJS. We are working to merge pull requests and address almost all issues. IntroJS is **still alive** and we will release a new version soon.
+
+
 ## Where to get
 You can obtain your local copy of Intro.js from:
 
