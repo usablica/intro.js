@@ -304,7 +304,13 @@
       _exitIntro.call(this, this._targetElement);
       return;
     }
-
+	  if( (typeof this._prevStep !='undefined') && (this._currentStep != this._prevStep)) {
+		  var prevStep = this._introItems[ this._prevStep ];
+		  if ( typeof (this._introBeforeLeaveCallback) !== 'undefined' ) {
+			  // @change
+			  this._introBeforeLeaveCallback.call( this, prevStep.element, prevStep );
+		  }
+	  }
     var nextStep = this._introItems[this._currentStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
       this._introBeforeChangeCallback.call(this, nextStep.element, nextStep);
@@ -325,7 +331,11 @@
     if (this._currentStep === 0) {
       return false;
     }
-
+	  var prevStep = this._introItems[ this._currentStep ];
+	  if ( typeof (this._introBeforeLeaveCallback) !== 'undefined' ) {
+		  // @change
+		  this._introBeforeLeaveCallback.call( this, prevStep.element, prevStep );
+	  }
     var nextStep = this._introItems[--this._currentStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
       this._introBeforeChangeCallback.call(this, nextStep.element, nextStep);
@@ -667,7 +677,8 @@
    * @param {Object} targetElement
    */
   function _showElement(targetElement) {
-
+	  //Update prevStep
+	  this._prevStep = this._currentStep;
     if (typeof (this._introChangeCallback) !== 'undefined') {
       this._introChangeCallback.call(this, targetElement.element, targetElement);
     }
@@ -1240,6 +1251,15 @@
       }
       return this;
     },
+	  onbeforeleave: function ( providedCallback ) {
+		  if ( typeof (						providedCallback
+			  ) === 'function' ) {
+			  this._introBeforeLeaveCallback = providedCallback;
+		  } else {
+			  throw new Error( 'Provided callback for onbeforeleave was not a function' );
+		  }
+		  return this;
+	  },
     oncomplete: function(providedCallback) {
       if (typeof (providedCallback) === 'function') {
         this._introCompleteCallback = providedCallback;
