@@ -633,11 +633,23 @@
         widthHeightPadding = 0;
       }
 
+      //get Overlay helper layer user specific adjustments
+      var topAdjustLightBox=0;
+      var leftAdjustLightBox=0;
+      if(currentElement.topAdjustLightBox){
+        if(!isNaN(currentElement.topAdjustLightBox))
+          topAdjustLightBox=parseInt(currentElement.topAdjustLightBox);  
+      }
+      if(currentElement.leftAdjustLightBox){
+        if(!isNaN(currentElement.leftAdjustLightBox))
+          leftAdjustLightBox=parseInt(currentElement.leftAdjustLightBox);  
+      }
+
       //set new position to helper layer
       helperLayer.setAttribute('style', 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
                                         'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
-                                        'top:'    + (elementPosition.top    - 5)   + 'px;' +
-                                        'left: '  + (elementPosition.left   - 5)   + 'px;');
+                                        'top:'    + (elementPosition.top + topAdjustLightBox   - 5)   + 'px;' +
+                                        'left: '  + (elementPosition.left + leftAdjustLightBox  - 5)   + 'px;');
 
     }
   }
