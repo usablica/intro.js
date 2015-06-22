@@ -212,6 +212,14 @@
           if (target && target.className.indexOf('introjs-prevbutton') > 0) {
             //user hit enter while focusing on previous button
             _previousStep.call(self);
+          } else if (target && target.className.indexOf('intojs-completed') > 0) {
+              //default behavior for responding to enter if the introjs completed
+              if (typeof (this._introCompleteCallback) === 'function') {
+                  this._introCompleteCallback.call(this);
+              }
+              _exitIntro.call(this, this._targetElement);
+              return;
+
           } else if (target && target.className.indexOf('introjs-skipbutton') > 0) {
             //user hit enter while focusing on skip button
             _exitIntro.call(self, targetElm);
@@ -294,8 +302,8 @@
     } else {
       ++this._currentStep;
     }
-
-    if ((this._introItems.length) <= this._currentStep) {
+    //alert((this._introItems.length) <= this._currentStep);
+    if ((this._introItems.length) <= this._currentStep-1) {
       //end of the intro
       //check if any callback is defined
       if (typeof (this._introCompleteCallback) === 'function') {
@@ -702,6 +710,11 @@
       oldtooltipContainer.style.opacity = 0;
       oldtooltipContainer.style.display = "none";
 
+        if (this._introItems.length == targetElement.step ) {
+            nextTooltipButton.style.opacity = 0;
+            skipTooltipButton.className = skipTooltipButton.className+' intojs-completed';
+        }
+
       if (oldHelperNumberLayer != null) {
         var lastIntroItem = this._introItems[(targetElement.step - 2 >= 0 ? targetElement.step - 2 : 0)];
 
@@ -742,6 +755,7 @@
         _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
 
         //change active bullet
+          console.log(oldReferenceLayer);
         oldReferenceLayer.querySelector('.introjs-bullets li > a.active').className = '';
         oldReferenceLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
 
