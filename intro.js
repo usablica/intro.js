@@ -702,6 +702,10 @@
       oldtooltipContainer.style.opacity = 0;
       oldtooltipContainer.style.display = "none";
 
+        if (this._introItems.length == targetElement.step ) {
+            nextTooltipButton.style.opacity = 0;
+        }
+        
       if (oldHelperNumberLayer != null) {
         var lastIntroItem = this._introItems[(targetElement.step - 2 >= 0 ? targetElement.step - 2 : 0)];
 
