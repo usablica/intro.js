@@ -520,7 +520,12 @@
         tooltipOffset       = _getOffset(tooltipLayer);
 
         arrowLayer.className      = 'introjs-arrow top-middle';
-        tooltipLayer.style.left   = (targetElementOffset.width / 2 - tooltipOffset.width / 2) + 'px';
+        var tooltipLayerStyleLeft = targetElementOffset.width / 2 - tooltipOffset.width / 2;
+        // off the right side of the window
+        if (targetElementOffset.left + tooltipLayerStyleLeft + tooltipOffset.width > windowSize.width)
+          tooltipLayer.style.left = (windowSize.width - tooltipOffset.width - targetElementOffset.left) + 'px';
+        else
+          tooltipLayer.style.left = tooltipLayerStyleLeft + 'px';
         tooltipLayer.style.top    = (targetElementOffset.height +  20) + 'px';
         break;
       case 'bottom-left-aligned':
