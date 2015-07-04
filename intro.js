@@ -410,15 +410,17 @@
    *
    * @api private
    * @method _placeTooltip
-   * @param {Object} targetElement
-   * @param {Object} tooltipLayer
-   * @param {Object} arrowLayer
+   * @param {HTMLElement} targetElement
+   * @param {HTMLElement} tooltipLayer
+   * @param {HTMLElement} arrowLayer
+   * @param {HTMLElement} helperNumberLayer
    */
   function _placeTooltip(targetElement, tooltipLayer, arrowLayer, helperNumberLayer) {
     var tooltipCssClass = '',
         currentStepObj,
         tooltipOffset,
-        targetElementOffset;
+        targetElementOffset,
+        currentTooltipPosition;
 
     //reset the old style
     tooltipLayer.style.top        = null;
@@ -448,18 +450,15 @@
 
     tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
 
-    //custom css class for tooltip boxes
-    var tooltipCssClass = this._options.tooltipClass;
-
     currentTooltipPosition = this._introItems[this._currentStep].position;
     if ((currentTooltipPosition == "auto" || this._options.tooltipPosition == "auto")) {
       if (currentTooltipPosition != "floating") { // Floating is always valid, no point in calculating
         currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer, currentTooltipPosition)
       }
     }
-    var targetOffset = _getOffset(targetElement)
-    var tooltipHeight = _getOffset(tooltipLayer).height
-    var windowSize = _getWinSize()
+    var targetOffset = _getOffset(targetElement);
+    var tooltipHeight = _getOffset(tooltipLayer).height;
+    var windowSize = _getWinSize();
     switch (currentTooltipPosition) {
       case 'top':
         tooltipLayer.style.left = '15px';
@@ -484,7 +483,7 @@
         if (targetOffset.top + tooltipHeight > windowSize.height) {
           // In this case, left would have fallen below the bottom of the screen.
           // Modify so that the bottom of the tooltip connects with the target
-          tooltipLayer.style.top = "-" + (tooltipHeight - targetOffset.height - 20) + "px"
+          tooltipLayer.style.top = "-" + (tooltipHeight - targetOffset.height - 20) + "px";
           arrowLayer.className = 'introjs-arrow right-bottom';
         } else {
           arrowLayer.className = 'introjs-arrow right';
