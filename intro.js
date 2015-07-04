@@ -510,30 +510,65 @@
         break;
       case 'bottom-right-aligned':
         arrowLayer.className      = 'introjs-arrow top-right';
-        tooltipLayer.style.right  = '0px';
-        tooltipLayer.style.bottom = '-' + (tooltipOffset.height + 10) + 'px';
-        break;
-      case 'bottom-middle-aligned':
-        arrowLayer.className      = 'introjs-arrow top-middle';
-        var tooltipLayerStyleLeft = targetOffset.width / 2 - tooltipOffset.width / 2;
-        // off the right side of the window
-        if (targetOffset.left + tooltipLayerStyleLeft + tooltipOffset.width > windowSize.width)
-          tooltipLayer.style.left = (windowSize.width - tooltipOffset.width - targetOffset.left) + 'px';
-        else
-          tooltipLayer.style.left = tooltipLayerStyleLeft + 'px';
+
+        var tooltipLayerStyleRight = 0;
+        _checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer);
         tooltipLayer.style.top    = (targetOffset.height +  20) + 'px';
         break;
+
+      case 'bottom-middle-aligned':
+        arrowLayer.className      = 'introjs-arrow top-middle';
+
+        var tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipOffset.width / 2;
+        if (_checkLeft(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, tooltipLayer)) {
+          tooltipLayer.style.right = null;
+          _checkRight(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, windowSize, tooltipLayer);
+        }
+        tooltipLayer.style.top = (targetOffset.height + 20) + 'px';
+        break;
+
       case 'bottom-left-aligned':
       // Bottom-left-aligned is the same as the default bottom
       case 'bottom':
       // Bottom going to follow the default behavior
       default:
-        tooltipLayer.style.bottom = '-' + (tooltipOffset.height + 10) + 'px';
-        tooltipLayer.style.left = (targetOffset.width / 2 - tooltipOffset.width / 2) + 'px';
-
         arrowLayer.className = 'introjs-arrow top';
+
+        var tooltipLayerStyleLeft = 0;
+        _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
+        tooltipLayer.style.top    = (targetOffset.height +  20) + 'px';
         break;
     }
+  }
+
+  /**
+   * Set tooltip left so it doesn't go off the right side of the window
+   *
+   * @return boolean true, if tooltipLayerStyleLeft is ok.  false, otherwise.
+   */
+  function _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer) {
+    if (targetOffset.left + tooltipLayerStyleLeft + tooltipOffset.width > windowSize.width) {
+      // off the right side of the window
+      tooltipLayer.style.left = (windowSize.width - tooltipOffset.width - targetOffset.left) + 'px';
+      return false;
+    }
+    tooltipLayer.style.left = tooltipLayerStyleLeft + 'px';
+    return true;
+  }
+
+  /**
+   * Set tooltip right so it doesn't go off the left side of the window
+   *
+   * @return boolean true, if tooltipLayerStyleRight is ok.  false, otherwise.
+   */
+  function _checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer) {
+    if (targetOffset.left + targetOffset.width - tooltipLayerStyleRight - tooltipOffset.width < 0) {
+      // off the left side of the window
+      tooltipLayer.style.left = (-targetOffset.left) + 'px';
+      return false;
+    }
+    tooltipLayer.style.right = tooltipLayerStyleRight + 'px';
+    return true;
   }
 
   /**
