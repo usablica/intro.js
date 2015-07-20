@@ -214,7 +214,11 @@
             _previousStep.call(self);
           } else if (target && target.className.indexOf('introjs-skipbutton') > 0) {
             //user hit enter while focusing on skip button
-            _exitIntro.call(self, targetElm);
+            if (self._introItems.length - 1 === self._currentStep) {
+              _nextStep.call(self);
+            } else {
+              _exitIntro.call(self, targetElm);
+            }
           } else {
             //default behavior for responding to enter
             _nextStep.call(self);
