@@ -473,8 +473,9 @@
           // Modify so that the bottom of the tooltip connects with the target
           arrowLayer.className = "introjs-arrow left-bottom";
           tooltipLayer.style.top = "-" + (tooltipHeight - targetOffset.height - 20) + "px"
+        } else {
+          arrowLayer.className = 'introjs-arrow left';
         }
-        arrowLayer.className = 'introjs-arrow left';
         break;
       case 'left':
         if (this._options.showStepNumbers == true) {
