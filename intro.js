@@ -194,11 +194,12 @@
 
       self._onKeyDown = function(e) {
         if (e.keyCode === 27 && self._options.exitOnEsc == true) {
+          var currentStepOnExit = self._currentStep;
           //escape key pressed, exit the intro
           _exitIntro.call(self, targetElm);
           //check if any callback is defined
           if (self._introExitCallback != undefined) {
-            self._introExitCallback.call(self);
+            self._introExitCallback.call(self, currentStepOnExit);
           }
         } else if(e.keyCode === 37) {
           //left arrow
@@ -884,7 +885,7 @@
         }
 
         if (self._introItems.length - 1 != self._currentStep && typeof (self._introExitCallback) === 'function') {
-          self._introExitCallback.call(self);
+          self._introExitCallback.call(self, self._currentStep);
         }
 
         _exitIntro.call(self, self._targetElement);
@@ -1072,11 +1073,12 @@
 
     overlayLayer.onclick = function() {
       if (self._options.exitOnOverlayClick == true) {
+        var currentStepOnExit = self._currentStep;
         _exitIntro.call(self, targetElm);
 
         //check if any callback is defined
         if (self._introExitCallback != undefined) {
-          self._introExitCallback.call(self);
+          self._introExitCallback.call(self, currentStepOnExit);
         }
       }
     };
