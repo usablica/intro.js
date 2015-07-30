@@ -96,7 +96,7 @@
         }
 
         //intro without element
-        if (typeof(currentItem.element) === 'undefined' || currentItem.element == null) {
+        if (currentItem.element === undefined) {
           var floatingElementQuery = document.querySelector(".introjsFloatingElement");
 
           if (floatingElementQuery == null) {
@@ -214,7 +214,7 @@
             _previousStep.call(self);
           } else if (target && target.className.indexOf('introjs-skipbutton') > 0) {
             //user hit enter while focusing on skip button
-            _exitIntro.call(self, targetElm);
+            target.click();
           } else {
             //default behavior for responding to enter
             _nextStep.call(self);
@@ -251,20 +251,20 @@
     return false;
   }
 
- /*
+  /*
    * makes a copy of the object
    * @api private
    * @method _cloneObject
-  */
+   */
   function _cloneObject(object) {
-      if (object == null || typeof (object) != 'object' || typeof (object.nodeType) != 'undefined') {
-          return object;
-      }
-      var temp = {};
-      for (var key in object) {
-          temp[key] = _cloneObject(object[key]);
-      }
-      return temp;
+    if (object == null || typeof (object) != 'object' || typeof (object.nodeType) != 'undefined') {
+      return object;
+    }
+    var temp = {};
+    for (var key in object) {
+      temp[key] = _cloneObject(object[key]);
+    }
+    return temp;
   }
   /**
    * Go to specific step of introduction
@@ -277,6 +277,51 @@
     this._currentStep = step - 2;
     if (typeof (this._introItems) !== 'undefined') {
       _nextStep.call(this);
+    }
+  }
+
+  function _resolveElementAndShow(step, direction) {
+    var self = this,
+        show = function() {
+          if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
+            self._introBeforeChangeCallback.call(self, step.element);
+          }
+
+          _showElement.call(self, step);
+        }
+
+    if (typeof step.element === 'function') {
+      step.selectorFunc = step.element;
+    }
+
+    // store the selector function so we can re-invoke if we hit this step again during the tour
+    if (step.selectorFunc) {
+      step.element = step.selectorFunc();
+    }
+
+    if (step.element) {
+      // support for promissory element functions
+      if (step.element.then) {
+        step.element.then(
+            function resolved(resolvedElement) {
+              step.element = resolvedElement;
+              show();
+            },
+
+            function failed() {
+              direction === 'forward' ? self.nextStep() : self.previousStep();
+            }
+        );
+      }
+      else {
+        show();
+      }
+    }
+    else if (direction === 'forward') {
+      self.nextStep();
+    }
+    else {
+      self.previousStep();
     }
   }
 
@@ -306,11 +351,7 @@
     }
 
     var nextStep = this._introItems[this._currentStep];
-    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
-    }
-
-    _showElement.call(this, nextStep);
+    _resolveElementAndShow.call(this, nextStep, 'forward');
   }
 
   /**
@@ -327,11 +368,7 @@
     }
 
     var nextStep = this._introItems[--this._currentStep];
-    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
-    }
-
-    _showElement.call(this, nextStep);
+    _resolveElementAndShow.call(this, nextStep, 'reverse');
   }
 
   /**
@@ -367,7 +404,7 @@
     var referenceLayer = targetElement.querySelector('.introjs-tooltipReferenceLayer');
     if (referenceLayer) {
       referenceLayer.parentNode.removeChild(referenceLayer);
-	}
+    }
     //remove disableInteractionLayer
     var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
     if (disableInteractionLayer) {
@@ -447,6 +484,7 @@
     }
 
     tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
+    tooltipLayer.className = tooltipLayer.className.replace(' floating', '');
 
     //custom css class for tooltip boxes
     var tooltipCssClass = this._options.tooltipClass;
@@ -499,10 +537,9 @@
         //we have to adjust the top and left of layer manually for intro items without element
         tooltipOffset = _getOffset(tooltipLayer);
 
-        tooltipLayer.style.left   = '50%';
-        tooltipLayer.style.top    = '50%';
         tooltipLayer.style.marginLeft = '-' + (tooltipOffset.width / 2)  + 'px';
-        tooltipLayer.style.marginTop  = '-' + (tooltipOffset.height / 2) + 'px';
+        tooltipLayer.style.top = ((document.documentElement.clientHeight / 2) - tooltipOffset.height) + 'px';
+        tooltipLayer.className += ' floating';
 
         if (typeof(helperNumberLayer) != 'undefined' && helperNumberLayer != null) {
           helperNumberLayer.style.left = '-' + ((tooltipOffset.width / 2) + 18) + 'px';
@@ -635,9 +672,9 @@
 
       //set new position to helper layer
       helperLayer.setAttribute('style', 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
-                                        'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
-                                        'top:'    + (elementPosition.top    - 5)   + 'px;' +
-                                        'left: '  + (elementPosition.left   - 5)   + 'px;');
+      'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
+      'top:'    + (elementPosition.top    - 5)   + 'px;' +
+      'left: '  + (elementPosition.left   - 5)   + 'px;');
 
     }
   }
@@ -959,15 +996,15 @@
 
     if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
       var rect = targetElement.element.getBoundingClientRect(),
-        winHeight = _getWinSize().height,
-        top = rect.bottom - (rect.bottom - rect.top),
-        bottom = rect.bottom - winHeight;
+          winHeight = _getWinSize().height,
+          top = rect.bottom - (rect.bottom - rect.top),
+          bottom = rect.bottom - winHeight;
 
       //Scroll up
       if (top < 0 || targetElement.element.clientHeight > winHeight) {
         window.scrollBy(0, top - 30); // 30px padding from edge to look nice
 
-      //Scroll down
+        //Scroll down
       } else {
         window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
       }
@@ -1033,10 +1070,10 @@
     var rect = el.getBoundingClientRect();
 
     return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
-      rect.right <= window.innerWidth
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
+    rect.right <= window.innerWidth
     );
   }
 
