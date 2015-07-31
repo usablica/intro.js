@@ -460,7 +460,7 @@
     var windowSize = _getWinSize();
     switch (currentTooltipPosition) {
       case 'top':
-        tooltipLayer.style.left = '15px';;
+        tooltipLayer.style.left = '15px';
         tooltipLayer.style.top = '-' + (tooltipHeight + 10) + 'px';
         arrowLayer.className = 'introjs-arrow bottom';
         break;
