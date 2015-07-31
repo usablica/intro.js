@@ -715,7 +715,7 @@
       //remove `introjs-fixParent` class from the elements
       var fixParents = document.querySelectorAll('.introjs-fixParent');
       if (fixParents && fixParents.length > 0) {
-        for (i = fixParents.length - 1; i >= 0; i--) {
+        for (var i = fixParents.length - 1; i >= 0; i--) {
           fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
         }
       }
