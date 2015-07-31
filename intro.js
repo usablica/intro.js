@@ -79,12 +79,11 @@
    */
   function _introForElement(targetElm) {
     var introItems = [],
-        self = this,
-        i;
+        self = this;
 
     if (this._options.steps) {
       //use steps passed programmatically
-      for (i = 0, stepsLength = this._options.steps.length; i < stepsLength; i++) {
+      for (var i = 0, stepsLength = this._options.steps.length; i < stepsLength; i++) {
         var currentItem = _cloneObject(this._options.steps[i]);
         //set the step
         currentItem.step = introItems.length + 1;
