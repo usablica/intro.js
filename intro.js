@@ -65,7 +65,9 @@
       /* Precedence of positions, when auto is enabled */
       positionPrecedence: ["bottom", "top", "right", "left"],
       /* Disable an interaction with element? */
-      disableInteraction: false
+      disableInteraction: false,
+      /* Show a "X" at the top right of the helplayer */
+      showCloseX: false
     };
   }
 
@@ -839,7 +841,25 @@
         buttonsLayer.style.display = 'none';
       }
 
+      if (this._options.showCloseX === true) {
+        console.log('showCloseX');
+        var closeXLink = document.createElement('a');
+        closeXLink.className = 'introjs-closelink';
+        closeXLink.href = 'javascript:void(0);';
+        closeXLink.innerHTML = 'x';
+        closeXLink.onclick = function () {
+          if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
+            self._introCompleteCallback.call(self);
+          }
+          if (self._introItems.length - 1 != self._currentStep && typeof (self._introExitCallback) === 'function') {
+            self._introExitCallback.call(self);
+          }
+          _exitIntro.call(self, self._targetElement);
+        };
+      }
+
       tooltipLayer.className = 'introjs-tooltip';
+      tooltipLayer.appendChild(closeXLink)
       tooltipLayer.appendChild(tooltipTextLayer);
       tooltipLayer.appendChild(bulletsLayer);
       tooltipLayer.appendChild(progressLayer);
