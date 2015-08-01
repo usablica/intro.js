@@ -65,7 +65,7 @@ tr.introjs-showElement > th {
 
 .introjs-tooltipReferenceLayer {
   position: absolute;
-  z-index: 10000000;
+  z-index: 9999997;
   background-color: transparent;
   -webkit-transition: all 0.3s ease-out;
      -moz-transition: all 0.3s ease-out;
