@@ -195,11 +195,11 @@
       self._onKeyDown = function(e) {
         if (e.keyCode === 27 && self._options.exitOnEsc == true) {
           //escape key pressed, exit the intro
-          //check if exit callback is defined
+          _exitIntro.call(self, targetElm);
+          //check if any callback is defined
           if (self._introExitCallback != undefined) {
             self._introExitCallback.call(self);
           }
-          _exitIntro.call(self, targetElm);
         } else if(e.keyCode === 37) {
           //left arrow
           _previousStep.call(self);
@@ -214,13 +214,6 @@
             _previousStep.call(self);
           } else if (target && target.className.indexOf('introjs-skipbutton') > 0) {
             //user hit enter while focusing on skip button
-            if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
-                self._introCompleteCallback.call(self);
-            }
-            //check if any callback is defined
-            if (self._introExitCallback != undefined) {
-              self._introExitCallback.call(self);
-            }
             _exitIntro.call(self, targetElm);
           } else {
             //default behavior for responding to enter
@@ -374,7 +367,7 @@
     var referenceLayer = targetElement.querySelector('.introjs-tooltipReferenceLayer');
     if (referenceLayer) {
       referenceLayer.parentNode.removeChild(referenceLayer);
-	}
+  }
     //remove disableInteractionLayer
     var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
     if (disableInteractionLayer) {
@@ -697,6 +690,7 @@
     if (oldHelperLayer != null) {
       var oldHelperNumberLayer = oldReferenceLayer.querySelector('.introjs-helperNumberLayer'),
           oldtooltipLayer      = oldReferenceLayer.querySelector('.introjs-tooltiptext'),
+          oldtooltipTitleLayer      = oldReferenceLayer.querySelector('.introjs-tooltiptitle'),
           oldArrowLayer        = oldReferenceLayer.querySelector('.introjs-arrow'),
           oldtooltipContainer  = oldReferenceLayer.querySelector('.introjs-tooltip'),
           skipTooltipButton    = oldReferenceLayer.querySelector('.introjs-skipbutton'),
@@ -744,6 +738,17 @@
         }
         //set current tooltip text
         oldtooltipLayer.innerHTML = targetElement.intro;
+
+        //set current tooltip title
+        if(targetElement.title){
+          oldtooltipTitleLayer.style.display = 'block';
+          oldtooltipTitleLayer.innerHTML = targetElement.title;
+        }
+        else{
+          oldtooltipTitleLayer.style.display = 'none';
+          oldtooltipTitleLayer.innerHTML = '';
+        }
+
         //set the tooltip position
         oldtooltipContainer.style.display = "block";
         _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
@@ -773,7 +778,9 @@
           referenceLayer    = document.createElement('div'),
           arrowLayer        = document.createElement('div'),
           tooltipLayer      = document.createElement('div'),
+          tooltipTitleLayer = document.createElement('div'),
           tooltipTextLayer  = document.createElement('div'),
+          introTitleLayer   = document.createElement('div'),
           bulletsLayer      = document.createElement('div'),
           progressLayer     = document.createElement('div'),
           buttonsLayer      = document.createElement('div');
@@ -790,6 +797,19 @@
       this._targetElement.appendChild(referenceLayer);
 
       arrowLayer.className = 'introjs-arrow';
+
+      //add step title layer to target element
+      if(targetElement.title){
+        tooltipTitleLayer.className = 'introjs-tooltiptitle'
+        tooltipTitleLayer.innerHTML = targetElement.title
+      }
+
+      //add intro title layer to target element
+      if(this._options.title){
+        introTitleLayer.className = 'introjs-title'
+        introTitleLayer.innerHTML = this._options.title
+      }
+      
 
       tooltipTextLayer.className = 'introjs-tooltiptext';
       tooltipTextLayer.innerHTML = targetElement.intro;
@@ -840,6 +860,8 @@
       }
 
       tooltipLayer.className = 'introjs-tooltip';
+      tooltipLayer.appendChild(introTitleLayer);
+      tooltipLayer.appendChild(tooltipTitleLayer);
       tooltipLayer.appendChild(tooltipTextLayer);
       tooltipLayer.appendChild(bulletsLayer);
       tooltipLayer.appendChild(progressLayer);
@@ -1079,12 +1101,12 @@
 
     overlayLayer.onclick = function() {
       if (self._options.exitOnOverlayClick == true) {
+        _exitIntro.call(self, targetElm);
 
         //check if any callback is defined
         if (self._introExitCallback != undefined) {
           self._introExitCallback.call(self);
         }
-        _exitIntro.call(self, targetElm);
       }
     };
 
