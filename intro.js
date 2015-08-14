@@ -745,8 +745,10 @@
           oldtooltipTitleLayer.innerHTML = targetElement.title;
         }
         else{
-          oldtooltipTitleLayer.style.display = 'none';
-          oldtooltipTitleLayer.innerHTML = '';
+          if(oldtooltipTitleLayer){
+            oldtooltipTitleLayer.style.display = 'none';
+            oldtooltipTitleLayer.innerHTML = '';
+          }
         }
 
         //set the tooltip position
