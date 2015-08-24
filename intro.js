@@ -93,10 +93,8 @@
         if (typeof(currentItem.element) === 'string') {
           //grab the element with given selector from the page
           currentItem.element = document.querySelector(currentItem.element);
-        }
-
-        //intro without element
-        if (typeof(currentItem.element) === 'undefined' || currentItem.element == null) {
+        } else {
+          //intro without element
           var floatingElementQuery = document.querySelector(".introjsFloatingElement");
 
           if (floatingElementQuery == null) {
@@ -811,7 +809,7 @@
         introTitleLayer.className = 'introjs-title'
         introTitleLayer.innerHTML = this._options.title
       }
-      
+
 
       tooltipTextLayer.className = 'introjs-tooltiptext';
       tooltipTextLayer.innerHTML = targetElement.intro;
