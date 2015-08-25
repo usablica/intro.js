@@ -493,6 +493,7 @@
         tooltipStyle.top = '-' + (tooltipHeight + OFFSET_TOP) + 'px';
         break;
       case 'right':
+        arrowStyle.right = null;
         tooltipStyle.left = (targetWidth + 20) + 'px';
         if (targetTop + tooltipHeight > windowSize.height) {
           // In this case, right would have fallen below the bottom of the screen.
