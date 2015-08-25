@@ -195,11 +195,11 @@
       self._onKeyDown = function(e) {
         if (e.keyCode === 27 && self._options.exitOnEsc == true) {
           //escape key pressed, exit the intro
-          _exitIntro.call(self, targetElm);
-          //check if any callback is defined
+          //check if exit callback is defined
           if (self._introExitCallback != undefined) {
             self._introExitCallback.call(self);
           }
+          _exitIntro.call(self, targetElm);
         } else if(e.keyCode === 37) {
           //left arrow
           _previousStep.call(self);
@@ -214,6 +214,13 @@
             _previousStep.call(self);
           } else if (target && target.className.indexOf('introjs-skipbutton') > 0) {
             //user hit enter while focusing on skip button
+            if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
+                self._introCompleteCallback.call(self);
+            }
+            //check if any callback is defined
+            if (self._introExitCallback != undefined) {
+              self._introExitCallback.call(self);
+            }
             _exitIntro.call(self, targetElm);
           } else {
             //default behavior for responding to enter
@@ -473,8 +480,9 @@
           // Modify so that the bottom of the tooltip connects with the target
           arrowLayer.className = "introjs-arrow left-bottom";
           tooltipLayer.style.top = "-" + (tooltipOffset.height - targetOffset.height - 20) + "px"
+        } else {
+          arrowLayer.className = 'introjs-arrow left';
         }
-        arrowLayer.className = 'introjs-arrow left';
         break;
       case 'left':
         if (this._options.showStepNumbers == true) {
@@ -1107,12 +1115,12 @@
 
     overlayLayer.onclick = function() {
       if (self._options.exitOnOverlayClick == true) {
-        _exitIntro.call(self, targetElm);
 
         //check if any callback is defined
         if (self._introExitCallback != undefined) {
           self._introExitCallback.call(self);
         }
+        _exitIntro.call(self, targetElm);
       }
     };
 
