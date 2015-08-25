@@ -547,11 +547,13 @@
 
         break;
       case 'bottom-right-aligned':
+        arrowStyle.top = null;
         arrowLayer.className      = 'introjs-arrow top-right';
         tooltipStyle.right  = '0px';
         tooltipStyle.bottom = '-' + (_getOffset(tooltipLayer).height + 10) + 'px';
         break;
       case 'bottom-middle-aligned':
+        arrowStyle.top = null;
         targetElementOffset = _getOffset(targetElement);
         tooltipOffset       = _getOffset(tooltipLayer);
 
