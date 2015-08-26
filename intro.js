@@ -944,15 +944,19 @@
       prevTooltipButton.tabIndex = '-1';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
+      nextTooltipButton.innerHTML = this._options.nextLabel;
+      skipTooltipButton.style.visibility = 'visible';
     } else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
-      skipTooltipButton.innerHTML = this._options.doneLabel;
+      skipTooltipButton.style.visibility = 'hidden';
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
-      nextTooltipButton.tabIndex = '-1';
+      nextTooltipButton.innerHTML = this._options.doneLabel;
+      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
     } else {
+      skipTooltipButton.style.visibility = 'visible';
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
+      nextTooltipButton.innerHTML = this._options.nextLabel;
     }
 
     //Set focus on "next" button, so that hitting Enter always moves you onto the next step
