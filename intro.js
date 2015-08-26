@@ -881,9 +881,7 @@
       var nextTooltipButton = document.createElement('a');
 
       nextTooltipButton.onclick = function() {
-        if (self._introItems.length - 1 != self._currentStep) {
           _nextStep.call(self);
-        }
       };
 
       nextTooltipButton.href = 'javascript:void(0);';
