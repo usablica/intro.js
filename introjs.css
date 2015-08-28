@@ -65,6 +65,7 @@ tr.introjs-showElement > th {
 
 .introjs-tooltipReferenceLayer {
   position: absolute;
+  visibility: hidden;
   z-index: 10000000;
   background-color: transparent;
   -webkit-transition: all 0.3s ease-out;
@@ -86,6 +87,7 @@ tr.introjs-showElement > th {
 
 .introjs-helperNumberLayer {
   position: absolute;
+  visibility: visible;
   top: -16px;
   left: -16px;
   z-index: 9999999999 !important;
@@ -184,6 +186,7 @@ tr.introjs-showElement > th {
 
 .introjs-tooltip {
   position: absolute;
+  visibility: visible;
   padding: 10px;
   background-color: white;
   min-width: 200px;
