@@ -469,9 +469,11 @@
     windowSize    = _getWinSize();
     switch (currentTooltipPosition) {
       case 'top':
-        tooltipLayer.style.left = '15px';
-        tooltipLayer.style.top = '-' + (tooltipOffset.height + 10) + 'px';
         arrowLayer.className = 'introjs-arrow bottom';
+
+        var tooltipLayerStyleLeft = 15;
+        _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
+        tooltipLayer.style.bottom = (targetOffset.height +  20) + 'px';
         break;
       case 'right':
         tooltipLayer.style.left = (targetOffset.width + 20) + 'px';
