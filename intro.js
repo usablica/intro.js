@@ -211,13 +211,13 @@
             //user hit enter while focusing on previous button
             _previousStep.call(self);
           } else if (target && target.className.indexOf('introjs-skipbutton') > 0) {
-            //user hit enter while focusing on skip button
+            //user hit enter while focusing on skip button and it was the last step
             if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
                 self._introCompleteCallback.call(self);
             }
-            //check if any callback is defined
-            if (self._introExitCallback != undefined) {
-              self._introExitCallback.call(self);
+            //user hit enter while focusing on skip button and it was not the last step
+            if (self._introItems.length - 1 != self._currentStep && typeof (self._introExitCallback) === 'function') {
+                self._introExitCallback.call(self);
             }
             _exitIntro.call(self, targetElm);
           } else {
