@@ -83,8 +83,6 @@
 
     if (this._options.steps) {
       //use steps passed programmatically
-      var allIntroSteps = [];
-
       for (var i = 0, stepsLength = this._options.steps.length; i < stepsLength; i++) {
         var currentItem = _cloneObject(this._options.steps[i]);
         //set the step
@@ -265,11 +263,15 @@
   */
   function _cloneObject(object) {
       if (object == null || typeof (object) != 'object' || typeof (object.nodeType) != 'undefined') {
-          return object;
+        return object;
       }
       var temp = {};
       for (var key in object) {
+        if (typeof (jQuery) != 'undefined' && object[key] instanceof jQuery) {
+          temp[key] = object[key];
+        } else {
           temp[key] = _cloneObject(object[key]);
+        }
       }
       return temp;
   }
@@ -374,7 +376,7 @@
     var referenceLayer = targetElement.querySelector('.introjs-tooltipReferenceLayer');
     if (referenceLayer) {
       referenceLayer.parentNode.removeChild(referenceLayer);
-	}
+    }
     //remove disableInteractionLayer
     var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
     if (disableInteractionLayer) {
@@ -398,7 +400,7 @@
     if (fixParents && fixParents.length > 0) {
       for (var i = fixParents.length - 1; i >= 0; i--) {
         fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
-      };
+      }
     }
 
     //clean listeners
@@ -457,7 +459,7 @@
 
     if ((currentTooltipPosition == "auto" || this._options.tooltipPosition == "auto")) {
       if (currentTooltipPosition != "floating") { // Floating is always valid, no point in calculating
-        currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer, currentTooltipPosition)
+        currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer, currentTooltipPosition);
       }
     }
 
@@ -495,13 +497,16 @@
       case 'right':
         arrowStyle.right = null;
         tooltipStyle.left = (targetWidth + 20) + 'px';
+
         if (targetTop + tooltipHeight > windowSize.height) {
           // In this case, right would have fallen below the bottom of the screen.
           // Modify so that the bottom of the tooltip connects with the target
           arrowLayer.className = "introjs-arrow left-bottom";
           tooltipStyle.top = "-" + (tooltipHeight - targetHeight - 20) + "px"
         }
+
         arrowLayer.className = 'introjs-arrow left';
+
         break;
       case 'left':
         if (this._options.showStepNumbers == true) {
@@ -598,26 +603,26 @@
   function _determineAutoPosition(targetElement, tooltipLayer, desiredTooltipPosition) {
 
     // Take a clone of position precedence. These will be the available
-    var possiblePositions = this._options.positionPrecedence.slice()
+    var possiblePositions = this._options.positionPrecedence.slice();
 
-    var windowSize = _getWinSize()
-    var tooltipHeight = _getOffset(tooltipLayer).height + 10
-    var tooltipWidth = _getOffset(tooltipLayer).width + 20
-    var targetOffset = _getOffset(targetElement)
+    var windowSize = _getWinSize();
+    var tooltipHeight = _getOffset(tooltipLayer).height + 10;
+    var tooltipWidth = _getOffset(tooltipLayer).width + 20;
+    var targetOffset = _getOffset(targetElement);
 
     // If we check all the possible areas, and there are no valid places for the tooltip, the element
     // must take up most of the screen real estate. Show the tooltip floating in the middle of the screen.
-    var calculatedPosition = "floating"
+    var calculatedPosition = "floating";
 
     // Check if the width of the tooltip + the starting point would spill off the right side of the screen
     // If no, neither bottom or top are valid
     if (targetOffset.left + tooltipWidth > windowSize.width || ((targetOffset.left + (targetOffset.width / 2)) - tooltipWidth) < 0) {
-      _removeEntry(possiblePositions, "bottom")
+      _removeEntry(possiblePositions, "bottom");
       _removeEntry(possiblePositions, "top");
     } else {
       // Check for space below
       if ((targetOffset.height + targetOffset.top + tooltipHeight) > windowSize.height) {
-        _removeEntry(possiblePositions, "bottom")
+        _removeEntry(possiblePositions, "bottom");
       }
 
       // Check for space above
@@ -644,11 +649,11 @@
     // If the requested position is in the list, replace our calculated choice with that
     if (desiredTooltipPosition && desiredTooltipPosition != "auto") {
       if (possiblePositions.indexOf(desiredTooltipPosition) > -1) {
-        calculatedPosition = desiredTooltipPosition
+        calculatedPosition = desiredTooltipPosition;
       }
     }
 
-    return calculatedPosition
+    return calculatedPosition;
   }
 
   /**
@@ -843,7 +848,6 @@
         bulletsLayer.style.display = 'none';
       }
 
-
       var ulContainer = document.createElement('ul');
 
       for (var i = 0, stepsLength = this._introItems.length; i < stepsLength; i++) {
@@ -1000,7 +1004,7 @@
       var zIndex = _getPropValue(parentElm, 'z-index');
       var opacity = parseFloat(_getPropValue(parentElm, 'opacity'));
       var transform = _getPropValue(parentElm, 'transform') || _getPropValue(parentElm, '-webkit-transform') || _getPropValue(parentElm, '-moz-transform') || _getPropValue(parentElm, '-ms-transform') || _getPropValue(parentElm, '-o-transform');
-      if (/[0-9]+/.test(zIndex) || opacity < 1 || transform !== 'none') {
+      if (/[0-9]+/.test(zIndex) || opacity < 1 || (transform !== 'none' && transform !== undefined)) {
         parentElm.className += ' introjs-fixParent';
       }
 
