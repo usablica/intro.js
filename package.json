@@ -1,7 +1,7 @@
 {
     "name": "intro.js",
     "description": "Better introductions for websites and features with a step-by-step guide for your projects",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
     "repository": {
         "type": "git",
