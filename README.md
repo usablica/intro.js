@@ -397,7 +397,7 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 
 ## Release History
 
- * **v1.1.0** - 2014-10-17
+ * **v1.1.0** - 2015-09-01
    - Fix no interaction bug
    - Fix recursion bug with jQuery
    - Call `onexit` on pressing Esc or clicking on the overlay layer
