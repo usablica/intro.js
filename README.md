@@ -397,6 +397,9 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 
 ## Release History
 
+ * **v1.1.1** - 2015-09-05
+   - Fix versioning issue
+
  * **v1.1.0** - 2015-09-01
    - Fix no interaction bug
    - Fix recursion bug with jQuery

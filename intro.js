@@ -1,5 +1,5 @@
 /**
- * Intro.js v1.1.0
+ * Intro.js v1.1.1
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -19,7 +19,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '1.1.0';
+  var VERSION = '1.1.1';
 
   /**
    * IntroJs main class
