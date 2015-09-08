@@ -167,6 +167,23 @@ tr.introjs-showElement > th {
   border-bottom-color:transparent;
   border-left-color:transparent;
 }
+.introjs-arrow.bottom-right {
+  bottom: -10px;
+  right: 10px;
+  border-top-color:white;
+  border-right-color:transparent;
+  border-bottom-color:transparent;
+  border-left-color:transparent;
+}
+.introjs-arrow.bottom-middle {
+  bottom: -10px;
+  left: 50%;
+  margin-left: -5px;
+  border-top-color:white;
+  border-right-color:transparent;
+  border-bottom-color:transparent;
+  border-left-color:transparent;
+}
 .introjs-arrow.left {
   left: -10px;
   top: 10px;

@@ -471,10 +471,29 @@
     windowSize    = _getWinSize();
     switch (currentTooltipPosition) {
       case 'top':
+      // top-left-aligned is the same as top
+      case 'top-left-aligned':
         arrowLayer.className = 'introjs-arrow bottom';
 
         var tooltipLayerStyleLeft = 15;
         _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
+        tooltipLayer.style.bottom = (targetOffset.height +  20) + 'px';
+        break;
+      case 'top-right-aligned':
+        arrowLayer.className = 'introjs-arrow bottom-right';
+
+        var tooltipLayerStyleRight = 15;
+        _checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer);
+        tooltipLayer.style.bottom = (targetOffset.height +  20) + 'px';
+        break;
+      case 'top-middle-aligned':
+        arrowLayer.className = 'introjs-arrow bottom-middle';
+
+        var tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipOffset.width / 2;
+        if (_checkLeft(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, tooltipLayer)) {
+          tooltipLayer.style.right = null;
+          _checkRight(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, windowSize, tooltipLayer);
+        }
         tooltipLayer.style.bottom = (targetOffset.height +  20) + 'px';
         break;
       case 'right':
