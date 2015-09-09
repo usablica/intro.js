@@ -845,7 +845,13 @@
         var innerLi    = document.createElement('li');
         var anchorLink = document.createElement('a');
 
-        anchorLink.onclick = function() {
+        anchorLink.onclick = function(event) {
+          if (event.preventDefault) { // prevent window.onbeforeunload trigger
+            event.preventDefault();
+          } 
+          else { 
+            event.returnValue = false;
+          } 
           self.goToStep(this.getAttribute('data-stepnumber'));
         };
 
@@ -896,7 +902,13 @@
       //next button
       var nextTooltipButton = document.createElement('a');
 
-      nextTooltipButton.onclick = function() {
+      nextTooltipButton.onclick = function(event) {
+    	if (event.preventDefault) { // prevent window.onbeforeunload trigger
+          event.preventDefault();
+        } 
+        else { 
+          event.returnValue = false;
+        } 
         if (self._introItems.length - 1 != self._currentStep) {
           _nextStep.call(self);
         }
@@ -908,7 +920,13 @@
       //previous button
       var prevTooltipButton = document.createElement('a');
 
-      prevTooltipButton.onclick = function() {
+      prevTooltipButton.onclick = function(event) {
+    	if (event.preventDefault) { // prevent window.onbeforeunload trigger
+          event.preventDefault();
+        } 
+        else { 
+          event.returnValue = false;
+        } 
         if (self._currentStep != 0) {
           _previousStep.call(self);
         }
@@ -923,7 +941,13 @@
       skipTooltipButton.href = 'javascript:void(0);';
       skipTooltipButton.innerHTML = this._options.skipLabel;
 
-      skipTooltipButton.onclick = function() {
+      skipTooltipButton.onclick = function(event) {
+    	if (event.preventDefault) { // prevent window.onbeforeunload trigger
+          event.preventDefault();
+        } 
+        else { 
+          event.returnValue = false;
+        } 
         if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
           self._introCompleteCallback.call(self);
         }
