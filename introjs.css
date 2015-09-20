@@ -107,6 +107,7 @@ tr.introjs-showElement > th {
   background:         linear-gradient(to bottom, #ff3019 0%, #cf0404 100%);  /* W3C */
   width: 20px;
   height:20px;
+  box-sizing: content-box;
   line-height: 20px;
   border: 3px solid white;
   border-radius: 50%;
