@@ -479,7 +479,8 @@
         break;
       case 'right':
         tooltipLayer.style.left = (targetOffset.width + 20) + 'px';
-        if (targetOffset.top + tooltipOffset.height > windowSize.height) {
+        if (targetOffset.top + tooltipOffset.height > windowSize.height &&
+            tooltipOffset.height < targetOffset.top + targetOffset.height) {
           // In this case, right would have fallen below the bottom of the screen.
           // Modify so that the bottom of the tooltip connects with the target
           arrowLayer.className = "introjs-arrow left-bottom";
@@ -493,7 +494,8 @@
           tooltipLayer.style.top = '15px';
         }
 
-        if (targetOffset.top + tooltipOffset.height > windowSize.height) {
+        if (targetOffset.top + tooltipOffset.height > windowSize.height &&
+            tooltipOffset.height < targetOffset.top + targetOffset.height) {
           // In this case, left would have fallen below the bottom of the screen.
           // Modify so that the bottom of the tooltip connects with the target
           tooltipLayer.style.top = "-" + (tooltipOffset.height - targetOffset.height - 20) + "px";
