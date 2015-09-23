@@ -19,10 +19,14 @@
           transition: all 0.3s ease-out;
 }
 
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  .introjs-fixParent {
+    position: absolute !important;
+  }
+}
 .introjs-fixParent {
   z-index: auto !important;
   opacity: 1.0 !important;
-  position: absolute !important;
   -webkit-transform: none !important;
      -moz-transform: none !important;
       -ms-transform: none !important;
