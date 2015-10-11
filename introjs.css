@@ -48,6 +48,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-helperLayer {
+  padding: 5px;
   position: absolute;
   z-index: 9999998;
   background-color: #FFF;
@@ -64,6 +65,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-tooltipReferenceLayer {
+  padding: 5px;
   position: absolute;
   visibility: hidden;
   z-index: 10000000;
@@ -73,6 +75,20 @@ tr.introjs-showElement > th {
       -ms-transition: all 0.3s ease-out;
        -o-transition: all 0.3s ease-out;
           transition: all 0.3s ease-out;
+}
+
+.introjs-tooltipReferenceLayer--right {
+  padding-right: 0;
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.introjs-tooltipReferenceLayer--bottom {
+  padding-bottom: 0;
+  border-bottom: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .introjs-helperLayer *,
@@ -113,6 +129,16 @@ tr.introjs-showElement > th {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0); /* IE6-9 */
   filter: progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000); /* IE10 text shadows */
   box-shadow: 0 2px 5px rgba(0,0,0,.4);
+}
+
+.introjs-tooltipReferenceLayer--top .introjs-helperNumberLayer {
+  top: auto;
+  bottom: -16px;
+}
+
+.introjs-tooltipReferenceLayer--left .introjs-helperNumberLayer {
+  left: auto;
+  right: -16px;
 }
 
 .introjs-arrow {
