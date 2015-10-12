@@ -65,7 +65,9 @@
       /* Precedence of positions, when auto is enabled */
       positionPrecedence: ["bottom", "top", "right", "left"],
       /* Disable an interaction with element? */
-      disableInteraction: false
+      disableInteraction: false,
+      /* position of skip button */
+      skipButtonPosition: 'first'
     };
   }
 
@@ -935,12 +937,20 @@
         _exitIntro.call(self, self._targetElement);
       };
 
-      buttonsLayer.appendChild(skipTooltipButton);
+      var skipButtonOnLast = true;
+      if (this._options.skipButtonPosition != 'last'){
+        skipButtonOnLast = false
+        buttonsLayer.appendChild(skipTooltipButton);
+      }
 
       //in order to prevent displaying next/previous button always
       if (this._introItems.length > 1) {
         buttonsLayer.appendChild(prevTooltipButton);
         buttonsLayer.appendChild(nextTooltipButton);
+      }
+      
+      if (skipButtonOnLast){
+        buttonsLayer.appendChild(skipTooltipButton);
       }
 
       tooltipLayer.appendChild(buttonsLayer);
