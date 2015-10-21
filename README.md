@@ -375,6 +375,11 @@ You can use IntroJS inside your Wordpress, here is a good article by SitePoint: 
 
 Here is a under construction plugin for Wordpress: https://github.com/newoldmedia/intro.js-wordpress
 
+### GWT Wrapper
+GWT wrapper on top of Intro.js
+
+Github: https://github.com/Agnie-Software/gwt-introjs
+
 ## Build
 
 First you should install `nodejs` and `npm`, then first run this command: `npm install` to install all dependencies.
