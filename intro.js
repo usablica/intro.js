@@ -1145,13 +1145,18 @@
    */
   function _getOffset(element) {
     var elementPosition = {};
-
+    //iframe workaround - dummy client rect here
+    var boundingFrameClientRect = {
+      top: 0,
+      left: 0
+    };
+    if ((element) && (element.ownerDocument !== window.document)) { //lives in iframe
+      boundingFrameClientRect = element.ownerDocument.defaultView.frameElement.getBoundingClientRect()
+    }
     //set width
     elementPosition.width = element.offsetWidth;
-
     //set height
     elementPosition.height = element.offsetHeight;
-
     //calculate element top and left
     var _x = 0;
     var _y = 0;
@@ -1161,9 +1166,9 @@
       element = element.offsetParent;
     }
     //set top
-    elementPosition.top = _y;
+    elementPosition.top = _y + boundingFrameClientRect.top;     //account for elements within a frame
     //set left
-    elementPosition.left = _x;
+    elementPosition.left = _x + boundingFrameClientRect.left;     //account for elements within a frame
 
     return elementPosition;
   }
