@@ -28,6 +28,7 @@
    */
   function IntroJs(obj) {
     this._targetElement = obj;
+    this._introItems = [];
 
     this._options = {
       /* Next button label in tooltip box */
@@ -65,7 +66,11 @@
       /* Precedence of positions, when auto is enabled */
       positionPrecedence: ["bottom", "top", "right", "left"],
       /* Disable an interaction with element? */
-      disableInteraction: false
+      disableInteraction: false,
+      /* Default hint position */
+      hintPosition: 'top',
+      /* Hint button label */
+      hintButtonLabel: 'Got it',
     };
   }
 
@@ -694,7 +699,7 @@
    * @api private
    * @method _disableInteraction
    */
-  function _disableInteraction () {
+  function _disableInteraction() {
     var disableInteractionLayer = document.querySelector('.introjs-disableInteraction');
     if (disableInteractionLayer === null) {
       disableInteractionLayer = document.createElement('div');
@@ -1132,7 +1137,175 @@
     }, 10);
 
     return true;
-  }
+  };
+
+
+  /**
+   * Start parsing hint items
+   *
+   * @api private
+   * @param {Object} targetElm
+   * @method _startHint
+   */
+  function _populateHints(targetElm) {
+    var self = this;
+
+    if (this._options.hints) {
+      for (var i = 0, l = this._options.hints.length; i < l; i++) {
+        var currentItem = _cloneObject(this._options.hints[i]);
+
+        if (typeof(currentItem.element) === 'string') {
+          //grab the element with given selector from the page
+          currentItem.element = document.querySelector(currentItem.element);
+        }
+
+        if (currentItem.element != null) {
+          this._introItems.push(currentItem);
+        }
+      }
+    } else {
+      var hints = targetElm.querySelectorAll('*[data-hint]');
+
+      if (hints.length < 1) {
+        return false;
+      }
+
+      //first add intro items with data-step
+      for (var i = 0, l = hints.length; i < l; i++) {
+        var currentElement = hints[i];
+
+        this._introItems.push({
+          element: currentElement,
+          hint: currentElement.getAttribute('data-hint'),
+          hintPosition: currentElement.getAttribute('data-hintPosition') || this._options.hintPosition,
+          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+        });
+      }
+    }
+
+    _addHints.call(this);
+  };
+
+  /**
+   * Add all available hints to the page
+   *
+   * @api private
+   * @method _addHints
+   */
+  function _addHints() {
+    var hintsWrapper = document.createElement('div');
+    hintsWrapper.className = 'introjs-hints';
+
+    for (var i = 0, l = this._introItems.length; i < l; i++) {
+      var item = this._introItems[i];
+
+      var hint = document.createElement('a');
+      hint.href = "javascript:void(0);";
+
+      // when user clicks on the hint element
+      hint.onclick = _hintClick.bind(this, hint, item);
+
+      hint.className = 'introjs-hint';
+      var hintDot = document.createElement('div');
+      hintDot.className = 'introjs-hint-dot';
+      var hintPulse = document.createElement('div');
+      hintPulse.className = 'introjs-hint-pulse';
+
+      hint.appendChild(hintDot);
+      hint.appendChild(hintPulse);
+      hint.setAttribute('data-step', i);
+
+      // get/calculate offset of target element
+      var offset = _getOffset.call(this, item.element);
+
+      // we swap the hint element with target element
+      // because _setHelperLayerPosition uses `element` property
+      item.targetElement = item.element;
+      item.element = hint;
+
+      // align the hint element
+      switch (item.hintPosition) {
+        default:
+        case 'top-left':
+          hint.style.left = offset.left + 'px';
+          hint.style.top = offset.top + 'px';
+          break;
+        case 'top-right':
+          hint.style.left = (offset.left + offset.width) + 'px';
+          hint.style.top = offset.top + 'px';
+          break;
+        case 'bottom-left':
+          hint.style.left = offset.left + 'px';
+          hint.style.top = (offset.top + offset.height) + 'px';
+          break;
+        case 'bottom-right':
+          hint.style.left = (offset.left + offset.width) + 'px';
+          hint.style.top = (offset.top + offset.height) + 'px';
+          break;
+        case 'bottom-middle':
+          hint.style.left = (offset.left + (offset.width / 2)) + 'px';
+          hint.style.top = (offset.top + offset.height) + 'px';
+          break;
+        case 'top-middle':
+          hint.style.left = (offset.left + (offset.width / 2)) + 'px';
+          hint.style.top = offset.top + 'px';
+          break;
+      }
+
+      hintsWrapper.appendChild(hint);
+    }
+
+    // adding the hints wrapper
+    document.body.appendChild(hintsWrapper);
+  };
+
+  /**
+   * Triggers when user clicks on the hint element
+   *
+   * @api private
+   * @method _hintClick
+   * @param {Object} hintElement
+   * @param {Object} item
+   */
+  function _hintClick(hintElement, item) {
+    var tooltipLayer = document.createElement('div');
+    var tooltipTextLayer = document.createElement('div');
+    var arrowLayer = document.createElement('div');
+    var referenceLayer = document.createElement('div');
+
+    tooltipLayer.className = 'introjs-tooltip';
+
+    tooltipTextLayer.className = 'introjs-tooltiptext';
+
+    var tooltipWrapper = document.createElement('p');
+    tooltipWrapper.innerHTML = item.hint;
+
+    var closeButton = document.createElement('a');
+    closeButton.className = 'introjs-button';
+    closeButton.innerHTML = this._options.hintButtonLabel;
+
+    tooltipTextLayer.appendChild(tooltipWrapper);
+    tooltipTextLayer.appendChild(closeButton);
+
+    arrowLayer.className = 'introjs-arrow';
+    tooltipLayer.appendChild(arrowLayer);
+
+    tooltipLayer.appendChild(tooltipTextLayer);
+
+    // set current step for _placeTooltip function
+    this._currentStep = hintElement.getAttribute('data-step');
+
+    // align reference layer position
+    referenceLayer.className = 'introjs-tooltipReferenceLayer introjs-hintTooltip';
+    referenceLayer.setAttribute('data-step', hintElement.getAttribute('data-step'));
+    _setHelperLayerPosition.call(this, referenceLayer);
+
+    referenceLayer.appendChild(tooltipLayer);
+    document.body.appendChild(referenceLayer);
+
+    //set proper position
+    _placeTooltip.call(this, hintElement, tooltipLayer, arrowLayer);
+  };
 
   /**
    * Get an element position on the page
@@ -1166,7 +1339,7 @@
     elementPosition.left = _x;
 
     return elementPosition;
-  }
+  };
 
   /**
    * Gets the current progress percentage
@@ -1179,7 +1352,7 @@
     // Steps are 0 indexed
     var currentStep = parseInt((this._currentStep + 1), 10);
     return ((currentStep / this._introItems.length) * 100);
-  }
+  };
 
   /**
    * Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
@@ -1194,7 +1367,7 @@
     for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
     for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
     return obj3;
-  }
+  };
 
   var introJs = function (targetElm) {
     if (typeof (targetElm) === 'object') {
@@ -1299,6 +1472,10 @@
       } else {
         throw new Error('Provided callback for onexit was not a function.');
       }
+      return this;
+    },
+    addHints: function() {
+      _populateHints.call(this, this._targetElement);
       return this;
     }
   };
