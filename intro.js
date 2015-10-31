@@ -1139,6 +1139,19 @@
     return true;
   };
 
+  /**
+   * Removes open hint (tooltip hint)
+   *
+   * @api private
+   * @method _removeHintTooltip
+   */
+  function _removeHintTooltip() {
+    var tooltip = this._targetElement.querySelector('.introjs-hintTooltip');
+
+    if (tooltip) {
+      tooltip.parentNode.removeChild(tooltip);
+    }
+  };
 
   /**
    * Start parsing hint items
@@ -1184,6 +1197,31 @@
     }
 
     _addHints.call(this);
+
+    if (window.addEventListener) {
+      window.addEventListener('click', _removeHintTooltip.bind(this), true);
+      //for window resize
+      //window.addEventListener('resize', this._onResize, true);
+    } else if (document.attachEvent) { //IE
+      //for window resize
+     document.attachEvent('onclick', _removeHintTooltip.bind(this));
+     //document.attachEvent('onresize', self._onResize);
+    }
+  };
+
+  /**
+   * Remove single hint from the page
+   *
+   * @api private
+   * @method _removeHint
+   */
+  function _removeHint(stepId) {
+    _removeHintTooltip.call(this);
+    var hint = this._targetElement.querySelector('.introjs-hint[data-step="' + stepId + '"]');
+
+    if (hint) {
+      hint.parentNode.removeChild(hint);
+    }
   };
 
   /**
@@ -1203,7 +1241,7 @@
       hint.href = "javascript:void(0);";
 
       // when user clicks on the hint element
-      hint.onclick = _hintClick.bind(this, hint, item);
+      hint.onclick = _hintClick.bind(this, hint, item, i);
 
       hint.className = 'introjs-hint';
       var hintDot = document.createElement('div');
@@ -1266,8 +1304,11 @@
    * @method _hintClick
    * @param {Object} hintElement
    * @param {Object} item
+   * @param {Number} stepId
    */
-  function _hintClick(hintElement, item) {
+  function _hintClick(hintElement, item, stepId) {
+    _removeHintTooltip.call(this);
+
     var tooltipLayer = document.createElement('div');
     var tooltipTextLayer = document.createElement('div');
     var arrowLayer = document.createElement('div');
@@ -1283,6 +1324,7 @@
     var closeButton = document.createElement('a');
     closeButton.className = 'introjs-button';
     closeButton.innerHTML = this._options.hintButtonLabel;
+    closeButton.onclick = _removeHint.bind(this, stepId);
 
     tooltipTextLayer.appendChild(tooltipWrapper);
     tooltipTextLayer.appendChild(closeButton);
