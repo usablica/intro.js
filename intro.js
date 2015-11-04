@@ -428,14 +428,17 @@
    * @param {HTMLElement} tooltipLayer
    * @param {HTMLElement} arrowLayer
    * @param {HTMLElement} helperNumberLayer
+   * @param {Boolean} hintMode
    */
-  function _placeTooltip(targetElement, tooltipLayer, arrowLayer, helperNumberLayer) {
+  function _placeTooltip(targetElement, tooltipLayer, arrowLayer, helperNumberLayer, hintMode) {
     var tooltipCssClass = '',
         currentStepObj,
         tooltipOffset,
         targetOffset,
         windowSize,
         currentTooltipPosition;
+
+    hintMode = hintMode || false;
 
     //reset the old style
     tooltipLayer.style.top        = null;
@@ -474,11 +477,17 @@
     targetOffset  = _getOffset(targetElement);
     tooltipOffset = _getOffset(tooltipLayer);
     windowSize    = _getWinSize();
+
     switch (currentTooltipPosition) {
       case 'top':
         arrowLayer.className = 'introjs-arrow bottom';
 
-        var tooltipLayerStyleLeft = 15;
+        if (hintMode) {
+          var tooltipLayerStyleLeft = 0;
+        } else {
+          var tooltipLayerStyleLeft = 15;
+        }
+
         _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
         tooltipLayer.style.bottom = (targetOffset.height +  20) + 'px';
         break;
@@ -494,7 +503,7 @@
         }
         break;
       case 'left':
-        if (this._options.showStepNumbers == true) {
+        if (!hintMode && this._options.showStepNumbers == true) {
           tooltipLayer.style.top = '15px';
         }
 
@@ -536,6 +545,12 @@
         arrowLayer.className      = 'introjs-arrow top-middle';
 
         var tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipOffset.width / 2;
+
+        // a fix for middle aligned hints
+        if (hintMode) {
+          tooltipLayerStyleLeftRight += 5;
+        }
+
         if (_checkLeft(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, tooltipLayer)) {
           tooltipLayer.style.right = null;
           _checkRight(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, windowSize, tooltipLayer);
@@ -1146,10 +1161,13 @@
    * @method _removeHintTooltip
    */
   function _removeHintTooltip() {
-    var tooltip = this._targetElement.querySelector('.introjs-hintTooltip');
+    var tooltip = this._targetElement.querySelector('.introjs-hintReference');
+
 
     if (tooltip) {
+      var step = tooltip.getAttribute('data-step');
       tooltip.parentNode.removeChild(tooltip);
+      return step;
     }
   };
 
@@ -1198,8 +1216,8 @@
 
     _addHints.call(this);
 
-    if (window.addEventListener) {
-      window.addEventListener('click', _removeHintTooltip.bind(this), true);
+    if (document.addEventListener) {
+      document.addEventListener('click', _removeHintTooltip.bind(this), false);
       //for window resize
       //window.addEventListener('resize', this._onResize, true);
     } else if (document.attachEvent) { //IE
@@ -1231,6 +1249,7 @@
    * @method _addHints
    */
   function _addHints() {
+    var self = this;
     var hintsWrapper = document.createElement('div');
     hintsWrapper.className = 'introjs-hints';
 
@@ -1240,8 +1259,16 @@
       var hint = document.createElement('a');
       hint.href = "javascript:void(0);";
 
-      // when user clicks on the hint element
-      hint.onclick = _hintClick.bind(this, hint, item, i);
+      (function (hint, item, i) {
+        // when user clicks on the hint element
+        hint.onclick = function(e) {
+          var evt = e ? e : window.event;
+          if (evt.stopPropagation)    evt.stopPropagation();
+          if (evt.cancelBubble != null) evt.cancelBubble = true;
+
+          _hintClick.call(self, hint, item, i);
+        };
+      }(hint, item, i));
 
       hint.className = 'introjs-hint';
       var hintDot = document.createElement('div');
@@ -1307,7 +1334,13 @@
    * @param {Number} stepId
    */
   function _hintClick(hintElement, item, stepId) {
-    _removeHintTooltip.call(this);
+    // remove all open tooltips
+    var removedStep = _removeHintTooltip.call(this);
+
+    // to toggle the tooltip
+    if (parseInt(removedStep, 10) == stepId) {
+      return;
+    }
 
     var tooltipLayer = document.createElement('div');
     var tooltipTextLayer = document.createElement('div');
@@ -1315,6 +1348,17 @@
     var referenceLayer = document.createElement('div');
 
     tooltipLayer.className = 'introjs-tooltip';
+
+    tooltipLayer.onclick = function (e) {
+      //IE9 & Other Browsers
+      if (e.stopPropagation) {
+        e.stopPropagation();
+      }
+      //IE8 and Lower
+      else {
+        e.cancelBubble = true;
+      }
+    };
 
     tooltipTextLayer.className = 'introjs-tooltiptext';
 
@@ -1338,7 +1382,7 @@
     this._currentStep = hintElement.getAttribute('data-step');
 
     // align reference layer position
-    referenceLayer.className = 'introjs-tooltipReferenceLayer introjs-hintTooltip';
+    referenceLayer.className = 'introjs-tooltipReferenceLayer introjs-hintReference';
     referenceLayer.setAttribute('data-step', hintElement.getAttribute('data-step'));
     _setHelperLayerPosition.call(this, referenceLayer);
 
@@ -1346,7 +1390,7 @@
     document.body.appendChild(referenceLayer);
 
     //set proper position
-    _placeTooltip.call(this, hintElement, tooltipLayer, arrowLayer);
+    _placeTooltip.call(this, hintElement, tooltipLayer, arrowLayer, null, true);
   };
 
   /**
@@ -1505,6 +1549,30 @@
         this._introCompleteCallback = providedCallback;
       } else {
         throw new Error('Provided callback for oncomplete was not a function.');
+      }
+      return this;
+    },
+    onhintsadded: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._hintsAddedCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onhintsadded was not a function.');
+      }
+      return this;
+    },
+    onhintclick: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._hintClickCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onhintclick was not a function.');
+      }
+      return this;
+    },
+    onhintremove: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._hintRemoveCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onhintremove was not a function.');
       }
       return this;
     },

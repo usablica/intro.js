@@ -347,7 +347,9 @@ tr.introjs-showElement > th {
 
 .introjs-hint {
   position: absolute;
-  background: rgba(99, 99, 99, 0.18);
+  background: transparent;
+  width: 20px;
+  height: 15px;
 }
 
 .introjs-hint:hover > .introjs-hint-pulse {
