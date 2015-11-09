@@ -1180,6 +1180,7 @@
    */
   function _populateHints(targetElm) {
     var self = this;
+    this._introItems = []
 
     if (this._options.hints) {
       for (var i = 0, l = this._options.hints.length; i < l; i++) {
@@ -1209,6 +1210,7 @@
           element: currentElement,
           hint: currentElement.getAttribute('data-hint'),
           hintPosition: currentElement.getAttribute('data-hintPosition') || this._options.hintPosition,
+          tooltipClass: currentElement.getAttribute('data-tooltipClass'),
           position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
         });
       }
@@ -1219,13 +1221,26 @@
     if (document.addEventListener) {
       document.addEventListener('click', _removeHintTooltip.bind(this), false);
       //for window resize
-      //window.addEventListener('resize', this._onResize, true);
+      window.addEventListener('resize', _reAlignHints.bind(this), true);
     } else if (document.attachEvent) { //IE
       //for window resize
-     document.attachEvent('onclick', _removeHintTooltip.bind(this));
-     //document.attachEvent('onresize', self._onResize);
+      document.attachEvent('onclick', _removeHintTooltip.bind(this));
+      document.attachEvent('onresize', _reAlignHints.bind(this));
     }
   };
+
+  /**
+   * Re-aligns all hint elements
+   *
+   * @api private
+   * @method _reAlignHints
+   */
+  function _reAlignHints() {
+    for (var i = 0, l = this._introItems.length; i < l; i++) {
+      var item = this._introItems[i];
+      _alignHintPosition.call(this, item.hintPosition, item.element, item.targetElement)
+    }
+  }
 
   /**
    * Remove single hint from the page
@@ -1240,6 +1255,45 @@
     if (hint) {
       hint.parentNode.removeChild(hint);
     }
+
+    // call the callback function (if any)
+    if (typeof (this._hintRemoveCallback) !== 'undefined') {
+      this._hintRemoveCallback.call(this, stepId);
+    }
+  };
+
+  /**
+   * Hide a hint
+   *
+   * @api private
+   * @method _hideHint
+   */
+  function _hideHint(stepId) {
+    _removeHintTooltip.call(this);
+    var hint = this._targetElement.querySelector('.introjs-hint[data-step="' + stepId + '"]');
+
+    if (hint) {
+      hint.className += ' introjs-hidehint';
+    }
+
+    // call the callback function (if any)
+    if (typeof (this._hintCloseCallback) !== 'undefined') {
+      this._hintCloseCallback.call(this, stepId);
+    }
+  };
+
+  /**
+   * Remove all hints from the page
+   *
+   * @api private
+   * @method _removeHints
+   */
+  function _removeHints() {
+    var hints = this._targetElement.querySelectorAll('.introjs-hint');
+
+    for (var i = 0, l = hints.length; i < l; i++) {
+      _removeHint.call(this, hints[i].getAttribute('data-step'));
+    }
   };
 
   /**
@@ -1250,11 +1304,22 @@
    */
   function _addHints() {
     var self = this;
-    var hintsWrapper = document.createElement('div');
-    hintsWrapper.className = 'introjs-hints';
+
+    var oldHintsWrapper = document.querySelector('.introjs-hints');
+
+    if (oldHintsWrapper != null) {
+      hintsWrapper = oldHintsWrapper;
+    } else {
+      var hintsWrapper = document.createElement('div');
+      hintsWrapper.className = 'introjs-hints';
+    }
 
     for (var i = 0, l = this._introItems.length; i < l; i++) {
       var item = this._introItems[i];
+
+      // avoid append a hint twice
+      if (document.querySelector('.introjs-hint[data-step="' + i + '"]'))
+        continue;
 
       var hint = document.createElement('a');
       hint.href = "javascript:void(0);";
@@ -1280,48 +1345,67 @@
       hint.appendChild(hintPulse);
       hint.setAttribute('data-step', i);
 
-      // get/calculate offset of target element
-      var offset = _getOffset.call(this, item.element);
-
       // we swap the hint element with target element
       // because _setHelperLayerPosition uses `element` property
       item.targetElement = item.element;
       item.element = hint;
 
-      // align the hint element
-      switch (item.hintPosition) {
-        default:
-        case 'top-left':
-          hint.style.left = offset.left + 'px';
-          hint.style.top = offset.top + 'px';
-          break;
-        case 'top-right':
-          hint.style.left = (offset.left + offset.width) + 'px';
-          hint.style.top = offset.top + 'px';
-          break;
-        case 'bottom-left':
-          hint.style.left = offset.left + 'px';
-          hint.style.top = (offset.top + offset.height) + 'px';
-          break;
-        case 'bottom-right':
-          hint.style.left = (offset.left + offset.width) + 'px';
-          hint.style.top = (offset.top + offset.height) + 'px';
-          break;
-        case 'bottom-middle':
-          hint.style.left = (offset.left + (offset.width / 2)) + 'px';
-          hint.style.top = (offset.top + offset.height) + 'px';
-          break;
-        case 'top-middle':
-          hint.style.left = (offset.left + (offset.width / 2)) + 'px';
-          hint.style.top = offset.top + 'px';
-          break;
-      }
+      // align the hint position
+      _alignHintPosition.call(this, item.hintPosition, hint, item.targetElement);
 
       hintsWrapper.appendChild(hint);
     }
 
     // adding the hints wrapper
     document.body.appendChild(hintsWrapper);
+
+    // call the callback function (if any)
+    if (typeof (this._hintsAddedCallback) !== 'undefined') {
+      this._hintsAddedCallback.call(this);
+    }
+  };
+
+  /**
+   * Aligns hint position
+   *
+   * @api private
+   * @method _alignHintPosition
+   * @param {String} position
+   * @param {Object} hint
+   * @param {Object} element
+   */
+  function _alignHintPosition(position, hint, element) {
+    // get/calculate offset of target element
+    var offset = _getOffset.call(this, element);
+
+    // align the hint element
+    switch (position) {
+      default:
+      case 'top-left':
+        hint.style.left = offset.left + 'px';
+        hint.style.top = offset.top + 'px';
+        break;
+      case 'top-right':
+        hint.style.left = (offset.left + offset.width) + 'px';
+        hint.style.top = offset.top + 'px';
+        break;
+      case 'bottom-left':
+        hint.style.left = offset.left + 'px';
+        hint.style.top = (offset.top + offset.height) + 'px';
+        break;
+      case 'bottom-right':
+        hint.style.left = (offset.left + offset.width) + 'px';
+        hint.style.top = (offset.top + offset.height) + 'px';
+        break;
+      case 'bottom-middle':
+        hint.style.left = (offset.left + (offset.width / 2)) + 'px';
+        hint.style.top = (offset.top + offset.height) + 'px';
+        break;
+      case 'top-middle':
+        hint.style.left = (offset.left + (offset.width / 2)) + 'px';
+        hint.style.top = offset.top + 'px';
+        break;
+    }
   };
 
   /**
@@ -1334,6 +1418,11 @@
    * @param {Number} stepId
    */
   function _hintClick(hintElement, item, stepId) {
+    // call the callback function (if any)
+    if (typeof (this._hintClickCallback) !== 'undefined') {
+      this._hintClickCallback.call(this, hintElement, item, stepId);
+    }
+
     // remove all open tooltips
     var removedStep = _removeHintTooltip.call(this);
 
@@ -1368,7 +1457,7 @@
     var closeButton = document.createElement('a');
     closeButton.className = 'introjs-button';
     closeButton.innerHTML = this._options.hintButtonLabel;
-    closeButton.onclick = _removeHint.bind(this, stepId);
+    closeButton.onclick = _hideHint.bind(this, stepId);
 
     tooltipTextLayer.appendChild(tooltipWrapper);
     tooltipTextLayer.appendChild(closeButton);
@@ -1565,6 +1654,14 @@
         this._hintClickCallback = providedCallback;
       } else {
         throw new Error('Provided callback for onhintclick was not a function.');
+      }
+      return this;
+    },
+    onhintclose: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._hintCloseCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onhintclose was not a function.');
       }
       return this;
     },

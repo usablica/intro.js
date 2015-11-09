@@ -352,14 +352,18 @@ tr.introjs-showElement > th {
   height: 15px;
 }
 
+.introjs-hidehint {
+    display: none;
+}
+
 .introjs-hint:hover > .introjs-hint-pulse {
-  border: 5px solid rgba(179, 179, 179, 5.27);
+  border: 5px solid rgba(60, 60, 60, 0.57);
 }
 
 .introjs-hint-pulse {
   width: 10px;
   height: 10px;
-  border: 5px solid rgba(179, 179, 179, 0.27);
+  border: 5px solid rgba(60, 60, 60, 0.27);
   -webkit-border-radius: 30px;
   -moz-border-radius: 30px;
   border-radius: 30px;
