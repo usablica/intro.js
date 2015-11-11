@@ -314,9 +314,18 @@
       return;
     }
 
+    // Notify previous step of change
+    var lastActiveStep = this._introItems[this._lastActiveStep || 0];
+    if (typeof (lastActiveStep) !== 'undefined' && typeof (lastActiveStep.after) !== 'undefined') {
+      lastActiveStep.after.call(this, lastActiveStep);
+    }
+
     var nextStep = this._introItems[this._currentStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
       this._introBeforeChangeCallback.call(this, nextStep.element);
+    }
+    if (typeof (nextStep.before) !== 'undefined') {
+      nextStep.before.call(this, nextStep);
     }
 
     _showElement.call(this, nextStep);
@@ -335,9 +344,18 @@
       return false;
     }
 
+    // Notify previous step of change
+    var lastActiveStep = this._introItems[this._lastActiveStep || 0];
+    if (typeof (lastActiveStep) !== 'undefined' && typeof (lastActiveStep.after) !== 'undefined') {
+      lastActiveStep.after.call(this, lastActiveStep);
+    }
+
     var nextStep = this._introItems[--this._currentStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
       this._introBeforeChangeCallback.call(this, nextStep.element);
+    }
+    if (typeof (nextStep.before) !== 'undefined') {
+      nextStep.before.call(this, nextStep);
     }
 
     _showElement.call(this, nextStep);
@@ -357,6 +375,12 @@
     //return if intro already completed or skipped
     if (overlayLayer == null) {
       return;
+    }
+
+    // Notify previous step of change
+    var lastActiveStep = this._introItems[this._lastActiveStep || 0];
+    if (typeof (lastActiveStep) !== 'undefined' && typeof (lastActiveStep.after) !== 'undefined') {
+      lastActiveStep.after.call(this, lastActiveStep);
     }
 
     //for fade-out animation
@@ -412,6 +436,7 @@
 
     //set the step to zero
     this._currentStep = undefined;
+    this._lastActiveStep = undefined;
   }
 
   /**
@@ -713,6 +738,8 @@
    * @param {Object} targetElement
    */
   function _showElement(targetElement) {
+
+    this._lastActiveStep = this._currentStep;
 
     if (typeof (this._introChangeCallback) !== 'undefined') {
       this._introChangeCallback.call(this, targetElement.element);
