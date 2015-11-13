@@ -835,7 +835,7 @@
 
       bulletsLayer.className = 'introjs-bullets';
 
-      if (this._options.showBullets === false) {
+      if (this._options.steps.length <= 1 || this._options.showBullets === false) {
         bulletsLayer.style.display = 'none';
       }
 
