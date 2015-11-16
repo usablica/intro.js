@@ -714,6 +714,10 @@
    */
   function _showElement(targetElement) {
 
+    if (this._disabledAnimation) {
+        return;
+    }
+
     if (typeof (this._introChangeCallback) !== 'undefined') {
       this._introChangeCallback.call(this, targetElement.element);
     }
@@ -1260,6 +1264,12 @@
       _setHelperLayerPosition.call(this, document.querySelector('.introjs-helperLayer'));
       _setHelperLayerPosition.call(this, document.querySelector('.introjs-tooltipReferenceLayer'));
       return this;
+    },
+
+    // Disables the animation
+    disableAnimation: function(disabled) {
+        this._disabledAnimation = disabled;
+        return this;
     },
     onbeforechange: function(providedCallback) {
       if (typeof (providedCallback) === 'function') {
