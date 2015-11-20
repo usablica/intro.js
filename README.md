@@ -348,6 +348,7 @@ introJs().onafterchange(function(targetElement) {
  - `showStepNumbers`: Show steps number in the red circle or not, `true` or `false`
  - `keyboardNavigation`: Navigating with keyboard or not, `true` or `false`
  - `showButtons`: Show introduction navigation buttons or not, `true` or `false`
+ - `showSkipButton`: Show skip button or not, `true` or `false` 
  - `showBullets`: Show introduction bullets or not, `true` or `false`
  - `showProgress`: Show introduction progress or not, `true` or `false`
  - `scrollToElement`: Auto scroll to highlighted element if it's outside of viewport, `true` or `false`
