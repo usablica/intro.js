@@ -71,8 +71,13 @@
       /* Precedence of positions, when auto is enabled */
       positionPrecedence: ["bottom", "top", "right", "left"],
       /* Disable an interaction with element? */
-      disableInteraction: false
+      disableInteraction: false,
+      /* Let user swipe to navigate */
+      swipeNavigation: true,
+      /* Swipe sensibility */
+      swipeSensibility: 30
     };
+
   }
 
   /**
@@ -266,6 +271,23 @@
         document.attachEvent('onresize', self._onResize);
       }
     }
+
+    if (this._options.swipeNavigation) {
+      // Init swipe detection
+      new _swipeFunc().init({
+        main_target: 'introjs-tooltip',
+        x_min_length: self._options.swipeSensibility,
+        callback: function(direction) {
+          if (direction === 'right') {
+            _nextStep.call(self);
+          }
+          else {
+            _previousStep.call(self);
+          }
+        }
+      });
+    }
+
     return false;
   }
 
@@ -1260,6 +1282,76 @@
     }
     return obj3;
   }
+
+  /**
+   * Gets swipe direction
+   *
+   * @api private
+   * @method _swipeFunc
+   * @returns swipe direction left/right
+   */
+  function _swipeFunc() {
+    this._cb = function() {};
+    this._y_diff = -1;
+    this._x_diff = -1;
+    this._x_min_length = 1;
+    this.touches = {
+      'touchstart': {
+        'entered': false,
+        'x': -1,
+        'y': -1
+      },
+      'touchmove': {
+        'entered': false,
+        'x': -1,
+        'y': -1
+      },
+      'touchend': false,
+      'direction': 'undetermined'
+    };
+  }
+  _swipeFunc.prototype = {
+    touchHandler: function(event) {
+      var event_handle = this.handle,
+        touch;
+      if (typeof event !== 'undefined') {
+        event.preventDefault();
+        if (event.touches !== 'undefined') {
+          touch = event.touches[0];
+          switch (event.type) {
+            case 'touchstart':
+            case 'touchmove':
+              event_handle.touches[event.type].entered = true;
+              event_handle.touches[event.type].x = touch.pageX;
+              event_handle.touches[event.type].y = touch.pageY;
+              break;
+            case 'touchend':
+              event_handle.touches[event.type] = true;
+              if (!event_handle.touches.touchmove.entered)
+                break;
+              event_handle._y_diff = event_handle.touches.touchstart.y > event_handle.touches.touchmove.y ? event_handle.touches.touchstart.y - event_handle.touches.touchmove.y : event_handle.touches.touchmove.y - event_handle.touches.touchstart.y;
+              event_handle._x_diff = event_handle.touches.touchstart.x > event_handle.touches.touchmove.x ? event_handle.touches.touchstart.x - event_handle.touches.touchmove.x : event_handle.touches.touchmove.x - event_handle.touches.touchstart.x;
+              if (event_handle.touches.touchstart.x > -1 && event_handle.touches.touchmove.x > -1 && event_handle._x_diff > event_handle._x_min_length && event_handle._x_diff >= event_handle._y_diff) {
+                event_handle.touches.direction = event_handle.touches.touchstart.x < event_handle.touches.touchmove.x ? 'right' : 'left';
+
+                event_handle._cb(event_handle.touches.direction);
+              }
+            default:
+              break;
+          }
+        }
+      }
+    },
+    init: function(opts) {
+      this._x_min_length = opts.x_min_length !== undefined ? opts.x_min_length : this._x_min_length;
+      this._cb = opts.callback || function() {};
+      document.getElementsByClassName(opts.main_target)[0].addEventListener('touchstart', this.touchHandler, false);
+      document.getElementsByClassName(opts.main_target)[0].addEventListener('touchmove', this.touchHandler, false);
+      document.getElementsByClassName(opts.main_target)[0].addEventListener('touchend', this.touchHandler, false);
+      document.getElementsByClassName(opts.main_target)[0].handle = this;
+    }
+  };
+
 
   var introJs = function(targetElm) {
     if (typeof(targetElm) === 'object') {
