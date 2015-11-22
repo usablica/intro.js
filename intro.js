@@ -1315,7 +1315,6 @@
       var event_handle = this.handle,
         touch;
       if (typeof event !== 'undefined') {
-        event.preventDefault();
         if (event.touches !== 'undefined') {
           touch = event.touches[0];
           switch (event.type) {
