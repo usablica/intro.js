@@ -348,11 +348,14 @@ introJs().onafterchange(function(targetElement) {
  - `showStepNumbers`: Show steps number in the red circle or not, `true` or `false`
  - `keyboardNavigation`: Navigating with keyboard or not, `true` or `false`
  - `showButtons`: Show introduction navigation buttons or not, `true` or `false`
+ - `showSkipButton`: Show skip button or not, `true` or `false` 
  - `showBullets`: Show introduction bullets or not, `true` or `false`
  - `showProgress`: Show introduction progress or not, `true` or `false`
  - `scrollToElement`: Auto scroll to highlighted element if it's outside of viewport, `true` or `false`
  - `overlayOpacity`: Adjust the overlay opacity, `Number`
  - `disableInteraction`: Disable an interaction inside element or not, `true` or `false`
+ - `swipeNavigation`: Navigating with swipe or not, `true` or `false`
+ - `swipeSensibility`: Swipe sensibility
 
 See [setOption](https://github.com/usablica/intro.js/#introjssetoptionoption-value) to see an example.
 
