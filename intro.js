@@ -108,7 +108,7 @@
           currentItem.position = 'floating';
         }
 
-        if (currentItem.element != null) {
+        if (currentItem.element != null && window.getComputedStyle(currentElement).display != 'none') {
           introItems.push(currentItem);
         }
       }
@@ -126,7 +126,7 @@
         var currentElement = allIntroSteps[i];
         var step = parseInt(currentElement.getAttribute('data-step'), 10);
 
-        if (step > 0) {
+        if (step > 0 && window.getComputedStyle(currentElement).display != 'none') {
           introItems[step - 1] = {
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
@@ -144,7 +144,7 @@
       for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
         var currentElement = allIntroSteps[i];
 
-        if (currentElement.getAttribute('data-step') == null) {
+        if (currentElement.getAttribute('data-step') == null && window.getComputedStyle(currentElement).display != 'none') {
 
           while (true) {
             if (typeof introItems[nextStep] == 'undefined') {
@@ -178,6 +178,11 @@
     introItems.sort(function (a, b) {
       return a.step - b.step;
     });
+	
+	//Define intro step number
+	for(var i=0;i<introItems.length; i++){
+		introItems[i].step=i+1
+	}
 
     //set it to the introJs object
     self._introItems = introItems;

@@ -33,9 +33,10 @@
       <hr>
 
       <div class="jumbotron">
-        <h1 data-step="1" data-intro="This is a tooltip!">Basic Usage</h1>
+        <h1 data-step="2" data-intro="This is a tooltip!">Basic Usage</h1>
         <p class="lead" data-step="4" data-intro="Another step.">This is the basic usage of IntroJs, with <code>data-step</code> and <code>data-intro</code> attributes.</p>
         <a class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:introJs().start();">Show me how</a>
+		<a class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:hideElement();" id="hideBtn">Hide Element</a>
       </div>
 
       <hr>
@@ -52,7 +53,7 @@
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
           </div>
 
-        <div class="span6" data-step="3" data-intro="More features, more fun."  data-position='left'>
+        <div id="secondColumn" class="span6" data-step="3" data-intro="More features, more fun."  data-position='left'>
           <h4>Section Four</h4>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
 
@@ -67,6 +68,19 @@
 
       <hr>
     </div>
+
     <script type="text/javascript" src="../../intro.js"></script>
+	<script>
+		function hideElement(){
+			if(document.getElementById("secondColumn").style.display == ''){
+				document.getElementById("hideBtn").innerHTML="Show Element"
+				document.getElementById("secondColumn").style.display = 'none';
+			}
+			else{
+				document.getElementById("hideBtn").innerHTML="Hide Element"
+				document.getElementById("secondColumn").style.display = '';
+			}
+		}
+	</script>
   </body>
 </html>
