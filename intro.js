@@ -108,7 +108,7 @@
           currentItem.position = 'floating';
         }
 
-        if (currentItem.element != null && window.getComputedStyle(currentElement).display != 'none') {
+        if (currentItem.element != null && !(window.getComputedStyle(currentElement).display.indexOf("none")>=0)) {
           introItems.push(currentItem);
         }
       }
@@ -126,7 +126,7 @@
         var currentElement = allIntroSteps[i];
         var step = parseInt(currentElement.getAttribute('data-step'), 10);
 
-        if (step > 0 && window.getComputedStyle(currentElement).display != 'none') {
+        if (step > 0 && !(window.getComputedStyle(currentElement).display.indexOf("none")>=0)) {
           introItems[step - 1] = {
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
@@ -144,7 +144,7 @@
       for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
         var currentElement = allIntroSteps[i];
 
-        if (currentElement.getAttribute('data-step') == null && window.getComputedStyle(currentElement).display != 'none') {
+        if (currentElement.getAttribute('data-step') == null && !(window.getComputedStyle(currentElement).display.indexOf("none")>=0)) {
 
           while (true) {
             if (typeof introItems[nextStep] == 'undefined') {
