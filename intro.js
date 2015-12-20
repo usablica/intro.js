@@ -695,6 +695,11 @@
           elementPosition = _getOffset(currentElement.element),
           widthHeightPadding = 10;
 
+      // if the target element is fixed, the tooltip should be fixed as well.
+      if (_isFixed(currentElement.element)) {
+        helperLayer.className += ' introjs-fixedTooltip';
+      }
+
       if (currentElement.position == 'floating') {
         widthHeightPadding = 0;
       }
@@ -1067,7 +1072,29 @@
     } else {
       return propValue;
     }
-  }
+  };
+
+  /**
+   * Checks to see if target element (or parents) position is fixed or not
+   *
+   * @api private
+   * @method _isFixed
+   * @param {Object} element
+   * @returns Boolean
+   */
+  function _isFixed (element) {
+    var p = element.parentNode;
+
+    if (p.nodeName === 'HTML') {
+      return false;
+    }
+
+    if (_getPropValue(element, 'position') == 'fixed') {
+      return true;
+    }
+
+    return _isFixed(p);
+  };
 
   /**
    * Provides a cross-browser way to get the screen dimensions
@@ -1336,6 +1363,12 @@
       }(hint, item, i));
 
       hint.className = 'introjs-hint';
+
+      // hint's position should be fixed if the target element's position is fixed
+      if (_isFixed(item.element)) {
+        hint.className += ' introjs-fixedhint';
+      }
+
       var hintDot = document.createElement('div');
       hintDot.className = 'introjs-hint-dot';
       var hintPulse = document.createElement('div');

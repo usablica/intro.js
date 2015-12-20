@@ -345,6 +345,10 @@ tr.introjs-showElement > th {
   top: 50%;
 }
 
+.introjs-fixedTooltip {
+  position: fixed;
+}
+
 .introjs-hint {
   position: absolute;
   background: transparent;
@@ -353,7 +357,11 @@ tr.introjs-showElement > th {
 }
 
 .introjs-hidehint {
-    display: none;
+  display: none;
+}
+
+.introjs-fixedhint {
+  position: fixed;
 }
 
 .introjs-hint:hover > .introjs-hint-pulse {
