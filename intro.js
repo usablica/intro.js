@@ -68,7 +68,7 @@
       /* Disable an interaction with element? */
       disableInteraction: false,
       /* Default hint position */
-      hintPosition: 'top',
+      hintPosition: 'top-middle',
       /* Hint button label */
       hintButtonLabel: 'Got it'
     };
@@ -1218,6 +1218,8 @@
           currentItem.element = document.querySelector(currentItem.element);
         }
 
+        currentItem.hintPosition = currentItem.hintPosition || 'top-middle';
+
         if (currentItem.element != null) {
           this._introItems.push(currentItem);
         }
@@ -1270,26 +1272,6 @@
   }
 
   /**
-   * Remove single hint from the page
-   *
-   * @api private
-   * @method _removeHint
-   */
-  function _removeHint(stepId) {
-    _removeHintTooltip.call(this);
-    var hint = this._targetElement.querySelector('.introjs-hint[data-step="' + stepId + '"]');
-
-    if (hint) {
-      hint.parentNode.removeChild(hint);
-    }
-
-    // call the callback function (if any)
-    if (typeof (this._hintRemoveCallback) !== 'undefined') {
-      this._hintRemoveCallback.call(this, stepId);
-    }
-  };
-
-  /**
    * Hide a hint
    *
    * @api private
@@ -1306,20 +1288,6 @@
     // call the callback function (if any)
     if (typeof (this._hintCloseCallback) !== 'undefined') {
       this._hintCloseCallback.call(this, stepId);
-    }
-  };
-
-  /**
-   * Remove all hints from the page
-   *
-   * @api private
-   * @method _removeHints
-   */
-  function _removeHints() {
-    var hints = this._targetElement.querySelectorAll('.introjs-hint');
-
-    for (var i = 0, l = hints.length; i < l; i++) {
-      _removeHint.call(this, hints[i].getAttribute('data-step'));
     }
   };
 
@@ -1695,14 +1663,6 @@
         this._hintCloseCallback = providedCallback;
       } else {
         throw new Error('Provided callback for onhintclose was not a function.');
-      }
-      return this;
-    },
-    onhintremove: function(providedCallback) {
-      if (typeof (providedCallback) === 'function') {
-        this._hintRemoveCallback = providedCallback;
-      } else {
-        throw new Error('Provided callback for onhintremove was not a function.');
       }
       return this;
     },
