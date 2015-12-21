@@ -409,7 +409,7 @@ introJs().onafterchange(function(targetElement) {
  - `data-step`: Optionally define the number (priority) of step
  - `data-tooltipClass`: Optionally define a CSS class for tooltip
  - `data-highlightClass`: Optionally append a CSS class to the helperLayer
- - `data-position`: Optionally define the position of tooltip, `top`, `left`, `right`, `bottom`, `bottom-left-aligned` (same as 'bottom'), 'bottom-middle-aligned' and 'bottom-right-aligned'. Default is `bottom`
+ - `data-position`: Optionally define the position of tooltip, `top`, `left`, `right`, `bottom`, `bottom-left-aligned` (same as `bottom`), `bottom-middle-aligned` and `bottom-right-aligned`. Default is `bottom`
 
 ###Options:
 
@@ -431,6 +431,9 @@ introJs().onafterchange(function(targetElement) {
  - `scrollToElement`: Auto scroll to highlighted element if it's outside of viewport, `true` or `false`
  - `overlayOpacity`: Adjust the overlay opacity, `Number`
  - `disableInteraction`: Disable an interaction inside element or not, `true` or `false`
+ - `hintPosition`: Hint position. Default: `top`
+ - `hintButtonLabel`: Hint button label. Default: 'Got it'
+
 
 See [setOption](https://github.com/usablica/intro.js/#introjssetoptionoption-value) to see an example.
 
