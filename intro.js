@@ -1,5 +1,5 @@
 /**
- * Intro.js v1.1.1
+ * Intro.js v2.0
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -19,7 +19,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '1.1.1';
+  var VERSION = '2.0';
 
   /**
    * IntroJs main class
@@ -70,7 +70,7 @@
       /* Default hint position */
       hintPosition: 'top',
       /* Hint button label */
-      hintButtonLabel: 'Got it',
+      hintButtonLabel: 'Got it'
     };
   }
 
