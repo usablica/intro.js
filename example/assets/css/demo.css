@@ -1,6 +1,8 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway);
+
 body {
   padding-top: 20px;
-  font-family: "Myriad Pro", Verdana, Arial, Tahoma;
+  font-family: 'Raleway', sans-serif;
   padding-bottom: 40px;
 }
 
