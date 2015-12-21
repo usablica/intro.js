@@ -1,4 +1,4 @@
-# Intro.js
+# Intro.js v2.0
 
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
@@ -21,7 +21,7 @@ Intro.js can be added to your site in three simple steps:
 
 > CDN hosted files are available at [jsDelivr](http://www.jsdelivr.com/#!intro.js) (click Show More) & [cdnjs](http://cdnjs.com/#introjs).
 
-**2)** Add `data-intro` and `data-step` to your HTML elements.
+**2)** Add `data-intro` and `data-step` to your HTML elements. To add hints you should use `data-hint` attribute.
 
 For example:
 
@@ -220,6 +220,84 @@ introJs().refresh();
 
 ----
 
+###introJs.addHints()
+
+To add available hints to the page (using `data-hint` or JSON)
+
+**Available since**: v2.0
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().addHints();
+````
+
+-----
+
+###introJs.onhintclick(providedCallback)
+
+Invkoes given function when user clicks on one of hints.
+
+**Available since**: v2.0
+
+**Parameters:**
+ - providedCallback : Function
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().onhintclick(function() {
+  alert("hint clicked");
+});
+````
+
+-----
+
+###introJs.onhintsadded(providedCallback)
+
+Invokes given callback function after adding and rendering all hints.
+
+**Available since**: v2.0
+
+**Parameters:**
+ - providedCallback : Function
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().onhintsadded(function() {
+  alert("all hints were added");
+});
+````
+
+-----
+
+###introJs.onhintclose(providedCallback)
+
+Set callback for when a single hint removes from page (e.g. when user clicks on "Got it" button)
+
+**Available since**: v2.0
+
+**Parameters:**
+ - providedCallback : Function
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().onhintclose(function() {
+  alert("hint closed");
+});
+````
+
+-----
 
 ###introJs.oncomplete(providedCallback)
 
