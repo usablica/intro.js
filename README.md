@@ -485,6 +485,10 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 
 ## Release History
 
+ * **v2.0** - 2015-12-21
+   - Adding `hint` feature
+   - Updating templates
+
  * **v1.1.1** - 2015-09-05
    - Fix versioning issue
 
