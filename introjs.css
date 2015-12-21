@@ -65,6 +65,7 @@ tr.introjs-showElement > th {
 
 .introjs-tooltipReferenceLayer {
   position: absolute;
+  visibility: hidden;
   z-index: 10000000;
   background-color: transparent;
   -webkit-transition: all 0.3s ease-out;
@@ -86,6 +87,7 @@ tr.introjs-showElement > th {
 
 .introjs-helperNumberLayer {
   position: absolute;
+  visibility: visible;
   top: -16px;
   left: -16px;
   z-index: 9999999999 !important;
@@ -184,6 +186,7 @@ tr.introjs-showElement > th {
 
 .introjs-tooltip {
   position: absolute;
+  visibility: visible;
   padding: 10px;
   background-color: white;
   min-width: 200px;
@@ -340,4 +343,111 @@ tr.introjs-showElement > th {
   width: 0;
   left: 50%;
   top: 50%;
+}
+
+.introjs-fixedTooltip {
+  position: fixed;
+}
+
+.introjs-hint {
+  position: absolute;
+  background: transparent;
+  width: 20px;
+  height: 15px;
+}
+
+.introjs-hidehint {
+  display: none;
+}
+
+.introjs-fixedhint {
+  position: fixed;
+}
+
+.introjs-hint:hover > .introjs-hint-pulse {
+  border: 5px solid rgba(60, 60, 60, 0.57);
+}
+
+.introjs-hint-pulse {
+  width: 10px;
+  height: 10px;
+  border: 5px solid rgba(60, 60, 60, 0.27);
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  background-color: rgba(136, 136, 136, 0.24);
+  z-index: 10;
+  position: absolute;
+  -webkit-transition: all 0.2s ease-out;
+     -moz-transition: all 0.2s ease-out;
+      -ms-transition: all 0.2s ease-out;
+       -o-transition: all 0.2s ease-out;
+          transition: all 0.2s ease-out;
+}
+
+.introjs-hint-dot {
+  border: 10px solid rgba(146, 146, 146, 0.36);
+  background: transparent;
+  -webkit-border-radius: 60px;
+  -moz-border-radius: 60px;
+  border-radius: 60px;
+  height: 50px;
+  width: 50px;
+  -webkit-animation: introjspulse 3s ease-out;
+  -moz-animation: introjspulse 3s ease-out;
+  animation: introjspulse 3s ease-out;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  position: absolute;
+  top: -25px;
+  left: -25px;
+  z-index: 1;
+  opacity: 0;
+}
+
+@-moz-keyframes intrjspulse {
+ 0% {
+    -moz-transform: scale(0);
+    opacity: 0.0;
+ }
+ 25% {
+    -moz-transform: scale(0);
+    opacity: 0.1;
+ }
+ 50% {
+    -moz-transform: scale(0.1);
+    opacity: 0.3;
+ }
+ 75% {
+    -moz-transform: scale(0.5);
+    opacity: 0.5;
+ }
+ 100% {
+    -moz-transform: scale(1);
+    opacity: 0.0;
+ }
+}
+
+@-webkit-keyframes "introjspulse" {
+ 0% {
+    -webkit-transform: scale(0);
+    opacity: 0.0;
+ }
+ 25% {
+    -webkit-transform: scale(0);
+    opacity: 0.1;
+ }
+ 50% {
+    -webkit-transform: scale(0.1);
+    opacity: 0.3;
+ }
+ 75% {
+    -webkit-transform: scale(0.5);
+    opacity: 0.5;
+ }
+ 100% {
+    -webkit-transform: scale(1);
+    opacity: 0.0;
+ }
 }
