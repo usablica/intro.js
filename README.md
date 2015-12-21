@@ -410,6 +410,8 @@ introJs().onafterchange(function(targetElement) {
  - `data-tooltipClass`: Optionally define a CSS class for tooltip
  - `data-highlightClass`: Optionally append a CSS class to the helperLayer
  - `data-position`: Optionally define the position of tooltip, `top`, `left`, `right`, `bottom`, `bottom-left-aligned` (same as `bottom`), `bottom-middle-aligned` and `bottom-right-aligned`. Default is `bottom`
+ - `data-hint`: The tooltip text of hint
+ - `data-hintPosition`: Optionally define the position of hint. Options: `top-middle`, `top-left`, `top-right`, `bottom-left`, `bottom-right`, `bottom-middle`. Default: `top-middle`
 
 ###Options:
 
@@ -431,7 +433,7 @@ introJs().onafterchange(function(targetElement) {
  - `scrollToElement`: Auto scroll to highlighted element if it's outside of viewport, `true` or `false`
  - `overlayOpacity`: Adjust the overlay opacity, `Number`
  - `disableInteraction`: Disable an interaction inside element or not, `true` or `false`
- - `hintPosition`: Hint position. Default: `top`
+ - `hintPosition`: Hint position. Default: `top-middle`
  - `hintButtonLabel`: Hint button label. Default: 'Got it'
 
 
