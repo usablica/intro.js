@@ -1,4 +1,4 @@
-# Intro.js
+# Intro.js v2.0
 
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
@@ -21,7 +21,7 @@ Intro.js can be added to your site in three simple steps:
 
 > CDN hosted files are available at [jsDelivr](http://www.jsdelivr.com/#!intro.js) (click Show More) & [cdnjs](http://cdnjs.com/#introjs).
 
-**2)** Add `data-intro` and `data-step` to your HTML elements.
+**2)** Add `data-intro` and `data-step` to your HTML elements. To add hints you should use `data-hint` attribute.
 
 For example:
 
@@ -220,6 +220,84 @@ introJs().refresh();
 
 ----
 
+###introJs.addHints()
+
+To add available hints to the page (using `data-hint` or JSON)
+
+**Available since**: v2.0
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().addHints();
+````
+
+-----
+
+###introJs.onhintclick(providedCallback)
+
+Invkoes given function when user clicks on one of hints.
+
+**Available since**: v2.0
+
+**Parameters:**
+ - providedCallback : Function
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().onhintclick(function() {
+  alert("hint clicked");
+});
+````
+
+-----
+
+###introJs.onhintsadded(providedCallback)
+
+Invokes given callback function after adding and rendering all hints.
+
+**Available since**: v2.0
+
+**Parameters:**
+ - providedCallback : Function
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().onhintsadded(function() {
+  alert("all hints were added");
+});
+````
+
+-----
+
+###introJs.onhintclose(providedCallback)
+
+Set callback for when a single hint removes from page (e.g. when user clicks on "Got it" button)
+
+**Available since**: v2.0
+
+**Parameters:**
+ - providedCallback : Function
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().onhintclose(function() {
+  alert("hint closed");
+});
+````
+
+-----
 
 ###introJs.oncomplete(providedCallback)
 
@@ -331,7 +409,9 @@ introJs().onafterchange(function(targetElement) {
  - `data-step`: Optionally define the number (priority) of step
  - `data-tooltipClass`: Optionally define a CSS class for tooltip
  - `data-highlightClass`: Optionally append a CSS class to the helperLayer
- - `data-position`: Optionally define the position of tooltip, `top`, `left`, `right`, `bottom`, `bottom-left-aligned` (same as 'bottom'), 'bottom-middle-aligned' and 'bottom-right-aligned'. Default is `bottom`
+ - `data-position`: Optionally define the position of tooltip, `top`, `left`, `right`, `bottom`, `bottom-left-aligned` (same as `bottom`), `bottom-middle-aligned` and `bottom-right-aligned`. Default is `bottom`
+ - `data-hint`: The tooltip text of hint
+ - `data-hintPosition`: Optionally define the position of hint. Options: `top-middle`, `top-left`, `top-right`, `bottom-left`, `bottom-right`, `bottom-middle`. Default: `top-middle`
 
 ###Options:
 
@@ -353,6 +433,9 @@ introJs().onafterchange(function(targetElement) {
  - `scrollToElement`: Auto scroll to highlighted element if it's outside of viewport, `true` or `false`
  - `overlayOpacity`: Adjust the overlay opacity, `Number`
  - `disableInteraction`: Disable an interaction inside element or not, `true` or `false`
+ - `hintPosition`: Hint position. Default: `top-middle`
+ - `hintButtonLabel`: Hint button label. Default: 'Got it'
+
 
 See [setOption](https://github.com/usablica/intro.js/#introjssetoptionoption-value) to see an example.
 
@@ -401,6 +484,10 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 </p>
 
 ## Release History
+
+ * **v2.0** - 2015-12-21
+   - Adding `hint` feature
+   - Updating templates
 
  * **v1.1.1** - 2015-09-05
    - Fix versioning issue
