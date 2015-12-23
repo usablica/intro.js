@@ -461,7 +461,7 @@ Here is a under construction plugin for Wordpress: https://github.com/newoldmedi
 ### GWT Wrapper
 GWT wrapper on top of Intro.js
 
-Github: https://github.com/Agnie-Software/gwt-introjs
+GitHub: https://github.com/Agnie-Software/gwt-introjs
 
 ## Build
 
@@ -601,7 +601,7 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 **Afshin Mehrabani**
 
 - [Twitter](https://twitter.com/afshinmeh)
-- [Github](https://github.com/afshinm)
+- [GitHub](https://github.com/afshinm)
 - [Personal page](http://afshinm.name/)
 
 [Other contributors](https://github.com/usablica/intro.js/graphs/contributors)
