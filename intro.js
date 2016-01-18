@@ -67,6 +67,8 @@
       positionPrecedence: ["bottom", "top", "right", "left"],
       /* Disable an interaction with element? */
       disableInteraction: false,
+      /* Set how much padding to be used around helper element */
+      helperElementPadding: 10,
       /* Default hint position */
       hintPosition: 'top-middle',
       /* Hint button label */
@@ -693,7 +695,7 @@
 
       var currentElement  = this._introItems[this._currentStep],
           elementPosition = _getOffset(currentElement.element),
-          widthHeightPadding = 10;
+          widthHeightPadding = this._options.helperElementPadding;
 
       // if the target element is fixed, the tooltip should be fixed as well.
       if (_isFixed(currentElement.element)) {
@@ -707,8 +709,8 @@
       //set new position to helper layer
       helperLayer.setAttribute('style', 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
                                         'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
-                                        'top:'    + (elementPosition.top    - 5)   + 'px;' +
-                                        'left: '  + (elementPosition.left   - 5)   + 'px;');
+                                        'top:'    + (elementPosition.top    - widthHeightPadding / 2)   + 'px;' +
+                                        'left: '  + (elementPosition.left   - widthHeightPadding / 2)   + 'px;');
 
     }
   }
