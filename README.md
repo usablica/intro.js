@@ -238,7 +238,7 @@ introJs().addHints();
 
 ###introJs.onhintclick(providedCallback)
 
-Invkoes given function when user clicks on one of hints.
+Invokes given function when user clicks on one of hints.
 
 **Available since**: v2.0
 
