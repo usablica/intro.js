@@ -467,6 +467,7 @@
     }
 
     tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
+    tooltipLayer.setAttribute('role', 'dialog');
 
     currentTooltipPosition = this._introItems[this._currentStep].position;
     if ((currentTooltipPosition == "auto" || this._options.tooltipPosition == "auto")) {
@@ -817,6 +818,7 @@
         oldReferenceLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
 
         oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').setAttribute('style', 'width:' + _getProgress.call(self) + '%;');
+        oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').setAttribute('aria-valuenow', _getProgress.call(self));
 
         //show the tooltip
         oldtooltipContainer.style.opacity = 1;
@@ -865,10 +867,13 @@
       }
 
       var ulContainer = document.createElement('ul');
+      ulContainer.setAttribute('role', 'tablist');
 
       for (var i = 0, stepsLength = this._introItems.length; i < stepsLength; i++) {
         var innerLi    = document.createElement('li');
+          innerLi.setAttribute('role', 'presentation');
         var anchorLink = document.createElement('a');
+          anchorLink.setAttribute('role', 'tab');
 
         anchorLink.onclick = function() {
           self.goToStep(this.getAttribute('data-stepnumber'));
@@ -893,6 +898,10 @@
       }
       var progressBar = document.createElement('div');
       progressBar.className = 'introjs-progressbar';
+      progressBar.setAttribute('role', 'progress');
+      progressBar.setAttribute('aria-valuemin', 0);
+      progressBar.setAttribute('aria-valuemax', 100);
+      progressBar.setAttribute('aria-valuenow', _getProgress.call(this));
       progressBar.setAttribute('style', 'width:' + _getProgress.call(this) + '%;');
 
       progressLayer.appendChild(progressBar);
@@ -997,6 +1006,10 @@
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
     }
+
+    prevTooltipButton.setAttribute('role', 'button');
+    nextTooltipButton.setAttribute('role', 'button');
+    skipTooltipButton.setAttribute('role', 'button');
 
     //Set focus on "next" button, so that hitting Enter always moves you onto the next step
     nextTooltipButton.focus();
@@ -1457,6 +1470,7 @@
 
     var closeButton = document.createElement('a');
     closeButton.className = 'introjs-button';
+    closeButton.setAttribute('role', 'button');
     closeButton.innerHTML = this._options.hintButtonLabel;
     closeButton.onclick = _hideHint.bind(this, stepId);
 
