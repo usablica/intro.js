@@ -225,6 +225,9 @@
               self._introExitCallback.call(self);
             }
             _exitIntro.call(self, targetElm);
+          } else if (target && target.getAttribute('data-stepnumber')) {
+            //user hit enter while focusing on step bullet
+            target.click();
           } else {
             //default behavior for responding to enter
             _nextStep.call(self);
