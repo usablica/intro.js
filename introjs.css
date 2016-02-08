@@ -406,6 +406,29 @@ tr.introjs-showElement > th {
   opacity: 0;
 }
 
+.introjs-titlebar{
+    position:relative;
+    top:-10px;
+    background-color: #ececec;
+    margin-left:-10px;
+    margin-right:-10px;
+    text-align:center;
+    border-radius:4px 4px;
+}
+
+.introjs-titletext{
+font-weight:bold;
+}
+
+.introjs-closebutton{
+    float:right;
+        text-decoration:none;
+        padding-right:10px;
+}
+.introjs-closebutton:hover{
+    text-decoration:none;
+}
+
 @-moz-keyframes intrjspulse {
  0% {
     -moz-transform: scale(0);
