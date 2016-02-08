@@ -45,6 +45,8 @@
       tooltipClass: '',
       /* CSS class that is added to the helperLayer */
       highlightClass: '',
+      /* Padding for helperLayer*/
+      highlightPadding:10,
       /* Close introduction when pressing Escape button? */
       exitOnEsc: true,
       /* Close introduction when clicking on overlay layer? */
@@ -699,7 +701,7 @@
 
       var currentElement  = this._introItems[this._currentStep],
           elementPosition = _getOffset(currentElement.element),
-          widthHeightPadding = 10;
+          widthHeightPadding = this._options.highlightPadding || 0;
 
       // if the target element is fixed, the tooltip should be fixed as well.
       if (_isFixed(currentElement.element)) {
