@@ -46,7 +46,7 @@
       /* CSS class that is added to the helperLayer */
       highlightClass: '',
       /* Padding for helperLayer*/
-      highlightPadding:10,
+      highlightPadding: 5,
       /* Close introduction when pressing Escape button? */
       exitOnEsc: true,
       /* Close introduction when clicking on overlay layer? */
@@ -713,10 +713,11 @@
       }
 
       //set new position to helper layer
-      helperLayer.setAttribute('style', 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
-                                        'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
-                                        'top:'    + (elementPosition.top    - 5)   + 'px;' +
-                                        'left: '  + (elementPosition.left   - 5)   + 'px;');
+      helperLayer.setAttribute('style', 'width: '   + elementPosition.width + 'px; ' +
+                                       'height:'    + elementPosition.height + 'px; ' +
+                                       'padding: '  + widthHeightPadding + 'px; ' +
+                                       'top:'       + (elementPosition.top - this._options.highlightPadding) + 'px;' +
+                                       'left: '     + (elementPosition.left - this._options.highlightPadding) + 'px;');
 
     }
   }
