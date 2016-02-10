@@ -465,7 +465,11 @@ Github: https://github.com/Agnie-Software/gwt-introjs
 
 ## Build
 
-First you should install `nodejs` and `npm`, then first run this command: `npm install` to install all dependencies.
+First you should install `nodejs` and `npm`, and `make` then first run this command: `npm install` to install all dependencies.
+
+Note: Make requires the server jre, or you can bypass it as follows: http://stackoverflow.com/questions/18123144/missing-server-jvm-java-jre7-bin-server-jvm-dll
+
+Note: You may have to add `make` to your path.
 
 Now you can run this command to minify all static resources:
 
