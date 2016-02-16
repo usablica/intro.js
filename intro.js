@@ -970,19 +970,19 @@
       }
 
       tooltipLayer.appendChild(buttonsLayer);
-
-      //set proper position also on window resize for responsive sites
-      self._onResize = function () {
-          _setHelperLayerPosition.call(self, document.querySelector('.introjs-helperLayer'));
-          _setHelperLayerPosition.call(self, document.querySelector('.introjs-tooltipReferenceLayer'));
-          _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
-      }
-      if (window.addEventListener) {
-          window.addEventListener('resize', self._onResize, true);
-      } else if (document.attachEvent) {
-          document.attachEvent('onresize', self._onResize);
-      }
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
+    }
+     
+    //set proper position also on window resize for responsive sites
+    self._onResize = function () {
+        _setHelperLayerPosition.call(self, document.querySelector('.introjs-helperLayer'));
+        _setHelperLayerPosition.call(self, document.querySelector('.introjs-tooltipReferenceLayer'));
+        _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
+    }
+    if (window.addEventListener) {
+        window.addEventListener('resize', self._onResize, true);
+    } else if (document.attachEvent) {
+        document.attachEvent('onresize', self._onResize);
     }
 
     //disable interaction
