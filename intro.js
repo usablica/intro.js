@@ -977,7 +977,9 @@
     self._onResize = function () {
         _setHelperLayerPosition.call(self, document.querySelector('.introjs-helperLayer'));
         _setHelperLayerPosition.call(self, document.querySelector('.introjs-tooltipReferenceLayer'));
-        _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
+        if (targetElement.element && tooltipLayer && arrowLayer) {
+            _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
+        }
     }
     if (window.addEventListener) {
         window.addEventListener('resize', self._onResize, true);
