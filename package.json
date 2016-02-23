@@ -1,7 +1,7 @@
 {
     "name": "intro.js",
     "description": "Better introductions for websites and features with a step-by-step guide for your projects",
-    "version": "2.0.0",
+    "version": "2.0",
     "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
     "repository": {
         "type": "git",
@@ -11,7 +11,7 @@
         "node-minify": "*"
     },
     "engine": [
-        "node >=2.10.1"
+        "node >=0.1.90"
     ],
     "main": "intro.js",
     "spm": {
