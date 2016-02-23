@@ -469,7 +469,7 @@
 
     tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
 
-    currentTooltipPosition = this._introItems[this._currentStep].position;
+    currentTooltipPosition = this._introItems[this._currentStep].position || 'auto';
     if ((currentTooltipPosition == "auto" || this._options.tooltipPosition == "auto")) {
       if (currentTooltipPosition != "floating") { // Floating is always valid, no point in calculating
         currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer, currentTooltipPosition);
@@ -832,7 +832,13 @@
           nextTooltipButton.focus();
         }
       }, 350);
-
+      //set proper position also on window resize for responsive sites
+      self._onResize = function () {
+          _setHelperLayerPosition.call(self, document.querySelector('.introjs-helperLayer'));
+          _setHelperLayerPosition.call(self, document.querySelector('.introjs-tooltipReferenceLayer'));
+          //this will reposition right left top bottom
+          _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
+      }
     } else {
       var helperLayer       = document.createElement('div'),
           referenceLayer    = document.createElement('div'),
@@ -971,16 +977,16 @@
 
       tooltipLayer.appendChild(buttonsLayer);
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
+
+      //set proper position also on window resize for responsive sites
+      self._onResize = function () {
+          _setHelperLayerPosition.call(self, document.querySelector('.introjs-helperLayer'));
+          _setHelperLayerPosition.call(self, document.querySelector('.introjs-tooltipReferenceLayer'));
+          //this will reposition right left top bottom
+          _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
+      }
     }
-     
-    //set proper position also on window resize for responsive sites
-    self._onResize = function () {
-        _setHelperLayerPosition.call(self, document.querySelector('.introjs-helperLayer'));
-        _setHelperLayerPosition.call(self, document.querySelector('.introjs-tooltipReferenceLayer'));
-        if (targetElement.element && tooltipLayer && arrowLayer) {
-            _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
-        }
-    }
+
     if (window.addEventListener) {
         window.addEventListener('resize', self._onResize, true);
     } else if (document.attachEvent) {
