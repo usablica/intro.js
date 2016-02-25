@@ -695,9 +695,14 @@
           elementPosition = _getOffset(currentElement.element),
           widthHeightPadding = 10;
 
-      // if the target element is fixed, the tooltip should be fixed as well.
+      // If the target element is fixed, the tooltip should be fixed as well.
+      // Otherwise, remove a fixed class that may be left over from the previous
+      // step.
       if (_isFixed(currentElement.element)) {
         helperLayer.className += ' introjs-fixedTooltip';
+      }
+      else {
+        helperLayer.className = helperLayer.className.replace(/introjs-fixedTooltip/g, '');
       }
 
       if (currentElement.position == 'floating') {
