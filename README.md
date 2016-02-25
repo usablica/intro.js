@@ -1,4 +1,4 @@
-# Intro.js v2.0
+# Intro.js v2.0.0
 
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
@@ -224,7 +224,7 @@ introJs().refresh();
 
 To add available hints to the page (using `data-hint` or JSON)
 
-**Available since**: v2.0
+**Available since**: v2.0.0
 
 **Returns:**
  - introJs object.
@@ -240,7 +240,7 @@ introJs().addHints();
 
 Invkoes given function when user clicks on one of hints.
 
-**Available since**: v2.0
+**Available since**: v2.0.0
 
 **Parameters:**
  - providedCallback : Function
@@ -261,7 +261,7 @@ introJs().onhintclick(function() {
 
 Invokes given callback function after adding and rendering all hints.
 
-**Available since**: v2.0
+**Available since**: v2.0.0
 
 **Parameters:**
  - providedCallback : Function
@@ -282,7 +282,7 @@ introJs().onhintsadded(function() {
 
 Set callback for when a single hint removes from page (e.g. when user clicks on "Got it" button)
 
-**Available since**: v2.0
+**Available since**: v2.0.0
 
 **Parameters:**
  - providedCallback : Function
@@ -303,7 +303,7 @@ introJs().onhintclose(function() {
 
 Set callback for when introduction completed.
 
-**Available since**: v0.2.0
+**Available since**: v0.2.0.0
 
 **Parameters:**
  - providedCallback : Function
@@ -324,7 +324,7 @@ introJs().oncomplete(function() {
 
 Set callback to exit of introduction. Exit also means pressing `ESC` key and clicking on the overlay layer by the user.
 
-**Available since:** v0.2.0
+**Available since:** v0.2.0.0
 
 **Parameters:**
  - providedCallback : Function
@@ -485,7 +485,7 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 
 ## Release History
 
- * **v2.0** - 2015-12-21
+ * **v2.0.0** - 2015-12-21
    - Adding `hint` feature
    - Updating templates
 
