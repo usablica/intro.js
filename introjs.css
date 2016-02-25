@@ -338,7 +338,7 @@ tr.introjs-showElement > th {
 }
 
 .introjsFloatingElement {
-  position: absolute;
+  position: fixed;
   height: 0;
   width: 0;
   left: 50%;
