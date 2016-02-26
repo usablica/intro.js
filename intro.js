@@ -1013,7 +1013,7 @@
 
     var parentElm = targetElement.element.parentNode;
     while (parentElm != null) {
-      if (parentElm.tagName.toLowerCase() === 'body') break;
+      if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
 
       //fix The Stacking Contenxt problem.
       //More detail: https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context
@@ -1085,7 +1085,7 @@
   function _isFixed (element) {
     var p = element.parentNode;
 
-    if (p.nodeName === 'HTML') {
+    if (!p || p.nodeName === 'HTML') {
       return false;
     }
 
