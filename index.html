@@ -25,8 +25,14 @@
       <section class="header" data-step="6" data-intro="Thanks for your time <3">
       <h1 data-intro="Hello world! I'm Intro.js" data-step="1">Intro.js</h1>
       <h3 class="title" data-intro="This is a simple step-by-step guide made using Intro.js" data-step="2">Step-by-step guide and feature introduction</h3>
+
       <a class="button button-primary" href="https://github.com/usablica/intro.js/releases" target="_blank" data-intro="Intro.js is free and open-source. Download it." data-step="5">Download</a>
       <a class="button button-primary" href="javascript:void(0);" onclick="introJs().start()">Demo</a>
+      <div class="row">
+          <div class="column">
+              <a class="commercial-link" href="/#commercial">Commercial use</a>
+          </div>
+      </div>
       <div class="value-props row" data-intro="Another step. Intro.js main features!" data-step="3">
         <div class="four columns value-prop">
             <i class="fa fa-compress fa-5x"></i><br />
@@ -52,6 +58,13 @@
           <li class="navbar-item"><a class="navbar-link" href="javascript:void(0)" onclick="introJs().start()">Demo</a></li>
           <li class="navbar-item"><a class="navbar-link" href="https://github.com/usablica/intro.js" target="_blank"><i class="fa fa-github"></i>&nbsp;Github</a></li>
           <li class="navbar-item"><a class="navbar-link" href="https://twitter.com/usablica" target="_blank"><i class="fa fa-twitter"></i>&nbsp;Twitter</a></li>
+          <li class="navbar-item">
+          <a class="navbar-link" href="#" id="donateButton"><i class="fa fa-heart"></i>&nbsp;Donate</a>
+          <form id="donateForm" action="https://introjs.herokuapp.com/charge" method="post">
+              <input type="hidden" id="stripeToken" name="stripeToken" />
+              <input type="hidden" id="amount" name="amount" value="500" />
+          </form>
+          </li>
         </ul>
       </div>
     </nav>
@@ -228,6 +241,141 @@
     </div>
   </div>
 
+  <div class="section" id="commercial_section">
+      <div class="container">
+          <h6 class="docs-header" id="commercial">Intro.js Commercial</h6>
+          <p>
+          Intro.js is a free and open-source library, however, if you are using the library for your business
+          you can subscribe to one of commercial licenses plus support, code review and support by Intro.js team.
+          </p>
+          <p>Here you can find all available Intro.js licenses and plans for commercial use.</p>
+
+          <div class="wrapper">
+              <div class="package">
+                  <div class="name">Starter</div>
+                  <div class="price">USD$9.99</div>
+                  <div class="trial">Personal Package</div>
+                  <hr>
+                  <ul>
+                      <li>
+                      <strong>1</strong>
+                      Project
+                      </li>
+                      <li>
+                      <strong>No</strong>
+                      support
+                      </li>
+                      <li>
+                      <strong>1</strong>
+                      customized theme
+                      </li>
+                      <li>
+                      <strong>No</strong> code review
+                      </li>
+                      <li>
+                      Future updates
+                      </li>
+                  </ul>
+                  <hr>
+                    <form action="https://introjs.herokuapp.com/charge" method="POST" class="stripe-form">
+                      <script
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_live_ZSJq4BT73VGchztlGmdmDFc1"
+                        data-name="Intro.js"
+                        data-description="Starter Plan"
+                        data-label="Subscribe"
+                        data-currency="usd"
+                        data-amount="999"
+                        data-locale="auto">
+                      </script>
+                      <input type="hidden" id="amount" name="amount" value="999" />
+                    </form>
+              </div>
+              <div class="package brilliant">
+                  <div class="name">Business</div>
+                  <div class="price">USD$29.99</div>
+                  <div class="trial">With support</div>
+                  <hr>
+                  <ul>
+                      <li>
+                      <strong>5</strong>
+                      Projects
+                      </li>
+                      <li>
+                      <strong>1</strong>
+                      month support
+                      </li>
+                      <li>
+                      <strong>5</strong>
+                      customized theme
+                      </li>
+                      <li>
+                      Code review
+                      </li>
+                      <li>
+                      Future updates
+                      </li>
+                  </ul>
+                  <hr>
+                    <form action="https://introjs.herokuapp.com/charge" method="POST" class="stripe-form">
+                      <script
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_live_ZSJq4BT73VGchztlGmdmDFc1"
+                        data-name="Intro.js"
+                        data-description="Business Plan"
+                        data-label="Subscribe"
+                        data-currency="usd"
+                        data-amount="2999"
+                        data-locale="auto">
+                      </script>
+                      <input type="hidden" id="amount" name="amount" value="2999" />
+                    </form>
+              </div>
+              <div class="package">
+                  <div class="name">Premium</div>
+                  <div class="price">USD$99.99</div>
+                  <div class="trial">Premium Package</div>
+                  <hr>
+                  <ul>
+                      <li>
+                      <strong>Unlimited</strong>
+                      Projects
+                      </li>
+                      <li>
+                      <strong>1</strong>
+                      year support
+                      </li>
+                      <li>
+                      <strong>10</strong>
+                      customized theme
+                      </li>
+                      <li>
+                      Code review
+                      </li>
+                      <li>
+                      Future updates
+                      </li>
+                  </ul>
+                  <hr>
+                    <form action="https://introjs.herokuapp.com/charge" method="POST" class="stripe-form">
+                      <script
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_live_ZSJq4BT73VGchztlGmdmDFc1"
+                        data-name="Intro.js"
+                        data-label="Subscribe"
+                        data-description="Premium Plan"
+                        data-currency="usd"
+                        data-amount="9999"
+                        data-locale="auto">
+                      </script>
+
+                      <input type="hidden" id="amount" name="amount" value="9999" />
+                    </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
   <script type="text/javascript">
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -236,6 +384,33 @@
 
       ga('create', 'UA-69239984-1', 'auto');
       ga('send', 'pageview');
+  </script>
+
+  <script type="text/javascript">
+      var handler = StripeCheckout.configure({
+        key: 'pk_live_ZSJq4BT73VGchztlGmdmDFc1',
+        locale: 'auto',
+        token: function(token) {
+          var stripeForm = $('#donateForm');
+          $(stripeForm).find('#stripeToken').val(token.id);
+          stripeForm.submit();
+        }
+      });
+
+      $('#donateButton').on('click', function(e) {
+        handler.open({
+          name: 'Intro.js',
+          description: 'Donate Project',
+          currency: "usd",
+          amount: '500'
+        });
+        e.preventDefault();
+      });
+
+      // Close Checkout on page navigation
+      $(window).on('popstate', function() {
+        handler.close();
+      });
   </script>
 
 </body>
