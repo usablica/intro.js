@@ -14,6 +14,12 @@ You can obtain your local copy of Intro.js from:
 **4)** Download it from CDN ([1](http://www.jsdelivr.com/#!intro.js), [2](http://cdnjs.com/#introjs))
 
 
+## Commercial use
+
+Intro.js is a free and open-source library, however, if you are using the library for your business you can subscribe to one of commercial licenses plus support, code review and support by Intro.js team.
+
+See all available plans: http://introjs.com/#commercial
+
 ## How to use
 Intro.js can be added to your site in three simple steps:
 
