@@ -698,6 +698,8 @@
       // if the target element is fixed, the tooltip should be fixed as well.
       if (_isFixed(currentElement.element)) {
         helperLayer.className += ' introjs-fixedTooltip';
+      } else {
+        helperLayer.className = helperLayer.className.replace(' introjs-fixedTooltip', '');
       }
 
       if (currentElement.position == 'floating') {
