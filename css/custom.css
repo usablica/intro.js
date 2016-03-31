@@ -350,3 +350,8 @@
 #donateOptions {
      display: none;
 }
+.customer_logo {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
