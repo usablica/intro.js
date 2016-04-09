@@ -1,5 +1,5 @@
 /**
- * Intro.js v2.0
+ * Intro.js v2.0.1
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -19,7 +19,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '2.0';
+  var VERSION = '2.0.1';
 
   /**
    * IntroJs main class
@@ -129,6 +129,12 @@
       //first add intro items with data-step
       for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
         var currentElement = allIntroSteps[i];
+
+        // skip hidden elements
+        if (currentElement.style.display == 'none') {
+          continue;
+        }
+
         var step = parseInt(currentElement.getAttribute('data-step'), 10);
 
         if (step > 0) {
@@ -703,9 +709,6 @@
       } else {
         helperLayer.className = helperLayer.className.replace(' introjs-fixedTooltip', '');
       }
-      else {
-        helperLayer.className = helperLayer.className.replace(/introjs-fixedTooltip/g, '');
-      }
 
       if (currentElement.position == 'floating') {
         widthHeightPadding = 0;
@@ -1015,7 +1018,8 @@
 
     var currentElementPosition = _getPropValue(targetElement.element, 'position');
     if (currentElementPosition !== 'absolute' &&
-        currentElementPosition !== 'relative') {
+        currentElementPosition !== 'relative' &&
+        currentElementPosition !== 'fixed') {
       //change to new intro item
       targetElement.element.className += ' introjs-relativePosition';
     }
@@ -1276,6 +1280,9 @@
   function _reAlignHints() {
     for (var i = 0, l = this._introItems.length; i < l; i++) {
       var item = this._introItems[i];
+
+      if (typeof (item.targetElement) == 'undefined') continue;
+
       _alignHintPosition.call(this, item.hintPosition, item.element, item.targetElement)
     }
   }
@@ -1615,8 +1622,12 @@
       return this;
     },
     refresh: function() {
+      // re-align intros
       _setHelperLayerPosition.call(this, document.querySelector('.introjs-helperLayer'));
       _setHelperLayerPosition.call(this, document.querySelector('.introjs-tooltipReferenceLayer'));
+
+      //re-align hints
+      _reAlignHints.call(this);
       return this;
     },
     onbeforechange: function(providedCallback) {
