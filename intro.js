@@ -741,6 +741,17 @@
   }
 
   /**
+   * Setting anchors to behave like buttons
+   *
+   * @api private
+   * @method _setAnchorAsButton
+   */
+  function _setAnchorAsButton(anchor){
+    anchor.setAttribute('role', 'button');
+    anchor.tabIndex = 0;
+  }
+
+  /**
    * Show an element on the page
    *
    * @api private
@@ -888,7 +899,7 @@
 
         if (i === (targetElement.step-1)) anchorLink.className = 'active';
 
-        anchorLink.href = 'javascript:void(0);';
+        _setAnchorAsButton(anchorLink);
         anchorLink.innerHTML = "&nbsp;";
         anchorLink.setAttribute('data-stepnumber', this._introItems[i].step);
 
@@ -939,7 +950,7 @@
         }
       };
 
-      nextTooltipButton.href = 'javascript:void(0);';
+      _setAnchorAsButton(nextTooltipButton);
       nextTooltipButton.innerHTML = this._options.nextLabel;
 
       //previous button
@@ -951,13 +962,13 @@
         }
       };
 
-      prevTooltipButton.href = 'javascript:void(0);';
+      _setAnchorAsButton(prevTooltipButton);
       prevTooltipButton.innerHTML = this._options.prevLabel;
 
       //skip button
       var skipTooltipButton = document.createElement('a');
       skipTooltipButton.className = 'introjs-button introjs-skipbutton';
-      skipTooltipButton.href = 'javascript:void(0);';
+      _setAnchorAsButton(skipTooltipButton);
       skipTooltipButton.innerHTML = this._options.skipLabel;
 
       skipTooltipButton.onclick = function() {
@@ -1333,7 +1344,7 @@
         continue;
 
       var hint = document.createElement('a');
-      hint.href = "javascript:void(0);";
+      _setAnchorAsButton(hint);
 
       (function (hint, item, i) {
         // when user clicks on the hint element
