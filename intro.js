@@ -992,28 +992,28 @@
     }
 
     if(prevTooltipButton) prevTooltipButton.removeAttribute('tabIndex')
-     else prevTooltipButton = {};
-     if(nextTooltipButton) nextTooltipButton.removeAttribute('tabIndex')
-     else nextTooltipButton = {};
+    else prevTooltipButton = {};
+    if(nextTooltipButton) nextTooltipButton.removeAttribute('tabIndex')
+    else nextTooltipButton = {};
 
-     if (this._currentStep == 0 && this._introItems.length > 1) {
-       prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
-       prevTooltipButton.tabIndex = '-1';
-       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
-       skipTooltipButton.innerHTML = this._options.skipLabel;
-     } else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
-       skipTooltipButton.innerHTML = this._options.doneLabel;
-       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-       nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
-       nextTooltipButton.tabIndex = '-1';
-     } else {
-       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
-       skipTooltipButton.innerHTML = this._options.skipLabel;
-     }
+    if (this._currentStep == 0 && this._introItems.length > 1) {
+      prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
+      prevTooltipButton.tabIndex = '-1';
+      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+      skipTooltipButton.innerHTML = this._options.skipLabel;
+    } else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
+      skipTooltipButton.innerHTML = this._options.doneLabel;
+      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
+      nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+      nextTooltipButton.tabIndex = '-1';
+    } else {
+      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
+      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+      skipTooltipButton.innerHTML = this._options.skipLabel;
+    }
 
      //Set focus on "next" button, so that hitting Enter always moves you onto the next step
-     if(nextTooltipButton.focus) nextTooltipButton.focus();
+    if(nextTooltipButton.focus) nextTooltipButton.focus();
 
     //add target element position style
     targetElement.element.className += ' introjs-showElement';
