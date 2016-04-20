@@ -835,10 +835,10 @@
         if (oldHelperNumberLayer) oldHelperNumberLayer.style.opacity = 1;
 
         //reset button focus
-        if (nextTooltipButton.tabIndex === -1) {
+        if (nextTooltipButton.focus && nextTooltipButton.tabIndex === -1) {
           //tabindex of -1 means we are at the end of the tour - focus on skip / done
           skipTooltipButton.focus();
-        } else {
+      } else if(nextTooltipButton.focus){
           //still in the tour, focus on next
           nextTooltipButton.focus();
         }
