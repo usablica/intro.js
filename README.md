@@ -1,4 +1,4 @@
-# Intro.js v2.0
+# Intro.js v2.1
 
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
@@ -28,7 +28,7 @@ For example:
 <a href='http://google.com/' data-intro='Hello step one!'></a>
 ````
 
-See all attributes [here](https://github.com/usablica/intro.js/#attributes).
+See all attributes [here](https://github.com/usablica/intro.js/wiki/Documentation/#attributes).
 
 **3)** Call this JavaScript function:
 ```javascript
@@ -43,7 +43,7 @@ Optionally, pass one parameter to `introJs` function to limit the presentation s
 
 ## Using templates
 
-IntroJS provides awesome templates and we are trying to update and add more templates for next versions. You can browse all templates here: https://github.com/usablica/intro.js/wiki/IntroJs-templates
+IntroJS provides awesome templates and we are trying to update and add more templates for next versions. You can browse all templates here: https://github.com/usablica/intro.js/wiki/templates
 
 In order to use templates, all you need to do is appending the template stylesheet to your page, *after* IntroJS CSS file:
 
