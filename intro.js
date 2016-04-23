@@ -1,5 +1,5 @@
 /**
- * Intro.js v2.0.1
+ * Intro.js v2.1.0
  * https://github.com/usablica/intro.js
  * MIT licensed
  *
@@ -19,7 +19,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '2.0.1';
+  var VERSION = '2.1.0';
 
   /**
    * IntroJs main class
@@ -1707,6 +1707,10 @@
     },
     addHints: function() {
       _populateHints.call(this, this._targetElement);
+      return this;
+    },
+    hideHint: function (stepId) {
+      _hideHint.call(this, stepId);
       return this;
     }
   };
