@@ -2,7 +2,7 @@
   "name": "intro.js",
   "repo": "usablica/intro.js",
   "description": "Better introductions for websites and features with a step-by-step guide for your projects",
-  "version": "2.0",
+  "version": "2.1.0",
   "main": "intro.js",
   "scripts": [
     "intro.js"
