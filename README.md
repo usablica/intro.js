@@ -73,6 +73,11 @@ Here you can find an IntroJs integration for Drupal: https://drupal.org/sandbox/
 ### AngularJS
 For AngularJS, you can use the directives in [angular-intro.js](http://code.mendhak.com/angular-intro.js/).
 
+### Ember
+Ember IntroJS wraps introjs in an Ember Component to guide users through your app.
+
+https://github.com/thefrontside/ember-introjs
+
 ### Wordpress
 You can use IntroJS inside your Wordpress, here is a good article by SitePoint: http://www.sitepoint.com/creating-intro-js-powered-tours-wordpress/
 
