@@ -1,5 +1,17 @@
 ## Release History
 
+ * **v2.1.0** - 2016-04-20
+   - Removed javascript:void hrefs in order to support CSP
+   - Add hideHint function to public api
+   - Add re-align hints to refresh function + skip hidden elements for intro
+   - Added a check for ghost elements
+   - Remove `introjs-fixedTooltip` if not needed
+   - Removed any leftover introjs-fixedTooltip class
+   - CSS - Make filter a string
+   - Add new template 'flattener'
+   - Updating documentation + adding Emberjs
+   - and some minor bug fixes.
+
  * **v2.0.0** - 2015-12-21
    - Adding `hint` feature
    - Updating templates
