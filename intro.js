@@ -41,6 +41,8 @@
       doneLabel: 'Done',
       /* Default tooltip box position */
       tooltipPosition: 'bottom',
+      /* Backup tooltip box top position */
+      backupTooltopTopPosition: '50%',
       /* Next CSS class for tooltip boxes */
       tooltipClass: '',
       /* CSS class that is added to the helperLayer */
@@ -109,6 +111,7 @@
           if (floatingElementQuery == null) {
             floatingElementQuery = document.createElement('div');
             floatingElementQuery.className = 'introjsFloatingElement';
+            floatingElementQuery.style.top = this._options.backupTooltopTopPosition;
 
             document.body.appendChild(floatingElementQuery);
           }
@@ -848,7 +851,7 @@
           //still in the tour, focus on next
           nextTooltipButton.focus();
         }
-      }, 350);
+    }, 350);
 
     } else {
       var helperLayer       = document.createElement('div'),
@@ -1056,28 +1059,32 @@
   }
 
   function _scroll(targetElement, tooltipLayer) {
-    if ((!_elementInViewport(targetElement.element, this._options.scrollOffsetTop, this._options.scrollOffsetBottom)
-      || !_elementInViewport(tooltipLayer, this._options.scrollOffsetTop, this._options.scrollOffsetBottom))
-      && this._options.scrollToElement === true) {
+      if ((!_elementInViewport(targetElement.element, this._options.scrollOffsetTop, this._options.scrollOffsetBottom)
+        || !_elementInViewport(tooltipLayer, this._options.scrollOffsetTop, this._options.scrollOffsetBottom || !targetElement.element))
+        && this._options.scrollToElement === true) {
 
-      var winHeight = _getWinSize().height,
-        rect = targetElement.element.getBoundingClientRect(),
-        rTop = rect.top,
-        rBottom = rect.bottom - winHeight,
-        tooltipRect = tooltipLayer.getBoundingClientRect(),
-        tTop = tooltipRect.top,
-        tBottom = tooltipRect.bottom - winHeight,
-        top = rTop < tTop ? rTop : tTop,
-        bottom = rBottom > tBottom ? rBottom : tBottom;
+        var winHeight = _getWinSize().height,
+          rect = targetElement.element.getBoundingClientRect(),
+          rTop = rect.top,
+          rBottom = rect.bottom - winHeight,
+          tooltipRect = tooltipLayer.getBoundingClientRect(),
+          tTop = tooltipRect.top,
+          tBottom = tooltipRect.bottom - winHeight,
+          top = rTop < tTop ? rTop : tTop,
+          bottom = rBottom > tBottom ? rBottom : tBottom;
 
-      //Scroll up
-      if (top < this._options.scrollOffsetTop || (targetElement.element.clientHeight + this._options.scrollOffsetTop) > winHeight) {
-        window.scrollBy(0, top - (this._options.scrollOffsetTop)); // 30px padding from edge to look nice
-      //Scroll down
-      } else {
-        window.scrollBy(0, bottom + (this._options.scrollOffsetBottom)); // 70px + 30px padding from edge to look nice
+
+        if (targetElement.element.className.indexOf('introjsFloatingElement') !== -1) {
+          top = (rTop - rBottom) / 2;
+          window.scrollBy(0, top - (this._options.scrollOffsetTop)); // center floating element
+        //Scroll up
+        } else if (top < this._options.scrollOffsetTop || (targetElement.element.clientHeight + this._options.scrollOffsetTop) > winHeight) {
+          window.scrollBy(0, top - (this._options.scrollOffsetTop)); // offset from edge to look nice (standard: 30px)
+        //Scroll down
+        } else {
+          window.scrollBy(0, bottom + (this._options.scrollOffsetBottom)); // offset padding from edge to look nice (standard: 100px)
+        }
       }
-    }
   }
 
   /**
