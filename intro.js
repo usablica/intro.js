@@ -61,6 +61,10 @@
       showProgress: false,
       /* Scroll to highlighted element? */
       scrollToElement: true,
+      /* Scroll offset top */
+      scrollOffsetTop: 30,
+      /* Scroll offset bottom */
+      scrollOffsetBottom: 100,
       /* Set the overlay opacity */
       overlayOpacity: 0.8,
       /* Precedence of positions, when auto is enabled */
@@ -824,6 +828,8 @@
         oldtooltipContainer.style.display = "block";
         _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
 
+        _scroll.call(self, targetElement, oldtooltipLayer);
+
         //change active bullet
         oldReferenceLayer.querySelector('.introjs-bullets li > a.active').className = '';
         oldReferenceLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
@@ -838,7 +844,7 @@
         if (nextTooltipButton.focus && nextTooltipButton.tabIndex === -1) {
           //tabindex of -1 means we are at the end of the tour - focus on skip / done
           skipTooltipButton.focus();
-      } else if(nextTooltipButton.focus){
+        } else if(nextTooltipButton.focus){
           //still in the tour, focus on next
           nextTooltipButton.focus();
         }
@@ -984,6 +990,8 @@
 
       //set proper position
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
+
+      _scroll.call(self, targetElement, tooltipLayer);
     }
 
     //disable interaction
@@ -1042,24 +1050,30 @@
       parentElm = parentElm.parentNode;
     }
 
-    if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
-      var rect = targetElement.element.getBoundingClientRect(),
-        winHeight = _getWinSize().height,
-        top = rect.bottom - (rect.bottom - rect.top),
-        bottom = rect.bottom - winHeight;
+    if (typeof (this._introAfterChangeCallback) !== 'undefined') {
+      this._introAfterChangeCallback.call(this, targetElement.element);
+    }
+  }
+
+  function _scroll(targetElement, tooltipLayer) {
+    if ((!_elementInViewport(targetElement.element) || !_elementInViewport(tooltipLayer)) && this._options.scrollToElement === true) {
+      var winHeight = _getWinSize().height,
+        rect = targetElement.element.getBoundingClientRect(),
+        rTop = rect.top,
+        rBottom = rect.bottom - winHeight,
+        tooltipRect = tooltipLayer.getBoundingClientRect(),
+        tTop = tooltipRect.top,
+        tBottom = tooltipRect.bottom - winHeight,
+        top = rTop < tTop ? rTop : tTop,
+        bottom = rBottom > tBottom ? rBottom : tBottom;
 
       //Scroll up
       if (top < 0 || targetElement.element.clientHeight > winHeight) {
-        window.scrollBy(0, top - 30); // 30px padding from edge to look nice
-
+        window.scrollBy(0, top - (this._options.scrollOffsetTop || 30)); // 30px padding from edge to look nice
       //Scroll down
       } else {
-        window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
+        window.scrollBy(0, bottom + (this._options.scrollOffsetBottom || 100)); // 70px + 30px padding from edge to look nice
       }
-    }
-
-    if (typeof (this._introAfterChangeCallback) !== 'undefined') {
-      this._introAfterChangeCallback.call(this, targetElement.element);
     }
   }
 
@@ -1137,6 +1151,8 @@
    * @param {Object} el
    */
   function _elementInViewport(el) {
+    if(!el) return false;
+
     var rect = el.getBoundingClientRect();
 
     return (
