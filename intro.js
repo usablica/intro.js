@@ -41,6 +41,8 @@
       doneLabel: 'Done',
       /* Default tooltip box position */
       tooltipPosition: 'bottom',
+      /* Backup tooltip box top position */
+      backupTooltopTopPosition: '50%',
       /* Next CSS class for tooltip boxes */
       tooltipClass: '',
       /* CSS class that is added to the helperLayer */
@@ -61,6 +63,10 @@
       showProgress: false,
       /* Scroll to highlighted element? */
       scrollToElement: true,
+      /* Scroll offset top */
+      scrollOffsetTop: 30,
+      /* Scroll offset bottom */
+      scrollOffsetBottom: 100,
       /* Set the overlay opacity */
       overlayOpacity: 0.8,
       /* Precedence of positions, when auto is enabled */
@@ -105,6 +111,7 @@
           if (floatingElementQuery == null) {
             floatingElementQuery = document.createElement('div');
             floatingElementQuery.className = 'introjsFloatingElement';
+            floatingElementQuery.style.top = this._options.backupTooltopTopPosition;
 
             document.body.appendChild(floatingElementQuery);
           }
@@ -824,6 +831,8 @@
         oldtooltipContainer.style.display = "block";
         _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
 
+        _scroll.call(self, targetElement, oldtooltipLayer);
+
         //change active bullet
         oldReferenceLayer.querySelector('.introjs-bullets li > a.active').className = '';
         oldReferenceLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
@@ -838,11 +847,11 @@
         if (nextTooltipButton.focus && nextTooltipButton.tabIndex === -1) {
           //tabindex of -1 means we are at the end of the tour - focus on skip / done
           skipTooltipButton.focus();
-      } else if(nextTooltipButton.focus){
+        } else if(nextTooltipButton.focus){
           //still in the tour, focus on next
           nextTooltipButton.focus();
         }
-      }, 350);
+    }, 350);
 
     } else {
       var helperLayer       = document.createElement('div'),
@@ -984,6 +993,8 @@
 
       //set proper position
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
+
+      _scroll.call(self, targetElement, tooltipLayer);
     }
 
     //disable interaction
@@ -1042,25 +1053,38 @@
       parentElm = parentElm.parentNode;
     }
 
-    if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
-      var rect = targetElement.element.getBoundingClientRect(),
-        winHeight = _getWinSize().height,
-        top = rect.bottom - (rect.bottom - rect.top),
-        bottom = rect.bottom - winHeight;
-
-      //Scroll up
-      if (top < 0 || targetElement.element.clientHeight > winHeight) {
-        window.scrollBy(0, top - 30); // 30px padding from edge to look nice
-
-      //Scroll down
-      } else {
-        window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
-      }
-    }
-
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
       this._introAfterChangeCallback.call(this, targetElement.element);
     }
+  }
+
+  function _scroll(targetElement, tooltipLayer) {
+      if ((!_elementInViewport(targetElement.element, this._options.scrollOffsetTop, this._options.scrollOffsetBottom)
+        || !_elementInViewport(tooltipLayer, this._options.scrollOffsetTop, this._options.scrollOffsetBottom || !targetElement.element))
+        && this._options.scrollToElement === true) {
+
+        var winHeight = _getWinSize().height,
+          rect = targetElement.element.getBoundingClientRect(),
+          rTop = rect.top,
+          rBottom = rect.bottom - winHeight,
+          tooltipRect = tooltipLayer.getBoundingClientRect(),
+          tTop = tooltipRect.top,
+          tBottom = tooltipRect.bottom - winHeight,
+          top = rTop < tTop ? rTop : tTop,
+          bottom = rBottom > tBottom ? rBottom : tBottom;
+
+
+        if (targetElement.element.className.indexOf('introjsFloatingElement') !== -1) {
+          top = (rTop - rBottom) / 2;
+          window.scrollBy(0, top - (this._options.scrollOffsetTop)); // center floating element
+        //Scroll up
+        } else if (top < this._options.scrollOffsetTop || (targetElement.element.clientHeight + this._options.scrollOffsetTop) > winHeight) {
+          window.scrollBy(0, top - (this._options.scrollOffsetTop)); // offset from edge to look nice (standard: 30px)
+        //Scroll down
+        } else {
+          window.scrollBy(0, bottom + (this._options.scrollOffsetBottom)); // offset padding from edge to look nice (standard: 100px)
+        }
+      }
   }
 
   /**
@@ -1136,13 +1160,15 @@
    * @method _elementInViewport
    * @param {Object} el
    */
-  function _elementInViewport(el) {
+  function _elementInViewport(el, offsetTop, offsetBottom) {
+    if(!el) return false;
+
     var rect = el.getBoundingClientRect();
 
     return (
-      rect.top >= 0 &&
+      rect.top - (offsetTop || 0) >= 0 &&
       rect.left >= 0 &&
-      (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
+      (rect.bottom+80) + (offsetBottom || 0) <= window.innerHeight && // add 80 to get the text right
       rect.right <= window.innerWidth
     );
   }
