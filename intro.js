@@ -1056,7 +1056,10 @@
   }
 
   function _scroll(targetElement, tooltipLayer) {
-    if ((!_elementInViewport(targetElement.element) || !_elementInViewport(tooltipLayer)) && this._options.scrollToElement === true) {
+    if ((!_elementInViewport(targetElement.element, this._options.scrollOffsetTop, this._options.scrollOffsetBottom)
+      || !_elementInViewport(tooltipLayer, this._options.scrollOffsetTop, this._options.scrollOffsetBottom))
+      && this._options.scrollToElement === true) {
+
       var winHeight = _getWinSize().height,
         rect = targetElement.element.getBoundingClientRect(),
         rTop = rect.top,
@@ -1068,11 +1071,11 @@
         bottom = rBottom > tBottom ? rBottom : tBottom;
 
       //Scroll up
-      if (top < 0 || targetElement.element.clientHeight > winHeight) {
-        window.scrollBy(0, top - (this._options.scrollOffsetTop || 30)); // 30px padding from edge to look nice
+      if (top < this._options.scrollOffsetTop || (targetElement.element.clientHeight + this._options.scrollOffsetTop) > winHeight) {
+        window.scrollBy(0, top - (this._options.scrollOffsetTop)); // 30px padding from edge to look nice
       //Scroll down
       } else {
-        window.scrollBy(0, bottom + (this._options.scrollOffsetBottom || 100)); // 70px + 30px padding from edge to look nice
+        window.scrollBy(0, bottom + (this._options.scrollOffsetBottom)); // 70px + 30px padding from edge to look nice
       }
     }
   }
@@ -1150,15 +1153,15 @@
    * @method _elementInViewport
    * @param {Object} el
    */
-  function _elementInViewport(el) {
+  function _elementInViewport(el, offsetTop, offsetBottom) {
     if(!el) return false;
 
     var rect = el.getBoundingClientRect();
 
     return (
-      rect.top >= 0 &&
+      rect.top - (offsetTop || 0) >= 0 &&
       rect.left >= 0 &&
-      (rect.bottom+80) <= window.innerHeight && // add 80 to get the text right
+      (rect.bottom+80) + (offsetBottom || 0) <= window.innerHeight && // add 80 to get the text right
       rect.right <= window.innerWidth
     );
   }
