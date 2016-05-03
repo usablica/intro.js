@@ -1061,6 +1061,7 @@
   function _scroll(targetElement, tooltipLayer) {
       if ((!_elementInViewport(targetElement.element, this._options.scrollOffsetTop, this._options.scrollOffsetBottom)
         || !_elementInViewport(tooltipLayer, this._options.scrollOffsetTop, this._options.scrollOffsetBottom || !targetElement.element))
+        || targetElement.element.className.indexOf('introjsFloatingElement') !== -1
         && this._options.scrollToElement === true) {
 
         var winHeight = _getWinSize().height,
@@ -1070,20 +1071,18 @@
           tooltipRect = tooltipLayer.getBoundingClientRect(),
           tTop = tooltipRect.top,
           tBottom = tooltipRect.bottom - winHeight,
-          top = rTop < tTop ? rTop : tTop,
-          bottom = rBottom > tBottom ? rBottom : tBottom;
+          scroll = 0,
+          totalHeight = rect.height + tooltipRect.height + this._options.scrollOffsetTop + this._options.scrollOffsetBottom;
 
-
-        if (targetElement.element.className.indexOf('introjsFloatingElement') !== -1) {
-          top = (rTop - rBottom) / 2;
-          window.scrollBy(0, top - (this._options.scrollOffsetTop)); // center floating element
-        //Scroll up
-        } else if (top < this._options.scrollOffsetTop || (targetElement.element.clientHeight + this._options.scrollOffsetTop) > winHeight) {
-          window.scrollBy(0, top - (this._options.scrollOffsetTop)); // offset from edge to look nice (standard: 30px)
-        //Scroll down
+        if(targetElement.element.className.indexOf('introjsFloatingElement') !== -1) {
+            scroll = ((tTop + tBottom) / 2 ) + (tooltipRect.height / 2); // center floating element
+        } else if (totalHeight > winHeight){
+            scroll = (rTop + 30) < tTop ? (tBottom + this._options.scrollOffsetBottom) : (tTop - this._options.scrollOffsetTop);
         } else {
-          window.scrollBy(0, bottom + (this._options.scrollOffsetBottom)); // offset padding from edge to look nice (standard: 100px)
+            scroll = (rTop < tTop ? rTop : tTop) - this._options.scrollOffsetTop;
         }
+
+        window.scrollBy(0, scroll);
       }
   }
 
