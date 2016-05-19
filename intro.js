@@ -1015,6 +1015,16 @@
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
       nextTooltipButton.tabIndex = '-1';
+			if(this._options.hideLabelOnExit === "next"){
+        nextTooltipButton.className += ' introjs-hidden-button';
+        prevTooltipButton.className += ' introjs-tooltip-btn-border-right';
+      }else if(this._options.hideLabelOnExit === "previous"){
+        prevTooltipButton.className += ' introjs-hidden-button';
+        nextTooltipButton.className += ' introjs-tooltip-btn-border-left';
+      }else if(this._options.hideLabelOnExit === "both"){
+        nextTooltipButton.className += ' introjs-hidden-button';
+        prevTooltipButton.className += ' introjs-hidden-button';
+      }
     } else {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
