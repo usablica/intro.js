@@ -406,7 +406,7 @@ tr.introjs-showElement > th {
   opacity: 0;
 }
 
-@-moz-keyframes intrjspulse {
+@-moz-keyframes introjspulse {
  0% {
     -moz-transform: scale(0);
     opacity: 0.0;
@@ -429,7 +429,7 @@ tr.introjs-showElement > th {
  }
 }
 
-@-webkit-keyframes "introjspulse" {
+@-webkit-keyframes introjspulse {
  0% {
     -webkit-transform: scale(0);
     opacity: 0.0;
