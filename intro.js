@@ -1109,7 +1109,7 @@
   function _isFixed (element) {
     var p = element.parentNode;
 
-    if (p.nodeName === 'HTML') {
+    if (p && p.nodeName === 'HTML') {
       return false;
     }
 
