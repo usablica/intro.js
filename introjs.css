@@ -413,7 +413,7 @@ tr.introjs-showElement > th {
   margin-left: -10px;
   margin-right: -10px;
   text-align: center;
-  border-radius: 4px 4px;
+  border-radius: 4px 4px 0 0;
 }
 
 .introjs-titletext {
