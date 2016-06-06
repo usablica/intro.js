@@ -6,6 +6,12 @@
  * Copyright (C) 2013 usabli.ca - A weekend project by Afshin Mehrabani (@afshinmeh)
  */
 
+/**
+ * updated by: Aram Bayadyan
+ * Intro.js v2.1.1
+ * https://github.com/aramix/intro.js
+ */
+
 (function (root, factory) {
   if (typeof exports === 'object') {
     // CommonJS
@@ -19,7 +25,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '2.1.0';
+  var VERSION = '2.1.1';
 
   /**
    * IntroJs main class
