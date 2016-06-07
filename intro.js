@@ -1148,6 +1148,8 @@
    */
   function _getPropValue (element, propName) {
     var propValue = '';
+    var element = element || document;
+    
     if (element.currentStyle) { //IE
       propValue = element.currentStyle[propName];
     } else if (document.defaultView && document.defaultView.getComputedStyle) { //Others
@@ -1171,7 +1173,8 @@
    * @returns Boolean
    */
   function _isFixed (element) {
-    var p = element && element.parentNode;
+    var element = element || document;
+    var p = element.parentNode;
 
     if (p && p.nodeName === 'HTML') {
       return false;
