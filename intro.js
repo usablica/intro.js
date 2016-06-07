@@ -1173,18 +1173,21 @@
    * @returns Boolean
    */
   function _isFixed (element) {
-    var element = element || document;
-    var p = element.parentNode;
+    if (element) {
+      var p = element.parentNode;
 
-    if (p && p.nodeName === 'HTML') {
-      return false;
+      if (p && p.nodeName === 'HTML') {
+        return false;
+      }
+
+      if (_getPropValue(element, 'position') == 'fixed') {
+        return true;
+      }
+
+      return _isFixed(p);
     }
 
-    if (_getPropValue(element, 'position') == 'fixed') {
-      return true;
-    }
-
-    return _isFixed(p);
+    return false;
   };
 
   /**
