@@ -19,7 +19,14 @@
   
   <script type="text/javascript">
       if (document.location.hostname === 'usablica.github.io') {
-        window.location = 'http://introjs.com';
+        window.location = 'http://introjs.com' + (window.location.search || '');
+      }
+
+      var autostartMatch = window.location.search.match(/(?:\?|\&)autostart=([^\&]*)(?:\&|$)/);
+      if (autostartMatch && autostartMatch[1]) {
+        jQuery(function() {
+          introJs().start();
+        })
       }
   </script>
 </head>
