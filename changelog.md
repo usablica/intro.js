@@ -1,5 +1,14 @@
 ## Release History
 
+ * **v2.1.1** - 2016-06-06
+   - showSkipButton:
+   true: no change in current behavior
+   false: hide "Skip" button, and once user completed the tour  "Next" button will hide and user will see "Skip" button (with "doneLabel"). For user it will feel like "Next" button is changed to "Skip" button.
+   - showTitlebar:
+   Titlebar will display(like modal dialog).
+   Titlebar will show x button to close(will act as "Skip" button.
+   Titlebar will display title(header text), user can set title along with intro in steps.
+   
  * **v2.1.0** - 2016-04-20
    - Removed javascript:void hrefs in order to support CSP
    - Add hideHint function to public api

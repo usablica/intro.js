@@ -20,9 +20,8 @@
 }
 
 .introjs-fixParent {
-  z-index: auto !important;
+  z-index: 9999999 !important;
   opacity: 1.0 !important;
-  position: absolute !important;
   -webkit-transform: none !important;
      -moz-transform: none !important;
       -ms-transform: none !important;
@@ -409,7 +408,31 @@ tr.introjs-showElement > th {
   opacity: 0;
 }
 
-@-moz-keyframes intrjspulse {
+.introjs-titlebar {
+  position: relative;
+  top: -10px;
+  background-color: #ececec;
+  margin-left: -10px;
+  margin-right: -10px;
+  text-align: center;
+  border-radius: 4px 4px 0 0;
+}
+
+.introjs-titletext {
+  font-weight: bold;
+}
+
+.introjs-closebutton {
+  float: right;
+  text-decoration: none;
+  padding-right: 10px;
+}
+
+.introjs-closebutton:hover {
+  text-decoration: none;
+}
+
+@-moz-keyframes introjspulse {
  0% {
     -moz-transform: scale(0);
     opacity: 0.0;
@@ -432,7 +455,7 @@ tr.introjs-showElement > th {
  }
 }
 
-@-webkit-keyframes "introjspulse" {
+@-webkit-keyframes introjspulse {
  0% {
     -webkit-transform: scale(0);
     opacity: 0.0;
