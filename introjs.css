@@ -39,6 +39,9 @@ tr.introjs-showElement > th {
 .introjs-disableInteraction {
   z-index: 99999999 !important;
   position: absolute;
+  background-color: white;
+  opacity: 0;
+  filter: alpha(opacity=0);
 }
 
 .introjs-relativePosition,
