@@ -1320,6 +1320,16 @@
     }
   };
 
+  function _hideHints() {
+    var self = this;
+    var hintsWrapper = document.querySelector('.introjs-hints');
+    if(hintsWrapper === null) {
+        return;
+    }
+
+    hintsWrapper.parentElement.removeChild(hintsWrapper);
+  }
+
   /**
    * Add all available hints to the page
    *
@@ -1714,6 +1724,10 @@
     hideHint: function (stepId) {
       _hideHint.call(this, stepId);
       return this;
+    },
+    hideHints: function() {
+        _hideHints.call(this);
+        return this;
     }
   };
 
