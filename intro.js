@@ -1216,7 +1216,6 @@
   function _removeHintTooltip() {
     var tooltip = this._targetElement.querySelector('.introjs-hintReference');
 
-
     if (tooltip) {
       var step = tooltip.getAttribute('data-step');
       tooltip.parentNode.removeChild(tooltip);
@@ -1317,6 +1316,22 @@
     // call the callback function (if any)
     if (typeof (this._hintCloseCallback) !== 'undefined') {
       this._hintCloseCallback.call(this, stepId);
+    }
+  };
+
+  /**
+   * Hide all hints
+   *
+   * @api private
+   * @method _hideHints
+   */
+  function _hideHints() {
+    var hints = this._targetElement.querySelectorAll('.introjs-hint');
+
+    if (hints && hints.length > 0) {
+      for (var i = 0; i < hints.length; i++) {
+        _hideHint.call(this, hints[i].getAttribute('data-step'));
+      }
     }
   };
 
@@ -1713,6 +1728,10 @@
     },
     hideHint: function (stepId) {
       _hideHint.call(this, stepId);
+      return this;
+    },
+    hideHints: function () {
+      _hideHints.call(this);
       return this;
     }
   };
