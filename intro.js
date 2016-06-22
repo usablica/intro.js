@@ -72,7 +72,9 @@
       /* Default hint position */
       hintPosition: 'top-middle',
       /* Hint button label */
-      hintButtonLabel: 'Got it'
+      hintButtonLabel: 'Got it',
+      /* Adding animation to hints? */
+      hintAnimation: true
     };
   }
 
@@ -1243,7 +1245,8 @@
           currentItem.element = document.querySelector(currentItem.element);
         }
 
-        currentItem.hintPosition = currentItem.hintPosition || 'top-middle';
+        currentItem.hintPosition = currentItem.hintPosition || this._options.hintPosition;
+        currentItem.hintAnimation = currentItem.hintAnimation || this._options.hintAnimation;
 
         if (currentItem.element != null) {
           this._introItems.push(currentItem);
@@ -1260,10 +1263,20 @@
       for (var i = 0, l = hints.length; i < l; i++) {
         var currentElement = hints[i];
 
+        // hint animation
+        var hintAnimation = currentElement.getAttribute('data-hintAnimation');
+
+        if (hintAnimation) {
+          hintAnimation = (hintAnimation == 'true');
+        } else {
+          hintAnimation = this._options.hintAnimation;
+        }
+
         this._introItems.push({
           element: currentElement,
           hint: currentElement.getAttribute('data-hint'),
           hintPosition: currentElement.getAttribute('data-hintPosition') || this._options.hintPosition,
+          hintAnimation: hintAnimation,
           tooltipClass: currentElement.getAttribute('data-tooltipClass'),
           position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
         });
@@ -1375,6 +1388,10 @@
       }(hint, item, i));
 
       hint.className = 'introjs-hint';
+
+      if (!item.hintAnimation) {
+        hint.className += ' introjs-hint-no-anim';
+      }
 
       // hint's position should be fixed if the target element's position is fixed
       if (_isFixed(item.element)) {

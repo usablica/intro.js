@@ -357,8 +357,12 @@ tr.introjs-showElement > th {
   background: transparent;
   width: 20px;
   height: 15px;
+  cursor: pointer;
 }
-
+.introjs-hint:focus {
+    border: 0;
+    outline: 0;
+}
 .introjs-hidehint {
   display: none;
 }
@@ -387,7 +391,11 @@ tr.introjs-showElement > th {
        -o-transition: all 0.2s ease-out;
           transition: all 0.2s ease-out;
 }
-
+.introjs-hint-no-anim .introjs-hint-dot {
+  -webkit-animation: none;
+  -moz-animation: none;
+  animation: none;
+}
 .introjs-hint-dot {
   border: 10px solid rgba(146, 146, 146, 0.36);
   background: transparent;
