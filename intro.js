@@ -11,6 +11,7 @@
  *   skipLabel
  *   doneLabel
  *   doneClass
+ *   doneClassInsteadOfDefault
  *   tooltipPosition
  *   tooltipClass
  *   highlightClass
@@ -89,8 +90,10 @@
       skipLabel: 'Skip',
       /* Done button label in tooltip box */
       doneLabel: 'Done',
-      /* Default tooltip box position */
+      /* Class to add on Done button */
       doneClass: null,
+      /* Should doneClass replace (rather than add to) default button class? Does not work well with showBackButton or showBullets. */
+      doneClassInsteadOfDefault: null,
       /* Default tooltip box position */
       tooltipPosition: 'bottom',
       /* Next CSS class for tooltip boxes */
@@ -133,6 +136,10 @@
       /* Height of header area at the top not to be covered by tooltip. */
       headerHeight: 0
     };
+    if (this._options.doneClassInsteadOfDefault === null) {
+      // Options that allow going backwards on a tour require keeping the default introjs-button class.
+      this._options.doneClassInsteadOfDefault = !(this._options.showButtons || this._options.showBullets);
+    }
   }
 
   /**
@@ -1082,7 +1089,11 @@
     } else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
       skipTooltipButton.innerHTML = this._options.doneLabel;
       if (this._options.doneClass != null) {
-        skipTooltipButton.className = 'introjs-button ' + this._options.doneClass;
+        if (this._options.doneClassInsteadOfDefault) {
+          skipTooltipButton.className = this._options.doneClass;
+        } else {
+          skipTooltipButton.className = 'introjs-button ' + this._options.doneClass;
+        }
       }
 
       if (this._options.showBackButton) {
