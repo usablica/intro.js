@@ -124,7 +124,7 @@
       overlayOpacity: 0.8,
       /* Pixels of highlighted padding around element */
       padding: 5,
-      /* Padding to add after scrolling when element is not in the viewport (in pixels) */		 +      /* Pixels of highlighted padding around element */
+      /* Padding to add after scrolling when element is not in the viewport (in pixels) */
       scrollPadding: 30,
       /* Precedence of positions, when auto is enabled */
       positionPrecedence: ["bottom", "top", "right", "left"],
