@@ -27,6 +27,7 @@
  *   scrollToElement
  *   overlayOpacity
  *   padding
+ *   scrollPadding
  *   positionPrecedence
  *   disableInteraction
  *   hintPosition
@@ -123,6 +124,8 @@
       overlayOpacity: 0.8,
       /* Pixels of highlighted padding around element */
       padding: 5,
+      /* Padding to add after scrolling when element is not in the viewport (in pixels) */		 +      /* Pixels of highlighted padding around element */
+      scrollPadding: 30,
       /* Precedence of positions, when auto is enabled */
       positionPrecedence: ["bottom", "top", "right", "left"],
       /* Disable an interaction with element? */
@@ -1144,11 +1147,11 @@
 
       //Scroll up
       if (top < this._options.headerHeight || targetElement.element.clientHeight > winHeight) {
-        window.scrollBy(0, top - this._options.headerHeight - 30); // 30px padding from edge to look nice
+        window.scrollBy(0, top - this._options.headerHeight - this._options.scrollPadding); // 30px padding from edge to look nice
 
       //Scroll down
       } else {
-        window.scrollBy(0, bottom + 100); // 70px + 30px padding from edge to look nice
+        window.scrollBy(0, bottom + 70 + this._options.scrollPadding); // 70px + 30px padding from edge to look nice
       }
     }
 
@@ -1657,7 +1660,7 @@
    */
   function _updateProgressBar(self, oldReferenceLayer) {
     if (self._monkeypatch && '_updateProgressBar' in self._monkeypatch) {
-    	self._monkeypatch._updateProgressBar(self, oldReferenceLayer);
+      self._monkeypatch._updateProgressBar(self, oldReferenceLayer);
     } else {
       oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').setAttribute('style', 'width:' + _getProgress.call(self) + '%;');
     }
