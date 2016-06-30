@@ -118,8 +118,6 @@
       showHelperLayer: true,
       /* Show tour progress? */
       showProgress: false,
-      /* Show tour progress with bullets? */
-      showProgressBullets: false,
       /* Scroll to highlighted element? */
       scrollToElement: true,
       /* Set the overlay opacity */
@@ -934,7 +932,6 @@
           tooltipLayer      = document.createElement('div'),
           tooltipTextLayer  = document.createElement('div'),
           bulletsLayer      = document.createElement('div'),
-          progressBulletsLayer = document.createElement('div'),
           progressLayer     = document.createElement('div'),
           buttonsLayer      = document.createElement('div');
 
@@ -996,7 +993,6 @@
       tooltipLayer.className = 'introjs-tooltip';
       tooltipLayer.appendChild(tooltipTextLayer);
       tooltipLayer.appendChild(bulletsLayer);
-      tooltipLayer.appendChild(progressBulletsLayer);
       tooltipLayer.appendChild(progressLayer);
 
       //add helper layer number
@@ -1633,64 +1629,6 @@
 
     return elementPosition;
   };
-
-  /**
-   * Creates the progress bullets.
-   *
-   * @api private
-   * @method _createProgressBullets
-   * @returns progress bullets ul element
-   */
-  function _createProgressBullets(progressBulletsLayer) {
-    var progressBulletUlContainer = document.createElement('ul');
-
-    for (var step_num = 0, stepsLength = this._introItems.length; step_num < stepsLength; step_num++) {
-        var connectingBarLi = document.createElement('li')
-        var progressBulletInnerLi = document.createElement('li');
-        var progressBulletDiv = document.createElement('div');
-        var progressBulletSpan = document.createElement('span');
-        progressBulletInnerLi.setAttribute('introjs-progress-bullet', step_num);
-        if (step_num > 0) {
-          connectingBarLi.setAttribute('introjs-progress-bullet-bar', step_num);
-        }
-
-        progressBulletInnerLi.className = 'progress-bullet';
-        connectingBarLi.className = 'connecting-bar';
-        if (step_num <= this._currentStep) {
-          progressBulletInnerLi.className += ' viewed';
-          connectingBarLi.className += ' viewed';
-          progressBulletSpan.innerHTML = '<i class="fa fa-check"></i>';
-        }
-
-        progressBulletInnerLi.appendChild(progressBulletDiv);
-        progressBulletDiv.appendChild(progressBulletSpan);
-        if (step_num > 0) {
-          progressBulletUlContainer.appendChild(connectingBarLi);
-        }
-        progressBulletUlContainer.appendChild(progressBulletInnerLi);
-      }
-
-    progressBulletsLayer.appendChild(progressBulletUlContainer);
-    return progressBulletUlContainer;
-  }
-
-  /**
-   * Updates the progress bullets.
-   *
-   * @api private
-   * @method _updateProgressBullets
-   */
-  function _updateProgressBullets(self, oldReferenceLayer) {
-    for (var step_num = 0; step_num < self._introItems.length; step_num++) {
-      var innerLi = oldReferenceLayer.querySelector('li[introjs-progress-bullet="' + step_num + '"]');
-      innerLi.className = (step_num <= this._currentStep) ? 'progress-bullet viewed' : 'progress-bullet';
-      innerLi.querySelector('span').innerHTML = (step_num <= this._currentStep) ? '<i class="fa fa-check"></i>': '';
-      if (step_num > 0) {
-        var connectingBarLi = oldReferenceLayer.querySelector('li[introjs-progress-bullet-bar="' + step_num + '"]');
-        connectingBarLi.className = (step_num <= this._currentStep) ? 'connecting-bar viewed' : 'connecting-bar';
-      }
-    }
-  }
 
   /**
    * Creates the progress bar.
