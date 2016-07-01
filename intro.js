@@ -1735,7 +1735,7 @@
    *                             false means extend it.)
    * @returns this (to facilitate chaining)
    */
-  function _setCallback(functionName, providedCallback, overwrite=false) {
+  function _setCallback(functionName, providedCallback, overwrite) {
     if (typeof (providedCallback) === 'function') {
       var callbackName = _getCallback.call(this, functionName)
       if (overwrite || typeof (this[callbackName]) === 'undefined') {
