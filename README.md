@@ -1,4 +1,4 @@
-# Intro.js v2.1
+# Intro.js v2.2
 
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
@@ -132,4 +132,4 @@ If you want to use Intro.js for a commercial application, theme or plugin the co
 
 ### Open-source license
 
-AGPLv3
+GNU AGPLv3
