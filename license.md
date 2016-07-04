@@ -1,5 +1,7 @@
 ## License
 
+We changed Intro.js's license and added commercial license to be able to provide better support, features and version. If you are using Intro.js for a commercial project, you would need to get a commercial license. However, if you are using Intro.js version older than v2.0.0, you don't need to obtain a commercial license.
+
 ### Commercial license
 
 If you want to use Intro.js for a commercial application, theme or plugin the commercial license is the appropriate license. With this option, your source code is kept proprietary. Purchase a commercial license at [introjs.com](http://introjs.com/#commercial)
@@ -639,8 +641,9 @@ to attach them to the start of each source file to most effectively
 state the exclusion of warranty; and each file should have at least
 the "copyright" line and a pointer to where the full notice is found.
 
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    Better introductions for websites and features with a step-by-step guide for your projects.
+
+    Copyright (C) 2012-2016 Afshin Mehrabani
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
