@@ -1,6 +1,8 @@
 ## License
 
-We changed Intro.js's license and added commercial license to be able to provide better support, features and version. If you are using Intro.js for a commercial project, you would need to get a commercial license. However, if you are using Intro.js version older than v2.0.0, you don't need to obtain a commercial license.
+We changed Intro.js's license and added commercial license to be able to provide better support, features and versions. If you are using Intro.js for a commercial project, you would need to get a commercial license at [introjs.com](http://introjs.com/#commercial). 
+
+However, if you are using Intro.js version older than v2.0.0, you don't need to obtain a commercial license.
 
 ### Commercial license
 
