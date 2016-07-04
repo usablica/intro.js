@@ -1,7 +1,7 @@
 {
-    "name": "intro.js",
+    "name": "intro.js-mit",
     "description": "Better introductions for websites and features with a step-by-step guide for your projects",
-    "version": "2.1.0",
+    "version": "3.0.0",
     "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
     "repository": {
         "type": "git",
@@ -13,6 +13,7 @@
     "engine": [
         "node >=0.1.90"
     ],
+    "license": "MIT OR SEE LICENSE IN LICENSE.md",
     "main": "intro.js",
     "spm": {
         "main": "intro.js",
