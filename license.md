@@ -643,6 +643,7 @@ to attach them to the start of each source file to most effectively
 state the exclusion of warranty; and each file should have at least
 the "copyright" line and a pointer to where the full notice is found.
 
+```
     Better introductions for websites and features with a step-by-step guide for your projects.
 
     Copyright (C) 2012-2016 Afshin Mehrabani
@@ -659,6 +660,7 @@ the "copyright" line and a pointer to where the full notice is found.
 
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+```
 
 Also add information on how to contact you by electronic and paper mail.
 
