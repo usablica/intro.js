@@ -13,6 +13,7 @@
     "engine": [
         "node >=0.1.90"
     ],
+    "license": "MIT OR SEE LICENSE IN LICENSE.md",
     "main": "intro.js",
     "spm": {
         "main": "intro.js",
