@@ -1,0 +1,59 @@
+.introjs-helperNumberLayer {
+  font-family: tahoma, Arial, verdana, sans-serif;
+  font-size: 14px;
+  text-shadow: none;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  border: 2px solid #ecf0f1;
+  border-radius: 50%;
+  background: #e74c3c;
+}
+
+.introjs-helperLayer {
+  background-color: #FFF;
+  background-color: rgba(255,255,255,.9);
+  border: none;
+  border-radius: 2px;
+}
+
+.introjs-tooltip {
+  letter-spacing: .1em;
+  color: #2c3e50;
+  font-family: tahoma, Arial, verdana, sans-serif;
+  border-radius: 2px;
+}
+
+.introjs-button {
+  padding: 0.6em 0.8em;
+  text-shadow: none;
+  font-weight: bold;
+  color: #2c3e50;
+  font-family: tahoma, Arial, verdana, sans-serif;
+  background: #ecf0f1;
+  background-image: none;
+  -webkit-border-radius: .2em;
+  -moz-border-radius: .2em;
+  border-radius: .2em;
+  -webkit-transition: background .3s, border .3s;
+     -moz-transition: background .3s, border .3s;
+      -ms-transition: background .3s, border .3s;
+       -o-transition: background .3s, border .3s;
+          transition: background .3s, border .3s;
+}
+
+.introjs-prevbutton {
+  border-radius: .2em 0 0 .2em;
+}
+
+.introjs-nextbutton {
+  border-radius: 0 .2em .2em 0;
+}
+
+.introjs-button:hover, .introjs-button:focus {
+  background: #2c3e50;
+  color: #fff;
+  box-shadow: none;
+  border-color: #2c3e50;
+  text-decoration: none;
+}

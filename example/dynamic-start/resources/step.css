@@ -1,0 +1,128 @@
+@import url("http://fonts.googleapis.com/css?family=Lato:400,700");
+
+
+body {
+  padding-top: 0px;
+  font-family: 'Lato', sans-serif;*/
+  padding-bottom: 0px;
+  width: auto;
+  height: auto;;
+  vertical-align: center;
+}
+
+#overview, #helpTip {
+  width: 1200px;
+  height: 300px;
+  vertical-align: center;
+  float: center;
+  text-align: center;
+}
+/*
+/*  SECTIONS  */
+.section {
+  clear: both;
+  padding: 0px;
+  margin: 0px;
+}
+
+/*  COLUMN SETUP  */
+.col {
+  display: block;
+  float: center;
+  margin: 0% 0 0% 0%;
+}
+.col:first-child { margin-left: 5px; }
+
+/*  GROUPING  */
+.group:before,
+.group:after { content:""; display:table; }
+.group:after { clear:both;}
+.group { zoom:1; /* For IE 6/7 */ }
+
+
+/*  GRID OF SIXTEEN  */
+.span_1_of_9 {  width: 140px; }
+
+@media (min-width: 1200px) {
+  [class*="span"] {
+    float: left;
+    min-height: 1px;
+    margin-left: 0px;
+  }
+}
+
+button, input, textarea, summary, a {
+    outline: none;
+}
+
+button {
+    display: inline-block;
+    margin: 0 0 0 5px;
+    padding: 6px 10px 7px 10px;
+    border-width: 1px;
+    border-style: solid;
+    font-family: 'Lato', Arial, sans-serif;
+    font-size: 1em;
+    cursor: pointer;
+    border-color: #bbb;
+    background-color: #eee;
+    color: #333;
+}
+
+button.secondary {
+    padding: 2px 10px 4px 10px;
+    line-height: 19px;
+}
+
+button:hover,
+button:focus {
+    background-color: #d2d2d2;
+    border-color: #999;
+}
+
+button.submit,
+button[type="submit"] {
+    border-color: #1691C6;
+    background-color: #1691C6;
+    color: #fff;
+}
+
+button.submit:hover,
+button[type="submit"]:hover,
+button.submit:focus,
+button[type="submit"]:focus {
+    background-color: #1380AF;
+    border-color: #0059B2;
+}
+
+button.disabled,
+button:disabled,
+button:disabled:hover,
+button.disabled:hover,
+button:disabled:focus,
+button.disabled:focus {
+    border-color: #ccc;
+    color: #bbb;
+    background-color: transparent;
+    cursor: default;
+}
+
+.introjs-progress {
+  border-radius: 1px;
+  height: 5px;
+}
+
+.introjs-progressbar {
+  background-color: rgb(0,144,200);
+}
+
+.introjs-tooltip {
+  vertical-align: top;
+  min-width: 400px;
+  max-width: 900px;
+  max-height: 300px;
+}
+
+.tool {
+  cursor: pointer;
+}

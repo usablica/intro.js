@@ -1,0 +1,265 @@
+.introjs-overlay {
+  position: absolute;
+  z-index: 999999;
+  background: #525252;
+  opacity: 0;
+
+  -webkit-transition: all 0.3s ease-out;
+     -moz-transition: all 0.3s ease-out;
+      -ms-transition: all 0.3s ease-out;
+       -o-transition: all 0.3s ease-out;
+          transition: all 0.3s ease-out;
+}
+
+.introjs-fixParent {
+  z-index: auto !important;
+  opacity: 1.0 !important;
+}
+
+.introjs-showElement {
+  z-index: 9999999 !important;
+}
+
+.introjs-relativePosition {
+  position: relative;
+}
+
+.introjs-helperLayer {
+  position: absolute;
+  z-index: 9999998;
+  background-color: #FFF;
+  background-color: rgba(255,255,255,.9);
+  border: 1px solid #777;
+  border: 3px solid rgba(211, 214, 209, 1);
+  border-radius: 0;
+  box-shadow: 0 5px 8px -3px rgba(0,0,0,.6);
+  -webkit-transition: all 0.3s ease-out;
+     -moz-transition: all 0.3s ease-out;
+      -ms-transition: all 0.3s ease-out;
+       -o-transition: all 0.3s ease-out;
+          transition: all 0.3s ease-out;
+}
+
+.introjs-helperNumberLayer {
+  position: absolute;
+  top: -16px;
+  left: -16px;
+  z-index: 9999999999 !important;
+  padding: 2px;
+  font-family: Arial, verdana, tahoma;
+  font-size: 13px;
+  font-weight: bold;
+  color: white; /* Old browsers */ /* Chrome10+,Safari5.1+ */
+  background:#ff3019 ;
+  width: 20px;
+  height:20px;
+  text-align: center;
+  line-height: 20px;
+  border: 3px solid #DA4433;
+  border-radius: 10px 10px 0; /* IE6-9 */  /* IE10 text shadows */
+}
+
+.introjs-arrow {
+  border: 5px solid white;
+  content:'';
+  position: absolute;
+}
+.introjs-arrow.top {
+  top: -10px;
+  border-top-color:transparent;
+  border-right-color:transparent;
+  border-bottom-color: #ecf0f1;
+  border-left-color:transparent;
+}
+.introjs-arrow.right {
+  right: -10px;
+  top: 10px;
+  border-top-color:transparent;
+  border-right-color:transparent;
+  border-bottom-color:transparent;
+  border-left-color:#ecf0f1;
+}
+.introjs-arrow.bottom {
+  bottom: -10px;
+  border-top-color:#ecf0f1;
+  border-right-color:transparent;
+  border-bottom-color:transparent;
+  border-left-color:transparent;
+}
+.introjs-arrow.left {
+  left: -10px;
+  top: 10px;
+  border-top-color:transparent;
+  border-right-color: #ecf0f1;
+  border-bottom-color:transparent;
+  border-left-color:transparent;
+}
+
+.introjs-tooltip {
+  position: absolute;
+  padding: 10px;
+  background-color: #ecf0f1;
+  min-width: 200px;
+  max-width: 300px;
+  /* border-radius: 3px; */
+  box-shadow: 0 6px 7px -4px rgba(0,0,0,.4);
+  -webkit-transition: opacity 0.1s ease-out;
+     -moz-transition: opacity 0.1s ease-out;
+      -ms-transition: opacity 0.1s ease-out;
+       -o-transition: opacity 0.1s ease-out;
+          transition: opacity 0.1s ease-out;
+}
+
+.introjs-tooltiptext {
+    margin-left: -10px;
+
+    margin-right: -10px;
+    border-top: 1px solid #FFFFFF;
+    background: #FAFAFA;
+    color: #2c3e50;
+    padding: 5px 10px;
+    border-bottom: 1px solid #FFFFFF;
+}
+
+.introjs-tooltipbuttons {
+  text-align: center;
+}
+
+/*
+ Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/
+ Changed by Afshin Mehrabani
+*/
+.introjs-button {
+  position: relative;
+  overflow: visible;
+  display: inline-block;
+  padding: 0.5em 0.8em;
+  box-shadow: 0 2px 0px -0px #306588;
+  margin: 0;
+  outline: none;
+  background: #2980b9;
+  text-decoration: none;
+  font: 11px/normal sans-serif;
+  color: #fff !important;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none !important;
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  -o-background-clip: padding-box;
+  /*background-clip: padding-box;*/ /* commented out due to Opera 11.10 bug */
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  border-radius: 0.2em;
+  /* IE hacks */
+  zoom: 1;
+  *display: inline;
+  margin-top: 10px;
+}
+
+.introjs-button:hover {
+  color: #fff;
+  background: #2671A2;
+  text-decoration: none;
+  box-shadow: 0 2px 0px -0px #235677;
+}
+
+.introjs-button:focus,
+.introjs-button:active {
+    background: #23587A;  text-decoration: none;
+    /* bottom: -1px; */
+    box-shadow: 0 2px 0px 0px #173B53;
+}
+
+/* overrides extra padding on button elements in Firefox */
+.introjs-button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+.introjs-skipbutton {
+  margin-right: 5px;
+  color: #fff;
+  background: #e74c3c;
+  box-shadow: 0 2px 0px -0px #B91D0D;
+}
+
+.introjs-skipbutton:hover {
+    background: #EB1540;  box-shadow: 0 2px 0px -0px #B91D0D;
+
+}
+
+.introjs-skipbutton:active, .introjs-skipbutton:focus {
+    background: #C02312;
+    box-shadow: 0 1px 0px -0px #6F1309;
+
+}
+
+.introjs-prevbutton {
+  -webkit-border-radius: 0.2em 0 0 0.2em;
+  -moz-border-radius: 0.2em 0 0 0.2em;
+  border-radius: 0.2em 0 0 0.2em;
+  border-right: none;
+}
+
+.introjs-nextbutton {
+  -webkit-border-radius: 0 0.2em 0.2em 0;
+  -moz-border-radius: 0 0.2em 0.2em 0;
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+.introjs-disabled, .introjs-disabled:hover, .introjs-disabled:focus {
+  color: #C2C2C2 !important;
+  border-color: #d4d4d4;
+  cursor: default;
+  box-shadow: 0 2px 0px -0px #CACED1;
+  background-color: #E6E6E6;
+  background-image: none;
+  text-decoration: none;
+}
+
+.introjs-bullets {
+  text-align: center;
+}
+.introjs-bullets ul {
+  clear: both;
+  margin: 15px auto 0;
+  padding: 0;
+  display: inline-block;
+}
+.introjs-bullets ul li {
+  list-style: none;
+  float: left;
+  margin: 0 2px;
+}
+.introjs-bullets ul li a {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: #ccc;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  text-decoration: none;
+}
+.introjs-bullets ul li a:hover {
+  background: #999;
+}
+.introjs-bullets ul li a.active {
+  background: #999;
+}
+
+.introjs-progress {
+  background-color: #FAFAFA;
+}
+.introjs-progressbar {
+  background-color: #2980b9;
+}
+
+.introjsFloatingElement {
+  position: absolute;
+  height: 0;
+  width: 0;
+  left: 50%;
+  top: 50%;
+}
