@@ -14,6 +14,7 @@
         "node >=0.1.90"
     ],
     "main": "intro.js",
+    "license": "See LICENSE.md",
     "spm": {
         "main": "intro.js",
         "output": ["introjs.css"]
