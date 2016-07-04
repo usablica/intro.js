@@ -39,7 +39,7 @@ Optionally, pass one parameter to `introJs` function to limit the presentation s
 
 **For example** `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
 
-<p align="center"><img src="http://introjs.com/img/introjs-demo.png"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/introjs-demo.png"></p>
 
 ## Using templates
 
