@@ -22,7 +22,6 @@
  *   showButtons
  *   showBackButton
  *   showBullets
- *   showHelperLayer
  *   showProgress
  *   scrollToElement
  *   overlayOpacity
@@ -115,7 +114,6 @@
       showBackButton: true,
       /* Show tour bullets? */
       showBullets: true,
-      showHelperLayer: true,
       /* Show tour progress? */
       showProgress: false,
       /* Scroll to highlighted element? */
