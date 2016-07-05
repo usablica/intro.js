@@ -31,6 +31,7 @@
  *   disableInteraction
  *   hintPosition
  *   hintButtonLabel
+ *   hintAnimation
  *   headerHeight
  *
  * Methods:
@@ -133,7 +134,9 @@
       /* Hint button label */
       hintButtonLabel: 'Got it',
       /* Height of header area at the top not to be covered by tooltip. */
-      headerHeight: 0
+      headerHeight: 0,
+      /* Adding animation to hints? */
+      hintAnimation: true
     };
     if (this._options.doneClassInsteadOfDefault === null) {
       // Options that allow going backwards on a tour require keeping the default introjs-button class.
@@ -1224,7 +1227,7 @@
   }
 
   /**
-   * Add overlay layer to the page
+   * Check to see if the element is in the viewport or not
    * http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
    *
    * @api private
@@ -1300,7 +1303,6 @@
   function _removeHintTooltip() {
     var tooltip = this._targetElement.querySelector('.introjs-hintReference');
 
-
     if (tooltip) {
       var step = tooltip.getAttribute('data-step');
       tooltip.parentNode.removeChild(tooltip);
@@ -1328,7 +1330,8 @@
           currentItem.element = document.querySelector(currentItem.element);
         }
 
-        currentItem.hintPosition = currentItem.hintPosition || 'top-middle';
+        currentItem.hintPosition = currentItem.hintPosition || this._options.hintPosition;
+        currentItem.hintAnimation = currentItem.hintAnimation || this._options.hintAnimation;
 
         if (currentItem.element != null) {
           this._introItems.push(currentItem);
@@ -1345,10 +1348,20 @@
       for (var i = 0, l = hints.length; i < l; i++) {
         var currentElement = hints[i];
 
+        // hint animation
+        var hintAnimation = currentElement.getAttribute('data-hintAnimation');
+
+        if (hintAnimation) {
+          hintAnimation = (hintAnimation == 'true');
+        } else {
+          hintAnimation = this._options.hintAnimation;
+        }
+
         this._introItems.push({
           element: currentElement,
           hint: currentElement.getAttribute('data-hint'),
           hintPosition: currentElement.getAttribute('data-hintPosition') || this._options.hintPosition,
+          hintAnimation: hintAnimation,
           tooltipClass: currentElement.getAttribute('data-tooltipClass'),
           position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
         });
@@ -1405,6 +1418,22 @@
   };
 
   /**
+   * Hide all hints
+   *
+   * @api private
+   * @method _hideHints
+   */
+  function _hideHints() {
+    var hints = this._targetElement.querySelectorAll('.introjs-hint');
+
+    if (hints && hints.length > 0) {
+      for (var i = 0; i < hints.length; i++) {
+        _hideHint.call(this, hints[i].getAttribute('data-step'));
+      }
+    }
+  };
+
+  /**
    * Add all available hints to the page
    *
    * @api private
@@ -1444,6 +1473,10 @@
       }(hint, item, i));
 
       hint.className = 'introjs-hint';
+
+      if (!item.hintAnimation) {
+        hint.className += ' introjs-hint-no-anim';
+      }
 
       // hint's position should be fixed if the target element's position is fixed
       if (_isFixed(item.element)) {
