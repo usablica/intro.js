@@ -43,7 +43,6 @@
  *   goToStep(step)
  *   nextStep()
  *   previousStep()
- *   updateStep()
  *   exit()
  *   refresh()
  *   onbeforechange(providedCallback)
@@ -1844,17 +1843,6 @@
     previousStep: function() {
       _previousStep.call(this);
       return this;
-    },
-    updateStep: function(stepNum, introItem) {
-      // Sets a step to something different than it currently is.
-      if (stepNum > this._introItems.length) {
-        throw new Error('Cannot set step ' + stepNum + '. There are only ' + this._introItems.length + ' steps.');
-      } else if (introItem.element == null || typeof(introItem.element) === 'undefined') {
-        throw new Error('Updated step must have a valid element.');
-      } else {
-        introItem.step = stepNum;
-        this._introItems[stepNum-1] = introItem;
-      }
     },
     exit: function() {
       _exitIntro.call(this, this._targetElement);
