@@ -839,9 +839,10 @@
         _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
 
         //change active bullet
-        oldReferenceLayer.querySelector('.introjs-bullets li > a.active').className = '';
-        oldReferenceLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
-
+        if (this._options.showBullets === false) {
+            oldReferenceLayer.querySelector('.introjs-bullets li > a.active').className = '';
+            oldReferenceLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
+        }
         oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').setAttribute('style', 'width:' + _getProgress.call(self) + '%;');
 
         //show the tooltip
