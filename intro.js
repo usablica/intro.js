@@ -1422,7 +1422,7 @@
 
     // call the callback function (if any)
     if (typeof (this._hintsAddedCallback) !== 'undefined') {
-      this._hintsAddedCallback.call(this);
+      this._hintsAddedCallback.call(this, this._introItems.length);
     }
   };
 
