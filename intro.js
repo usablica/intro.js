@@ -87,6 +87,62 @@
     };
   }
 
+  function _floatingElement() {
+    var floatingElementQuery = document.querySelector(".introjsFloatingElement");
+
+    if (floatingElementQuery == null) {
+      floatingElementQuery = document.createElement('div');
+      floatingElementQuery.className = 'introjsFloatingElement';
+
+      document.body.appendChild(floatingElementQuery);
+    }
+
+    return floatingElementQuery;
+  }
+
+  function _createDynamicElementForIntroItem(item) {
+    //dynamically grab the element with given selector from the page
+    var selector = item.element;
+    var position = item.position;
+
+    function elementIfVisible() {
+      var element = document.querySelector(selector);
+      if (!element) return null
+      var isVisible = (window.getComputedStyle(element).display !== 'none');
+      return (isVisible ? element : null);
+    }
+
+    //replace element with dynamic accessor
+    delete item.element;
+    Object.defineProperty(item, 'element', {
+      get: function() {
+        var maybeElement = elementIfVisible();
+        if (maybeElement) {
+          return maybeElement;
+        } else {
+          return _floatingElement();
+        }
+      }
+    });
+
+    //position is `floating` if element not visible
+    delete item.position;
+    Object.defineProperty(item, 'position', {
+      get: function() {
+        if (elementIfVisible()) {
+          return position;
+        } else {
+          return 'floating';
+        }
+      },
+      set: function(newValue) {
+        position = newValue;
+      }
+    });
+
+    return item;
+  }
+
   /**
    * Initiate a new introduction/guide from an element in the page
    *
@@ -110,7 +166,7 @@
         //use querySelector function only when developer used CSS selector
         if (typeof (currentItem.element) === 'string') {
           //grab the element with given selector from the page
-          currentItem.element = document.querySelector(currentItem.element);
+          currentItem = _createDynamicElementForIntroItem(currentItem);
         }
 
         //intro without element
@@ -376,7 +432,7 @@
     if (continueStep === false) {
       --this._currentStep;
       return false;
-    } 
+    }
 
     if ((this._introItems.length) <= this._currentStep) {
       //end of the intro
@@ -456,7 +512,7 @@
     var continueExit = true;
 
     // calling onbeforeexit callback
-    // 
+    //
     // If this callback return `false`, it would halt the process
     if (this._introBeforeExitCallback != undefined) {
       continueExit = this._introBeforeExitCallback.call(self);
