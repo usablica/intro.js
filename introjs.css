@@ -361,7 +361,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-fixedhint {
-  position: fixed;
+  position: absolute;
 }
 
 .introjs-hint:hover > .introjs-hint-pulse {
