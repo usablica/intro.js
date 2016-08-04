@@ -346,7 +346,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-fixedTooltip {
-  position: fixed;
+  position: absolute;
 }
 
 .introjs-hint {
@@ -361,7 +361,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-fixedhint {
-  position: absolute;
+  position: fixed;
 }
 
 .introjs-hint:hover > .introjs-hint-pulse {
