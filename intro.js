@@ -164,7 +164,7 @@
         currentItem.step = introItems.length + 1;
 
         //use querySelector function only when developer used CSS selector
-        if (typeof (currentItem.element) === 'string') {
+        if (typeof (currentItem.element) === 'string' || currentItem.element == null) {
           //grab the element with given selector from the page
           currentItem = _createDynamicElementForIntroItem(currentItem);
         }
