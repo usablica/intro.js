@@ -110,7 +110,7 @@ tr.introjs-showElement > th {
   background:         linear-gradient(to bottom, #ff3019 0%, #cf0404 100%);  /* W3C */
   width: 20px;
   height:20px;
-  line-height: 20px;
+  line-height: 13px;
   border: 3px solid white;
   border-radius: 50%;
   filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0)"; /* IE6-9 */
