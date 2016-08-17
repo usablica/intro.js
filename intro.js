@@ -498,7 +498,7 @@
         }
 
         _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
-        tooltipLayer.style.bottom = (targetOffset.height +  20) + 'px';
+        tooltipLayer.style.bottom = (targetOffset.height + 20) + 'px';
         break;
       case 'right':
         tooltipLayer.style.left = (targetOffset.width + 20) + 'px';
@@ -519,7 +519,7 @@
         if (targetOffset.top + tooltipOffset.height > windowSize.height) {
           // In this case, left would have fallen below the bottom of the screen.
           // Modify so that the bottom of the tooltip connects with the target
-          tooltipLayer.style.top = "-" + (tooltipOffset.height - targetOffset.height - 20) + "px";
+          tooltipLayer.style.top = "-" + (tooltipOffset.height - targetOffset.height - 5) + "px";
           arrowLayer.className = 'introjs-arrow right-bottom';
         } else {
           arrowLayer.className = 'introjs-arrow right';
@@ -702,7 +702,7 @@
 
       var currentElement  = this._introItems[this._currentStep],
           elementPosition = _getOffset(currentElement.element),
-          widthHeightPadding = 10;
+          PADDING_AND_BORDER = 5 + 1;
 
       // If the target element is fixed, the tooltip should be fixed as well.
       // Otherwise, remove a fixed class that may be left over from the previous
@@ -714,15 +714,50 @@
       }
 
       if (currentElement.position == 'floating') {
-        widthHeightPadding = 0;
+        helperLayer.classList.add("introjs-tooltipReferenceLayer--floating");
       }
+      else {
+        helperLayer.classList.remove("introjs-tooltipReferenceLayer--floating");
+      }
+      
+      _setHelperLayerClasses(helperLayer, elementPosition);
 
       //set new position to helper layer
-      helperLayer.setAttribute('style', 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
-                                        'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
-                                        'top:'    + (elementPosition.top    - 5)   + 'px;' +
-                                        'left: '  + (elementPosition.left   - 5)   + 'px;');
+      helperLayer.setAttribute('style', 'width: ' + elementPosition.width  + 'px; ' +
+                                        'height:' + elementPosition.height + 'px; ' +
+                                        'top:'    + (elementPosition.top    - PADDING_AND_BORDER)   + 'px;' +
+                                        'left: '  + (elementPosition.left   - PADDING_AND_BORDER)   + 'px;');
 
+    }
+  }
+  
+  /**
+   * Update the helper layer classes depending on the element position on the screen
+   *
+   * @api private
+   * @method _setHelperLayerClasses
+   * @param {Object} helperLayer
+   * @param {Object} elementPosition
+   */
+  function _setHelperLayerClasses(helperLayer, elementPosition) {
+    var EDGE_TRESHOLD = 20;
+    
+    helperLayer.classList.remove("introjs-tooltipReferenceLayer--top", "introjs-tooltipReferenceLayer--bottom", "introjs-tooltipReferenceLayer--left", "introjs-tooltipReferenceLayer--right");
+    
+    // Check if the helper layer is positioned close to the top or the bottom of the document
+    if (elementPosition.top < EDGE_TRESHOLD) {
+      helperLayer.classList.add("introjs-tooltipReferenceLayer--top");
+    }
+    else if (document.documentElement.scrollHeight - (elementPosition.top + elementPosition.height) < EDGE_TRESHOLD) {
+      helperLayer.classList.add("introjs-tooltipReferenceLayer--bottom");
+    }
+    
+    // Check if the helper layer is positioned close to the left or the right edge of the document
+    if (elementPosition.left < EDGE_TRESHOLD) {
+      helperLayer.classList.add("introjs-tooltipReferenceLayer--left");
+    }
+    else if (document.documentElement.scrollWidth - (elementPosition.left + elementPosition.width) < EDGE_TRESHOLD) {
+      helperLayer.classList.add("introjs-tooltipReferenceLayer--right");
     }
   }
 
