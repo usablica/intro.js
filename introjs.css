@@ -1,5 +1,6 @@
 .introjs-overlay {
   position: absolute;
+  box-sizing: content-box;
   z-index: 999999;
   background-color: #000;
   opacity: 0;
@@ -51,6 +52,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-helperLayer {
+  box-sizing: content-box;
   position: absolute;
   z-index: 9999998;
   background-color: #FFF;
@@ -67,6 +69,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-tooltipReferenceLayer {
+  box-sizing: content-box;
   position: absolute;
   visibility: hidden;
   z-index: 10000000;
@@ -89,6 +92,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-helperNumberLayer {
+  box-sizing: content-box;
   position: absolute;
   visibility: visible;
   top: -16px;
@@ -188,6 +192,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-tooltip {
+  box-sizing: content-box;
   position: absolute;
   visibility: visible;
   padding: 10px;
@@ -213,6 +218,7 @@ tr.introjs-showElement > th {
  Changed by Afshin Mehrabani
 */
 .introjs-button {
+  box-sizing: content-box;
   position: relative;
   overflow: visible;
   display: inline-block;
@@ -265,6 +271,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-skipbutton {
+  box-sizing: content-box;
   margin-right: 5px;
   color: #7a7a7a;
 }
@@ -313,17 +320,20 @@ tr.introjs-showElement > th {
   text-align: center;
 }
 .introjs-bullets ul {
+  box-sizing: content-box;
   clear: both;
   margin: 15px auto 0;
   padding: 0;
   display: inline-block;
 }
 .introjs-bullets ul li {
+  box-sizing: content-box;
   list-style: none;
   float: left;
   margin: 0 2px;
 }
 .introjs-bullets ul li a {
+  box-sizing: content-box;
   display: block;
   width: 6px;
   height: 6px;
@@ -342,6 +352,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-progress {
+  box-sizing: content-box;
   overflow: hidden;
   height: 10px;
   margin: 10px 0 5px 0;
@@ -349,6 +360,7 @@ tr.introjs-showElement > th {
   background-color: #ecf0f1
 }
 .introjs-progressbar {
+  box-sizing: content-box;
   float: left;
   width: 0%;
   height: 100%;
@@ -371,6 +383,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-hint {
+  box-sizing: content-box;
   position: absolute;
   background: transparent;
   width: 20px;
@@ -394,6 +407,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-hint-pulse {
+  box-sizing: content-box;
   width: 10px;
   height: 10px;
   border: 5px solid rgba(60, 60, 60, 0.27);
@@ -415,6 +429,7 @@ tr.introjs-showElement > th {
   animation: none;
 }
 .introjs-hint-dot {
+  box-sizing: content-box;
   border: 10px solid rgba(146, 146, 146, 0.36);
   background: transparent;
   -webkit-border-radius: 60px;
