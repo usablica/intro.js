@@ -276,10 +276,23 @@ tr.introjs-showElement > th {
   border-right: none;
 }
 
+.introjs-prevbutton.introjs-fullbutton {
+  border: 1px solid #d4d4d4;
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  border-radius: 0.2em;
+}
+
 .introjs-nextbutton {
   -webkit-border-radius: 0 0.2em 0.2em 0;
   -moz-border-radius: 0 0.2em 0.2em 0;
   border-radius: 0 0.2em 0.2em 0;
+}
+
+.introjs-nextbutton.introjs-fullbutton {
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  border-radius: 0.2em;
 }
 
 .introjs-disabled, .introjs-disabled:hover, .introjs-disabled:focus {
@@ -290,6 +303,10 @@ tr.introjs-showElement > th {
   background-color: #f4f4f4;
   background-image: none;
   text-decoration: none;
+}
+
+.introjs-hidden {
+     display: none;
 }
 
 .introjs-bullets {
@@ -315,6 +332,7 @@ tr.introjs-showElement > th {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   text-decoration: none;
+  cursor: pointer;
 }
 .introjs-bullets ul li a:hover {
   background: #999;

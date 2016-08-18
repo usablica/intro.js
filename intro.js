@@ -1,5 +1,5 @@
 /**
- * Intro.js v2.2.0
+ * Intro.js v2.3.0
  * https://github.com/usablica/intro.js
  *
  * Copyright (C) 2016 Afshin Mehrabani (@afshinmeh)
@@ -18,7 +18,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '2.2.0';
+  var VERSION = '2.3.0';
 
   /**
    * IntroJs main class
@@ -38,6 +38,10 @@
       skipLabel: 'Skip',
       /* Done button label in tooltip box */
       doneLabel: 'Done',
+      /* Hide previous button in the first step? Otherwise, it will be disabled button. */
+      hidePrev: true,
+      /* Hide next button in the last step? Otherwise, it will be disabled button. */
+      hideNext: true,
       /* Default tooltip box position */
       tooltipPosition: 'bottom',
       /* Next CSS class for tooltip boxes */
@@ -1009,14 +1013,28 @@
     nextTooltipButton.removeAttribute('tabIndex');
 
     if (this._currentStep == 0 && this._introItems.length > 1) {
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
-      prevTooltipButton.tabIndex = '-1';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+
+      if (this._options.hidePrev == true) {
+        prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-hidden';
+        nextTooltipButton.className += ' introjs-fullbutton';
+      } else {
+        prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
+      }
+
+      prevTooltipButton.tabIndex = '-1';
       skipTooltipButton.innerHTML = this._options.skipLabel;
     } else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
       skipTooltipButton.innerHTML = this._options.doneLabel;
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+
+      if (this._options.hideNext == true) {
+        nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-hidden';
+        prevTooltipButton.className += ' introjs-fullbutton';
+      } else {
+        nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+      }
+
       nextTooltipButton.tabIndex = '-1';
     } else {
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
