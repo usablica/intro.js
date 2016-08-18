@@ -39,9 +39,9 @@
       /* Done button label in tooltip box */
       doneLabel: 'Done',
       /* Hide previous button in the first step? Otherwise, it will be disabled button. */
-      hidePrev: true,
+      hidePrev: false,
       /* Hide next button in the last step? Otherwise, it will be disabled button. */
-      hideNext: true,
+      hideNext: false,
       /* Default tooltip box position */
       tooltipPosition: 'bottom',
       /* Next CSS class for tooltip boxes */
