@@ -1,4 +1,4 @@
-# Intro.js v2.2.0
+# Intro.js v2.3.0
 
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
