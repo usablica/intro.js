@@ -1060,7 +1060,7 @@
     while (parentElm != null) {
       if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
 
-      //fix The Stacking Contenxt problem.
+      //fix The Stacking Context problem.
       //More detail: https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context
       var zIndex = _getPropValue(parentElm, 'z-index');
       var opacity = parseFloat(_getPropValue(parentElm, 'opacity'));
