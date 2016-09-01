@@ -1,5 +1,14 @@
 ## Release History
 
+ * **v2.3.0** - 2016-07-01
+   - Fixing the conflict with Bootstrap 3
+   - Adding two new options to hide next and previous button in first and last steps
+   - Add web components compatibility (polymer)
+   - Removing `position: absolute` from parent fix class
+   - Fixing typo in hint pulse class
+   - Adding a Bootstrap 3 example + different positions example
+   - and some minor bug fixes.
+
  * **v2.1.0** - 2016-04-20
    - Removed javascript:void hrefs in order to support CSP
    - Add hideHint function to public api
