@@ -88,6 +88,11 @@ GWT wrapper on top of Intro.js
 
 Github: https://github.com/Agnie-Software/gwt-introjs
 
+### R Wrapper
+You can use IntroJs with [R](https://cran.r-project.org/) for [Shiny applications](http://shiny.rstudio.com/) with the [rintrojs package on CRAN](https://cran.r-project.org/web/packages/rintrojs/).
+
+Github: https://github.com/carlganz/rintrojs
+
 ## Build
 
 First you should install `nodejs` and `npm`, then first run this command: `npm install` to install all dependencies.
