@@ -868,10 +868,10 @@
         if (oldHelperNumberLayer) oldHelperNumberLayer.style.opacity = 1;
 
         //reset button focus
-        if (nextTooltipButton.tabIndex === -1) {
+        if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null && nextTooltipButton.tabIndex === -1) {
           //tabindex of -1 means we are at the end of the tour - focus on skip / done
           skipTooltipButton.focus();
-        } else {
+        } else if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
           //still in the tour, focus on next
           nextTooltipButton.focus();
         }
@@ -1023,48 +1023,88 @@
       _disableInteraction.call(self);
     }
 
-    prevTooltipButton.removeAttribute('tabIndex');
-    nextTooltipButton.removeAttribute('tabIndex');
+    if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
+      nextTooltipButton.removeAttribute('tabIndex');
+    }
+    if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
+      prevTooltipButton.removeAttribute('tabIndex');
+    }
 
     // when it's the first step of tour
     if (this._currentStep == 0 && this._introItems.length > 1) {
-      skipTooltipButton.className = 'introjs-button introjs-skipbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+      if (typeof skipTooltipButton !== "undefined" && skipTooltipButton != null) {
+        skipTooltipButton.className = 'introjs-button introjs-skipbutton';
+      }
+      if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
+        nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+      }
 
       if (this._options.hidePrev == true) {
-        prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-hidden';
-        nextTooltipButton.className += ' introjs-fullbutton';
+        if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
+          prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-hidden';
+        }
+        if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
+          nextTooltipButton.className += ' introjs-fullbutton';
+        }
       } else {
-        prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
+        if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
+          prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
+        }
       }
 
-      prevTooltipButton.tabIndex = '-1';
-      skipTooltipButton.innerHTML = this._options.skipLabel;
+      if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
+        prevTooltipButton.tabIndex = '-1';
+      }
+      if (typeof skipTooltipButton !== "undefined" && skipTooltipButton != null) {
+        skipTooltipButton.innerHTML = this._options.skipLabel;
+      }
     } else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
       // last step of tour
-      skipTooltipButton.innerHTML = this._options.doneLabel;
-      // adding donebutton class in addition to skipbutton
-      skipTooltipButton.className += ' introjs-donebutton';
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-
-      if (this._options.hideNext == true) {
-        nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-hidden';
-        prevTooltipButton.className += ' introjs-fullbutton';
-      } else {
-        nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+      if (typeof skipTooltipButton !== "undefined" && skipTooltipButton != null) {
+        skipTooltipButton.innerHTML = this._options.doneLabel;
+        // adding donebutton class in addition to skipbutton
+        skipTooltipButton.className = 'introjs-button introjs-prevbutton';
+      }
+      if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
+        prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       }
 
-      nextTooltipButton.tabIndex = '-1';
+      if (this._options.hideNext == true) {
+        if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
+          nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-hidden';
+        }
+        if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
+          prevTooltipButton.className += ' introjs-fullbutton';
+        }
+      } else {
+        if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
+          nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+        }
+      }
+
+      if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
+        nextTooltipButton.tabIndex = '-1';
+      }
     } else {
       // steps between start and end
-      skipTooltipButton.className = 'introjs-button introjs-skipbutton';
-      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
-      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
-      skipTooltipButton.innerHTML = this._options.skipLabel;
+      if (typeof skipTooltipButton !== "undefined" && skipTooltipButton != null) {
+        skipTooltipButton.className = 'introjs-button introjs-skipbutton';
+      }
+      if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
+        prevTooltipButton.className = 'introjs-button introjs-prevbutton';
+      }
+      if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
+        nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+      }
+      if (typeof skipTooltipButton !== "undefined" && skipTooltipButton != null) {
+        skipTooltipButton.innerHTML = this._options.skipLabel;
+      }
     }
 
     //Set focus on "next" button, so that hitting Enter always moves you onto the next step
-    nextTooltipButton.focus();
+    if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
+      nextTooltipButton.focus();
+    }
 
     _setShowElement(targetElement);
 
