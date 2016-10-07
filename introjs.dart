@@ -62,10 +62,6 @@ class IntroJs {
     }
   }
 
-  void clone() {
-    _jsObj.clone();
-  }
-
   void setOption(String option, var value) {
     _jsObj.setOption(option, value);
   }
