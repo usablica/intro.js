@@ -249,23 +249,3 @@ class Hint {
       String position,
       String targetElement});
 }
-
-/**
- * Utility
- */
-class Position {
-  static const String topLeft = "top-left";
-  static const String topRight = "top-right";
-  static const String bottomLeft = "bottom-left";
-  static const String bottomRight = "bottom-right";
-  static const String bottomMiddle = "bottom-middle";
-  static const String topMiddle = "top-middle";
-  static const String top = "top";
-  static const String right = "right";
-  static const String left = "left";
-  static const String floating = "floating";
-  static const String bottomRightAligned = "bottom-right-aligned";
-  static const String bottomMiddleAligned = "bottom-middle-aligned";
-  static const String bottomLeftAligned = "bottom-left-aligned";
-  static const String bottom = "bottom";
-}
