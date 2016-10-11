@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Intro.js by Afshin Mehrabani (@afshinmeh) in usabli.ca group -->
+    <meta charset="utf-8">
+    <title>Pricing Elasticity Analysis: How does a price change impact my bottom line?</title>
+    <!--meta name="viewport" content="width=device-width, initial-scale=1.0"-->
+    <meta name="description" content='This Starter Kit will guide you through how you can use the A/B testing tools within Alteryx to answer "How does a price change impact my bottom line?" and similar questions.'>
+    <meta name="author" content="Content Engineering - Stephen Wagner">
+
+    <link href="../../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../../introjs.css" rel="stylesheet">
+    <link href="../../assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="../../dynamic-start/resources/step.css" rel="stylesheet">
+
+  </head>
+
+  <body style="text-align: center;padding-top: 50px;">
+    <div id="overview" style="display:block;margin-right: auto;margin-left: auto;">
+      <br>
+      <img src="../../dynamic-start/img/AB_Controls_Title.png" style="height:auto;width:100%;">
+      <p>An important step in running an A/B test is to match control and treatment units properly.<br>Matching units properly will allow you to control for differences between units and compare "apples to apples" as best as possible.<br>This guided workflow will demonstrate how to match control and treatment stores to use when analyzing which facial price performed the best.</p>
+      <button type="submit" id="start">Start Guided Workflow</button></br>
+      <p style="margin-top:5px;font-size:12px;">Use keyboard arrow keys to progress through walkthrough.&nbsp;&nbsp;Press Esc to end walkthrough.</p>
+      <p style="margin-top:8px;font-size:10px;"><i>For best viewing experience, please move the Results view underneath the Configuration view</i></p>
+    </div>
+
+    <div id="walkthrough" style="display:none;">
+      <div id="header" class="section group">
+        <img src="../../dynamic-start/img/AB_Controls_Title.png" style="height:48px;width:1020px;">
+      </div>
+
+      <div id="workflow" class="section group" style="text-align:center;display:block;">
+        <div id="col1" class="col span_1_of_9">
+          <div id="tool1" class="section group">
+            <img class="tool step7" src="../../dynamic-start/img/tools/tool1.png">
+          </div>
+          <div id="tool10" class="section group">
+            <img class="tool step13" src="../../dynamic-start/img/tools/tool10.png">
+          </div>
+          <div class="section group">
+          </div>
+        </div>
+        <div id="col2" class="col span_1_of_9">
+          <div id="tool2" class="section group">
+            <img class="tool step9" src="../../dynamic-start/img/tools/tool2.png">
+          </div>
+          <div class="section group">
+            <img class="tool" src="../../dynamic-start/img/tools/line.png">
+          </div>
+          <div class="section group">
+          </div>
+        </div>
+        <div id="col3" class="col span_1_of_9">
+          <div id="tool3" class="section group">
+            <img class="tool step15" src="../../dynamic-start/img/tools/tool3.png">
+          </div>
+          <div class="section group">
+            <img class="tool" src="../../dynamic-start/img/tools/line2.png">
+          </div>
+          <div class="section group">
+            <img src="../../dynamic-start/img/tools/line4.png">
+          </div>
+        </div>
+        <div id="col4" class="col span_1_of_9">
+          <div id="tool4" class="section group">
+            <img class="tool step18" src="../../dynamic-start/img/tools/tool4.png">
+          </div>
+          <div id="tool11" class="section group">
+            <img class="tool step20" src="../../dynamic-start/img/tools/tool11.png">
+          </div>
+          <div id="tool14" class="section group">
+            <img class="tool step22" src="../../dynamic-start/img/tools/tool14.png">
+          </div>
+        </div>
+        <div id="col5" class="col span_1_of_9">
+          <div id="tool5" class="section group">
+            <img class="tool step24" src="../../dynamic-start/img/tools/tool5.png">
+          </div>
+          <div id="tool12" class="section group">
+            <img class="tool step24" src="../../dynamic-start/img/tools/tool12.png">
+          </div>
+          <div id="tool15" class="section group">
+            <img class="tool step24" src="../../dynamic-start/img/tools/tool15.png">
+          </div>
+        </div>
+        <div id="col6" class="col span_1_of_9">
+          <div id="tool6" class="section group">
+            <img class="tool step26" src="../../dynamic-start/img/tools/tool6.png">
+          </div>
+          <div id="tool13" class="section group">
+            <img class="tool step26" src="../../dynamic-start/img/tools/tool13.png">
+          </div>
+          <div id="tool16" class="section group">
+            <img class="tool step26" src="../../dynamic-start/img/tools/tool16.png">
+          </div>
+        </div>
+        <div id="col7" class="col span_1_of_9">
+          <div id="tool7" class="section group">
+            <img class="tool step30" src="../../dynamic-start/img/tools/tool7.png">
+          </div>
+          <div class="section group">
+            <img src="../../dynamic-start/img/tools/line3.png">
+          </div>
+          <div class="section group">
+            <img src="../../dynamic-start/img/tools/line5.png">
+          </div>
+        </div>
+        <div id="col8" class="col span_1_of_9">
+          <div id="tool8" class="section group">
+            <img class="tool step32" src="../../dynamic-start/img/tools/tool8.png">
+          </div>
+          <div class="section group">
+          </div>
+          <div class="section group">
+          </div>
+        </div>
+        <div id="col9" class="col span_1_of_9">
+          <div id="tool9" class="section group">
+            <img class="tool step34" src="../../dynamic-start/img/tools/tool9.png">
+          </div>
+          <div class="section group">
+          </div>
+          <div class="section group">
+          </div>
+        </div>
+      </div>
+
+      <div id="footer" style="background-color:rgb(214,214,214);float:center;text-align:center;vertical-align:center;font-size:13px;">
+        <p><i>Navigation Tips:&nbsp;&nbsp;Use keyboard arrow keys to progress through walkthrough.&nbsp;&nbsp;&nbsp;Press Esc to end walkthrough.&nbsp;&nbsp;&nbsp;Click on a tool to begin walkthrough at that step.</i></p>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="../../../intro.js"></script>
+    <script type="application/dart" src="./resources/step.dart"></script>
+    <script type="text/javascript" src="packages/browser/dart.js"></script>
+  </body>
+</html>
