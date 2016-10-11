@@ -7,3 +7,5 @@ environment:
   sdk: '>=1.13.1 <2.0.0'
 dependencies:
   js: ^0.6.0
+dev_dependencies:
+  browser: any
