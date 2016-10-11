@@ -114,17 +114,17 @@ class IntroJs {
     return controller.stream;
   }
 
-  Stream get onComplete {
-    StreamController controller = new StreamController();
-    _jsObj.oncomplete(allowInterop(() => controller.add(null)));
-    return controller.stream;
+  Future get onComplete {
+    Completer completer = new Completer();
+    _jsObj.oncomplete(allowInterop(() => completer.complete(null)));
+    return completer.future;
   }
 
-  Stream<Element> get onHintsAdded {
-    StreamController<Element> controller = new StreamController<Element>();
+  Future<Element> get onHintsAdded {
+    Completer<Element>  completer = new Completer<Element> ();
     _jsObj.onhintsadded(
-        allowInterop((Element element) => controller.add(element)));
-    return controller.stream;
+        allowInterop((Element element) => completer.complete(element)));
+    return completer.future;
   }
 
   Stream<HintAddedEvent> get onHintClick {
@@ -149,10 +149,10 @@ class IntroJs {
     return controller.stream;
   }
 
-  Stream get onExit {
-    StreamController controller = new StreamController();
-    _jsObj.onexit(allowInterop(() => controller.add(null)));
-    return controller.stream;
+  Future get onExit {
+    Completer completer = new Completer();
+    _jsObj.onexit(allowInterop(() => completer.complete(null)));
+    return completer.future;
   }
 
   void addHints() {
