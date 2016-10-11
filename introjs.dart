@@ -120,10 +120,9 @@ class IntroJs {
     return completer.future;
   }
 
-  Future<Element> get onHintsAdded {
-    Completer<Element>  completer = new Completer<Element> ();
-    _jsObj.onhintsadded(
-        allowInterop((Element element) => completer.complete(element)));
+  Future get onHintsAdded {
+    Completer completer = new Completer();
+    _jsObj.onhintsadded(allowInterop(() => completer.complete(null)));
     return completer.future;
   }
 
