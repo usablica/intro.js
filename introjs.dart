@@ -222,7 +222,8 @@ class Options {
       String hintPosition,
       String hintButtonLabel,
       bool hintAnimation,
-      List<Hint> hints});
+      List<Hint> hints,
+      List<Step> steps});
 }
 
 @JS()
@@ -244,4 +245,14 @@ class Hint {
       String tooltipClass,
       String position,
       String targetElement});
+}
+
+@JS()
+@anonymous
+class Step {
+  external dynamic get element;
+  external String get intro;
+  external String get position;
+
+  external factory Step({var element, String intro, String position});
 }
