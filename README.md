@@ -93,6 +93,12 @@ You can use IntroJs with [R](https://cran.r-project.org/) for [Shiny application
 
 Github: https://github.com/carlganz/rintrojs
 
+### Dart Wrapper   
+
+Dart wrapper for Intro.js
+
+Github: https://github.com/moomoohk/introjs.dart
+
 ## Build
 
 First you should install `nodejs` and `npm`, then first run this command: `npm install` to install all dependencies.
