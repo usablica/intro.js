@@ -1672,7 +1672,7 @@
       return this;
     },
     addStep: function(options) {
-      if (!this._options.hasOwnProperty('steps')) {
+      if (!this._options.steps) {
         this._options.steps = [];
       }
 
@@ -1683,7 +1683,7 @@
       return this;
     },
     addSteps: function(steps) {
-      if (!steps.hasOwnProperty('length')) return;
+      if (!steps.length) return;
 
       for(var index = 0; index < steps.length; index++) {
         this.addStep(steps[index]);
