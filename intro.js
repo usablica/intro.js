@@ -1688,6 +1688,8 @@
       for(var index = 0; index < steps.length; index++) {
         this.addStep(steps[index]);
       }
+
+      return this;
     },
     nextStep: function() {
       _nextStep.call(this);
