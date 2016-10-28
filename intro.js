@@ -1676,9 +1676,7 @@
         this._options.steps = [];
       }
 
-      if (!this._options.steps.indexOf(options) === -1) {
-        this._options.steps.push(options);
-      }
+      this._options.steps.push(options);
 
       return this;
     },
