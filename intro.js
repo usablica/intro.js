@@ -1671,6 +1671,24 @@
       _goToStep.call(this, step);
       return this;
     },
+    addStep: function(options) {
+      if (!this._options.hasOwnProperty('steps')) {
+        this._options.steps = [];
+      }
+
+      if (!this._options.steps.indexOf(options) === -1) {
+        this._options.steps.push(options);
+      }
+
+      return this;
+    },
+    addSteps: function(steps) {
+      if (!steps.hasOwnProperty('length')) return;
+
+      for(var index = 0; index < steps.length; index++) {
+        this.addStep(steps[index]);
+      }
+    },
     nextStep: function() {
       _nextStep.call(this);
       return this;
