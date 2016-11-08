@@ -1251,7 +1251,7 @@
    */
   function _populateHints(targetElm) {
     var self = this;
-    this._introItems = []
+    this._introItems = [];
 
     if (this._options.hints) {
       for (var i = 0, l = this._options.hints.length; i < l; i++) {
