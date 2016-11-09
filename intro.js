@@ -1379,7 +1379,7 @@
         _showHint.call(this, hints[i].getAttribute('data-step'));
       }
     } else {
-      _addHints.call(this);
+      _populateHints.call(this, this._targetElement);
     }
   };
 
