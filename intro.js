@@ -1378,6 +1378,8 @@
       for (var i = 0; i < hints.length; i++) {
         _showHint.call(this, hints[i].getAttribute('data-step'));
       }
+    } else {
+      _addHints.call(this);
     }
   };
 
