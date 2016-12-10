@@ -2,7 +2,7 @@
 layout: doc
 title: Using themes
 categories: themes
-permalink: /themes/using-themes
+permalink: /themes/install
 ---
 
 IntroJS provides awesome templates and we are trying to update and add more templates for next versions. You can browse all available themes under this category.
