@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Intro.js - GWT</title>
+  <title>Intro.js - Attributes</title>
   <meta name="description" content="Intro.js - Better introductions for websites and features with a step-by-step guide for your projects.">
   <meta name="keywords" content="intro, introjs, doc42, documentation, doc, usablica">
   <meta name="author" content="Afshin Mehrabani">
@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="/docs/css/kissui.css">
   <link rel="stylesheet" href="/docs/css/custom.css">
   <link rel="stylesheet" href="/docs/css/sticky.min.css">
-  <link rel="canonical" href="http://introjs.com/docs/wrappers/gwt">
+  <link rel="canonical" href="http://introjs.com/docs/intro/attributes/">
   <link rel="alternate" type="application/rss+xml" title="Intro.js" href="http://introjs.com/docs/feed.xml">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism.css">
 </head>
@@ -200,8 +200,11 @@
         
             
               
-                
-                    <a class="item" href="/docs/intro/attributes/">Attributes</a>
+                 
+                  
+                      <span class="active item">Attributes</span>
+                  
+
                 
               
             
@@ -588,11 +591,8 @@
         
             
               
-                 
-                  
-                      <span class="active item">GWT</span>
-                  
-
+                
+                    <a class="item" href="/docs/wrappers/gwt">GWT</a>
                 
               
             
@@ -895,15 +895,19 @@
 
     <div class="eight columns page-content">
         <header class="post-header">
-            <h3 class="post-title">GWT</h3>
+            <h3 class="post-title">Attributes</h3>
         </header>
 
         <div class="post-content docs">
-            <p>GWT wrapper on top of Intro.js</p>
+            <p>You can use these HTML attributes to manage or alter intro elements.</p>
 
-<p>Github: <a href="https://github.com/Agnie-Software/gwt-introjs">https://github.com/Agnie-Software/gwt-introjs</a></p>
-
-<p><em>Do you know a project that we didn’t mention here? Please update the documentation on Github or <a href="support@introjs.com">email</a> us.</em></p>
+<ul>
+  <li><code class="highlighter-rouge">data-intro</code>: The tooltip text of step</li>
+  <li><code class="highlighter-rouge">data-step</code>: Optionally define the number (priority) of step</li>
+  <li><code class="highlighter-rouge">data-tooltipClass</code>: Optionally define a CSS class for tooltip</li>
+  <li><code class="highlighter-rouge">data-highlightClass</code>: Optionally append a CSS class to the helperLayer</li>
+  <li><code class="highlighter-rouge">data-position</code>: Optionally define the position of tooltip, <code class="highlighter-rouge">top</code>, <code class="highlighter-rouge">left</code>, <code class="highlighter-rouge">right</code>, <code class="highlighter-rouge">bottom</code>, <code class="highlighter-rouge">bottom-left-aligned</code> (same as <code class="highlighter-rouge">bottom</code>), <code class="highlighter-rouge">bottom-middle-aligned</code>, <code class="highlighter-rouge">bottom-right-aligned</code> or <code class="highlighter-rouge">auto</code> (to detect the position of element and assign the correct position automatically). Default is <code class="highlighter-rouge">bottom</code></li>
+</ul>
 
         </div>
     </div>

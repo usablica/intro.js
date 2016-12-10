@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Intro.js - GWT</title>
+  <title>Intro.js - Options</title>
   <meta name="description" content="Intro.js - Better introductions for websites and features with a step-by-step guide for your projects.">
   <meta name="keywords" content="intro, introjs, doc42, documentation, doc, usablica">
   <meta name="author" content="Afshin Mehrabani">
@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="/docs/css/kissui.css">
   <link rel="stylesheet" href="/docs/css/custom.css">
   <link rel="stylesheet" href="/docs/css/sticky.min.css">
-  <link rel="canonical" href="http://introjs.com/docs/wrappers/gwt">
+  <link rel="canonical" href="http://introjs.com/docs/intro/options/">
   <link rel="alternate" type="application/rss+xml" title="Intro.js" href="http://introjs.com/docs/feed.xml">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism.css">
 </head>
@@ -248,8 +248,11 @@
         
             
               
-                
-                    <a class="item" href="/docs/intro/options/">Options</a>
+                 
+                  
+                      <span class="active item">Options</span>
+                  
+
                 
               
             
@@ -588,11 +591,8 @@
         
             
               
-                 
-                  
-                      <span class="active item">GWT</span>
-                  
-
+                
+                    <a class="item" href="/docs/wrappers/gwt">GWT</a>
                 
               
             
@@ -895,15 +895,40 @@
 
     <div class="eight columns page-content">
         <header class="post-header">
-            <h3 class="post-title">GWT</h3>
+            <h3 class="post-title">Options</h3>
         </header>
 
         <div class="post-content docs">
-            <p>GWT wrapper on top of Intro.js</p>
+            <ul>
+  <li><code class="highlighter-rouge">steps</code>: For defining steps using JSON configuration (see <a href="https://github.com/usablica/intro.js/blob/master/example/programmatic/index.html">this</a> example)</li>
+  <li><code class="highlighter-rouge">nextLabel</code>: Next button label</li>
+  <li><code class="highlighter-rouge">prevLabel</code>: Previous button label</li>
+  <li><code class="highlighter-rouge">skipLabel</code>: Skip button label</li>
+  <li><code class="highlighter-rouge">doneLabel</code>: Done button label</li>
+  <li><code class="highlighter-rouge">hidePrev</code>: Hide previous button in the first step? Otherwise, it will be disabled button.</li>
+  <li><code class="highlighter-rouge">hideNext</code>: Hide next button in the last step? Otherwise, it will be disabled button.</li>
+  <li><code class="highlighter-rouge">tooltipPosition</code>: Default tooltip position</li>
+  <li><code class="highlighter-rouge">tooltipClass</code>: Adding CSS class to all tooltips</li>
+  <li><code class="highlighter-rouge">highlightClass</code>: Additional CSS class for the helperLayer</li>
+  <li><code class="highlighter-rouge">exitOnEsc</code>: Exit introduction when pressing Escape button, <code class="highlighter-rouge">true</code> or <code class="highlighter-rouge">false</code></li>
+  <li><code class="highlighter-rouge">exitOnOverlayClick</code>: Exit introduction when clicking on overlay layer, <code class="highlighter-rouge">true</code> or <code class="highlighter-rouge">false</code></li>
+  <li><code class="highlighter-rouge">showStepNumbers</code>: Show steps number in the red circle or not, <code class="highlighter-rouge">true</code> or <code class="highlighter-rouge">false</code></li>
+  <li><code class="highlighter-rouge">keyboardNavigation</code>: Navigating with keyboard or not, <code class="highlighter-rouge">true</code> or <code class="highlighter-rouge">false</code></li>
+  <li><code class="highlighter-rouge">showButtons</code>: Show introduction navigation buttons or not, <code class="highlighter-rouge">true</code> or <code class="highlighter-rouge">false</code></li>
+  <li><code class="highlighter-rouge">showBullets</code>: Show introduction bullets or not, <code class="highlighter-rouge">true</code> or <code class="highlighter-rouge">false</code></li>
+  <li><code class="highlighter-rouge">showProgress</code>: Show introduction progress or not, <code class="highlighter-rouge">true</code> or <code class="highlighter-rouge">false</code></li>
+  <li><code class="highlighter-rouge">scrollToElement</code>: Auto scroll to highlighted element if it’s outside of viewport, <code class="highlighter-rouge">true</code> or <code class="highlighter-rouge">false</code></li>
+  <li><code class="highlighter-rouge">overlayOpacity</code>: Adjust the overlay opacity, <code class="highlighter-rouge">Number</code> between <code class="highlighter-rouge">0</code> and <code class="highlighter-rouge">1</code></li>
+  <li><code class="highlighter-rouge">disableInteraction</code>: Disable an interaction inside element or not, <code class="highlighter-rouge">true</code> or <code class="highlighter-rouge">false</code></li>
+</ul>
 
-<p>Github: <a href="https://github.com/Agnie-Software/gwt-introjs">https://github.com/Agnie-Software/gwt-introjs</a></p>
+<h5 id="adding-options">Adding options</h5>
 
-<p><em>Do you know a project that we didn’t mention here? Please update the documentation on Github or <a href="support@introjs.com">email</a> us.</em></p>
+<p>An example of adding an option:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">introJs</span><span class="p">().</span><span class="nx">setOption</span><span class="p">(</span><span class="s2">"nextLabel"</span><span class="p">,</span> <span class="s2">" &gt; "</span><span class="p">);</span>
+</code></pre>
+</div>
 
         </div>
     </div>
