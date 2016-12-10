@@ -1366,6 +1366,38 @@
   };
 
   /**
+   * Show all hints
+   *
+   * @api private
+   * @method _showHints
+   */
+  function _showHints() {
+    var hints = this._targetElement.querySelectorAll('.introjs-hint');
+
+    if (hints && hints.length > 0) {
+      for (var i = 0; i < hints.length; i++) {
+        _showHint.call(this, hints[i].getAttribute('data-step'));
+      }
+    } else {
+      _populateHints.call(this, this._targetElement);
+    }
+  };
+
+  /**
+   * Show a hint
+   *
+   * @api private
+   * @method _showHint
+   */
+  function _showHint(stepId) {
+    var hint = this._targetElement.querySelector('.introjs-hint[data-step="' + stepId + '"]');
+
+    if (hint) {
+      hint.className = hint.className.replace(/introjs\-hidehint/g, '');
+    }
+  };
+
+  /**
    * Add all available hints to the page
    *
    * @api private
@@ -1766,6 +1798,14 @@
     },
     hideHints: function () {
       _hideHints.call(this);
+      return this;
+    },
+    showHint: function (stepId) {
+      _showHint.call(this, stepId);
+      return this;
+    },
+    showHints: function () {
+      _showHints.call(this);
       return this;
     }
   };
