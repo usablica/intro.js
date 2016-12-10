@@ -1,0 +1,33 @@
+<nav class="basic border fluid vertical menu" data-kui-sticky>
+    {% for cat in site.category-list %}
+
+    <div class="items">
+        <div class="icon item header">
+            <i class="fa fa-{{site.category-icons[forloop.index0]}}"></i>{{ cat | replace: "-", " " }}
+        </div>
+        {% assign pages = site.pages | sort:"weight"  %}
+
+        {% for p in pages %}
+            {% for pc in p.categories %}
+              {% if pc == cat %}
+                {% if page.permalink == p.url %} 
+                  {% if page.table-of-content != nil %}
+                      <div class="secondary items">
+                          <div class="active item header">{{ p.title }}</div>
+                          {% for p in page.table-of-content %}
+                              <a class="item" href="#{{p | downcase | replace:' ','-' }}">{{p}}</a>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      <span class="active item">{{ p.title }}</span>
+                  {% endif %}
+
+                {%else%}
+                    <a class="item" href="{{site.baseurl}}{{ p.url }}">{{ p.title }}</a>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+    {% endfor %}
+</nav>
