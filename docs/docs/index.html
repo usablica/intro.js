@@ -12,8 +12,8 @@ permalink: /
 </header>
 
 <div class="container">
-    {% for cat in site.category-list %}
-    <div class="five wide columns  basic vertical menu">
+    {% for cat in site.category-list limit:5 %}
+    <div class="seven wide columns basic vertical menu">
 
     <div class="items">
         <div class="icon item header">
