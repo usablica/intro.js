@@ -15,25 +15,25 @@ Please refer to [Using themes]({{site.baseurl}}/themes/install) to read about th
 
 Current default IntroJS template.
 
-**By Afshin Mehrabani**
-
 #### Royal
 
 <img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/themes/royal.png">
 
 Fixed tooltip bar to footer.
 
-**By Hossein Emrani**
-
 #### Nassim
 
 <img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/themes/nassim.png">
-
-**By Hossein Emrani**
-
 
 #### Nazanin
 
 <img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/themes/nazanin.png">
 
-**By Hossein Emrani**
+#### Dark
+
+<img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/themes/dark.png">
+
+#### Modern
+
+<img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/themes/modern.png">
+

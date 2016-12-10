@@ -57,3 +57,6 @@ You need to add the `JS` file (`intro.js`) before closing the body tag (`</body>
 
 That's it! Now follow next steps or go to [Quick Start]({{ site.baseurl }}/getting-started/start) page.
 
+##### RTL
+
+You can use Introjs for RTL websites as well (e.g. Farsi). What you need to do is adding `introjs-rtl.css` file after the main CSS file (`introjs.css`)
