@@ -1703,6 +1703,24 @@
       _goToStep.call(this, step);
       return this;
     },
+    addStep: function(options) {
+      if (!this._options.steps) {
+        this._options.steps = [];
+      }
+
+      this._options.steps.push(options);
+
+      return this;
+    },
+    addSteps: function(steps) {
+      if (!steps.length) return;
+
+      for(var index = 0; index < steps.length; index++) {
+        this.addStep(steps[index]);
+      }
+
+      return this;
+    },
     nextStep: function() {
       _nextStep.call(this);
       return this;
