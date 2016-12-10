@@ -86,7 +86,7 @@ Here is a under construction plugin for Wordpress: https://github.com/newoldmedi
 ### GWT Wrapper
 GWT wrapper on top of Intro.js
 
-Github: https://github.com/Agnie-Software/gwt-introjs
+GitHub: https://github.com/Agnie-Software/gwt-introjs
 
 ### R Wrapper
 You can use IntroJs with [R](https://cran.r-project.org/) for [Shiny applications](http://shiny.rstudio.com/) with the [rintrojs package on CRAN](https://cran.r-project.org/web/packages/rintrojs/).
@@ -125,7 +125,7 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 **Afshin Mehrabani**
 
 - [Twitter](https://twitter.com/afshinmeh)
-- [Github](https://github.com/afshinm)
+- [GitHub](https://github.com/afshinm)
 - [Personal page](http://afshinm.name/)
 
 [Other contributors](https://github.com/usablica/intro.js/graphs/contributors)
