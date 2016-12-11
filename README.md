@@ -44,11 +44,11 @@ Optionally, pass one parameter to `introJs` function to limit the presentation s
 
 ## Documentation
 
-Please visit [Documentation](https://introjs.com/docs).
+Please visit [Documentation](http://introjs.com/docs).
 
 ## Using with:
 
-Intro.js has many wrappers for different purposes. Please visit [Documentation](https://introjs.com/docs) for more info.
+Intro.js has many wrappers for different purposes. Please visit [Documentation](http://introjs.com/docs) for more info.
 
 ## Build
 
