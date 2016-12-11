@@ -41,63 +41,14 @@ Optionally, pass one parameter to `introJs` function to limit the presentation s
 
 <p align="center"><img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/introjs-demo.png"></p>
 
-## Using templates
-
-IntroJS provides awesome templates and we are trying to update and add more templates for next versions. You can browse all templates here: https://github.com/usablica/intro.js/wiki/templates
-
-In order to use templates, all you need to do is appending the template stylesheet to your page, *after* IntroJS CSS file:
-
-```html
-<!-- Add IntroJs styles -->
-<link href="../../introjs.css" rel="stylesheet">
-
-<!-- Add Nazanin template -->
-<link href="../../themes/introjs-nazanin.css" rel="stylesheet">
-```
 
 ## Documentation
 
-Please visit [Documentation](https://github.com/usablica/intro.js/wiki/Documentation) page on the Wiki.
+Please visit [Documentation](https://introjs.com/docs).
 
 ## Using with:
 
-### Rails
-If you are using the rails asset pipeline you can use the [introjs-rails](https://github.com/heelhook/intro.js-rails) gem.
-
-### Yii framework
-You can simply use this project for Yii framework: https://github.com/moein7tl/Yii-IntroJS
-
-### Drupal
-Here you can find an IntroJs integration for Drupal: https://drupal.org/sandbox/alexanderfb/2061829
-
-### AngularJS
-For AngularJS, you can use the directives in [angular-intro.js](http://code.mendhak.com/angular-intro.js/).
-
-### Ember
-Ember IntroJS wraps introjs in an Ember Component to guide users through your app.
-
-https://github.com/thefrontside/ember-introjs
-
-### Wordpress
-You can use IntroJS inside your Wordpress, here is a good article by SitePoint: http://www.sitepoint.com/creating-intro-js-powered-tours-wordpress/
-
-Here is a under construction plugin for Wordpress: https://github.com/newoldmedia/intro.js-wordpress
-
-### GWT Wrapper
-GWT wrapper on top of Intro.js
-
-Github: https://github.com/Agnie-Software/gwt-introjs
-
-### R Wrapper
-You can use IntroJs with [R](https://cran.r-project.org/) for [Shiny applications](http://shiny.rstudio.com/) with the [rintrojs package on CRAN](https://cran.r-project.org/web/packages/rintrojs/).
-
-Github: https://github.com/carlganz/rintrojs
-
-### Dart Wrapper   
-
-Dart wrapper for Intro.js
-
-Github: https://github.com/moomoohk/introjs.dart
+Intro.js has many wrappers for different purposes. Please visit [Documentation](https://introjs.com/docs) for more info.
 
 ## Build
 
