@@ -1,5 +1,12 @@
 ## Release History
 
+ * **v2.4.0** - 2016-12-11
+   - New documentation
+   - New template: Modern
+   - Added showHint and showHints
+   - Added Dart and R wrappers
+   - Minor bug fixes and coding style issues
+
  * **v2.3.0** - 2016-07-01
    - Fixing the conflict with Bootstrap 3
    - Adding two new options to hide next and previous button in first and last steps

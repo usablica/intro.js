@@ -1,4 +1,4 @@
-# Intro.js v2.3.0
+# Intro.js v2.4.0
 
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
@@ -83,7 +83,6 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 
 
 ## Support/Discussion
-- [Google Group](https://groups.google.com/d/forum/introjs)
 - [Stackoverflow](http://stackoverflow.com/questions/tagged/intro.js)
 
 ## License
