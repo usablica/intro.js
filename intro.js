@@ -212,9 +212,6 @@
         if (e.keyCode === 27 && self._options.exitOnEsc == true) {
           //escape key pressed, exit the intro
           //check if exit callback is defined
-          if (self._introExitCallback != undefined) {
-            self._introExitCallback.call(self);
-          }
           _exitIntro.call(self, targetElm);
         } else if(e.keyCode === 37) {
           //left arrow
@@ -233,10 +230,7 @@
             if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
                 self._introCompleteCallback.call(self);
             }
-            //check if any callback is defined
-            if (self._introExitCallback != undefined) {
-              self._introExitCallback.call(self);
-            }
+
             _exitIntro.call(self, targetElm);
           } else {
             //default behavior for responding to enter
@@ -410,7 +404,8 @@
     //remove `introjs-showElement` class from the element
     var showElement = document.querySelector('.introjs-showElement');
     if (showElement) {
-      showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, ''); // This is a manual trim.
+      _removeClass(showElement, /introjs-[a-zA-Z]+/g);
+      //showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, ''); // This is a manual trim.
     }
 
     //remove `introjs-fixParent` class from the elements
@@ -426,6 +421,11 @@
       window.removeEventListener('keydown', this._onKeyDown, true);
     } else if (document.detachEvent) { //IE
       document.detachEvent('onkeydown', this._onKeyDown);
+    }
+
+    //check if any callback is defined
+    if (this._introExitCallback != undefined) {
+      this._introExitCallback.call(self);
     }
 
     //set the step to zero
@@ -490,6 +490,10 @@
     targetOffset  = _getOffset(targetElement);
     tooltipOffset = _getOffset(tooltipLayer);
     windowSize    = _getWinSize();
+
+    console.log(targetElement)
+    console.log(targetOffset)
+    console.log(tooltipOffset)
 
     switch (currentTooltipPosition) {
       case 'top':
@@ -708,6 +712,28 @@
           elementPosition = _getOffset(currentElement.element),
           widthHeightPadding = 10;
 
+
+      console.log('go', currentElement)
+
+      //add target element position style
+      if (currentElement instanceof SVGElement) {
+        console.log('boo')
+        var parentElm = currentElement.parentNode;
+
+        while (currentElement.parentNode != null) {
+          if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
+
+          if (parentElm.tagName.toLowerCase() === 'svg') {
+            conosle.log(
+            'found parent'
+          )
+            currentElement = parentElm;
+          }
+
+          parentElm = parentElm.parentNode;
+        }
+      }
+
       // If the target element is fixed, the tooltip should be fixed as well.
       // Otherwise, remove a fixed class that may be left over from the previous
       // step.
@@ -822,8 +848,8 @@
 
       //remove old classes if the element still exist
       var oldShowElement = document.querySelector('.introjs-showElement');
-      if(oldShowElement) {
-        oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, '');
+      if (oldShowElement) {
+        _removeClass(oldShowElement, /introjs-[a-zA-Z]+/g);
       }
 
       //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
@@ -983,10 +1009,6 @@
           self._introCompleteCallback.call(self);
         }
 
-        if (self._introItems.length - 1 != self._currentStep && typeof (self._introExitCallback) === 'function') {
-          self._introExitCallback.call(self);
-        }
-
         _exitIntro.call(self, self._targetElement);
       };
 
@@ -1046,14 +1068,32 @@
     nextTooltipButton.focus();
 
     //add target element position style
-    targetElement.element.className += ' introjs-showElement';
+    if (targetElement.element instanceof SVGElement) {
+      var parentElm = targetElement.element.parentNode;
+
+      while (targetElement.element.parentNode != null) {
+        if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
+
+        if (parentElm.tagName.toLowerCase() === 'svg') {
+          _setClass(parentElm, 'introjs-showElement introjs-relativePosition')
+        }
+
+        parentElm = parentElm.parentNode;
+      }
+    } else {
+      //targetElement.element.node.className += ' introjs-showElement';
+      _setClass(targetElement.element, 'introjs-showElement')
+    }
+
+    console.log(parentElm)
 
     var currentElementPosition = _getPropValue(targetElement.element, 'position');
     if (currentElementPosition !== 'absolute' &&
         currentElementPosition !== 'relative' &&
         currentElementPosition !== 'fixed') {
       //change to new intro item
-      targetElement.element.className += ' introjs-relativePosition';
+      //targetElement.element.className += ' introjs-relativePosition';
+      _setClass(targetElement.element, 'introjs-relativePosition')
     }
 
     var parentElm = targetElement.element.parentNode;
@@ -1090,6 +1130,26 @@
 
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
       this._introAfterChangeCallback.call(this, targetElement.element);
+    }
+  }
+
+  function _setClass(element, className) {
+    if (element instanceof SVGElement) {
+      var pre = element.getAttribute('class') || '';
+
+      element.setAttribute('class', pre + ' ' + className);
+    } else {
+      element.className += ' ' + className;
+    }
+  };
+
+  function _removeClass(element, classNameRegex) {
+    if (element instanceof SVGElement) {
+      var pre = element.getAttribute('class') || '';
+
+      element.setAttribute('class', pre.replace(classNameRegex, '').replace(/^\s+|\s+$/g, ''));
+    } else {
+      element.className = element.className.replace(classNameRegex, '').replace(/^\s+|\s+$/g, '');
     }
   }
 
@@ -1209,11 +1269,6 @@
 
     overlayLayer.onclick = function() {
       if (self._options.exitOnOverlayClick == true) {
-
-        //check if any callback is defined
-        if (self._introExitCallback != undefined) {
-          self._introExitCallback.call(self);
-        }
         _exitIntro.call(self, targetElm);
       }
     };
@@ -1605,24 +1660,32 @@
   function _getOffset(element) {
     var elementPosition = {};
 
-    //set width
-    elementPosition.width = element.offsetWidth;
+    if (element instanceof SVGElement) {
+      var x = element.getBoundingClientRect()
+      elementPosition.top = x.top;
+      elementPosition.width = x.width;
+      elementPosition.height = x.height;
+      elementPosition.left = x.left;
+    } else {
+      //set width
+      elementPosition.width = element.offsetWidth;
 
-    //set height
-    elementPosition.height = element.offsetHeight;
+      //set height
+      elementPosition.height = element.offsetHeight;
 
-    //calculate element top and left
-    var _x = 0;
-    var _y = 0;
-    while (element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
-      _x += element.offsetLeft;
-      _y += element.offsetTop;
-      element = element.offsetParent;
+      //calculate element top and left
+      var _x = 0;
+      var _y = 0;
+      while (element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
+        _x += element.offsetLeft;
+        _y += element.offsetTop;
+        element = element.offsetParent;
+      }
+      //set top
+      elementPosition.top = _y;
+      //set left
+      elementPosition.left = _x;
     }
-    //set top
-    elementPosition.top = _y;
-    //set left
-    elementPosition.left = _x;
 
     return elementPosition;
   };
