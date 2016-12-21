@@ -15,7 +15,7 @@
     "node >=0.1.90"
   ],
   "main": "intro.js",
-  "license": "See LICENSE.md",
+  "license": "AGPL-3.0",
   "spm": {
     "main": "intro.js",
     "output": [
