@@ -1,5 +1,5 @@
 /**
- * Intro.js v2.4.0
+ * Intro.js v2.5.0
  * https://github.com/usablica/intro.js
  *
  * Copyright (C) 2016 Afshin Mehrabani (@afshinmeh)
@@ -18,7 +18,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '2.4.0';
+  var VERSION = '2.5.0';
 
   /**
    * IntroJs main class
@@ -401,12 +401,7 @@
       floatingElement.parentNode.removeChild(floatingElement);
     }
 
-    //remove `introjs-showElement` class from the element
-    var showElement = document.querySelector('.introjs-showElement');
-    if (showElement) {
-      _removeClass(showElement, /introjs-[a-zA-Z]+/g);
-      //showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, ''); // This is a manual trim.
-    }
+    _removeShowElement();
 
     //remove `introjs-fixParent` class from the elements
     var fixParents = document.querySelectorAll('.introjs-fixParent');
@@ -490,10 +485,6 @@
     targetOffset  = _getOffset(targetElement);
     tooltipOffset = _getOffset(tooltipLayer);
     windowSize    = _getWinSize();
-
-    console.log(targetElement)
-    console.log(targetOffset)
-    console.log(tooltipOffset)
 
     switch (currentTooltipPosition) {
       case 'top':
@@ -712,28 +703,6 @@
           elementPosition = _getOffset(currentElement.element),
           widthHeightPadding = 10;
 
-
-      console.log('go', currentElement)
-
-      //add target element position style
-      if (currentElement instanceof SVGElement) {
-        console.log('boo')
-        var parentElm = currentElement.parentNode;
-
-        while (currentElement.parentNode != null) {
-          if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
-
-          if (parentElm.tagName.toLowerCase() === 'svg') {
-            conosle.log(
-            'found parent'
-          )
-            currentElement = parentElm;
-          }
-
-          parentElm = parentElm.parentNode;
-        }
-      }
-
       // If the target element is fixed, the tooltip should be fixed as well.
       // Otherwise, remove a fixed class that may be left over from the previous
       // step.
@@ -847,10 +816,7 @@
       }
 
       //remove old classes if the element still exist
-      var oldShowElement = document.querySelector('.introjs-showElement');
-      if (oldShowElement) {
-        _removeClass(oldShowElement, /introjs-[a-zA-Z]+/g);
-      }
+      _removeShowElement();
 
       //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
       if (self._lastShowElementTimer) {
@@ -888,6 +854,7 @@
         }
       }, 350);
 
+      // end of old element if-else condition
     } else {
       var helperLayer       = document.createElement('div'),
           referenceLayer    = document.createElement('div'),
@@ -1024,6 +991,8 @@
 
       //set proper position
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
+
+      //end of new element if-else condition
     }
 
     //disable interaction
@@ -1067,7 +1036,55 @@
     //Set focus on "next" button, so that hitting Enter always moves you onto the next step
     nextTooltipButton.focus();
 
-    //add target element position style
+    _setShowElement(targetElement);
+
+    if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
+      var rect = targetElement.element.getBoundingClientRect(),
+        winHeight = _getWinSize().height,
+        top = rect.bottom - (rect.bottom - rect.top),
+        bottom = rect.bottom - winHeight;
+
+      //Scroll up
+      if (top < 0 || targetElement.element.clientHeight > winHeight) {
+        window.scrollBy(0, top - this._options.scrollPadding); // 30px padding from edge to look nice
+
+      //Scroll down
+      } else {
+        window.scrollBy(0, bottom + 70 + this._options.scrollPadding); // 70px + 30px padding from edge to look nice
+      }
+    }
+
+    if (typeof (this._introAfterChangeCallback) !== 'undefined') {
+      this._introAfterChangeCallback.call(this, targetElement.element);
+    }
+  }
+
+  /**
+   * To remove all show element(s)
+   *
+   * @api private
+   * @method _removeShowElement
+   */
+  function _removeShowElement() {
+    var elms = document.querySelectorAll('.introjs-showElement');
+
+    for (var i = 0, l = elms.length; i < l; i++) {
+      var elm = elms[i];
+      _removeClass(elm, /introjs-[a-zA-Z]+/g);
+    }
+  }
+
+  /**
+   * To set the show element
+   * This function set a relative (in most cases) position and changes the z-index
+   *
+   * @api private
+   * @method _setShowElement
+   * @param {Object} targetElement
+   */
+  function _setShowElement(targetElement) {
+    // we need to add this show element class to the parent of SVG elements
+    // because the SVG elements can't have independent z-index
     if (targetElement.element instanceof SVGElement) {
       var parentElm = targetElement.element.parentNode;
 
@@ -1075,17 +1092,14 @@
         if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
 
         if (parentElm.tagName.toLowerCase() === 'svg') {
-          _setClass(parentElm, 'introjs-showElement introjs-relativePosition')
+          _setClass(parentElm, 'introjs-showElement introjs-relativePosition');
         }
 
         parentElm = parentElm.parentNode;
       }
-    } else {
-      //targetElement.element.node.className += ' introjs-showElement';
-      _setClass(targetElement.element, 'introjs-showElement')
     }
 
-    console.log(parentElm)
+    _setClass(targetElement.element, 'introjs-showElement');
 
     var currentElementPosition = _getPropValue(targetElement.element, 'position');
     if (currentElementPosition !== 'absolute' &&
@@ -1111,26 +1125,6 @@
 
       parentElm = parentElm.parentNode;
     }
-
-    if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
-      var rect = targetElement.element.getBoundingClientRect(),
-        winHeight = _getWinSize().height,
-        top = rect.bottom - (rect.bottom - rect.top),
-        bottom = rect.bottom - winHeight;
-
-      //Scroll up
-      if (top < 0 || targetElement.element.clientHeight > winHeight) {
-        window.scrollBy(0, top - this._options.scrollPadding); // 30px padding from edge to look nice
-
-      //Scroll down
-      } else {
-        window.scrollBy(0, bottom + 70 + this._options.scrollPadding); // 70px + 30px padding from edge to look nice
-      }
-    }
-
-    if (typeof (this._introAfterChangeCallback) !== 'undefined') {
-      this._introAfterChangeCallback.call(this, targetElement.element);
-    }
   }
 
   function _setClass(element, className) {
@@ -1141,7 +1135,7 @@
     } else {
       element.className += ' ' + className;
     }
-  };
+  }
 
   function _removeClass(element, classNameRegex) {
     if (element instanceof SVGElement) {
@@ -1660,12 +1654,18 @@
   function _getOffset(element) {
     var elementPosition = {};
 
+    var body = document.body;
+    var docEl = document.documentElement;
+
+    var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+    var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+
     if (element instanceof SVGElement) {
       var x = element.getBoundingClientRect()
-      elementPosition.top = x.top;
+      elementPosition.top = x.top + scrollTop;
       elementPosition.width = x.width;
       elementPosition.height = x.height;
-      elementPosition.left = x.left;
+      elementPosition.left = x.left + scrollLeft;
     } else {
       //set width
       elementPosition.width = element.offsetWidth;
