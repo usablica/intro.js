@@ -3,10 +3,10 @@
 var fs = require('fs'),
   compressor = require('node-minify');
 
-new compressor.minify({
-  type: 'gcc',
-  fileIn: '../intro.js',
-  fileOut: '../minified/intro.min.js',
+compressor.minify({
+  compressor: 'gcc',
+  input: '../intro.js',
+  output: '../minified/intro.min.js',
   callback: function (err) {
     if (err) {
       console.log(err);
@@ -16,10 +16,10 @@ new compressor.minify({
   }
 });
 
-new compressor.minify({
-  type: 'yui-css',
-  fileIn: '../introjs.css',
-  fileOut: '../minified/introjs.min.css',
+compressor.minify({
+  compressor: 'yui-css',
+  input: '../introjs.css',
+  output: '../minified/introjs.min.css',
   callback: function (err) {
     if (err) {
       console.log(err);
@@ -29,10 +29,10 @@ new compressor.minify({
   }
 });
 
-new compressor.minify({
-  type: 'yui-css',
-  fileIn: '../introjs-rtl.css',
-  fileOut: '../minified/introjs-rtl.min.css',
+compressor.minify({
+  compressor: 'yui-css',
+  input: '../introjs-rtl.css',
+  output: '../minified/introjs-rtl.min.css',
   callback: function (err) {
     if (err) {
       console.log(err);
