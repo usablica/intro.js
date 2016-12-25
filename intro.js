@@ -338,7 +338,7 @@
    * Go to previous step on intro
    *
    * @api private
-   * @method _nextStep
+   * @method _previousStep
    */
   function _previousStep() {
     this._direction = 'backward';
