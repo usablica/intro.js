@@ -41,7 +41,6 @@ Optionally, pass one parameter to `introJs` function to limit the presentation s
 
 <p align="center"><img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/introjs-demo.png"></p>
 
-
 ## Documentation
 
 Please visit [Documentation](http://introjs.com/docs).

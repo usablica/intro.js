@@ -302,6 +302,19 @@
   }
 
   /**
+   * Go to the specific step of introduction with the explicit [data-step] number
+   *
+   * @api private
+   * @method _goToStepNumber
+   */
+  function _goToStepNumber(step) {
+    this._currentStepNumber = step;
+    if (typeof (this._introItems) !== 'undefined') {
+      _nextStep.call(this);
+    }
+  }
+
+  /**
    * Go to next step on intro
    *
    * @api private
@@ -309,6 +322,16 @@
    */
   function _nextStep() {
     this._direction = 'forward';
+
+    if (typeof (this._currentStepNumber) !== 'undefined') {
+        for( var i = 0, len = this._introItems.length; i < len; i++ ) {
+            var item = this._introItems[i];
+            if( item.step === this._currentStepNumber ) {
+                this._currentStep = i - 1;
+                this._currentStepNumber = undefined;
+            }
+        }
+    }
 
     if (typeof (this._currentStep) === 'undefined') {
       this._currentStep = 0;
@@ -1781,6 +1804,11 @@
       for(var index = 0; index < steps.length; index++) {
         this.addStep(steps[index]);
       }
+
+      return this;
+    },
+    goToStepNumber: function(step) {
+      _goToStepNumber.call(this, step);
 
       return this;
     },
