@@ -811,7 +811,10 @@
           skipTooltipButton    = oldReferenceLayer.querySelector('.introjs-skipbutton'),
           prevTooltipButton    = oldReferenceLayer.querySelector('.introjs-prevbutton'),
           nextTooltipButton    = oldReferenceLayer.querySelector('.introjs-nextbutton');
-
+      if (!skipTooltipButton){
+        skipTooltipButton = oldReferenceLayer.querySelector('.introjs-donebutton')
+      }
+      
       //update or reset the helper highlight class
       oldHelperLayer.className = highlightClass;
       //hide the tooltip
@@ -1055,6 +1058,7 @@
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
+      skipTooltipButton.className = 'introjs-button introjs-skipbutton';
     }
 
     //Set focus on "next" button, so that hitting Enter always moves you onto the next step
