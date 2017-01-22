@@ -97,6 +97,13 @@
       //use steps passed programmatically
       for (var i = 0, stepsLength = this._options.steps.length; i < stepsLength; i++) {
         var currentItem = _cloneObject(this._options.steps[i]);
+        
+        //does the step has a condition?
+        if (typeof(currentItem.condition) != 'undefined' && currentItem.condition == false) {
+          var conditionFn = new Function('return ' + currentItem.condition);
+          if (conditionFn() == false) continue;
+        }  
+        
         //set the step
         currentItem.step = introItems.length + 1;
         //use querySelector function only when developer used CSS selector
@@ -132,8 +139,11 @@
       if (allIntroSteps.length < 1) {
         return false;
       }
+      
+      //make an array where the steps that are occupied are stored
+      //undefined = free, false = occupied, true = occupied + fixed
+      var introSteps = [];
 
-      //first add intro items with data-step
       for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
         var currentElement = allIntroSteps[i];
 
@@ -141,46 +151,58 @@
         if (currentElement.style.display == 'none') {
           continue;
         }
-
-        var step = parseInt(currentElement.getAttribute('data-step'), 10);
-
-        if (step > 0) {
-          introItems[step - 1] = {
-            element: currentElement,
-            intro: currentElement.getAttribute('data-intro'),
-            step: parseInt(currentElement.getAttribute('data-step'), 10),
-            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            highlightClass: currentElement.getAttribute('data-highlightClass'),
-            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
-          };
+      
+        //does the step has a data-condition?
+        if (currentElement.hasAttribute('data-condition')) {
+          var conditionFn = new Function('return ' + currentElement.getAttribute('data-condition'));
+          if (conditionFn() == false) continue;
         }
-      }
-
-      //next add intro items without data-step
-      //todo: we need a cleanup here, two loops are redundant
-      var nextStep = 0;
-      for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
-        var currentElement = allIntroSteps[i];
-
-        if (currentElement.getAttribute('data-step') == null) {
-
-          while (true) {
-            if (typeof introItems[nextStep] == 'undefined') {
-              break;
-            } else {
-              nextStep++;
+        
+        //does the step has a data-step?
+        var step = 0;
+        if (currentElement.hasAttribute('data-step')) {
+          step = parseInt(currentElement.getAttribute('data-step'), 10);
+        }
+        
+        //when intro step has data-step attribute bigger then zero
+        //check if it's occupied. If so, then we need to put this item on that spot and move everything up
+        //but keep the ones with data-step on the same place (those are marked occupied+fixed)
+        if (step > 0 && typeof(introSteps[step]) == "boolean") {
+          var newPos = introSteps.length;
+          
+          for (var j = introSteps.length - 1 ; j >= step ; newPos = j, j--) {
+            if (introSteps[j] === false) {
+              while (introSteps[newPos] === true) {
+                newPos++;
+              }
+              
+              if (typeof(introSteps[newPos]) == "undefined") {
+                introItems[j-1].step = newPos;
+                introItems[newPos-1] = introItems[j-1];
+                introSteps[newPos] = false;
+                introSteps[j] = undefined;
+              }
             }
           }
-
-          introItems[nextStep] = {
-            element: currentElement,
-            intro: currentElement.getAttribute('data-intro'),
-            step: nextStep + 1,
-            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            highlightClass: currentElement.getAttribute('data-highlightClass'),
-            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
-          };
         }
+        
+        //when step equals zero, we need to find an available step
+        for (var idx = 1 ; step == 0 ; idx++) {
+          if (typeof(introSteps[idx]) == "undefined") step = idx;
+        }
+        
+        //mark the step as occupied
+        introSteps[step] = currentElement.hasAttribute('data-step');
+
+        introItems[step - 1] = {
+          element: currentElement,
+          intro: currentElement.getAttribute('data-intro'),
+          step: step,
+          tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+          highlightClass: currentElement.getAttribute('data-highlightClass'),
+          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
+          _isDataStep: (i == 0)
+        };
       }
     }
 
