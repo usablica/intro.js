@@ -1026,7 +1026,9 @@
     prevTooltipButton.removeAttribute('tabIndex');
     nextTooltipButton.removeAttribute('tabIndex');
 
+    // when it's the first step of tour
     if (this._currentStep == 0 && this._introItems.length > 1) {
+      skipTooltipButton.className = 'introjs-button introjs-skipbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
 
       if (this._options.hidePrev == true) {
@@ -1039,8 +1041,10 @@
       prevTooltipButton.tabIndex = '-1';
       skipTooltipButton.innerHTML = this._options.skipLabel;
     } else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
+      // last step of tour
       skipTooltipButton.innerHTML = this._options.doneLabel;
-      skipTooltipButton.className = 'introjs-button introjs-donebutton';
+      // adding donebutton class in addition to skipbutton
+      skipTooltipButton.className += ' introjs-donebutton';
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
 
       if (this._options.hideNext == true) {
@@ -1052,6 +1056,8 @@
 
       nextTooltipButton.tabIndex = '-1';
     } else {
+      // steps between start and end
+      skipTooltipButton.className = 'introjs-button introjs-skipbutton';
       prevTooltipButton.className = 'introjs-button introjs-prevbutton';
       nextTooltipButton.className = 'introjs-button introjs-nextbutton';
       skipTooltipButton.innerHTML = this._options.skipLabel;
