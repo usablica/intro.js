@@ -114,6 +114,8 @@ introJs().addHints();
 
 Show the hint with given `hintId`.
 
+**Available since**: v2.4.0
+
 **Example:**
 ```javascript
 introJs().showHint(1);
@@ -124,6 +126,8 @@ introJs().showHint(1);
 ##### introJs.showHints()
 
 Show all hints.
+
+**Available since**: v2.4.0
 
 **Example:**
 ```javascript
