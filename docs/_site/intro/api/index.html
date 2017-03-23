@@ -1035,6 +1035,40 @@
 
 <hr />
 
+<p>###introJs.goToStepNumber(step)</p>
+
+<p>Go to specific step of introduction with the concrete step.
+This differs from <code class="highlighter-rouge">goToStep</code> in the way that <code class="highlighter-rouge">data-step</code>
+does not have be continuous to pick the desired element.</p>
+
+<p><strong>Available since</strong>: v2.x</p>
+
+<p><strong>Parameters:</strong></p>
+
+<ul>
+  <li>step : Number</li>
+</ul>
+
+<p><strong>Returns:</strong></p>
+
+<ul>
+  <li>introJs object.</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"first"</span> <span class="na">data-step=</span><span class="s">'5'</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"second"</span> <span class="na">data-step=</span><span class="s">'9'</span><span class="nt">&gt;&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="c1">//start introduction from step with data-step='9'</span>
+<span class="nx">introJs</span><span class="p">().</span><span class="nx">goToStepNumber</span><span class="p">(</span><span class="mi">9</span><span class="p">).</span><span class="nx">start</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<hr />
+
 <h5 id="introjsaddstepoptions">introJs.addStep(options)</h5>
 
 <p>Add a new step to introJs.</p>
