@@ -1,5 +1,6 @@
 .introjs-overlay {
   position: absolute;
+  box-sizing: content-box;
   z-index: 999999;
   background-color: #000;
   opacity: 0;
@@ -9,7 +10,7 @@
   background: -o-radial-gradient(center,ellipse cover,rgba(0,0,0,0.4) 0,rgba(0,0,0,0.9) 100%);
   background: -ms-radial-gradient(center,ellipse cover,rgba(0,0,0,0.4) 0,rgba(0,0,0,0.9) 100%);
   background: radial-gradient(center,ellipse cover,rgba(0,0,0,0.4) 0,rgba(0,0,0,0.9) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#66000000',endColorstr='#e6000000',GradientType=1);
+  filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#66000000',endColorstr='#e6000000',GradientType=1)";
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
   filter: alpha(opacity=50);
   -webkit-transition: all 0.3s ease-out;
@@ -22,7 +23,6 @@
 .introjs-fixParent {
   z-index: auto !important;
   opacity: 1.0 !important;
-  position: absolute !important;
   -webkit-transform: none !important;
      -moz-transform: none !important;
       -ms-transform: none !important;
@@ -39,6 +39,9 @@ tr.introjs-showElement > th {
 .introjs-disableInteraction {
   z-index: 99999999 !important;
   position: absolute;
+  background-color: white;
+  opacity: 0;
+  filter: alpha(opacity=0);
 }
 
 .introjs-relativePosition,
@@ -48,6 +51,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-helperLayer {
+  box-sizing: content-box;
   position: absolute;
   z-index: 9999998;
   background-color: #FFF;
@@ -64,6 +68,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-tooltipReferenceLayer {
+  box-sizing: content-box;
   position: absolute;
   visibility: hidden;
   z-index: 10000000;
@@ -86,6 +91,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-helperNumberLayer {
+  box-sizing: content-box;
   position: absolute;
   visibility: visible;
   top: -16px;
@@ -110,8 +116,8 @@ tr.introjs-showElement > th {
   line-height: 20px;
   border: 3px solid white;
   border-radius: 50%;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0); /* IE6-9 */
-  filter: progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000); /* IE10 text shadows */
+  filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0)"; /* IE6-9 */
+  filter: "progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000)"; /* IE10 text shadows */
   box-shadow: 0 2px 5px rgba(0,0,0,.4);
 }
 
@@ -185,6 +191,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-tooltip {
+  box-sizing: content-box;
   position: absolute;
   visibility: visible;
   padding: 10px;
@@ -210,6 +217,7 @@ tr.introjs-showElement > th {
  Changed by Afshin Mehrabani
 */
 .introjs-button {
+  box-sizing: content-box;
   position: relative;
   overflow: visible;
   display: inline-block;
@@ -262,6 +270,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-skipbutton {
+  box-sizing: content-box;
   margin-right: 5px;
   color: #7a7a7a;
 }
@@ -273,10 +282,23 @@ tr.introjs-showElement > th {
   border-right: none;
 }
 
+.introjs-prevbutton.introjs-fullbutton {
+  border: 1px solid #d4d4d4;
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  border-radius: 0.2em;
+}
+
 .introjs-nextbutton {
   -webkit-border-radius: 0 0.2em 0.2em 0;
   -moz-border-radius: 0 0.2em 0.2em 0;
   border-radius: 0 0.2em 0.2em 0;
+}
+
+.introjs-nextbutton.introjs-fullbutton {
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  border-radius: 0.2em;
 }
 
 .introjs-disabled, .introjs-disabled:hover, .introjs-disabled:focus {
@@ -289,21 +311,28 @@ tr.introjs-showElement > th {
   text-decoration: none;
 }
 
+.introjs-hidden {
+     display: none;
+}
+
 .introjs-bullets {
   text-align: center;
 }
 .introjs-bullets ul {
+  box-sizing: content-box;
   clear: both;
   margin: 15px auto 0;
   padding: 0;
   display: inline-block;
 }
 .introjs-bullets ul li {
+  box-sizing: content-box;
   list-style: none;
   float: left;
   margin: 0 2px;
 }
 .introjs-bullets ul li a {
+  box-sizing: content-box;
   display: block;
   width: 6px;
   height: 6px;
@@ -312,6 +341,7 @@ tr.introjs-showElement > th {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   text-decoration: none;
+  cursor: pointer;
 }
 .introjs-bullets ul li a:hover {
   background: #999;
@@ -321,6 +351,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-progress {
+  box-sizing: content-box;
   overflow: hidden;
   height: 10px;
   margin: 10px 0 5px 0;
@@ -328,6 +359,7 @@ tr.introjs-showElement > th {
   background-color: #ecf0f1
 }
 .introjs-progressbar {
+  box-sizing: content-box;
   float: left;
   width: 0%;
   height: 100%;
@@ -350,12 +382,17 @@ tr.introjs-showElement > th {
 }
 
 .introjs-hint {
+  box-sizing: content-box;
   position: absolute;
   background: transparent;
   width: 20px;
   height: 15px;
+  cursor: pointer;
 }
-
+.introjs-hint:focus {
+    border: 0;
+    outline: 0;
+}
 .introjs-hidehint {
   display: none;
 }
@@ -369,6 +406,7 @@ tr.introjs-showElement > th {
 }
 
 .introjs-hint-pulse {
+  box-sizing: content-box;
   width: 10px;
   height: 10px;
   border: 5px solid rgba(60, 60, 60, 0.27);
@@ -384,8 +422,13 @@ tr.introjs-showElement > th {
        -o-transition: all 0.2s ease-out;
           transition: all 0.2s ease-out;
 }
-
+.introjs-hint-no-anim .introjs-hint-dot {
+  -webkit-animation: none;
+  -moz-animation: none;
+  animation: none;
+}
 .introjs-hint-dot {
+  box-sizing: content-box;
   border: 10px solid rgba(146, 146, 146, 0.36);
   background: transparent;
   -webkit-border-radius: 60px;
@@ -406,7 +449,7 @@ tr.introjs-showElement > th {
   opacity: 0;
 }
 
-@-moz-keyframes intrjspulse {
+@-moz-keyframes introjspulse {
  0% {
     -moz-transform: scale(0);
     opacity: 0.0;
@@ -429,7 +472,7 @@ tr.introjs-showElement > th {
  }
 }
 
-@-webkit-keyframes "introjspulse" {
+@-webkit-keyframes introjspulse {
  0% {
     -webkit-transform: scale(0);
     opacity: 0.0;
