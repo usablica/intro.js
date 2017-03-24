@@ -9,4 +9,4 @@ If you want to use Introjs inside a AngularJS project, you can use the directive
 
 - [angular-intro.js](http://code.mendhak.com/angular-intro.js/)
 
-*Do you know a project that we didn't mention here? Please update the documentation on Github or [email](support@introjs.com) us.*
+*Do you know a project that we didn't mention here? Please update the documentation on Github or [email](mailto:support@introjs.com) us.*

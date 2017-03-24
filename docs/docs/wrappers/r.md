@@ -9,4 +9,4 @@ You can use IntroJs with [R](https://cran.r-project.org/) for [Shiny application
 
 Github: [https://github.com/carlganz/rintrojs](https://github.com/carlganz/rintrojs)
 
-*Do you know a project that we didn't mention here? Please update the documentation on Github or [email](support@introjs.com) us.*
+*Do you know a project that we didn't mention here? Please update the documentation on Github or [email](mailto:support@introjs.com) us.*
