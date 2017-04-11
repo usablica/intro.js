@@ -1085,7 +1085,7 @@
     }
 
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
-      this._introAfterChangeCallback.call(this, targetElement.element, currentStep);
+      this._introAfterChangeCallback.call(this, targetElement.element, currentStep+1);
     }
   }
 
