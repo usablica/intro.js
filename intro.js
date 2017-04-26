@@ -77,7 +77,9 @@
       /* Hint button label */
       hintButtonLabel: 'Got it',
       /* Adding animation to hints? */
-      hintAnimation: true
+      hintAnimation: true,
+      /* Click the text == next/done button */
+      textClickSkip: false
     };
   }
 
@@ -903,6 +905,20 @@
 
       tooltipTextLayer.className = 'introjs-tooltiptext';
       tooltipTextLayer.innerHTML = targetElement.intro;
+
+      if (this._options.textClickSkip === true) {
+        tooltipTextLayer.onclick = function (e) {
+
+          if (self._introItems.length - 1 != self._currentStep) {
+            _nextStep.call(self);
+          } else {
+            if (self._introItems.length - 1 == self._currentStep && typeof (self._introCompleteCallback) === 'function') {
+              self._introCompleteCallback.call(self);
+            }
+            _exitIntro.call(self, self._targetElement);
+          }
+        };
+      }
 
       bulletsLayer.className = 'introjs-bullets';
 
