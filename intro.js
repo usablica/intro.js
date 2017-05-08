@@ -264,6 +264,16 @@
         //for window resize
         document.attachEvent('onresize', self._onResize);
       }
+      
+      self._onResize = function(e) {
+          _updatePosition.call(self);
+      };
+      
+      if (window.addEventListener) {
+        window.addEventListener("resize", self._onResize, true);
+      } else if (document.attachEvent) { //IE
+        document.attachEvent("onresize", self._onResize);
+      }
     }
     return false;
   }
@@ -1086,6 +1096,29 @@
 
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
       this._introAfterChangeCallback.call(this, targetElement.element);
+    }
+  }
+  
+  /**
+   * Update the position of the helper layer on the screen
+   *
+   * @api private
+   * @method _updatePosition
+   */
+  function _updatePosition()
+  {
+    //Get the current helper layer
+    var currentHelperLayer = document.querySelector(".introjs-helperLayer");
+    
+    //Check to see if there is a helper layer before we do anything with it
+    if(currentHelperLayer != null) {
+      var elementPosition = _getOffset(this._introItems[this._currentStep].element);
+      
+      //Set the new position of the helper layer
+      currentHelperLayer.setAttribute("style", "width: " + (elementPosition.width + 10)  + "px; " +
+                                      "height:" + (elementPosition.height + 10) + "px; " +
+                                      "top:"    + (elementPosition.top - 5)     + "px;" +
+                                      "left: "  + (elementPosition.left - 5)    + "px;");
     }
   }
 
