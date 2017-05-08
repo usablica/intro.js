@@ -956,7 +956,8 @@
       //add helper layer number
       if (this._options.showStepNumbers == true) {
         var helperNumberLayer = document.createElement('span');
-        helperNumberLayer.className = 'introjs-helperNumberLayer';
+        var currentElement  = this._introItems[this._currentStep];
+        helperNumberLayer.className = 'introjs-helperNumberLayer introjs-helperNumberLayer-' + currentElement.position;
         helperNumberLayer.innerHTML = targetElement.step;
         referenceLayer.appendChild(helperNumberLayer);
       }
