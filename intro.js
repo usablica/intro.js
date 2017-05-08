@@ -172,14 +172,16 @@
             }
           }
 
-          introItems[nextStep] = {
-            element: currentElement,
-            intro: currentElement.getAttribute('data-intro'),
-            step: nextStep + 1,
-            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            highlightClass: currentElement.getAttribute('data-highlightClass'),
-            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
-          };
+          if ($(currentElement).is(':visible')) {
+            introItems[nextStep] = {
+              element: currentElement,
+              intro: currentElement.getAttribute('data-intro'),
+              step: nextStep + 1,
+              tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+              highlightClass: currentElement.getAttribute('data-highlightClass'),
+              position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+            };
+          }
         }
       }
     }
