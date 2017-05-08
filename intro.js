@@ -52,6 +52,8 @@
       exitOnEsc: true,
       /* Close introduction when clicking on overlay layer? */
       exitOnOverlayClick: true,
+      /* Close introduction when complete */
+      exitOnComplete: true,
       /* Show step numbers in introduction? */
       showStepNumbers: true,
       /* Let user use keyboard to navigate the tour? */
@@ -345,7 +347,9 @@
       if (typeof (this._introCompleteCallback) === 'function') {
         this._introCompleteCallback.call(this);
       }
-      _exitIntro.call(this, this._targetElement);
+      if (this._options.exitOnComplete) {
+        _exitIntro.call(this, this._targetElement);
+      }
       return;
     }
 
