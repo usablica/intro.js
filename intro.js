@@ -350,8 +350,16 @@
     }
 
     var nextStep = this._introItems[this._currentStep];
+    var beforeChangePromise = null;
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
+      beforeChangePromise = this._introBeforeChangeCallback.call(this, nextStep.element);
+    }
+    if (beforeChangePromise && typeof beforeChangePromise === 'object' && typeof beforeChangePromise.then === 'function') {
+      var that = this;
+      beforeChangePromise.then(function () {
+        _showElement.call(that, nextStep);
+      });
+      return;
     }
 
     _showElement.call(this, nextStep);
