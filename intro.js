@@ -322,6 +322,7 @@
    */
   function _nextStep() {
     this._direction = 'forward';
+    this._previousStep = +this._currentStep;
 
     if (typeof (this._currentStepNumber) !== 'undefined') {
         for( var i = 0, len = this._introItems.length; i < len; i++ ) {
@@ -350,8 +351,9 @@
     }
 
     var nextStep = this._introItems[this._currentStep];
+    var previousStep = this._introItems[this._previousStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
+      this._introBeforeChangeCallback.call(this, nextStep, previousStep);
     }
 
     _showElement.call(this, nextStep);
@@ -365,14 +367,16 @@
    */
   function _previousStep() {
     this._direction = 'backward';
+    this._previousStep = +this._currentStep;
 
     if (this._currentStep === 0) {
       return false;
     }
 
     var nextStep = this._introItems[--this._currentStep];
+    var previousStep = this._introItems[this._previousStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
+      this._introBeforeChangeCallback.call(this, nextStep, previousStep);
     }
 
     _showElement.call(this, nextStep);
