@@ -1,0 +1,11 @@
+name: introjs
+version: 1.0.0
+description: intro.js wrapper for Dart
+author: moomoohk@ymail.com
+homepage: https://github.com/moomoohk/introjs.dart
+environment:
+  sdk: '>=1.13.1 <2.0.0'
+dependencies:
+  js: ^0.6.0
+dev_dependencies:
+  browser: any
