@@ -128,6 +128,9 @@
     } else {
       //use steps from data-* annotations
       var allIntroSteps = targetElm.querySelectorAll('*[data-intro]');
+      var introElementsWithDataStep = targetElm.querySelectorAll("*[data-intro][data-step]");
+      // Index of array where we can push the items with no data step in them
+      var noDataStepItemStartIndex = introElementsWithDataStep.length;
       //if there's no element to intro
       if (allIntroSteps.length < 1) {
         return false;
@@ -142,44 +145,31 @@
           continue;
         }
 
-        var step = parseInt(currentElement.getAttribute('data-step'), 10);
+        if (currentItem.getAttribute('data-step') != null) {
 
-        if (step > 0) {
-          introItems[step - 1] = {
-            element: currentElement,
-            intro: currentElement.getAttribute('data-intro'),
-            step: parseInt(currentElement.getAttribute('data-step'), 10),
-            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            highlightClass: currentElement.getAttribute('data-highlightClass'),
-            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
-          };
-        }
-      }
+          //parseInt function call can be replaced with unary operator +
+          var step = +currentElement.getAttribute('data-step');
 
-      //next add intro items without data-step
-      //todo: we need a cleanup here, two loops are redundant
-      var nextStep = 0;
-      for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
-        var currentElement = allIntroSteps[i];
-
-        if (currentElement.getAttribute('data-step') == null) {
-
-          while (true) {
-            if (typeof introItems[nextStep] == 'undefined') {
-              break;
-            } else {
-              nextStep++;
-            }
+          if (step > 0) {
+            introItems[step - 1] = {
+              element: currentElement,
+              intro: currentElement.getAttribute('data-intro'),
+              step: step
+              tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+              highlightClass: currentElement.getAttribute('data-highlightClass'),
+              position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+            };
           }
-
-          introItems[nextStep] = {
-            element: currentElement,
-            intro: currentElement.getAttribute('data-intro'),
-            step: nextStep + 1,
-            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            highlightClass: currentElement.getAttribute('data-highlightClass'),
-            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
-          };
+        } else {
+            // Start pushing all items without data-step at the end of the array
+            introItems[noDataStepItemStartIndex] = {
+              element: currentItem,
+              step: ++noDataStepItemStartIndex,
+              intro: currentItem.getAttribute("data-intro"),
+              tooltipClass: currentItem.getAttribute("data-tooltipClass"),
+              highlightClass: currentItem.getAttribute("data-highlightClass"),
+              position: currentItem.getAttribute("data-position")
+            };
         }
       }
     }
