@@ -20,3 +20,7 @@
   -moz-border-radius: 0.2em 0 0 0.2em;
   border-radius: 0.2em 0 0 0.2em;
 }
+
+.introjs-bullets ul li {
+    float: right;
+}
