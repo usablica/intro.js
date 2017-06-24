@@ -351,10 +351,10 @@
 
     var nextStep = this._introItems[this._currentStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
+      this._introBeforeChangeCallback.call(this, nextStep.element, this._currentStep);
     }
 
-    _showElement.call(this, nextStep);
+    _showElement.call(this, nextStep, this._currentStep);
   }
 
   /**
@@ -372,10 +372,10 @@
 
     var nextStep = this._introItems[--this._currentStep];
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
+      this._introBeforeChangeCallback.call(this, nextStep.element, this._currentStep);
     }
 
-    _showElement.call(this, nextStep);
+    _showElement.call(this, nextStep, this._currentStep);
   }
 
   /**
@@ -783,9 +783,9 @@
    * @method _showElement
    * @param {Object} targetElement
    */
-  function _showElement(targetElement) {
+  function _showElement(targetElement, currentStep) {
     if (typeof (this._introChangeCallback) !== 'undefined') {
-      this._introChangeCallback.call(this, targetElement.element);
+      this._introChangeCallback.call(this, targetElement.element, currentStep);
     }
 
     var self = this,
@@ -1085,7 +1085,7 @@
     }
 
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
-      this._introAfterChangeCallback.call(this, targetElement.element);
+      this._introAfterChangeCallback.call(this, targetElement.element, currentStep+1);
     }
   }
 
