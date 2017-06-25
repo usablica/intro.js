@@ -893,8 +893,8 @@
         if (oldHelperNumberLayer) oldHelperNumberLayer.style.opacity = 1;
 
         //reset button focus
-        if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null && nextTooltipButton.tabIndex === -1) {
-          //tabindex of -1 means we are at the end of the tour - focus on skip / done
+        if (typeof skipTooltipButton !== "undefined" && skipTooltipButton != null && /introjs-donebutton/gi.test(skipTooltipButton.className)) {
+          // skip button is now "done" button
           skipTooltipButton.focus();
         } else if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
           //still in the tour, focus on next
@@ -1088,7 +1088,7 @@
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton != null) {
         skipTooltipButton.innerHTML = this._options.doneLabel;
         // adding donebutton class in addition to skipbutton
-        skipTooltipButton.className = 'introjs-button introjs-prevbutton';
+        skipTooltipButton.className += ' introjs-donebutton';
       }
       if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
         prevTooltipButton.className = 'introjs-button introjs-prevbutton';
