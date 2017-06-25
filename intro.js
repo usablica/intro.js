@@ -1,5 +1,5 @@
 /**
- * Intro.js v2.5.0
+ * Intro.js v2.6.0
  * https://github.com/usablica/intro.js
  *
  * Copyright (C) 2016 Afshin Mehrabani (@afshinmeh)
@@ -18,7 +18,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '2.5.0';
+  var VERSION = '2.6.0';
 
   /**
    * IntroJs main class
