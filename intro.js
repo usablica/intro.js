@@ -382,21 +382,21 @@
    * @api private
    */
   function _refresh() {
-      // re-align intros
-      _setHelperLayerPosition.call(this, document.querySelector('.introjs-helperLayer'));
-      _setHelperLayerPosition.call(this, document.querySelector('.introjs-tooltipReferenceLayer'));
-      
-      // re-align tooltip
-      if(this._currentStep !== undefined && this._currentStep !== null) {
-        var oldHelperNumberLayer = document.querySelector('.introjs-helperNumberLayer'),
-            oldArrowLayer        = document.querySelector('.introjs-arrow'),
-            oldtooltipContainer  = document.querySelector('.introjs-tooltip');
-        _placeTooltip.call(this, this._introItems[this._currentStep].element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
-      }
+    // re-align intros
+    _setHelperLayerPosition.call(this, document.querySelector('.introjs-helperLayer'));
+    _setHelperLayerPosition.call(this, document.querySelector('.introjs-tooltipReferenceLayer'));
 
-      //re-align hints
-      _reAlignHints.call(this);
-      return this;
+    // re-align tooltip
+    if(this._currentStep !== undefined && this._currentStep !== null) {
+      var oldHelperNumberLayer = document.querySelector('.introjs-helperNumberLayer'),
+        oldArrowLayer        = document.querySelector('.introjs-arrow'),
+        oldtooltipContainer  = document.querySelector('.introjs-tooltip');
+      _placeTooltip.call(this, this._introItems[this._currentStep].element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
+    }
+
+    //re-align hints
+    _reAlignHints.call(this);
+    return this;
   }
 
   /**
@@ -521,11 +521,15 @@
     tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
 
     currentTooltipPosition = this._introItems[this._currentStep].position;
-    if ((currentTooltipPosition == "auto" || this._options.tooltipPosition == "auto")) {
-      if (currentTooltipPosition != "floating") { // Floating is always valid, no point in calculating
+
+    if (currentTooltipPosition != "floating") { // Floating is always valid, no point in calculating
+      if (currentTooltipPosition === "auto") {
+        currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer);
+      } else {
         currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer, currentTooltipPosition);
       }
     }
+
     targetOffset  = _getOffset(targetElement);
     tooltipOffset = _getOffset(tooltipLayer);
     windowSize    = _getWinSize();
