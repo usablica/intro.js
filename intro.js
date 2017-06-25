@@ -1609,7 +1609,7 @@
           if (evt.stopPropagation)    evt.stopPropagation();
           if (evt.cancelBubble != null) evt.cancelBubble = true;
 
-          _hintClick.call(self, hint, item, i);
+          _showHintDialog.call(self, i);
         };
       }(hint, item, i));
 
@@ -1714,12 +1714,13 @@
    * Triggers when user clicks on the hint element
    *
    * @api private
-   * @method _hintClick
-   * @param {Object} hintElement
-   * @param {Object} item
+   * @method _showHintDialog
    * @param {Number} stepId
    */
-  function _hintClick(hintElement, item, stepId) {
+  function _showHintDialog(stepId) {
+    var hintElement = document.querySelector('.introjs-hint[data-step="' + stepId + '"]');
+    var item = this._introItems[stepId];
+
     // call the callback function (if any)
     if (typeof (this._hintClickCallback) !== 'undefined') {
       this._hintClickCallback.call(this, hintElement, item, stepId);
@@ -2037,6 +2038,10 @@
     },
     removeHint: function (stepId) {
       _removeHint.call(this, stepId);
+      return this;
+    },
+    showHintDialog: function (stepId) {
+      _showHintDialog.call(this, stepId);
       return this;
     }
   };
