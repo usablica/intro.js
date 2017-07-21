@@ -77,7 +77,9 @@
       /* Hint button label */
       hintButtonLabel: 'Got it',
       /* Adding animation to hints? */
-      hintAnimation: true
+      hintAnimation: true,
+      /* additional classes to put on the buttons */
+      buttonClass: "introjs-button"
     };
   }
 
@@ -1015,7 +1017,7 @@
 
       //skip button
       var skipTooltipButton = document.createElement('a');
-      skipTooltipButton.className = 'introjs-button introjs-skipbutton';
+      skipTooltipButton.className = this._options.buttonClass + ' introjs-skipbutton ';
       _setAnchorAsButton(skipTooltipButton);
       skipTooltipButton.innerHTML = this._options.skipLabel;
 
@@ -1058,22 +1060,22 @@
     // when it's the first step of tour
     if (this._currentStep == 0 && this._introItems.length > 1) {
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton != null) {
-        skipTooltipButton.className = 'introjs-button introjs-skipbutton';
+        skipTooltipButton.className = this._options.buttonClass + ' introjs-skipbutton';
       }
       if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
-        nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+        nextTooltipButton.className = this._options.buttonClass + ' introjs-nextbutton';
       }
 
       if (this._options.hidePrev == true) {
         if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
-          prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-hidden';
+          prevTooltipButton.className = this._options.buttonClass + ' introjs-prevbutton introjs-hidden';
         }
         if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
           nextTooltipButton.className += ' introjs-fullbutton';
         }
       } else {
         if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
-          prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
+          prevTooltipButton.className = this._options.buttonClass + ' introjs-prevbutton introjs-disabled';
         }
       }
 
@@ -1091,19 +1093,19 @@
         skipTooltipButton.className += ' introjs-donebutton';
       }
       if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
-        prevTooltipButton.className = 'introjs-button introjs-prevbutton';
+        prevTooltipButton.className = this._options.buttonClass + ' introjs-prevbutton';
       }
 
       if (this._options.hideNext == true) {
         if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
-          nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-hidden';
+          nextTooltipButton.className = this._options.buttonClass + ' introjs-nextbutton introjs-hidden';
         }
         if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
           prevTooltipButton.className += ' introjs-fullbutton';
         }
       } else {
         if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
-          nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+          nextTooltipButton.className = this._options.buttonClass + ' introjs-nextbutton introjs-disabled';
         }
       }
 
@@ -1113,13 +1115,13 @@
     } else {
       // steps between start and end
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton != null) {
-        skipTooltipButton.className = 'introjs-button introjs-skipbutton';
+        skipTooltipButton.className = this._options.buttonClass + ' introjs-skipbutton';
       }
       if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
-        prevTooltipButton.className = 'introjs-button introjs-prevbutton';
+        prevTooltipButton.className = this._options.buttonClass + ' introjs-prevbutton';
       }
       if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
-        nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+        nextTooltipButton.className = this._options.buttonClass + ' introjs-nextbutton';
       }
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton != null) {
         skipTooltipButton.innerHTML = this._options.skipLabel;
@@ -1757,7 +1759,7 @@
     tooltipWrapper.innerHTML = item.hint;
 
     var closeButton = document.createElement('a');
-    closeButton.className = 'introjs-button';
+    closeButton.className = this._options.buttonClass;
     closeButton.innerHTML = this._options.hintButtonLabel;
     closeButton.onclick = _hideHint.bind(this, stepId);
 
