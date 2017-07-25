@@ -23,11 +23,16 @@
 .introjs-fixParent {
   z-index: auto !important;
   opacity: 1.0 !important;
-  -webkit-transform: none !important;
-     -moz-transform: none !important;
-      -ms-transform: none !important;
-       -o-transform: none !important;
-          transform: none !important;
+}
+
+.introjs-fixElement {
+  transform-origin: top left !important;
+  position: relative !important;
+  margin: 5px !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
 }
 
 .introjs-showElement,

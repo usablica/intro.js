@@ -1131,7 +1131,8 @@
       nextTooltipButton.focus();
     }
 
-    _setShowElement(targetElement);
+    //Pass in whichever helperlayer we're using because _removeShowElement strips the child node classes
+    _setShowElement(targetElement, helperLayer || oldHelperLayer);
 
     if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
       var rect = targetElement.element.getBoundingClientRect(),
@@ -1177,7 +1178,7 @@
    * @method _setShowElement
    * @param {Object} targetElement
    */
-  function _setShowElement(targetElement) {
+  function _setShowElement(targetElement, helperLayer) {
     // we need to add this show element class to the parent of SVG elements
     // because the SVG elements can't have independent z-index
     if (targetElement.element instanceof SVGElement) {
@@ -1205,6 +1206,7 @@
       _setClass(targetElement.element, 'introjs-relativePosition')
     }
 
+    var transformString = '';
     var parentElm = targetElement.element.parentNode;
     while (parentElm != null) {
       if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
@@ -1216,9 +1218,25 @@
       var transform = _getPropValue(parentElm, 'transform') || _getPropValue(parentElm, '-webkit-transform') || _getPropValue(parentElm, '-moz-transform') || _getPropValue(parentElm, '-ms-transform') || _getPropValue(parentElm, '-o-transform');
       if (/[0-9]+/.test(zIndex) || opacity < 1 || (transform !== 'none' && transform !== undefined)) {
         parentElm.className += ' introjs-fixParent';
+        transformString     += ' ' + parentElm.style.transform;
       }
 
       parentElm = parentElm.parentNode;
+    }
+
+    // Since we cannot rely on z-index stacking, let's clone the element and put it above the helperLayer
+    if(transformString.trim() != '') {
+      while (helperLayer.lastChild) {
+        helperLayer.removeChild(helperLayer.lastChild);
+      };
+
+      var clone = targetElement.element.cloneNode(true);
+
+      clone.style.cssText   = document.defaultView.getComputedStyle(targetElement.element).cssText;
+      clone.className      += ' introjs-fixElement';
+      clone.style.transform = transformString;
+
+      helperLayer.appendChild(clone);
     }
   }
 
@@ -1802,32 +1820,11 @@
     var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
     var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
 
-    if (element instanceof SVGElement) {
-      var x = element.getBoundingClientRect()
-      elementPosition.top = x.top + scrollTop;
-      elementPosition.width = x.width;
-      elementPosition.height = x.height;
-      elementPosition.left = x.left + scrollLeft;
-    } else {
-      //set width
-      elementPosition.width = element.offsetWidth;
-
-      //set height
-      elementPosition.height = element.offsetHeight;
-
-      //calculate element top and left
-      var _x = 0;
-      var _y = 0;
-      while (element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
-        _x += element.offsetLeft;
-        _y += element.offsetTop;
-        element = element.offsetParent;
-      }
-      //set top
-      elementPosition.top = _y;
-      //set left
-      elementPosition.left = _x;
-    }
+    var x = element.getBoundingClientRect()
+    elementPosition.top = x.top + scrollTop;
+    elementPosition.width = x.width;
+    elementPosition.height = x.height;
+    elementPosition.left = x.left + scrollLeft;
 
     return elementPosition;
   }
