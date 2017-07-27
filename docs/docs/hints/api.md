@@ -152,6 +152,24 @@ introJs().hideHint(0); //you should pass the id of the hint (the `data-step` att
 
 -----
 
+-----
+
+##### introJs.showHintDialog(stepId)
+
+Shows the popup dialog next to the hint with given `stepId`. The `stepId` is an `integer` and it's the value of `data-step` attribute on the hint element.
+
+**Available since**: v2.6
+
+**Returns:**
+ - introJs object.
+
+**Example:**
+```javascript
+introJs().showHintDialog(0); //you should pass the id of the hint (the `data-step` attribute).
+````
+
+-----
+
 ##### introJs.hideHints()
 
 Hides all hints on the page.
