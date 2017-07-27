@@ -136,9 +136,9 @@ introJs().showHints();
 
 -----
 
-##### introJs.hideHint(stepId)
+##### introJs.hideHint(hintId)
 
-Hides the hint with given `stepId`. The `stepId` is an `integer` and it's the value of `data-step` attribute on the hint element.
+Hides the hint with given `hintId`. The `hintId` is an `integer` and it's the value of `data-hint` attribute on the hint element.
 
 **Available since**: v2.1
 
@@ -147,7 +147,7 @@ Hides the hint with given `stepId`. The `stepId` is an `integer` and it's the va
 
 **Example:**
 ```javascript
-introJs().hideHint(0); //you should pass the id of the hint (the `data-step` attribute).
+introJs().hideHint(0); //you should pass the id of the hint (the `data-hint` attribute).
 ````
 
 -----
