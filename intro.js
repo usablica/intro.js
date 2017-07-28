@@ -64,10 +64,16 @@
       showProgress: false,
       /* Scroll to highlighted element? */
       scrollToElement: true,
-      /* Set the overlay opacity */
-      overlayOpacity: 0.8,
+      /*
+       * Should we scroll the tooltip or target element?
+       *
+       * Options are: 'element' or 'tooltip'
+       */
+      scrollTo: 'element',
       /* Padding to add after scrolling when element is not in the viewport (in pixels) */
       scrollPadding: 30,
+      /* Set the overlay opacity */
+      overlayOpacity: 0.8,
       /* Precedence of positions, when auto is enabled */
       positionPrecedence: ["bottom", "top", "right", "left"],
       /* Disable an interaction with element? */
@@ -99,14 +105,15 @@
         var currentItem = _cloneObject(this._options.steps[i]);
         //set the step
         currentItem.step = introItems.length + 1;
+
         //use querySelector function only when developer used CSS selector
-        if (typeof(currentItem.element) === 'string') {
+        if (typeof (currentItem.element) === 'string') {
           //grab the element with given selector from the page
           currentItem.element = document.querySelector(currentItem.element);
         }
 
         //intro without element
-        if (typeof(currentItem.element) === 'undefined' || currentItem.element == null) {
+        if (typeof (currentItem.element) === 'undefined' || currentItem.element == null) {
           var floatingElementQuery = document.querySelector(".introjsFloatingElement");
 
           if (floatingElementQuery == null) {
@@ -119,6 +126,8 @@
           currentItem.element  = floatingElementQuery;
           currentItem.position = 'floating';
         }
+
+        currentItem.scrollTo = currentItem.scrollTo || this._options.scrollTo;
 
         if (currentItem.element != null) {
           introItems.push(currentItem);
@@ -151,7 +160,8 @@
             step: parseInt(currentElement.getAttribute('data-step'), 10),
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
             highlightClass: currentElement.getAttribute('data-highlightClass'),
-            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
+            scrollTo: currentElement.getAttribute('data-scrollTo') || this._options.scrollTo
           };
         }
       }
@@ -178,7 +188,8 @@
             step: nextStep + 1,
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
             highlightClass: currentElement.getAttribute('data-highlightClass'),
-            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
+            scrollTo: currentElement.getAttribute('data-scrollTo') || this._options.scrollTo
           };
         }
       }
@@ -870,6 +881,7 @@
       if (self._lastShowElementTimer) {
         clearTimeout(self._lastShowElementTimer);
       }
+
       self._lastShowElementTimer = setTimeout(function() {
         //set current step to the label
         if (oldHelperNumberLayer != null) {
@@ -900,6 +912,9 @@
           //still in the tour, focus on next
           nextTooltipButton.focus();
         }
+
+        // change the scroll of the window, if needed
+        _scrollTo.call(self, targetElement.scrollTo, targetElement, oldtooltipLayer);
       }, 350);
 
       // end of old element if-else condition
@@ -1040,6 +1055,9 @@
       //set proper position
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
 
+      // change the scroll of the window, if needed
+      _scrollTo.call(this, targetElement.scrollTo, targetElement, tooltipLayer);
+
       //end of new element if-else condition
     }
 
@@ -1133,24 +1151,45 @@
 
     _setShowElement(targetElement);
 
-    if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
-      var rect = targetElement.element.getBoundingClientRect(),
-        winHeight = _getWinSize().height,
-        top = rect.bottom - (rect.bottom - rect.top),
-        bottom = rect.bottom - winHeight;
+    if (typeof (this._introAfterChangeCallback) !== 'undefined') {
+      this._introAfterChangeCallback.call(this, targetElement.element);
+    }
+  }
 
-      //Scroll up
+  /**
+   * To change the scroll of `window` after highlighting an element
+   *
+   * @api private
+   * @method _scrollTo
+   * @param {String} scrollTo
+   * @param {Object} targetElement
+   * @param {Object} tooltipLayer
+   */
+  function _scrollTo(scrollTo, targetElement, tooltipLayer) {
+    if (!this._options.scrollToElement) return;
+
+    if (scrollTo === 'tooltip') {
+      var rect = tooltipLayer.getBoundingClientRect();
+    } else {
+      var rect = targetElement.element.getBoundingClientRect();
+    }
+
+    if (!_elementInViewport(targetElement.element)) {
+      var winHeight = _getWinSize().height;
+      var top = rect.bottom - (rect.bottom - rect.top);
+      var bottom = rect.bottom - winHeight;
+
+      // TODO (afshinm): do we need scroll padding now?
+      // I have changed the scroll option and now it scrolls the window to
+      // the center of the target element or tooltip.
+
       if (top < 0 || targetElement.element.clientHeight > winHeight) {
-        window.scrollBy(0, top - this._options.scrollPadding); // 30px padding from edge to look nice
+        window.scrollBy(0, rect.top - ((winHeight / 2) -  (rect.height / 2)) - this._options.scrollPadding); // 30px padding from edge to look nice
 
       //Scroll down
       } else {
-        window.scrollBy(0, bottom + 70 + this._options.scrollPadding); // 70px + 30px padding from edge to look nice
+        window.scrollBy(0, rect.top - ((winHeight / 2) -  (rect.height / 2)) + this._options.scrollPadding); // 30px padding from edge to look nice
       }
-    }
-
-    if (typeof (this._introAfterChangeCallback) !== 'undefined') {
-      this._introAfterChangeCallback.call(this, targetElement.element);
     }
   }
 
