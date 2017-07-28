@@ -26,7 +26,7 @@ permalink: /intro/options/
  - `scrollTo`: Target element to scroll to (`element` or `tooltip`). Default is `element`. Applies when `scrollToElement` is `true`
  - `scrollPadding`: Padding of scroll in px. Default is 30. Applies when `scrollToElement` is `true`
  - `overlayOpacity`: Adjust the overlay opacity, `Number` between `0` and `1`
- - `disableInteraction`: Disable an interaction inside element or not, `true` or `false`
+ - `disableInteraction`: To disable interactions with elements inside the highlighted box, `true` or `false`
 
 ##### Adding options
 
