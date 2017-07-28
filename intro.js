@@ -103,6 +103,7 @@
       //use steps passed programmatically
       for (var i = 0, stepsLength = this._options.steps.length; i < stepsLength; i++) {
         var currentItem = _cloneObject(this._options.steps[i]);
+
         //set the step
         currentItem.step = introItems.length + 1;
 
@@ -129,6 +130,10 @@
 
         currentItem.scrollTo = currentItem.scrollTo || this._options.scrollTo;
 
+        if (typeof (currentItem.disableInteraction) === 'undefined') {
+          currentItem.disableInteraction = this._options.disableInteraction;
+        }
+
         if (currentItem.element != null) {
           introItems.push(currentItem);
         }
@@ -153,6 +158,12 @@
 
         var step = parseInt(currentElement.getAttribute('data-step'), 10);
 
+        var disableInteraction = this._options.disableInteraction;
+
+        if (typeof (currentElement.getAttribute('data-disable-interaction')) != 'undefined') {
+          disableInteraction = !!currentElement.getAttribute('data-disable-interaction');
+        }
+
         if (step > 0) {
           introItems[step - 1] = {
             element: currentElement,
@@ -161,7 +172,8 @@
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
             highlightClass: currentElement.getAttribute('data-highlightClass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
-            scrollTo: currentElement.getAttribute('data-scrollTo') || this._options.scrollTo
+            scrollTo: currentElement.getAttribute('data-scrollTo') || this._options.scrollTo,
+            disableInteraction: disableInteraction
           };
         }
       }
@@ -182,6 +194,12 @@
             }
           }
 
+          var disableInteraction = this._options.disableInteraction;
+
+          if (typeof (currentElement.getAttribute('data-disable-interaction')) != 'undefined') {
+            disableInteraction = !!currentElement.getAttribute('data-disable-interaction');
+          }
+
           introItems[nextStep] = {
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
@@ -189,7 +207,8 @@
             tooltipClass: currentElement.getAttribute('data-tooltipClass'),
             highlightClass: currentElement.getAttribute('data-highlightClass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
-            scrollTo: currentElement.getAttribute('data-scrollTo') || this._options.scrollTo
+            scrollTo: currentElement.getAttribute('data-scrollTo') || this._options.scrollTo,
+            disableInteraction: disableInteraction
           };
         }
       }
@@ -444,6 +463,7 @@
     if (referenceLayer) {
       referenceLayer.parentNode.removeChild(referenceLayer);
     }
+
     //remove disableInteractionLayer
     var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
     if (disableInteractionLayer) {
@@ -792,6 +812,7 @@
    */
   function _disableInteraction() {
     var disableInteractionLayer = document.querySelector('.introjs-disableInteraction');
+
     if (disableInteractionLayer === null) {
       disableInteractionLayer = document.createElement('div');
       disableInteractionLayer.className = 'introjs-disableInteraction';
@@ -1061,8 +1082,14 @@
       //end of new element if-else condition
     }
 
+    // removing previous disable interaction layer
+    var disableInteractionLayer = self._targetElement.querySelector('.introjs-disableInteraction');
+    if (disableInteractionLayer) {
+      disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
+    }
+
     //disable interaction
-    if (this._options.disableInteraction === true) {
+    if (targetElement.disableInteraction) {
       _disableInteraction.call(self);
     }
 
