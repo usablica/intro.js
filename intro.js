@@ -2,7 +2,7 @@
  * Intro.js v2.6.0
  * https://github.com/usablica/intro.js
  *
- * Copyright (C) 2016 Afshin Mehrabani (@afshinmeh)
+ * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh)
  */
 
 (function (root, factory) {
