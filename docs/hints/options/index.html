@@ -967,13 +967,36 @@
   <li><code class="highlighter-rouge">hintPosition</code>: Hint position. Default: <code class="highlighter-rouge">top-middle</code></li>
   <li><code class="highlighter-rouge">hintButtonLabel</code>: Hint button label. Default: ‘Got it’</li>
   <li><code class="highlighter-rouge">hintAnimation</code>: To add animation to hints or not. Default: <code class="highlighter-rouge">true</code></li>
+  <li><code class="highlighter-rouge">hints</code>: For definining hints using JSON configuration. Array of hint objects.</li>
 </ul>
+
+<h5 id="hint-format">Hint format</h5>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
+    <span class="nl">hint</span><span class="p">:</span> <span class="s1">'text for the hint'</span><span class="p">,</span>
+    <span class="nx">element</span><span class="err">:</span> <span class="nx">element</span><span class="p">,</span> <span class="c1">// string query selector or DOMElement</span>
+    <span class="nx">hintPosition</span><span class="err">:</span> <span class="p">(</span><span class="nx">Optional</span><span class="p">)</span> <span class="nx">Hint</span> <span class="nx">position</span><span class="p">.</span> <span class="nx">Default</span><span class="err">:</span> <span class="err">`</span><span class="nx">top</span><span class="o">-</span><span class="nx">middle</span><span class="err">`</span>
+    <span class="nl">hintAnimation</span><span class="p">:</span> <span class="p">(</span><span class="nx">Optional</span><span class="p">)</span> <span class="nx">To</span> <span class="nx">add</span> <span class="nx">animation</span> <span class="nx">to</span> <span class="nx">hints</span> <span class="nx">or</span> <span class="nx">not</span><span class="p">.</span> <span class="nx">Default</span><span class="err">:</span> <span class="err">`</span><span class="kc">true</span><span class="err">`</span>
+<span class="p">}</span>
+</code></pre>
+</div>
 
 <h5 id="adding-options">Adding options</h5>
 
 <p>An example of adding an option:</p>
 
 <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">introJs</span><span class="p">().</span><span class="nx">setOption</span><span class="p">(</span><span class="s2">"hintButtonLabel"</span><span class="p">,</span> <span class="s2">"OK"</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>An example of adding hints programmatically through options:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">introJs</span><span class="p">().</span><span class="nx">setOptions</span><span class="p">({</span>
+    <span class="na">hints</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">hint</span><span class="p">:</span> <span class="s1">'First hint'</span><span class="p">,</span> <span class="na">element</span><span class="p">:</span> <span class="s1">'#new-feature'</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">hint</span><span class="p">:</span> <span class="s1">'Second hint'</span><span class="p">,</span> <span class="na">element</span><span class="p">:</span> <span class="s1">'#new-button'</span><span class="p">,</span> <span class="na">hintAnimation</span><span class="p">:</span> <span class="kc">false</span> <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">});</span>
 </code></pre>
 </div>
 
