@@ -80,6 +80,9 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 
 [Other contributors](https://github.com/usablica/intro.js/graphs/contributors)
 
+## Contributing
+
+View [contribution guidlines](https://github.com/usablica/intro.js/blob/master/CODE_OF_CONDUCT.md)
 
 ## Support/Discussion
 - [Stackoverflow](http://stackoverflow.com/questions/tagged/intro.js)
