@@ -1,4 +1,4 @@
-# Intro.js v2.5.0
+# Intro.js v2.6.0
 
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
@@ -80,6 +80,9 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 
 [Other contributors](https://github.com/usablica/intro.js/graphs/contributors)
 
+## Contributing
+
+View [contribution guidlines](https://github.com/usablica/intro.js/blob/master/CONTRIBUTING.md)
 
 ## Support/Discussion
 - [Stackoverflow](http://stackoverflow.com/questions/tagged/intro.js)
