@@ -16,6 +16,7 @@ We have prepared a list of common examples using Introjs for both hints and intr
 *   [Basic usage with progress-bar](http://introjs.com/example/hello-world/withProgress.html "Basic usage with progress-bar")
 *   [Programmatic defining using JSON](http://introjs.com/example/programmatic/index.html "Programmatic defining using JSON")
 *   [Multi-Page introduction](http://introjs.com/example/multi-page/index.html "Multi-Page introduction")
+*   [Disabling interaction with elements](http://introjs.com/example/disable-interaction/index.html "Disabling interaction with elements")
 *   [Auto-positioning](http://introjs.com/example/auto-position/index.html "Auto-positioning")
 *   [RTL version](http://introjs.com/example/RTL/index.html "RTL version")
 *   [HTML in tooltip](http://introjs.com/example/html-tooltip/index.html "HTML in tooltip")

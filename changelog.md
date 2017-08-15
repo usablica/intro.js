@@ -1,5 +1,14 @@
 ## Release History
 
+ * **v2.6.0** - 2017-07-29
+   - Per step disable interaction
+   - Adding `scrollTo` option 
+   - Better scrolling method
+   - Fixing pulse animation issue on IE
+   - Adding a new method to show the popup of specific hint
+   - Fixing build script
+   - Some minor bug fixes
+
  * **v2.5.0** - 2017-03-22
    - SVG support
    - Adding new function: `goToStepNumber`, `removeHint`, `removeHits`
