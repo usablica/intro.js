@@ -5,18 +5,25 @@
  * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh)
  */
 
-(function (root, factory) {
-  if (typeof exports === 'object') {
-    // CommonJS
-    factory(exports);
-  } else if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(['exports'], factory);
-  } else {
-    // Browser globals
-    factory(root);
-  }
-} (this, function (exports) {
+(function(f) {
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = f();
+    } else if (typeof define === "function" && define.amd) {
+        define([], f);
+    } else {
+        var g;
+        if (typeof window !== "undefined") {
+            g = window;
+        } else if (typeof global !== "undefined") {
+            g = global;
+        } else if (typeof self !== "undefined") {
+            g = self;
+        } else {
+            g = this;
+        }
+        g.introJs = f();
+    }
+})(function () {
   //Default config/variables
   var VERSION = '2.6.0';
 
@@ -2112,6 +2119,5 @@
     }
   };
 
-  exports.introJs = introJs;
   return introJs;
-}));
+});
