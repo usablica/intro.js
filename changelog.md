@@ -1,5 +1,10 @@
 ## Release History
 
+ * **v2.7.0** - 2017-08-17
+   - Added `onbeforeexit` callback
+   - Added `force` parameter to `exit()`
+   - Added Code of Conduct and Contributing guide files
+
  * **v2.6.0** - 2017-07-29
    - Per step disable interaction
    - Adding `scrollTo` option 

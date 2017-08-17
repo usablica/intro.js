@@ -1,5 +1,5 @@
 /**
- * Intro.js v2.6.0
+ * Intro.js v2.7.0
  * https://github.com/usablica/intro.js
  *
  * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh)
@@ -18,7 +18,7 @@
   }
 } (this, function (exports) {
   //Default config/variables
-  var VERSION = '2.6.0';
+  var VERSION = '2.7.0';
 
   /**
    * IntroJs main class
@@ -435,8 +435,22 @@
    * @api private
    * @method _exitIntro
    * @param {Object} targetElement
+   * @param {Boolean} force - Setting to `true` will skip the result of beforeExit callback
    */
-  function _exitIntro(targetElement) {
+  function _exitIntro(targetElement, force) {
+    var continueExit = true;
+
+    // calling onbeforeexit callback
+    // 
+    // If this callback return `false`, it would halt the process
+    if (this._introBeforeExitCallback != undefined) {
+      continueExit = this._introBeforeExitCallback.call(self);
+    }
+
+    // skip this check if `force` parameter is `true`
+    // otherwise, if `onbeforeexit` returned `false`, don't exit the intro
+    if (!force && continueExit === false) return;
+
     //remove overlay layers from the page
     var overlayLayers = targetElement.querySelectorAll('.introjs-overlay');
 
@@ -2006,8 +2020,8 @@
       _previousStep.call(this);
       return this;
     },
-    exit: function() {
-      _exitIntro.call(this, this._targetElement);
+    exit: function(force) {
+      _exitIntro.call(this, this._targetElement, force);
       return this;
     },
     refresh: function() {
@@ -2075,6 +2089,14 @@
         this._introExitCallback = providedCallback;
       } else {
         throw new Error('Provided callback for onexit was not a function.');
+      }
+      return this;
+    },
+    onbeforeexit: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._introBeforeExitCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onbeforeexit was not a function.');
       }
       return this;
     },
