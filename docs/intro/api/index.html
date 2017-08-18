@@ -1035,7 +1035,7 @@
 
 <hr />
 
-<p>###introJs.goToStepNumber(step)</p>
+<h5 id="introjsgotostepnumberstep">introJs.goToStepNumber(step)</h5>
 
 <p>Go to specific step of introduction with the concrete step.
 This differs from <code class="highlighter-rouge">goToStep</code> in the way that <code class="highlighter-rouge">data-step</code>
@@ -1141,11 +1141,17 @@ does not have be continuous to pick the desired element.</p>
 
 <hr />
 
-<h5 id="introjsexit">introJs.exit()</h5>
+<h5 id="introjsexitforce">introJs.exit([force])</h5>
 
 <p>Exit the introduction.</p>
 
 <p><strong>Available since</strong>: v0.3.0</p>
+
+<p><strong>Parameters:</strong></p>
+
+<ul>
+  <li>force : Boolean (optional) - Exit the tour even if <code class="highlighter-rouge">introJs.onbeforeexit</code> returns <code class="highlighter-rouge">false</code> (Available since 2.7.0)</li>
+</ul>
 
 <p><strong>Returns:</strong></p>
 
@@ -1286,6 +1292,37 @@ does not have be continuous to pick the desired element.</p>
 
 <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">introJs</span><span class="p">().</span><span class="nx">onexit</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">alert</span><span class="p">(</span><span class="s2">"exit of introduction"</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h5 id="introjsonbeforeexitprovidedcallback">introJs.onbeforeexit(providedCallback)</h5>
+
+<p>Works exactly same as <code class="highlighter-rouge">onexit</code> but calls before closing the tour. Also, returning <code class="highlighter-rouge">false</code> would prevent the tour from closing.</p>
+
+<p><strong>Available since:</strong> v0.2.7</p>
+
+<p><strong>Parameters:</strong></p>
+
+<ul>
+  <li>providedCallback : Function</li>
+</ul>
+
+<p><strong>Returns:</strong></p>
+
+<ul>
+  <li>introJs object.</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">introJs</span><span class="p">().</span><span class="nx">onbeforeexit</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"on before exit"</span><span class="p">)</span>
+
+  <span class="c1">// returning false means don't exit the intro</span>
+  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
 <span class="p">});</span>
 </code></pre>
 </div>
