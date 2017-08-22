@@ -567,7 +567,9 @@
 
     currentTooltipPosition = this._introItems[this._currentStep].position;
 
-    if (currentTooltipPosition != "floating") { // Floating is always valid, no point in calculating
+    if (currentTooltipPosition && currentTooltipPosition.includes(".forced")) {
+      currentTooltipPosition = currentTooltipPosition.split(".forced")[0]
+    } else if (currentTooltipPosition != "floating") { // Floating is always valid, no point in calculating
       if (currentTooltipPosition === "auto") {
         currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer);
       } else {
