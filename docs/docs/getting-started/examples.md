@@ -18,15 +18,15 @@ We have prepared a list of common examples using Introjs for both hints and intr
 *   [Basic usage with progress-bar](http://introjs.com/example/hello-world/withProgress.html "Basic usage with progress-bar")
 *   [Introduction without focusing on elements](http://introjs.com/example/withoutElement/index.html "Introduction without focusing on elements")
 
+
 ##### Callbacks
 
 *   [Onbeforechange callback](http://introjs.com/example/callbacks/onbeforechange.html "Onbeforechange callback")
-
+*   [Confirm before exit](http://introjs.com/example/hello-world/exit-confirm.html "Shows a confirm before exit")
 
 ##### JSON configuration
 
 *   [Programmatic defining using JSON](http://introjs.com/example/programmatic/index.html "Programmatic defining using JSON")
-
 
 ##### Advanced
 

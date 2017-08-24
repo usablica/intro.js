@@ -67,7 +67,7 @@ introJs().goToStep(2).start(); //starts introduction from step 2
 
 -----
 
-###introJs.goToStepNumber(step)
+##### introJs.goToStepNumber(step)
 
 Go to specific step of introduction with the concrete step.
 This differs from `goToStep` in the way that `data-step`
@@ -165,11 +165,15 @@ introJs().goToStep(3).start().previousStep(); //starts introduction from step 2
 
 -----
 
-##### introJs.exit()
+##### introJs.exit([force])
 
 Exit the introduction.
 
 **Available since**: v0.3.0
+
+**Parameters:**
+
+ - force : Boolean (optional) - Exit the tour even if `introJs.onbeforeexit` returns `false` (Available since 2.7.0)
 
 **Returns:**
 
@@ -291,6 +295,33 @@ Set callback to exit of introduction. Exit also means pressing `ESC` key and cli
 ```javascript
 introJs().onexit(function() {
   alert("exit of introduction");
+});
+````
+
+-----
+
+##### introJs.onbeforeexit(providedCallback)
+
+Works exactly same as `onexit` but calls before closing the tour. Also, returning `false` would prevent the tour from closing.
+
+**Available since:** v0.2.7
+
+**Parameters:**
+
+ - providedCallback : Function
+
+**Returns:**
+
+ - introJs object.
+
+**Example:**
+
+```javascript
+introJs().onbeforeexit(function() {
+  console.log("on before exit")
+
+  // returning false means don't exit the intro
+  return false;
 });
 ````
 
