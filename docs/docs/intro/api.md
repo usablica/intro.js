@@ -356,6 +356,8 @@ introJs().onchange(function(targetElement) {
 
 Given callback function will be called before starting a new step of introduction. The callback function receives the element of the new step as an argument.
 
+If you want to prevent displaying the next / previous step, return `false` in `providedCallback`. See Examples page for more details. (Available since 2.7.0)
+
 **Available since:** v0.4.0
 
 **Parameters:**
@@ -369,8 +371,11 @@ Given callback function will be called before starting a new step of introductio
 **Example:**
 
 ```javascript
-introJs().onbeforechange(function(targetElement) {
-  alert("before new step");
+introJs().onbeforechange(function() {
+  alert("before new step. Step: " + this._currentStep);
+
+  // return false to stop displaying the next step
+  // return false;
 });
 ````
 

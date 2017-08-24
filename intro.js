@@ -368,6 +368,16 @@
       ++this._currentStep;
     }
 
+    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
+      var continueStep = this._introBeforeChangeCallback.call(this);
+    }
+
+    // if `onbeforechange` returned `false`, stop displaying the element
+    if (continueStep === false) {
+      --this._currentStep;
+      return false;
+    } 
+
     if ((this._introItems.length) <= this._currentStep) {
       //end of the intro
       //check if any callback is defined
@@ -379,10 +389,6 @@
     }
 
     var nextStep = this._introItems[this._currentStep];
-    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
-    }
-
     _showElement.call(this, nextStep);
   }
 
@@ -399,11 +405,19 @@
       return false;
     }
 
-    var nextStep = this._introItems[--this._currentStep];
+    --this._currentStep;
+
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      this._introBeforeChangeCallback.call(this, nextStep.element);
+      var continueStep = this._introBeforeChangeCallback.call(this);
     }
 
+    // if `onbeforechange` returned `false`, stop displaying the element
+    if (continueStep === false) {
+      ++this._currentStep;
+      return false;
+    }
+
+    var nextStep = this._introItems[this._currentStep];
     _showElement.call(this, nextStep);
   }
 
