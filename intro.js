@@ -429,6 +429,7 @@
     // re-align intros
     _setHelperLayerPosition.call(this, document.querySelector('.introjs-helperLayer'));
     _setHelperLayerPosition.call(this, document.querySelector('.introjs-tooltipReferenceLayer'));
+    _setHelperLayerPosition.call(this, document.querySelector('.introjs-disableInteraction'));
 
     // re-align tooltip
     if(this._currentStep !== undefined && this._currentStep !== null) {
