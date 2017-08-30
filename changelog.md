@@ -1,5 +1,10 @@
 ## Release History
 
+ * **v2.8.0-alpha.1** - 2017-08-30
+   - Enabling `onbeforechange` to return bool and prevent the next step to display
+   - Updating disable interaction layer after window resize
+   - Fixing disable interaction layer z-index issue
+
  * **v2.7.0** - 2017-08-17
    - Added `onbeforeexit` callback
    - Added `force` parameter to `exit()`
