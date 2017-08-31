@@ -260,7 +260,7 @@
             clone.style.left = rectObject.left + 'px';
             clone.style.width = rectObject.width + 'px';
             clone.style.height = rectObject.height + 'px';
-            clone.classList.add('introjs-clone');
+            clone.classList.add('introjsClone');
 
             var elAll = el.getElementsByTagName('*');
             var all = clone.getElementsByTagName('*');
@@ -530,7 +530,7 @@
             ;
         }
 
-        var elms = document.querySelectorAll('.introjs-clone');
+        var elms = document.querySelectorAll('.introjsClone');
 
         for (var i = 0, l = elms.length; i < l; i++) {
             var elm = elms[i];
