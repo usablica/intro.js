@@ -252,9 +252,12 @@
             copyComputedStyle(el, clone);
 
             rectObject = el.getBoundingClientRect();
+
             clone.style.display = 'none';
             clone.style.zIndex = 99999999;
             clone.style.position = 'fixed';
+
+            clone.style.margin = '0px';
 
             clone.style.top = rectObject.top + 'px';
             clone.style.left = rectObject.left + 'px';
@@ -527,7 +530,6 @@
                     }
                 }.bind(overlayLayer), 500);
             }
-            ;
         }
 
         var elms = document.querySelectorAll('.introjsClone');
