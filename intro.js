@@ -215,13 +215,8 @@
     }
 
     //removing undefined/null elements
-    var tempIntroItems = [];
-    for (var z = 0; z < introItems.length; z++) {
-      introItems[z] && tempIntroItems.push(introItems[z]);  // copy non-empty values to the end of the array
-    }
-
-    introItems = tempIntroItems;
-
+    introItems = introItems.filter(function(v){return v;});
+    
     //Ok, sort all items with given steps
     introItems.sort(function (a, b) {
       return a.step - b.step;
