@@ -391,8 +391,10 @@
       ++this._currentStep;
     }
 
+    var nextStep = this._introItems[this._currentStep];
+
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      var continueStep = this._introBeforeChangeCallback.call(this);
+      var continueStep = this._introBeforeChangeCallback.call(this, nextStep.element);
     }
 
     // if `onbeforechange` returned `false`, stop displaying the element
@@ -411,7 +413,6 @@
       return;
     }
 
-    var nextStep = this._introItems[this._currentStep];
     _showElement.call(this, nextStep);
   }
 
@@ -430,8 +431,10 @@
 
     --this._currentStep;
 
+    var nextStep = this._introItems[this._currentStep];
+
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
-      var continueStep = this._introBeforeChangeCallback.call(this);
+      var continueStep = this._introBeforeChangeCallback.call(this, nextStep.element);
     }
 
     // if `onbeforechange` returned `false`, stop displaying the element
@@ -440,7 +443,6 @@
       return false;
     }
 
-    var nextStep = this._introItems[this._currentStep];
     _showElement.call(this, nextStep);
   }
 
