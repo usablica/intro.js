@@ -262,17 +262,18 @@
         if (code === null) {
           code = (e.charCode === null) ? e.keyCode : e.charCode;
         }
-        if (code === 27 && self._options.exitOnEsc == true) {
+        
+        if (code === 'Escape' || code === 27 && self._options.exitOnEsc == true) {
           //escape key pressed, exit the intro
           //check if exit callback is defined
           _exitIntro.call(self, targetElm);
-        } else if(code === 37) {
+        } else if (code === 'ArrowLeft' || code === 37) {
           //left arrow
           _previousStep.call(self);
-        } else if (code === 39) {
+        } else if (code === 'ArrowRight' || code === 39) {
           //right arrow
           _nextStep.call(self);
-        } else if (code === 13) {
+        } else if (code === 'Enter' || code === 13) {
           //srcElement === ie
           var target = e.target || e.srcElement;
           if (target && target.className.indexOf('introjs-prevbutton') > 0) {
