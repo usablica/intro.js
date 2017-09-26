@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Groups</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Intro.js - Better introductions for websites and features with a step-by-step guide for your projects.">
+    <meta name="author" content="Afshin Mehrabani (@afshinmeh) in usabli.ca group">
+
+    <!-- styles -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/demo.css" rel="stylesheet">
+
+    <!-- Add IntroJs styles -->
+    <link href="../../introjs.css" rel="stylesheet">
+
+    <link href="../assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="container-narrow">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right" data-step="5" data-intro="Get it, use it.">
+          <li><a href="https://github.com/usablica/intro.js/tags"><i class='icon-black icon-download-alt'></i> Download</a></li>
+          <li><a href="https://github.com/usablica/intro.js">Github</a></li>
+          <li><a href="https://twitter.com/usablica">@usablica</a></li>
+        </ul>
+        <h3 class="muted">Intro.js</h3>
+      </div>
+
+      <hr>
+
+      <div class="jumbotron">
+        <h1>Groups</h1>
+        <p class="lead">An example of grouping, with <code>data-intro-group</code> attributes.</p>
+        <a class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:introJs().start('odd');">Show me odds</a>
+        <a class="btn btn-large btn-info" href="javascript:void(0);" onclick="javascript:introJs().start('even');">Show me evens</a>
+      </div>
+
+      <hr>
+
+      <div class="row-fluid marketing">
+        <div class="span6">
+          <div data-step="1" data-intro-group="odd" data-intro="Here we go">
+            <h4>Section One</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+          </div>
+          <div data-step="1" data-intro-group="even" data-intro="Here we go">
+            <h4>Section Two</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+          </div>
+          <div data-step="2" data-intro-group="odd" data-intro="Through the list">
+            <h4>Section Three</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+          </div>
+        </div>
+
+        <div class="span6">
+          <div data-step="2" data-intro-group="even" data-intro="Through the list">
+            <h4>Section Four</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+          </div>
+          <div data-step="3" data-intro-group="odd" data-intro="On and on...">
+            <h4>Section Five</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+          </div>
+          <div data-step="3" data-intro-group="even" data-intro="On and on...">
+            <h4>Section Six</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+    </div>
+    <script type="text/javascript" src="../../intro.js"></script>
+  </body>
+</html>

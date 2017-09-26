@@ -95,10 +95,12 @@
    * @api private
    * @method _introForElement
    * @param {Object} targetElm
+   * @param {String} group
    * @returns {Boolean} Success or not?
    */
-  function _introForElement(targetElm) {
-    var introItems = [],
+  function _introForElement(targetElm, group) {
+    var allIntroSteps = targetElm.querySelectorAll("*[data-intro]"),
+        introItems = [],
         self = this;
 
     if (this._options.steps) {
@@ -153,6 +155,12 @@
       for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
         var currentElement = allIntroSteps[i];
 
+        // PR #80
+        // start intro for groups of elements
+        if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
+          continue;
+        }
+        
         // skip hidden elements
         if (currentElement.style.display == 'none') {
           continue;
@@ -186,6 +194,12 @@
       for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
         var currentElement = allIntroSteps[i];
 
+        // PR #80
+        // start intro for groups of elements
+        if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
+          continue;
+        }
+
         if (currentElement.getAttribute('data-step') == null) {
 
           while (true) {
@@ -201,6 +215,7 @@
           if (typeof (currentElement.getAttribute('data-disable-interaction')) != 'undefined') {
             disableInteraction = !!currentElement.getAttribute('data-disable-interaction');
           }
+
 
           introItems[nextStep] = {
             element: currentElement,
@@ -2036,8 +2051,8 @@
       this._options = _mergeOptions(this._options, options);
       return this;
     },
-    start: function () {
-      _introForElement.call(this, this._targetElement);
+    start: function (group) {
+      _introForElement.call(this, this._targetElement, group);
       return this;
     },
     goToStep: function(step) {
