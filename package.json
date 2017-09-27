@@ -1,21 +1,25 @@
 {
-    "name": "intro.js",
-    "description": "Better introductions for websites and features with a step-by-step guide for your projects",
-    "version": "2.0",
-    "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/usablica/intro.js"
-    },
-    "devDependencies": {
-        "node-minify": "*"
-    },
-    "engine": [
-        "node >=0.1.90"
-    ],
+  "name": "intro.js",
+  "description": "Better introductions for websites and features with a step-by-step guide for your projects",
+  "version": "2.8.0-alpha.1",
+  "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
+  "homepage": "http://introjs.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/usablica/intro.js"
+  },
+  "devDependencies": {
+    "node-minify": "*"
+  },
+  "engine": [
+    "node >=0.1.90"
+  ],
+  "main": "intro.js",
+  "license": "AGPL-3.0",
+  "spm": {
     "main": "intro.js",
-    "spm": {
-        "main": "intro.js",
-        "output": ["introjs.css"]
-    }
+    "output": [
+      "introjs.css"
+    ]
+  }
 }

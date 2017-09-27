@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Multi-page introduction, Page 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Intro.js - Better introductions for websites and features with a step-by-step guide for your projects.">
+    <meta name="author" content="Afshin Mehrabani (@afshinmeh) in usabli.ca group">
+
+    <!-- styles -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/demo.css" rel="stylesheet">
+
+    <!-- Add IntroJs styles -->
+    <link href="../../introjs.css" rel="stylesheet">
+    <link href="../assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="container-narrow">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="https://github.com/usablica/intro.js/tags"><i class='icon-black icon-download-alt'></i> Download</a></li>
+          <li><a href="https://github.com/usablica/intro.js">Github</a></li>
+          <li><a href="https://twitter.com/usablica">@usablica</a></li>
+        </ul>
+        <h3 class="muted">Intro.js</h3>
+      </div>
+
+      <hr>
+
+      <div class="jumbotron">
+        <h1 data-intro="This is a tooltip!">SVG</h1>
+        <p class="lead">Using Introjs for SVG Element</p>
+        <a id="startButton" class="btn btn-large btn-success" href="javascript:void(0);">Show me how</a>
+      </div>
+
+      <hr>
+
+      <svg width="960" height="500">
+          <circle data-intro="hello" cx="429" cy="260" r="32" style="fill: rgb(31, 119, 180); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle>
+          <circle data-intro="second step intro" cx="171" cy="112" r="32" style="fill: rgb(174, 199, 232); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle>
+          <circle cx="414" cy="51" r="32" style="fill: rgb(255, 127, 14); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="177" cy="464" r="32" style="fill: rgb(255, 187, 120); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="680" cy="378" r="32" style="fill: rgb(44, 160, 44); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="477" cy="68" r="32" style="fill: rgb(152, 223, 138); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="867" cy="395" r="32" style="fill: rgb(214, 39, 40); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="572" cy="327" r="32" style="fill: rgb(255, 152, 150); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="87" cy="427" r="32" style="fill: rgb(148, 103, 189); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="41" cy="273" r="32" style="fill: rgb(197, 176, 213); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="382" cy="443" r="32" style="fill: rgb(140, 86, 75); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="135" cy="57" r="32" style="fill: rgb(196, 156, 148); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="821" cy="144" r="32" style="fill: rgb(227, 119, 194); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="539" cy="272" r="32" style="fill: rgb(247, 182, 210); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="886" cy="93" r="32" style="fill: rgb(127, 127, 127); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="74" cy="181" r="32" style="fill: rgb(199, 199, 199); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="526" cy="299" r="32" style="fill: rgb(188, 189, 34); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="434" cy="57" r="32" style="fill: rgb(219, 219, 141); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="722" cy="394" r="32" style="fill: rgb(23, 190, 207); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle><circle cx="809" cy="139" r="32" style="fill: rgb(158, 218, 229); -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></circle>
+      </svg>
+
+    </div>
+    <script type="text/javascript" src="../../intro.js"></script>
+    <script type="text/javascript">
+      document.getElementById('startButton').onclick = function() {
+        introJs().start();
+      };
+    </script>
+  </body>
+</html>

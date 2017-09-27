@@ -1,0 +1,35 @@
+---
+layout: landing
+title: Homepage
+permalink: /
+---
+
+<header class="hero">
+    <div class="logo">
+        <h1>Intro.js</h1>
+        <span>Step-by-step guide and feature introduction</span>
+    </div>
+</header>
+
+<div class="container">
+    {% for cat in site.category-list limit:5 %}
+    <div class="seven wide columns basic vertical menu">
+
+    <div class="items">
+        <div class="icon item header">
+            <i class="fa fa-{{site.category-icons[forloop.index0]}}"></i>{{ cat | replace: "-", " " }}
+        </div>
+        {% assign pages = site.pages | sort:"weight"  %}
+
+        {% for p in pages %}
+            {% for pc in p.categories %}
+              {% if pc == cat %}
+                <a class="item" href="{{site.baseurl}}{{ p.url }}">{{ p.title }}</a>
+              {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+    </div>
+    {% endfor %}
+
+</div>

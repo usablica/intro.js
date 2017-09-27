@@ -1,0 +1,55 @@
+.introjs-tooltip {
+  background-color: rgba(000, 0, 0, 0.5);
+  color: #fff;
+}
+
+.introjs-button,
+.introjs-button:hover, .introjs-button:focus, .introjs-button:active,
+.introjs-disabled, .introjs-disabled:focus, .introjs-disabled:hover {
+  outline: none;
+  background-image: none;
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid transparent;
+  border-radius: 50px;
+  box-shadow: none;
+  border-shadow: none;
+  text-shadow: none;
+}
+
+.introjs-button:hover, .introjs-button:focus, .introjs-button:active {
+  border: 1px solid #fff
+}
+.introjs-disabled, .introjs-disabled:focus, .introjs-disabled:hover {
+  color: #ccc;
+  border: 1px solid transparent;
+}
+
+.introjs-arrow {
+  border: 10px solid #fff;
+}
+.introjs-arrow.top, .introjs-arrow.top-middle, .introjs-arrow.top-right {
+  border-color: transparent transparent rgba(000, 0, 0, 0.5);
+  top: -20px;
+  left: 20px;
+}
+.introjs-arrow.bottom, .introjs-arrow.bottom-middle, .introjs-arrow.bottom-right {
+  border-color: rgba(000, 0, 0, 0.5) transparent transparent;
+  bottom: -20px;
+  left: 20px;
+}
+.introjs-arrow.left, .introjs-arrow.right {
+    top: 20px;
+}
+.introjs-arrow.left-bottom, .introjs-arrow.right-bottom {
+    bottom: 20px;
+}
+
+.introjs-arrow.left, .introjs-arrow.left-bottom {
+  left: -20px;
+  border-color: rgba(000, 0, 0, 0.5) transparent transparent transparent;
+}
+.introjs-arrow.right, .introjs-arrow.right-bottom {
+  right: -20px;
+  border-color: transparent transparent transparent rgba(000, 0, 0, 0.5);
+}
