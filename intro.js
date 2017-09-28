@@ -621,6 +621,8 @@
     tooltipOffset = _getOffset(tooltipLayer);
     windowSize    = _getWinSize();
 
+    _setClass(tooltipLayer, 'introjs-' + currentTooltipPosition);
+
     switch (currentTooltipPosition) {
       case 'top':
         arrowLayer.className = 'introjs-arrow bottom';
@@ -770,7 +772,7 @@
 
     // Check if the width of the tooltip + the starting point would spill off the right side of the screen
     // If no, neither bottom or top are valid
-    if (targetOffset.left + tooltipWidth > windowSize.width || ((targetOffset.left + (targetOffset.width / 2)) - tooltipWidth) < 0) {
+    if (targetOffset.left + tooltipWidth > windowSize.width) {
       _removeEntry(possiblePositions, "bottom");
       _removeEntry(possiblePositions, "top");
     } else {

@@ -19,11 +19,17 @@
 		function startTour() {
 			var tour = introJs()
 			tour.setOption('tooltipPosition', 'auto');
-			tour.setOption('positionPrecedence', ['left', 'right', 'bottom', 'top'])
-			tour.start()
+			tour.setOption('positionPrecedence', ['left', 'right', 'top', 'bottom']);
+			tour.start();
 		}
 	
 	</script>
+  <style>
+    .jumbotron {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+  </style>
   </head>
 
   <body>
