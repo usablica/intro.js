@@ -621,8 +621,9 @@
     tooltipOffset = _getOffset(tooltipLayer);
     windowSize    = _getWinSize();
 
-    // determine special-case bottom align, for optimum visibility
-    if (currentTooltipPosition === 'bottom') {
+    // determine special-case bottom and top align, for optimum visibility
+    if (currentTooltipPosition === 'bottom' ||
+      currentTooltipPosition === 'top') {
       var screenWidth = window.screen.width,
           screenThird = screenWidth / 3,
           targetLeft = targetOffset.left;
@@ -631,10 +632,10 @@
         // hint is greater than 1/3 of the screen width
         if (targetLeft < (screenWidth - screenThird)) {
           // hint is less than 2/3 of the screen width
-          currentTooltipPosition = 'bottom-middle-aligned';
+          currentTooltipPosition += '-middle-aligned';
         } else {
           // hint is greater than 2/3 of the screen width
-          currentTooltipPosition = 'bottom-right-aligned';
+          currentTooltipPosition += '-right-aligned';
         }
       }
     }
@@ -642,6 +643,33 @@
     _setClass(tooltipLayer, 'introjs-' + currentTooltipPosition);
 
     switch (currentTooltipPosition) {
+      case 'top-right-aligned':
+        arrowLayer.className      = 'introjs-arrow bottom-right';
+
+        var tooltipLayerStyleRight = 0;
+        _checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer);
+        tooltipLayer.style.bottom    = (targetOffset.height +  20) + 'px';
+        break;
+
+      case 'top-middle-aligned':
+        arrowLayer.className      = 'introjs-arrow bottom-middle';
+
+        var tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipOffset.width / 2;
+
+        // a fix for middle aligned hints
+        if (hintMode) {
+          tooltipLayerStyleLeftRight += 5;
+        }
+
+        if (_checkLeft(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, tooltipLayer)) {
+          tooltipLayer.style.right = null;
+          _checkRight(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, windowSize, tooltipLayer);
+        }
+        tooltipLayer.style.bottom = (targetOffset.height + 20) + 'px';
+        break;
+
+      case 'top-left-aligned':
+      // top-left-aligned is the same as the default top
       case 'top':
         arrowLayer.className = 'introjs-arrow bottom';
 
@@ -779,10 +807,17 @@
     // Take a clone of position precedence. These will be the available
     var possiblePositions = this._options.positionPrecedence.slice();
 
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
     var windowSize = _getWinSize();
     var tooltipHeight = _getOffset(tooltipLayer).height + 10;
     var tooltipWidth = _getOffset(tooltipLayer).width + 20;
     var targetOffset = _getOffset(targetElement);
+
+    // adjust for scroll position
+    targetOffset.top -= scrollTop;
+    targetOffset.left -= scrollLeft;
 
     // If we check all the possible areas, and there are no valid places for the tooltip, the element
     // must take up most of the screen real estate. Show the tooltip floating in the middle of the screen.
@@ -808,15 +843,24 @@
       _removeEntry(possiblePositions, "left");
     }
 
-    // At this point, our array only has positions that are valid. Pick the first one, as it remains in order
-    if (possiblePositions.length > 0) {
-      calculatedPosition = possiblePositions[0];
+    if (desiredTooltipPosition) {
+      // filter out hyphenated positions to return
+      // a valid option from the list
+      // ex: "bottom-right-aligned"
+      // should return 'bottom'
+      // todo: actually return 'bottom-right-aligned'
+      desiredTooltipPosition = desiredTooltipPosition.split('-')[0];
     }
 
-    // If the requested position is in the list, replace our calculated choice with that
-    if (desiredTooltipPosition && desiredTooltipPosition != "auto") {
-      if (possiblePositions.indexOf(desiredTooltipPosition) > -1) {
+    if (possiblePositions.length) {
+      if (desiredTooltipPosition && 
+          desiredTooltipPosition !== "auto" &&
+          possiblePositions.indexOf(desiredTooltipPosition) > -1) {
+        // If the requested position is in the list, choose that
         calculatedPosition = desiredTooltipPosition;
+      } else {
+        // Pick the first valid position, in order
+        calculatedPosition = possiblePositions[0];
       }
     }
 

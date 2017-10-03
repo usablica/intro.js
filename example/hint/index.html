@@ -15,6 +15,23 @@
     <link href="../../introjs.css" rel="stylesheet">
 
     <link href="../assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+
+    <style>
+    .btn-group-justified {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+      flex-flow: row nowrap;
+    }
+    .btn-group-justified > * {
+      -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+    }
+    </style>
   </head>
 
   <body>
@@ -35,7 +52,7 @@
       <hr>
 
       <div class="jumbotron">
-        <h1 data-hint="This is a tooltip!" data-hintPosition="top-middle" data-position="bottom-right-aligned">Hints</h1>
+        <h1 data-hint="This is a tooltip!" data-hintPosition="top-middle" data-position="top">Hints</h1>
         <p class="lead">Add hints using <code>data-hint</code> attribute.</p>
         <a class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:introJs().addHints();">Add hints</a>
       </div>
@@ -68,6 +85,30 @@
       </div>
 
       <hr>
+
+      <div class="btn-group btn-group-justified" role="group" aria-label="...">
+          <button 
+            type="button"
+            role="button"
+            data-hint="Left align" 
+            data-hintPosition="top-middle" 
+            data-position="bottom"
+            class="btn btn-default">Left</button>
+          <button 
+            type="button"
+            role="button"
+            data-hint="Middle align" 
+            data-hintPosition="top-middle" 
+            data-position="bottom"
+            class="btn btn-default">Middle</button>
+          <button 
+            type="button"
+            role="button"
+            data-hint="Right align" 
+            data-hintPosition="top-middle" 
+            data-position="bottom"
+            class="btn btn-default">Right</button>
+        </div>
     </div>
     <script type="text/javascript" src="../../intro.js"></script>
   </body>
