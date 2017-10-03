@@ -628,7 +628,7 @@
           targetLeft = targetOffset.left;
 
       if (targetLeft > screenThird) {
-        // hint is less than 1/3 of the screen width
+        // hint is greater than 1/3 of the screen width
         if (targetLeft < (screenWidth - screenThird)) {
           // hint is less than 2/3 of the screen width
           currentTooltipPosition = 'bottom-middle-aligned';
