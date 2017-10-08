@@ -7,6 +7,10 @@
 		"document" : true,
 		"exports" : true,
 		"define" : true,
-		"SVGElement" : true
+		"SVGElement" : true,
+		"module" : true,
+		"console" : true,
+		"global" : true,
+		"self" : true
 	}
 }

@@ -5,18 +5,32 @@
  * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh)
  */
 
-(function (root, factory) {
-  if (typeof exports === 'object') {
-    // CommonJS
-    factory(exports);
-  } else if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(['exports'], factory);
-  } else {
-    // Browser globals
-    factory(root);
-  }
-} (this, function (exports) {
+(function(f) {
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = f();
+        // deprecated function
+        // @since 2.8.0
+        module.exports.introJs = function () {
+          console.warn('Deprecated: please use require("intro.js") directly, instead of the introJs method of the function');
+          // introJs()
+          return f().apply(this, arguments);
+        };
+    } else if (typeof define === "function" && define.amd) {
+        define([], f);
+    } else {
+        var g;
+        if (typeof window !== "undefined") {
+            g = window;
+        } else if (typeof global !== "undefined") {
+            g = global;
+        } else if (typeof self !== "undefined") {
+            g = self;
+        } else {
+            g = this;
+        }
+        g.introJs = f();
+    }
+})(function () {
   //Default config/variables
   var VERSION = '2.8.0-alpha.1';
 
@@ -154,10 +168,8 @@
         return false;
       }
 
-      i = 0;
-
       //first add intro items with data-step
-      for (; i < elmsLength; i++) {
+      for (i = 0; i < elmsLength; i++) {
         currentElement = allIntroSteps[i];
 
         // skip hidden elements
@@ -190,8 +202,7 @@
       //next add intro items without data-step
       //todo: we need a cleanup here, two loops are redundant
       var nextStep = 0;
-      i = 0;
-      for (; i < elmsLength; i++) {
+      for (i = 0; i < elmsLength; i++) {
         currentElement = allIntroSteps[i];
 
         if (currentElement.getAttribute('data-step') === null) {
@@ -285,10 +296,10 @@
         } else if (code === 'Enter' || code === 13) {
           //srcElement === ie
           var target = e.target || e.srcElement;
-          if (target && target.className.indexOf('introjs-prevbutton') > 0) {
+          if (target && target.className.match('introjs-prevbutton')) {
             //user hit enter while focusing on previous button
             _previousStep.call(self);
-          } else if (target && target.className.indexOf('introjs-skipbutton') > 0) {
+          } else if (target && target.className.match('introjs-skipbutton')) {
             //user hit enter while focusing on skip button
             if (self._introItems.length - 1 === self._currentStep && typeof (self._introCompleteCallback) === 'function') {
                 self._introCompleteCallback.call(self);
@@ -508,8 +519,7 @@
     var i;
 
     if (overlayLayers && overlayLayers.length > 0) {
-      i = overlayLayers.length - 1;
-      for (; i >= 0; i--) {
+      for (i = overlayLayers.length - 1; i >= 0; i--) {
         //for fade-out animation
         var overlayLayer = overlayLayers[i];
         overlayLayer.style.opacity = 0;
@@ -549,9 +559,8 @@
     //remove `introjs-fixParent` class from the elements
     var fixParents = document.querySelectorAll('.introjs-fixParent');
     if (fixParents && fixParents.length > 0) {
-      i = fixParents.length - 1;
-      for (; i >= 0; i--) {
-        fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
+      for (i = fixParents.length - 1; i >= 0; i--) {
+        _removeClass(fixParents[i], /introjs-fixParent/g);
       }
     }
 
@@ -853,9 +862,9 @@
       // Otherwise, remove a fixed class that may be left over from the previous
       // step.
       if (_isFixed(currentElement.element)) {
-        helperLayer.className += ' introjs-fixedTooltip';
+        _addClass(helperLayer, 'introjs-fixedTooltip');
       } else {
-        helperLayer.className = helperLayer.className.replace(' introjs-fixedTooltip', '');
+        _removeClass(helperLayer, 'introjs-fixedTooltip');
       }
 
       if (currentElement.position === 'floating') {
@@ -961,9 +970,9 @@
       //remove `introjs-fixParent` class from the elements
       var fixParents = document.querySelectorAll('.introjs-fixParent');
       if (fixParents && fixParents.length > 0) {
-        i = fixParents.length - 1;
-        for (; i >= 0; i--) {
+        for (i = fixParents.length - 1; i >= 0; i--) {
           fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
+          _removeClass(fixParents[i], /introjs-fixParent/g);
         }
       }
 
@@ -1198,7 +1207,7 @@
           prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-hidden';
         }
         if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
-          nextTooltipButton.className += ' introjs-fullbutton';
+          _addClass(nextTooltipButton, 'introjs-fullbutton');
         }
       } else {
         if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
@@ -1217,7 +1226,7 @@
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
         skipTooltipButton.innerHTML = this._options.doneLabel;
         // adding donebutton class in addition to skipbutton
-        skipTooltipButton.className += ' introjs-donebutton';
+        _addClass(skipTooltipButton, 'introjs-donebutton');
       }
       if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
         prevTooltipButton.className = 'introjs-button introjs-prevbutton';
@@ -1228,7 +1237,7 @@
           nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-hidden';
         }
         if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
-          prevTooltipButton.className += ' introjs-fullbutton';
+          _addClass(prevTooltipButton, 'introjs-fullbutton');
         }
       } else {
         if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
@@ -1343,22 +1352,21 @@
         if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
 
         if (parentElm.tagName.toLowerCase() === 'svg') {
-          _setClass(parentElm, 'introjs-showElement introjs-relativePosition');
+          _addClass(parentElm, 'introjs-showElement introjs-relativePosition');
         }
 
         parentElm = parentElm.parentNode;
       }
     }
 
-    _setClass(targetElement.element, 'introjs-showElement');
+    _addClass(targetElement.element, 'introjs-showElement');
 
     var currentElementPosition = _getPropValue(targetElement.element, 'position');
     if (currentElementPosition !== 'absolute' &&
         currentElementPosition !== 'relative' &&
         currentElementPosition !== 'fixed') {
       //change to new intro item
-      //targetElement.element.className += ' introjs-relativePosition';
-      _setClass(targetElement.element, 'introjs-relativePosition');
+      _addClass(targetElement.element, 'introjs-relativePosition');
     }
 
     parentElm = targetElement.element.parentNode;
@@ -1371,23 +1379,51 @@
       var opacity = parseFloat(_getPropValue(parentElm, 'opacity'));
       var transform = _getPropValue(parentElm, 'transform') || _getPropValue(parentElm, '-webkit-transform') || _getPropValue(parentElm, '-moz-transform') || _getPropValue(parentElm, '-ms-transform') || _getPropValue(parentElm, '-o-transform');
       if (/[0-9]+/.test(zIndex) || opacity < 1 || (transform !== 'none' && transform !== undefined)) {
-        parentElm.className += ' introjs-fixParent';
+        _addClass(parentElm, 'introjs-fixParent');
       }
 
       parentElm = parentElm.parentNode;
     }
   }
 
-  function _setClass(element, className) {
+  /**
+   * Append a class to an element
+   *
+   * @api private
+   * @method _addClass
+   * @param {Object} element
+   * @param {String} className
+   * @returns null
+   */
+  function _addClass(element, className) {
     if (element instanceof SVGElement) {
+      // svg
       var pre = element.getAttribute('class') || '';
 
       element.setAttribute('class', pre + ' ' + className);
     } else {
-      element.className += ' ' + className;
+      if (element.classList !== undefined) {
+        // check for modern classList property
+        var classes = className.split(' ');
+        for (var i = 0, len = classes.length; i < len; i++) {
+          element.classList.add( classes[i] );
+        }
+      } else if (!element.className.match( className )) {
+        // check if element doesn't already have className
+        element.className += ' ' + className;
+      }
     }
   }
 
+  /**
+   * Remove a class from an element
+   *
+   * @api private
+   * @method _removeClass
+   * @param {Object} element
+   * @param {RegExp|String} classNameRegex can be regex or string
+   * @returns null
+   */
   function _removeClass(element, classNameRegex) {
     if (element instanceof SVGElement) {
       var pre = element.getAttribute('class') || '';
@@ -1556,8 +1592,7 @@
     this._introItems = [];
 
     if (this._options.hints) {
-      len = this._options.hints.length;
-      for (; i < len; i++) {
+      for (i = 0, len = this._options.hints.length; i < len; i++) {
         var currentItem = _cloneObject(this._options.hints[i]);
 
         if (typeof(currentItem.element) === 'string') {
@@ -1580,9 +1615,7 @@
       }
 
       //first add intro items with data-step
-      i = 0;
-      len = hints.length;
-      for (; i < len; i++) {
+      for (i = 0, len = hints.length; i < len; i++) {
         var currentElement = hints[i];
 
         // hint animation
@@ -1645,7 +1678,7 @@
     var hint = this._targetElement.querySelector('.introjs-hint[data-step="' + stepId + '"]');
 
     if (hint) {
-      hint.className += ' introjs-hidehint';
+      _addClass(hint, 'introjs-hidehint');
     }
 
     // call the callback function (if any)
@@ -1698,7 +1731,7 @@
     var hint = this._targetElement.querySelector('.introjs-hint[data-step="' + stepId + '"]');
 
     if (hint) {
-      hint.className = hint.className.replace(/introjs\-hidehint/g, '');
+      _removeClass(hint, /introjs-hidehint/g);
     }
   }
 
@@ -1788,12 +1821,12 @@
       hint.className = 'introjs-hint';
 
       if (!item.hintAnimation) {
-        hint.className += ' introjs-hint-no-anim';
+        _addClass(hint, 'introjs-hint-no-anim');
       }
 
       // hint's position should be fixed if the target element's position is fixed
       if (_isFixed(item.element)) {
-        hint.className += ' introjs-fixedhint';
+        _addClass(hint, 'introjs-fixedhint');
       }
 
       var hintDot = document.createElement('div');
@@ -2228,6 +2261,5 @@
     }
   };
 
-  exports.introJs = introJs;
   return introJs;
-}));
+});
