@@ -802,7 +802,7 @@
 
     // If the requested position is in the list, replace our calculated choice with that
     if (desiredTooltipPosition && desiredTooltipPosition != "auto") {
-      if (possiblePositions.indexOf(desiredTooltipPosition) > -1) {
+      if (possiblePositions.indexOf(desiredTooltipPosition) == -1) {
         calculatedPosition = desiredTooltipPosition;
       }
     }
