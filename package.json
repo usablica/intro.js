@@ -15,6 +15,12 @@
     "node >=0.1.90"
   ],
   "main": "intro.js",
+  "files": [
+    "*.js",
+    "*.css",
+    "license.md",
+    "themes/*"
+  ],
   "license": "AGPL-3.0",
   "spm": {
     "main": "intro.js",
