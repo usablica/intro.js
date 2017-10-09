@@ -609,36 +609,14 @@
 
     currentTooltipPosition = this._introItems[this._currentStep].position;
 
-    if (currentTooltipPosition != "floating") { // Floating is always valid, no point in calculating
-      if (currentTooltipPosition === "auto") {
-        currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer);
-      } else {
-        currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer, currentTooltipPosition);
-      }
+    // Floating is always valid, no point in calculating
+    if (currentTooltipPosition != "floating") { 
+      currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer, currentTooltipPosition);
     }
 
     targetOffset  = _getOffset(targetElement);
     tooltipOffset = _getOffset(tooltipLayer);
     windowSize    = _getWinSize();
-
-    // determine special-case bottom and top align, for optimum visibility
-    if (currentTooltipPosition === 'bottom' ||
-      currentTooltipPosition === 'top') {
-      var screenWidth = window.screen.width,
-          screenThird = screenWidth / 3,
-          targetLeft = targetOffset.left;
-
-      if (targetLeft > screenThird) {
-        // hint is greater than 1/3 of the screen width
-        if (targetLeft < (screenWidth - screenThird)) {
-          // hint is less than 2/3 of the screen width
-          currentTooltipPosition += '-middle-aligned';
-        } else {
-          // hint is greater than 2/3 of the screen width
-          currentTooltipPosition += '-right-aligned';
-        }
-      }
-    }
 
     _setClass(tooltipLayer, 'introjs-' + currentTooltipPosition);
 
@@ -797,10 +775,10 @@
    * Determines the position of the tooltip based on the position precedence and availability
    * of screen space.
    *
-   * @param {Object} targetElement
-   * @param {Object} tooltipLayer
-   * @param {Object} desiredTooltipPosition
-   *
+   * @param {Object}    targetElement
+   * @param {Object}    tooltipLayer
+   * @param {String}    desiredTooltipPosition
+   * @return {String}   calculatedPosition
    */
   function _determineAutoPosition(targetElement, tooltipLayer, desiredTooltipPosition) {
 
@@ -823,6 +801,10 @@
     // must take up most of the screen real estate. Show the tooltip floating in the middle of the screen.
     var calculatedPosition = "floating";
 
+    /*
+    * auto determine position 
+    */
+
     // Check for space below
     if ((targetOffset.height + targetOffset.top + tooltipHeight) > windowSize.height) {
       _removeEntry(possiblePositions, "bottom");
@@ -843,18 +825,25 @@
       _removeEntry(possiblePositions, "left");
     }
 
+    // @var {String}  ex: 'right-aligned'
+    var desiredAlignment = (function (pos) {
+      var hyphenIndex = pos.indexOf('-');
+      if (hyphenIndex !== -1) {
+        // has alignment
+        return pos.substr(hyphenIndex);
+      }
+      return '';
+    })(desiredTooltipPosition || '');
+
+    // strip alignment from position
     if (desiredTooltipPosition) {
-      // filter out hyphenated positions to return
-      // a valid option from the list
       // ex: "bottom-right-aligned"
       // should return 'bottom'
-      // todo: actually return 'bottom-right-aligned'
       desiredTooltipPosition = desiredTooltipPosition.split('-')[0];
     }
 
     if (possiblePositions.length) {
-      if (desiredTooltipPosition && 
-          desiredTooltipPosition !== "auto" &&
+      if (desiredTooltipPosition !== "auto" &&
           possiblePositions.indexOf(desiredTooltipPosition) > -1) {
         // If the requested position is in the list, choose that
         calculatedPosition = desiredTooltipPosition;
@@ -864,7 +853,63 @@
       }
     }
 
+    // only top and bottom positions have optional alignments
+    if (['top', 'bottom'].indexOf(calculatedPosition) !== -1) {
+      calculatedPosition += _determineAutoAlignment(targetOffset.left, tooltipWidth, windowSize, desiredAlignment);
+    }
+
     return calculatedPosition;
+  }
+
+  /**
+  * auto-determine alignment
+  * @param {Integer}  offsetLeft
+  * @param {Integer}  tooltipWidth
+  * @param {Object}   windowSize
+  * @param {String}   desiredAlignment
+  * @return {String}  calculatedAlignment
+  */
+  function _determineAutoAlignment (offsetLeft, tooltipWidth, windowSize, desiredAlignment) {
+    var halfTooltipWidth = tooltipWidth / 2,
+      winWidth = Math.min(windowSize.width, window.screen.width),
+      possibleAlignments = ['-left-aligned', '-middle-aligned', '-right-aligned'],
+      calculatedAlignment = '';
+    
+    // valid left must be at least a tooltipWidth
+    // away from right side
+    if (winWidth - offsetLeft < tooltipWidth) {
+      _removeEntry(possibleAlignments, '-left-aligned');
+    }
+
+    // valid middle must be at least half 
+    // width away from both sides
+    if (offsetLeft < halfTooltipWidth || 
+      winWidth - offsetLeft < halfTooltipWidth) {
+      _removeEntry(possibleAlignments, '-middle-aligned');
+    }
+
+    // valid right must be at least a tooltipWidth
+    // width away from left side
+    if (offsetLeft < tooltipWidth) {
+      _removeEntry(possibleAlignments, '-right-aligned');
+    }
+
+    if (possibleAlignments.length) {
+      if (possibleAlignments.indexOf(desiredAlignment) !== -1) {
+        // the desired alignment is valid
+        calculatedAlignment = desiredAlignment;
+      } else {
+        // pick the first valid position, in order
+        calculatedAlignment = possibleAlignments[0];
+      }
+    } else {
+      // if screen width is too small 
+      // for ANY alignment, middle is 
+      // probably the best for visibility
+      calculatedAlignment = '-middle-aligned';
+    }
+
+    return calculatedAlignment;
   }
 
   /**
