@@ -1171,13 +1171,6 @@
       _disableInteraction.call(self);
     }
 
-    if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
-      nextTooltipButton.removeAttribute('tabIndex');
-    }
-    if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
-      prevTooltipButton.removeAttribute('tabIndex');
-    }
-
     // when it's the first step of tour
     if (this._currentStep == 0 && this._introItems.length > 1) {
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton != null) {
@@ -1200,9 +1193,6 @@
         }
       }
 
-      if (typeof prevTooltipButton !== "undefined" && prevTooltipButton != null) {
-        prevTooltipButton.tabIndex = '-1';
-      }
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton != null) {
         skipTooltipButton.innerHTML = this._options.skipLabel;
       }
@@ -1228,10 +1218,6 @@
         if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
           nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
         }
-      }
-
-      if (typeof nextTooltipButton !== "undefined" && nextTooltipButton != null) {
-        nextTooltipButton.tabIndex = '-1';
       }
     } else {
       // steps between start and end
