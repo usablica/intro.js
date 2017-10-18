@@ -276,7 +276,7 @@
         if (code === null) {
           code = (e.charCode === null) ? e.keyCode : e.charCode;
         }
-        
+
         if (code === 'Escape' || code === 27 && self._options.exitOnEsc == true) {
           //escape key pressed, exit the intro
           //check if exit callback is defined
@@ -1961,6 +1961,46 @@
     _placeTooltip.call(this, hintElement, tooltipLayer, arrowLayer, null, true);
   }
 
+	/**
+	 * Replaces element in a step
+	 *
+	 * @api private
+	 * @method _replaceItemElement
+	 * @param {Number} pos
+	 * @param {Object|String} targetElem
+	 */
+  function _replaceItemElement(pos, targetElem) {
+    if (typeof pos !== 'number' || (!targetElem.jquery && typeof targetElem !== 'string' && !(targetElem instanceof Element)) || pos >= this._introItems.length) {
+      return false;
+    }
+    // Auxiliary element to check against null
+    var auxElem = null;
+    if (typeof targetElem !== 'string') {
+      // Gets javascript object from selector
+	  auxElem = document.querySelector(targetElem);
+    }
+	else if (targetElem.jquery) {
+      // Gets javascript object from jQuery
+	  auxElem = targetElem[0];
+	}
+	else if (targetElem instanceof Element) {
+	  // Gets javascript object directly
+	  auxElem = targetElem;
+	}
+	if (auxElem === null) {
+	  return false;
+	}
+
+	this._introItems[pos].element = auxElem;
+
+	// Remove floating if element is floating
+	if (this._introItems[pos].position === 'floating') {
+	  delete this._introItems[pos].position;
+    }
+
+    return true;
+
+  }
   /**
    * Get an element position on the page
    * Thanks to `meouw`: http://stackoverflow.com/a/442474/375966
@@ -2226,6 +2266,10 @@
     },
     showHintDialog: function (stepId) {
       _showHintDialog.call(this, stepId);
+      return this;
+    },
+    replaceItemElement: function (pos, targetElem) {
+      _replaceItemElement.call(this, pos, targetElem);
       return this;
     }
   };
