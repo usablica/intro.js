@@ -1975,11 +1975,7 @@
     }
     // Auxiliary element to check against null
     var auxElem = null;
-    if (typeof targetElem !== 'string') {
-      // Gets javascript object from selector
-	  auxElem = document.querySelector(targetElem);
-    }
-	else if (targetElem.jquery) {
+	if (targetElem.jquery) {
       // Gets javascript object from jQuery
 	  auxElem = targetElem[0];
 	}
@@ -1987,6 +1983,10 @@
 	  // Gets javascript object directly
 	  auxElem = targetElem;
 	}
+    else if (typeof targetElem !== 'string') {
+        // Gets javascript object from selector
+        auxElem = document.querySelector(targetElem);
+    }
 	if (auxElem === null) {
 	  return false;
 	}
