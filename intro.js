@@ -1961,14 +1961,14 @@
     _placeTooltip.call(this, hintElement, tooltipLayer, arrowLayer, null, true);
   }
 
-	/**
-	 * Replaces element in a step
-	 *
-	 * @api private
-	 * @method _replaceItemElement
-	 * @param {Number} pos
-	 * @param {Object|String} targetElem
-	 */
+  /**
+   * Replaces element in a step
+   *
+   * @api private
+   * @method _replaceItemElement
+   * @param {Number} pos
+   * @param {Object|String} targetElem
+   */
   function _replaceItemElement(pos, targetElem) {
     if (typeof pos !== 'number' || (!targetElem.jquery && typeof targetElem !== 'string' && !(targetElem instanceof Element)) || pos >= this._introItems.length) {
       return false;
@@ -1984,8 +1984,8 @@
 	  auxElem = targetElem;
 	}
     else if (typeof targetElem !== 'string') {
-        // Gets javascript object from selector
-        auxElem = document.querySelector(targetElem);
+      // Gets javascript object from selector
+      auxElem = document.querySelector(targetElem);
     }
 	if (auxElem === null) {
 	  return false;
