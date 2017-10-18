@@ -1975,27 +1975,27 @@
     }
     // Auxiliary element to check against null
     var auxElem = null;
-	if (targetElem.jquery) {
+    if (targetElem.jquery) {
       // Gets javascript object from jQuery
-	  auxElem = targetElem[0];
-	}
-	else if (targetElem instanceof Element) {
-	  // Gets javascript object directly
-	  auxElem = targetElem;
-	}
+      auxElem = targetElem[0];
+    }
+    else if (targetElem instanceof Element) {
+      // Gets javascript object directly
+      auxElem = targetElem;
+    }
     else if (typeof targetElem !== 'string') {
       // Gets javascript object from selector
       auxElem = document.querySelector(targetElem);
     }
-	if (auxElem === null) {
+    if (auxElem === null) {
 	  return false;
-	}
+    }
 
-	this._introItems[pos].element = auxElem;
+    this._introItems[pos].element = auxElem;
 
 	// Remove floating if element is floating
-	if (this._introItems[pos].position === 'floating') {
-	  delete this._introItems[pos].position;
+    if (this._introItems[pos].position === 'floating') {
+      delete this._introItems[pos].position;
     }
 
     return true;
