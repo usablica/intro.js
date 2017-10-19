@@ -1983,7 +1983,7 @@
       // Gets javascript object directly
       auxElem = targetElem;
     }
-    else if (typeof targetElem !== 'string') {
+    else if (typeof targetElem === 'string') {
       // Gets javascript object from selector
       auxElem = document.querySelector(targetElem);
     }
