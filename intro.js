@@ -584,6 +584,7 @@
    */
   function _placeTooltip(targetElement, tooltipLayer, arrowLayer, helperNumberLayer, hintMode) {
     var tooltipCssClass = '',
+        alignArrowHorizontally = false,
         currentStepObj,
         tooltipOffset,
         targetOffset,
@@ -647,6 +648,7 @@
 
         _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
         tooltipLayer.style.bottom = (targetOffset.height +  20) + 'px';
+        alignArrowHorizontally = true;
         break;
       case 'right':
         tooltipLayer.style.left = (targetOffset.width + 20) + 'px';
@@ -725,7 +727,15 @@
         var tooltipLayerStyleLeft = 0;
         _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
         tooltipLayer.style.top    = (targetOffset.height +  20) + 'px';
+        alignArrowHorizontally = true;
         break;
+    }
+      
+    if (alignArrowHorizontally) {
+      const tooltipRect = tooltipLayer.getBoundingClientRect();
+      const targetRect = targetElement.getBoundingClientRect();
+      const arrowRect = arrowLayer.getBoundingClientRect();
+      arrowLayer.style.left = Math.round(targetRect.x - tooltipRect.x + targetRect.width / 2 - arrowRect.width / 2) + 'px';
     }
   }
 
