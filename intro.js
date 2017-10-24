@@ -1613,7 +1613,7 @@
     } else {
       var hints = targetElm.querySelectorAll('*[data-hint]');
 
-      if (hints.length === 0) {
+      if (!hints || !hints.length) {
         return false;
       }
 
