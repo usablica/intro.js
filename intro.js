@@ -113,13 +113,12 @@
    */
   function _introForElement(targetElm) {
     var introItems = [],
-        self = this,
-        i = 0;
+        self = this;
 
     if (this._options.steps) {
       //use steps passed programmatically
-      for (var stepsLength = this._options.steps.length; i < stepsLength; i++) {
-        var currentItem = _cloneObject(this._options.steps[i]);
+      _forEach(this._options.steps, function (step) {
+        var currentItem = _cloneObject(step);
 
         //set the step
         currentItem.step = introItems.length + 1;
@@ -153,14 +152,13 @@
 
         if (currentItem.element !== null) {
           introItems.push(currentItem);
-        }
-      }
+        }        
+      }.bind(this));
 
     } else {
       //use steps from data-* annotations
       var allIntroSteps = targetElm.querySelectorAll('*[data-intro]');
       var elmsLength = allIntroSteps.length;
-      var currentElement;
       var disableInteraction;
 
       //if there's no element to intro
@@ -168,13 +166,10 @@
         return false;
       }
 
-      //first add intro items with data-step
-      for (i = 0; i < elmsLength; i++) {
-        currentElement = allIntroSteps[i];
-
+      _forEach(allIntroSteps, function (currentElement) {
         // skip hidden elements
         if (currentElement.style.display === 'none') {
-          continue;
+          return;
         }
 
         var step = parseInt(currentElement.getAttribute('data-step'), 10);
@@ -197,14 +192,13 @@
             disableInteraction: disableInteraction
           };
         }
-      }
+      }.bind(this));
 
       //next add intro items without data-step
       //todo: we need a cleanup here, two loops are redundant
       var nextStep = 0;
-      for (i = 0; i < elmsLength; i++) {
-        currentElement = allIntroSteps[i];
 
+      _forEach(allIntroSteps, function (currentElement) {
         if (currentElement.getAttribute('data-step') === null) {
 
           while (true) {
@@ -213,7 +207,7 @@
             } else {
               nextStep++;
             }
-          }
+          } 
 
 
           if (typeof (currentElement.getAttribute('data-disable-interaction')) !== 'undefined') {
@@ -233,7 +227,7 @@
             disableInteraction: disableInteraction
           };
         }
-      }
+      }.bind(this));
     }
 
     //removing undefined/null elements
@@ -397,13 +391,12 @@
     this._direction = 'forward';
 
     if (typeof (this._currentStepNumber) !== 'undefined') {
-        for( var i = 0, len = this._introItems.length; i < len; i++ ) {
-            var item = this._introItems[i];
-            if( item.step === this._currentStepNumber ) {
-                this._currentStep = i - 1;
-                this._currentStepNumber = undefined;
-            }
+      _forEach(this._introItems, function (item, i) {
+        if( item.step === this._currentStepNumber ) {
+          this._currentStep = i - 1;
+          this._currentStepNumber = undefined;
         }
+      }.bind(this));
     }
 
     if (typeof (this._currentStep) === 'undefined') {
@@ -516,19 +509,16 @@
 
     //remove overlay layers from the page
     var overlayLayers = targetElement.querySelectorAll('.introjs-overlay');
-    var i;
 
-    if (overlayLayers && overlayLayers.length > 0) {
-      for (i = overlayLayers.length - 1; i >= 0; i--) {
-        //for fade-out animation
-        var overlayLayer = overlayLayers[i];
+    if (overlayLayers && overlayLayers.length) {
+      _forEach(overlayLayers, function (overlayLayer) {
         overlayLayer.style.opacity = 0;
         window.setTimeout(function () {
           if (this.parentNode) {
             this.parentNode.removeChild(this);
           }
         }.bind(overlayLayer), 500);
-      }
+      }.bind(this));
     }
 
     //remove all helper layers
@@ -558,11 +548,9 @@
 
     //remove `introjs-fixParent` class from the elements
     var fixParents = document.querySelectorAll('.introjs-fixParent');
-    if (fixParents && fixParents.length > 0) {
-      for (i = fixParents.length - 1; i >= 0; i--) {
-        _removeClass(fixParents[i], /introjs-fixParent/g);
-      }
-    }
+    _forEach(fixParents, function (parent) {
+      _removeClass(parent, /introjs-fixParent/g);
+    });
 
     //clean listeners
     if (window.removeEventListener) {
@@ -925,7 +913,6 @@
         oldHelperLayer = document.querySelector('.introjs-helperLayer'),
         oldReferenceLayer = document.querySelector('.introjs-tooltipReferenceLayer'),
         highlightClass = 'introjs-helperLayer',
-        i,
         nextTooltipButton,
         prevTooltipButton,
         skipTooltipButton;
@@ -969,13 +956,10 @@
 
       //remove `introjs-fixParent` class from the elements
       var fixParents = document.querySelectorAll('.introjs-fixParent');
-      if (fixParents && fixParents.length > 0) {
-        for (i = fixParents.length - 1; i >= 0; i--) {
-          fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
-          _removeClass(fixParents[i], /introjs-fixParent/g);
-        }
-      }
-
+      _forEach(fixParents, function (parent) {
+        _removeClass(parent, /introjs-fixParent/g);
+      });
+      
       //remove old classes if the element still exist
       _removeShowElement();
 
@@ -1060,25 +1044,26 @@
           self.goToStep(this.getAttribute('data-stepnumber'));
       };
 
-      i = 0;
-
-      for (var stepsLength = this._introItems.length; i < stepsLength; i++) {
+      _forEach(this._introItems, function (item, i) {
         var innerLi    = document.createElement('li');
-          innerLi.setAttribute('role', 'presentation');
         var anchorLink = document.createElement('a');
-          anchorLink.setAttribute('role', 'tab');
+        
+        innerLi.setAttribute('role', 'presentation');
+        anchorLink.setAttribute('role', 'tab');
 
         anchorLink.onclick = anchorClick;
 
-        if (i === (targetElement.step-1)) anchorLink.className = 'active';
+        if (i === (targetElement.step-1)) {
+          anchorLink.className = 'active';
+        } 
 
         _setAnchorAsButton(anchorLink);
         anchorLink.innerHTML = "&nbsp;";
-        anchorLink.setAttribute('data-stepnumber', this._introItems[i].step);
+        anchorLink.setAttribute('data-stepnumber', item.step);
 
         innerLi.appendChild(anchorLink);
         ulContainer.appendChild(innerLi);
-      }
+      });
 
       bulletsLayer.appendChild(ulContainer);
 
@@ -1327,10 +1312,9 @@
   function _removeShowElement() {
     var elms = document.querySelectorAll('.introjs-showElement');
 
-    for (var i = 0, l = elms.length; i < l; i++) {
-      var elm = elms[i];
+    _forEach(elms, function (elm) {
       _removeClass(elm, /introjs-[a-zA-Z]+/g);
-    }
+    });
   }
 
   /**
@@ -1387,6 +1371,27 @@
   }
 
   /**
+  * Iterates arrays
+  *
+  * @param {Array} arr
+  * @param {Function} forEachFnc
+  * @param {Function} completeFnc
+  * @return {Null}
+  */
+  function _forEach(arr, forEachFnc, completeFnc) {
+    // in case arr is an empty query selector node list
+    if (arr) {
+      for (var i = 0, len = arr.length; i < len; i++) {
+        forEachFnc(arr[i], i);
+      }
+    }
+
+    if (typeof(completeFnc) === 'function') {
+      completeFnc();
+    }
+  }
+
+  /**
    * Append a class to an element
    *
    * @api private
@@ -1405,9 +1410,9 @@
       if (element.classList !== undefined) {
         // check for modern classList property
         var classes = className.split(' ');
-        for (var i = 0, len = classes.length; i < len; i++) {
-          element.classList.add( classes[i] );
-        }
+        _forEach(classes, function (cls) {
+          element.classList.add( cls );
+        });
       } else if (!element.className.match( className )) {
         // check if element doesn't already have className
         element.className += ' ' + className;
@@ -1586,14 +1591,12 @@
    * @method _startHint
    */
   function _populateHints(targetElm) {
-    var i = 0,
-      len;
 
     this._introItems = [];
 
     if (this._options.hints) {
-      for (i = 0, len = this._options.hints.length; i < len; i++) {
-        var currentItem = _cloneObject(this._options.hints[i]);
+      _forEach(this._options.hints, function (hint) {
+        var currentItem = _cloneObject(hint);
 
         if (typeof(currentItem.element) === 'string') {
           //grab the element with given selector from the page
@@ -1606,18 +1609,16 @@
         if (currentItem.element !== null) {
           this._introItems.push(currentItem);
         }
-      }
+      }.bind(this));
     } else {
       var hints = targetElm.querySelectorAll('*[data-hint]');
 
-      if (hints.length < 1) {
+      if (hints.length === 0) {
         return false;
       }
 
       //first add intro items with data-step
-      for (i = 0, len = hints.length; i < len; i++) {
-        var currentElement = hints[i];
-
+      _forEach(hints, function (currentElement) {
         // hint animation
         var hintAnimation = currentElement.getAttribute('data-hintAnimation');
 
@@ -1635,7 +1636,7 @@
           tooltipClass: currentElement.getAttribute('data-tooltipClass'),
           position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
         });
-      }
+      }.bind(this));
     }
 
     _addHints.call(this);
@@ -1658,13 +1659,13 @@
    * @method _reAlignHints
    */
   function _reAlignHints() {
-    for (var i = 0, l = this._introItems.length; i < l; i++) {
-      var item = this._introItems[i];
-
-      if (typeof (item.targetElement) === 'undefined') continue;
+    _forEach(this._introItems, function (item) {
+      if (typeof(item.targetElement) === 'undefined') {
+        return;
+      }
 
       _alignHintPosition.call(this, item.hintPosition, item.element, item.targetElement);
-    }
+    }.bind(this));
   }
 
   /**
@@ -1696,11 +1697,9 @@
   function _hideHints() {
     var hints = this._targetElement.querySelectorAll('.introjs-hint');
 
-    if (hints && hints.length > 0) {
-      for (var i = 0; i < hints.length; i++) {
-        _hideHint.call(this, hints[i].getAttribute('data-step'));
-      }
-    }
+    _forEach(hints, function (hint) {
+      _hideHint.call(this, hint.getAttribute('data-step'));
+    }.bind(this));
   }
 
   /**
@@ -1712,10 +1711,10 @@
   function _showHints() {
     var hints = this._targetElement.querySelectorAll('.introjs-hint');
 
-    if (hints && hints.length > 0) {
-      for (var i = 0; i < hints.length; i++) {
-        _showHint.call(this, hints[i].getAttribute('data-step'));
-      }
+    if (hints && hints.length) {
+      _forEach(hints, function (hint) {
+        _showHint.call(this, hint.getAttribute('data-step'));
+      }.bind(this));
     } else {
       _populateHints.call(this, this._targetElement);
     }
@@ -1745,11 +1744,9 @@
   function _removeHints() {
     var hints = this._targetElement.querySelectorAll('.introjs-hint');
 
-    if (hints && hints.length > 0) {
-      for (var i = 0; i < hints.length; i++) {
-        _removeHint.call(this, hints[i].getAttribute('data-step'));
-      }
-    }
+    _forEach(hints, function (hint) {
+      _removeHint.call(this, hint.getAttribute('data-step'));
+    }.bind(this));
   }
 
   /**
@@ -1806,12 +1803,11 @@
       };
     };
 
-    for (var i = 0, l = this._introItems.length; i < l; i++) {
-      var item = this._introItems[i];
-
+    _forEach(this._introItems, function(item, i) {
       // avoid append a hint twice
-      if (document.querySelector('.introjs-hint[data-step="' + i + '"]'))
-        continue;
+      if (document.querySelector('.introjs-hint[data-step="' + i + '"]')) {
+        return;
+      }
 
       var hint = document.createElement('a');
       _setAnchorAsButton(hint);
@@ -1847,7 +1843,7 @@
       _alignHintPosition.call(this, item.hintPosition, hint, item.targetElement);
 
       hintsWrapper.appendChild(hint);
-    }
+    }.bind(this));
 
     // adding the hints wrapper
     document.body.appendChild(hintsWrapper);
