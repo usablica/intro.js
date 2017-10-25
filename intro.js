@@ -277,7 +277,7 @@
           code = (e.charCode === null) ? e.keyCode : e.charCode;
         }
         
-        if (code === 'Escape' || code === 27 && self._options.exitOnEsc == true) {
+        if ((code === 'Escape' || code === 27) && self._options.exitOnEsc == true) {
           //escape key pressed, exit the intro
           //check if exit callback is defined
           _exitIntro.call(self, targetElm);
@@ -816,7 +816,7 @@
 
     // If the requested position is in the list, replace our calculated choice with that
     if (desiredTooltipPosition && desiredTooltipPosition != "auto") {
-      if (possiblePositions.indexOf(desiredTooltipPosition) > -1) {
+      if (possiblePositions.indexOf(desiredTooltipPosition) == -1) {
         calculatedPosition = desiredTooltipPosition;
       }
     }
