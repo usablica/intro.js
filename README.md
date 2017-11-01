@@ -1,5 +1,7 @@
 # Intro.js v2.8.0
 
+![](https://travis-ci.org/usablica/intro.js.svg?branch=master)
+
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
 ## Where to get
