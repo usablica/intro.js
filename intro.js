@@ -159,10 +159,9 @@
 
     } else {
       //use steps from data-* annotations
-      var allIntroSteps = targetElm.querySelectorAll('*[data-intro]');
       var elmsLength = allIntroSteps.length;
       var disableInteraction;
-
+      
       //if there's no element to intro
       if (elmsLength < 1) {
         return false;
@@ -173,7 +172,7 @@
         // PR #80
         // start intro for groups of elements
         if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
-          continue;
+          return;
         }
 
         // skip hidden elements
@@ -212,7 +211,7 @@
         // PR #80
         // start intro for groups of elements
         if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
-          continue;
+          return;
         }
         
         if (currentElement.getAttribute('data-step') === null) {
