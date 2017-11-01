@@ -630,7 +630,7 @@
     tooltipOffset = _getOffset(tooltipLayer);
     windowSize    = _getWinSize();
 
-    _setClass(tooltipLayer, 'introjs-' + currentTooltipPosition);
+    _addClass(tooltipLayer, 'introjs-' + currentTooltipPosition);
 
     switch (currentTooltipPosition) {
       case 'top-right-aligned':
@@ -713,7 +713,7 @@
       case 'bottom-right-aligned':
         arrowLayer.className      = 'introjs-arrow top-right';
 
-        var tooltipLayerStyleRight = 0;
+        tooltipLayerStyleRight = 0;
         _checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer);
         tooltipLayer.style.top    = (targetOffset.height +  20) + 'px';
         break;
@@ -721,7 +721,7 @@
       case 'bottom-middle-aligned':
         arrowLayer.className      = 'introjs-arrow top-middle';
 
-        var tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipOffset.width / 2;
+        tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipOffset.width / 2;
 
         // a fix for middle aligned hints
         if (hintMode) {
