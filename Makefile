@@ -1,6 +1,9 @@
 BASE = .
 
+.PHONY: build
 build:
 	cd BUILD && node BUILD.js
 
-.PHONY: build
+.PHONY: test
+test:
+	npm test
