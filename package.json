@@ -8,13 +8,24 @@
     "type": "git",
     "url": "https://github.com/usablica/intro.js"
   },
+  "scripts": {
+    "test": "npm run test:jshint",
+    "test:jshint": "jshint ./intro.js"
+  },
   "devDependencies": {
+    "jshint": "^2.9.5",
     "node-minify": "*"
   },
   "engine": [
     "node >=0.1.90"
   ],
   "main": "intro.js",
+  "files": [
+    "*.js",
+    "*.css",
+    "license.md",
+    "themes/*"
+  ],
   "license": "AGPL-3.0",
   "spm": {
     "main": "intro.js",
