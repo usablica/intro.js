@@ -122,72 +122,59 @@ tr.introjs-showElement > th {
 }
 
 .introjs-arrow {
-  border: 5px solid white;
+  border: 5px solid transparent;
   content:'';
   position: absolute;
 }
 .introjs-arrow.top {
   top: -10px;
-  border-top-color:transparent;
-  border-right-color:transparent;
   border-bottom-color:white;
-  border-left-color:transparent;
 }
 .introjs-arrow.top-right {
   top: -10px;
   right: 10px;
-  border-top-color:transparent;
-  border-right-color:transparent;
   border-bottom-color:white;
-  border-left-color:transparent;
 }
 .introjs-arrow.top-middle {
   top: -10px;
   left: 50%;
   margin-left: -5px;
-  border-top-color:transparent;
-  border-right-color:transparent;
   border-bottom-color:white;
-  border-left-color:transparent;
 }
 .introjs-arrow.right {
   right: -10px;
   top: 10px;
-  border-top-color:transparent;
-  border-right-color:transparent;
-  border-bottom-color:transparent;
   border-left-color:white;
 }
 .introjs-arrow.right-bottom {
   bottom:10px;
   right: -10px;
-  border-top-color:transparent;
-  border-right-color:transparent;
-  border-bottom-color:transparent;
   border-left-color:white;
 }
 .introjs-arrow.bottom {
   bottom: -10px;
   border-top-color:white;
-  border-right-color:transparent;
-  border-bottom-color:transparent;
-  border-left-color:transparent;
+}
+.introjs-arrow.bottom-right {
+  bottom: -10px;
+  right: 10px;
+  border-top-color:white;
+}
+.introjs-arrow.bottom-middle {
+  bottom: -10px;
+  left: 50%;
+  margin-left: -5px;
+  border-top-color:white;
 }
 .introjs-arrow.left {
   left: -10px;
   top: 10px;
-  border-top-color:transparent;
   border-right-color:white;
-  border-bottom-color:transparent;
-  border-left-color:transparent;
 }
 .introjs-arrow.left-bottom {
   left: -10px;
   bottom:10px;
-  border-top-color:transparent;
   border-right-color:white;
-  border-bottom-color:transparent;
-  border-left-color:transparent;
 }
 
 .introjs-tooltip {
