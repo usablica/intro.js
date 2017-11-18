@@ -1661,7 +1661,7 @@
    * @method _removeHintTooltip
    */
   function _removeHintTooltip() {
-    var tooltip = this._targetElement.querySelector('.introjs-hintReference');
+    var tooltip = document.querySelector('.introjs-hintReference');
 
     if (tooltip) {
       var step = tooltip.getAttribute('data-step');
@@ -1756,14 +1756,26 @@
   }
 
   /**
+  * Get a queryselector within the hint wrapper
+  *
+  * @param {String} selector
+  * @return {NodeList|Array}
+  */
+  function _hintQuerySelectorAll(selector) {
+    var hintsWrapper = document.querySelector('.introjs-hints');
+    return (hintsWrapper) ? hintsWrapper.querySelectorAll(selector) : [];
+  }
+
+  /**
    * Hide a hint
    *
    * @api private
    * @method _hideHint
    */
   function _hideHint(stepId) {
+    var hint = _hintQuerySelectorAll('.introjs-hint[data-step="' + stepId + '"]')[0];
+    
     _removeHintTooltip.call(this);
-    var hint = this._targetElement.querySelector('.introjs-hint[data-step="' + stepId + '"]');
 
     if (hint) {
       _addClass(hint, 'introjs-hidehint');
@@ -1782,7 +1794,7 @@
    * @method _hideHints
    */
   function _hideHints() {
-    var hints = this._targetElement.querySelectorAll('.introjs-hint');
+    var hints = _hintQuerySelectorAll('.introjs-hint');
 
     _forEach(hints, function (hint) {
       _hideHint.call(this, hint.getAttribute('data-step'));
@@ -1796,7 +1808,7 @@
    * @method _showHints
    */
   function _showHints() {
-    var hints = this._targetElement.querySelectorAll('.introjs-hint');
+    var hints = _hintQuerySelectorAll('.introjs-hint');
 
     if (hints && hints.length) {
       _forEach(hints, function (hint) {
@@ -1814,7 +1826,7 @@
    * @method _showHint
    */
   function _showHint(stepId) {
-    var hint = this._targetElement.querySelector('.introjs-hint[data-step="' + stepId + '"]');
+    var hint = _hintQuerySelectorAll('.introjs-hint[data-step="' + stepId + '"]')[0];
 
     if (hint) {
       _removeClass(hint, /introjs-hidehint/g);
@@ -1829,7 +1841,7 @@
    * @method _removeHints
    */
   function _removeHints() {
-    var hints = this._targetElement.querySelectorAll('.introjs-hint');
+    var hints = _hintQuerySelectorAll('.introjs-hint');
 
     _forEach(hints, function (hint) {
       _removeHint.call(this, hint.getAttribute('data-step'));
@@ -1845,7 +1857,7 @@
    * @method _removeHint
    */
   function _removeHint(stepId) {
-    var hint = this._targetElement.querySelector('.introjs-hint[data-step="' + stepId + '"]');
+    var hint = _hintQuerySelectorAll('.introjs-hint[data-step="' + stepId + '"]')[0];
 
     if (hint) {
       hint.parentNode.removeChild(hint);
