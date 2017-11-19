@@ -1355,6 +1355,7 @@
    * @param {Object} tooltipLayer
    */
   function _scrollTo(scrollTo, targetElement, tooltipLayer) {
+    if (scrollTo === 'off') return;  
     var rect;
 
     if (!this._options.scrollToElement) return;
