@@ -1539,7 +1539,9 @@
   function _getPropValue (element, propName) {
     var propValue = '';
     if (element.currentStyle) { //IE
-      propValue = element.currentStyle[propName];
+      /*To change the z-index value of an element with JavaScript, you would use the usual “camel casing minus the hyphen”,
+       which is generally the norm for accessing CSS properties with JavaScript (e.g. myElement.style.zIndex = "100";)*/
+      propValue = element.currentStyle[propName === 'z-index' ? 'zIndex' : propName];
     } else if (document.defaultView && document.defaultView.getComputedStyle) { //Others
       propValue = document.defaultView.getComputedStyle(element, null).getPropertyValue(propName);
     }
