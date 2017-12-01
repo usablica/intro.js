@@ -30,7 +30,7 @@ For example:
 <a href='http://google.com/' data-intro='Hello step one!'></a>
 ````
 
-See all attributes [here](https://github.com/usablica/intro.js/wiki/Documentation/#attributes).
+See all attributes [here](https://introjs.com/docs/intro/attributes/).
 
 **3)** Call this JavaScript function:
 ```javascript
