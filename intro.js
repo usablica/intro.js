@@ -792,17 +792,10 @@
     // Take a clone of position precedence. These will be the available
     var possiblePositions = this._options.positionPrecedence.slice();
 
-    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-
     var windowSize = _getWinSize();
     var tooltipHeight = _getOffset(tooltipLayer).height + 10;
     var tooltipWidth = _getOffset(tooltipLayer).width + 20;
-    var targetOffset = _getOffset(targetElement);
-
-    // adjust for scroll position
-    targetOffset.top -= scrollTop;
-    targetOffset.left -= scrollLeft;
+    var targetElementRect = targetElement.getBoundingClientRect();
 
     // If we check all the possible areas, and there are no valid places for the tooltip, the element
     // must take up most of the screen real estate. Show the tooltip floating in the middle of the screen.
@@ -813,22 +806,22 @@
     */
 
     // Check for space below
-    if ((targetOffset.height + targetOffset.top + tooltipHeight) > windowSize.height) {
+    if (targetElementRect.bottom + tooltipHeight + tooltipHeight > windowSize.height) {
       _removeEntry(possiblePositions, "bottom");
     }
 
     // Check for space above
-    if (targetOffset.top - tooltipHeight < 0) {
+    if (targetElementRect.top - tooltipHeight < 0) {
       _removeEntry(possiblePositions, "top");
     }
 
     // Check for space to the right
-    if (targetOffset.width + targetOffset.left + tooltipWidth > windowSize.width) {
+    if (targetElementRect.right + tooltipWidth > windowSize.width) {
       _removeEntry(possiblePositions, "right");
     }
 
     // Check for space to the left
-    if (targetOffset.left - tooltipWidth < 0) {
+    if (targetElementRect.left - tooltipWidth < 0) {
       _removeEntry(possiblePositions, "left");
     }
 
@@ -862,7 +855,7 @@
 
     // only top and bottom positions have optional alignments
     if (['top', 'bottom'].indexOf(calculatedPosition) !== -1) {
-      calculatedPosition += _determineAutoAlignment(targetOffset.left, tooltipWidth, windowSize, desiredAlignment);
+      calculatedPosition += _determineAutoAlignment(targetElementRect.left, tooltipWidth, windowSize, desiredAlignment);
     }
 
     return calculatedPosition;
@@ -1362,6 +1355,7 @@
    * @param {Object} tooltipLayer
    */
   function _scrollTo(scrollTo, targetElement, tooltipLayer) {
+    if (scrollTo === 'off') return;  
     var rect;
 
     if (!this._options.scrollToElement) return;
