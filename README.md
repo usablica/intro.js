@@ -1,4 +1,4 @@
-# Intro.js v2.8.0
+# Intro.js v2.9.0
 
 ![](https://travis-ci.org/usablica/intro.js.svg?branch=master)
 

@@ -1,5 +1,13 @@
 ## Release History
 
+ * **v2.9.0-alpha.1** - 2017-12-02
+   - Supporting scroll option `off`
+   - Improved accuracy of tooltip positions
+   - Improved auto position
+   - Changed HTML attributes to lowercase
+   - Improved coding style
+   - Many bug fixes
+
  * **v2.8.0-alpha.1** - 2017-08-30
    - Enabling `onbeforechange` to return bool and prevent the next step to display
    - Updating disable interaction layer after window resize
