@@ -185,10 +185,10 @@
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
             step: parseInt(currentElement.getAttribute('data-step'), 10),
-            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            highlightClass: currentElement.getAttribute('data-highlightClass'),
+            tooltipClass: currentElement.getAttribute('data-tooltipclass'),
+            highlightClass: currentElement.getAttribute('data-highlightclass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
-            scrollTo: currentElement.getAttribute('data-scrollTo') || this._options.scrollTo,
+            scrollTo: currentElement.getAttribute('data-scrollto') || this._options.scrollTo,
             disableInteraction: disableInteraction
           };
         }
@@ -220,10 +220,10 @@
             element: currentElement,
             intro: currentElement.getAttribute('data-intro'),
             step: nextStep + 1,
-            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
-            highlightClass: currentElement.getAttribute('data-highlightClass'),
+            tooltipClass: currentElement.getAttribute('data-tooltipclass'),
+            highlightClass: currentElement.getAttribute('data-highlightclass'),
             position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
-            scrollTo: currentElement.getAttribute('data-scrollTo') || this._options.scrollTo,
+            scrollTo: currentElement.getAttribute('data-scrollto') || this._options.scrollTo,
             disableInteraction: disableInteraction
           };
         }
@@ -1707,7 +1707,7 @@
       //first add intro items with data-step
       _forEach(hints, function (currentElement) {
         // hint animation
-        var hintAnimation = currentElement.getAttribute('data-hintAnimation');
+        var hintAnimation = currentElement.getAttribute('data-hintanimation');
 
         if (hintAnimation) {
           hintAnimation = (hintAnimation === 'true');
@@ -1718,9 +1718,9 @@
         this._introItems.push({
           element: currentElement,
           hint: currentElement.getAttribute('data-hint'),
-          hintPosition: currentElement.getAttribute('data-hintPosition') || this._options.hintPosition,
+          hintPosition: currentElement.getAttribute('data-hintposition') || this._options.hintPosition,
           hintAnimation: hintAnimation,
-          tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+          tooltipClass: currentElement.getAttribute('data-tooltipclass'),
           position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
         });
       }.bind(this));
