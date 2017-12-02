@@ -73,12 +73,18 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 
 ## <a href="https://github.com/usablica/intro.js/blob/master/changelog.md">Release History</a>
 
-## Author
+## Authors
 **Afshin Mehrabani**
 
 - [Twitter](https://twitter.com/afshinmeh)
 - [Github](https://github.com/afshinm)
 - [Personal page](http://afshinm.name/)
+
+**Benjamin J DeLong**
+
+- [Twitter](https://twitter.com/bozdoz)
+- [Github](https://github.com/bozdoz)
+- [Personal page](https://bozdoz.com/)
 
 [Other contributors](https://github.com/usablica/intro.js/graphs/contributors)
 

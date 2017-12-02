@@ -13,7 +13,9 @@ Intro.js is an open source vanilla Javascript / CSS library to add step-by-step 
 Intro.js doesn't have any dependencies. All you need to do is adding the JS and CSS file, that's it.
 
 #### Author
-Afshin Mehrabani (afshin.meh at gmail.com)
+
+ - Afshin Mehrabani (afshin.meh at gmail.com)  
+ - Benjamin J DeLong  
 
 and many [contributors](https://github.com/usablica/intro.js/graphs/contributors).
 
