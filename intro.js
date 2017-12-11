@@ -513,6 +513,8 @@
     // otherwise, if `onbeforeexit` returned `false`, don't exit the intro
     if (!force && continueExit === false) return;
 
+    document.body.classList.remove('introjs-noscroll');
+
     //remove overlay layers from the page
     var overlayLayers = targetElement.querySelectorAll('.introjs-overlay');
 
@@ -1042,9 +1044,13 @@
         }
       }
 
+      // change the scroll of the window, if needed
+      _scrollTo.call(self, targetElement.scrollTo, targetElement, oldtooltipLayer);
+
       //set new position to helper layer
       _setHelperLayerPosition.call(self, oldHelperLayer);
       _setHelperLayerPosition.call(self, oldReferenceLayer);
+      _setStepsOverlayPosition.call(self, targetElement);
 
       //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
       if (self._lastShowElementTimer) {
@@ -1083,8 +1089,6 @@
           nextTooltipButton.focus();
         }
 
-        // change the scroll of the window, if needed
-        _scrollTo.call(self, targetElement.scrollTo, targetElement, oldtooltipLayer);
       }, 350);
 
       // end of old element if-else condition
@@ -1101,9 +1105,13 @@
       helperLayer.className = highlightClass;
       referenceLayer.className = 'introjs-tooltipReferenceLayer';
 
+      // change the scroll of the window, if needed
+      _scrollTo.call(this, targetElement.scrollTo, targetElement, tooltipLayer);
+
       //set new position to helper layer
       _setHelperLayerPosition.call(self, helperLayer);
       _setHelperLayerPosition.call(self, referenceLayer);
+      _setStepsOverlayPosition.call(self, targetElement);
 
       //add helper layer to target element
       this._targetElement.appendChild(helperLayer);
@@ -1237,9 +1245,6 @@
       //set proper position
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
 
-      // change the scroll of the window, if needed
-      _scrollTo.call(this, targetElement.scrollTo, targetElement, tooltipLayer);
-
       //end of new element if-else condition
     }
 
@@ -1326,8 +1331,6 @@
     if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
       nextTooltipButton.focus();
     }
-
-    _placeStepsOverlay.call(this, targetElement);
 
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
       this._introAfterChangeCallback.call(this, targetElement.element);
@@ -1534,12 +1537,12 @@
    * @param {Object} targetElm
    */
   function _addOverlayLayer(targetElm) {
-    var self = this,
-        styleText = '',
-        overlay;
+    var self = this;
+
+    document.body.classList.add('introjs-noscroll');
 
     Object.getOwnPropertyNames(POSITIONS).forEach(function(key) {
-      overlay = document.createElement("div");
+      var overlay = document.createElement("div");
       overlay.classList.add('introjs-overlay');
       overlay.classList.add('introjs-overlay-' + POSITIONS[key]);
       targetElm.appendChild(overlay);
@@ -1589,9 +1592,15 @@
     return true;
   }
 
-  function _placeStepsOverlay(targetElement) {
-    var elementDimensions = targetElement.element.getBoundingClientRect();//_getOffset(targetElement.element);
-    var windowDimensions = _getWinSize();
+  function _setStepsOverlayPosition(targetElement) {
+    var elementDimensions = _getOffset(targetElement.element);
+    
+    var body = document.body;
+    var html = document.documentElement;
+    var windowDimensions = {
+      height: Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight),
+      width: Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth)
+    };
 
     var topLeftPadding,
         bottomRightPadding,
@@ -1624,37 +1633,42 @@
       bottom = windowDimensions.height - (elementDimensions.top + elementDimensions.height + bottomRightPadding);
     }
 
+    var styles = {};
+    Object.getOwnPropertyNames(POSITIONS).forEach(function(key) {
+      var position = POSITIONS[key];
+      styles[key] = 'opacity: ' + overlayOpacity + ';'; 
+      switch (position) {
+        case POSITIONS.LEFT:
+          styles[key] += ' top: 0px;';
+          styles[key] += ' left: 0px;';
+          styles[key] += ' width: ' + left + 'px;';
+          styles[key] += ' height: ' + (top + height + bottom) + 'px;';
+          break;
+        case POSITIONS.RIGHT:
+          styles[key] += ' top: 0px;';
+          styles[key] += ' left: ' + (left + width) + 'px;';
+          styles[key] += ' width: ' + right + 'px;';
+          styles[key] += ' height: ' + (top + height + bottom) + 'px;';
+          break;
+        case POSITIONS.TOP:
+          styles[key] += ' top: 0px;';
+          styles[key] += ' left: ' + left + 'px;';
+          styles[key] += ' width: ' + width + 'px;';
+          styles[key] += ' height: ' + top + 'px;';
+          break;
+        case POSITIONS.BOTTOM:
+          styles[key] += ' top: ' + (top + height) + 'px;';
+          styles[key] += ' left: ' + left + 'px;';
+          styles[key] += ' width: ' + width + 'px;';
+          styles[key] += ' height: ' + bottom + 'px;';
+          break;
+      }
+    });
+
     Object.getOwnPropertyNames(POSITIONS).forEach(function(key) {
       var position = POSITIONS[key];
       var overlay = document.getElementsByClassName('introjs-overlay-' + position)[0];
-      var styleText = 'opacity: ' + overlayOpacity + '; position: fixed;';
-      switch (position) {
-        case POSITIONS.LEFT:
-          styleText += ' top: 0px;';
-          styleText += ' left: 0px;';
-          styleText += ' width: ' + left + 'px;';
-          styleText += ' height: 100%;';
-          break;
-        case POSITIONS.RIGHT:
-          styleText += ' top: 0px;';
-          styleText += ' right: 0px;';
-          styleText += ' width: ' + right + 'px;';
-          styleText += ' height: 100%;';
-          break;
-        case POSITIONS.TOP:
-          styleText += ' top: 0px;';
-          styleText += ' left: ' + left + 'px;';
-          styleText += ' width: ' + width + 'px;';
-          styleText += ' height: ' + top + 'px';
-          break;
-        case POSITIONS.BOTTOM:
-          styleText += ' bottom: 0px;';
-          styleText += ' left: ' + left + 'px;';
-          styleText += ' width: ' + width + 'px;';
-          styleText += ' height: ' + bottom + 'px';
-          break;
-      }
-      overlay.setAttribute('style', styleText);
+      overlay.setAttribute('style', styles[key]);
     });
   }
     
