@@ -33,6 +33,12 @@
 })(function () {
   //Default config/variables
   var VERSION = '2.9.0-alpha.1';
+  var POSITIONS = {
+    BOTTOM: 'bottom',
+    TOP: 'top',
+    RIGHT: 'right',
+    LEFT: 'left'
+  };
 
   /**
    * IntroJs main class
@@ -57,7 +63,7 @@
       /* Hide next button in the last step? Otherwise, it will be disabled button. */
       hideNext: false,
       /* Default tooltip box position */
-      tooltipPosition: 'bottom',
+      tooltipPosition: POSITIONS.BOTTOM,
       /* Next CSS class for tooltip boxes */
       tooltipClass: '',
       /* CSS class that is added to the helperLayer */
@@ -87,9 +93,9 @@
       /* Padding to add after scrolling when element is not in the viewport (in pixels) */
       scrollPadding: 30,
       /* Set the overlay opacity */
-      overlayOpacity: 0.8,
+      overlayOpacity: 0.75,
       /* Precedence of positions, when auto is enabled */
-      positionPrecedence: ["bottom", "top", "right", "left"],
+      positionPrecedence: [POSITIONS.BOTTOM, POSITIONS.TOP, POSITIONS.RIGHT, POSITIONS.LEFT],
       /* Disable an interaction with element? */
       disableInteraction: false,
       /* Set how much padding to be used around helper element */
@@ -544,14 +550,6 @@
       floatingElement.parentNode.removeChild(floatingElement);
     }
 
-    _removeShowElement();
-
-    //remove `introjs-fixParent` class from the elements
-    var fixParents = document.querySelectorAll('.introjs-fixParent');
-    _forEach(fixParents, function (parent) {
-      _removeClass(parent, /introjs-fixParent/g);
-    });
-
     //clean listeners
     if (window.removeEventListener) {
       window.removeEventListener('keydown', this._onKeyDown, true);
@@ -660,7 +658,7 @@
 
       case 'top-left-aligned':
       // top-left-aligned is the same as the default top
-      case 'top':
+      case POSITIONS.TOP:
         arrowLayer.className = 'introjs-arrow bottom';
 
         tooltipLayerStyleLeft = (hintMode) ? 0 : 15;
@@ -668,7 +666,7 @@
         _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
         tooltipLayer.style.bottom = (targetOffset.height +  20) + 'px';
         break;
-      case 'right':
+      case POSITIONS.RIGHT:
         tooltipLayer.style.left = (targetOffset.width + 20) + 'px';
         if (targetOffset.top + tooltipOffset.height > windowSize.height) {
           // In this case, right would have fallen below the bottom of the screen.
@@ -679,7 +677,7 @@
           arrowLayer.className = 'introjs-arrow left';
         }
         break;
-      case 'left':
+      case POSITIONS.LEFT:
         if (!hintMode && this._options.showStepNumbers === true) {
           tooltipLayer.style.top = '15px';
         }
@@ -807,22 +805,22 @@
 
     // Check for space below
     if (targetElementRect.bottom + tooltipHeight + tooltipHeight > windowSize.height) {
-      _removeEntry(possiblePositions, "bottom");
+      _removeEntry(possiblePositions, POSITIONS.BOTTOM);
     }
 
     // Check for space above
     if (targetElementRect.top - tooltipHeight < 0) {
-      _removeEntry(possiblePositions, "top");
+      _removeEntry(possiblePositions, POSITIONS.TOP);
     }
 
     // Check for space to the right
     if (targetElementRect.right + tooltipWidth > windowSize.width) {
-      _removeEntry(possiblePositions, "right");
+      _removeEntry(possiblePositions, POSITIONS.RIGHT);
     }
 
     // Check for space to the left
     if (targetElementRect.left - tooltipWidth < 0) {
-      _removeEntry(possiblePositions, "left");
+      _removeEntry(possiblePositions, POSITIONS.LEFT);
     }
 
     // @var {String}  ex: 'right-aligned'
@@ -854,7 +852,7 @@
     }
 
     // only top and bottom positions have optional alignments
-    if (['top', 'bottom'].indexOf(calculatedPosition) !== -1) {
+    if ([POSITIONS.TOP, POSITIONS.BOTTOM].indexOf(calculatedPosition) !== -1) {
       calculatedPosition += _determineAutoAlignment(targetElementRect.left, tooltipWidth, windowSize, desiredAlignment);
     }
 
@@ -1047,15 +1045,6 @@
       //set new position to helper layer
       _setHelperLayerPosition.call(self, oldHelperLayer);
       _setHelperLayerPosition.call(self, oldReferenceLayer);
-
-      //remove `introjs-fixParent` class from the elements
-      var fixParents = document.querySelectorAll('.introjs-fixParent');
-      _forEach(fixParents, function (parent) {
-        _removeClass(parent, /introjs-fixParent/g);
-      });
-      
-      //remove old classes if the element still exist
-      _removeShowElement();
 
       //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
       if (self._lastShowElementTimer) {
@@ -1338,7 +1327,7 @@
       nextTooltipButton.focus();
     }
 
-    _setShowElement(targetElement);
+    _placeStepsOverlay.call(this, targetElement);
 
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
       this._introAfterChangeCallback.call(this, targetElement.element);
@@ -1381,73 +1370,6 @@
       } else {
         window.scrollBy(0, rect.top - ((winHeight / 2) -  (rect.height / 2)) + this._options.scrollPadding); // 30px padding from edge to look nice
       }
-    }
-  }
-
-  /**
-   * To remove all show element(s)
-   *
-   * @api private
-   * @method _removeShowElement
-   */
-  function _removeShowElement() {
-    var elms = document.querySelectorAll('.introjs-showElement');
-
-    _forEach(elms, function (elm) {
-      _removeClass(elm, /introjs-[a-zA-Z]+/g);
-    });
-  }
-
-  /**
-   * To set the show element
-   * This function set a relative (in most cases) position and changes the z-index
-   *
-   * @api private
-   * @method _setShowElement
-   * @param {Object} targetElement
-   */
-  function _setShowElement(targetElement) {
-    var parentElm;
-    // we need to add this show element class to the parent of SVG elements
-    // because the SVG elements can't have independent z-index
-    if (targetElement.element instanceof SVGElement) {
-      parentElm = targetElement.element.parentNode;
-
-      while (targetElement.element.parentNode !== null) {
-        if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
-
-        if (parentElm.tagName.toLowerCase() === 'svg') {
-          _addClass(parentElm, 'introjs-showElement introjs-relativePosition');
-        }
-
-        parentElm = parentElm.parentNode;
-      }
-    }
-
-    _addClass(targetElement.element, 'introjs-showElement');
-
-    var currentElementPosition = _getPropValue(targetElement.element, 'position');
-    if (currentElementPosition !== 'absolute' &&
-        currentElementPosition !== 'relative' &&
-        currentElementPosition !== 'fixed') {
-      //change to new intro item
-      _addClass(targetElement.element, 'introjs-relativePosition');
-    }
-
-    parentElm = targetElement.element.parentNode;
-    while (parentElm !== null) {
-      if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
-
-      //fix The Stacking Context problem.
-      //More detail: https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context
-      var zIndex = _getPropValue(parentElm, 'z-index');
-      var opacity = parseFloat(_getPropValue(parentElm, 'opacity'));
-      var transform = _getPropValue(parentElm, 'transform') || _getPropValue(parentElm, '-webkit-transform') || _getPropValue(parentElm, '-moz-transform') || _getPropValue(parentElm, '-ms-transform') || _getPropValue(parentElm, '-o-transform');
-      if (/[0-9]+/.test(zIndex) || opacity < 1 || (transform !== 'none' && transform !== undefined)) {
-        _addClass(parentElm, 'introjs-fixParent');
-      }
-
-      parentElm = parentElm.parentNode;
     }
   }
 
@@ -1612,9 +1534,28 @@
    * @param {Object} targetElm
    */
   function _addOverlayLayer(targetElm) {
-    var overlayLayer = document.createElement('div'),
+    var self = this,
         styleText = '',
-        self = this;
+        overlay;
+
+    Object.getOwnPropertyNames(POSITIONS).forEach(function(key) {
+      overlay = document.createElement("div");
+      overlay.classList.add('introjs-overlay');
+      overlay.classList.add('introjs-overlay-' + POSITIONS[key]);
+      targetElm.appendChild(overlay);
+    
+      if (self._options.exitOnOverlayClick === true) {
+        overlay.onclick = function() {
+          _exitIntro.call(self, targetElm);
+        }
+      }
+    });
+
+    return true;
+    
+    var overlayLayer = document.createElement('div'),
+    styleText = '',
+    self = this;
 
     //set css class name
     overlayLayer.className = 'introjs-overlay';
@@ -1648,6 +1589,75 @@
     return true;
   }
 
+  function _placeStepsOverlay(targetElement) {
+    var elementDimensions = targetElement.element.getBoundingClientRect();//_getOffset(targetElement.element);
+    var windowDimensions = _getWinSize();
+
+    var topLeftPadding,
+        bottomRightPadding,
+        left,
+        right,
+        top,
+        bottom,
+        width,
+        height;
+
+    var overlayOpacity = this._options.overlayOpacity.toString();
+    var padding = this._options.helperElementPadding / 2;
+    var borderWidth = 1;
+    
+    if (targetElement.position === "floating") {
+      left = elementDimensions.left;
+      right = windowDimensions.width - elementDimensions.left;
+      top = elementDimensions.top;
+      bottom = windowDimensions.height - elementDimensions.top;
+      width = 0;
+      height = 0;
+    } else {
+      topLeftPadding = padding - borderWidth;
+      bottomRightPadding = padding + borderWidth;
+      width = elementDimensions.width + 2 * padding; 
+      height = elementDimensions.height + 2 * padding; 
+      left = elementDimensions.left - topLeftPadding;
+      right = windowDimensions.width - (elementDimensions.left + elementDimensions.width + bottomRightPadding);
+      top = elementDimensions.top - topLeftPadding;
+      bottom = windowDimensions.height - (elementDimensions.top + elementDimensions.height + bottomRightPadding);
+    }
+
+    Object.getOwnPropertyNames(POSITIONS).forEach(function(key) {
+      var position = POSITIONS[key];
+      var overlay = document.getElementsByClassName('introjs-overlay-' + position)[0];
+      var styleText = 'opacity: ' + overlayOpacity + '; position: fixed;';
+      switch (position) {
+        case POSITIONS.LEFT:
+          styleText += ' top: 0px;';
+          styleText += ' left: 0px;';
+          styleText += ' width: ' + left + 'px;';
+          styleText += ' height: 100%;';
+          break;
+        case POSITIONS.RIGHT:
+          styleText += ' top: 0px;';
+          styleText += ' right: 0px;';
+          styleText += ' width: ' + right + 'px;';
+          styleText += ' height: 100%;';
+          break;
+        case POSITIONS.TOP:
+          styleText += ' top: 0px;';
+          styleText += ' left: ' + left + 'px;';
+          styleText += ' width: ' + width + 'px;';
+          styleText += ' height: ' + top + 'px';
+          break;
+        case POSITIONS.BOTTOM:
+          styleText += ' bottom: 0px;';
+          styleText += ' left: ' + left + 'px;';
+          styleText += ' width: ' + width + 'px;';
+          styleText += ' height: ' + bottom + 'px';
+          break;
+      }
+      overlay.setAttribute('style', styleText);
+    });
+  }
+    
   /**
    * Removes open hint (tooltip hint)
    *
