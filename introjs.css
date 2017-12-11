@@ -13,6 +13,10 @@
           transition: all 0.3s ease-out;
 }
 
+.introjs-noscroll {
+  overflow: hidden;
+}
+
 .introjs-disableInteraction {
   z-index: 99999999 !important;
   position: absolute;
