@@ -478,6 +478,8 @@
     _setHelperLayerPosition.call(this, document.querySelector('.introjs-tooltipReferenceLayer'));
     _setHelperLayerPosition.call(this, document.querySelector('.introjs-disableInteraction'));
 
+    _setStepsOverlayPosition.call(this, this._introItems[this._currentStep]);
+
     // re-align tooltip
     if(this._currentStep !== undefined && this._currentStep !== null) {
       var oldHelperNumberLayer = document.querySelector('.introjs-helperNumberLayer'),
@@ -516,7 +518,7 @@
     document.body.classList.remove('introjs-noscroll');
 
     //remove overlay layers from the page
-    var overlayLayers = targetElement.querySelectorAll('.introjs-overlay');
+    var overlayLayers = document.body.querySelectorAll('.introjs-overlay');
 
     if (overlayLayers && overlayLayers.length) {
       _forEach(overlayLayers, function (overlayLayer) {
@@ -1050,6 +1052,7 @@
       //set new position to helper layer
       _setHelperLayerPosition.call(self, oldHelperLayer);
       _setHelperLayerPosition.call(self, oldReferenceLayer);
+
       _setStepsOverlayPosition.call(self, targetElement);
 
       //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
@@ -1111,6 +1114,7 @@
       //set new position to helper layer
       _setHelperLayerPosition.call(self, helperLayer);
       _setHelperLayerPosition.call(self, referenceLayer);
+
       _setStepsOverlayPosition.call(self, targetElement);
 
       //add helper layer to target element
@@ -1530,7 +1534,7 @@
   }
 
   /**
-   * Add overlay layer to the page
+   * Add overlay layers to the page
    *
    * @api private
    * @method _addOverlayLayer
@@ -1545,7 +1549,7 @@
       var overlay = document.createElement("div");
       overlay.classList.add('introjs-overlay');
       overlay.classList.add('introjs-overlay-' + POSITIONS[key]);
-      targetElm.appendChild(overlay);
+      document.body.appendChild(overlay);
     
       if (self._options.exitOnOverlayClick === true) {
         overlay.onclick = function() {
@@ -1555,120 +1559,114 @@
     });
 
     return true;
-    
-    var overlayLayer = document.createElement('div'),
-    styleText = '',
-    self = this;
-
-    //set css class name
-    overlayLayer.className = 'introjs-overlay';
-
-    //check if the target element is body, we should calculate the size of overlay layer in a better way
-    if (!targetElm.tagName || targetElm.tagName.toLowerCase() === 'body') {
-      styleText += 'top: 0;bottom: 0; left: 0;right: 0;position: fixed;';
-      overlayLayer.setAttribute('style', styleText);
-    } else {
-      //set overlay layer position
-      var elementPosition = _getOffset(targetElm);
-      if (elementPosition) {
-        styleText += 'width: ' + elementPosition.width + 'px; height:' + elementPosition.height + 'px; top:' + elementPosition.top + 'px;left: ' + elementPosition.left + 'px;';
-        overlayLayer.setAttribute('style', styleText);
-      }
-    }
-
-    targetElm.appendChild(overlayLayer);
-
-    overlayLayer.onclick = function() {
-      if (self._options.exitOnOverlayClick === true) {
-        _exitIntro.call(self, targetElm);
-      }
-    };
-
-    window.setTimeout(function() {
-      styleText += 'opacity: ' + self._options.overlayOpacity.toString() + ';';
-      overlayLayer.setAttribute('style', styleText);
-    }, 10);
-
-    return true;
   }
 
+  /**
+   * Position and resize overlay layers
+   *
+   * @api private
+   * @method _setStepsOverlayPosition
+   * @param {Object} targetElement
+   */
   function _setStepsOverlayPosition(targetElement) {
     var elementDimensions = _getOffset(targetElement.element);
-    
+    var overlayOpacity = this._options.overlayOpacity.toString();
+    var borderWidth = 1;
+  
+    //get dimensions of the document
     var body = document.body;
     var html = document.documentElement;
-    var windowDimensions = {
+    var documentDimensions = {
       height: Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight),
       width: Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth)
     };
 
-    var topLeftPadding,
-        bottomRightPadding,
-        left,
-        right,
-        top,
-        bottom,
-        width,
-        height;
-
-    var overlayOpacity = this._options.overlayOpacity.toString();
-    var padding = this._options.helperElementPadding / 2;
-    var borderWidth = 1;
-    
-    if (targetElement.position === "floating") {
-      left = elementDimensions.left;
-      right = windowDimensions.width - elementDimensions.left;
-      top = elementDimensions.top;
-      bottom = windowDimensions.height - elementDimensions.top;
-      width = 0;
-      height = 0;
+    //get dimensions of the intro parent element
+    var parentDimensions;
+    var overlayParent = this._targetElement;
+    var parentIsFixed = (window.getComputedStyle(overlayParent).position === "fixed");
+    if (!overlayParent.tagName || overlayParent.tagName.toLowerCase() === 'body') {
+      //if the parent element is body, use the width and height of the document, without offset  
+      parentDimensions = {
+        height: documentDimensions.height,
+        width: documentDimensions.width,
+        left: 0,
+        top: 0
+      }
     } else {
-      topLeftPadding = padding - borderWidth;
-      bottomRightPadding = padding + borderWidth;
-      width = elementDimensions.width + 2 * padding; 
-      height = elementDimensions.height + 2 * padding; 
-      left = elementDimensions.left - topLeftPadding;
-      right = windowDimensions.width - (elementDimensions.left + elementDimensions.width + bottomRightPadding);
-      top = elementDimensions.top - topLeftPadding;
-      bottom = windowDimensions.height - (elementDimensions.top + elementDimensions.height + bottomRightPadding);
+      var parentOffset = _getOffset(overlayParent);
+      parentDimensions = {
+          height: parentOffset.height,
+          width: parentOffset.width,
+          left: parentOffset.left,
+          top: parentOffset.top
+      }
     }
 
-    var styles = {};
+    //compute dimensions of the four overlay parts
+    var overlayDimensions = {
+      offset: {},
+      width: {},
+      height: {}
+    };
+
+    overlayDimensions.offset.left = parentDimensions.left;
+    overlayDimensions.offset.top = parentDimensions.top;
+    
+    if (targetElement.position === "floating") {
+      overlayDimensions.width.left = parentDimensions.width / 2 - parentDimensions.left;  
+      overlayDimensions.width.center = 0; 
+
+      overlayDimensions.height.top = parentDimensions.height / 2 - parentDimensions.top;
+      overlayDimensions.height.center = 0;
+    } else {
+      var topLeftPadding = (this._options.helperElementPadding / 2) - borderWidth;
+
+      overlayDimensions.width.left = elementDimensions.left - parentDimensions.left - topLeftPadding;  
+      overlayDimensions.width.center = elementDimensions.width + this._options.helperElementPadding; 
+
+      overlayDimensions.height.top = elementDimensions.top - parentDimensions.top - topLeftPadding;
+      overlayDimensions.height.center = elementDimensions.height + this._options.helperElementPadding;
+    }
+
+    overlayDimensions.width.right = parentDimensions.width - (overlayDimensions.width.left + overlayDimensions.width.center);
+    overlayDimensions.height.bottom = parentDimensions.height - (overlayDimensions.height.top + overlayDimensions.height.center); 
+
+    //compute and set the styles for the four overlays
     Object.getOwnPropertyNames(POSITIONS).forEach(function(key) {
       var position = POSITIONS[key];
-      styles[key] = 'opacity: ' + overlayOpacity + ';'; 
+      var styleString = 'opacity: ' + overlayOpacity + ';';
+      if (parentIsFixed) {
+        styleString += ' position: fixed;';
+      }
       switch (position) {
         case POSITIONS.LEFT:
-          styles[key] += ' top: 0px;';
-          styles[key] += ' left: 0px;';
-          styles[key] += ' width: ' + left + 'px;';
-          styles[key] += ' height: ' + (top + height + bottom) + 'px;';
+          styleString += ' top: ' + overlayDimensions.offset.top + 'px;';
+          styleString += ' left: ' + overlayDimensions.offset.left + 'px;';
+          styleString += ' width: ' + overlayDimensions.width.left + 'px;';
+          styleString += ' height: ' + parentDimensions.height + 'px;';
           break;
         case POSITIONS.RIGHT:
-          styles[key] += ' top: 0px;';
-          styles[key] += ' left: ' + (left + width) + 'px;';
-          styles[key] += ' width: ' + right + 'px;';
-          styles[key] += ' height: ' + (top + height + bottom) + 'px;';
+          styleString += ' top: ' + overlayDimensions.offset.top + 'px;';
+          styleString += ' left: ' + (overlayDimensions.offset.left + overlayDimensions.width.left + overlayDimensions.width.center) + 'px;';
+          styleString += ' width: ' + overlayDimensions.width.right + 'px;';
+          styleString += ' height: ' + parentDimensions.height + 'px;';
           break;
         case POSITIONS.TOP:
-          styles[key] += ' top: 0px;';
-          styles[key] += ' left: ' + left + 'px;';
-          styles[key] += ' width: ' + width + 'px;';
-          styles[key] += ' height: ' + top + 'px;';
+          styleString += ' top: ' + overlayDimensions.offset.top + 'px;';
+          styleString += ' left: ' + (overlayDimensions.offset.left + overlayDimensions.width.left) + 'px;';
+          styleString += ' width: ' + overlayDimensions.width.center + 'px;';
+          styleString += ' height: ' + overlayDimensions.height.top + 'px;';
           break;
         case POSITIONS.BOTTOM:
-          styles[key] += ' top: ' + (top + height) + 'px;';
-          styles[key] += ' left: ' + left + 'px;';
-          styles[key] += ' width: ' + width + 'px;';
-          styles[key] += ' height: ' + bottom + 'px;';
+          styleString += ' top: ' + (overlayDimensions.offset.top + overlayDimensions.height.top + overlayDimensions.height.center) + 'px;';
+          styleString += ' left: ' + (overlayDimensions.offset.left + overlayDimensions.width.left) + 'px;';
+          styleString += ' width: ' + overlayDimensions.width.center + 'px;';
+          styleString += ' height: ' + overlayDimensions.height.bottom + 'px;';
           break;
       }
-    });
-
-    Object.getOwnPropertyNames(POSITIONS).forEach(function(key) {
-      var position = POSITIONS[key];
       var overlay = document.getElementsByClassName('introjs-overlay-' + position)[0];
-      overlay.setAttribute('style', styles[key]);
+      overlay.setAttribute('style', styleString);
     });
   }
     
