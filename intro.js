@@ -1009,7 +1009,8 @@
         highlightClass = 'introjs-helperLayer',
         nextTooltipButton,
         prevTooltipButton,
-        skipTooltipButton;
+        skipTooltipButton,
+        scrollParent;
 
     //check for a current step highlight class
     if (typeof (targetElement.highlightClass) === 'string') {
@@ -1044,7 +1045,15 @@
         }
       }
 
-      //set new position to helper layer
+      // scroll to element
+      scrollParent = _getScrollParent( targetElement.element );
+
+      if (scrollParent !== document.body) {
+        // target is within a scrollable element
+        _scrollParentToElement(scrollParent, targetElement.element);
+      }
+
+      // set new position to helper layer
       _setHelperLayerPosition.call(self, oldHelperLayer);
       _setHelperLayerPosition.call(self, oldReferenceLayer);
 
@@ -1111,6 +1120,14 @@
 
       helperLayer.className = highlightClass;
       referenceLayer.className = 'introjs-tooltipReferenceLayer';
+
+      // scroll to element
+      scrollParent = _getScrollParent( targetElement.element );
+
+      if (scrollParent !== document.body) {
+        // target is within a scrollable element
+        _scrollParentToElement(scrollParent, targetElement.element);
+      }
 
       //set new position to helper layer
       _setHelperLayerPosition.call(self, helperLayer);
@@ -2090,42 +2107,53 @@
    * @returns Element's position info
    */
   function _getOffset(element) {
-    var elementPosition = {};
-
     var body = document.body;
     var docEl = document.documentElement;
-
     var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
     var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+    var x = element.getBoundingClientRect();
+    return {
+      top: x.top + scrollTop,
+      width: x.width,
+      height: x.height,
+      left: x.left + scrollLeft
+    };
+  }
 
-    if (element instanceof SVGElement) {
-      var x = element.getBoundingClientRect();
-      elementPosition.top = x.top + scrollTop;
-      elementPosition.width = x.width;
-      elementPosition.height = x.height;
-      elementPosition.left = x.left + scrollLeft;
-    } else {
-      //set width
-      elementPosition.width = element.offsetWidth;
+  /**
+  * Find the nearest scrollable parent
+  * copied from https://stackoverflow.com/questions/35939886/find-first-scrollable-parent
+  *
+  * @param Element element
+  * @return Element
+  */
+  function _getScrollParent(element) {
+    var style = window.getComputedStyle(element);
+    var excludeStaticParent = (style.position === "absolute");
+    var overflowRegex = /(auto|scroll)/;
 
-      //set height
-      elementPosition.height = element.offsetHeight;
-
-      //calculate element top and left
-      var _x = 0;
-      var _y = 0;
-      while (element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
-        _x += element.offsetLeft;
-        _y += element.offsetTop;
-        element = element.offsetParent;
+    if (style.position === "fixed") return document.body;
+    
+    for (var parent = element; (parent = parent.parentElement);) {
+      style = window.getComputedStyle(parent);
+      if (excludeStaticParent && style.position === "static") {
+        continue;
       }
-      //set top
-      elementPosition.top = _y;
-      //set left
-      elementPosition.left = _x;
+      if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX)) return parent;
     }
 
-    return elementPosition;
+    return document.body;
+  }
+
+  /**
+  * scroll a scrollable element to a child element
+  *
+  * @param Element parent
+  * @param Element element
+  * @return Null
+  */
+  function _scrollParentToElement (parent, element) {
+    parent.scrollTop = element.offsetTop - parent.offsetTop;
   }
 
   /**
