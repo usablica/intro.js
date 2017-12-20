@@ -2273,7 +2273,7 @@
     // add instance to list of _instances
     // passing group to _stamp to increment
     // from 0 onward somewhat reliably
-    introJs[ _stamp(instance, 'introjs-instance') ] = instance;
+    introJs.instances[ _stamp(instance, 'introjs-instance') ] = instance;
 
     return instance;
   };
