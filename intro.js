@@ -2116,7 +2116,7 @@
       var _y = 0;
       while (element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
         _x += element.offsetLeft;
-        _y += element.offsetTop;
+        _y += element.offsetTop - element.scrollTop;
         element = element.offsetParent;
       }
       //set top
