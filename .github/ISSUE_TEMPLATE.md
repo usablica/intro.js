@@ -1,5 +1,5 @@
 ## Description
-Describe one (**and only one**) issue or enhancement you want to see in Intro.js (**before writing any code**).
+Describe one (and only one) issue or enhancement you want to see in Intro.js (before writing any code).
 
 ## Expected Behavior
 What did you expect to happen?
