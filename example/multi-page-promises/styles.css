@@ -1,0 +1,18 @@
+.page {
+  position: absolute;
+  width: 100%;
+  top: 20px;
+  -webkit-transition: opacity 1s linear;
+  -moz-transition: opacity 1s linear;
+   -ms-transition: opacity 1s linear;
+    -o-transition: opacity 1s linear;
+       transition: opacity 1s linear;
+}
+
+.visible {
+  opacity: 1;
+}
+
+.invisible {
+  opacity: 0;
+}

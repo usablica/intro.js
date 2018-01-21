@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Multi-page introduction, Page 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Intro.js - Better introductions for websites and features with a step-by-step guide for your projects.">
+  <meta name="author" content="Afshin Mehrabani (@afshinmeh) in usabli.ca group">
+
+  <!-- styles -->
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/css/demo.css" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+
+  <!-- Add IntroJs styles -->
+  <link href="../../introjs.css" rel="stylesheet">
+  <link href="../assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="page visible">
+    <div class="container-narrow">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li>
+            <a href="https://github.com/usablica/intro.js/tags">
+              <i class='icon-black icon-download-alt'></i> Download</a>
+          </li>
+          <li>
+            <a href="https://github.com/usablica/intro.js">Github</a>
+          </li>
+          <li>
+            <a href="https://twitter.com/usablica">@usablica</a>
+          </li>
+        </ul>
+        <h3 class="muted">Intro.js</h3>
+      </div>
+
+      <hr>
+
+      <div class="jumbotron">
+        <h1 data-step="1" data-intro="This is a tooltip!">Multi-Page</span>
+        </h1>
+        <p class="lead">Multi-page introduction, you will see three steps of introduction in this page.</p>
+        <a id="startButton" class="btn btn-large btn-success" href="javascript:void(0);">Show me how</a>
+      </div>
+
+      <hr>
+
+      <div class="row-fluid marketing">
+        <div class="span6" data-step="2" data-intro="Ok, wasn't that fun?" data-position='right'>
+          <h4>Section One</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus.
+            Phasellus nec metus purus.</p>
+
+          <h4>Section Two</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus.
+            Phasellus nec metus purus.</p>
+
+          <h4>Section Three</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus.
+            Phasellus nec metus purus.</p>
+        </div>
+
+        <div id="firstPageEnd" class="span6" data-step="3" data-intro="More features, more fun." data-position='left'>
+          <h4>Section Four</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus.
+            Phasellus nec metus purus.</p>
+
+          <h4>Section Five</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus.
+            Phasellus nec metus purus.</p>
+          <h4>Section Six</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus.
+            Phasellus nec metus purus.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page invisible">
+    <div class="container-narrow">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right" data-step="5" data-intro="Get it, use it.">
+          <li><a href="https://github.com/usablica/intro.js/tags"><i class='icon-black icon-download-alt'></i> Download</a></li>
+          <li><a href="https://github.com/usablica/intro.js">Github</a></li>
+          <li><a href="https://twitter.com/usablica">@usablica</a></li>
+        </ul>
+        <h3 class="muted">Intro.js</h3>
+      </div>
+
+      <hr>
+
+      <div class="jumbotron">
+        <h1>Second Page</span></h1>
+        <p id="secondPageBegin" class="lead" data-step="4" data-intro="Another step.">Next page of introduction!</p>
+      </div>
+
+      <hr>
+
+      <div class="row-fluid marketing">
+        <div class="span6">
+          <h4>Section One</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+
+          <h4>Section Two</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+
+          <h4>Section Three</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+        </div>
+
+        <div class="span6">
+          <h4>Section Four</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+
+          <h4>Section Five</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+
+          <h4>Section Six</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis augue a neque cursus ac blandit orci faucibus. Phasellus nec metus purus.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="../../intro.js"></script>
+  <script type="text/javascript">
+    window.onload = function () {
+      var intro = introJs();
+
+      // set up event handling.
+      // switch page based on current element's id. 
+      intro.attachBeforeChange(function (element) {
+        switch (element.id) {
+          case "firstPageEnd":
+            return toPage(1);
+            break;
+          case "secondPageBegin":
+            return toPage(2);
+            break;
+          default:
+        }
+      });
+      
+      document.getElementById('startButton').onclick = intro.start.bind(intro);
+    }
+
+    // functionality for page changes
+    var currentPageNum = 1;
+    function toPage(pageNum) {
+      // do it only when we are not already on the given page
+      if (currentPageNum !== pageNum) {
+        currentPageNum = pageNum;
+        // Return a promise to intro. Resolving the promise will continue
+        // the normal flow. Rejection means abort.
+        // For some events we can also resolve with a boolean value.
+        return new Promise(function(resolve, reject){
+          try {
+            // css manipulation to change the page
+            var visiblePage = document.getElementsByClassName("visible")[0];
+            var invisiblePage = document.getElementsByClassName("invisible")[0];
+            visiblePage.classList.remove("visible");
+            invisiblePage.classList.remove("invisible");
+            visiblePage.classList.add("invisible");
+            invisiblePage.classList.add("visible");
+
+            //timeout until the page change is done, then resolve
+            setTimeout(resolve, 1000);
+          } catch (error) {
+            // in case of failure, just quit intro
+            reject();
+          }
+        });
+      }
+      // Note that undefined is implicitly returned in case the page change was skipped.
+      // This will simply continue the flow.
+    }
+  </script>
+</body>
+
+</html>
