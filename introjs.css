@@ -60,6 +60,7 @@ tr.introjs-showElement > th {
   border: 1px solid rgba(0,0,0,.5);
   border-radius: 4px;
   box-shadow: 0 2px 15px rgba(0,0,0,.4);
+  opacity: 0;
   -webkit-transition: all 0.3s ease-out;
      -moz-transition: all 0.3s ease-out;
       -ms-transition: all 0.3s ease-out;
@@ -73,6 +74,7 @@ tr.introjs-showElement > th {
   visibility: hidden;
   z-index: 100000000;
   background-color: transparent;
+  opacity: 0;
   -webkit-transition: all 0.3s ease-out;
      -moz-transition: all 0.3s ease-out;
       -ms-transition: all 0.3s ease-out;

@@ -44,6 +44,7 @@
         </h1>
         <p class="lead">Multi-page introduction, you will see three steps of introduction in this page.</p>
         <a id="startButton" class="btn btn-large btn-success" href="javascript:void(0);">Show me how</a>
+        <a id="secondPageButton" class="btn btn-large pageButton" href="javascript:void(0);">Second page</a>
       </div>
 
       <hr>
@@ -79,7 +80,7 @@
     </div>
   </div>
 
-  <div class="page invisible">
+  <div class="page second invisible">
     <div class="container-narrow">
       <div class="masthead">
         <ul class="nav nav-pills pull-right" data-step="5" data-intro="Get it, use it.">
@@ -95,6 +96,8 @@
       <div class="jumbotron">
         <h1>Second Page</span></h1>
         <p id="secondPageBegin" class="lead" data-step="4" data-intro="Another step.">Next page of introduction!</p>
+        <a id="secondStartButton" class="btn btn-large btn-success" href="javascript:void(0);">Show me how</a>
+        <a id="firstPageButton" class="btn btn-large" href="javascript:void(0);">First page</a>
       </div>
 
       <hr>
@@ -127,10 +130,20 @@
 
   <script type="text/javascript" src="../../intro.js"></script>
   <script type="text/javascript">
+    var currentPageNum = 1;
+    
     window.onload = function () {
+      var introStartPage;
+      
       var intro = introJs();
 
       // set up event handling.
+      // start on first page
+      intro.attachStart(function () {
+        introStartPage = currentPageNum;
+        return toPage(1);
+      });
+
       // switch page based on current element's id. 
       intro.attachBeforeChange(function (element) {
         switch (element.id) {
@@ -143,17 +156,24 @@
           default:
         }
       });
+
+      // after exit, return to the page where the intro was started
+      intro.attachExit(function () {
+        return toPage(introStartPage);
+      });
       
       document.getElementById('startButton').onclick = intro.start.bind(intro);
+      document.getElementById('secondStartButton').onclick = intro.start.bind(intro);
+      document.getElementById('secondPageButton').onclick = function () {toPage(2);};
+      document.getElementById('firstPageButton').onclick = function () {toPage(1);};
     }
 
     // functionality for page changes
-    var currentPageNum = 1;
     function toPage(pageNum) {
       // do it only when we are not already on the given page
       if (currentPageNum !== pageNum) {
         currentPageNum = pageNum;
-        // Return a promise to intro. Resolving the promise will continue
+        // Return a promise to intro. Resolving the promise continues
         // the normal flow. Rejection means abort.
         // For some events we can also resolve with a boolean value.
         return new Promise(function(resolve, reject){
@@ -166,8 +186,8 @@
             visiblePage.classList.add("invisible");
             invisiblePage.classList.add("visible");
 
-            //timeout until the page change is done, then resolve
-            setTimeout(resolve, 1000);
+            // timeout until the page change is done, then resolve
+            setTimeout(resolve, 300);
           } catch (error) {
             // in case of failure, just quit intro
             reject();

@@ -2,11 +2,15 @@
   position: absolute;
   width: 100%;
   top: 20px;
-  -webkit-transition: opacity 1s linear;
-  -moz-transition: opacity 1s linear;
-   -ms-transition: opacity 1s linear;
-    -o-transition: opacity 1s linear;
-       transition: opacity 1s linear;
+  -webkit-transition: opacity .3s linear;
+  -moz-transition: opacity .3s linear;
+   -ms-transition: opacity .3s linear;
+    -o-transition: opacity .3s linear;
+       transition: opacity .3s linear;
+}
+
+.page.second {
+  color: firebrick;
 }
 
 .visible {
@@ -15,4 +19,8 @@
 
 .invisible {
   opacity: 0;
+}
+
+.pageButton {
+  color: firebrick;
 }

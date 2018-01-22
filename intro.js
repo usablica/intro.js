@@ -37,6 +37,10 @@
   //Create the list of event names as immutable object.
   //Let's us expose the event names as static property of the IntroJs class. 
   var EVENT_NAMES = Object.create({}, {
+    start: {
+      value: 'Start',
+      writable: false
+    },
     beforeChange: {
       value: 'BeforeChange',
       writable: false
@@ -149,8 +153,10 @@
       this._eventHandler[EVENT_NAMES[key]] = [];
     }.bind(this));
 
-    //in case of critical failures, this flag can block all event handling
+    // in case of critical failures, this flag can block all event handling
     this._blockEventHandling = false;
+    // this flag blocks keyboard and mouse/touch events during a step change
+    this._blockUserInteraction = false;
   }
 
   /**
@@ -301,8 +307,10 @@
 
     //add overlay layer to the page
     if(_addOverlayLayer.call(self, targetElm)) {
-      //then, start the show
-      _nextStep.call(self);
+      _executeEventListeners.call(this, EVENT_NAMES.start, null).then(function () {
+        //then, start the show
+        _nextStep.call(self);
+      });
 
       self._onKeyDown = function(e) {
         /*
@@ -320,6 +328,8 @@
           (3) e.keyCode
         https://github.com/jquery/jquery/blob/a6b0705294d336ae2f63f7276de0da1195495363/src/event.js#L638
         */
+        if (self._blockUserInteraction) return;
+
         var code = (e.code === null) ? e.which : e.code;
 
         // if code/e.which is null
@@ -438,13 +448,36 @@
   }
 
   /**
+   * Set the opacity of tooltip and reference layer to a given value.
+   * Fades these layers in/out, when the intro flow is suspended by an event handler.  
+   *
+   * @api private
+   * @method _setLayerOpacity
+   * @param {Number} Opacity
+   */
+  function _setLayerOpacity(opacity) {
+    var helperLayer = document.querySelector('.introjs-helperLayer');
+    if (helperLayer) {
+      helperLayer.style.opacity = opacity;
+    }
+
+    var referenceLayer = document.querySelector('.introjs-tooltipReferenceLayer');
+    if (referenceLayer) {
+      referenceLayer.style.opacity = opacity;
+    }
+  }
+
+  /**
    * Go to next step on intro
    *
    * @api private
    * @method _nextStep
    */
   function _nextStep() {
+    this._blockUserInteraction = true;
     this._direction = 'forward';
+
+    _setLayerOpacity(0);
 
     if (typeof (this._currentStepNumber) !== 'undefined') {
       _forEach(this._introItems, function (item, i) {
@@ -499,6 +532,9 @@
     if (this._currentStep === 0) {
       return false;
     }
+
+    this._blockUserInteraction = true;
+    _setLayerOpacity(0);
 
     --this._currentStep;
 
@@ -1183,6 +1219,7 @@
           ulContainer.setAttribute('role', 'tablist');
 
           var anchorClick = function () {
+              if (self._blockUserInteraction) return;
               self.goToStep(this.getAttribute('data-stepnumber'));
           };
 
@@ -1249,6 +1286,7 @@
           nextTooltipButton = document.createElement('a');
 
           nextTooltipButton.onclick = function() {
+            if (self._blockUserInteraction) return;
             if (self._introItems.length - 1 !== self._currentStep) {
               _nextStep.call(self);
             }
@@ -1261,6 +1299,7 @@
           prevTooltipButton = document.createElement('a');
 
           prevTooltipButton.onclick = function() {
+            if (self._blockUserInteraction) return;
             if (self._currentStep !== 0) {
               _previousStep.call(self);
             }
@@ -1276,6 +1315,7 @@
           skipTooltipButton.innerHTML = this._options.skipLabel;
 
           skipTooltipButton.onclick = function() {
+            if (self._blockUserInteraction) return;
             if (self._introItems.length - 1 === self._currentStep) {
               _executeEventListeners.call(self, EVENT_NAMES.complete, null).then(function() {
                 _exitIntro.call(self, self._targetElement);
@@ -1391,9 +1431,13 @@
         _setShowElement(targetElement);
 
         // Call event handlers for 'afterChange'.
-        // Intro is just waiting for user input after this step, so there is no need to handle then().
-        // But we could block user interaction at the start of _nextStep and _previousStep and then unblock it here.
-        _executeEventListeners.call(this, EVENT_NAMES.afterChange, null, targetElement.element).catch(
+        _executeEventListeners.call(this, EVENT_NAMES.afterChange, null, targetElement.element).then(
+          function () {
+            _setLayerOpacity(1);
+            // unblock user interaction
+            this._blockUserInteraction = false;
+          }.bind(this)
+        ).catch(
           function(blockEvents) {
             _failIntro.call(this, blockEvents);
           }.bind(this)
@@ -1695,6 +1739,7 @@
     targetElm.appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
+      if (self._blockUserInteraction) return;
       if (self._options.exitOnOverlayClick === true) {
         _exitIntro.call(self, targetElm);
       }
@@ -2128,6 +2173,9 @@
 
       //set proper position
       _placeTooltip.call(this, hintElement, tooltipLayer, arrowLayer, null, true);
+
+      // make sure that the tooltip is visible
+      _setLayerOpacity(1);
     }.bind(this));
   }
 
@@ -2508,8 +2556,10 @@
     } else {
       throw new Error('Provided callback for ' + eventName + ' is not a function.');
     }
-    // ToDo: return a function, that let's the developer directly detach the event handler
-    return this;
+    // return a function that lets the developer directly detach the event handler
+    return function () {
+      this.detachEventHandler(eventName, callbackFunction, callbackContext);
+    }.bind(this);
   };
 
   IntroJs.prototype.detachEventHandler = function(
@@ -2535,7 +2585,7 @@
     return this;
   };
 
-  //expose event names, in case someone wants to use attach/detach directly.
+  //expose event names, so that developers can use attach/detach directly.
   introJs.EVENT_NAMES = EVENT_NAMES;
 
   introJs.fn = IntroJs.prototype;
