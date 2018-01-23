@@ -448,26 +448,6 @@
   }
 
   /**
-   * Set the opacity of tooltip and reference layer to a given value.
-   * Fades these layers in/out, when the intro flow is suspended by an event handler.  
-   *
-   * @api private
-   * @method _setLayerOpacity
-   * @param {Number} Opacity
-   */
-  function _setLayerOpacity(opacity) {
-    var helperLayer = document.querySelector('.introjs-helperLayer');
-    if (helperLayer) {
-      helperLayer.style.opacity = opacity;
-    }
-
-    var referenceLayer = document.querySelector('.introjs-tooltipReferenceLayer');
-    if (referenceLayer) {
-      referenceLayer.style.opacity = opacity;
-    }
-  }
-
-  /**
    * Go to next step on intro
    *
    * @api private
@@ -2269,6 +2249,26 @@
     _exitIntro.call(this, this._targetElement, true);
   }
 
+  /**
+   * Set the opacity of tooltip and reference layer to a given value.
+   * Fades these layers in/out, when the intro flow is suspended by an event handler.  
+   *
+   * @api private
+   * @method _setLayerOpacity
+   * @param {Number} Opacity
+   */
+  function _setLayerOpacity(opacity) {
+    var helperLayer = document.querySelector('.introjs-helperLayer');
+    if (helperLayer) {
+      helperLayer.style.opacity = opacity;
+    }
+
+    var referenceLayer = document.querySelector('.introjs-tooltipReferenceLayer');
+    if (referenceLayer) {
+      referenceLayer.style.opacity = opacity;
+    }
+  }
+
   // ModulePromise is either a reference to the global Promise prototype, or a simple 
   // surrogate that resolves immediately and does nothing in the reject case.
   // Any Promise polyfill should be provided from the outside.
@@ -2318,6 +2318,7 @@
       var args = [].slice.call(arguments, 2);
       // call all event handlers and save their returned values in promiseArray
       _forEach(this._eventHandler[eventName], function(callbackHandler) {
+        // detach callbacks that shall be called only once
         if (callbackHandler.callOnce) {
           this.detachEventHandler(
             eventName,
@@ -2325,6 +2326,7 @@
             callbackHandler.callbackContext
           );
         }
+        // now call the event handler and save its return value
         var returnValue = callbackHandler.callbackFunction.apply(
           callbackHandler.callbackContext,
           args
@@ -2335,6 +2337,8 @@
       }.bind(this));
       
       if (typeof defaultResolvedBoolean === 'boolean') {
+        // if it's possible to reolve with a boolean, then return a promise
+        // that resolves after all returned booleans have been iterated
         return new ModulePromise(function(resolve, reject) {
           ModulePromise.all(promiseArray).then(function(values) {
             var resolvedValue = defaultResolvedBoolean;
@@ -2347,6 +2351,7 @@
           }, reject);
         });
       } else {
+        // as default, return a promise that waits until all callback promises resolve or one rejects
         return ModulePromise.all(promiseArray);
       }  
     } else {
