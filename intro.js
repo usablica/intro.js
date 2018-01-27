@@ -561,6 +561,10 @@
 
     //re-align hints
     _reAlignHints.call(this);
+
+    // make tooltip and helper layer visible
+    _setLayerOpacity(1);
+
     return this;
   }
 
