@@ -1635,7 +1635,10 @@
     targetElm.appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
-      if (self._options.exitOnOverlayClick === true) {
+      if (self._options.exitOnOverlayClick) {
+        if (typeof (self._introOverlayClickExitCallback) === 'function') {
+          self._introOverlayClickExitCallback(self);
+        }
         _exitIntro.call(self, targetElm);
       }
     };
@@ -1654,6 +1657,7 @@
    * @api private
    * @method _removeHintTooltip
    */
+
   function _removeHintTooltip() {
     var tooltip = document.querySelector('.introjs-hintReference');
 
@@ -2238,6 +2242,14 @@
     },
     exit: function(force) {
       _exitIntro.call(this, this._targetElement, force);
+      return this;
+    },
+    onoverlayclickexit: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._introOverlayClickExitCallback = providedCallback
+      } else {
+        throw new Error('Provided callback for onoutsideexit was not a function');
+      }
       return this;
     },
     refresh: function() {
