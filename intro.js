@@ -280,6 +280,9 @@
         if ((code === 'Escape' || code === 27) && self._options.exitOnEsc === true) {
           //escape key pressed, exit the intro
           //check if exit callback is defined
+          if (typeof (self._introEscapeExitCallback) === 'function') {
+            self._introEscapeExitCallback(self);
+          }
           _exitIntro.call(self, targetElm);
         } else if (code === 'ArrowLeft' || code === 37) {
           //left arrow
@@ -2244,11 +2247,19 @@
       _exitIntro.call(this, this._targetElement, force);
       return this;
     },
+    onescapeexit: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._introEscapeExitCallback = providedCallback
+      } else {
+        throw new Error('Provided callback for onescapeexit was not a function');
+      }
+      return this;
+    },
     onoverlayclickexit: function(providedCallback) {
       if (typeof (providedCallback) === 'function') {
         this._introOverlayClickExitCallback = providedCallback
       } else {
-        throw new Error('Provided callback for onoutsideexit was not a function');
+        throw new Error('Provided callback for onoverlayclickexit was not a function');
       }
       return this;
     },
