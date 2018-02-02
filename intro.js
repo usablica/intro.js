@@ -2249,7 +2249,7 @@
     },
     onescapeexit: function(providedCallback) {
       if (typeof (providedCallback) === 'function') {
-        this._introEscapeExitCallback = providedCallback
+        this._introEscapeExitCallback = providedCallback;
       } else {
         throw new Error('Provided callback for onescapeexit was not a function');
       }
@@ -2257,7 +2257,7 @@
     },
     onoverlayclickexit: function(providedCallback) {
       if (typeof (providedCallback) === 'function') {
-        this._introOverlayClickExitCallback = providedCallback
+        this._introOverlayClickExitCallback = providedCallback;
       } else {
         throw new Error('Provided callback for onoverlayclickexit was not a function');
       }
