@@ -954,10 +954,10 @@
       }
 
       //set new position to helper layer
-      helperLayer.setAttribute('style', 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
+      helperLayer.style.cssText = 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
                                         'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
                                         'top:'    + (elementPosition.top    - widthHeightPadding / 2)   + 'px;' +
-                                        'left: '  + (elementPosition.left   - widthHeightPadding / 2)   + 'px;');
+                                        'left: '  + (elementPosition.left   - widthHeightPadding / 2)   + 'px;';
 
     }
   }
@@ -1078,7 +1078,7 @@
             oldReferenceLayer.querySelector('.introjs-bullets li > a.active').className = '';
             oldReferenceLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
         }
-        oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').setAttribute('style', 'width:' + _getProgress.call(self) + '%;');
+        oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').style.cssText = 'width:' + _getProgress.call(self) + '%;';
         oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').setAttribute('aria-valuenow', _getProgress.call(self));
 
         //show the tooltip
@@ -1172,7 +1172,7 @@
       progressBar.setAttribute('aria-valuemin', 0);
       progressBar.setAttribute('aria-valuemax', 100);
       progressBar.setAttribute('aria-valuenow', _getProgress.call(this));
-      progressBar.setAttribute('style', 'width:' + _getProgress.call(this) + '%;');
+      progressBar.style.cssText = 'width:' + _getProgress.call(this) + '%;';
 
       progressLayer.appendChild(progressBar);
 
@@ -1622,13 +1622,13 @@
     //check if the target element is body, we should calculate the size of overlay layer in a better way
     if (!targetElm.tagName || targetElm.tagName.toLowerCase() === 'body') {
       styleText += 'top: 0;bottom: 0; left: 0;right: 0;position: fixed;';
-      overlayLayer.setAttribute('style', styleText);
+      overlayLayer.style.cssText = styleText;
     } else {
       //set overlay layer position
       var elementPosition = _getOffset(targetElm);
       if (elementPosition) {
         styleText += 'width: ' + elementPosition.width + 'px; height:' + elementPosition.height + 'px; top:' + elementPosition.top + 'px;left: ' + elementPosition.left + 'px;';
-        overlayLayer.setAttribute('style', styleText);
+        overlayLayer.style.cssText = styleText;
       }
     }
 
@@ -1642,7 +1642,7 @@
 
     window.setTimeout(function() {
       styleText += 'opacity: ' + self._options.overlayOpacity.toString() + ';';
-      overlayLayer.setAttribute('style', styleText);
+      overlayLayer.style.cssText = styleText;
     }, 10);
 
     return true;
