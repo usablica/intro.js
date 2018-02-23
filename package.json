@@ -10,11 +10,12 @@
   },
   "scripts": {
     "test": "npm run test:jshint",
-    "test:jshint": "jshint ./intro.js"
+    "test:jshint": "jshint ./intro.js",
+    "minify": "for file in ./intro*; do NAME=$(basename $file) && minify $file > ./minified/${NAME%.*}.min.${NAME#*.}; done"
   },
   "devDependencies": {
     "jshint": "^2.9.5",
-    "node-minify": "*"
+    "minify": "^3.0.4"
   },
   "engine": [
     "node >=0.1.90"
