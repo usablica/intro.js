@@ -114,8 +114,7 @@
    */
   function _introForElement(targetElm, group) {
     var allIntroSteps = targetElm.querySelectorAll("*[data-intro]"),
-        introItems = [],
-        self = this;
+        introItems = [];
 
     if (this._options.steps) {
       //use steps passed programmatically
@@ -261,92 +260,87 @@
     });
 
     //set it to the introJs object
-    self._introItems = introItems;
+    this._introItems = introItems;
 
     //add overlay layer to the page
-    if(_addOverlayLayer.call(self, targetElm)) {
+    if(_addOverlayLayer.call(this, targetElm)) {
       //then, start the show
-      _nextStep.call(self);
+      _nextStep.call(this);
 
-      self._onKeyDown = function(e) {
-        /*
-        on keyCode:
-        https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
-        This feature has been removed from the Web standards.
-        Though some browsers may still support it, it is in
-        the process of being dropped.
-        Instead, you should use KeyboardEvent.code,
-        if it's implemented.
-
-        jQuery's approach is to test for
-          (1) e.which, then
-          (2) e.charCode, then
-          (3) e.keyCode
-        https://github.com/jquery/jquery/blob/a6b0705294d336ae2f63f7276de0da1195495363/src/event.js#L638
-        */
-        var code = (e.code === null) ? e.which : e.code;
-
-        // if code/e.which is null
-        if (code === null) {
-          code = (e.charCode === null) ? e.keyCode : e.charCode;
-        }
-        
-        if ((code === 'Escape' || code === 27) && self._options.exitOnEsc === true) {
-          //escape key pressed, exit the intro
-          //check if exit callback is defined
-          _exitIntro.call(self, targetElm);
-        } else if (code === 'ArrowLeft' || code === 37) {
-          //left arrow
-          _previousStep.call(self);
-        } else if (code === 'ArrowRight' || code === 39) {
-          //right arrow
-          _nextStep.call(self);
-        } else if (code === 'Enter' || code === 13) {
-          //srcElement === ie
-          var target = e.target || e.srcElement;
-          if (target && target.className.match('introjs-prevbutton')) {
-            //user hit enter while focusing on previous button
-            _previousStep.call(self);
-          } else if (target && target.className.match('introjs-skipbutton')) {
-            //user hit enter while focusing on skip button
-            if (self._introItems.length - 1 === self._currentStep && typeof (self._introCompleteCallback) === 'function') {
-                self._introCompleteCallback.call(self);
-            }
-
-            _exitIntro.call(self, targetElm);
-          } else {
-            //default behavior for responding to enter
-            _nextStep.call(self);
-          }
-
-          //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
-          if(e.preventDefault) {
-            e.preventDefault();
-          } else {
-            e.returnValue = false;
-          }
-        }
-      };
-
-      self._onResize = function() {
-        self.refresh.call(self);
-      };
-
-      if (window.addEventListener) {
-        if (this._options.keyboardNavigation) {
-          window.addEventListener('keydown', self._onKeyDown, true);
-        }
-        //for window resize
-        window.addEventListener('resize', self._onResize, true);
-      } else if (document.attachEvent) { //IE
-        if (this._options.keyboardNavigation) {
-          document.attachEvent('onkeydown', self._onKeyDown);
-        }
-        //for window resize
-        document.attachEvent('onresize', self._onResize);
+      if (this._options.keyboardNavigation) {
+        DOMEvent.on(window, 'keydown', _onKeyDown, this, true);
       }
+      //for window resize
+      DOMEvent.on(window, 'resize', _onResize, this, true);
     }
     return false;
+  }
+
+  function _onResize () {
+    this.refresh.call(this);
+  }
+
+  /**
+  * on keyCode:
+  * https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
+  * This feature has been removed from the Web standards.
+  * Though some browsers may still support it, it is in
+  * the process of being dropped.
+  * Instead, you should use KeyboardEvent.code,
+  * if it's implemented.
+  *
+  * jQuery's approach is to test for
+  *   (1) e.which, then
+  *   (2) e.charCode, then
+  *   (3) e.keyCode
+  * https://github.com/jquery/jquery/blob/a6b0705294d336ae2f63f7276de0da1195495363/src/event.js#L638
+  *
+  * @param type var
+  * @return type
+  */
+  function _onKeyDown (e) {
+    var code = (e.code === null) ? e.which : e.code;
+
+    // if code/e.which is null
+    if (code === null) {
+      code = (e.charCode === null) ? e.keyCode : e.charCode;
+    }
+    
+    if ((code === 'Escape' || code === 27) && this._options.exitOnEsc === true) {
+      //escape key pressed, exit the intro
+      //check if exit callback is defined
+      _exitIntro.call(this, this._targetElement);
+    } else if (code === 'ArrowLeft' || code === 37) {
+      //left arrow
+      _previousStep.call(this);
+    } else if (code === 'ArrowRight' || code === 39) {
+      //right arrow
+      _nextStep.call(this);
+    } else if (code === 'Enter' || code === 13) {
+      //srcElement === ie
+      var target = e.target || e.srcElement;
+      if (target && target.className.match('introjs-prevbutton')) {
+        //user hit enter while focusing on previous button
+        _previousStep.call(this);
+      } else if (target && target.className.match('introjs-skipbutton')) {
+        //user hit enter while focusing on skip button
+        if (this._introItems.length - 1 === this._currentStep && typeof (this._introCompleteCallback) === 'function') {
+            this._introCompleteCallback.call(this);
+        }
+
+        _exitIntro.call(this, this._targetElement);
+      } else {
+        //default behavior for responding to enter
+        _nextStep.call(this);
+      }
+
+      //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
+      if(e.preventDefault) {
+        e.preventDefault();
+      } else {
+        e.returnValue = false;
+      }
+    }
   }
 
  /*
@@ -567,11 +561,8 @@
     });
 
     //clean listeners
-    if (window.removeEventListener) {
-      window.removeEventListener('keydown', this._onKeyDown, true);
-    } else if (document.detachEvent) { //IE
-      document.detachEvent('onkeydown', this._onKeyDown);
-    }
+    DOMEvent.off(window, 'keydown', _onKeyDown, this, true);
+    DOMEvent.off(window, 'resize', _onResize, this, true);
 
     //check if any callback is defined
     if (this._introExitCallback !== undefined) {
@@ -1504,6 +1495,112 @@
   }
 
   /**
+  * Mark any object with an incrementing number
+  * used for keeping track of objects
+  *
+  * @param Object obj   Any object or DOM Element
+  * @param String key
+  * @return Object
+  */
+  var _stamp = (function () {
+    var keys = {};
+    return function stamp (obj, key) {
+      
+      // get group key
+      key = key || 'introjs-stamp';
+
+      // each group increments from 0
+      keys[key] = keys[key] || 0;
+
+      // stamp only once per object
+      if (obj[key] === undefined) {
+        // increment key for each new object
+        obj[key] = keys[key]++;
+      }
+
+      return obj[key];
+    };
+  })();
+
+  /**
+  * DOMEvent Handles all DOM events
+  *
+  * methods:
+  *
+  * on - add event handler
+  * off - remove event
+  */
+  var DOMEvent = (function () {
+    function DOMEvent () {
+      var events_key = 'introjs_event';
+      
+      /**
+      * Gets a unique ID for an event listener
+      *
+      * @param Object obj
+      * @param String type        event type
+      * @param Function listener
+      * @param Object context
+      * @return String
+      */
+      this._id = function (obj, type, listener, context) {
+        return type + _stamp(listener) + (context ? '_' + _stamp(context) : '');
+      };
+
+      /**
+      * Adds event listener
+      *
+      * @param Object obj
+      * @param String type        event type
+      * @param Function listener
+      * @param Object context
+      * @param Boolean useCapture
+      * @return null
+      */
+      this.on = function (obj, type, listener, context, useCapture) {
+        var id = this._id.apply(this, arguments),
+            handler = function (e) {
+              return listener.call(context || obj, e || window.event);
+            };
+
+        if ('addEventListener' in obj) {
+          obj.addEventListener(type, handler, useCapture);
+        } else if ('attachEvent' in obj) {
+          obj.attachEvent('on' + type, handler);
+        }
+
+        obj[events_key] = obj[events_key] || {};
+        obj[events_key][id] = handler;
+      };
+
+      /**
+      * Removes event listener
+      *
+      * @param Object obj
+      * @param String type        event type
+      * @param Function listener
+      * @param Object context
+      * @param Boolean useCapture
+      * @return null
+      */
+      this.off = function (obj, type, listener, context, useCapture) {
+        var id = this._id.apply(this, arguments),
+            handler = obj[events_key] && obj[events_key][id];
+
+        if ('removeEventListener' in obj) {
+          obj.removeEventListener(type, handler, useCapture);
+        } else if ('detachEvent' in obj) {
+          obj.detachEvent('on' + type, handler);
+        }
+
+        obj[events_key][id] = null;
+      };
+    }
+
+    return new DOMEvent();
+  })();
+
+  /**
    * Append a class to an element
    *
    * @api private
@@ -1753,15 +1850,12 @@
 
     _addHints.call(this);
 
-    if (document.addEventListener) {
-      document.addEventListener('click', _removeHintTooltip.bind(this), false);
-      //for window resize
-      window.addEventListener('resize', _reAlignHints.bind(this), true);
-    } else if (document.attachEvent) { //IE
-      //for window resize
-      document.attachEvent('onclick', _removeHintTooltip.bind(this));
-      document.attachEvent('onresize', _reAlignHints.bind(this));
-    }
+    /* 
+    todo:
+    these events should be removed at some point 
+    */
+    DOMEvent.on(document, 'click', _removeHintTooltip, this, false);
+    DOMEvent.on(window, 'resize', _reAlignHints, this, true);
   }
 
   /**
@@ -2200,22 +2294,30 @@
   }
 
   var introJs = function (targetElm) {
+    var instance;
+
     if (typeof (targetElm) === 'object') {
       //Ok, create a new instance
-      return new IntroJs(targetElm);
+      instance = new IntroJs(targetElm);
 
     } else if (typeof (targetElm) === 'string') {
       //select the target element with query selector
       var targetElement = document.querySelector(targetElm);
 
       if (targetElement) {
-        return new IntroJs(targetElement);
+        instance = new IntroJs(targetElement);
       } else {
         throw new Error('There is no element with given selector.');
       }
     } else {
-      return new IntroJs(document.body);
+      instance = new IntroJs(document.body);
     }
+    // add instance to list of _instances
+    // passing group to _stamp to increment
+    // from 0 onward somewhat reliably
+    introJs.instances[ _stamp(instance, 'introjs-instance') ] = instance;
+
+    return instance;
   };
 
   /**
@@ -2225,6 +2327,14 @@
    * @type String
    */
   introJs.version = VERSION;
+
+  /**
+  * key-val object helper for introJs instances
+  *
+  * @property instances
+  * @type Object
+  */
+  introJs.instances = {};
 
   //Prototype
   introJs.fn = IntroJs.prototype = {
