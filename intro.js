@@ -109,10 +109,12 @@
    * @api private
    * @method _introForElement
    * @param {Object} targetElm
+   * @param {String} group
    * @returns {Boolean} Success or not?
    */
-  function _introForElement(targetElm) {
-    var introItems = [];
+  function _introForElement(targetElm, group) {
+    var allIntroSteps = targetElm.querySelectorAll("*[data-intro]"),
+        introItems = [];
 
     if (this._options.steps) {
       //use steps passed programmatically
@@ -156,16 +158,22 @@
 
     } else {
       //use steps from data-* annotations
-      var allIntroSteps = targetElm.querySelectorAll('*[data-intro]');
       var elmsLength = allIntroSteps.length;
       var disableInteraction;
-
+      
       //if there's no element to intro
       if (elmsLength < 1) {
         return false;
       }
 
       _forEach(allIntroSteps, function (currentElement) {
+        
+        // PR #80
+        // start intro for groups of elements
+        if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
+          return;
+        }
+
         // skip hidden elements
         if (currentElement.style.display === 'none') {
           return;
@@ -198,6 +206,13 @@
       var nextStep = 0;
 
       _forEach(allIntroSteps, function (currentElement) {
+        
+        // PR #80
+        // start intro for groups of elements
+        if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
+          return;
+        }
+        
         if (currentElement.getAttribute('data-step') === null) {
 
           while (true) {
@@ -207,7 +222,6 @@
               nextStep++;
             }
           } 
-
 
           if (typeof (currentElement.getAttribute('data-disable-interaction')) !== 'undefined') {
             disableInteraction = !!currentElement.getAttribute('data-disable-interaction');
@@ -945,10 +959,10 @@
       }
 
       //set new position to helper layer
-      helperLayer.setAttribute('style', 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
+      helperLayer.style.cssText = 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
                                         'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
                                         'top:'    + (elementPosition.top    - widthHeightPadding / 2)   + 'px;' +
-                                        'left: '  + (elementPosition.left   - widthHeightPadding / 2)   + 'px;');
+                                        'left: '  + (elementPosition.left   - widthHeightPadding / 2)   + 'px;';
 
     }
   }
@@ -1000,7 +1014,8 @@
         highlightClass = 'introjs-helperLayer',
         nextTooltipButton,
         prevTooltipButton,
-        skipTooltipButton;
+        skipTooltipButton,
+        scrollParent;
 
     //check for a current step highlight class
     if (typeof (targetElement.highlightClass) === 'string') {
@@ -1035,7 +1050,15 @@
         }
       }
 
-      //set new position to helper layer
+      // scroll to element
+      scrollParent = _getScrollParent( targetElement.element );
+
+      if (scrollParent !== document.body) {
+        // target is within a scrollable element
+        _scrollParentToElement(scrollParent, targetElement.element);
+      }
+
+      // set new position to helper layer
       _setHelperLayerPosition.call(self, oldHelperLayer);
       _setHelperLayerPosition.call(self, oldReferenceLayer);
 
@@ -1069,7 +1092,7 @@
             oldReferenceLayer.querySelector('.introjs-bullets li > a.active').className = '';
             oldReferenceLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
         }
-        oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').setAttribute('style', 'width:' + _getProgress.call(self) + '%;');
+        oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').style.cssText = 'width:' + _getProgress.call(self) + '%;';
         oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').setAttribute('aria-valuenow', _getProgress.call(self));
 
         //show the tooltip
@@ -1102,6 +1125,14 @@
 
       helperLayer.className = highlightClass;
       referenceLayer.className = 'introjs-tooltipReferenceLayer';
+
+      // scroll to element
+      scrollParent = _getScrollParent( targetElement.element );
+
+      if (scrollParent !== document.body) {
+        // target is within a scrollable element
+        _scrollParentToElement(scrollParent, targetElement.element);
+      }
 
       //set new position to helper layer
       _setHelperLayerPosition.call(self, helperLayer);
@@ -1163,7 +1194,7 @@
       progressBar.setAttribute('aria-valuemin', 0);
       progressBar.setAttribute('aria-valuemax', 100);
       progressBar.setAttribute('aria-valuenow', _getProgress.call(this));
-      progressBar.setAttribute('style', 'width:' + _getProgress.call(this) + '%;');
+      progressBar.style.cssText = 'width:' + _getProgress.call(this) + '%;';
 
       progressLayer.appendChild(progressBar);
 
@@ -1719,13 +1750,13 @@
     //check if the target element is body, we should calculate the size of overlay layer in a better way
     if (!targetElm.tagName || targetElm.tagName.toLowerCase() === 'body') {
       styleText += 'top: 0;bottom: 0; left: 0;right: 0;position: fixed;';
-      overlayLayer.setAttribute('style', styleText);
+      overlayLayer.style.cssText = styleText;
     } else {
       //set overlay layer position
       var elementPosition = _getOffset(targetElm);
       if (elementPosition) {
         styleText += 'width: ' + elementPosition.width + 'px; height:' + elementPosition.height + 'px; top:' + elementPosition.top + 'px;left: ' + elementPosition.left + 'px;';
-        overlayLayer.setAttribute('style', styleText);
+        overlayLayer.style.cssText = styleText;
       }
     }
 
@@ -1739,7 +1770,7 @@
 
     window.setTimeout(function() {
       styleText += 'opacity: ' + self._options.overlayOpacity.toString() + ';';
-      overlayLayer.setAttribute('style', styleText);
+      overlayLayer.style.cssText = styleText;
     }, 10);
 
     return true;
@@ -2184,42 +2215,53 @@
    * @returns Element's position info
    */
   function _getOffset(element) {
-    var elementPosition = {};
-
     var body = document.body;
     var docEl = document.documentElement;
-
     var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
     var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+    var x = element.getBoundingClientRect();
+    return {
+      top: x.top + scrollTop,
+      width: x.width,
+      height: x.height,
+      left: x.left + scrollLeft
+    };
+  }
 
-    if (element instanceof SVGElement) {
-      var x = element.getBoundingClientRect();
-      elementPosition.top = x.top + scrollTop;
-      elementPosition.width = x.width;
-      elementPosition.height = x.height;
-      elementPosition.left = x.left + scrollLeft;
-    } else {
-      //set width
-      elementPosition.width = element.offsetWidth;
+  /**
+  * Find the nearest scrollable parent
+  * copied from https://stackoverflow.com/questions/35939886/find-first-scrollable-parent
+  *
+  * @param Element element
+  * @return Element
+  */
+  function _getScrollParent(element) {
+    var style = window.getComputedStyle(element);
+    var excludeStaticParent = (style.position === "absolute");
+    var overflowRegex = /(auto|scroll)/;
 
-      //set height
-      elementPosition.height = element.offsetHeight;
-
-      //calculate element top and left
-      var _x = 0;
-      var _y = 0;
-      while (element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
-        _x += element.offsetLeft;
-        _y += element.offsetTop;
-        element = element.offsetParent;
+    if (style.position === "fixed") return document.body;
+    
+    for (var parent = element; (parent = parent.parentElement);) {
+      style = window.getComputedStyle(parent);
+      if (excludeStaticParent && style.position === "static") {
+        continue;
       }
-      //set top
-      elementPosition.top = _y;
-      //set left
-      elementPosition.left = _x;
+      if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX)) return parent;
     }
 
-    return elementPosition;
+    return document.body;
+  }
+
+  /**
+  * scroll a scrollable element to a child element
+  *
+  * @param Element parent
+  * @param Element element
+  * @return Null
+  */
+  function _scrollParentToElement (parent, element) {
+    parent.scrollTop = element.offsetTop - parent.offsetTop;
   }
 
   /**
@@ -2307,8 +2349,8 @@
       this._options = _mergeOptions(this._options, options);
       return this;
     },
-    start: function () {
-      _introForElement.call(this, this._targetElement);
+    start: function (group) {
+      _introForElement.call(this, this._targetElement, group);
       return this;
     },
     goToStep: function(step) {
