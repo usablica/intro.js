@@ -33,6 +33,7 @@
 })(function () {
   //Default config/variables
   var VERSION = '2.9.0-alpha.1';
+  var POSITIONS = ['bottom', 'top', 'right', 'left'];
 
   /**
    * IntroJs main class
@@ -89,7 +90,7 @@
       /* Set the overlay opacity */
       overlayOpacity: 0.8,
       /* Precedence of positions, when auto is enabled */
-      positionPrecedence: ["bottom", "top", "right", "left"],
+      positionPrecedence: POSITIONS.slice(),
       /* Disable an interaction with element? */
       disableInteraction: false,
       /* Set how much padding to be used around helper element */
@@ -263,16 +264,17 @@
     this._introItems = introItems;
 
     //add overlay layer to the page
-    if(_addOverlayLayer.call(this, targetElm)) {
-      //then, start the show
-      _nextStep.call(this);
+    _addOverlayLayer.call(this, targetElm);
 
-      if (this._options.keyboardNavigation) {
-        DOMEvent.on(window, 'keydown', _onKeyDown, this, true);
-      }
-      //for window resize
-      DOMEvent.on(window, 'resize', _onResize, this, true);
+    //then, start the show
+    _nextStep.call(this);
+
+    if (this._options.keyboardNavigation) {
+      DOMEvent.on(window, 'keydown', _onKeyDown, this, true);
     }
+    //for window resize
+    DOMEvent.on(window, 'resize', _onResize, this, true);
+
     return false;
   }
 
@@ -553,12 +555,6 @@
     }
 
     _removeShowElement();
-
-    //remove `introjs-fixParent` class from the elements
-    var fixParents = document.querySelectorAll('.introjs-fixParent');
-    _forEach(fixParents, function (parent) {
-      _removeClass(parent, /introjs-fixParent/g);
-    });
 
     //clean listeners
     DOMEvent.off(window, 'keydown', _onKeyDown, this, true);
@@ -959,10 +955,10 @@
       }
 
       //set new position to helper layer
-      helperLayer.style.cssText = 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
-                                        'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
-                                        'top:'    + (elementPosition.top    - widthHeightPadding / 2)   + 'px;' +
-                                        'left: '  + (elementPosition.left   - widthHeightPadding / 2)   + 'px;';
+      _setStyle(helperLayer, 'width: ' + (elementPosition.width  + widthHeightPadding)  + 'px; ' +
+                             'height:' + (elementPosition.height + widthHeightPadding)  + 'px; ' +
+                             'top:'    + (elementPosition.top    - widthHeightPadding / 2)   + 'px;' +
+                             'left: '  + (elementPosition.left   - widthHeightPadding / 2)   + 'px;');
 
     }
   }
@@ -1092,7 +1088,8 @@
             oldReferenceLayer.querySelector('.introjs-bullets li > a.active').className = '';
             oldReferenceLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
         }
-        oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').style.cssText = 'width:' + _getProgress.call(self) + '%;';
+        _setStyle(oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar'), 'width:' + _getProgress.call(self) + '%;');
+
         oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').setAttribute('aria-valuenow', _getProgress.call(self));
 
         //show the tooltip
@@ -1194,7 +1191,7 @@
       progressBar.setAttribute('aria-valuemin', 0);
       progressBar.setAttribute('aria-valuemax', 100);
       progressBar.setAttribute('aria-valuenow', _getProgress.call(this));
-      progressBar.style.cssText = 'width:' + _getProgress.call(this) + '%;';
+      _setStyle(progressBar, 'width:' + _getProgress.call(this) + '%;');
 
       progressLayer.appendChild(progressBar);
 
@@ -1429,48 +1426,83 @@
    * @param {Object} targetElement
    */
   function _setShowElement(targetElement) {
-    var parentElm;
-    // we need to add this show element class to the parent of SVG elements
-    // because the SVG elements can't have independent z-index
-    if (targetElement.element instanceof SVGElement) {
-      parentElm = targetElement.element.parentNode;
+    var elementDimensions = targetElement.element.getBoundingClientRect();
+    var windowDimensions = _getWinSize();
 
-      while (targetElement.element.parentNode !== null) {
-        if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
+    var topLeftPadding,
+        bottomRightPadding,
+        left,
+        right,
+        top,
+        bottom,
+        width,
+        height;
 
-        if (parentElm.tagName.toLowerCase() === 'svg') {
-          _addClass(parentElm, 'introjs-showElement introjs-relativePosition');
-        }
+    var overlayOpacity = this._options.overlayOpacity.toString();
+    var padding = this._options.helperElementPadding / 2;
+    var borderWidth = 1;
+    
+    if (targetElement.position === "floating") {
+      left = elementDimensions.left;
+      right = windowDimensions.width - elementDimensions.left;
+      top = elementDimensions.top;
+      bottom = windowDimensions.height - elementDimensions.top;
+      width = 0;
+      height = 0;
+    } else {
+      topLeftPadding = padding - borderWidth;
+      bottomRightPadding = padding + borderWidth;
+      width = elementDimensions.width + 2 * padding; 
+      height = elementDimensions.height + 2 * padding; 
+      left = elementDimensions.left - topLeftPadding;
+      right = windowDimensions.width - (elementDimensions.left + elementDimensions.width + bottomRightPadding);
+      top = elementDimensions.top - topLeftPadding;
+      bottom = windowDimensions.height - (elementDimensions.top + elementDimensions.height + bottomRightPadding);
+    }
 
-        parentElm = parentElm.parentNode;
+    _forEach(POSITIONS, function(position) {
+      var overlay = document.getElementsByClassName('introjs-overlay-' + position)[0];
+      var styleText = 'opacity: ' + overlayOpacity + '; position: fixed;';
+      switch (position) {
+        case POSITIONS.LEFT:
+          styleText += ' top: 0px;';
+          styleText += ' left: 0px;';
+          styleText += ' width: ' + left + 'px;';
+          styleText += ' height: 100%;';
+          break;
+        case POSITIONS.RIGHT:
+          styleText += ' top: 0px;';
+          styleText += ' right: 0px;';
+          styleText += ' width: ' + right + 'px;';
+          styleText += ' height: 100%;';
+          break;
+        case POSITIONS.TOP:
+          styleText += ' top: 0px;';
+          styleText += ' left: ' + left + 'px;';
+          styleText += ' width: ' + width + 'px;';
+          styleText += ' height: ' + top + 'px';
+          break;
+        case POSITIONS.BOTTOM:
+          styleText += ' bottom: 0px;';
+          styleText += ' left: ' + left + 'px;';
+          styleText += ' width: ' + width + 'px;';
+          styleText += ' height: ' + bottom + 'px';
+          break;
       }
-    }
+      _setStyle(overlay, styleText);
+    });
+  }
 
-    _addClass(targetElement.element, 'introjs-showElement');
-
-    var currentElementPosition = _getPropValue(targetElement.element, 'position');
-    if (currentElementPosition !== 'absolute' &&
-        currentElementPosition !== 'relative' &&
-        currentElementPosition !== 'fixed') {
-      //change to new intro item
-      _addClass(targetElement.element, 'introjs-relativePosition');
-    }
-
-    parentElm = targetElement.element.parentNode;
-    while (parentElm !== null) {
-      if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
-
-      //fix The Stacking Context problem.
-      //More detail: https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context
-      var zIndex = _getPropValue(parentElm, 'z-index');
-      var opacity = parseFloat(_getPropValue(parentElm, 'opacity'));
-      var transform = _getPropValue(parentElm, 'transform') || _getPropValue(parentElm, '-webkit-transform') || _getPropValue(parentElm, '-moz-transform') || _getPropValue(parentElm, '-ms-transform') || _getPropValue(parentElm, '-o-transform');
-      if (/[0-9]+/.test(zIndex) || opacity < 1 || (transform !== 'none' && transform !== undefined)) {
-        _addClass(parentElm, 'introjs-fixParent');
-      }
-
-      parentElm = parentElm.parentNode;
-    }
+  /**
+  * Sets the style of an DOM element
+  *
+  * @param {Object} element
+  * @param {String} style
+  * @return null
+  */
+  function _setStyle(element, style) {
+    // super simple :D
+    element.style.cssText = style;
   }
 
   /**
@@ -1740,40 +1772,18 @@
    * @param {Object} targetElm
    */
   function _addOverlayLayer(targetElm) {
-    var overlayLayer = document.createElement('div'),
-        styleText = '',
-        self = this;
+    var self = this;
 
-    //set css class name
-    overlayLayer.className = 'introjs-overlay';
-
-    //check if the target element is body, we should calculate the size of overlay layer in a better way
-    if (!targetElm.tagName || targetElm.tagName.toLowerCase() === 'body') {
-      styleText += 'top: 0;bottom: 0; left: 0;right: 0;position: fixed;';
-      overlayLayer.style.cssText = styleText;
-    } else {
-      //set overlay layer position
-      var elementPosition = _getOffset(targetElm);
-      if (elementPosition) {
-        styleText += 'width: ' + elementPosition.width + 'px; height:' + elementPosition.height + 'px; top:' + elementPosition.top + 'px;left: ' + elementPosition.left + 'px;';
-        overlayLayer.style.cssText = styleText;
+    _forEach(POSITIONS, function (key) {
+      var overlay = document.createElement('div');
+      _addClass(overlay, 'introjs-overlay introjs-overlay-' + key);
+      if (self._options.exitOnOverlayClick) {
+        DOMEvent.on(overlay, 'click', function () {
+          _exitIntro.call(self, targetElm);
+        });
       }
-    }
-
-    targetElm.appendChild(overlayLayer);
-
-    overlayLayer.onclick = function() {
-      if (self._options.exitOnOverlayClick === true) {
-        _exitIntro.call(self, targetElm);
-      }
-    };
-
-    window.setTimeout(function() {
-      styleText += 'opacity: ' + self._options.overlayOpacity.toString() + ';';
-      overlayLayer.style.cssText = styleText;
-    }, 10);
-
-    return true;
+      targetElm.appendChild( overlay );
+    });
   }
 
   /**
