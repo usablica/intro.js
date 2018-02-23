@@ -109,10 +109,12 @@
    * @api private
    * @method _introForElement
    * @param {Object} targetElm
+   * @param {String} group
    * @returns {Boolean} Success or not?
    */
-  function _introForElement(targetElm) {
-    var introItems = [],
+  function _introForElement(targetElm, group) {
+    var allIntroSteps = targetElm.querySelectorAll("*[data-intro]"),
+        introItems = [],
         self = this;
 
     if (this._options.steps) {
@@ -157,16 +159,22 @@
 
     } else {
       //use steps from data-* annotations
-      var allIntroSteps = targetElm.querySelectorAll('*[data-intro]');
       var elmsLength = allIntroSteps.length;
       var disableInteraction;
-
+      
       //if there's no element to intro
       if (elmsLength < 1) {
         return false;
       }
 
       _forEach(allIntroSteps, function (currentElement) {
+        
+        // PR #80
+        // start intro for groups of elements
+        if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
+          return;
+        }
+
         // skip hidden elements
         if (currentElement.style.display === 'none') {
           return;
@@ -199,6 +207,13 @@
       var nextStep = 0;
 
       _forEach(allIntroSteps, function (currentElement) {
+        
+        // PR #80
+        // start intro for groups of elements
+        if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
+          return;
+        }
+        
         if (currentElement.getAttribute('data-step') === null) {
 
           while (true) {
@@ -208,7 +223,6 @@
               nextStep++;
             }
           } 
-
 
           if (typeof (currentElement.getAttribute('data-disable-interaction')) !== 'undefined') {
             disableInteraction = !!currentElement.getAttribute('data-disable-interaction');
@@ -2197,8 +2211,8 @@
       this._options = _mergeOptions(this._options, options);
       return this;
     },
-    start: function () {
-      _introForElement.call(this, this._targetElement);
+    start: function (group) {
+      _introForElement.call(this, this._targetElement, group);
       return this;
     },
     goToStep: function(step) {
