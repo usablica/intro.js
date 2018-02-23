@@ -1357,7 +1357,7 @@
       nextTooltipButton.focus();
     }
 
-    _setShowElement(targetElement);
+    _setShowElement.call(this, targetElement);
 
     if (typeof (this._introAfterChangeCallback) !== 'undefined') {
       this._introAfterChangeCallback.call(this, targetElement.element);
@@ -1426,7 +1426,7 @@
    * @param {Object} targetElement
    */
   function _setShowElement(targetElement) {
-    var elementDimensions = targetElement.element.getBoundingClientRect();
+    var elementDimensions = _getOffset(targetElement.element);
     var windowDimensions = _getWinSize();
 
     var topLeftPadding,
@@ -1460,33 +1460,40 @@
       bottom = windowDimensions.height - (elementDimensions.top + elementDimensions.height + bottomRightPadding);
     }
 
+    left = Math.round(left);
+    right = Math.round(right);
+    top = Math.round(top);
+    bottom = Math.round(bottom);
+    height = Math.round(height);
+    width = Math.round(width);
+
     _forEach(POSITIONS, function(position) {
       var overlay = document.getElementsByClassName('introjs-overlay-' + position)[0];
-      var styleText = 'opacity: ' + overlayOpacity + '; position: fixed;';
+      var styleText = 'opacity: ' + overlayOpacity + ';';
       switch (position) {
-        case POSITIONS.LEFT:
-          styleText += ' top: 0px;';
-          styleText += ' left: 0px;';
-          styleText += ' width: ' + left + 'px;';
-          styleText += ' height: 100%;';
+        case 'left':
+          styleText += 'top: 0px;';
+          styleText += 'left: 0px;';
+          styleText += 'width: ' + left + 'px;';
+          styleText += 'height: ' + (top + height + bottom) +'px;';
           break;
-        case POSITIONS.RIGHT:
-          styleText += ' top: 0px;';
-          styleText += ' right: 0px;';
-          styleText += ' width: ' + right + 'px;';
-          styleText += ' height: 100%;';
+        case 'right':
+          styleText += 'top: 0px;';
+          styleText += 'left: ' + (left + width) + 'px;';
+          styleText += 'width: ' + right + 'px;';
+          styleText += 'height: ' + (top + height + bottom) + 'px;';
           break;
-        case POSITIONS.TOP:
-          styleText += ' top: 0px;';
-          styleText += ' left: ' + left + 'px;';
-          styleText += ' width: ' + width + 'px;';
-          styleText += ' height: ' + top + 'px';
+        case 'top':
+          styleText += 'top: 0px;';
+          styleText += 'left: ' + left + 'px;';
+          styleText += 'width: ' + width + 'px;';
+          styleText += 'height: ' + top + 'px;';
           break;
-        case POSITIONS.BOTTOM:
-          styleText += ' bottom: 0px;';
-          styleText += ' left: ' + left + 'px;';
-          styleText += ' width: ' + width + 'px;';
-          styleText += ' height: ' + bottom + 'px';
+        case 'bottom':
+          styleText += 'top: ' + (top + height) + 'px;';
+          styleText += 'left: ' + left + 'px;';
+          styleText += 'width: ' + width + 'px;';
+          styleText += 'height: ' + bottom + 'px';
           break;
       }
       _setStyle(overlay, styleText);

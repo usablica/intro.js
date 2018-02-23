@@ -1,9 +1,10 @@
 .introjs-overlay {
-  position: absolute;
+  position: fixed;
   box-sizing: content-box;
   z-index: 999999;
   background-color: #000;
   opacity: 0;
+  cursor: pointer;
   -webkit-transition: all 0.3s ease-out;
      -moz-transition: all 0.3s ease-out;
       -ms-transition: all 0.3s ease-out;
@@ -33,6 +34,7 @@ tr.introjs-showElement > th {
   border: 1px solid rgba(0,0,0,.5);
   border-radius: 4px;
   box-shadow: 0 2px 15px rgba(0,0,0,.4);
+  pointer-events: none;
   -webkit-transition: all 0.3s ease-out;
      -moz-transition: all 0.3s ease-out;
       -ms-transition: all 0.3s ease-out;
