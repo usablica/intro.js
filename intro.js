@@ -331,6 +331,9 @@
         }
 
         _exitIntro.call(this, this._targetElement);
+      } else if (target && target.getAttribute('data-stepnumber')) {
+        // user hit enter while focusing on step bullet
+        target.click();
       } else {
         //default behavior for responding to enter
         _nextStep.call(this);
