@@ -145,6 +145,10 @@
 
           currentItem.element  = floatingElementQuery;
           currentItem.position = 'floating';
+        } else {
+            // using default options, if not set
+            if (!currentItem.position)
+                currentItem.position = this._options.tooltipPosition;
         }
 
         currentItem.scrollTo = currentItem.scrollTo || this._options.scrollTo;
