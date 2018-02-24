@@ -1259,8 +1259,7 @@
           self._introCompleteCallback.call(self);
         }
 
-
-        if (self._introItems.length - 1 != self._currentStep && typeof (self._introExitCallback) === 'function') {
+        if (self._introItems.length - 1 !== self._currentStep && typeof (self._introExitCallback) === 'function') {
           self._introExitCallback.call(self);
         }
 

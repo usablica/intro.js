@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "jshint": "^2.9.5",
-    "minify": "^3.0.4"
+    "minify": "^3.0.2"
   },
   "engine": [
     "node >=0.1.90"
