@@ -1,5 +1,15 @@
 ## Release History
 
+ * **v2.9.0** - 2018-04-23
+   - Added @bozdoz as Author
+   - Fixed scroll positions when parent element is scrollable 
+   - Added DOM Event helper function and _stamp to uniquely identify objects and intro instances; fixes issues with removing event listeners
+   - Added new syntax for radial gradients
+   - Fixes to CSP violations to avoid using `setAttribute`
+   - Fix to intro groups from PR #80 (also PR #763)
+   - optional `buttonClass` option to overwrite 'introjs-button'
+   - Added `onskip` callback
+
  * **v2.9.0-alpha.1** - 2017-12-02
    - Supporting scroll option `off`
    - Improved accuracy of tooltip positions
