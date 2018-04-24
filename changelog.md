@@ -1,5 +1,8 @@
 ## Release History
 
+ * **v2.9.1** - 2018-04-24
+   - hotfix to removing events from removed DOM elements
+
  * **v2.9.0** - 2018-04-23
    - Added @bozdoz as Author
    - Fixed scroll positions when parent element is scrollable 

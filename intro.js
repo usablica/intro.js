@@ -1,5 +1,5 @@
 /**
- * Intro.js v2.9.0
+ * Intro.js v2.9.1
  * https://github.com/usablica/intro.js
  *
  * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh)
@@ -32,7 +32,7 @@
     }
 })(function () {
   //Default config/variables
-  var VERSION = '2.9.0';
+  var VERSION = '2.9.1';
 
   /**
    * IntroJs main class
@@ -1596,6 +1596,10 @@
       this.off = function (obj, type, listener, context, useCapture) {
         var id = this._id.apply(this, arguments),
             handler = obj[events_key] && obj[events_key][id];
+
+        if (!handler) {
+          return;
+        }
 
         if ('removeEventListener' in obj) {
           obj.removeEventListener(type, handler, useCapture);

@@ -4,10 +4,7 @@
 # Script for releasing new versions
 # Handles version updating and publishing to:
 # 	- GitHub 
-#
-# TODO:
-#	- Publish to npm
-#	- Publish to bower
+# 	- NPM 
 #
 
 # check package version
@@ -46,3 +43,5 @@ fi
 	
 git push --tags -f
 git push
+
+npm publish
