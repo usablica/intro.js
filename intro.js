@@ -1031,6 +1031,11 @@
       highlightClass += (' ' + this._options.highlightClass);
     }
 
+    // run onEnter callback
+    if (typeof targetElement.onEnter === 'function') {
+      targetElement.onEnter();
+    }
+
     if (oldHelperLayer !== null) {
       var oldHelperNumberLayer = oldReferenceLayer.querySelector('.introjs-helperNumberLayer'),
           oldtooltipLayer      = oldReferenceLayer.querySelector('.introjs-tooltiptext'),
