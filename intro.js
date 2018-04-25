@@ -136,12 +136,13 @@
         if (typeof (currentItem.element) === 'undefined' || currentItem.element === null) {
           var floatingElementQuery = document.querySelector(".introjsFloatingElement");
 
-          if (floatingElementQuery === null) {
+          // Commenting due to default message in the middle of the screen
+          /* if (floatingElementQuery === null) {
             floatingElementQuery = document.createElement('div');
             floatingElementQuery.className = 'introjsFloatingElement';
 
             document.body.appendChild(floatingElementQuery);
-          }
+          } */
 
           currentItem.element  = floatingElementQuery;
           currentItem.position = 'floating';
