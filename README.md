@@ -1,4 +1,4 @@
-# Intro.js v2.9.2
+# Intro.js v2.9.3
 
 [![Build Status](https://travis-ci.org/usablica/intro.js.svg?branch=master)](https://travis-ci.org/usablica/intro.js)
 

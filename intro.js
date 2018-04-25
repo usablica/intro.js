@@ -1,5 +1,5 @@
 /**
- * Intro.js v2.9.2
+ * Intro.js v2.9.3
  * https://github.com/usablica/intro.js
  *
  * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh)
@@ -32,7 +32,7 @@
     }
 })(function () {
   //Default config/variables
-  var VERSION = '2.9.2';
+  var VERSION = '2.9.3';
 
   /**
    * IntroJs main class
@@ -1263,7 +1263,10 @@
           self._introExitCallback.call(self);
         }
 
-        self._introSkipCallback.call(self);
+        if (typeof(self._introSkipCallback) === 'function') {
+          self._introSkipCallback.call(self);
+        }
+
         _exitIntro.call(self, self._targetElement);
       };
 

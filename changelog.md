@@ -1,5 +1,8 @@
 ## Release History
 
+ * **v2.9.3** - 2018-04-24
+   - hotfix to skipping and exiting the intro
+
  * **v2.9.2** - 2018-04-24
    - hotfix to add any minified files that might have been dependencies to the npm package
 
