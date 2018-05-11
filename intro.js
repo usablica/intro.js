@@ -65,8 +65,8 @@
       /* Close introduction when pressing Escape button? */
       exitOnEsc: true,
       /* Deprecated use overlayClicked Close introduction when clicking on overlay layer? */
-      exitOnOverlayClick: false,
-      /* Action when overlay is clicked. Options are: 'exit' or 'continue' */
+      exitOnOverlayClick: true,
+      /* Action when overlay is clicked. Options are: '' or 'exit' or 'continue' */
       overlayClicked: 'exit',
       /* Show step numbers in introduction? */
       showStepNumbers: true,
@@ -1782,20 +1782,21 @@
     targetElm.appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
-      if (self._options.overlayClicked === 'exit' || self._options.exitOnOverlayClick === true) {
-        _exitIntro.call(self, targetElm);
+      if (self._options.overlayClicked === '' || self._options.exitOnOverlayClick === false) {
+        // Do nothing
       } else if (self._options.overlayClicked === 'continue')
-        // First check if there is a next step if so simulate next clicked
+        // Simulate the next button or done button if there is a next step
         if (self._introItems.length - 1 !== self._currentStep) {
           _nextStep.call(self);
         } else {
-          // If this is the last step simulate done clicked
           if (self._introItems.length - 1 === self._currentStep && typeof (self._introCompleteCallback) === 'function') {
             self._introCompleteCallback.call(self);
           }
 
           _exitIntro.call(self, self._targetElement);
-        }
+      } else if (self._options.overlayClicked === 'exit' || self._options.exitOnOverlayClick === true) {
+        _exitIntro.call(self, targetElm);
+      }
     };
 
     window.setTimeout(function() {
