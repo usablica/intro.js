@@ -64,8 +64,10 @@
       highlightClass: '',
       /* Close introduction when pressing Escape button? */
       exitOnEsc: true,
-      /* Close introduction when clicking on overlay layer? */
-      exitOnOverlayClick: true,
+      /* Deprecated use overlayClicked Close introduction when clicking on overlay layer? */
+      exitOnOverlayClick: false,
+      /* Action when overlay is clicked. Options are: 'exit' or 'continue' */
+      overlayClicked: 'exit',
       /* Show step numbers in introduction? */
       showStepNumbers: true,
       /* Let user use keyboard to navigate the tour? */
@@ -155,21 +157,21 @@
 
         if (currentItem.element !== null) {
           introItems.push(currentItem);
-        }        
+        }
       }.bind(this));
 
     } else {
       //use steps from data-* annotations
       var elmsLength = allIntroSteps.length;
       var disableInteraction;
-      
+
       //if there's no element to intro
       if (elmsLength < 1) {
         return false;
       }
 
       _forEach(allIntroSteps, function (currentElement) {
-        
+
         // PR #80
         // start intro for groups of elements
         if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
@@ -208,13 +210,13 @@
       var nextStep = 0;
 
       _forEach(allIntroSteps, function (currentElement) {
-        
+
         // PR #80
         // start intro for groups of elements
         if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
           return;
         }
-        
+
         if (currentElement.getAttribute('data-step') === null) {
 
           while (true) {
@@ -223,7 +225,7 @@
             } else {
               nextStep++;
             }
-          } 
+          }
 
           if (typeof (currentElement.getAttribute('data-disable-interaction')) !== 'undefined') {
             disableInteraction = !!currentElement.getAttribute('data-disable-interaction');
@@ -250,8 +252,8 @@
     for (var z = 0; z < introItems.length; z++) {
       if (introItems[z]) {
         // copy non-falsy values to the end of the array
-        tempIntroItems.push(introItems[z]);  
-      } 
+        tempIntroItems.push(introItems[z]);
+      }
     }
 
     introItems = tempIntroItems;
@@ -307,7 +309,7 @@
     if (code === null) {
       code = (e.charCode === null) ? e.keyCode : e.charCode;
     }
-    
+
     if ((code === 'Escape' || code === 27) && this._options.exitOnEsc === true) {
       //escape key pressed, exit the intro
       //check if exit callback is defined
@@ -631,7 +633,7 @@
     currentTooltipPosition = this._introItems[this._currentStep].position;
 
     // Floating is always valid, no point in calculating
-    if (currentTooltipPosition !== "floating") { 
+    if (currentTooltipPosition !== "floating") {
       currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer, currentTooltipPosition);
     }
 
@@ -812,7 +814,7 @@
     var calculatedPosition = "floating";
 
     /*
-    * auto determine position 
+    * auto determine position
     */
 
     // Check for space below
@@ -884,16 +886,16 @@
       winWidth = Math.min(windowSize.width, window.screen.width),
       possibleAlignments = ['-left-aligned', '-middle-aligned', '-right-aligned'],
       calculatedAlignment = '';
-    
+
     // valid left must be at least a tooltipWidth
     // away from right side
     if (winWidth - offsetLeft < tooltipWidth) {
       _removeEntry(possibleAlignments, '-left-aligned');
     }
 
-    // valid middle must be at least half 
+    // valid middle must be at least half
     // width away from both sides
-    if (offsetLeft < halfTooltipWidth || 
+    if (offsetLeft < halfTooltipWidth ||
       winWidth - offsetLeft < halfTooltipWidth) {
       _removeEntry(possibleAlignments, '-middle-aligned');
     }
@@ -913,8 +915,8 @@
         calculatedAlignment = possibleAlignments[0];
       }
     } else {
-      // if screen width is too small 
-      // for ANY alignment, middle is 
+      // if screen width is too small
+      // for ANY alignment, middle is
       // probably the best for visibility
       calculatedAlignment = '-middle-aligned';
     }
@@ -1036,7 +1038,7 @@
           oldtooltipLayer      = oldReferenceLayer.querySelector('.introjs-tooltiptext'),
           oldArrowLayer        = oldReferenceLayer.querySelector('.introjs-arrow'),
           oldtooltipContainer  = oldReferenceLayer.querySelector('.introjs-tooltip');
-          
+
       skipTooltipButton    = oldReferenceLayer.querySelector('.introjs-skipbutton');
       prevTooltipButton    = oldReferenceLayer.querySelector('.introjs-prevbutton');
       nextTooltipButton    = oldReferenceLayer.querySelector('.introjs-nextbutton');
@@ -1072,7 +1074,7 @@
       _forEach(fixParents, function (parent) {
         _removeClass(parent, /introjs-fixParent/g);
       });
-      
+
       //remove old classes if the element still exist
       _removeShowElement();
 
@@ -1168,7 +1170,7 @@
       _forEach(this._introItems, function (item, i) {
         var innerLi    = document.createElement('li');
         var anchorLink = document.createElement('a');
-        
+
         innerLi.setAttribute('role', 'presentation');
         anchorLink.setAttribute('role', 'tab');
 
@@ -1176,7 +1178,7 @@
 
         if (i === (targetElement.step-1)) {
           anchorLink.className = 'active';
-        } 
+        }
 
         _setAnchorAsButton(anchorLink);
         anchorLink.innerHTML = "&nbsp;";
@@ -1390,7 +1392,7 @@
    * @param {Object} tooltipLayer
    */
   function _scrollTo(scrollTo, targetElement, tooltipLayer) {
-    if (scrollTo === 'off') return;  
+    if (scrollTo === 'off') return;
     var rect;
 
     if (!this._options.scrollToElement) return;
@@ -1518,7 +1520,7 @@
   var _stamp = (function () {
     var keys = {};
     return function stamp (obj, key) {
-      
+
       // get group key
       key = key || 'introjs-stamp';
 
@@ -1546,7 +1548,7 @@
   var DOMEvent = (function () {
     function DOMEvent () {
       var events_key = 'introjs_event';
-      
+
       /**
       * Gets a unique ID for an event listener
       *
@@ -1780,9 +1782,20 @@
     targetElm.appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
-      if (self._options.exitOnOverlayClick === true) {
+      if (self._options.overlayClicked === 'exit' || self._options.exitOnOverlayClick === true) {
         _exitIntro.call(self, targetElm);
-      }
+      } else if (self._options.overlayClicked === 'continue')
+        // First check if there is a next step if so simulate next clicked
+        if (self._introItems.length - 1 !== self._currentStep) {
+          _nextStep.call(self);
+        } else {
+          // If this is the last step simulate done clicked
+          if (self._introItems.length - 1 === self._currentStep && typeof (self._introCompleteCallback) === 'function') {
+            self._introCompleteCallback.call(self);
+          }
+
+          _exitIntro.call(self, self._targetElement);
+        }
     };
 
     window.setTimeout(function() {
@@ -1867,9 +1880,9 @@
 
     _addHints.call(this);
 
-    /* 
+    /*
     todo:
-    these events should be removed at some point 
+    these events should be removed at some point
     */
     DOMEvent.on(document, 'click', _removeHintTooltip, this, false);
     DOMEvent.on(window, 'resize', _reAlignHints, this, true);
@@ -1910,7 +1923,7 @@
    */
   function _hideHint(stepId) {
     var hint = _hintQuerySelectorAll('.introjs-hint[data-step="' + stepId + '"]')[0];
-    
+
     _removeHintTooltip.call(this);
 
     if (hint) {
@@ -2018,14 +2031,14 @@
 
     /**
     * Returns an event handler unique to the hint iteration
-    * 
+    *
     * @param {Integer} i
     * @return {Function}
     */
     var getHintClick = function (i) {
       return function(e) {
         var evt = e ? e : window.event;
-        
+
         if (evt.stopPropagation) {
           evt.stopPropagation();
         }
@@ -2258,7 +2271,7 @@
     var overflowRegex = /(auto|scroll)/;
 
     if (style.position === "fixed") return document.body;
-    
+
     for (var parent = element; (parent = parent.parentElement);) {
       style = window.getComputedStyle(parent);
       if (excludeStaticParent && style.position === "static") {
