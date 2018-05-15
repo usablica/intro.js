@@ -101,7 +101,9 @@
       /* Adding animation to hints? */
       hintAnimation: true,
       /* additional classes to put on the buttons */
-      buttonClass: "introjs-button"
+      buttonClass: "introjs-button",
+      /* Stop event bubbling from introJS layer elements. */
+      stopEventPropagation: true
     };
   }
 
@@ -275,6 +277,11 @@
       //for window resize
       DOMEvent.on(window, 'resize', _onResize, this, true);
     }
+
+    if (this._options.stopEventPropagation) {
+      _stopEventPropagation();
+    }
+
     return false;
   }
 
@@ -756,6 +763,48 @@
         _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
         tooltipLayer.style.top    = (targetOffset.height +  20) + 'px';
     }
+  }
+
+  /**
+   * Stop click events from bubbling out of introJS layer elements.
+   *
+   * @api private
+   * @method _stopEventPropagation
+   */
+  function _stopEventPropagation() {
+    // Element.closest() polyfil
+    // @link https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
+    if (!window.Element.prototype.matches) {
+      window.Element.prototype.matches = window.Element.prototype.msMatchesSelector ||
+        window.Element.prototype.webkitMatchesSelector;
+    }
+
+    if (!window.Element.prototype.closest) {
+      window.Element.prototype.closest = function (s) {
+        var el = this;
+        if (!document.documentElement.contains(el)) return null;
+        do {
+          if (el.matches(s)) return el;
+          el = el.parentElement || el.parentNode;
+        } while (el !== null && el.nodeType === 1);
+        return null;
+      };
+    }
+
+    DOMEvent.on(document.getElementsByTagName('body')[0], 'click', function (e) {
+      if (
+        (e.target.matches('.introjs-tooltipReferenceLayer') || e.target.closest('.introjs-tooltipReferenceLayer')) ||
+        (e.target.matches('.introjs-overlay') || e.target.closest('.introjs-overlay')) ||
+        (e.target.matches('.introjs-helperLayer') || e.target.closest('.introjs-helperLayer')) ||
+        (e.target.matches('.introjs-disableInteraction') || e.target.closest('.introjs-disableInteraction'))
+      ) {
+        if (e.stopPropagation) {
+          e.stopPropagation();
+        } else {
+          e.cancelBubble = true;
+        }
+      }
+    }, this, false);
   }
 
   /**
