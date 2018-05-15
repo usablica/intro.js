@@ -27,6 +27,7 @@ permalink: /intro/options/
  - `scrollPadding`: Padding of scroll in px. Default is 30. Applies when `scrollToElement` is `true`
  - `overlayOpacity`: Adjust the overlay opacity, `Number` between `0` and `1`
  - `disableInteraction`: To disable interactions with elements inside the highlighted box, `true` or `false`
+ - `stopEventPropagation`: To stop click events from bubbling out of introJS layer elements, `true` or `false`
 
 ##### Adding options
 
