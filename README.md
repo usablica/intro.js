@@ -1,6 +1,6 @@
-# Intro.js v2.9.0
+# Intro.js v2.9.3
 
-![](https://travis-ci.org/usablica/intro.js.svg?branch=master)
+[![Build Status](https://travis-ci.org/usablica/intro.js.svg?branch=master)](https://travis-ci.org/usablica/intro.js)
 
 > Better introductions for websites and features with a step-by-step guide for your projects.
 

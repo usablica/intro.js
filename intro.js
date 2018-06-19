@@ -1,5 +1,5 @@
 /**
- * Intro.js v2.9.0-alpha.1
+ * Intro.js v2.9.3
  * https://github.com/usablica/intro.js
  *
  * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh)
@@ -32,7 +32,7 @@
     }
 })(function () {
   //Default config/variables
-  var VERSION = '2.9.0-alpha.1';
+  var VERSION = '2.9.3';
   var POSITIONS = ['bottom', 'top', 'right', 'left'];
 
   /**
@@ -100,7 +100,9 @@
       /* Hint button label */
       hintButtonLabel: 'Got it',
       /* Adding animation to hints? */
-      hintAnimation: true
+      hintAnimation: true,
+      /* additional classes to put on the buttons */
+      buttonClass: "introjs-button"
     };
   }
 
@@ -354,6 +356,9 @@
         }
 
         _exitIntro.call(this, this._targetElement);
+      } else if (target && target.getAttribute('data-stepnumber')) {
+        // user hit enter while focusing on step bullet
+        target.click();
       } else {
         //default behavior for responding to enter
         _nextStep.call(this);
@@ -1294,18 +1299,20 @@
 
       //skip button
       skipTooltipButton = _createElement('a', {
-        className: 'introjs-button introjs-skipbutton',
+        className: this._options.buttonClass + ' introjs-skipbutton',
         innerHTML: this._options.skipLabel,
         onclick: function() {
           if (self._introItems.length - 1 === self._currentStep && typeof (self._introCompleteCallback) === 'function') {
             self._introCompleteCallback.call(self);
           }
-
+          if (typeof(self._introSkipCallback) === 'function') {
+            self._introSkipCallback.call(self);
+          }
           _exitIntro.call(self, self._targetElement);
         }
       });
       _setAnchorAsButton(skipTooltipButton);
-
+      
       buttonsLayer.appendChild(skipTooltipButton);
 
       //in order to prevent displaying next/previous button always
@@ -1339,22 +1346,22 @@
     // when it's the first step of tour
     if (this._currentStep === 0 && this._introItems.length > 1) {
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
-        skipTooltipButton.className = 'introjs-button introjs-skipbutton';
+        skipTooltipButton.className = this._options.buttonClass + ' introjs-skipbutton';
       }
       if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
-        nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+        nextTooltipButton.className = this._options.buttonClass + ' introjs-nextbutton';
       }
 
       if (this._options.hidePrev === true) {
         if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
-          prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-hidden';
+          prevTooltipButton.className = this._options.buttonClass + ' introjs-prevbutton introjs-hidden';
         }
         if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
           _addClass(nextTooltipButton, 'introjs-fullbutton');
         }
       } else {
         if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
-          prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-disabled';
+          prevTooltipButton.className = this._options.buttonClass + ' introjs-prevbutton introjs-disabled';
         }
       }
 
@@ -1369,31 +1376,31 @@
         _addClass(skipTooltipButton, 'introjs-donebutton');
       }
       if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
-        prevTooltipButton.className = 'introjs-button introjs-prevbutton';
+        prevTooltipButton.className = this._options.buttonClass + ' introjs-prevbutton';
       }
 
       if (this._options.hideNext === true) {
         if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
-          nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-hidden';
+          nextTooltipButton.className = this._options.buttonClass + ' introjs-nextbutton introjs-hidden';
         }
         if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
           _addClass(prevTooltipButton, 'introjs-fullbutton');
         }
       } else {
         if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
-          nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-disabled';
+          nextTooltipButton.className = this._options.buttonClass + ' introjs-nextbutton introjs-disabled';
         }
       }
     } else {
       // steps between start and end
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
-        skipTooltipButton.className = 'introjs-button introjs-skipbutton';
+        skipTooltipButton.className = this._options.buttonClass + ' introjs-skipbutton';
       }
       if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
-        prevTooltipButton.className = 'introjs-button introjs-prevbutton';
+        prevTooltipButton.className = this._options.buttonClass + ' introjs-prevbutton';
       }
       if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
-        nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+        nextTooltipButton.className = this._options.buttonClass + ' introjs-nextbutton';
       }
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
         skipTooltipButton.innerHTML = this._options.skipLabel;
@@ -1680,6 +1687,10 @@
       this.off = function (obj, type, listener, context, useCapture) {
         var id = this._id.apply(this, arguments),
             handler = obj[events_key] && obj[events_key][id];
+
+        if (!handler) {
+          return;
+        }
 
         if ('removeEventListener' in obj) {
           obj.removeEventListener(type, handler, useCapture);
@@ -2257,7 +2268,7 @@
     });
 
     var closeButton = _createElement('a', {
-      className: 'introjs-button',
+      className: this._options.buttonClass,
       role: 'button',
       innerHTML: this._options.hintButtonLabel,
       onclick: _hideHint.bind(this, stepId)
@@ -2533,6 +2544,14 @@
         this._introExitCallback = providedCallback;
       } else {
         throw new Error('Provided callback for onexit was not a function.');
+      }
+      return this;
+    },
+    onskip: function(providedCallback) {
+      if (typeof (providedCallback) === 'function') {
+        this._introSkipCallback = providedCallback;
+      } else {
+        throw new Error('Provided callback for onskip was not a function.');
       }
       return this;
     },
