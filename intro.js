@@ -348,11 +348,11 @@
     }
   }
 
- /*
+  /*
    * makes a copy of the object
    * @api private
    * @method _cloneObject
-  */
+   */
   function _cloneObject(object) {
       if (object === null || typeof (object) !== 'object' || typeof (object.nodeType) !== 'undefined') {
         return object;
@@ -407,7 +407,7 @@
       _forEach(this._introItems, function (item, i) {
         if( item.step === this._currentStepNumber ) {
           this._currentStep = i - 1;
-          this._currentStepNumber = undefined;
+          this._currentStepNumber = void 0;
         }
       }.bind(this));
     }
@@ -421,7 +421,7 @@
     var nextStep = this._introItems[this._currentStep];
     var continueStep = true;
 
-    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
+    if (typeof (this._introBeforeChangeCallback) === 'function') {
       continueStep = this._introBeforeChangeCallback.call(this, nextStep.element);
     }
 
@@ -462,7 +462,7 @@
     var nextStep = this._introItems[this._currentStep];
     var continueStep = true;
 
-    if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
+    if (typeof (this._introBeforeChangeCallback) === 'function') {
       continueStep = this._introBeforeChangeCallback.call(this, nextStep.element);
     }
 
@@ -486,7 +486,7 @@
     _setHelperLayerPosition.call(this, document.querySelector('.introjs-disableInteraction'));
 
     // re-align tooltip
-    if(this._currentStep !== undefined && this._currentStep !== null) {
+    if(typeof (this._currentStep) !== 'undefined' && this._currentStep !== null) {
       var oldHelperNumberLayer = document.querySelector('.introjs-helperNumberLayer'),
         oldArrowLayer        = document.querySelector('.introjs-arrow'),
         oldtooltipContainer  = document.querySelector('.introjs-tooltip');
@@ -512,7 +512,7 @@
     // calling onbeforeexit callback
     //
     // If this callback return `false`, it would halt the process
-    if (this._introBeforeExitCallback !== undefined) {
+    if (typeof (this._introBeforeExitCallback) === 'function') {
       continueExit = this._introBeforeExitCallback.call(this);
     }
 
@@ -570,12 +570,12 @@
     DOMEvent.off(window, 'resize', _onResize, this, true);
 
     //check if any callback is defined
-    if (this._introExitCallback !== undefined) {
+    if (typeof (this._introExitCallback) === 'function') {
       this._introExitCallback.call(this);
     }
 
     //set the step to zero
-    this._currentStep = undefined;
+    this._currentStep = void 0;
   }
 
   /**
@@ -1009,7 +1009,7 @@
    * @param {Object} targetElement
    */
   function _showElement(targetElement) {
-    if (typeof (this._introChangeCallback) !== 'undefined') {
+    if (typeof (this._introChangeCallback) === 'function') {
       this._introChangeCallback.call(this, targetElement.element);
     }
 
@@ -1375,7 +1375,7 @@
 
     _setShowElement(targetElement);
 
-    if (typeof (this._introAfterChangeCallback) !== 'undefined') {
+    if (typeof (this._introAfterChangeCallback) === 'function') {
       this._introAfterChangeCallback.call(this, targetElement.element);
     }
   }
@@ -1478,7 +1478,7 @@
       var zIndex = _getPropValue(parentElm, 'z-index');
       var opacity = parseFloat(_getPropValue(parentElm, 'opacity'));
       var transform = _getPropValue(parentElm, 'transform') || _getPropValue(parentElm, '-webkit-transform') || _getPropValue(parentElm, '-moz-transform') || _getPropValue(parentElm, '-ms-transform') || _getPropValue(parentElm, '-o-transform');
-      if (/[0-9]+/.test(zIndex) || opacity < 1 || (transform !== 'none' && transform !== undefined)) {
+      if (/[0-9]+/.test(zIndex) || opacity < 1 || (transform !== 'none' && typeof (transform) !== 'undefined')) {
         _addClass(parentElm, 'introjs-fixParent');
       }
 
@@ -1526,7 +1526,7 @@
       keys[key] = keys[key] || 0;
 
       // stamp only once per object
-      if (obj[key] === undefined) {
+      if (typeof (obj[key]) === 'undefined') {
         // increment key for each new object
         obj[key] = keys[key]++;
       }
@@ -1633,7 +1633,7 @@
 
       element.setAttribute('class', pre + ' ' + className);
     } else {
-      if (element.classList !== undefined) {
+      if (typeof (element.classList) !== 'undefined') {
         // check for modern classList property
         var classes = className.split(' ');
         _forEach(classes, function (cls) {
@@ -1722,7 +1722,7 @@
    * @returns {Object} width and height attributes
    */
   function _getWinSize() {
-    if (window.innerWidth !== undefined) {
+    if (typeof (window.innerWidth) !== 'undefined') {
       return { width: window.innerWidth, height: window.innerHeight };
     } else {
       var D = document.documentElement;
@@ -1918,7 +1918,7 @@
     }
 
     // call the callback function (if any)
-    if (typeof (this._hintCloseCallback) !== 'undefined') {
+    if (typeof (this._hintCloseCallback) === 'function') {
       this._hintCloseCallback.call(this, stepId);
     }
   }
@@ -2084,7 +2084,7 @@
     document.body.appendChild(hintsWrapper);
 
     // call the callback function (if any)
-    if (typeof (this._hintsAddedCallback) !== 'undefined') {
+    if (typeof (this._hintsAddedCallback) === 'function') {
       this._hintsAddedCallback.call(this);
     }
   }
@@ -2158,7 +2158,7 @@
     var item = this._introItems[stepId];
 
     // call the callback function (if any)
-    if (typeof (this._hintClickCallback) !== 'undefined') {
+    if (typeof (this._hintClickCallback) === 'function') {
       this._hintClickCallback.call(this, hintElement, item, stepId);
     }
 
