@@ -31,6 +31,13 @@
         g.introJs = f();
     }
 })(function () {
+  //Polyfill for Array.isArray
+  if (!Array.isArray) {
+    Array.isArray = function(arg) {
+      return Object.prototype.toString.call(arg) === '[object Array]';
+    };
+  }
+
   //Default config/variables
   var VERSION = '2.9.3';
 
@@ -367,10 +374,28 @@
       }
       var temp = {};
       for (var key in object) {
-        if (typeof(window.jQuery) !== 'undefined' && object[key] instanceof window.jQuery) {
+        if (object[key] === null || typeof (object[key]) === 'undefined' || (typeof (window.jQuery) !== 'undefined' && object[key] instanceof window.jQuery)) {
           temp[key] = object[key];
         } else {
-          temp[key] = _cloneObject(object[key]);
+          temp[key] = Array.isArray(object[key]) ? _cloneArray(object[key]) : _cloneObject(object[key]);
+        }
+      }
+      return temp;
+  }
+
+  /*
+   * makes a copy of the array
+   * @api private
+   * @method _cloneArray
+   */
+  function _cloneArray(array) {
+      if (array === null || !Array.isArray(array)) {
+        return array;
+      }
+      var temp = array.slice(0);
+      for (var i = 0; i < array.length; i++) {
+        if (array[i] !== null && typeof (array[i]) !== 'undefined' && (typeof (window.jQuery) === 'undefined' || !(array[i] instanceof window.jQuery))) {
+          temp[i] = Array.isArray(temp[i]) ? _cloneArray(array[i]) : _cloneObject(array[i]);
         }
       }
       return temp;
