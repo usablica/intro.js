@@ -314,20 +314,26 @@
       _exitIntro.call(this, this._targetElement);
     } else if (code === 'ArrowLeft' || code === 37) {
       //left arrow
-      _previousStep.call(this);
+      if (this._currentStep !== 0 && this._introItems.length > 1) {
+        _previousStep.call(this);
+      }
     } else if (code === 'ArrowRight' || code === 39) {
       //right arrow
-      _nextStep.call(this);
+      if (this._introItems.length - 1 !== this._currentStep && this._introItems.length > 1) {
+        _nextStep.call(this);
+      }
     } else if (code === 'Enter' || code === 13) {
       //srcElement === ie
       var target = e.target || e.srcElement;
       if (target && target.className.match('introjs-prevbutton')) {
         //user hit enter while focusing on previous button
-        _previousStep.call(this);
+        if (this._currentStep !== 0 && this._introItems.length > 1) {
+          _previousStep.call(this);
+        }
       } else if (target && target.className.match('introjs-skipbutton')) {
         //user hit enter while focusing on skip button
-        if (this._introItems.length - 1 === this._currentStep && typeof (this._introCompleteCallback) === 'function') {
-            this._introCompleteCallback.call(this);
+        if (typeof (this._introSkipCallback) === 'function') {
+            this._introSkipCallback.call(this);
         }
 
         _exitIntro.call(this, this._targetElement);
@@ -336,7 +342,9 @@
         target.click();
       } else {
         //default behavior for responding to enter
-        _nextStep.call(this);
+        if (this._introItems.length - 1 !== this._currentStep && this._introItems.length > 1) {
+          _nextStep.call(this);
+        }
       }
 
       //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
