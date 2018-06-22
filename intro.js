@@ -49,6 +49,7 @@
   function IntroJs(obj) {
     this._targetElement = obj;
     this._introItems = [];
+    this._highestAdditionalElementIndex = -1;
 
     this._options = {
       /* Next button label in tooltip box */
@@ -158,6 +159,16 @@
 
         if (typeof (currentItem.disableInteraction) === 'undefined') {
           currentItem.disableInteraction = this._options.disableInteraction;
+        }
+
+        if (currentItem.additionalElements) {
+          _forEach(currentItem.additionalElements, function(additionalElement, additionalElementIndex) {
+            if (typeof (additionalElement) === 'string') {
+              //grab the element with given selector from the page
+              currentItem.additionalElements[additionalElementIndex] = document.querySelector(additionalElement);
+            }
+            this._highestAdditionalElementIndex = Math.max(this._highestAdditionalElementIndex, additionalElementIndex);
+          }.bind(this));
         }
 
         if (currentItem.element !== null) {
@@ -517,6 +528,12 @@
     _setHelperLayerPosition.call(this, document.querySelector('.introjs-helperLayer'));
     _setHelperLayerPosition.call(this, document.querySelector('.introjs-tooltipReferenceLayer'));
     _setHelperLayerPosition.call(this, document.querySelector('.introjs-disableInteraction'));
+    if (this._introItems[this._currentStep].additionalElements) {
+      _forEach(this._introItems[this._currentStep].additionalElements, function(additionalElement, additionalElementIndex) {
+        _setHelperLayerPosition.call(this, document.querySelector('.introjs-additionalElementHelperLayer-' + additionalElementIndex, additionalElement));
+        _setHelperLayerPosition.call(this, document.querySelector('.introjs-additionalElementDisableInteraction-' + additionalElementIndex, additionalElement));
+      }.bind(this));
+    }
 
     // re-align tooltip
     if(typeof (this._currentStep) !== 'undefined' && this._currentStep !== null) {
@@ -584,6 +601,21 @@
       disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
     }
 
+    //remove all additionalElement layers
+    if (this._highestAdditionalElementIndex > -1) {
+      for (var i = 0; i <= this._highestAdditionalElementIndex; i++) {
+        helperLayer = targetElement.querySelector('.introjs-additionalElementHelperLayer-' + i);
+        if (helperLayer) {
+          helperLayer.parentNode.removeChild(helperLayer);
+        }
+
+        disableInteractionLayer = targetElement.querySelector('.introjs-additionalElementDisableInteraction-' + i);
+        if (disableInteractionLayer) {
+          disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
+        }
+      }
+    }
+
     //remove intro floating element
     var floatingElement = document.querySelector('.introjsFloatingElement');
     if (floatingElement) {
@@ -609,6 +641,9 @@
 
     //set the step to zero
     this._currentStep = void 0;
+
+    //unset the highest additional element index
+    this._highestAdditionalElementIndex = -1;
   }
 
   /**
@@ -974,25 +1009,26 @@
    * @method _setHelperLayerPosition
    * @param {Object} helperLayer
    */
-  function _setHelperLayerPosition(helperLayer) {
+  function _setHelperLayerPosition(helperLayer, target) {
     if (helperLayer) {
       //prevent error when `this._currentStep` in undefined
       if (!this._introItems[this._currentStep]) return;
 
       var currentElement  = this._introItems[this._currentStep],
-          elementPosition = _getOffset(currentElement.element),
+          targetElement = (typeof target !== 'undefined' ? target : currentElement.element),
+          elementPosition = _getOffset(targetElement),
           widthHeightPadding = this._options.helperElementPadding;
 
       // If the target element is fixed, the tooltip should be fixed as well.
       // Otherwise, remove a fixed class that may be left over from the previous
       // step.
-      if (_isFixed(currentElement.element)) {
+      if (_isFixed(targetElement)) {
         _addClass(helperLayer, 'introjs-fixedTooltip');
       } else {
         _removeClass(helperLayer, 'introjs-fixedTooltip');
       }
 
-      if (currentElement.position === 'floating') {
+      if (currentElement.position === 'floating' && typeof target === 'undefined') {
         widthHeightPadding = 0;
       }
 
@@ -1011,16 +1047,16 @@
    * @api private
    * @method _disableInteraction
    */
-  function _disableInteraction() {
-    var disableInteractionLayer = document.querySelector('.introjs-disableInteraction');
+  function _disableInteraction(targetElement, index) {
+    var disableInteractionLayer = document.querySelector('.introjs-disableInteraction' + (typeof index !== 'undefined' ? '-' + index : ''));
 
     if (disableInteractionLayer === null) {
       disableInteractionLayer = document.createElement('div');
-      disableInteractionLayer.className = 'introjs-disableInteraction';
+      disableInteractionLayer.className = 'introjs-disableInteraction' + (typeof index !== 'undefined' ? ' introjs-additionalElementDisableInteraction-' + index : '');
       this._targetElement.appendChild(disableInteractionLayer);
     }
 
-    _setHelperLayerPosition.call(this, disableInteractionLayer);
+    _setHelperLayerPosition.call(this, disableInteractionLayer, targetElement);
   }
 
   /**
@@ -1109,6 +1145,27 @@
       //remove old classes if the element still exist
       _removeShowElement();
 
+      if (this._highestAdditionalElementIndex > -1) {
+        for (var i = 0; i <= this._highestAdditionalElementIndex; i++) {
+          var oldAdditionalHelperLayer = document.querySelector('.introjs-additionalElementHelperLayer-' + i);
+          //update or reset the helper highlight class
+          oldAdditionalHelperLayer.className = highlightClass + ' introjs-additionalElementHelperLayer-' + i;
+          oldAdditionalHelperLayer.style.opacity = 0;
+          oldAdditionalHelperLayer.style.display = "none";
+
+          if (targetElement.additionalElements && i < targetElement.additionalElements.length) {
+            //set new position to helper layer
+            _setHelperLayerPosition.call(self, oldAdditionalHelperLayer, targetElement.additionalElements[i]);
+            _setShowElement({
+              'isAdditionalElement': true,
+              'element': targetElement.additionalElements[i]
+            });
+            oldAdditionalHelperLayer.style.opacity = 1;
+            oldAdditionalHelperLayer.style.display = "block";
+          }
+        }
+      }
+
       //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
       if (self._lastShowElementTimer) {
         window.clearTimeout(self._lastShowElementTimer);
@@ -1179,6 +1236,29 @@
       //add helper layer to target element
       this._targetElement.appendChild(helperLayer);
       this._targetElement.appendChild(referenceLayer);
+
+      if (this._highestAdditionalElementIndex > -1) {
+        for (var j = 0; j <= this._highestAdditionalElementIndex; j++) {
+          var additionalHelperLayer       = document.createElement('div');
+          additionalHelperLayer.className = highlightClass + ' introjs-additionalElementHelperLayer-' + j;
+          additionalHelperLayer.style.opacity = 0;
+          additionalHelperLayer.style.display = "none";
+
+          if (targetElement.additionalElements && j < targetElement.additionalElements.length) {
+            //set new position to helper layer
+            _setHelperLayerPosition.call(self, additionalHelperLayer, targetElement.additionalElements[j]);
+            _setShowElement({
+              'isAdditionalElement': true,
+              'element': targetElement.additionalElements[j]
+            });
+            additionalHelperLayer.style.opacity = 1;
+            additionalHelperLayer.style.display = "block";
+          }
+
+          //add helper layer to target element
+          this._targetElement.appendChild(additionalHelperLayer);
+        }
+      }
 
       arrowLayer.className = 'introjs-arrow';
 
@@ -1314,15 +1394,29 @@
       //end of new element if-else condition
     }
 
-    // removing previous disable interaction layer
+    // removing previous disable interaction layers
     var disableInteractionLayer = self._targetElement.querySelector('.introjs-disableInteraction');
     if (disableInteractionLayer) {
       disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
     }
 
+    if (this._highestAdditionalElementIndex > -1) {
+      for (var k = 0; k <= this._highestAdditionalElementIndex; k++) {
+        disableInteractionLayer = self._targetElement.querySelector('.introjs-additionalElementDisableInteraction-' + k);
+        if (disableInteractionLayer) {
+          disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
+        }
+      }
+    }
+
     //disable interaction
     if (targetElement.disableInteraction) {
       _disableInteraction.call(self);
+      if (targetElement.additionalElements) {
+        _forEach(targetElement.additionalElements, function(additionalElement, additionalElementIndex) {
+          _disableInteraction.call(self, additionalElement, additionalElementIndex);
+        }.bind(this));
+      }
     }
 
     // when it's the first step of tour
@@ -1485,6 +1579,9 @@
     }
 
     _addClass(targetElement.element, 'introjs-showElement');
+    if (typeof (targetElement.isAdditionalElement) !== 'undefined' && targetElement.isAdditionalElement === true) {
+      _addClass(targetElement.element, 'introjs-showAdditionalElement');
+    }
 
     var currentElementPosition = _getPropValue(targetElement.element, 'position');
     if (currentElementPosition !== 'absolute' &&
