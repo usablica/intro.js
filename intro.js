@@ -1060,7 +1060,7 @@
 
       if (scrollParent !== document.body) {
         // target is within a scrollable element
-        _scrollParentToElement(scrollParent, targetElement.element);
+        _scrollParentToElement.call(self, scrollParent, targetElement.element);
       }
 
       // set new position to helper layer
@@ -1136,7 +1136,7 @@
 
       if (scrollParent !== document.body) {
         // target is within a scrollable element
-        _scrollParentToElement(scrollParent, targetElement.element);
+        _scrollParentToElement.call(self, scrollParent, targetElement.element);
       }
 
       //set new position to helper layer
@@ -2278,6 +2278,8 @@
   * @return Null
   */
   function _scrollParentToElement (parent, element) {
+    if (!this._options.scrollToElement) return;
+
     parent.scrollTop = element.offsetTop - parent.offsetTop;
   }
 
