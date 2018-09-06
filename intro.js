@@ -43,9 +43,7 @@
     this._targetElement = obj;
     this._introItems = [];
 
-    this._options = {
-      /* Checkbox label in tooltip box */
-      checkboxLabel: 'Do not show it again',
+    this._options = {      
       /* Next button label in tooltip box */
       nextLabel: 'Next &rarr;',
       /* Previous button label in tooltip box */
@@ -103,7 +101,11 @@
       /* Adding animation to hints? */
       hintAnimation: true,
       /* additional classes to put on the buttons */
-      buttonClass: "introjs-button"
+      buttonClass: "introjs-button",
+      /* Checkbox label in tooltip box */
+      checkboxLabel: 'Do not show it again',
+      /* Checkbox label in tooltip box */
+      showCheckbox: false
     };
   }
 
@@ -1282,21 +1284,24 @@
         buttonsLayer.appendChild(nextTooltipButton);
       }
 
-      tooltipLayer.appendChild(buttonsLayer);
-
+      
       //Add the checkbox layer
-      checkboxLayer.className = 'introjs-checkboxLayer';
-      var checkDontShowAgain = document.createElement("INPUT");
-      checkDontShowAgain.setAttribute("type", "checkbox");
-      checkDontShowAgain.setAttribute("class", "checkbox-show-again");
-      checkDontShowAgain.setAttribute('id', 'checkBoxShowAgain');
-      var checkboxLabel = document.createElement("label");
-      checkboxLabel.setAttribute('for', 'checkBoxShowAgain');
-      checkboxLabel.innerHTML = this._options.checkboxLabel;
-      checkboxLayer.appendChild(checkDontShowAgain);
-      checkboxLayer.appendChild(checkboxLabel);
-      tooltipLayer.appendChild(checkboxLayer);
+      if (this._options.showCheckbox) {
+        checkboxLayer.className = 'introjs-checkboxLayer';
+        var checkDontShowAgain = document.createElement("INPUT");
+        checkDontShowAgain.setAttribute("type", "checkbox");
+        checkDontShowAgain.setAttribute("class", "checkbox-show-again");
+        checkDontShowAgain.setAttribute('id', 'checkBoxShowAgain');
+        var checkboxLabel = document.createElement("label");
+        checkboxLabel.setAttribute('for', 'checkBoxShowAgain');
+        checkboxLabel.innerHTML = this._options.checkboxLabel;
+        checkboxLayer.appendChild(checkDontShowAgain);
+        checkboxLayer.appendChild(checkboxLabel);
+        tooltipLayer.appendChild(checkboxLayer);
+      }
 
+      tooltipLayer.appendChild(buttonsLayer);
+      
       //set proper position
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
 
