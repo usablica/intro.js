@@ -504,3 +504,9 @@ tr.introjs-showElement > th {
         opacity: 0.0;
     }
 }
+
+.introjs-checkboxLayer label {
+  font-size: 12px;
+  margin-left: 2px;
+  font-weight: 100;
+}

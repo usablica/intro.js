@@ -44,6 +44,8 @@
     this._introItems = [];
 
     this._options = {
+      /* Checkbox label in tooltip box */
+      checkboxLabel: 'Do not show it again',
       /* Next button label in tooltip box */
       nextLabel: 'Next &rarr;',
       /* Previous button label in tooltip box */
@@ -1126,7 +1128,8 @@
           tooltipTextLayer  = document.createElement('div'),
           bulletsLayer      = document.createElement('div'),
           progressLayer     = document.createElement('div'),
-          buttonsLayer      = document.createElement('div');
+          buttonsLayer      = document.createElement('div'),
+          checkboxLayer     = document.createElement('div');
 
       helperLayer.className = highlightClass;
       referenceLayer.className = 'introjs-tooltipReferenceLayer';
@@ -1264,7 +1267,8 @@
         }
 
         if (typeof(self._introSkipCallback) === 'function') {
-          self._introSkipCallback.call(self);
+          var checkboxChecked = self._options.showCheckbox ? document.getElementById("checkBoxShowAgain").checked : null;
+          self._introSkipCallback.call(self, checkboxChecked);
         }
 
         _exitIntro.call(self, self._targetElement);
@@ -1279,6 +1283,19 @@
       }
 
       tooltipLayer.appendChild(buttonsLayer);
+
+      //Add the checkbox layer
+      checkboxLayer.className = 'introjs-checkboxLayer';
+      var checkDontShowAgain = document.createElement("INPUT");
+      checkDontShowAgain.setAttribute("type", "checkbox");
+      checkDontShowAgain.setAttribute("class", "checkbox-show-again");
+      checkDontShowAgain.setAttribute('id', 'checkBoxShowAgain');
+      var checkboxLabel = document.createElement("label");
+      checkboxLabel.setAttribute('for', 'checkBoxShowAgain');
+      checkboxLabel.innerHTML = this._options.checkboxLabel;
+      checkboxLayer.appendChild(checkDontShowAgain);
+      checkboxLayer.appendChild(checkboxLabel);
+      tooltipLayer.appendChild(checkboxLayer);
 
       //set proper position
       _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
