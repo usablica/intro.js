@@ -419,8 +419,18 @@
     }
 
     var nextStep = this._introItems[this._currentStep];
-    var continueStep = true;
 
+    if ((this._introItems.length) <= this._currentStep) {
+        //end of the intro
+        //check if any callback is defined
+        if (typeof (this._introCompleteCallback) === 'function') {
+            this._introCompleteCallback.call(this);
+        }
+        _exitIntro.call(this, this._targetElement);
+        return;
+    }
+
+    var continueStep = true;
     if (typeof (this._introBeforeChangeCallback) !== 'undefined') {
       continueStep = this._introBeforeChangeCallback.call(this, nextStep.element);
     }
@@ -429,16 +439,6 @@
     if (continueStep === false) {
       --this._currentStep;
       return false;
-    }
-
-    if ((this._introItems.length) <= this._currentStep) {
-      //end of the intro
-      //check if any callback is defined
-      if (typeof (this._introCompleteCallback) === 'function') {
-        this._introCompleteCallback.call(this);
-      }
-      _exitIntro.call(this, this._targetElement);
-      return;
     }
 
     _showElement.call(this, nextStep);
