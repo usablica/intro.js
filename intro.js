@@ -261,6 +261,47 @@
       return a.step - b.step;
     });
 
+    var copyComputedStyle = function (from, to) {
+      var computed_style_object = false;
+      computed_style_object = from.currentStyle || document.defaultView.getComputedStyle(from, null);
+      if (!computed_style_object) return null;
+       var stylePropertyValid = function (name, value) {
+        return typeof value !== 'undefined' &&
+          typeof value !== 'object' &&
+          typeof value !== 'function' &&
+          value.length > 0 &&
+          value != parseInt(value)
+      };
+      for (property in computed_style_object) {
+        if (stylePropertyValid(property, computed_style_object[property])) {
+          to.style[property] = computed_style_object[property];
+        }
+      }
+    };
+     for (var ii in introItems) {
+      var el = introItems[ii].element;
+      var clone = el.cloneNode(true);
+      copyComputedStyle(el, clone);
+      rectObject = el.getBoundingClientRect();
+      clone.style.display = 'none';
+      clone.style.zIndex = 99999999;
+      clone.style.position = 'fixed';
+      clone.style.margin = '0px';
+      clone.style.top = rectObject.top + 'px';
+      clone.style.left = rectObject.left + 'px';
+      clone.style.width = rectObject.width + 'px';
+      clone.style.height = rectObject.height + 'px';
+      clone.classList.add('introjsClone');
+      var elAll = el.getElementsByTagName('*');
+      var all = clone.getElementsByTagName('*');
+      for (var i = -1, l = all.length; ++i < l;) {
+        copyComputedStyle(elAll[i], all[i]);
+      }
+      document.body.appendChild(clone);
+      introItems[ii].element = clone;
+    }
+
+
     //set it to the introJs object
     this._introItems = introItems;
 
@@ -532,6 +573,13 @@
           }
         }.bind(overlayLayer), 500);
       }.bind(this));
+    }
+
+
+    var elms = document.querySelectorAll('.introjsClone');
+    for (var i = 0, l = elms.length; i < l; i++) {
+      var elm = elms[i];
+      elm.parentNode.removeChild(elm);
     }
 
     //remove all helper layers
@@ -1013,6 +1061,8 @@
       this._introChangeCallback.call(this, targetElement.element);
     }
 
+    targetElement.element.style.display = 'block';
+
     var self = this,
         oldHelperLayer = document.querySelector('.introjs-helperLayer'),
         oldReferenceLayer = document.querySelector('.introjs-tooltipReferenceLayer'),
@@ -1430,6 +1480,7 @@
 
     _forEach(elms, function (elm) {
       _removeClass(elm, /introjs-[a-zA-Z]+/g);
+      elm.style.display = 'none';
     });
   }
 
