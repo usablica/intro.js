@@ -2527,5 +2527,8 @@
     }
   };
 
+  // set corresponding constructor to IntroJs (otherwise is Object)
+  IntroJs.prototype.constructor = IntroJs;
+
   return introJs;
 });
