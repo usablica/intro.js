@@ -86,6 +86,8 @@
       scrollTo: 'element',
       /* Padding to add after scrolling when element is not in the viewport (in pixels) */
       scrollPadding: 30,
+      /* The thing to scroll */
+      scrollContainer: window,
       /* Set the overlay opacity */
       overlayOpacity: 0.8,
       /* Precedence of positions, when auto is enabled */
@@ -1063,6 +1065,9 @@
         _scrollParentToElement(scrollParent, targetElement.element);
       }
 
+      // change the scroll of the window, if needed
+      _scrollTo.call(self, targetElement.scrollTo, targetElement, oldtooltipLayer);
+
       // set new position to helper layer
       _setHelperLayerPosition.call(self, oldHelperLayer);
       _setHelperLayerPosition.call(self, oldReferenceLayer);
@@ -1113,9 +1118,7 @@
           nextTooltipButton.focus();
         }
 
-        // change the scroll of the window, if needed
-        _scrollTo.call(self, targetElement.scrollTo, targetElement, oldtooltipLayer);
-      }, 350);
+      }, 500);
 
       // end of old element if-else condition
     } else {
@@ -1408,13 +1411,16 @@
       // TODO (afshinm): do we need scroll padding now?
       // I have changed the scroll option and now it scrolls the window to
       // the center of the target element or tooltip.
+      var container = this._options.scrollContainer !== window ?
+            ? document.getElementById(this._options.scrollContainer)
+            : window;
 
       if (top < 0 || targetElement.element.clientHeight > winHeight) {
-        window.scrollBy(0, rect.top - ((winHeight / 2) -  (rect.height / 2)) - this._options.scrollPadding); // 30px padding from edge to look nice
+        container.scrollBy(0, rect.top - ((winHeight / 2) -  (rect.height / 2)) - this._options.scrollPadding); // 30px padding from edge to look nice
 
       //Scroll down
       } else {
-        window.scrollBy(0, rect.top - ((winHeight / 2) -  (rect.height / 2)) + this._options.scrollPadding); // 30px padding from edge to look nice
+        container.scrollBy(0, rect.top - ((winHeight / 2) -  (rect.height / 2)) + this._options.scrollPadding); // 30px padding from edge to look nice
       }
     }
   }
