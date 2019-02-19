@@ -1411,7 +1411,7 @@
       // TODO (afshinm): do we need scroll padding now?
       // I have changed the scroll option and now it scrolls the window to
       // the center of the target element or tooltip.
-      var container = this._options.scrollContainer !== window ?
+      var container = this._options.scrollContainer !== window 
             ? document.getElementById(this._options.scrollContainer)
             : window;
 
