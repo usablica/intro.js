@@ -1049,6 +1049,7 @@
       oldtooltipContainer.style.opacity = 0;
       oldtooltipContainer.style.display = "none";
 
+        /*
       if (oldHelperNumberLayer !== null) {
         var lastIntroItem = this._introItems[(targetElement.step - 2 >= 0 ? targetElement.step - 2 : 0)];
 
@@ -1056,6 +1057,7 @@
           oldHelperNumberLayer.style.opacity = 0;
         }
       }
+      */
 
       // scroll to element
       scrollParent = _getScrollParent( targetElement.element );
