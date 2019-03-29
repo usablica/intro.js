@@ -1254,7 +1254,7 @@
       skipTooltipButton = document.createElement('a');
       skipTooltipButton.className = this._options.buttonClass + ' introjs-skipbutton ';
       _setAnchorAsButton(skipTooltipButton);
-      skipTooltipButton.innerHTML = this._options.skipLabel;
+      skipTooltipButton.innerHTML = targetElement.skipLabel ? targetElement.skipLabel : this._options.skipLabel;
 
       skipTooltipButton.onclick = function() {
         if (self._introItems.length - 1 === self._currentStep && typeof (self._introCompleteCallback) === 'function') {
@@ -1302,6 +1302,18 @@
       _disableInteraction.call(self);
     }
 
+    // Update button tekst based on step options
+    if (targetElement.nextLabel) {
+      nextTooltipButton.innerHTML = targetElement.nextLabel;
+    } else if (nextTooltipButton.innerHTML != this._options.nextLabel) {
+      nextTooltipButton.innerHTML = this._options.nextLabel;
+    }
+    if (targetElement.prevLabel) {
+      prevTooltipButton.innerHTML = targetElement.prevLabel;
+    } else if (prevTooltipButton.innerHTML != this._options.prevLabel) {
+      prevTooltipButton.innerHTML = this._options.prevLabel;
+    }
+
     // when it's the first step of tour
     if (this._currentStep === 0 && this._introItems.length > 1) {
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
@@ -1325,12 +1337,12 @@
       }
 
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
-        skipTooltipButton.innerHTML = this._options.skipLabel;
+        skipTooltipButton.innerHTML = targetElement.skipLabel ? targetElement.skipLabel : this._options.skipLabel;
       }
     } else if (this._introItems.length - 1 === this._currentStep || this._introItems.length === 1) {
       // last step of tour
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
-        skipTooltipButton.innerHTML = this._options.doneLabel;
+        skipTooltipButton.innerHTML = targetElement.doneLabel ? targetElement.doneLabel : this._options.doneLabel;
         // adding donebutton class in addition to skipbutton
         _addClass(skipTooltipButton, 'introjs-donebutton');
       }
@@ -1362,7 +1374,7 @@
         nextTooltipButton.className = this._options.buttonClass + ' introjs-nextbutton';
       }
       if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
-        skipTooltipButton.innerHTML = this._options.skipLabel;
+        skipTooltipButton.innerHTML = targetElement.skipLabel ? targetElement.skipLabel : this._options.skipLabel;
       }
     }
 
@@ -1761,7 +1773,8 @@
   function _addOverlayLayer(targetElm) {
     var overlayLayer = document.createElement('div'),
         styleText = '',
-        self = this;
+        self = this,
+        alreadyExited = false;
 
     //set css class name
     overlayLayer.className = 'introjs-overlay';
@@ -1782,6 +1795,9 @@
     targetElm.appendChild(overlayLayer);
 
     overlayLayer.onclick = function() {
+      if (alreadyExited) {
+        return false
+      };
       if (self._options.overlayClicked === '' || self._options.exitOnOverlayClick === false) {
         // Do nothing
       } else if (self._options.overlayClicked === 'continue')
