@@ -1808,7 +1808,7 @@
           if (self._introItems.length - 1 === self._currentStep && typeof (self._introCompleteCallback) === 'function') {
             self._introCompleteCallback.call(self);
           }
-
+          alreadyExited = true;
           _exitIntro.call(self, self._targetElement);
       } else if (self._options.overlayClicked === 'exit' || self._options.exitOnOverlayClick === true) {
         _exitIntro.call(self, targetElm);
