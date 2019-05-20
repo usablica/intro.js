@@ -816,7 +816,7 @@
     */
 
     // Check for space below
-    if (targetElementRect.bottom + tooltipHeight + tooltipHeight > windowSize.height) {
+    if (targetElementRect.bottom + tooltipHeight > windowSize.height) {
       _removeEntry(possiblePositions, "bottom");
     }
 
