@@ -183,7 +183,7 @@
 
         var step = parseInt(currentElement.getAttribute('data-step'), 10);
 
-        if (typeof (currentElement.getAttribute('data-disable-interaction')) !== 'undefined') {
+        if (currentElement.hasAttribute('data-disable-interaction')) {
           disableInteraction = !!currentElement.getAttribute('data-disable-interaction');
         } else {
           disableInteraction = this._options.disableInteraction;
@@ -225,7 +225,7 @@
             }
           } 
 
-          if (typeof (currentElement.getAttribute('data-disable-interaction')) !== 'undefined') {
+          if (currentElement.hasAttribute('data-disable-interaction')) {
             disableInteraction = !!currentElement.getAttribute('data-disable-interaction');
           } else {
             disableInteraction = this._options.disableInteraction;
