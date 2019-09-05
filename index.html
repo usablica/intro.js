@@ -17,6 +17,7 @@
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="minified/intro.min.js"></script>
+  <script src="https://js.stripe.com/v3"></script>
 
   <script type="text/javascript">
       if (document.location.hostname === 'usablica.github.io') {
@@ -374,21 +375,53 @@
                       <li>
                       Future updates
                       </li>
+                      <li>
+                      Once-off Payment
+                      </li>
                   </ul>
                   <hr>
-                    <form action="https://introjs.herokuapp.com/charge" method="POST" class="stripe-form">
-                      <script
-                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                        data-key="pk_live_ZSJq4BT73VGchztlGmdmDFc1"
-                        data-name="Intro.js"
-                        data-description="Starter Plan"
-                        data-label="Purchase"
-                        data-currency="usd"
-                        data-amount="999"
-                        data-locale="auto">
-                      </script>
-                      <input type="hidden" id="amount" name="amount" value="999" />
-                    </form>
+
+
+<!-- Create a button that your customers click to complete their purchase. Customize the styling to suit your branding. -->
+<button
+  id="checkout-button-sku_Fkz0duydyfrC9Q"
+  role="link"
+  class="button button-primary"
+>
+  Purchase
+</button>
+
+<div id="error-message"></div>
+
+<script>
+  var stripe = Stripe('pk_live_ZSJq4BT73VGchztlGmdmDFc1');
+
+  var checkoutButton = document.getElementById('checkout-button-sku_Fkz0duydyfrC9Q');
+  checkoutButton.addEventListener('click', function () {
+    // When the customer clicks on the button, redirect
+    // them to Checkout.
+    stripe.redirectToCheckout({
+      items: [{sku: 'sku_Fkz0duydyfrC9Q', quantity: 1}],
+
+      // Do not rely on the redirect to the successUrl for fulfilling
+      // purchases, customers may not always reach the success_url after
+      // a successful payment.
+      // Instead use one of the strategies described in
+      // https://stripe.com/docs/payments/checkout/fulfillment
+      successUrl: 'http://introjs.com/success',
+      cancelUrl: 'http://introjs.com/canceled',
+    })
+    .then(function (result) {
+      if (result.error) {
+        // If `redirectToCheckout` fails due to a browser or network
+        // error, display the localized error message to your customer.
+        var displayError = document.getElementById('error-message');
+        displayError.textContent = result.error.message;
+      }
+    });
+  });
+</script>
+
               </div>
               <div class="package brilliant">
                   <div class="name">Business</div>
@@ -417,6 +450,9 @@
                       </li>
                       <li>
                       Future updates
+                      </li>
+                      <li>
+                      Once-off Payment
                       </li>
                   </ul>
                   <hr>
@@ -461,6 +497,9 @@
                       </li>
                       <li>
                       Future updates
+                      </li>
+                      <li>
+                      Once-off Payment
                       </li>
                   </ul>
                   <hr>
