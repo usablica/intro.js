@@ -1,4 +1,5 @@
-import getOffset from "./getOffset";
+import getOffset from "../util/getOffset";
+import exitIntro from "./exitIntro";
 
 /**
  * Add overlay layer to the page
@@ -32,7 +33,7 @@ export default function addOverlayLayer(targetElm) {
 
   overlayLayer.onclick = () => {
     if (self._options.exitOnOverlayClick === true) {
-      _exitIntro.call(self, targetElm);
+      exitIntro.call(self, targetElm);
     }
   };
 

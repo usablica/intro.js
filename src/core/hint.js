@@ -1,10 +1,13 @@
-import addClass from "./addClass";
-import removeClass from "./removeClass";
-import isFixed from "./isFixed";
-import getOffset from "./getOffset";
-import cloneObject from "./cloneObject";
-import forEach from "./forEach";
-import DOMEvent from "../DOMEvent";
+import addClass from "../util/addClass";
+import removeClass from "../util/removeClass";
+import isFixed from "../util/isFixed";
+import getOffset from "../util/getOffset";
+import cloneObject from "../util/cloneObject";
+import forEach from "../util/forEach";
+import DOMEvent from "./DOMEvent";
+import setAnchorAsButton from '../util/setAnchorAsButton';
+import setHelperLayerPosition from './setHelperLayerPosition';
+import placeTooltip from './placeTooltip';
 
 /**
  * Get a queryselector within the hint wrapper
