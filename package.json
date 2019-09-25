@@ -9,8 +9,6 @@
     "url": "https://github.com/usablica/intro.js"
   },
   "main": "dist/intro.js",
-  "browser": "dist/intro.umd.js",
-  "module": "dist/intro.es.js",
   "scripts": {
     "test": "npm run test:jshint",
     "test:jshint": "jshint ./intro.js",
