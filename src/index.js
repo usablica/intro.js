@@ -3,6 +3,7 @@ import stamp from './util/stamp';
 import exitIntro from './core/exitIntro';
 import refresh from './core/refresh';
 import introForElement from './core/introForElement';
+import { version } from '../package.json';
 import {
   populateHints,
   hideHint,
@@ -14,16 +15,7 @@ import {
   showHintDialog,
 } from './core/hint';
 import { goToStep, goToStepNumber, nextStep, previousStep } from './core/steps';
-
-/**
- * Intro.js v2.9.3
- * https://github.com/usablica/intro.js
- *
- * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh)
- */
-
-  //Default config/variables
-const VERSION = '2.9.3';
+import './styles/introjs.scss';
 
 /**
  * IntroJs main class
@@ -129,7 +121,7 @@ const introJs = targetElm => {
  * @property version
  * @type String
  */
-introJs.version = VERSION;
+introJs.version = version;
 
 /**
  * key-val object helper for introJs instances

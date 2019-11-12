@@ -1,6 +1,16 @@
+/*!
+ * Intro.js v2.9.3
+ * https://github.com/usablica/intro.js
+ *
+ * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh).
+ * https://raw.githubusercontent.com/usablica/intro.js/master/license.md
+ *
+ * Date: Tue, 12 Nov 2019 00:04:22 GMT
+ */
+
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('core-js/modules/es6.function.bind'), require('core-js/modules/es6.regexp.replace'), require('core-js/modules/es6.regexp.match'), require('core-js/modules/es6.regexp.split'), require('core-js/modules/es6.string.includes'), require('core-js/modules/es6.array.index-of'), require('core-js/modules/es7.array.includes'), require('core-js/modules/es6.array.sort'), require('core-js/modules/es6.regexp.to-string'), require('core-js/modules/es6.date.to-string'), require('core-js/modules/es6.object.to-string')) :
-  typeof define === 'function' && define.amd ? define(['core-js/modules/es6.function.bind', 'core-js/modules/es6.regexp.replace', 'core-js/modules/es6.regexp.match', 'core-js/modules/es6.regexp.split', 'core-js/modules/es6.string.includes', 'core-js/modules/es6.array.index-of', 'core-js/modules/es7.array.includes', 'core-js/modules/es6.array.sort', 'core-js/modules/es6.regexp.to-string', 'core-js/modules/es6.date.to-string', 'core-js/modules/es6.object.to-string'], factory) :
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.introJs = factory());
 }(this, function () { 'use strict';
 
@@ -2216,15 +2226,8 @@
     return false;
   }
 
-  /**
-   * Intro.js v2.9.3
-   * https://github.com/usablica/intro.js
-   *
-   * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh)
-   */
-  //Default config/variables
+  var version = "2.9.3";
 
-  var VERSION = '2.9.3';
   /**
    * IntroJs main class
    *
@@ -2355,7 +2358,7 @@
    */
 
 
-  introJs.version = VERSION;
+  introJs.version = version;
   /**
    * key-val object helper for introJs instances
    *

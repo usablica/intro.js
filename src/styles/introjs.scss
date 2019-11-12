@@ -1,24 +1,17 @@
-$color_1: white;
-$color_2: #333;
-$color_3: #7a7a7a;
-$color_4: #9a9a9a;
-$font_family_1: Arial, verdana, tahoma;
-$background_color_1: #000;
-$background_color_2: white;
-$background_color_3: #FFF;
-$background_color_4: rgba(255, 255, 255, .9);
-$background_color_5: transparent;
-$background_color_6: #ececec;
-$background_color_7: #f4f4f4;
-$background_color_8: #ecf0f1;
+$black900: #212121;
+$black800: #424242;
+$black600: #616161;
+$black500: #9E9E9E;
+$black400: #BDBDBD;
+$black300: #E0E0E0;
+$black200: #EEEEEE;
+$black100: #f4f4f4;
+$white: #ffffff;
+
+$font_family: Arial, verdana, tahoma;
 $background_color_9: #08c;
 $background_color_10: rgba(136, 136, 136, 0.24);
-$border_color_1: #bcbcbc;
-$border_color_2: #d4d4d4;
-$border_top_color_1: white;
-$border_right_color_1: white;
-$border_bottom_color_1: white;
-$border_left_color_1: white;
+
 
 /*
  Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/
@@ -53,14 +46,9 @@ $border_left_color_1: white;
   position: absolute;
   box-sizing: content-box;
   z-index: 999999;
-  background-color: $background_color_1;
+  background-color: $black900;
   opacity: 0;
-  background: -moz-radial-gradient(center, ellipse farthest-corner, rgba(0, 0, 0, 0.4) 0, rgba(0, 0, 0, 0.9) 100%);
-  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(100%, rgba(0, 0, 0, 0.9)));
-  background: -webkit-radial-gradient(center, ellipse farthest-corner, rgba(0, 0, 0, 0.4) 0, rgba(0, 0, 0, 0.9) 100%);
-  background: -o-radial-gradient(center, ellipse farthest-corner, rgba(0, 0, 0, 0.4) 0, rgba(0, 0, 0, 0.9) 100%);
-  background: -ms-radial-gradient(center, ellipse farthest-corner, rgba(0, 0, 0, 0.4) 0, rgba(0, 0, 0, 0.9) 100%);
-  background: radial-gradient(center, ellipse farthest-corner, rgba(0, 0, 0, 0.4) 0, rgba(0, 0, 0, 0.9) 100%);
+  background: radial-gradient(center, ellipse farthest-corner, rgba($black900, 0.5) 0, rgba($black900, 0.9) 100%);
   filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#66000000',endColorstr='#e6000000',GradientType=1)";
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
   filter: alpha(opacity=50);
@@ -92,7 +80,7 @@ tr.introjs-showElement {
 .introjs-disableInteraction {
   z-index: 99999999 !important;
   position: absolute;
-  background-color: $background_color_2;
+  background-color: $white;
   opacity: 0;
   filter: alpha(opacity=0);
 }
@@ -105,10 +93,10 @@ tr.introjs-showElement {
   box-sizing: content-box;
   position: absolute;
   z-index: 9999998;
-  background-color: $background_color_4;
-  border: 1px solid rgba(0, 0, 0, .5);
+  background-color: rgba($white, .9);
+  border: 1px solid rgba($black900, .5);
   border-radius: 4px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, .4);
+  box-shadow: 0 2px 15px rgba($black900, .4);
   transition: all 0.3s ease-out;
 
   * {
@@ -129,7 +117,7 @@ tr.introjs-showElement {
   position: absolute;
   visibility: hidden;
   z-index: 100000000;
-  background-color: $background_color_5;
+  background-color: transparent;
   transition: all 0.3s ease-out;
 }
 
@@ -141,18 +129,13 @@ tr.introjs-showElement {
   left: -16px;
   z-index: 9999999999 !important;
   padding: 2px;
-  font-family: $font_family_1;
+  font-family: $font_family;
   font-size: 13px;
   font-weight: bold;
-  color: $color_1;
+  color: $white;
   text-align: center;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
+  text-shadow: 1px 1px 1px rgba($black900, .3);
   background: #ff3019;
-  background: -webkit-linear-gradient(top, #ff3019 0%, #cf0404 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff3019), color-stop(100%, #cf0404));
-  background: -moz-linear-gradient(top, #ff3019 0%, #cf0404 100%);
-  background: -ms-linear-gradient(top, #ff3019 0%, #cf0404 100%);
-  background: -o-linear-gradient(top, #ff3019 0%, #cf0404 100%);
   background: linear-gradient(to bottom, #ff3019 0%, #cf0404 100%);
   width: 20px;
   height: 20px;
@@ -161,7 +144,7 @@ tr.introjs-showElement {
   border-radius: 50%;
   filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0)";
   filter: "progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000)";
-  box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
+  box-shadow: 0 2px 5px rgba($black900, .4);
 }
 
 .introjs-arrow {
@@ -172,62 +155,62 @@ tr.introjs-showElement {
 
 .introjs-arrow.top {
   top: -10px;
-  border-bottom-color: $border_bottom_color_1;
+  border-bottom-color: $white;
 }
 
 .introjs-arrow.top-right {
   top: -10px;
   right: 10px;
-  border-bottom-color: $border_bottom_color_1;
+  border-bottom-color: $white;
 }
 
 .introjs-arrow.top-middle {
   top: -10px;
   left: 50%;
   margin-left: -5px;
-  border-bottom-color: $border_bottom_color_1;
+  border-bottom-color: $white;
 }
 
 .introjs-arrow.right {
   right: -10px;
   top: 10px;
-  border-left-color: $border_left_color_1;
+  border-left-color: $white;
 }
 
 .introjs-arrow.right-bottom {
   bottom: 10px;
   right: -10px;
-  border-left-color: $border_left_color_1;
+  border-left-color: $white;
 }
 
 .introjs-arrow.bottom {
   bottom: -10px;
-  border-top-color: $border_top_color_1;
+  border-top-color: $white;
 }
 
 .introjs-arrow.bottom-right {
   bottom: -10px;
   right: 10px;
-  border-top-color: $border_top_color_1;
+  border-top-color: $white;
 }
 
 .introjs-arrow.bottom-middle {
   bottom: -10px;
   left: 50%;
   margin-left: -5px;
-  border-top-color: $border_top_color_1;
+  border-top-color: $white;
 }
 
 .introjs-arrow.left {
   left: -10px;
   top: 10px;
-  border-right-color: $border_right_color_1;
+  border-right-color: $white;
 }
 
 .introjs-arrow.left-bottom {
   left: -10px;
   bottom: 10px;
-  border-right-color: $border_right_color_1;
+  border-right-color: $white;
 }
 
 .introjs-tooltip {
@@ -235,11 +218,11 @@ tr.introjs-showElement {
   position: absolute;
   visibility: visible;
   padding: 10px;
-  background-color: $background_color_2;
+  background-color: $white;
   min-width: 200px;
   max-width: 300px;
   border-radius: 3px;
-  box-shadow: 0 1px 10px rgba(0, 0, 0, .4);
+  box-shadow: 0 1px 10px rgba($black900, .4);
   transition: opacity 0.1s ease-out;
 }
 
@@ -254,48 +237,36 @@ tr.introjs-showElement {
   overflow: visible;
   display: inline-block;
   padding: 0.3em 0.8em;
-  border: 1px solid #d4d4d4;
-  margin: 0;
+  border: 1px solid $black400;
   text-decoration: none;
-  text-shadow: 1px 1px 0 #fff;
+  text-shadow: 1px 1px 0 $white;
   font: 11px/normal sans-serif;
-  color: $color_2;
+  color: $black800;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
-  background-color: $background_color_6;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f4f4f4), to(#ececec));
-  background-image: -moz-linear-gradient(#f4f4f4, #ececec);
-  background-image: -o-linear-gradient(#f4f4f4, #ececec);
-  background-image: linear-gradient(#f4f4f4, #ececec);
+  background-color: $black300;
+  background-image: linear-gradient($black100, #ececec);
   -webkit-background-clip: padding;
   -moz-background-clip: padding;
   -o-background-clip: padding-box;
-  -webkit-border-radius: 0.2em;
-  -moz-border-radius: 0.2em;
   border-radius: 0.2em;
   zoom: 1;
   *display: inline;
-  margin-top: 10px;
+  margin: 10px 0 0;
 
   &:hover {
-    border-color: $border_color_1;
+    border-color: $black400;
     text-decoration: none;
     box-shadow: 0px 1px 1px #e3e3e3;
   }
 
   &:focus {
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ececec), to(#f4f4f4));
-    background-image: -moz-linear-gradient(#ececec, #f4f4f4);
-    background-image: -o-linear-gradient(#ececec, #f4f4f4);
-    background-image: linear-gradient(#ececec, #f4f4f4);
+    background-image: linear-gradient(#ececec, $black100);
   }
 
   &:active {
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ececec), to(#f4f4f4));
-    background-image: -moz-linear-gradient(#ececec, #f4f4f4);
-    background-image: -o-linear-gradient(#ececec, #f4f4f4);
-    background-image: linear-gradient(#ececec, #f4f4f4);
+    background-image: linear-gradient(#ececec, $black100);
   }
 
   &::-moz-focus-inner {
@@ -307,7 +278,7 @@ tr.introjs-showElement {
 .introjs-skipbutton {
   box-sizing: content-box;
   margin-right: 5px;
-  color: $color_3;
+  color: $black600;
 }
 
 .introjs-prevbutton {
@@ -316,7 +287,7 @@ tr.introjs-showElement {
 }
 
 .introjs-prevbutton.introjs-fullbutton {
-  border: 1px solid #d4d4d4;
+  border: 1px solid $black400;
   border-radius: 0.2em;
 }
 
@@ -329,30 +300,30 @@ tr.introjs-showElement {
 }
 
 .introjs-disabled {
-  color: $color_4;
-  border-color: $border_color_2;
+  color: $black500;
+  border-color: $black400;
   box-shadow: none;
   cursor: default;
-  background-color: $background_color_7;
+  background-color: $black100;
   background-image: none;
   text-decoration: none;
 
   &:hover {
-    color: $color_4;
-    border-color: $border_color_2;
+    color: $black500;
+    border-color: $black400;
     box-shadow: none;
     cursor: default;
-    background-color: $background_color_7;
+    background-color: $black100;
     background-image: none;
     text-decoration: none;
   }
 
   &:focus {
-    color: $color_4;
-    border-color: $border_color_2;
+    color: $black500;
+    border-color: $black400;
     box-shadow: none;
     cursor: default;
-    background-color: $background_color_7;
+    background-color: $black100;
     background-image: none;
     text-decoration: none;
   }
@@ -406,7 +377,7 @@ tr.introjs-showElement {
   height: 10px;
   margin: 10px 0 5px 0;
   border-radius: 4px;
-  background-color: $background_color_8;
+  background-color: $black300;
 }
 
 .introjs-progressbar {
@@ -482,8 +453,6 @@ tr.introjs-showElement {
   box-sizing: content-box;
   border: 10px solid rgba(146, 146, 146, 0.36);
   background: transparent;
-  -webkit-border-radius: 60px;
-  -moz-border-radius: 60px;
   border-radius: 60px;
   height: 50px;
   width: 50px;
