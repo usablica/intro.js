@@ -1060,7 +1060,7 @@
 
       if (scrollParent !== document.body) {
         // target is within a scrollable element
-        _scrollParentToElement(scrollParent, targetElement.element);
+        _scrollParentToElement.call(this, scrollParent, targetElement.element);
       }
 
       // set new position to helper layer
@@ -1136,7 +1136,7 @@
 
       if (scrollParent !== document.body) {
         // target is within a scrollable element
-        _scrollParentToElement(scrollParent, targetElement.element);
+        _scrollParentToElement.call(this, scrollParent, targetElement.element);
       }
 
       //set new position to helper layer
@@ -2278,7 +2278,11 @@
   * @return Null
   */
   function _scrollParentToElement (parent, element) {
-    parent.scrollTop = element.offsetTop - parent.offsetTop;
+    var offsetTop = 0;
+    for (var e = element; e != parent; e = e.offsetParent) {
+        offsetTop += e.offsetTop;
+    }
+    parent.scrollTop = offsetTop - parent.offsetTop - this._options.scrollPadding;
   }
 
   /**
