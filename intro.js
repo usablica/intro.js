@@ -2279,7 +2279,7 @@
   */
   function _scrollParentToElement (parent, element) {
     var offsetTop = 0;
-    for (var e = element; e != parent; e = e.offsetParent) {
+    for (var e = element; e !== parent; e = e.offsetParent) {
         offsetTop += e.offsetTop;
     }
     parent.scrollTop = offsetTop - parent.offsetTop - this._options.scrollPadding;
