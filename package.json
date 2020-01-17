@@ -1,7 +1,7 @@
 {
   "name": "intro.js",
   "description": "Better introductions for websites and features with a step-by-step guide for your projects",
-  "version": "2.9.3",
+  "version": "2.9.4",
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
   "homepage": "http://introjs.com",
   "repository": {
