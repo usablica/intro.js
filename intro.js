@@ -1464,6 +1464,7 @@
     var currentElementPosition = _getPropValue(targetElement.element, 'position');
     if (currentElementPosition !== 'absolute' &&
         currentElementPosition !== 'relative' &&
+        currentElementPosition !== 'sticky' &&
         currentElementPosition !== 'fixed') {
       //change to new intro item
       _addClass(targetElement.element, 'introjs-relativePosition');
