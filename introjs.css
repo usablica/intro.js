@@ -199,6 +199,13 @@ tr.introjs-showElement > th {
   white-space: nowrap;
 }
 
+.introjs-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
 /*
  Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/
  Changed by Afshin Mehrabani
