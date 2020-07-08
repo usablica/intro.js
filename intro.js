@@ -2370,6 +2370,9 @@
       _introForElement.call(this, this._targetElement, group);
       return this;
     },
+    getCurrentStep: function() {
+        return this._currentStep;
+    },
     goToStep: function(step) {
       _goToStep.call(this, step);
       return this;
