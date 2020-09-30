@@ -4,7 +4,7 @@
 
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
-## Where to get
+##From where to get?
 You can obtain your local copy of Intro.js from:
 
 **1)** This github repository, using ```git clone https://github.com/usablica/intro.js.git```
