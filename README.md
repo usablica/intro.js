@@ -15,7 +15,7 @@ You can obtain your local copy of Intro.js from:
 
 **4)** Download it from CDN ([1](http://www.jsdelivr.com/projects/intro.js), [2](https://cdnjs.com/libraries/intro.js))
 
-## How to use
+## Steps to use
 Intro.js can be added to your site in three simple steps:
 
 **1)** Include `intro.js` and `introjs.css` (or the minified version for production) in your page. Use `introjs-rtl.min.css` for Right-to-Left language support.
