@@ -1,3 +1,5 @@
+an amazing project sir but plz make index page of resources
+
 # Intro.js v2.9.3
 
 [![Build Status](https://travis-ci.org/usablica/intro.js.svg?branch=master)](https://travis-ci.org/usablica/intro.js)
