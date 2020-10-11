@@ -47,7 +47,6 @@
   "files": [
     "*.js",
     "*.css",
-    "license.md",
     "themes/*",
     "minified/*"
   ],
