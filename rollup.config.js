@@ -14,6 +14,7 @@ import postcss from 'postcss';
 import { version } from './package.json';
 
 const inputPath = 'src/index.js';
+const outputPath = './dist';
 
 const banner = `/*!
  * Intro.js v${version}
@@ -29,7 +30,7 @@ const banner = `/*!
 const plugins = [
   json(),
   sass({
-    output: "dist/introjs.css",
+    output: `${outputPath}/minified/introjs.min.css`,
     options: {
       sourceMap: true,
     },
@@ -52,7 +53,7 @@ export default [
   {
     input: inputPath,
     output: {
-      file: pkg.main,
+      file: `${outputPath}/${pkg.main}`,
       format: 'umd',
       banner,
       name: 'introJs'
@@ -62,7 +63,7 @@ export default [
   {
     input: inputPath,
     output: {
-      file: pkg.main.replace(/\.js$/, '.min.js'),
+      file: `${outputPath}/minified/${pkg.main.replace(/\.js$/, '.min.js')}`,
       banner,
       format: 'umd',
       name: 'introJs'

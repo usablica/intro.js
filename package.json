@@ -8,10 +8,10 @@
     "type": "git",
     "url": "https://github.com/usablica/intro.js"
   },
-  "main": "dist/intro.js",
+  "main": "intro.js",
   "scripts": {
     "test": "npm run test:jshint",
-    "test:jshint": "jshint ./intro.js",
+    "test:jshint": "jshint ./dist/intro.js",
     "release": "./release.sh || true",
     "build-js": "rollup -c",
     "build": "rollup -c",
