@@ -3,8 +3,8 @@
 #
 # Script for releasing new versions
 # Handles version updating and publishing to:
-# 	- GitHub 
-# 	- NPM 
+# 	- GitHub
+# 	- NPM
 #
 
 # check package version
@@ -26,7 +26,7 @@ if [[ v$VERSION == $LAST ]]; then
 fi
 
 npm test || exit 1
-npm run minify
+npm run build
 
 echo "New Version: $LAST => v$VERSION"
 echo "---"
@@ -40,7 +40,7 @@ else
 	git commit -am "v$VERSION"
 	git tag v$VERSION -f
 fi
-	
+
 git push --tags -f
 git push
 
