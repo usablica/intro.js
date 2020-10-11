@@ -6,3 +6,4 @@ _site
 
 yarn.lock
 *.iml
+dist/
