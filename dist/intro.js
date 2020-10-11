@@ -5,16 +5,18 @@
  * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh).
  * https://raw.githubusercontent.com/usablica/intro.js/master/license.md
  *
- * Date: Tue, 12 Nov 2019 00:04:22 GMT
+ * Date: Sun, 11 Oct 2020 09:36:16 GMT
  */
 
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.introJs = factory());
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   function _typeof(obj) {
+    "@babel/helpers - typeof";
+
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
       _typeof = function (obj) {
         return typeof obj;
@@ -2564,4 +2566,4 @@
 
   return introJs;
 
-}));
+})));

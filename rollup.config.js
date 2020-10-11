@@ -19,7 +19,7 @@ const banner = `/*!
  * Intro.js v${version}
  * https://github.com/usablica/intro.js
  *
- * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh).
+ * Copyright (C) 2017-2020 Afshin Mehrabani (@afshinmeh).
  * https://raw.githubusercontent.com/usablica/intro.js/master/license.md
  *
  * Date: ${new Date().toUTCString()}
