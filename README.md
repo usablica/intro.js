@@ -106,10 +106,6 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
   </tbody>
 </table>
 
-## Contributing
-
-View [contribution guidlines](https://github.com/usablica/intro.js/blob/master/CONTRIBUTING.md)
-
 ## Support/Discussion
 - [Stackoverflow](http://stackoverflow.com/questions/tagged/intro.js)
 
