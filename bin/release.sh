@@ -58,11 +58,9 @@ read confirm
 
 if [[ $confirm == "yes" ]]; then
     echo "Publishing..."
-    git commit -am "chore: v$VERSION :rocket:"
-    git tag -a "v$VERSION"
 
+    git tag "v$VERSION"
     git push --tags
-    git push
 
     npm publish
 else
