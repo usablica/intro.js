@@ -1,6 +1,8 @@
 # Intro.js v3
 
 [![Build Status](https://travis-ci.org/usablica/intro.js.svg?branch=master)](https://travis-ci.org/usablica/intro.js)
+[![](https://data.jsdelivr.com/v1/package/npm/intro.js/badge)](https://www.jsdelivr.com/package/npm/intro.js)
+![npm](https://img.shields.io/npm/dm/intro.js)
 
 > Better introductions for websites and features with a step-by-step guide for your projects.
 
