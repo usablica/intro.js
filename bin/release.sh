@@ -25,7 +25,7 @@ VERSION=$(node --eval "console.log(require('./package.json').version);")
 
 LAST=$(git describe --abbrev=0)
 
-if [[ v$VERSION == $LAST ]]; then
+if [[ v$VERSION == "$LAST" ]]; then
 	echo "Update version in package.json!"
 	exit 1
 fi
@@ -33,17 +33,17 @@ fi
 # check javascript version
 VERSION=$(node --eval "console.log(require('$DIST_FOLDER/intro.js').version);")
 
-if [[ v$VERSION == $LAST ]]; then
+if [[ v$VERSION == "$LAST" ]]; then
 	echo "Update version in ./intro.js!"
 	exit 1
 fi
 
-#npm test || exit 1
+npm test
 
 # this is an attempt to preserve backward compatibility
 # it can be replaced with package.json "exports" once it's stable
 cp "./package.json" "$DIST_FOLDER"
-cp *.md "$DIST_FOLDER"
+cp ./*.md "$DIST_FOLDER"
 cp -r "themes" "$DIST_FOLDER"
 
 pushd $DIST_FOLDER
@@ -59,12 +59,14 @@ read confirm
 if [[ $confirm == "yes" ]]; then
     echo "Publishing..."
     #git commit -am "chore: v$VERSION :rocket:"
-    #git tag -a v$VERSION -f
+    #git tag -a v$VERSION
     #
-    #git push --tags -f
+    #git push --tags
     #git push
     #
     # npm publish
+else
+  echo "Skipping the publish procedure"
 fi
 
 popd
