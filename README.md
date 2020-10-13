@@ -59,18 +59,20 @@ First you should install `nodejs` and `npm`, then first run this command: `npm i
 
 Now you can run this command to minify all static resources:
 
-    make build
+    npm run build
 
 ## Instant IntroJs
 
 Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publishing.
 
 <p align="center">
-  <a target='_blank' href="http://www.packtpub.com/create-useful-introductions-for-websites-and-applications-with-introjs-library/book"><img src='http://dgdsbygo8mp3h.cloudfront.net/sites/default/files/imagecache/productview_larger/2517OS_Instant%20IntroJS%20Starter.jpg' /></a>
+  <a target='_blank' href="https://www.packtpub.com/eu/application-development/instant-introjs-instant">
+    <img src='https://www.packtpub.com/media/catalog/product/cache/4cdce5a811acc0d2926d7f857dceb83b/2/5/2517os_instant20introjs20starter.jpg' />
+  </a>
 </p>
 
 <p align="center">
-  <a target='_blank' href="http://www.packtpub.com/create-useful-introductions-for-websites-and-applications-with-introjs-library/book">Buy and Download</a>
+  <a target='_blank' href="https://www.packtpub.com/eu/application-development/instant-introjs-instant">Buy and Download</a>
 </p>
 
 ## <a href="https://github.com/usablica/intro.js/blob/master/changelog.md">Release History</a>
