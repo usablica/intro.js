@@ -1,9 +1,9 @@
-import getOffset from '../util/getOffset';
-import getWindowSize from '../util/getWindowSize';
-import addClass from '../util/addClass';
-import checkRight from '../util/checkRight';
-import checkLeft from '../util/checkLeft';
-import removeEntry from '../util/removeEntry';
+import getOffset from "../util/getOffset";
+import getWindowSize from "../util/getWindowSize";
+import addClass from "../util/addClass";
+import checkRight from "../util/checkRight";
+import checkLeft from "../util/checkLeft";
+import removeEntry from "../util/removeEntry";
 
 /**
  * auto-determine alignment
@@ -13,29 +13,40 @@ import removeEntry from '../util/removeEntry';
  * @param {String}   desiredAlignment
  * @return {String}  calculatedAlignment
  */
-function _determineAutoAlignment(offsetLeft, tooltipWidth, {width}, desiredAlignment) {
+function _determineAutoAlignment(
+  offsetLeft,
+  tooltipWidth,
+  { width },
+  desiredAlignment
+) {
   const halfTooltipWidth = tooltipWidth / 2;
   const winWidth = Math.min(width, window.screen.width);
-  const possibleAlignments = ['-left-aligned', '-middle-aligned', '-right-aligned'];
-  let calculatedAlignment = '';
+  const possibleAlignments = [
+    "-left-aligned",
+    "-middle-aligned",
+    "-right-aligned",
+  ];
+  let calculatedAlignment = "";
 
   // valid left must be at least a tooltipWidth
   // away from right side
   if (winWidth - offsetLeft < tooltipWidth) {
-    removeEntry(possibleAlignments, '-left-aligned');
+    removeEntry(possibleAlignments, "-left-aligned");
   }
 
   // valid middle must be at least half
   // width away from both sides
-  if (offsetLeft < halfTooltipWidth ||
-    winWidth - offsetLeft < halfTooltipWidth) {
-    removeEntry(possibleAlignments, '-middle-aligned');
+  if (
+    offsetLeft < halfTooltipWidth ||
+    winWidth - offsetLeft < halfTooltipWidth
+  ) {
+    removeEntry(possibleAlignments, "-middle-aligned");
   }
 
   // valid right must be at least a tooltipWidth
   // width away from left side
   if (offsetLeft < tooltipWidth) {
-    removeEntry(possibleAlignments, '-right-aligned');
+    removeEntry(possibleAlignments, "-right-aligned");
   }
 
   if (possibleAlignments.length) {
@@ -50,7 +61,7 @@ function _determineAutoAlignment(offsetLeft, tooltipWidth, {width}, desiredAlign
     // if screen width is too small
     // for ANY alignment, middle is
     // probably the best for visibility
-    calculatedAlignment = '-middle-aligned';
+    calculatedAlignment = "-middle-aligned";
   }
 
   return calculatedAlignment;
@@ -65,8 +76,11 @@ function _determineAutoAlignment(offsetLeft, tooltipWidth, {width}, desiredAlign
  * @param {String}    desiredTooltipPosition
  * @return {String}   calculatedPosition
  */
-function _determineAutoPosition(targetElement, tooltipLayer, desiredTooltipPosition) {
-
+function _determineAutoPosition(
+  targetElement,
+  tooltipLayer,
+  desiredTooltipPosition
+) {
   // Take a clone of position precedence. These will be the available
   const possiblePositions = this._options.positionPrecedence.slice();
 
@@ -80,8 +94,8 @@ function _determineAutoPosition(targetElement, tooltipLayer, desiredTooltipPosit
   let calculatedPosition = "floating";
 
   /*
-  * auto determine position
-  */
+   * auto determine position
+   */
 
   // Check for space below
   if (targetElementRect.bottom + tooltipHeight > windowSize.height) {
@@ -104,25 +118,27 @@ function _determineAutoPosition(targetElement, tooltipLayer, desiredTooltipPosit
   }
 
   // @var {String}  ex: 'right-aligned'
-  const desiredAlignment = (pos => {
-    const hyphenIndex = pos.indexOf('-');
+  const desiredAlignment = ((pos) => {
+    const hyphenIndex = pos.indexOf("-");
     if (hyphenIndex !== -1) {
       // has alignment
       return pos.substr(hyphenIndex);
     }
-    return '';
-  })(desiredTooltipPosition || '');
+    return "";
+  })(desiredTooltipPosition || "");
 
   // strip alignment from position
   if (desiredTooltipPosition) {
     // ex: "bottom-right-aligned"
     // should return 'bottom'
-    desiredTooltipPosition = desiredTooltipPosition.split('-')[0];
+    desiredTooltipPosition = desiredTooltipPosition.split("-")[0];
   }
 
   if (possiblePositions.length) {
-    if (desiredTooltipPosition !== "auto" &&
-      possiblePositions.includes(desiredTooltipPosition)) {
+    if (
+      desiredTooltipPosition !== "auto" &&
+      possiblePositions.includes(desiredTooltipPosition)
+    ) {
       // If the requested position is in the list, choose that
       calculatedPosition = desiredTooltipPosition;
     } else {
@@ -132,8 +148,13 @@ function _determineAutoPosition(targetElement, tooltipLayer, desiredTooltipPosit
   }
 
   // only top and bottom positions have optional alignments
-  if (['top', 'bottom'].includes(calculatedPosition)) {
-    calculatedPosition += _determineAutoAlignment(targetElementRect.left, tooltipWidth, windowSize, desiredAlignment);
+  if (["top", "bottom"].includes(calculatedPosition)) {
+    calculatedPosition += _determineAutoAlignment(
+      targetElementRect.left,
+      tooltipWidth,
+      windowSize,
+      desiredAlignment
+    );
   }
 
   return calculatedPosition;
@@ -150,8 +171,14 @@ function _determineAutoPosition(targetElement, tooltipLayer, desiredTooltipPosit
  * @param {HTMLElement} helperNumberLayer
  * @param {Boolean} hintMode
  */
-export default function placeTooltip(targetElement, tooltipLayer, arrowLayer, helperNumberLayer, hintMode) {
-  let tooltipCssClass = '';
+export default function placeTooltip(
+  targetElement,
+  tooltipLayer,
+  arrowLayer,
+  helperNumberLayer,
+  hintMode
+) {
+  let tooltipCssClass = "";
   let currentStepObj;
   let tooltipOffset;
   let targetOffset;
@@ -168,9 +195,9 @@ export default function placeTooltip(targetElement, tooltipLayer, arrowLayer, he
   tooltipLayer.style.marginLeft = null;
   tooltipLayer.style.marginTop = null;
 
-  arrowLayer.style.display = 'inherit';
+  arrowLayer.style.display = "inherit";
 
-  if (typeof (helperNumberLayer) !== 'undefined' && helperNumberLayer !== null) {
+  if (typeof helperNumberLayer !== "undefined" && helperNumberLayer !== null) {
     helperNumberLayer.style.top = null;
     helperNumberLayer.style.left = null;
   }
@@ -180,20 +207,28 @@ export default function placeTooltip(targetElement, tooltipLayer, arrowLayer, he
 
   //if we have a custom css class for each step
   currentStepObj = this._introItems[this._currentStep];
-  if (typeof (currentStepObj.tooltipClass) === 'string') {
+  if (typeof currentStepObj.tooltipClass === "string") {
     tooltipCssClass = currentStepObj.tooltipClass;
   } else {
     tooltipCssClass = this._options.tooltipClass;
   }
 
-  tooltipLayer.className = (`introjs-tooltip ${tooltipCssClass}`).replace(/^\s+|\s+$/g, '');
-  tooltipLayer.setAttribute('role', 'dialog');
+  tooltipLayer.className = `introjs-tooltip ${tooltipCssClass}`.replace(
+    /^\s+|\s+$/g,
+    ""
+  );
+  tooltipLayer.setAttribute("role", "dialog");
 
   currentTooltipPosition = this._introItems[this._currentStep].position;
 
   // Floating is always valid, no point in calculating
   if (currentTooltipPosition !== "floating") {
-    currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer, currentTooltipPosition);
+    currentTooltipPosition = _determineAutoPosition.call(
+      this,
+      targetElement,
+      tooltipLayer,
+      currentTooltipPosition
+    );
   }
 
   let tooltipLayerStyleLeft;
@@ -204,104 +239,155 @@ export default function placeTooltip(targetElement, tooltipLayer, arrowLayer, he
   addClass(tooltipLayer, `introjs-${currentTooltipPosition}`);
 
   switch (currentTooltipPosition) {
-    case 'top-right-aligned':
-      arrowLayer.className = 'introjs-arrow bottom-right';
+    case "top-right-aligned":
+      arrowLayer.className = "introjs-arrow bottom-right";
 
       let tooltipLayerStyleRight = 0;
-      checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer);
+      checkLeft(
+        targetOffset,
+        tooltipLayerStyleRight,
+        tooltipOffset,
+        tooltipLayer
+      );
       tooltipLayer.style.bottom = `${targetOffset.height + 20}px`;
       break;
 
-    case 'top-middle-aligned':
-      arrowLayer.className = 'introjs-arrow bottom-middle';
+    case "top-middle-aligned":
+      arrowLayer.className = "introjs-arrow bottom-middle";
 
-      let tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipOffset.width / 2;
+      let tooltipLayerStyleLeftRight =
+        targetOffset.width / 2 - tooltipOffset.width / 2;
 
       // a fix for middle aligned hints
       if (hintMode) {
         tooltipLayerStyleLeftRight += 5;
       }
 
-      if (checkLeft(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, tooltipLayer)) {
+      if (
+        checkLeft(
+          targetOffset,
+          tooltipLayerStyleLeftRight,
+          tooltipOffset,
+          tooltipLayer
+        )
+      ) {
         tooltipLayer.style.right = null;
-        checkRight(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, windowSize, tooltipLayer);
+        checkRight(
+          targetOffset,
+          tooltipLayerStyleLeftRight,
+          tooltipOffset,
+          windowSize,
+          tooltipLayer
+        );
       }
       tooltipLayer.style.bottom = `${targetOffset.height + 20}px`;
       break;
 
-    case 'top-left-aligned':
+    case "top-left-aligned":
     // top-left-aligned is the same as the default top
-    case 'top':
-      arrowLayer.className = 'introjs-arrow bottom';
+    case "top":
+      arrowLayer.className = "introjs-arrow bottom";
 
-      tooltipLayerStyleLeft = (hintMode) ? 0 : 15;
+      tooltipLayerStyleLeft = hintMode ? 0 : 15;
 
-      checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
+      checkRight(
+        targetOffset,
+        tooltipLayerStyleLeft,
+        tooltipOffset,
+        windowSize,
+        tooltipLayer
+      );
       tooltipLayer.style.bottom = `${targetOffset.height + 20}px`;
       break;
-    case 'right':
+    case "right":
       tooltipLayer.style.left = `${targetOffset.width + 20}px`;
       if (targetOffset.top + tooltipOffset.height > windowSize.height) {
         // In this case, right would have fallen below the bottom of the screen.
         // Modify so that the bottom of the tooltip connects with the target
         arrowLayer.className = "introjs-arrow left-bottom";
-        tooltipLayer.style.top = `-${tooltipOffset.height - targetOffset.height - 20}px`;
+        tooltipLayer.style.top = `-${
+          tooltipOffset.height - targetOffset.height - 20
+        }px`;
       } else {
-        arrowLayer.className = 'introjs-arrow left';
+        arrowLayer.className = "introjs-arrow left";
       }
       break;
-    case 'left':
+    case "left":
       if (!hintMode && this._options.showStepNumbers === true) {
-        tooltipLayer.style.top = '15px';
+        tooltipLayer.style.top = "15px";
       }
 
       if (targetOffset.top + tooltipOffset.height > windowSize.height) {
         // In this case, left would have fallen below the bottom of the screen.
         // Modify so that the bottom of the tooltip connects with the target
-        tooltipLayer.style.top = `-${tooltipOffset.height - targetOffset.height - 20}px`;
-        arrowLayer.className = 'introjs-arrow right-bottom';
+        tooltipLayer.style.top = `-${
+          tooltipOffset.height - targetOffset.height - 20
+        }px`;
+        arrowLayer.className = "introjs-arrow right-bottom";
       } else {
-        arrowLayer.className = 'introjs-arrow right';
+        arrowLayer.className = "introjs-arrow right";
       }
       tooltipLayer.style.right = `${targetOffset.width + 20}px`;
 
       break;
-    case 'floating':
-      arrowLayer.style.display = 'none';
+    case "floating":
+      arrowLayer.style.display = "none";
 
       //we have to adjust the top and left of layer manually for intro items without element
-      tooltipLayer.style.left = '50%';
-      tooltipLayer.style.top = '50%';
+      tooltipLayer.style.left = "50%";
+      tooltipLayer.style.top = "50%";
       tooltipLayer.style.marginLeft = `-${tooltipOffset.width / 2}px`;
       tooltipLayer.style.marginTop = `-${tooltipOffset.height / 2}px`;
 
-      if (typeof (helperNumberLayer) !== 'undefined' && helperNumberLayer !== null) {
-        helperNumberLayer.style.left = `-${(tooltipOffset.width / 2) + 18}px`;
-        helperNumberLayer.style.top = `-${(tooltipOffset.height / 2) + 18}px`;
+      if (
+        typeof helperNumberLayer !== "undefined" &&
+        helperNumberLayer !== null
+      ) {
+        helperNumberLayer.style.left = `-${tooltipOffset.width / 2 + 18}px`;
+        helperNumberLayer.style.top = `-${tooltipOffset.height / 2 + 18}px`;
       }
 
       break;
-    case 'bottom-right-aligned':
-      arrowLayer.className = 'introjs-arrow top-right';
+    case "bottom-right-aligned":
+      arrowLayer.className = "introjs-arrow top-right";
 
       tooltipLayerStyleRight = 0;
-      checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer);
+      checkLeft(
+        targetOffset,
+        tooltipLayerStyleRight,
+        tooltipOffset,
+        tooltipLayer
+      );
       tooltipLayer.style.top = `${targetOffset.height + 20}px`;
       break;
 
-    case 'bottom-middle-aligned':
-      arrowLayer.className = 'introjs-arrow top-middle';
+    case "bottom-middle-aligned":
+      arrowLayer.className = "introjs-arrow top-middle";
 
-      tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipOffset.width / 2;
+      tooltipLayerStyleLeftRight =
+        targetOffset.width / 2 - tooltipOffset.width / 2;
 
       // a fix for middle aligned hints
       if (hintMode) {
         tooltipLayerStyleLeftRight += 5;
       }
 
-      if (checkLeft(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, tooltipLayer)) {
+      if (
+        checkLeft(
+          targetOffset,
+          tooltipLayerStyleLeftRight,
+          tooltipOffset,
+          tooltipLayer
+        )
+      ) {
         tooltipLayer.style.right = null;
-        checkRight(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, windowSize, tooltipLayer);
+        checkRight(
+          targetOffset,
+          tooltipLayerStyleLeftRight,
+          tooltipOffset,
+          windowSize,
+          tooltipLayer
+        );
       }
       tooltipLayer.style.top = `${targetOffset.height + 20}px`;
       break;
@@ -311,10 +397,16 @@ export default function placeTooltip(targetElement, tooltipLayer, arrowLayer, he
     // case 'bottom':
     // Bottom going to follow the default behavior
     default:
-      arrowLayer.className = 'introjs-arrow top';
+      arrowLayer.className = "introjs-arrow top";
 
       tooltipLayerStyleLeft = 0;
-      checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
+      checkRight(
+        targetOffset,
+        tooltipLayerStyleLeft,
+        tooltipOffset,
+        windowSize,
+        tooltipLayer
+      );
       tooltipLayer.style.top = `${targetOffset.height + 20}px`;
   }
 }

@@ -1,5 +1,5 @@
-import getWindowSize from './getWindowSize';
-import elementInViewport from './elementInViewport';
+import getWindowSize from "./getWindowSize";
+import elementInViewport from "./elementInViewport";
 
 /**
  * To change the scroll of `window` after highlighting an element
@@ -10,13 +10,13 @@ import elementInViewport from './elementInViewport';
  * @param {Object} targetElement
  * @param {Object} tooltipLayer
  */
-export default function scrollTo(scrollTo, {element}, tooltipLayer) {
-  if (scrollTo === 'off') return;
+export default function scrollTo(scrollTo, { element }, tooltipLayer) {
+  if (scrollTo === "off") return;
   let rect;
 
   if (!this._options.scrollToElement) return;
 
-  if (scrollTo === 'tooltip') {
+  if (scrollTo === "tooltip") {
     rect = tooltipLayer.getBoundingClientRect();
   } else {
     rect = element.getBoundingClientRect();
@@ -31,11 +31,21 @@ export default function scrollTo(scrollTo, {element}, tooltipLayer) {
     // the center of the target element or tooltip.
 
     if (top < 0 || element.clientHeight > winHeight) {
-      window.scrollBy(0, rect.top - ((winHeight / 2) - (rect.height / 2)) - this._options.scrollPadding); // 30px padding from edge to look nice
+      window.scrollBy(
+        0,
+        rect.top -
+          (winHeight / 2 - rect.height / 2) -
+          this._options.scrollPadding
+      ); // 30px padding from edge to look nice
 
       //Scroll down
     } else {
-      window.scrollBy(0, rect.top - ((winHeight / 2) - (rect.height / 2)) + this._options.scrollPadding); // 30px padding from edge to look nice
+      window.scrollBy(
+        0,
+        rect.top -
+          (winHeight / 2 - rect.height / 2) +
+          this._options.scrollPadding
+      ); // 30px padding from edge to look nice
     }
   }
 }

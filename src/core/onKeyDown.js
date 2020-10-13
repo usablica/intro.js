@@ -1,5 +1,5 @@
-import { nextStep, previousStep } from './steps';
-import exitIntro from './exitIntro';
+import { nextStep, previousStep } from "./steps";
+import exitIntro from "./exitIntro";
 
 /**
  * on keyCode:
@@ -20,37 +20,40 @@ import exitIntro from './exitIntro';
  * @return type
  */
 export default function onKeyDown(e) {
-  let code = (e.code === null) ? e.which : e.code;
+  let code = e.code === null ? e.which : e.code;
 
   // if code/e.which is null
   if (code === null) {
-    code = (e.charCode === null) ? e.keyCode : e.charCode;
+    code = e.charCode === null ? e.keyCode : e.charCode;
   }
 
-  if ((code === 'Escape' || code === 27) && this._options.exitOnEsc === true) {
+  if ((code === "Escape" || code === 27) && this._options.exitOnEsc === true) {
     //escape key pressed, exit the intro
     //check if exit callback is defined
     exitIntro.call(this, this._targetElement);
-  } else if (code === 'ArrowLeft' || code === 37) {
+  } else if (code === "ArrowLeft" || code === 37) {
     //left arrow
     previousStep.call(this);
-  } else if (code === 'ArrowRight' || code === 39) {
+  } else if (code === "ArrowRight" || code === 39) {
     //right arrow
     nextStep.call(this);
-  } else if (code === 'Enter' || code === 13) {
+  } else if (code === "Enter" || code === 13) {
     //srcElement === ie
     const target = e.target || e.srcElement;
-    if (target && target.className.match('introjs-prevbutton')) {
+    if (target && target.className.match("introjs-prevbutton")) {
       //user hit enter while focusing on previous button
       previousStep.call(this);
-    } else if (target && target.className.match('introjs-skipbutton')) {
+    } else if (target && target.className.match("introjs-skipbutton")) {
       //user hit enter while focusing on skip button
-      if (this._introItems.length - 1 === this._currentStep && typeof (this._introCompleteCallback) === 'function') {
+      if (
+        this._introItems.length - 1 === this._currentStep &&
+        typeof this._introCompleteCallback === "function"
+      ) {
         this._introCompleteCallback.call(this);
       }
 
       exitIntro.call(this, this._targetElement);
-    } else if (target && target.getAttribute('data-stepnumber')) {
+    } else if (target && target.getAttribute("data-stepnumber")) {
       // user hit enter while focusing on step bullet
       target.click();
     } else {

@@ -1,4 +1,4 @@
-import stamp from '../util/stamp';
+import stamp from "../util/stamp";
 
 /**
  * DOMEvent Handles all DOM events
@@ -11,7 +11,7 @@ import stamp from '../util/stamp';
 
 const DOMEvent = (() => {
   function DOMEvent() {
-    const events_key = 'introjs_event';
+    const events_key = "introjs_event";
 
     /**
      * Gets a unique ID for an event listener
@@ -22,7 +22,8 @@ const DOMEvent = (() => {
      * @param Object context
      * @return String
      */
-    this._id = (obj, type, listener, context) => type + stamp(listener) + (context ? `_${stamp(context)}` : '');
+    this._id = (obj, type, listener, context) =>
+      type + stamp(listener) + (context ? `_${stamp(context)}` : "");
 
     /**
      * Adds event listener
@@ -36,11 +37,11 @@ const DOMEvent = (() => {
      */
     this.on = function (obj, type, listener, context, useCapture) {
       const id = this._id.apply(this, arguments);
-      const handler = e => listener.call(context || obj, e || window.event);
+      const handler = (e) => listener.call(context || obj, e || window.event);
 
-      if ('addEventListener' in obj) {
+      if ("addEventListener" in obj) {
         obj.addEventListener(type, handler, useCapture);
-      } else if ('attachEvent' in obj) {
+      } else if ("attachEvent" in obj) {
         obj.attachEvent(`on${type}`, handler);
       }
 
@@ -66,9 +67,9 @@ const DOMEvent = (() => {
         return;
       }
 
-      if ('removeEventListener' in obj) {
+      if ("removeEventListener" in obj) {
         obj.removeEventListener(type, handler, useCapture);
-      } else if ('detachEvent' in obj) {
+      } else if ("detachEvent" in obj) {
         obj.detachEvent(`on${type}`, handler);
       }
 

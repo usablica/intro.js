@@ -3,10 +3,21 @@
  *
  * @return boolean true, if tooltipLayerStyleLeft is ok.  false, otherwise.
  */
-export default function checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer) {
-  if (targetOffset.left + tooltipLayerStyleLeft + tooltipOffset.width > windowSize.width) {
+export default function checkRight(
+  targetOffset,
+  tooltipLayerStyleLeft,
+  tooltipOffset,
+  windowSize,
+  tooltipLayer
+) {
+  if (
+    targetOffset.left + tooltipLayerStyleLeft + tooltipOffset.width >
+    windowSize.width
+  ) {
     // off the right side of the window
-    tooltipLayer.left = `${windowSize.width - tooltipOffset.width - targetOffset.left}px`;
+    tooltipLayer.left = `${
+      windowSize.width - tooltipOffset.width - targetOffset.left
+    }px`;
     return false;
   }
   tooltipLayer.left = `${tooltipLayerStyleLeft}px`;

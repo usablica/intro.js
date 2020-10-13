@@ -14,7 +14,7 @@ export default function forEach(arr, forEachFnc, completeFnc) {
     }
   }
 
-  if (typeof (completeFnc) === 'function') {
+  if (typeof completeFnc === "function") {
     completeFnc();
   }
 }
