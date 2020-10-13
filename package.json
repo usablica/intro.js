@@ -28,7 +28,7 @@
     "node-sass": "^4.12.0",
     "postcss": "^7.0.21",
     "postcss-clean": "^1.1.0",
-    "postcss-normalize": "^8.0.1",
+    "postcss-normalize": "^9.0.0",
     "prettier": "2.1.2",
     "rollup": "^1.21.4",
     "rollup-plugin-babel": "^4.3.3",
