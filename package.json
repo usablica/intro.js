@@ -13,9 +13,8 @@
     "test": "npm run test:jshint",
     "test:jshint": "jshint ./dist/intro.js",
     "release": "./release.sh || true",
-    "build-js": "rollup -c",
     "build": "rollup -c",
-    "start": "rollup -c -w"
+    "build:watch": "rollup -c -w"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
@@ -29,6 +28,7 @@
     "postcss": "^7.0.21",
     "postcss-clean": "^1.1.0",
     "postcss-normalize": "^8.0.1",
+    "prettier": "2.1.2",
     "rollup": "^1.21.4",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
@@ -37,7 +37,6 @@
     "rollup-plugin-multi-entry": "^2.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-progress": "^1.1.1",
-    "rollup-plugin-sass": "^1.2.2",
     "rollup-plugin-terser": "^5.1.2",
     "rollup-plugin-uglify": "^6.0.3"
   },
@@ -58,6 +57,7 @@
     ]
   },
   "dependencies": {
-    "jshint": "^2.12.0"
+    "jshint": "^2.12.0",
+    "rollup-plugin-postcss": "^3.1.8"
   }
 }

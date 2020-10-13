@@ -6,14 +6,13 @@ import progress from 'rollup-plugin-progress';
 import json from '@rollup/plugin-json';
 import pkg from './package.json';
 import { terser } from 'rollup-plugin-terser';
-import sass from 'rollup-plugin-sass';
 import autoprefixer from 'autoprefixer';
 import normalize from 'postcss-normalize';
 import clean from 'postcss-clean';
-import postcss from 'postcss';
+import postcss from 'rollup-plugin-postcss';
 import { version } from './package.json';
 
-const inputPath = 'src/index.js';
+const inputPath = './src'
 const outputPath = './dist';
 
 const banner = `/*!
@@ -27,17 +26,8 @@ const banner = `/*!
  */
 `;
 
-const plugins = [
+const jsPlugins = [
   json(),
-  sass({
-    output: `${outputPath}/minified/introjs.min.css`,
-    options: {
-      sourceMap: true,
-    },
-    processor: css => postcss([normalize, autoprefixer, clean])
-      .process(css)
-      .then(result => result.css)
-  }),
   resolve(),
   progress(),
   filesize({
@@ -49,19 +39,84 @@ const plugins = [
   commonjs()
 ];
 
+const postCSSPlugins = [
+  normalize,
+  autoprefixer
+]
+
 export default [
   {
-    input: inputPath,
+    input: `${inputPath}/styles/introjs-rtl.scss`,
+    output: {
+      file: `${outputPath}/minified/introjs-rtl.min.css`,
+      format: 'es'
+    },
+    plugins: [
+      postcss({
+        sourceMap: true,
+        extract: true,
+        plugins: [
+          ...postCSSPlugins,
+          clean
+        ]
+      })
+    ]
+  },
+  {
+    input: `${inputPath}/styles/introjs-rtl.scss`,
+    output: {
+      file: `${outputPath}/introjs-rtl.css`,
+      format: 'es'
+    },
+    plugins: [
+      postcss({
+        extract: true,
+        plugins: postCSSPlugins
+      })
+    ]
+  },
+  {
+    input: `${inputPath}/styles/introjs.scss`,
+    output: {
+      file: `${outputPath}/introjs.css`,
+      format: 'es'
+    },
+    plugins: [
+      postcss({
+        extract: true,
+        plugins: postCSSPlugins
+      })
+    ]
+  },
+  {
+    input: `${inputPath}/styles/introjs.scss`,
+    output: {
+      file: `${outputPath}/minified/introjs.min.css`,
+      format: 'es'
+    },
+    plugins: [
+      postcss({
+        extract: true,
+        sourceMap: true,
+        plugins: [
+          ...postCSSPlugins,
+          clean
+        ]
+      })
+    ]
+  },
+  {
+    input: `${inputPath}/index.js`,
     output: {
       file: `${outputPath}/${pkg.main}`,
       format: 'umd',
       banner,
       name: 'introJs'
     },
-    plugins
+    plugins: jsPlugins
   },
   {
-    input: inputPath,
+    input: `${inputPath}/index.js`,
     output: {
       file: `${outputPath}/minified/${pkg.main.replace(/\.js$/, '.min.js')}`,
       banner,
@@ -69,7 +124,7 @@ export default [
       name: 'introJs'
     },
     plugins: [
-      ...plugins,
+      ...jsPlugins,
       terser()
     ]
   }

@@ -4,5 +4,5 @@
   "keywords": ["demo", "intro", "introduction"],
   "homepage": "http://introjs.com",
   "author": "Afshin Mehrabani",
-  "main": ["intro.js","introjs.css"]
+  "main": ["intro.js", "introjs.css"]
 }

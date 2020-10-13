@@ -15,7 +15,6 @@ import {
   showHintDialog,
 } from './core/hint';
 import { goToStep, goToStepNumber, nextStep, previousStep } from './core/steps';
-import './styles/introjs.scss';
 
 /**
  * IntroJs main class
