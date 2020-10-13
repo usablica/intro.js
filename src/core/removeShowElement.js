@@ -1,5 +1,5 @@
-import forEach from '../util/forEach';
-import removeClass from '../util/removeClass';
+import forEach from "../util/forEach";
+import removeClass from "../util/removeClass";
 
 /**
  * To remove all show element(s)
@@ -8,9 +8,9 @@ import removeClass from '../util/removeClass';
  * @method _removeShowElement
  */
 export default function removeShowElement() {
-  const elms = document.querySelectorAll('.introjs-showElement');
+  const elms = document.querySelectorAll(".introjs-showElement");
 
-  forEach(elms, elm => {
+  forEach(elms, (elm) => {
     removeClass(elm, /introjs-[a-zA-Z]+/g);
   });
 }

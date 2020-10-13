@@ -1,10 +1,10 @@
-import addOverlayLayer from './addOverlayLayer';
-import cloneObject from '../util/cloneObject';
-import forEach from '../util/forEach';
-import DOMEvent from './DOMEvent';
-import { nextStep } from './steps';
-import onKeyDown from './onKeyDown';
-import onResize from './onResize';
+import addOverlayLayer from "./addOverlayLayer";
+import cloneObject from "../util/cloneObject";
+import forEach from "../util/forEach";
+import DOMEvent from "./DOMEvent";
+import { nextStep } from "./steps";
+import onKeyDown from "./onKeyDown";
+import onResize from "./onResize";
 
 /**
  * Initiate a new introduction/guide from an element in the page
@@ -21,36 +21,41 @@ export default function introForElement(targetElm, group) {
 
   if (this._options.steps) {
     //use steps passed programmatically
-    forEach(this._options.steps, step => {
+    forEach(this._options.steps, (step) => {
       const currentItem = cloneObject(step);
 
       //set the step
       currentItem.step = introItems.length + 1;
 
       //use querySelector function only when developer used CSS selector
-      if (typeof (currentItem.element) === 'string') {
+      if (typeof currentItem.element === "string") {
         //grab the element with given selector from the page
         currentItem.element = document.querySelector(currentItem.element);
       }
 
       //intro without element
-      if (typeof (currentItem.element) === 'undefined' || currentItem.element === null) {
-        let floatingElementQuery = document.querySelector(".introjsFloatingElement");
+      if (
+        typeof currentItem.element === "undefined" ||
+        currentItem.element === null
+      ) {
+        let floatingElementQuery = document.querySelector(
+          ".introjsFloatingElement"
+        );
 
         if (floatingElementQuery === null) {
-          floatingElementQuery = document.createElement('div');
-          floatingElementQuery.className = 'introjsFloatingElement';
+          floatingElementQuery = document.createElement("div");
+          floatingElementQuery.className = "introjsFloatingElement";
 
           document.body.appendChild(floatingElementQuery);
         }
 
         currentItem.element = floatingElementQuery;
-        currentItem.position = 'floating';
+        currentItem.position = "floating";
       }
 
       currentItem.scrollTo = currentItem.scrollTo || this._options.scrollTo;
 
-      if (typeof (currentItem.disableInteraction) === 'undefined') {
+      if (typeof currentItem.disableInteraction === "undefined") {
         currentItem.disableInteraction = this._options.disableInteraction;
       }
 
@@ -58,7 +63,6 @@ export default function introForElement(targetElm, group) {
         introItems.push(currentItem);
       }
     });
-
   } else {
     //use steps from data-* annotations
     const elmsLength = allIntroSteps.length;
@@ -69,23 +73,27 @@ export default function introForElement(targetElm, group) {
       return false;
     }
 
-    forEach(allIntroSteps, currentElement => {
-
+    forEach(allIntroSteps, (currentElement) => {
       // PR #80
       // start intro for groups of elements
-      if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
+      if (group && currentElement.getAttribute("data-intro-group") !== group) {
         return;
       }
 
       // skip hidden elements
-      if (currentElement.style.display === 'none') {
+      if (currentElement.style.display === "none") {
         return;
       }
 
-      const step = parseInt(currentElement.getAttribute('data-step'), 10);
+      const step = parseInt(currentElement.getAttribute("data-step"), 10);
 
-      if (typeof (currentElement.getAttribute('data-disable-interaction')) !== 'undefined') {
-        disableInteraction = !!currentElement.getAttribute('data-disable-interaction');
+      if (
+        typeof currentElement.getAttribute("data-disable-interaction") !==
+        "undefined"
+      ) {
+        disableInteraction = !!currentElement.getAttribute(
+          "data-disable-interaction"
+        );
       } else {
         disableInteraction = this._options.disableInteraction;
       }
@@ -93,13 +101,17 @@ export default function introForElement(targetElm, group) {
       if (step > 0) {
         introItems[step - 1] = {
           element: currentElement,
-          intro: currentElement.getAttribute('data-intro'),
-          step: parseInt(currentElement.getAttribute('data-step'), 10),
-          tooltipClass: currentElement.getAttribute('data-tooltipclass'),
-          highlightClass: currentElement.getAttribute('data-highlightclass'),
-          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
-          scrollTo: currentElement.getAttribute('data-scrollto') || this._options.scrollTo,
-          disableInteraction
+          intro: currentElement.getAttribute("data-intro"),
+          step: parseInt(currentElement.getAttribute("data-step"), 10),
+          tooltipClass: currentElement.getAttribute("data-tooltipclass"),
+          highlightClass: currentElement.getAttribute("data-highlightclass"),
+          position:
+            currentElement.getAttribute("data-position") ||
+            this._options.tooltipPosition,
+          scrollTo:
+            currentElement.getAttribute("data-scrollto") ||
+            this._options.scrollTo,
+          disableInteraction,
         };
       }
     });
@@ -108,39 +120,46 @@ export default function introForElement(targetElm, group) {
     //todo: we need a cleanup here, two loops are redundant
     let nextStep = 0;
 
-    forEach(allIntroSteps, currentElement => {
-
+    forEach(allIntroSteps, (currentElement) => {
       // PR #80
       // start intro for groups of elements
-      if (group && (currentElement.getAttribute("data-intro-group") !== group)) {
+      if (group && currentElement.getAttribute("data-intro-group") !== group) {
         return;
       }
 
-      if (currentElement.getAttribute('data-step') === null) {
-
+      if (currentElement.getAttribute("data-step") === null) {
         while (true) {
-          if (typeof introItems[nextStep] === 'undefined') {
+          if (typeof introItems[nextStep] === "undefined") {
             break;
           } else {
             nextStep++;
           }
         }
 
-        if (typeof (currentElement.getAttribute('data-disable-interaction')) !== 'undefined') {
-          disableInteraction = !!currentElement.getAttribute('data-disable-interaction');
+        if (
+          typeof currentElement.getAttribute("data-disable-interaction") !==
+          "undefined"
+        ) {
+          disableInteraction = !!currentElement.getAttribute(
+            "data-disable-interaction"
+          );
         } else {
           disableInteraction = this._options.disableInteraction;
         }
 
         introItems[nextStep] = {
           element: currentElement,
-          intro: currentElement.getAttribute('data-intro'),
+          intro: currentElement.getAttribute("data-intro"),
           step: nextStep + 1,
-          tooltipClass: currentElement.getAttribute('data-tooltipclass'),
-          highlightClass: currentElement.getAttribute('data-highlightclass'),
-          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition,
-          scrollTo: currentElement.getAttribute('data-scrollto') || this._options.scrollTo,
-          disableInteraction
+          tooltipClass: currentElement.getAttribute("data-tooltipclass"),
+          highlightClass: currentElement.getAttribute("data-highlightclass"),
+          position:
+            currentElement.getAttribute("data-position") ||
+            this._options.tooltipPosition,
+          scrollTo:
+            currentElement.getAttribute("data-scrollto") ||
+            this._options.scrollTo,
+          disableInteraction,
         };
       }
     });
@@ -169,10 +188,10 @@ export default function introForElement(targetElm, group) {
     nextStep.call(this);
 
     if (this._options.keyboardNavigation) {
-      DOMEvent.on(window, 'keydown', onKeyDown, this, true);
+      DOMEvent.on(window, "keydown", onKeyDown, this, true);
     }
     //for window resize
-    DOMEvent.on(window, 'resize', onResize, this, true);
+    DOMEvent.on(window, "resize", onResize, this, true);
   }
   return false;
 }

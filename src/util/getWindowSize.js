@@ -8,9 +8,9 @@
  */
 export default function getWinSize() {
   if (window.innerWidth !== undefined) {
-    return {width: window.innerWidth, height: window.innerHeight};
+    return { width: window.innerWidth, height: window.innerHeight };
   } else {
     const D = document.documentElement;
-    return {width: D.clientWidth, height: D.clientHeight};
+    return { width: D.clientWidth, height: D.clientHeight };
   }
 }

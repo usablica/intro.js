@@ -1,4 +1,4 @@
-import getPropValue from './getPropValue';
+import getPropValue from "./getPropValue";
 
 /**
  * Checks to see if target element (or parents) position is fixed or not
@@ -11,11 +11,11 @@ import getPropValue from './getPropValue';
 export default function isFixed(element) {
   const p = element.parentNode;
 
-  if (!p || p.nodeName === 'HTML') {
+  if (!p || p.nodeName === "HTML") {
     return false;
   }
 
-  if (getPropValue(element, 'position') === 'fixed') {
+  if (getPropValue(element, "position") === "fixed") {
     return true;
   }
 

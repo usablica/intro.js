@@ -23,17 +23,20 @@ export default function setHelperLayerPosition(helperLayer) {
     // Otherwise, remove a fixed class that may be left over from the previous
     // step.
     if (isFixed(currentElement.element)) {
-      addClass(helperLayer, 'introjs-fixedTooltip');
+      addClass(helperLayer, "introjs-fixedTooltip");
     } else {
-      removeClass(helperLayer, 'introjs-fixedTooltip');
+      removeClass(helperLayer, "introjs-fixedTooltip");
     }
 
-    if (currentElement.position === 'floating') {
+    if (currentElement.position === "floating") {
       widthHeightPadding = 0;
     }
 
     //set new position to helper layer
-    helperLayer.style.cssText = `width: ${elementPosition.width + widthHeightPadding}px; height:${elementPosition.height + widthHeightPadding}px; top:${elementPosition.top - widthHeightPadding / 2}px;left: ${elementPosition.left - widthHeightPadding / 2}px;`;
+    helperLayer.style.cssText = `width: ${
+      elementPosition.width + widthHeightPadding
+    }px; height:${elementPosition.height + widthHeightPadding}px; top:${
+      elementPosition.top - widthHeightPadding / 2
+    }px;left: ${elementPosition.left - widthHeightPadding / 2}px;`;
   }
 }
-

@@ -8,7 +8,7 @@
  */
 const stamp = (() => {
   const keys = {};
-  return function stamp(obj, key = 'introjs-stamp') {
+  return function stamp(obj, key = "introjs-stamp") {
     // each group increments from 0
     keys[key] = keys[key] || 0;
 

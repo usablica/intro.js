@@ -17,6 +17,6 @@ export default function getOffset(element) {
     top: x.top + scrollTop,
     width: x.width,
     height: x.height,
-    left: x.left + scrollLeft
+    left: x.left + scrollLeft,
   };
 }

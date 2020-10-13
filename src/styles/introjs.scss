@@ -1,17 +1,16 @@
 $black900: #212121;
 $black800: #424242;
 $black600: #616161;
-$black500: #9E9E9E;
-$black400: #BDBDBD;
-$black300: #E0E0E0;
-$black200: #EEEEEE;
+$black500: #9e9e9e;
+$black400: #bdbdbd;
+$black300: #e0e0e0;
+$black200: #eeeeee;
 $black100: #f4f4f4;
 $white: #ffffff;
 
 $font_family: Arial, verdana, tahoma;
 $background_color_9: #08c;
 $background_color_10: rgba(136, 136, 136, 0.24);
-
 
 /*
  Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/
@@ -22,7 +21,7 @@ $background_color_10: rgba(136, 136, 136, 0.24);
 @keyframes introjspulse {
   0% {
     transform: scale(0);
-    opacity: 0.0;
+    opacity: 0;
   }
   25% {
     transform: scale(0);
@@ -38,7 +37,7 @@ $background_color_10: rgba(136, 136, 136, 0.24);
   }
   100% {
     transform: scale(1);
-    opacity: 0.0;
+    opacity: 0;
   }
 }
 
@@ -48,7 +47,12 @@ $background_color_10: rgba(136, 136, 136, 0.24);
   z-index: 999999;
   background-color: $black900;
   opacity: 0;
-  background: radial-gradient(center, ellipse farthest-corner, rgba($black900, 0.5) 0, rgba($black900, 0.9) 100%);
+  background: radial-gradient(
+    center,
+    ellipse farthest-corner,
+    rgba($black900, 0.5) 0,
+    rgba($black900, 0.9) 100%
+  );
   filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#66000000',endColorstr='#e6000000',GradientType=1)";
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
   filter: alpha(opacity=50);
@@ -57,7 +61,7 @@ $background_color_10: rgba(136, 136, 136, 0.24);
 
 .introjs-fixParent {
   z-index: auto !important;
-  opacity: 1.0 !important;
+  opacity: 1 !important;
   transform: none !important;
 }
 
@@ -93,10 +97,10 @@ tr.introjs-showElement {
   box-sizing: content-box;
   position: absolute;
   z-index: 9999998;
-  background-color: rgba($white, .9);
-  border: 1px solid rgba($black900, .5);
+  background-color: rgba($white, 0.9);
+  border: 1px solid rgba($black900, 0.5);
   border-radius: 4px;
-  box-shadow: 0 2px 15px rgba($black900, .4);
+  box-shadow: 0 2px 15px rgba($black900, 0.4);
   transition: all 0.3s ease-out;
 
   * {
@@ -134,7 +138,7 @@ tr.introjs-showElement {
   font-weight: bold;
   color: $white;
   text-align: center;
-  text-shadow: 1px 1px 1px rgba($black900, .3);
+  text-shadow: 1px 1px 1px rgba($black900, 0.3);
   background: #ff3019;
   background: linear-gradient(to bottom, #ff3019 0%, #cf0404 100%);
   width: 20px;
@@ -144,12 +148,12 @@ tr.introjs-showElement {
   border-radius: 50%;
   filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0)";
   filter: "progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000)";
-  box-shadow: 0 2px 5px rgba($black900, .4);
+  box-shadow: 0 2px 5px rgba($black900, 0.4);
 }
 
 .introjs-arrow {
   border: 5px solid transparent;
-  content: '';
+  content: "";
   position: absolute;
 }
 
@@ -222,7 +226,7 @@ tr.introjs-showElement {
   min-width: 200px;
   max-width: 300px;
   border-radius: 3px;
-  box-shadow: 0 1px 10px rgba($black900, .4);
+  box-shadow: 0 1px 10px rgba($black900, 0.4);
   transition: opacity 0.1s ease-out;
 }
 
@@ -240,7 +244,7 @@ tr.introjs-showElement {
   border: 1px solid $black400;
   text-decoration: none;
   text-shadow: 1px 1px 0 $white;
-  font: 11px/normal sans-serif;
+  font: 11px / normal sans-serif;
   color: $black800;
   white-space: nowrap;
   cursor: pointer;

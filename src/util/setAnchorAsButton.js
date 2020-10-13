@@ -5,6 +5,6 @@
  * @method _setAnchorAsButton
  */
 export default function setAnchorAsButton(anchor) {
-  anchor.setAttribute('role', 'button');
+  anchor.setAttribute("role", "button");
   anchor.tabIndex = 0;
 }

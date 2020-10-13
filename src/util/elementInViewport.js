@@ -12,7 +12,7 @@ export default function elementInViewport(el) {
   return (
     rect.top >= 0 &&
     rect.left >= 0 &&
-    (rect.bottom + 80) <= window.innerHeight && // add 80 to get the text right
+    rect.bottom + 80 <= window.innerHeight && // add 80 to get the text right
     rect.right <= window.innerWidth
   );
 }

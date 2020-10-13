@@ -9,11 +9,15 @@
  * @returns string property value
  */
 export default function getPropValue(element, propName) {
-  let propValue = '';
-  if (element.currentStyle) { //IE
+  let propValue = "";
+  if (element.currentStyle) {
+    //IE
     propValue = element.currentStyle[propName];
-  } else if (document.defaultView && document.defaultView.getComputedStyle) { //Others
-    propValue = document.defaultView.getComputedStyle(element, null).getPropertyValue(propName);
+  } else if (document.defaultView && document.defaultView.getComputedStyle) {
+    //Others
+    propValue = document.defaultView
+      .getComputedStyle(element, null)
+      .getPropertyValue(propName);
   }
 
   //Prevent exception in IE

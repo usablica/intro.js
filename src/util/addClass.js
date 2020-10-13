@@ -1,4 +1,4 @@
-import forEach from './forEach';
+import forEach from "./forEach";
 
 /**
  * Append a class to an element
@@ -12,14 +12,14 @@ import forEach from './forEach';
 export default function addClass(element, className) {
   if (element instanceof SVGElement) {
     // svg
-    const pre = element.getAttribute('class') || '';
+    const pre = element.getAttribute("class") || "";
 
-    element.setAttribute('class', `${pre} ${className}`);
+    element.setAttribute("class", `${pre} ${className}`);
   } else {
     if (element.classList !== undefined) {
       // check for modern classList property
-      const classes = className.split(' ');
-      forEach(classes, cls => {
+      const classes = className.split(" ");
+      forEach(classes, (cls) => {
         element.classList.add(cls);
       });
     } else if (!element.className.match(className)) {
