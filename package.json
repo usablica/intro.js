@@ -10,8 +10,9 @@
   },
   "main": "intro.js",
   "scripts": {
+    "prettier": "prettier --write 'src/**/*'",
     "test": "npm run test:jshint",
-    "test:jshint": "jshint ./dist/intro.js",
+    "test:jshint": "jshint ./src --verbose",
     "release": "./release.sh || true",
     "build": "rollup -c",
     "build:watch": "rollup -c -w"
