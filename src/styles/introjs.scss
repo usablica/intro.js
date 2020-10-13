@@ -1,0 +1,470 @@
+$black900: #212121;
+$black800: #424242;
+$black600: #616161;
+$black500: #9e9e9e;
+$black400: #bdbdbd;
+$black300: #e0e0e0;
+$black200: #eeeeee;
+$black100: #f4f4f4;
+$white: #ffffff;
+
+$font_family: Arial, verdana, tahoma;
+$background_color_9: #08c;
+$background_color_10: rgba(136, 136, 136, 0.24);
+
+/*
+ Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/
+ Changed by Afshin Mehrabani
+*/
+/* overrides extra padding on button elements in Firefox */
+
+@keyframes introjspulse {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  25% {
+    transform: scale(0);
+    opacity: 0.1;
+  }
+  50% {
+    transform: scale(0.1);
+    opacity: 0.3;
+  }
+  75% {
+    transform: scale(0.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.introjs-overlay {
+  position: absolute;
+  box-sizing: content-box;
+  z-index: 999999;
+  background-color: $black900;
+  opacity: 0;
+  background: radial-gradient(
+    center,
+    ellipse farthest-corner,
+    rgba($black900, 0.5) 0,
+    rgba($black900, 0.9) 100%
+  );
+  filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#66000000',endColorstr='#e6000000',GradientType=1)";
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  filter: alpha(opacity=50);
+  transition: all 0.3s ease-out;
+}
+
+.introjs-fixParent {
+  z-index: auto !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.introjs-showElement {
+  z-index: 9999999 !important;
+}
+
+tr.introjs-showElement {
+  > td {
+    z-index: 9999999 !important;
+    position: relative;
+  }
+
+  > th {
+    z-index: 9999999 !important;
+    position: relative;
+  }
+}
+
+.introjs-disableInteraction {
+  z-index: 99999999 !important;
+  position: absolute;
+  background-color: $white;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+
+.introjs-relativePosition {
+  position: relative;
+}
+
+.introjs-helperLayer {
+  box-sizing: content-box;
+  position: absolute;
+  z-index: 9999998;
+  background-color: rgba($white, 0.9);
+  border: 1px solid rgba($black900, 0.5);
+  border-radius: 4px;
+  box-shadow: 0 2px 15px rgba($black900, 0.4);
+  transition: all 0.3s ease-out;
+
+  * {
+    box-sizing: content-box;
+
+    &:before {
+      box-sizing: content-box;
+    }
+
+    &:after {
+      box-sizing: content-box;
+    }
+  }
+}
+
+.introjs-tooltipReferenceLayer {
+  box-sizing: content-box;
+  position: absolute;
+  visibility: hidden;
+  z-index: 100000000;
+  background-color: transparent;
+  transition: all 0.3s ease-out;
+}
+
+.introjs-helperNumberLayer {
+  box-sizing: content-box;
+  position: absolute;
+  visibility: visible;
+  top: -16px;
+  left: -16px;
+  z-index: 9999999999 !important;
+  padding: 2px;
+  font-family: $font_family;
+  font-size: 13px;
+  font-weight: bold;
+  color: $white;
+  text-align: center;
+  text-shadow: 1px 1px 1px rgba($black900, 0.3);
+  background: #ff3019;
+  background: linear-gradient(to bottom, #ff3019 0%, #cf0404 100%);
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  border: 3px solid white;
+  border-radius: 50%;
+  filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0)";
+  filter: "progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000)";
+  box-shadow: 0 2px 5px rgba($black900, 0.4);
+}
+
+.introjs-arrow {
+  border: 5px solid transparent;
+  content: "";
+  position: absolute;
+}
+
+.introjs-arrow.top {
+  top: -10px;
+  border-bottom-color: $white;
+}
+
+.introjs-arrow.top-right {
+  top: -10px;
+  right: 10px;
+  border-bottom-color: $white;
+}
+
+.introjs-arrow.top-middle {
+  top: -10px;
+  left: 50%;
+  margin-left: -5px;
+  border-bottom-color: $white;
+}
+
+.introjs-arrow.right {
+  right: -10px;
+  top: 10px;
+  border-left-color: $white;
+}
+
+.introjs-arrow.right-bottom {
+  bottom: 10px;
+  right: -10px;
+  border-left-color: $white;
+}
+
+.introjs-arrow.bottom {
+  bottom: -10px;
+  border-top-color: $white;
+}
+
+.introjs-arrow.bottom-right {
+  bottom: -10px;
+  right: 10px;
+  border-top-color: $white;
+}
+
+.introjs-arrow.bottom-middle {
+  bottom: -10px;
+  left: 50%;
+  margin-left: -5px;
+  border-top-color: $white;
+}
+
+.introjs-arrow.left {
+  left: -10px;
+  top: 10px;
+  border-right-color: $white;
+}
+
+.introjs-arrow.left-bottom {
+  left: -10px;
+  bottom: 10px;
+  border-right-color: $white;
+}
+
+.introjs-tooltip {
+  box-sizing: content-box;
+  position: absolute;
+  visibility: visible;
+  padding: 10px;
+  background-color: $white;
+  min-width: 200px;
+  max-width: 300px;
+  border-radius: 3px;
+  box-shadow: 0 1px 10px rgba($black900, 0.4);
+  transition: opacity 0.1s ease-out;
+}
+
+.introjs-tooltipbuttons {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.introjs-button {
+  box-sizing: content-box;
+  position: relative;
+  overflow: visible;
+  display: inline-block;
+  padding: 0.3em 0.8em;
+  border: 1px solid $black400;
+  text-decoration: none;
+  text-shadow: 1px 1px 0 $white;
+  font: 11px / normal sans-serif;
+  color: $black800;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  background-color: $black300;
+  background-image: linear-gradient($black100, #ececec);
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  -o-background-clip: padding-box;
+  border-radius: 0.2em;
+  zoom: 1;
+  *display: inline;
+  margin: 10px 0 0;
+
+  &:hover {
+    border-color: $black400;
+    text-decoration: none;
+    box-shadow: 0px 1px 1px #e3e3e3;
+  }
+
+  &:focus {
+    background-image: linear-gradient(#ececec, $black100);
+  }
+
+  &:active {
+    background-image: linear-gradient(#ececec, $black100);
+  }
+
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
+}
+
+.introjs-skipbutton {
+  box-sizing: content-box;
+  margin-right: 5px;
+  color: $black600;
+}
+
+.introjs-prevbutton {
+  border-radius: 0.2em 0 0 0.2em;
+  border-right: none;
+}
+
+.introjs-prevbutton.introjs-fullbutton {
+  border: 1px solid $black400;
+  border-radius: 0.2em;
+}
+
+.introjs-nextbutton {
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+.introjs-nextbutton.introjs-fullbutton {
+  border-radius: 0.2em;
+}
+
+.introjs-disabled {
+  color: $black500;
+  border-color: $black400;
+  box-shadow: none;
+  cursor: default;
+  background-color: $black100;
+  background-image: none;
+  text-decoration: none;
+
+  &:hover {
+    color: $black500;
+    border-color: $black400;
+    box-shadow: none;
+    cursor: default;
+    background-color: $black100;
+    background-image: none;
+    text-decoration: none;
+  }
+
+  &:focus {
+    color: $black500;
+    border-color: $black400;
+    box-shadow: none;
+    cursor: default;
+    background-color: $black100;
+    background-image: none;
+    text-decoration: none;
+  }
+}
+
+.introjs-hidden {
+  display: none;
+}
+
+.introjs-bullets {
+  text-align: center;
+
+  ul {
+    box-sizing: content-box;
+    clear: both;
+    margin: 15px auto 0;
+    padding: 0;
+    display: inline-block;
+
+    li {
+      box-sizing: content-box;
+      list-style: none;
+      float: left;
+      margin: 0 2px;
+
+      a {
+        box-sizing: content-box;
+        display: block;
+        width: 6px;
+        height: 6px;
+        background: #ccc;
+        border-radius: 10px;
+        text-decoration: none;
+        cursor: pointer;
+
+        &:hover {
+          background: #999;
+        }
+      }
+
+      a.active {
+        background: #999;
+      }
+    }
+  }
+}
+
+.introjs-progress {
+  box-sizing: content-box;
+  overflow: hidden;
+  height: 10px;
+  margin: 10px 0 5px 0;
+  border-radius: 4px;
+  background-color: $black300;
+}
+
+.introjs-progressbar {
+  box-sizing: content-box;
+  float: left;
+  width: 0%;
+  height: 100%;
+  font-size: 10px;
+  line-height: 10px;
+  text-align: center;
+  background-color: $background_color_9;
+}
+
+.introjsFloatingElement {
+  position: absolute;
+  height: 0;
+  width: 0;
+  left: 50%;
+  top: 50%;
+}
+
+.introjs-fixedTooltip {
+  position: fixed;
+}
+
+.introjs-hint {
+  box-sizing: content-box;
+  position: absolute;
+  background: transparent;
+  width: 20px;
+  height: 15px;
+  cursor: pointer;
+
+  &:focus {
+    border: 0;
+    outline: 0;
+  }
+
+  &:hover {
+    > .introjs-hint-pulse {
+      border: 5px solid rgba(60, 60, 60, 0.57);
+    }
+  }
+}
+
+.introjs-hidehint {
+  display: none;
+}
+
+.introjs-fixedhint {
+  position: fixed;
+}
+
+.introjs-hint-pulse {
+  box-sizing: content-box;
+  width: 10px;
+  height: 10px;
+  border: 5px solid rgba(60, 60, 60, 0.27);
+  border-radius: 30px;
+  background-color: $background_color_10;
+  z-index: 10;
+  position: absolute;
+  transition: all 0.2s ease-out;
+}
+
+.introjs-hint-no-anim {
+  .introjs-hint-dot {
+    animation: none;
+  }
+}
+
+.introjs-hint-dot {
+  box-sizing: content-box;
+  border: 10px solid rgba(146, 146, 146, 0.36);
+  background: transparent;
+  border-radius: 60px;
+  height: 50px;
+  width: 50px;
+  animation: introjspulse 3s ease-out;
+  animation-iteration-count: infinite;
+  position: absolute;
+  top: -25px;
+  left: -25px;
+  z-index: 1;
+  opacity: 0;
+}

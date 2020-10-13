@@ -1,4 +1,4 @@
-# Intro.js v2.9.3
+# Intro.js v3
 
 [![Build Status](https://travis-ci.org/usablica/intro.js.svg?branch=master)](https://travis-ci.org/usablica/intro.js)
 
@@ -74,19 +74,33 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 ## <a href="https://github.com/usablica/intro.js/blob/master/changelog.md">Release History</a>
 
 ## Authors
-**Afshin Mehrabani**
 
-- [Twitter](https://twitter.com/afshinmeh)
-- [Github](https://github.com/afshinm)
-- [Personal page](http://afshinm.name/)
-
-**Benjamin J DeLong**
-
-- [Twitter](https://twitter.com/bozdoz)
-- [Github](https://github.com/bozdoz)
-- [Personal page](https://bozdoz.com/)
-
-[Other contributors](https://github.com/usablica/intro.js/graphs/contributors)
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top">
+        <img width="100" height="100" src="https://github.com/afshinm.png?s=150">
+        <br>
+        <a href="https://github.com/afshinm">Afshin Mehrabani</a>
+      </td>
+      <td align="center" valign="top">
+        <img width="100" height="100" src="https://github.com/bozdoz.png?s=150">
+        <br>
+        <a href="https://github.com/bozdoz">Benjamin J DeLong</a>
+      </td>
+      <td align="center" valign="top">
+        <img width="100" height="100" src="https://github.com/jalalazimi.png?s=150">
+        <br>
+        <a href="https://github.com/jalalazimi">Jalal Azimi</a>
+      </td>
+      <td align="center" valign="top">
+        <img width="100" height="100" src="https://github.com/github.png?s=150">
+        <br>
+        <a href="https://github.com/usablica/intro.js/graphs/contributors">Other contributors</a>
+      </td> 
+     </tr>
+  </tbody>
+</table>
 
 ## Contributing
 

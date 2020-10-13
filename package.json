@@ -1,39 +1,56 @@
 {
   "name": "intro.js",
   "description": "Better introductions for websites and features with a step-by-step guide for your projects",
-  "version": "2.9.3",
+  "version": "3.0.0-beta.1",
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
   "homepage": "http://introjs.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/usablica/intro.js"
   },
+  "main": "intro.js",
   "scripts": {
+    "prettier": "prettier --write 'src/**/*'",
     "test": "npm run test:jshint",
-    "test:jshint": "jshint ./intro.js",
-    "minify": "for file in ./intro*; do NAME=$(basename $file) && minify $file > ./minified/${NAME%.*}.min.${NAME#*.}; done",
-    "release": "./release.sh || true"
+    "test:jshint": "jshint ./src --verbose",
+    "release": "./bin/release.sh || true",
+    "build": "rollup -c",
+    "build:watch": "rollup -c -w"
   },
   "devDependencies": {
-    "jshint": "^2.9.5",
-    "minify": "^3.0.5"
+    "@babel/core": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "@rollup/plugin-json": "^4.0.0",
+    "autoprefixer": "^9.7.1",
+    "core-js": "^3.2.1",
+    "eslint": "^6.4.0",
+    "minify": "^3.0.5",
+    "node-sass": "^4.12.0",
+    "postcss": "^7.0.21",
+    "postcss-clean": "^1.1.0",
+    "postcss-normalize": "^8.0.1",
+    "prettier": "2.1.2",
+    "rollup": "^1.21.4",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-eslint": "^7.0.0",
+    "rollup-plugin-filesize": "^6.2.0",
+    "rollup-plugin-multi-entry": "^2.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-progress": "^1.1.1",
+    "rollup-plugin-terser": "^5.1.2",
+    "rollup-plugin-uglify": "^6.0.3",
+    "jshint": "^2.12.0",
+    "rollup-plugin-postcss": "^3.1.8"
   },
   "engine": [
     "node >=0.1.90"
   ],
-  "main": "intro.js",
   "files": [
     "*.js",
     "*.css",
-    "license.md",
     "themes/*",
     "minified/*"
   ],
-  "license": "AGPL-3.0",
-  "spm": {
-    "main": "intro.js",
-    "output": [
-      "introjs.css"
-    ]
-  }
+  "license": "AGPL-3.0"
 }

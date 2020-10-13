@@ -12,7 +12,7 @@
     <link href="../assets/css/demo.css" rel="stylesheet">
 
     <!-- Add IntroJs styles -->
-    <link href="../../introjs.css" rel="stylesheet">
+    <link href="../../dist/introjs.css" rel="stylesheet">
 
     <link href="../assets/css/bootstrap-responsive.min.css" rel="stylesheet">
   </head>
@@ -68,16 +68,16 @@
       <hr>
 
     </div>
-    <script type="text/javascript" src="../../intro.js"></script>
+    <script type="text/javascript" src="../../dist/intro.js"></script>
     <script type="text/javascript">
       function startIntro(){
         var intro = introJs();
           intro.setOptions({
             steps: [
-              { 
+              {
                 intro: "Hello world!"
               },
-              { 
+              {
                 intro: "You <b>don't need</b> to define element to focus, this is a floating tooltip."
               },
               {
