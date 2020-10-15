@@ -21,7 +21,7 @@
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
     "@rollup/plugin-json": "^4.1.0",
-    "autoprefixer": "^9.8.6",
+    "autoprefixer": "^10.0.1",
     "core-js": "^3.6.5",
     "eslint": "^6.8.0",
     "jshint": "^2.12.0",
