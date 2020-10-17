@@ -1,0 +1,25 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "afshinm",
+      "name": "Afshin Mehrabani",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/314326?v=4",
+      "profile": "http://afshinm.name",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "intro.js",
+  "projectOwner": "usablica",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
