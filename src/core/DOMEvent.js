@@ -16,10 +16,10 @@ const DOMEvent = (() => {
     /**
      * Gets a unique ID for an event listener
      *
-     * @param Object obj
-     * @param String type        event type
-     * @param Function listener
-     * @param Object context
+     * @param obj Object
+     * @param type event type
+     * @param listener Function
+     * @param context Object
      * @return String
      */
     this._id = (obj, type, listener, context) =>
@@ -28,11 +28,11 @@ const DOMEvent = (() => {
     /**
      * Adds event listener
      *
-     * @param Object obj
-     * @param String type        event type
-     * @param Function listener
-     * @param Object context
-     * @param Boolean useCapture
+     * @param obj Object obj
+     * @param type String
+     * @param listener Function
+     * @param context Object
+     * @param useCapture Boolean
      * @return null
      */
     this.on = function (obj, type, listener, context, useCapture) {
@@ -52,11 +52,11 @@ const DOMEvent = (() => {
     /**
      * Removes event listener
      *
-     * @param Object obj
-     * @param String type        event type
-     * @param Function listener
-     * @param Object context
-     * @param Boolean useCapture
+     * @param obj Object
+     * @param type String
+     * @param listener Function
+     * @param context Object
+     * @param useCapture Boolean
      * @return null
      */
     this.off = function (obj, type, listener, context, useCapture) {
