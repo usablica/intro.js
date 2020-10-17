@@ -505,12 +505,18 @@ export default function _showElement(targetElement) {
     }
   }
 
-  prevTooltipButton.setAttribute("role", "button");
-  nextTooltipButton.setAttribute("role", "button");
-  skipTooltipButton.setAttribute("role", "button");
+  if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
+    prevTooltipButton.setAttribute('role', 'button');
+  }
+  if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
+    nextTooltipButton.setAttribute('role', 'button');
+  }
+  if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
+    skipTooltipButton.setAttribute('role', 'button');
+  }
 
   //Set focus on "next" button, so that hitting Enter always moves you onto the next step
-  if (typeof nextTooltipButton !== "undefined") {
+  if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
     nextTooltipButton.focus();
   }
 
