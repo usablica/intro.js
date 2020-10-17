@@ -281,6 +281,9 @@ export default function _showElement(targetElement) {
     }
     const progressBar = document.createElement("div");
     progressBar.className = "introjs-progressbar";
+    if(this._options.progressBarAdditionalClass){
+      progressBar.className += ' ' + this._options.progressBarAdditionalClass
+    }
     progressBar.setAttribute("role", "progress");
     progressBar.setAttribute("aria-valuemin", 0);
     progressBar.setAttribute("aria-valuemax", 100);
