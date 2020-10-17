@@ -348,13 +348,6 @@ export default function _showElement(targetElement) {
         self._introCompleteCallback.call(self);
       }
 
-      if (
-        self._introItems.length - 1 !== self._currentStep &&
-        typeof self._introExitCallback === "function"
-      ) {
-        self._introExitCallback.call(self);
-      }
-
       if (typeof self._introSkipCallback === "function") {
         self._introSkipCallback.call(self);
       }
@@ -517,7 +510,7 @@ export default function _showElement(targetElement) {
   skipTooltipButton.setAttribute("role", "button");
 
   //Set focus on "next" button, so that hitting Enter always moves you onto the next step
-  if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
+  if (typeof nextTooltipButton !== "undefined") {
     nextTooltipButton.focus();
   }
 
