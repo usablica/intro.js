@@ -80,51 +80,7 @@ Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publish
 
 ## <a href="https://github.com/usablica/intro.js/blob/master/changelog.md">Release History</a>
 
-## Authors
-
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top">
-        <img width="100" height="100" src="https://github.com/afshinm.png?s=150">
-        <br>
-        <a href="https://github.com/afshinm">Afshin Mehrabani</a>
-      </td>
-      <td align="center" valign="top">
-        <img width="100" height="100" src="https://github.com/bozdoz.png?s=150">
-        <br>
-        <a href="https://github.com/bozdoz">Benjamin J DeLong</a>
-      </td>
-      <td align="center" valign="top">
-        <img width="100" height="100" src="https://github.com/jalalazimi.png?s=150">
-        <br>
-        <a href="https://github.com/jalalazimi">Jalal Azimi</a>
-      </td>
-      <td align="center" valign="top">
-        <img width="100" height="100" src="https://github.com/github.png?s=150">
-        <br>
-        <a href="https://github.com/usablica/intro.js/graphs/contributors">Other contributors</a>
-      </td> 
-     </tr>
-  </tbody>
-</table>
-
-## Support/Discussion
-- [Stackoverflow](http://stackoverflow.com/questions/tagged/intro.js)
-
-## License
-
-### Commercial license
-
-If you want to use Intro.js for a commercial application, theme or plugin the commercial license is the appropriate license. With this option, your source code is kept proprietary. Purchase a commercial license at [introjs.com](http://introjs.com/#commercial)
-
-### Open-source license
-
-GNU AGPLv3
-
 ## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -139,4 +95,15 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+## Support/Discussion
+- [Stackoverflow](http://stackoverflow.com/questions/tagged/intro.js)
+
+## License
+
+### Commercial license
+
+If you want to use Intro.js for a commercial application, theme or plugin the commercial license is the appropriate license. With this option, your source code is kept proprietary. Purchase a commercial license at [introjs.com](http://introjs.com/#commercial)
+
+### Open-source license
+
+GNU AGPLv3
