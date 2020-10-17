@@ -18,10 +18,10 @@
     "build:watch": "rollup -c -w"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/preset-env": "^7.11.5",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
     "@rollup/plugin-json": "^4.1.0",
-    "autoprefixer": "^10.0.1",
+    "autoprefixer": "^9.0.0",
     "core-js": "^3.6.5",
     "eslint": "^6.8.0",
     "jshint": "^2.12.0",

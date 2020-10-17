@@ -109,3 +109,12 @@ export function previousStep() {
 
   showElement.call(this, nextStep);
 }
+
+/**
+ * Returns the current step of the intro
+ *
+ * @returns {boolean}
+ */
+export function currentStep() {
+  return this._currentStep;
+}

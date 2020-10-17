@@ -14,7 +14,13 @@ import {
   removeHints,
   showHintDialog,
 } from "./core/hint";
-import { goToStep, goToStepNumber, nextStep, previousStep } from "./core/steps";
+import {
+  currentStep,
+  goToStep,
+  goToStepNumber,
+  nextStep,
+  previousStep,
+} from "./core/steps";
 
 /**
  * IntroJs main class
@@ -180,6 +186,9 @@ introJs.fn = IntroJs.prototype = {
   previousStep() {
     previousStep.call(this);
     return this;
+  },
+  currentStep() {
+    return currentStep.call(this);
   },
   exit(force) {
     exitIntro.call(this, this._targetElement, force);
