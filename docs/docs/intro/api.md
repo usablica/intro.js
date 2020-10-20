@@ -44,6 +44,22 @@ Start the introduction for defined element(s).
 introJs().start()
 ````
 -----
+##### introJs.currentStep()
+
+Returns the current step index.
+
+**Available since**: v3.0.1
+
+**Returns:**
+
+ - number or undefined.
+
+**Example:**
+
+```javascript
+introJs().currentStep()
+````
+-----
 
 ##### introJs.goToStep(step)
 
