@@ -372,7 +372,7 @@ If you want to prevent displaying the next / previous step, return `false` in `p
 
 ```javascript
 introJs().onbeforechange(function() {
-  alert("before new step. Step: " + this._currentStep);
+  alert("before new step. Step: " + this.currentStep());
 
   // return false to stop displaying the next step
   // return false;

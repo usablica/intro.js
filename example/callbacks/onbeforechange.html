@@ -72,7 +72,7 @@
       function startIntro(){
         var intro = introJs();
         intro.onbeforechange(function () {
-          if (this._currentStep === 2) {
+          if (this.currentStep() === 2) {
             alert('You cannot continue! :P')
             return false;
           }
