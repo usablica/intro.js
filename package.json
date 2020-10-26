@@ -23,7 +23,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "autoprefixer": "^9.0.0",
     "core-js": "^3.6.5",
-    "eslint": "^6.8.0",
+    "eslint": "^7.12.0",
     "jshint": "^2.12.0",
     "lerna-changelog": "^1.0.1",
     "minify": "^6.0.0",
