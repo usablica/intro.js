@@ -87,10 +87,7 @@ export default function introForElement(targetElm, group) {
 
       const step = parseInt(currentElement.getAttribute("data-step"), 10);
 
-      if (
-        typeof currentElement.getAttribute("data-disable-interaction") !==
-        "undefined"
-      ) {
+      if (currentElement.hasAttribute("data-disable-interaction")) {
         disableInteraction = !!currentElement.getAttribute(
           "data-disable-interaction"
         );
@@ -136,10 +133,7 @@ export default function introForElement(targetElm, group) {
           }
         }
 
-        if (
-          typeof currentElement.getAttribute("data-disable-interaction") !==
-          "undefined"
-        ) {
+        if (currentElement.hasAttribute("data-disable-interaction")) {
           disableInteraction = !!currentElement.getAttribute(
             "data-disable-interaction"
           );
