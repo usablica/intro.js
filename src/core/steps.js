@@ -113,7 +113,7 @@ export function previousStep() {
 /**
  * Returns the current step of the intro
  *
- * @returns {boolean}
+ * @returns {number | boolean}
  */
 export function currentStep() {
   return this._currentStep;
