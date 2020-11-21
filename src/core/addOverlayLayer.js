@@ -1,5 +1,6 @@
 import getOffset from "../util/getOffset";
 import exitIntro from "./exitIntro";
+import createElement from "../util/createElement";
 
 /**
  * Add overlay layer to the page
@@ -9,7 +10,7 @@ import exitIntro from "./exitIntro";
  * @param {Object} targetElm
  */
 export default function addOverlayLayer(targetElm) {
-  const overlayLayer = document.createElement("div");
+  const overlayLayer = createElement("div");
   let styleText = "";
   const self = this;
 

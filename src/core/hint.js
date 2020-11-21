@@ -8,6 +8,7 @@ import DOMEvent from "./DOMEvent";
 import setAnchorAsButton from "../util/setAnchorAsButton";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
+import createElement from "../util/createElement";
 
 /**
  * Get a queryselector within the hint wrapper
@@ -130,8 +131,9 @@ export function addHints() {
   let hintsWrapper = document.querySelector(".introjs-hints");
 
   if (hintsWrapper === null) {
-    hintsWrapper = document.createElement("div");
-    hintsWrapper.className = "introjs-hints";
+    hintsWrapper = createElement("div", {
+      className: "introjs-hints"
+    });
   }
 
   /**
@@ -160,12 +162,12 @@ export function addHints() {
       return;
     }
 
-    const hint = document.createElement("a");
+    const hint = createElement("a", {
+      className: "introjs-hint"
+    });
     setAnchorAsButton(hint);
 
     hint.onclick = getHintClick(i);
-
-    hint.className = "introjs-hint";
 
     if (!item.hintAnimation) {
       addClass(hint, "introjs-hint-no-anim");
@@ -176,10 +178,13 @@ export function addHints() {
       addClass(hint, "introjs-fixedhint");
     }
 
-    const hintDot = document.createElement("div");
-    hintDot.className = "introjs-hint-dot";
-    const hintPulse = document.createElement("div");
-    hintPulse.className = "introjs-hint-pulse";
+    const hintDot = createElement("div", {
+      className: "introjs-hint-dot"
+    });
+
+    const hintPulse = createElement("div", {
+      className: "introjs-hint-pulse"
+    });
 
     hint.appendChild(hintDot);
     hint.appendChild(hintPulse);
@@ -288,12 +293,12 @@ export function showHintDialog(stepId) {
     return;
   }
 
-  const tooltipLayer = document.createElement("div");
-  const tooltipTextLayer = document.createElement("div");
-  const arrowLayer = document.createElement("div");
-  const referenceLayer = document.createElement("div");
-
-  tooltipLayer.className = "introjs-tooltip";
+  const tooltipLayer = createElement("div", {
+    className: "introjs-tooltip"
+  });
+  const tooltipTextLayer = createElement("div");
+  const arrowLayer = createElement("div");
+  const referenceLayer = createElement("div");
 
   tooltipLayer.onclick = (e) => {
     //IE9 & Other Browsers
@@ -308,10 +313,10 @@ export function showHintDialog(stepId) {
 
   tooltipTextLayer.className = "introjs-tooltiptext";
 
-  const tooltipWrapper = document.createElement("p");
+  const tooltipWrapper = createElement("p");
   tooltipWrapper.innerHTML = item.hint;
 
-  const closeButton = document.createElement("a");
+  const closeButton = createElement("a");
   closeButton.className = this._options.buttonClass;
   closeButton.setAttribute("role", "button");
   closeButton.innerHTML = this._options.hintButtonLabel;
