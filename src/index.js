@@ -90,6 +90,8 @@ function IntroJs(obj) {
     hintAnimation: true,
     /* additional classes to put on the buttons */
     buttonClass: "introjs-button",
+    /* additional classes to put on progress bar */
+    progressBarAdditionalClass: false,
   };
 }
 
