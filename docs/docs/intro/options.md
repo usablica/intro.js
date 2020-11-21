@@ -15,6 +15,7 @@ permalink: /intro/options/
  - `tooltipPosition`: Default tooltip position
  - `tooltipClass`: Adding CSS class to all tooltips
  - `highlightClass`: Additional CSS class for the helperLayer
+ - `buttonClass`: Additional CSS class for the buttons
  - `exitOnEsc`: Exit introduction when pressing Escape button, `true` or `false`
  - `exitOnOverlayClick`: Exit introduction when clicking on overlay layer, `true` or `false`
  - `showStepNumbers`: Show steps number in the red circle or not, `true` or `false`
