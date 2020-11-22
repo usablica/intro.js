@@ -1,5 +1,4 @@
 import forEach from "../util/forEach";
-import removeClass from "../util/removeClass";
 import DOMEvent from "./DOMEvent";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";

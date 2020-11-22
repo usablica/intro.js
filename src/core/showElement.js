@@ -2,7 +2,6 @@ import setShowElement from "../util/setShowElement";
 import scrollParentToElement from "../util/scrollParentToElement";
 import getScrollParent from "../util/getScrollParent";
 import addClass from "../util/addClass";
-import removeClass from "../util/removeClass";
 import scrollTo from "../util/scrollTo";
 import exitIntro from "./exitIntro";
 import forEach from "../util/forEach";
