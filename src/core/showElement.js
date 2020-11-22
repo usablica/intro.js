@@ -130,12 +130,6 @@ export default function _showElement(targetElement) {
     setHelperLayerPosition.call(self, oldHelperLayer);
     setHelperLayerPosition.call(self, oldReferenceLayer);
 
-    //remove `introjs-fixParent` class from the elements
-    const fixParents = document.querySelectorAll(".introjs-fixParent");
-    forEach(fixParents, (parent) => {
-      removeClass(parent, /introjs-fixParent/g);
-    });
-
     //remove old classes if the element still exist
     removeShowElement();
 

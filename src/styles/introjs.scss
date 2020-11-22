@@ -45,24 +45,9 @@ $background_color_10: rgba(136, 136, 136, 0.24);
   position: absolute;
   box-sizing: content-box;
   z-index: 999999;
-  background-color: $black900;
+  cursor: pointer;
   opacity: 0;
-  background: radial-gradient(
-    center,
-    ellipse farthest-corner,
-    rgba($black900, 0.5) 0,
-    rgba($black900, 0.9) 100%
-  );
-  filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#66000000',endColorstr='#e6000000',GradientType=1)";
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-  filter: alpha(opacity=50);
   transition: all 0.3s ease-out;
-}
-
-.introjs-fixParent {
-  z-index: auto !important;
-  opacity: 1 !important;
-  transform: none !important;
 }
 
 .introjs-showElement {
@@ -97,10 +82,9 @@ tr.introjs-showElement {
   box-sizing: content-box;
   position: absolute;
   z-index: 9999998;
-  background-color: rgba($white, 0.9);
   border: 1px solid rgba($black900, 0.5);
   border-radius: 4px;
-  box-shadow: 0 2px 15px rgba($black900, 0.4);
+  box-shadow: 0 0 1px 2px rgba($black900, 0.8), rgba($black900, 0.4) 0 0 0 5000px;
   transition: all 0.3s ease-out;
 
   * {

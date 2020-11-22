@@ -73,12 +73,6 @@ export default function exitIntro(targetElement, force) {
 
   removeShowElement();
 
-  //remove `introjs-fixParent` class from the elements
-  const fixParents = document.querySelectorAll(".introjs-fixParent");
-  forEach(fixParents, (parent) => {
-    removeClass(parent, /introjs-fixParent/g);
-  });
-
   //clean listeners
   DOMEvent.off(window, "keydown", onKeyDown, this, true);
   DOMEvent.off(window, "resize", onResize, this, true);
