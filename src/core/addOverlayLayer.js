@@ -38,10 +38,5 @@ export default function addOverlayLayer(targetElm) {
     }
   };
 
-  window.setTimeout(() => {
-    styleText += `opacity: ${self._options.overlayOpacity.toString()};`;
-    overlayLayer.style.cssText = styleText;
-  }, 10);
-
   return true;
 }

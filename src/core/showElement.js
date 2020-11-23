@@ -11,6 +11,8 @@ import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import removeShowElement from "./removeShowElement";
 import createElement from "../util/createElement";
+import setStyle from "../util/setStyle";
+import appendChild from "../util/appendChild";
 
 /**
  * Gets the current progress percentage
@@ -214,6 +216,10 @@ export default function _showElement(targetElement) {
     const progressLayer = createElement("div");
     const buttonsLayer = createElement("div");
 
+    setStyle(helperLayer, {
+      'box-shadow': `0 0 1px 2px rgba(33, 33, 33, 0.8), rgba(33, 33, 33, ${self._options.overlayOpacity.toString()}) 0 0 0 5000px`
+    });
+
     // scroll to element
     scrollParent = getScrollParent(targetElement.element);
 
@@ -227,8 +233,8 @@ export default function _showElement(targetElement) {
     setHelperLayerPosition.call(self, referenceLayer);
 
     //add helper layer to target element
-    this._targetElement.appendChild(helperLayer);
-    this._targetElement.appendChild(referenceLayer);
+    appendChild(this._targetElement, helperLayer, true);
+    appendChild(this._targetElement, referenceLayer);
 
     arrowLayer.className = "introjs-arrow";
 
@@ -281,7 +287,7 @@ export default function _showElement(targetElement) {
       className: "introjs-progressbar"
     });
 
-    if (this._options.progressBarAdditionalClass){
+    if (this._options.progressBarAdditionalClass) {
       progressBar.className += ' ' + this._options.progressBarAdditionalClass;
     }
     progressBar.setAttribute("role", "progress");

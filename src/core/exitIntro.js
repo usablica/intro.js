@@ -3,6 +3,7 @@ import DOMEvent from "./DOMEvent";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import removeShowElement from "./removeShowElement";
+import removeChild from "../util/removeChild";
 
 /**
  * Exit from intro
@@ -26,49 +27,31 @@ export default function exitIntro(targetElement, force) {
   // otherwise, if `onbeforeexit` returned `false`, don't exit the intro
   if (!force && continueExit === false) return;
 
-  //remove overlay layers from the page
+  // remove overlay layers from the page
   const overlayLayers = targetElement.querySelectorAll(".introjs-overlay");
 
   if (overlayLayers && overlayLayers.length) {
-    forEach(overlayLayers, (overlayLayer) => {
-      overlayLayer.style.opacity = 0;
-      window.setTimeout(
-        function () {
-          if (this.parentNode) {
-            this.parentNode.removeChild(this);
-          }
-        }.bind(overlayLayer),
-        500
-      );
-    });
+    forEach(overlayLayers, (overlayLayer) => removeChild(overlayLayer));
   }
 
   //remove all helper layers
   const helperLayer = targetElement.querySelector(".introjs-helperLayer");
-  if (helperLayer) {
-    helperLayer.parentNode.removeChild(helperLayer);
-  }
+  removeChild(helperLayer, true);
 
   const referenceLayer = targetElement.querySelector(
     ".introjs-tooltipReferenceLayer"
   );
-  if (referenceLayer) {
-    referenceLayer.parentNode.removeChild(referenceLayer);
-  }
+  removeChild(referenceLayer);
 
   //remove disableInteractionLayer
   const disableInteractionLayer = targetElement.querySelector(
     ".introjs-disableInteraction"
   );
-  if (disableInteractionLayer) {
-    disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
-  }
+  removeChild(disableInteractionLayer);
 
   //remove intro floating element
   const floatingElement = document.querySelector(".introjsFloatingElement");
-  if (floatingElement) {
-    floatingElement.parentNode.removeChild(floatingElement);
-  }
+  removeChild(floatingElement);
 
   removeShowElement();
 

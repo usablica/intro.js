@@ -2,6 +2,7 @@ import getOffset from "../util/getOffset";
 import isFixed from "../util/isFixed";
 import addClass from "../util/addClass";
 import removeClass from "../util/removeClass";
+import setStyle from "../util/setStyle";
 
 /**
  * Update the position of the helper layer on the screen
@@ -33,10 +34,11 @@ export default function setHelperLayerPosition(helperLayer) {
     }
 
     //set new position to helper layer
-    helperLayer.style.cssText = `width: ${
-      elementPosition.width + widthHeightPadding
-    }px; height:${elementPosition.height + widthHeightPadding}px; top:${
-      elementPosition.top - widthHeightPadding / 2
-    }px;left: ${elementPosition.left - widthHeightPadding / 2}px;`;
+    setStyle(helperLayer, {
+      width: `${elementPosition.width + widthHeightPadding}px`,
+      height: `${elementPosition.height + widthHeightPadding}px`,
+      top: `${elementPosition.top - widthHeightPadding / 2}px`,
+      left: `${elementPosition.left - widthHeightPadding / 2}px`
+    });
   }
 }
