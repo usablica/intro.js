@@ -1,6 +1,6 @@
 /**
  * Create a DOM element with various attributes
- * 
+ *
  * @param {String} tagname
  * @param {Object} attrs
  * @return Element
