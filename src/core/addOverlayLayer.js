@@ -1,6 +1,7 @@
 import getOffset from "../util/getOffset";
 import exitIntro from "./exitIntro";
 import createElement from "../util/createElement";
+import setStyle from "../util/setStyle";
 
 /**
  * Add overlay layer to the page
@@ -10,33 +11,45 @@ import createElement from "../util/createElement";
  * @param {Object} targetElm
  */
 export default function addOverlayLayer(targetElm) {
-  const overlayLayer = createElement("div");
-  let styleText = "";
+  const overlayLayer = createElement("div", {
+    className: "introjs-overlay"
+  });
+
   const self = this;
 
-  //set css class name
-  overlayLayer.className = "introjs-overlay";
-
-  //check if the target element is body, we should calculate the size of overlay layer in a better way
+  // check if the target element is body, we should calculate the size of overlay layer in a better way
   if (!targetElm.tagName || targetElm.tagName.toLowerCase() === "body") {
-    styleText += "top: 0;bottom: 0; left: 0;right: 0;position: fixed;";
-    overlayLayer.style.cssText = styleText;
+    setStyle(overlayLayer, {
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      position: 'fixed'
+    });
   } else {
-    //set overlay layer position
+    // set overlay layer position
     const elementPosition = getOffset(targetElm);
     if (elementPosition) {
-      styleText += `width: ${elementPosition.width}px; height:${elementPosition.height}px; top:${elementPosition.top}px;left: ${elementPosition.left}px;`;
-      overlayLayer.style.cssText = styleText;
+      setStyle(overlayLayer, {
+        width: `${elementPosition.width}px`,
+        height: `${elementPosition.height}px`,
+        top: `${elementPosition.top}px`,
+        left: `${elementPosition.left}px`
+      });
     }
   }
 
   targetElm.appendChild(overlayLayer);
 
-  overlayLayer.onclick = () => {
-    if (self._options.exitOnOverlayClick === true) {
+  if (self._options.exitOnOverlayClick === true) {
+    setStyle(overlayLayer, {
+      cursor: 'pointer'
+    });
+
+    overlayLayer.onclick = () => {
       exitIntro.call(self, targetElm);
-    }
-  };
+    };
+  }
 
   return true;
 }

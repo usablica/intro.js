@@ -9,7 +9,7 @@ export default function setStyle(element, style) {
   let cssText = '';
 
   if (element.style.cssText) {
-    cssText += `${element.style.cssText};`;
+    cssText += element.style.cssText;
   }
 
   if (typeof style === 'string') {

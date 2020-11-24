@@ -5,6 +5,10 @@
   "eqeqeq": true,
   "globals": {
     "window": true,
+    "jest": true,
+    "describe": true,
+    "expect": true,
+    "test": true,
     "document": true,
     "exports": true,
     "define": true,
