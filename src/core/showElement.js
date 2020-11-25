@@ -2,7 +2,6 @@ import setShowElement from "../util/setShowElement";
 import scrollParentToElement from "../util/scrollParentToElement";
 import getScrollParent from "../util/getScrollParent";
 import addClass from "../util/addClass";
-import removeClass from "../util/removeClass";
 import scrollTo from "../util/scrollTo";
 import exitIntro from "./exitIntro";
 import forEach from "../util/forEach";
@@ -11,6 +10,9 @@ import { nextStep, previousStep } from "./steps";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import removeShowElement from "./removeShowElement";
+import createElement from "../util/createElement";
+import setStyle from "../util/setStyle";
+import appendChild from "../util/appendChild";
 
 /**
  * Gets the current progress percentage
@@ -37,8 +39,10 @@ function _disableInteraction() {
   );
 
   if (disableInteractionLayer === null) {
-    disableInteractionLayer = document.createElement("div");
-    disableInteractionLayer.className = "introjs-disableInteraction";
+    disableInteractionLayer = createElement("div", {
+      className: "introjs-disableInteraction"
+    });
+
     this._targetElement.appendChild(disableInteractionLayer);
   }
 
@@ -127,12 +131,6 @@ export default function _showElement(targetElement) {
     setHelperLayerPosition.call(self, oldHelperLayer);
     setHelperLayerPosition.call(self, oldReferenceLayer);
 
-    //remove `introjs-fixParent` class from the elements
-    const fixParents = document.querySelectorAll(".introjs-fixParent");
-    forEach(fixParents, (parent) => {
-      removeClass(parent, /introjs-fixParent/g);
-    });
-
     //remove old classes if the element still exist
     removeShowElement();
 
@@ -205,17 +203,22 @@ export default function _showElement(targetElement) {
 
     // end of old element if-else condition
   } else {
-    const helperLayer = document.createElement("div");
-    const referenceLayer = document.createElement("div");
-    const arrowLayer = document.createElement("div");
-    const tooltipLayer = document.createElement("div");
-    const tooltipTextLayer = document.createElement("div");
-    const bulletsLayer = document.createElement("div");
-    const progressLayer = document.createElement("div");
-    const buttonsLayer = document.createElement("div");
+    const helperLayer = createElement("div", {
+      className: highlightClass
+    });
+    const referenceLayer = createElement("div", {
+      className: "introjs-tooltipReferenceLayer"
+    });
+    const arrowLayer = createElement("div");
+    const tooltipLayer = createElement("div");
+    const tooltipTextLayer = createElement("div");
+    const bulletsLayer = createElement("div");
+    const progressLayer = createElement("div");
+    const buttonsLayer = createElement("div");
 
-    helperLayer.className = highlightClass;
-    referenceLayer.className = "introjs-tooltipReferenceLayer";
+    setStyle(helperLayer, {
+      'box-shadow': `0 0 1px 2px rgba(33, 33, 33, 0.8), rgba(33, 33, 33, ${self._options.overlayOpacity.toString()}) 0 0 0 5000px`
+    });
 
     // scroll to element
     scrollParent = getScrollParent(targetElement.element);
@@ -230,8 +233,8 @@ export default function _showElement(targetElement) {
     setHelperLayerPosition.call(self, referenceLayer);
 
     //add helper layer to target element
-    this._targetElement.appendChild(helperLayer);
-    this._targetElement.appendChild(referenceLayer);
+    appendChild(this._targetElement, helperLayer, true);
+    appendChild(this._targetElement, referenceLayer);
 
     arrowLayer.className = "introjs-arrow";
 
@@ -244,7 +247,7 @@ export default function _showElement(targetElement) {
       bulletsLayer.style.display = "none";
     }
 
-    const ulContainer = document.createElement("ul");
+    const ulContainer = createElement("ul");
     ulContainer.setAttribute("role", "tablist");
 
     const anchorClick = function () {
@@ -252,8 +255,8 @@ export default function _showElement(targetElement) {
     };
 
     forEach(this._introItems, ({ step }, i) => {
-      const innerLi = document.createElement("li");
-      const anchorLink = document.createElement("a");
+      const innerLi = createElement("li");
+      const anchorLink = createElement("a");
 
       innerLi.setAttribute("role", "presentation");
       anchorLink.setAttribute("role", "tab");
@@ -279,9 +282,12 @@ export default function _showElement(targetElement) {
     if (this._options.showProgress === false) {
       progressLayer.style.display = "none";
     }
-    const progressBar = document.createElement("div");
-    progressBar.className = "introjs-progressbar";
-    if(this._options.progressBarAdditionalClass){
+
+    const progressBar = createElement("div", {
+      className: "introjs-progressbar"
+    });
+
+    if (this._options.progressBarAdditionalClass) {
       progressBar.className += ' ' + this._options.progressBarAdditionalClass;
     }
     progressBar.setAttribute("role", "progress");
@@ -303,7 +309,8 @@ export default function _showElement(targetElement) {
     tooltipLayer.appendChild(progressLayer);
 
     //add helper layer number
-    const helperNumberLayer = document.createElement("span");
+    const helperNumberLayer = createElement("span");
+
     if (this._options.showStepNumbers === true) {
       helperNumberLayer.className = "introjs-helperNumberLayer";
       helperNumberLayer.innerHTML = targetElement.step;
@@ -314,7 +321,7 @@ export default function _showElement(targetElement) {
     referenceLayer.appendChild(tooltipLayer);
 
     //next button
-    nextTooltipButton = document.createElement("a");
+    nextTooltipButton = createElement("a");
 
     nextTooltipButton.onclick = () => {
       if (self._introItems.length - 1 !== self._currentStep) {
@@ -326,7 +333,7 @@ export default function _showElement(targetElement) {
     nextTooltipButton.innerHTML = this._options.nextLabel;
 
     //previous button
-    prevTooltipButton = document.createElement("a");
+    prevTooltipButton = createElement("a");
 
     prevTooltipButton.onclick = () => {
       if (self._currentStep !== 0) {
@@ -338,8 +345,10 @@ export default function _showElement(targetElement) {
     prevTooltipButton.innerHTML = this._options.prevLabel;
 
     //skip button
-    skipTooltipButton = document.createElement("a");
-    skipTooltipButton.className = `${this._options.buttonClass} introjs-skipbutton `;
+    skipTooltipButton = createElement("a", {
+      className: `${this._options.buttonClass} introjs-skipbutton `
+    });
+
     setAnchorAsButton(skipTooltipButton);
     skipTooltipButton.innerHTML = this._options.skipLabel;
 

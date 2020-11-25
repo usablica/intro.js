@@ -5,6 +5,7 @@ import DOMEvent from "./DOMEvent";
 import { nextStep } from "./steps";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
+import createElement from "../util/createElement";
 
 /**
  * Initiate a new introduction/guide from an element in the page
@@ -43,8 +44,9 @@ export default function introForElement(targetElm, group) {
         );
 
         if (floatingElementQuery === null) {
-          floatingElementQuery = document.createElement("div");
-          floatingElementQuery.className = "introjsFloatingElement";
+          floatingElementQuery = createElement("div", {
+            className: "introjsFloatingElement"
+          });
 
           document.body.appendChild(floatingElementQuery);
         }
