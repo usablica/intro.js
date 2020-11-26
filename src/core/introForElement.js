@@ -28,6 +28,8 @@ export default function introForElement(targetElm, group) {
       //set the step
       currentItem.step = introItems.length + 1;
 
+      currentItem.title = currentItem.title || '';
+
       //use querySelector function only when developer used CSS selector
       if (typeof currentItem.element === "string") {
         //grab the element with given selector from the page
@@ -100,6 +102,7 @@ export default function introForElement(targetElm, group) {
       if (step > 0) {
         introItems[step - 1] = {
           element: currentElement,
+          title: currentElement.getAttribute("data-title"),
           intro: currentElement.getAttribute("data-intro"),
           step: parseInt(currentElement.getAttribute("data-step"), 10),
           tooltipClass: currentElement.getAttribute("data-tooltipclass"),
@@ -145,6 +148,7 @@ export default function introForElement(targetElm, group) {
 
         introItems[nextStep] = {
           element: currentElement,
+          title: currentElement.getAttribute("data-title"),
           intro: currentElement.getAttribute("data-intro"),
           step: nextStep + 1,
           tooltipClass: currentElement.getAttribute("data-tooltipclass"),

@@ -168,14 +168,12 @@ function _determineAutoPosition(
  * @param {HTMLElement} targetElement
  * @param {HTMLElement} tooltipLayer
  * @param {HTMLElement} arrowLayer
- * @param {HTMLElement} helperNumberLayer
  * @param {Boolean} hintMode
  */
 export default function placeTooltip(
   targetElement,
   tooltipLayer,
   arrowLayer,
-  helperNumberLayer,
   hintMode
 ) {
   let tooltipCssClass = "";
@@ -196,11 +194,6 @@ export default function placeTooltip(
   tooltipLayer.style.marginTop = null;
 
   arrowLayer.style.display = "inherit";
-
-  if (typeof helperNumberLayer !== "undefined" && helperNumberLayer !== null) {
-    helperNumberLayer.style.top = null;
-    helperNumberLayer.style.left = null;
-  }
 
   //prevent error when `this._currentStep` is undefined
   if (!this._introItems[this._currentStep]) return;
@@ -338,14 +331,6 @@ export default function placeTooltip(
       tooltipLayer.style.top = "50%";
       tooltipLayer.style.marginLeft = `-${tooltipOffset.width / 2}px`;
       tooltipLayer.style.marginTop = `-${tooltipOffset.height / 2}px`;
-
-      if (
-        typeof helperNumberLayer !== "undefined" &&
-        helperNumberLayer !== null
-      ) {
-        helperNumberLayer.style.left = `-${tooltipOffset.width / 2 + 18}px`;
-        helperNumberLayer.style.top = `-${tooltipOffset.height / 2 + 18}px`;
-      }
 
       break;
     case "bottom-right-aligned":

@@ -346,7 +346,7 @@ export function showHintDialog(stepId) {
   document.body.appendChild(referenceLayer);
 
   //set proper position
-  placeTooltip.call(this, hintElement, tooltipLayer, arrowLayer, null, true);
+  placeTooltip.call(this, hintElement, tooltipLayer, arrowLayer, true);
 }
 
 /**

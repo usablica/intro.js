@@ -33,11 +33,11 @@ function IntroJs(obj) {
 
   this._options = {
     /* Next button label in tooltip box */
-    nextLabel: "Next &rarr;",
+    nextLabel: "Next",
     /* Previous button label in tooltip box */
-    prevLabel: "&larr; Back",
+    prevLabel: "Back",
     /* Skip button label in tooltip box */
-    skipLabel: "Skip",
+    skipLabel: "×",
     /* Done button label in tooltip box */
     doneLabel: "Done",
     /* Hide previous button in the first step? Otherwise, it will be disabled button. */
