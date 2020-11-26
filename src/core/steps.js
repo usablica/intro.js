@@ -57,7 +57,7 @@ export function nextStep() {
   let continueStep = true;
 
   if (typeof this._introBeforeChangeCallback !== "undefined") {
-    continueStep = this._introBeforeChangeCallback.call(this, nextStep.element);
+    continueStep = this._introBeforeChangeCallback.call(this, nextStep && nextStep.element);
   }
 
   // if `onbeforechange` returned `false`, stop displaying the element
@@ -98,7 +98,7 @@ export function previousStep() {
   let continueStep = true;
 
   if (typeof this._introBeforeChangeCallback !== "undefined") {
-    continueStep = this._introBeforeChangeCallback.call(this, nextStep.element);
+    continueStep = this._introBeforeChangeCallback.call(this, nextStep && nextStep.element);
   }
 
   // if `onbeforechange` returned `false`, stop displaying the element
