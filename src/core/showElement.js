@@ -129,7 +129,7 @@ export default function _showElement(targetElement) {
     self._lastShowElementTimer = window.setTimeout(() => {
       // set current step to the label
       if (oldHelperNumberLayer !== null) {
-        oldHelperNumberLayer.innerHTML = targetElement.step;
+        oldHelperNumberLayer.innerHTML = `${targetElement.step} of ${this._introItems.length}`;
       }
 
       // set current tooltip text
@@ -168,12 +168,12 @@ export default function _showElement(targetElement) {
 
       //reset button focus
       if (
-        typeof skipTooltipButton !== "undefined" &&
-        skipTooltipButton !== null &&
-        /introjs-donebutton/gi.test(skipTooltipButton.className)
+        typeof nextTooltipButton !== "undefined" &&
+        nextTooltipButton !== null &&
+        /introjs-donebutton/gi.test(nextTooltipButton.className)
       ) {
         // skip button is now "done" button
-        skipTooltipButton.focus();
+        nextTooltipButton.focus();
       } else if (
         typeof nextTooltipButton !== "undefined" &&
         nextTooltipButton !== null
@@ -314,7 +314,7 @@ export default function _showElement(targetElement) {
 
     if (this._options.showStepNumbers === true) {
       helperNumberLayer.className = "introjs-helperNumberLayer";
-      helperNumberLayer.innerHTML = targetElement.step;
+      helperNumberLayer.innerHTML = `${targetElement.step} of ${this._introItems.length}`;
       tooltipLayer.appendChild(helperNumberLayer);
     }
 
@@ -327,6 +327,12 @@ export default function _showElement(targetElement) {
     nextTooltipButton.onclick = () => {
       if (self._introItems.length - 1 !== self._currentStep) {
         nextStep.call(self);
+      } else if (/introjs-donebutton/gi.test(nextTooltipButton.className)) {
+        if (typeof self._introCompleteCallback === "function") {
+          self._introCompleteCallback.call(self);
+        }
+
+        exitIntro.call(self, self._targetElement);
       }
     };
 
@@ -408,12 +414,6 @@ export default function _showElement(targetElement) {
   // when it's the first step of tour
   if (this._currentStep === 0 && this._introItems.length > 1) {
     if (
-      typeof skipTooltipButton !== "undefined" &&
-      skipTooltipButton !== null
-    ) {
-      skipTooltipButton.className = 'introjs-skipbutton';
-    }
-    if (
       typeof nextTooltipButton !== "undefined" &&
       nextTooltipButton !== null
     ) {
@@ -441,26 +441,11 @@ export default function _showElement(targetElement) {
         prevTooltipButton.className = `${this._options.buttonClass} introjs-prevbutton introjs-disabled`;
       }
     }
-
-    if (
-      typeof skipTooltipButton !== "undefined" &&
-      skipTooltipButton !== null
-    ) {
-      skipTooltipButton.innerHTML = this._options.skipLabel;
-    }
   } else if (
     this._introItems.length - 1 === this._currentStep ||
     this._introItems.length === 1
   ) {
     // last step of tour
-    if (
-      typeof skipTooltipButton !== "undefined" &&
-      skipTooltipButton !== null
-    ) {
-      skipTooltipButton.innerHTML = this._options.doneLabel;
-      // adding donebutton class in addition to skipbutton
-      addClass(skipTooltipButton, "introjs-donebutton");
-    }
     if (
       typeof prevTooltipButton !== "undefined" &&
       prevTooltipButton !== null
@@ -486,17 +471,17 @@ export default function _showElement(targetElement) {
         typeof nextTooltipButton !== "undefined" &&
         nextTooltipButton !== null
       ) {
-        nextTooltipButton.className = `${this._options.buttonClass} introjs-nextbutton introjs-disabled`;
+        if (this._options.nextToDone === true) {
+          nextTooltipButton.innerHTML = this._options.doneLabel;
+          addClass(nextTooltipButton, "introjs-donebutton");
+        } else {
+          nextTooltipButton.className = `${this._options.buttonClass} introjs-nextbutton introjs-disabled`;
+        }
       }
+
     }
   } else {
     // steps between start and end
-    if (
-      typeof skipTooltipButton !== "undefined" &&
-      skipTooltipButton !== null
-    ) {
-      skipTooltipButton.className = 'introjs-skipbutton';
-    }
     if (
       typeof prevTooltipButton !== "undefined" &&
       prevTooltipButton !== null
@@ -508,12 +493,7 @@ export default function _showElement(targetElement) {
       nextTooltipButton !== null
     ) {
       nextTooltipButton.className = `${this._options.buttonClass} introjs-nextbutton`;
-    }
-    if (
-      typeof skipTooltipButton !== "undefined" &&
-      skipTooltipButton !== null
-    ) {
-      skipTooltipButton.innerHTML = this._options.skipLabel;
+      nextTooltipButton.innerHTML = this._options.nextLabel;
     }
   }
 

@@ -192,10 +192,10 @@ tr.introjs-showElement {
   position: absolute;
   visibility: visible;
   background-color: $white;
-  min-width: 200px;
+  min-width: 250px;
   max-width: 300px;
   border-radius: 3px;
-  box-shadow: 0 1px 10px rgba($black900, 0.4);
+  box-shadow: 0 3px 30px rgba($black900, 0.3);
   transition: opacity 0.1s ease-out;
 }
 
@@ -423,7 +423,7 @@ tr.introjs-showElement {
   box-sizing: content-box;
   overflow: hidden;
   height: 10px;
-  margin: 10px 0 5px 0;
+  margin: 10px;
   border-radius: 4px;
   background-color: $black300;
 }
