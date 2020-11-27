@@ -418,6 +418,7 @@ export default function _showElement(targetElement) {
       nextTooltipButton !== null
     ) {
       nextTooltipButton.className = `${this._options.buttonClass} introjs-nextbutton`;
+      nextTooltipButton.innerHTML = this._options.nextLabel;
     }
 
     if (this._options.hidePrev === true) {

@@ -247,10 +247,7 @@ tr.introjs-showElement {
   overflow: visible;
   display: inline-block;
 
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding: 0.5rem 1rem;
 
   border: 1px solid $black400;
   text-decoration: none;
@@ -260,34 +257,34 @@ tr.introjs-showElement {
   white-space: nowrap;
   cursor: pointer;
   outline: none;
-  background-color: $black300;
-  background-image: linear-gradient($black100, #ececec);
-  -webkit-background-clip: padding;
-  -moz-background-clip: padding;
-  -o-background-clip: padding-box;
+  background-color: $black100;
   border-radius: 0.2em;
   zoom: 1;
   *display: inline;
 
   &:hover {
-    border-color: $black400;
     outline: none;
     text-decoration: none;
-    box-shadow: 0px 1px 1px #e3e3e3;
+    border-color: $black500;
+    background-color: $black300;
+    color: $black900;
   }
 
   &:focus {
     outline: none;
     text-decoration: none;
-    background-image: linear-gradient(#ececec, $black100);
-    box-shadow: 0 0 0 2px rgba($black900, 0.3);
-    border: 1px solid $black900;
+    background-color: $black200;
+    box-shadow: 0 0 0 0.2rem rgba($black500,.5);
+    border: 1px solid $black600;
+    color: $black900;
   }
 
   &:active {
     outline: none;
     text-decoration: none;
-    background-image: linear-gradient(#ececec, $black100);
+    background-color: $black300;
+    border-color: $black500;
+    color: $black900;
   }
 
   &::-moz-focus-inner {
@@ -323,17 +320,8 @@ tr.introjs-showElement {
   float: left;
 }
 
-.introjs-prevbutton.introjs-fullbutton {
-  border: 1px solid $black400;
-  border-radius: 0.2em;
-}
-
 .introjs-nextbutton {
   float: right;
-}
-
-.introjs-nextbutton.introjs-fullbutton {
-  border-radius: 0.2em;
 }
 
 .introjs-disabled {
