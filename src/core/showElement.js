@@ -234,8 +234,8 @@ export default function _showElement(targetElement) {
     // make sure these are cleaned up on exit
     this.once('exit', function () {
       removeChild(helperLayer, true);
-      removeChild(referenceLayer)
-    }, this)
+      removeChild(referenceLayer);
+    }, this);
 
     setStyle(helperLayer, {
       'box-shadow': `0 0 1px 2px rgba(33, 33, 33, 0.8), rgba(33, 33, 33, ${self._options.overlayOpacity.toString()}) 0 0 0 5000px`

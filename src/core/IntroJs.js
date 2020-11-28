@@ -71,4 +71,4 @@ function IntroJs(obj) {
   };
 }
 
-export default IntroJs
+export default IntroJs;
