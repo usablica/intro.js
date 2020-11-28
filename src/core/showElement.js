@@ -6,18 +6,19 @@ import scrollTo from "../util/scrollTo";
 import exitIntro from "./exitIntro";
 import forEach from "../util/forEach";
 import setAnchorAsButton from "../util/setAnchorAsButton";
-import { nextStep, previousStep } from "./steps";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import removeShowElement from "./removeShowElement";
 import createElement from "../util/createElement";
 import setStyle from "../util/setStyle";
 import appendChild from "../util/appendChild";
+import removeChild from "../util/removeChild";
 
 /**
  * Gets the current progress percentage
  *
  * @api private
+ * @this { import('./IntroJs').default }
  * @method _getProgress
  * @returns current progress percentage
  */
@@ -31,6 +32,7 @@ function _getProgress() {
  * Add disableinteraction layer and adjust the size and position of the layer
  *
  * @api private
+ * @this { import('./IntroJs').default }
  * @method _disableInteraction
  */
 function _disableInteraction() {
@@ -53,6 +55,7 @@ function _disableInteraction() {
  * Show an element on the page
  *
  * @api private
+ * @this { import('./IntroJs').default }
  * @method _showElement
  * @param {Object} targetElement
  */
@@ -209,12 +212,30 @@ export default function _showElement(targetElement) {
     const referenceLayer = createElement("div", {
       className: "introjs-tooltipReferenceLayer"
     });
-    const arrowLayer = createElement("div");
-    const tooltipLayer = createElement("div");
-    const tooltipTextLayer = createElement("div");
-    const bulletsLayer = createElement("div");
-    const progressLayer = createElement("div");
-    const buttonsLayer = createElement("div");
+    const arrowLayer = createElement("div", {
+      className: "introjs-arrow"
+    });
+    const tooltipLayer = createElement("div", {
+      className: "introjs-tooltip"
+    });
+    const tooltipTextLayer = createElement("div", {
+      className: "introjs-tooltiptext"
+    });
+    const bulletsLayer = createElement("div", {
+      className: "introjs-bullets"
+    });
+    const progressLayer = createElement("div", {
+      className: "introjs-progress"
+    });
+    const buttonsLayer = createElement("div", {
+      className: "introjs-tooltipbuttons"
+    });
+
+    // make sure these are cleaned up on exit
+    this.once('exit', function () {
+      removeChild(helperLayer, true);
+      removeChild(referenceLayer)
+    }, this)
 
     setStyle(helperLayer, {
       'box-shadow': `0 0 1px 2px rgba(33, 33, 33, 0.8), rgba(33, 33, 33, ${self._options.overlayOpacity.toString()}) 0 0 0 5000px`
@@ -236,12 +257,7 @@ export default function _showElement(targetElement) {
     appendChild(this._targetElement, helperLayer, true);
     appendChild(this._targetElement, referenceLayer);
 
-    arrowLayer.className = "introjs-arrow";
-
-    tooltipTextLayer.className = "introjs-tooltiptext";
     tooltipTextLayer.innerHTML = targetElement.intro;
-
-    bulletsLayer.className = "introjs-bullets";
 
     if (this._options.showBullets === false) {
       bulletsLayer.style.display = "none";
@@ -277,8 +293,6 @@ export default function _showElement(targetElement) {
 
     bulletsLayer.appendChild(ulContainer);
 
-    progressLayer.className = "introjs-progress";
-
     if (this._options.showProgress === false) {
       progressLayer.style.display = "none";
     }
@@ -298,12 +312,10 @@ export default function _showElement(targetElement) {
 
     progressLayer.appendChild(progressBar);
 
-    buttonsLayer.className = "introjs-tooltipbuttons";
     if (this._options.showButtons === false) {
       buttonsLayer.style.display = "none";
     }
 
-    tooltipLayer.className = "introjs-tooltip";
     tooltipLayer.appendChild(tooltipTextLayer);
     tooltipLayer.appendChild(bulletsLayer);
     tooltipLayer.appendChild(progressLayer);
@@ -324,8 +336,9 @@ export default function _showElement(targetElement) {
     nextTooltipButton = createElement("a");
 
     nextTooltipButton.onclick = () => {
-      if (self._introItems.length - 1 !== self._currentStep) {
-        nextStep.call(self);
+      if (this._introItems.length - 1 !== this._currentStep) {
+        // defined and bound in index.js
+        this.nextStep();
       }
     };
 
@@ -336,8 +349,9 @@ export default function _showElement(targetElement) {
     prevTooltipButton = createElement("a");
 
     prevTooltipButton.onclick = () => {
-      if (self._currentStep !== 0) {
-        previousStep.call(self);
+      if (this._currentStep !== 0) {
+        // defined and bound in index.js
+        this.previousStep();
       }
     };
 

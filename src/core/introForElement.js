@@ -2,7 +2,6 @@ import addOverlayLayer from "./addOverlayLayer";
 import cloneObject from "../util/cloneObject";
 import forEach from "../util/forEach";
 import DOMEvent from "./DOMEvent";
-import { nextStep } from "./steps";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import createElement from "../util/createElement";
@@ -11,6 +10,7 @@ import createElement from "../util/createElement";
  * Initiate a new introduction/guide from an element in the page
  *
  * @api private
+ * @this {import('./IntroJs').default}
  * @method _introForElement
  * @param {Object} targetElm
  * @param {String} group
@@ -172,22 +172,32 @@ export default function introForElement(targetElm, group) {
 
   introItems = tempIntroItems;
 
-  //Ok, sort all items with given steps
+  // Ok, sort all items with given steps
   introItems.sort((a, b) => a.step - b.step);
 
-  //set it to the introJs object
+  // set it to the introJs object
   this._introItems = introItems;
 
-  //add overlay layer to the page
+  // add overlay layer to the page
   if (addOverlayLayer.call(this, targetElm)) {
-    //then, start the show
-    nextStep.call(this);
+    // then, start the show
+    this.nextStep();
 
     if (this._options.keyboardNavigation) {
       DOMEvent.on(window, "keydown", onKeyDown, this, true);
+      
+      this.once('exit', function removeKeyDown () {
+        DOMEvent.off(window, "keydown", onKeyDown, this, true);
+      });
     }
-    //for window resize
+    // for window resize
     DOMEvent.on(window, "resize", onResize, this, true);
+
+    this.once('exit', function removeResize () {
+      DOMEvent.off(window, "resize", onResize, this, true);
+    });
   }
+
+  // TODO: Why does this return false?
   return false;
 }

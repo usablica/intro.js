@@ -1,7 +1,4 @@
 import forEach from "../util/forEach";
-import DOMEvent from "./DOMEvent";
-import onKeyDown from "./onKeyDown";
-import onResize from "./onResize";
 import removeShowElement from "./removeShowElement";
 import removeChild from "../util/removeChild";
 
@@ -9,6 +6,7 @@ import removeChild from "../util/removeChild";
  * Exit from intro
  *
  * @api private
+ * @this {import('./IntroJs').default}
  * @method _exitIntro
  * @param {Object} targetElement
  * @param {Boolean} force - Setting to `true` will skip the result of beforeExit callback
@@ -34,15 +32,6 @@ export default function exitIntro(targetElement, force) {
     forEach(overlayLayers, (overlayLayer) => removeChild(overlayLayer));
   }
 
-  //remove all helper layers
-  const helperLayer = targetElement.querySelector(".introjs-helperLayer");
-  removeChild(helperLayer, true);
-
-  const referenceLayer = targetElement.querySelector(
-    ".introjs-tooltipReferenceLayer"
-  );
-  removeChild(referenceLayer);
-
   //remove disableInteractionLayer
   const disableInteractionLayer = targetElement.querySelector(
     ".introjs-disableInteraction"
@@ -55,15 +44,13 @@ export default function exitIntro(targetElement, force) {
 
   removeShowElement();
 
-  //clean listeners
-  DOMEvent.off(window, "keydown", onKeyDown, this, true);
-  DOMEvent.off(window, "resize", onResize, this, true);
+  // signal to all listeners that introjs has exited
+  this.fire('exit');
 
-  //check if any callback is defined
+  // check if any callback is defined
   if (this._introExitCallback !== undefined) {
     this._introExitCallback.call(this);
   }
 
-  //set the step to zero
   this._currentStep = undefined;
 }
