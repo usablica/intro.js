@@ -23,17 +23,14 @@ export default function refresh() {
 
   // re-align tooltip
   if (this._currentStep !== undefined && this._currentStep !== null) {
-    const oldHelperNumberLayer = document.querySelector(
-      ".introjs-helperNumberLayer"
-    );
     const oldArrowLayer = document.querySelector(".introjs-arrow");
     const oldtooltipContainer = document.querySelector(".introjs-tooltip");
+
     placeTooltip.call(
       this,
       this._introItems[this._currentStep].element,
       oldtooltipContainer,
-      oldArrowLayer,
-      oldHelperNumberLayer
+      oldArrowLayer
     );
   }
 

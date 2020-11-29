@@ -8,7 +8,7 @@ $black200: #eeeeee;
 $black100: #f4f4f4;
 $white: #ffffff;
 
-$font_family: Arial, verdana, tahoma;
+$font_family: "Helvetica Neue", Inter, ui-sans-serif, "Apple Color Emoji", Helvetica, Arial, sans-serif;
 $background_color_9: #08c;
 $background_color_10: rgba(136, 136, 136, 0.24);
 
@@ -98,38 +98,25 @@ tr.introjs-showElement {
 }
 
 .introjs-tooltipReferenceLayer {
+  font-family: $font_family;
   box-sizing: content-box;
   position: absolute;
   visibility: hidden;
   z-index: 100000000;
   background-color: transparent;
   transition: all 0.3s ease-out;
+
+  * {
+    font-family: $font_family;
+  }
 }
 
 .introjs-helperNumberLayer {
-  box-sizing: content-box;
-  position: absolute;
-  visibility: visible;
-  top: -16px;
-  left: -16px;
-  z-index: 9999999999 !important;
-  padding: 2px;
   font-family: $font_family;
-  font-size: 13px;
-  font-weight: bold;
-  color: $white;
+  color: $black500;
   text-align: center;
-  text-shadow: 1px 1px 1px rgba($black900, 0.3);
-  background: #ff3019;
-  background: linear-gradient(to bottom, #ff3019 0%, #cf0404 100%);
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  border: 3px solid white;
-  border-radius: 50%;
-  filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3019', endColorstr='#cf0404', GradientType=0)";
-  filter: "progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000)";
-  box-shadow: 0 2px 5px rgba($black900, 0.4);
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .introjs-arrow {
@@ -140,6 +127,7 @@ tr.introjs-showElement {
 
 .introjs-arrow.top {
   top: -10px;
+  left: 10px;
   border-bottom-color: $white;
 }
 
@@ -170,6 +158,7 @@ tr.introjs-showElement {
 
 .introjs-arrow.bottom {
   bottom: -10px;
+  left: 10px;
   border-top-color: $white;
 }
 
@@ -202,18 +191,54 @@ tr.introjs-showElement {
   box-sizing: content-box;
   position: absolute;
   visibility: visible;
-  padding: 10px;
   background-color: $white;
-  min-width: 200px;
+  min-width: 250px;
   max-width: 300px;
-  border-radius: 3px;
-  box-shadow: 0 1px 10px rgba($black900, 0.4);
+  border-radius: 5px;
+  box-shadow: 0 3px 30px rgba($black900, 0.3);
   transition: opacity 0.1s ease-out;
 }
 
+.introjs-tooltiptext {
+  padding: 20px;
+}
+
+.introjs-tooltip-title {
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+  font-weight: 700;
+  float: left;
+  line-height: 32px;
+}
+
+.introjs-tooltip-header {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+
+  &:after {
+    content: ".";
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+  }
+}
+
 .introjs-tooltipbuttons {
+  border-top: 1px solid $black300;
+  padding: 10px;
   text-align: right;
   white-space: nowrap;
+
+  &:after {
+    content: "";
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+  }
 }
 
 .introjs-button {
@@ -221,37 +246,45 @@ tr.introjs-showElement {
   position: relative;
   overflow: visible;
   display: inline-block;
-  padding: 0.3em 0.8em;
+
+  padding: 0.5rem 1rem;
+
   border: 1px solid $black400;
   text-decoration: none;
   text-shadow: 1px 1px 0 $white;
-  font: 11px / normal sans-serif;
+  font-size: 14px;
   color: $black800;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
-  background-color: $black300;
-  background-image: linear-gradient($black100, #ececec);
-  -webkit-background-clip: padding;
-  -moz-background-clip: padding;
-  -o-background-clip: padding-box;
+  background-color: $black100;
   border-radius: 0.2em;
   zoom: 1;
   *display: inline;
-  margin: 10px 0 0;
 
   &:hover {
-    border-color: $black400;
+    outline: none;
     text-decoration: none;
-    box-shadow: 0px 1px 1px #e3e3e3;
+    border-color: $black500;
+    background-color: $black300;
+    color: $black900;
   }
 
   &:focus {
-    background-image: linear-gradient(#ececec, $black100);
+    outline: none;
+    text-decoration: none;
+    background-color: $black200;
+    box-shadow: 0 0 0 0.2rem rgba($black500,.5);
+    border: 1px solid $black600;
+    color: $black900;
   }
 
   &:active {
-    background-image: linear-gradient(#ececec, $black100);
+    outline: none;
+    text-decoration: none;
+    background-color: $black300;
+    border-color: $black500;
+    color: $black900;
   }
 
   &::-moz-focus-inner {
@@ -262,26 +295,29 @@ tr.introjs-showElement {
 
 .introjs-skipbutton {
   box-sizing: content-box;
-  margin-right: 5px;
   color: $black600;
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: 1;
+  text-align: center;
+  padding: 7px 10px;
+
+  &:hover,
+  &:focus {
+    color: $black900;
+    outline: none;
+    text-decoration: none;
+  }
 }
 
 .introjs-prevbutton {
-  border-radius: 0.2em 0 0 0.2em;
-  border-right: none;
-}
-
-.introjs-prevbutton.introjs-fullbutton {
-  border: 1px solid $black400;
-  border-radius: 0.2em;
+  float: left;
 }
 
 .introjs-nextbutton {
-  border-radius: 0 0.2em 0.2em 0;
-}
-
-.introjs-nextbutton.introjs-fullbutton {
-  border-radius: 0.2em;
+  float: right;
 }
 
 .introjs-disabled {
@@ -293,16 +329,7 @@ tr.introjs-showElement {
   background-image: none;
   text-decoration: none;
 
-  &:hover {
-    color: $black500;
-    border-color: $black400;
-    box-shadow: none;
-    cursor: default;
-    background-color: $black100;
-    background-image: none;
-    text-decoration: none;
-  }
-
+  &:hover,
   &:focus {
     color: $black500;
     border-color: $black400;
@@ -320,11 +347,13 @@ tr.introjs-showElement {
 
 .introjs-bullets {
   text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
 
   ul {
     box-sizing: content-box;
     clear: both;
-    margin: 15px auto 0;
+    margin: 0 auto 0;
     padding: 0;
     display: inline-block;
 
@@ -335,6 +364,7 @@ tr.introjs-showElement {
       margin: 0 2px;
 
       a {
+        transition: width 0.1s ease-in;
         box-sizing: content-box;
         display: block;
         width: 6px;
@@ -344,12 +374,17 @@ tr.introjs-showElement {
         text-decoration: none;
         cursor: pointer;
 
-        &:hover {
+        &:hover,
+        &:focus {
+          width: 15px;
           background: #999;
+          text-decoration: none;
+          outline: none;
         }
       }
 
       a.active {
+        width: 15px;
         background: #999;
       }
     }
@@ -360,7 +395,7 @@ tr.introjs-showElement {
   box-sizing: content-box;
   overflow: hidden;
   height: 10px;
-  margin: 10px 0 5px 0;
+  margin: 10px;
   border-radius: 4px;
   background-color: $black300;
 }

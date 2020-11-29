@@ -33,17 +33,19 @@ function IntroJs(obj) {
 
   this._options = {
     /* Next button label in tooltip box */
-    nextLabel: "Next &rarr;",
+    nextLabel: "Next",
     /* Previous button label in tooltip box */
-    prevLabel: "&larr; Back",
+    prevLabel: "Back",
     /* Skip button label in tooltip box */
-    skipLabel: "Skip",
+    skipLabel: "×",
     /* Done button label in tooltip box */
     doneLabel: "Done",
     /* Hide previous button in the first step? Otherwise, it will be disabled button. */
     hidePrev: false,
     /* Hide next button in the last step? Otherwise, it will be disabled button. */
     hideNext: false,
+    /* Change the Next button to Done in the last step of the intro? otherwise, it will render a disabled button */
+    nextToDone: true,
     /* Default tooltip box position */
     tooltipPosition: "bottom",
     /* Next CSS class for tooltip boxes */
@@ -55,7 +57,7 @@ function IntroJs(obj) {
     /* Close introduction when clicking on overlay layer? */
     exitOnOverlayClick: true,
     /* Show step numbers in introduction? */
-    showStepNumbers: true,
+    showStepNumbers: false,
     /* Let user use keyboard to navigate the tour? */
     keyboardNavigation: true,
     /* Show tour control buttons? */
