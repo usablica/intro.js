@@ -233,7 +233,7 @@ tr.introjs-showElement {
   white-space: nowrap;
 
   &:after {
-    content: ".";
+    content: "";
     visibility: hidden;
     display: block;
     height: 0;
