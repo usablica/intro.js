@@ -16,14 +16,11 @@ const DOMEvent = (() => {
     /**
      * Gets a unique ID for an event listener
      *
-     * @param obj Object
      * @param type event type
      * @param listener Function
-     * @param context Object
      * @return String
      */
-    this._id = (obj, type, listener, context) =>
-      type + stamp(listener) + (context ? `_${stamp(context)}` : "");
+    this._id = (type, listener) => type + stamp(listener);
 
     /**
      * Adds event listener
@@ -36,7 +33,7 @@ const DOMEvent = (() => {
      * @return null
      */
     this.on = function (obj, type, listener, context, useCapture) {
-      const id = this._id.apply(this, arguments);
+      const id = this._id(type, listener);
       const handler = (e) => listener.call(context || obj, e || window.event);
 
       if ("addEventListener" in obj) {
@@ -59,8 +56,8 @@ const DOMEvent = (() => {
      * @param useCapture Boolean
      * @return null
      */
-    this.off = function (obj, type, listener, context, useCapture) {
-      const id = this._id.apply(this, arguments);
+    this.off = function (obj, type, listener, _context, useCapture) {
+      const id = this._id(type, listener);
       const handler = obj[events_key] && obj[events_key][id];
 
       if (!handler) {
