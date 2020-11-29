@@ -102,7 +102,7 @@ export default function introForElement(targetElm, group) {
       if (step > 0) {
         introItems[step - 1] = {
           element: currentElement,
-          title: currentElement.getAttribute("data-title"),
+          title: currentElement.getAttribute("data-title") || '',
           intro: currentElement.getAttribute("data-intro"),
           step: parseInt(currentElement.getAttribute("data-step"), 10),
           tooltipClass: currentElement.getAttribute("data-tooltipclass"),
@@ -148,7 +148,7 @@ export default function introForElement(targetElm, group) {
 
         introItems[nextStep] = {
           element: currentElement,
-          title: currentElement.getAttribute("data-title"),
+          title: currentElement.getAttribute("data-title") || '',
           intro: currentElement.getAttribute("data-intro"),
           step: nextStep + 1,
           tooltipClass: currentElement.getAttribute("data-tooltipclass"),
