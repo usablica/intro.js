@@ -1,4 +1,18 @@
 module.exports = {
+  "env": {
+    test: {
+      presets: [
+        [
+          "@babel/env",
+          {
+            targets: {
+              browsers: "> 0.5%, ie >= 11"
+            }
+          }
+        ]
+      ]
+    }
+  },
   "presets": [
     [
       "@babel/env",
