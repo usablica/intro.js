@@ -4,7 +4,7 @@
 [![](https://data.jsdelivr.com/v1/package/npm/intro.js/badge)](https://www.jsdelivr.com/package/npm/intro.js)
 [![npm](https://img.shields.io/npm/dm/intro.js)](https://www.jsdelivr.com/package/npm/intro.js)
 
-> Better introductions for websites and features with a step-by-step guide for your projects.
+> Lightweight, user-friendly onboarding tour library
 
 ## Where to get
 You can obtain your local copy of Intro.js from:
@@ -60,22 +60,6 @@ First you should install `nodejs` and `npm`, then first run this command: `npm i
 Now you can run this command to minify all static resources:
 
     npm run build
-
-## Instant IntroJs
-
-Want to learn faster and easier? Here we have **Instant IntroJs**, Packt Publishing.
-
-<p align="center">
-  <a target='_blank' href="https://www.packtpub.com/eu/application-development/instant-introjs-instant">
-    <img src='https://www.packtpub.com/media/catalog/product/cache/4cdce5a811acc0d2926d7f857dceb83b/2/5/2517os_instant20introjs20starter.jpg' />
-  </a>
-</p>
-
-<p align="center">
-  <a target='_blank' href="https://www.packtpub.com/eu/application-development/instant-introjs-instant">Buy and Download</a>
-</p>
-
-## <a href="https://github.com/usablica/intro.js/blob/master/changelog.md">Release History</a>
 
 ## Contributors ✨
 
