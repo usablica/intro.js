@@ -295,20 +295,16 @@ tr.introjs-showElement {
 
 .introjs-skipbutton {
   box-sizing: content-box;
-  margin-right: 5px;
   color: $black600;
   float: right;
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
   font-weight: bold;
-  line-height: 32px;
+  line-height: 1;
+  text-align: center;
+  padding: 7px 10px;
 
-  &:hover {
-    color: $black900;
-    outline: none;
-    text-decoration: none;
-  }
-
+  &:hover,
   &:focus {
     color: $black900;
     outline: none;
@@ -333,16 +329,7 @@ tr.introjs-showElement {
   background-image: none;
   text-decoration: none;
 
-  &:hover {
-    color: $black500;
-    border-color: $black400;
-    box-shadow: none;
-    cursor: default;
-    background-color: $black100;
-    background-image: none;
-    text-decoration: none;
-  }
-
+  &:hover,
   &:focus {
     color: $black500;
     border-color: $black400;
@@ -387,13 +374,10 @@ tr.introjs-showElement {
         text-decoration: none;
         cursor: pointer;
 
-        &:hover {
-          width: 15px;
-          background: #999;
-        }
-
+        &:hover,
         &:focus {
           width: 15px;
+          background: #999;
           text-decoration: none;
           outline: none;
         }
