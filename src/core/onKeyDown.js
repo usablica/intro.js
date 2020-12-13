@@ -37,7 +37,7 @@ export default function onKeyDown(e) {
   } else if (code === "ArrowRight" || code === 39) {
     //right arrow
     nextStep.call(this);
-  } else if (code === "Enter" || code === 13) {
+  } else if (code === "Enter" || code === "NumpadEnter" || code === 13) {
     //srcElement === ie
     const target = e.target || e.srcElement;
     if (target && target.className.match("introjs-prevbutton")) {
