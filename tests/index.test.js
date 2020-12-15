@@ -2,7 +2,7 @@ import introJs from "../src";
 import { find, content, className } from "./helper";
 
 describe("intro", () => {
-  afterEach(() => {
+  beforeEach(() => {
     document.getElementsByTagName("html")[0].innerHTML = "";
   });
 
