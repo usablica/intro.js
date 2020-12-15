@@ -24,5 +24,32 @@ describe('addClass', () => {
 
       expect(el.className).toBe('firstClass secondClass');
     });
+
+    test('should not append duplicate classNames to svg elements', () => {
+      const el = document.createElement('svg');
+      el.className = 'firstClass';
+
+      addClass(el, 'firstClass');
+
+      expect(el.className).toBe('firstClass');
+    });
+
+    test('should not append duplicate classNames to elements', () => {
+      const el = document.createElement('div');
+      el.className = 'firstClass';
+
+      addClass(el, 'firstClass');
+
+      expect(el.className).toBe('firstClass');
+    });
+
+    test('should not append duplicate list of classNames to elements', () => {
+      const el = document.createElement('div');
+      el.className = 'firstClass firstClass';
+
+      addClass(el, 'firstClass firstClass firstClass');
+
+      expect(el.className).toBe('firstClass');
+    });
   }
 );

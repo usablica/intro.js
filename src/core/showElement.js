@@ -376,12 +376,14 @@ export default function _showElement(targetElement) {
 
     tooltipHeaderLayer.appendChild(skipTooltipButton);
 
-    //in order to prevent displaying next/previous button always
+    //in order to prevent displaying previous button always
     if (this._introItems.length > 1) {
       buttonsLayer.appendChild(prevTooltipButton);
-      buttonsLayer.appendChild(nextTooltipButton);
     }
 
+    // we always need the next button because this
+    // button changes to "Done" in the last step of the tour
+    buttonsLayer.appendChild(nextTooltipButton);
     tooltipLayer.appendChild(buttonsLayer);
 
     //set proper position
@@ -474,7 +476,7 @@ export default function _showElement(targetElement) {
       ) {
         if (this._options.nextToDone === true) {
           nextTooltipButton.innerHTML = this._options.doneLabel;
-          addClass(nextTooltipButton, "introjs-donebutton");
+          addClass(nextTooltipButton, `${this._options.buttonClass} introjs-nextbutton introjs-donebutton`);
         } else {
           nextTooltipButton.className = `${this._options.buttonClass} introjs-nextbutton introjs-disabled`;
         }
