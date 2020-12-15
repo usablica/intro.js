@@ -1,6 +1,6 @@
 /**
  * Create a DOM element with various attributes
- * 
+ *
  * @param {String} tagname
  * @param {Object} attrs
  * @return Element
@@ -18,7 +18,7 @@ export default function _createElement(tagname, attrs) {
   for (const k in attrs) {
     let v = attrs[k];
 
-    if (k === 'style') {
+    if (k === "style") {
       setStyle(element, v);
     } else if (k.match(setAttRegex)) {
       element.setAttribute(k, v);

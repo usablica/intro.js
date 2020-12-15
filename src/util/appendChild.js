@@ -9,15 +9,15 @@ import setStyle from "./setStyle";
  */
 export default function appendChild(parentElement, element, animate) {
   if (animate) {
-    const existingOpacity = element.style.opacity || '1';
+    const existingOpacity = element.style.opacity || "1";
 
     setStyle(element, {
-      'opacity': '0'
+      opacity: "0",
     });
 
     window.setTimeout(() => {
       setStyle(element, {
-        'opacity': existingOpacity
+        opacity: existingOpacity,
       });
     }, 10);
   }

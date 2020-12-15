@@ -40,7 +40,7 @@ function _disableInteraction() {
 
   if (disableInteractionLayer === null) {
     disableInteractionLayer = createElement("div", {
-      className: "introjs-disableInteraction"
+      className: "introjs-disableInteraction",
     });
 
     this._targetElement.appendChild(disableInteractionLayer);
@@ -194,34 +194,34 @@ export default function _showElement(targetElement) {
     // end of old element if-else condition
   } else {
     const helperLayer = createElement("div", {
-      className: highlightClass
+      className: highlightClass,
     });
     const referenceLayer = createElement("div", {
-      className: "introjs-tooltipReferenceLayer"
+      className: "introjs-tooltipReferenceLayer",
     });
     const arrowLayer = createElement("div", {
-      className: "introjs-arrow"
+      className: "introjs-arrow",
     });
     const tooltipLayer = createElement("div", {
-      className: "introjs-tooltip"
+      className: "introjs-tooltip",
     });
     const tooltipTextLayer = createElement("div", {
-      className: "introjs-tooltiptext"
+      className: "introjs-tooltiptext",
     });
     const tooltipHeaderLayer = createElement("div", {
-      className: "introjs-tooltip-header"
+      className: "introjs-tooltip-header",
     });
     const tooltipTitleLayer = createElement("h1", {
-      className: "introjs-tooltip-title"
+      className: "introjs-tooltip-title",
     });
     const bulletsLayer = createElement("div", {
-      className: "introjs-bullets"
+      className: "introjs-bullets",
     });
     const progressLayer = createElement("div");
     const buttonsLayer = createElement("div");
 
     setStyle(helperLayer, {
-      'box-shadow': `0 0 1px 2px rgba(33, 33, 33, 0.8), rgba(33, 33, 33, ${self._options.overlayOpacity.toString()}) 0 0 0 5000px`
+      "box-shadow": `0 0 1px 2px rgba(33, 33, 33, 0.8), rgba(33, 33, 33, ${self._options.overlayOpacity.toString()}) 0 0 0 5000px`,
     });
 
     // scroll to element
@@ -284,11 +284,11 @@ export default function _showElement(targetElement) {
     }
 
     const progressBar = createElement("div", {
-      className: "introjs-progressbar"
+      className: "introjs-progressbar",
     });
 
     if (this._options.progressBarAdditionalClass) {
-      progressBar.className += ' ' + this._options.progressBarAdditionalClass;
+      progressBar.className += " " + this._options.progressBarAdditionalClass;
     }
     progressBar.setAttribute("role", "progress");
     progressBar.setAttribute("aria-valuemin", 0);
@@ -353,7 +353,7 @@ export default function _showElement(targetElement) {
 
     //skip button
     skipTooltipButton = createElement("a", {
-      className: 'introjs-skipbutton'
+      className: "introjs-skipbutton",
     });
 
     setAnchorAsButton(skipTooltipButton);
@@ -387,12 +387,7 @@ export default function _showElement(targetElement) {
     tooltipLayer.appendChild(buttonsLayer);
 
     //set proper position
-    placeTooltip.call(
-      self,
-      targetElement.element,
-      tooltipLayer,
-      arrowLayer
-    );
+    placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer);
 
     // change the scroll of the window, if needed
     scrollTo.call(this, targetElement.scrollTo, targetElement, tooltipLayer);
@@ -476,12 +471,14 @@ export default function _showElement(targetElement) {
       ) {
         if (this._options.nextToDone === true) {
           nextTooltipButton.innerHTML = this._options.doneLabel;
-          addClass(nextTooltipButton, `${this._options.buttonClass} introjs-nextbutton introjs-donebutton`);
+          addClass(
+            nextTooltipButton,
+            `${this._options.buttonClass} introjs-nextbutton introjs-donebutton`
+          );
         } else {
           nextTooltipButton.className = `${this._options.buttonClass} introjs-nextbutton introjs-disabled`;
         }
       }
-
     }
   } else {
     // steps between start and end

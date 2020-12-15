@@ -38,7 +38,7 @@ export default function setHelperLayerPosition(helperLayer) {
       width: `${elementPosition.width + widthHeightPadding}px`,
       height: `${elementPosition.height + widthHeightPadding}px`,
       top: `${elementPosition.top - widthHeightPadding / 2}px`,
-      left: `${elementPosition.left - widthHeightPadding / 2}px`
+      left: `${elementPosition.left - widthHeightPadding / 2}px`,
     });
   }
 }
