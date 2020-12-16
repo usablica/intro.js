@@ -51,4 +51,12 @@ describe("addClass", () => {
 
     expect(el.className).toBe("firstClass");
   });
+
+  test("should not append duplicate list of classNames to an empty className", () => {
+    const el = document.createElement("div");
+
+    addClass(el, "firstClass firstClass firstClass");
+
+    expect(el.className).toBe("firstClass");
+  });
 });
