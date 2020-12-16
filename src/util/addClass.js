@@ -14,7 +14,10 @@ export default function addClass(element, className) {
     // svg
     const pre = element.getAttribute("class") || "";
 
-    element.setAttribute("class", `${pre} ${className}`);
+    if (!pre.match(className)) {
+      // check if element doesn't already have className
+      element.setAttribute("class", `${pre} ${className}`);
+    }
   } else {
     if (element.classList !== undefined) {
       // check for modern classList property
