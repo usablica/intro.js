@@ -9,6 +9,7 @@
     "exports": true,
     "define": true,
     "SVGElement": true,
+    "Element": true,
     "module": true,
     "console": true,
     "global": true,
