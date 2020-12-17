@@ -132,7 +132,7 @@ export function addHints() {
 
   if (hintsWrapper === null) {
     hintsWrapper = createElement("div", {
-      className: "introjs-hints"
+      className: "introjs-hints",
     });
   }
 
@@ -163,7 +163,7 @@ export function addHints() {
     }
 
     const hint = createElement("a", {
-      className: "introjs-hint"
+      className: "introjs-hint",
     });
     setAnchorAsButton(hint);
 
@@ -179,11 +179,11 @@ export function addHints() {
     }
 
     const hintDot = createElement("div", {
-      className: "introjs-hint-dot"
+      className: "introjs-hint-dot",
     });
 
     const hintPulse = createElement("div", {
-      className: "introjs-hint-pulse"
+      className: "introjs-hint-pulse",
     });
 
     hint.appendChild(hintDot);
@@ -294,7 +294,7 @@ export function showHintDialog(stepId) {
   }
 
   const tooltipLayer = createElement("div", {
-    className: "introjs-tooltip"
+    className: "introjs-tooltip",
   });
   const tooltipTextLayer = createElement("div");
   const arrowLayer = createElement("div");

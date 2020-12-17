@@ -12,7 +12,7 @@ import setStyle from "../util/setStyle";
  */
 export default function addOverlayLayer(targetElm) {
   const overlayLayer = createElement("div", {
-    className: "introjs-overlay"
+    className: "introjs-overlay",
   });
 
   const self = this;
@@ -24,7 +24,7 @@ export default function addOverlayLayer(targetElm) {
       bottom: 0,
       left: 0,
       right: 0,
-      position: 'fixed'
+      position: "fixed",
     });
   } else {
     // set overlay layer position
@@ -34,7 +34,7 @@ export default function addOverlayLayer(targetElm) {
         width: `${elementPosition.width}px`,
         height: `${elementPosition.height}px`,
         top: `${elementPosition.top}px`,
-        left: `${elementPosition.left}px`
+        left: `${elementPosition.left}px`,
       });
     }
   }
@@ -43,7 +43,7 @@ export default function addOverlayLayer(targetElm) {
 
   if (self._options.exitOnOverlayClick === true) {
     setStyle(overlayLayer, {
-      cursor: 'pointer'
+      cursor: "pointer",
     });
 
     overlayLayer.onclick = () => {

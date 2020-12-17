@@ -13,7 +13,7 @@ export default function removeChild(element, animate) {
 
   if (animate) {
     setStyle(element, {
-      'opacity': '0',
+      opacity: "0",
     });
 
     window.setTimeout(() => {

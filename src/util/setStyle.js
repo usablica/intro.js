@@ -6,13 +6,13 @@
  * @return null
  */
 export default function setStyle(element, style) {
-  let cssText = '';
+  let cssText = "";
 
   if (element.style.cssText) {
     cssText += element.style.cssText;
   }
 
-  if (typeof style === 'string') {
+  if (typeof style === "string") {
     cssText += style;
   } else {
     for (const rule in style) {
