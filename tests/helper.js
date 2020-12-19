@@ -1,5 +1,5 @@
 export function find(selector) {
-  if (typeof selector === 'string') {
+  if (typeof selector === "string") {
     return document.querySelector(selector);
   }
 
@@ -7,7 +7,7 @@ export function find(selector) {
     return selector;
   }
 
-  throw Error('invalid selector');
+  throw Error("invalid selector");
 }
 
 export function content(selector) {
@@ -31,21 +31,21 @@ export function className(selector) {
 }
 
 export function skipButton() {
-  return find('.introjs-skipbutton');
+  return find(".introjs-skipbutton");
 }
 
 export function nextButton() {
-  return find('.introjs-nextbutton');
+  return find(".introjs-nextbutton");
 }
 
 export function prevButton() {
-  return find('.introjs-prevbutton');
+  return find(".introjs-prevbutton");
 }
 
 export function doneButton() {
-  return find('.introjs-donebutton');
+  return find(".introjs-donebutton");
 }
 
 export function tooltipText() {
-  return find('.introjs-tooltiptext');
+  return find(".introjs-tooltiptext");
 }

@@ -5,7 +5,6 @@ import elementInViewport from "./elementInViewport";
  * To change the scroll of `window` after highlighting an element
  *
  * @api private
- * @method _scrollTo
  * @param {String} scrollTo
  * @param {Object} targetElement
  * @param {Object} tooltipLayer

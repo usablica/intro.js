@@ -1,5 +1,13 @@
 import introJs from "../src";
-import {content, className, skipButton, nextButton, prevButton, doneButton, tooltipText} from "./helper";
+import {
+  content,
+  className,
+  skipButton,
+  nextButton,
+  prevButton,
+  doneButton,
+  tooltipText,
+} from "./helper";
 
 describe("intro", () => {
   beforeEach(() => {
