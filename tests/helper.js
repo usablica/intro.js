@@ -49,3 +49,16 @@ export function doneButton() {
 export function tooltipText() {
   return find(".introjs-tooltiptext");
 }
+
+/**
+ * @returns {Element}
+ */
+export function appendDummyElement(name, text, style) {
+  const el = document.createElement(name || "p");
+  el.innerHTML = text || "hello world";
+  el.style = style;
+
+  document.body.appendChild(el);
+
+  return el;
+}

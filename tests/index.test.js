@@ -7,6 +7,7 @@ import {
   prevButton,
   doneButton,
   tooltipText,
+  appendDummyElement,
 } from "./helper";
 
 describe("intro", () => {
@@ -138,5 +139,76 @@ describe("intro", () => {
     expect(className(".introjs-showElement")).toContain(
       "introjs-relativePosition"
     );
+  });
+
+  test("should highlight the target element", () => {
+    const p = appendDummyElement();
+
+    introJs()
+      .setOptions({
+        steps: [
+          {
+            intro: "step one",
+            element: document.querySelector("p"),
+          },
+        ],
+      })
+      .start();
+
+    expect(p.className).toContain("introjs-showElement");
+    expect(p.className).toContain("introjs-relativePosition");
+  });
+
+  test("should not highlight the target element if queryString is incorrect", () => {
+    const p = appendDummyElement();
+
+    introJs()
+      .setOptions({
+        steps: [
+          {
+            intro: "step one",
+            element: document.querySelector("div"),
+          },
+        ],
+      })
+      .start();
+
+    expect(p.className).not.toContain("introjs-showElement");
+    expect(className(".introjs-showElement")).toContain(
+      "introjsFloatingElement"
+    );
+  });
+
+  test("should not add relativePosition if target element is fixed or absolute", () => {
+    const absolute = appendDummyElement(
+      "h1",
+      "hello world",
+      "position: absolute"
+    );
+    const fixed = appendDummyElement("h2", "hello world", "position: fixed");
+
+    const intro = introJs();
+    intro
+      .setOptions({
+        steps: [
+          {
+            intro: "step one",
+            element: document.querySelector("h1"),
+          },
+          {
+            intro: "step two",
+            element: document.querySelector("h2"),
+          },
+        ],
+      })
+      .start();
+
+    expect(absolute.className).toContain("introjs-showElement");
+    expect(absolute.className).not.toContain("introjs-relativePosition");
+
+    intro.nextStep();
+
+    expect(fixed.className).toContain("introjs-showElement");
+    expect(fixed.className).not.toContain("introjs-relativePosition");
   });
 });
