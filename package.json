@@ -70,7 +70,7 @@
     "labels": {
       "new feature": ":rocket: New Feature",
       "breaking": ":boom: Breaking Change",
-      "bug fix": ":bug: Bug Fix",
+      "bug": ":bug: Bug Fix",
       "polish": ":nail_care: Polish",
       "documentation": ":memo: Documentation",
       "internal": ":house: Internal",
