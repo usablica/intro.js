@@ -1,6 +1,5 @@
 import setShowElement from "../util/setShowElement";
 import scrollParentToElement from "../util/scrollParentToElement";
-import getScrollParent from "../util/getScrollParent";
 import addClass from "../util/addClass";
 import scrollTo from "../util/scrollTo";
 import exitIntro from "./exitIntro";
@@ -106,13 +105,8 @@ export default function _showElement(targetElement) {
     oldtooltipContainer.style.opacity = 0;
     oldtooltipContainer.style.display = "none";
 
-    // scroll to element
-    scrollParent = getScrollParent(targetElement.element);
-
-    if (scrollParent !== document.body) {
-      // target is within a scrollable element
-      scrollParentToElement(scrollParent, targetElement.element);
-    }
+    // if the target element is within a scrollable element
+    scrollParentToElement.call(self, targetElement);
 
     // set new position to helper layer
     setHelperLayerPosition.call(self, oldHelperLayer);
@@ -224,13 +218,8 @@ export default function _showElement(targetElement) {
       "box-shadow": `0 0 1px 2px rgba(33, 33, 33, 0.8), rgba(33, 33, 33, ${self._options.overlayOpacity.toString()}) 0 0 0 5000px`,
     });
 
-    // scroll to element
-    scrollParent = getScrollParent(targetElement.element);
-
-    if (scrollParent !== document.body) {
-      // target is within a scrollable element
-      scrollParentToElement(scrollParent, targetElement.element);
-    }
+    // target is within a scrollable element
+    scrollParentToElement.call(self, targetElement);
 
     //set new position to helper layer
     setHelperLayerPosition.call(self, helperLayer);
