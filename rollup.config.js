@@ -10,9 +10,10 @@ import autoprefixer from 'autoprefixer';
 import normalize from 'postcss-normalize';
 import clean from 'postcss-clean';
 import postcss from 'rollup-plugin-postcss';
+import typescript from 'rollup-plugin-typescript2';
 import { version } from './package.json';
 
-const inputPath = './src'
+const inputPath = './src';
 const outputPath = './dist';
 
 const banner = `/*!
@@ -27,6 +28,7 @@ const banner = `/*!
 `;
 
 const jsPlugins = [
+  typescript(),
   json(),
   resolve(),
   progress(),
@@ -42,7 +44,7 @@ const jsPlugins = [
 const postCSSPlugins = [
   normalize,
   autoprefixer
-]
+];
 
 export default [
   {
@@ -106,7 +108,7 @@ export default [
     ]
   },
   {
-    input: `${inputPath}/index.js`,
+    input: `${inputPath}/index.ts`,
     output: {
       file: `${outputPath}/${pkg.main}`,
       format: 'umd',
@@ -116,7 +118,7 @@ export default [
     plugins: jsPlugins
   },
   {
-    input: `${inputPath}/index.js`,
+    input: `${inputPath}/index.ts`,
     output: {
       file: `${outputPath}/minified/${pkg.main.replace(/\.js$/, '.min.js')}`,
       banner,
