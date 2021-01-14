@@ -1,4 +1,4 @@
-import {IntroItem} from "../index";
+import { IntroItem } from "../index";
 
 /*
  * makes a copy of the object
@@ -6,15 +6,26 @@ import {IntroItem} from "../index";
  * @method _cloneObject
  */
 export default function cloneObject(object: HTMLElement): IntroItem {
-  if (object === null || typeof object !== "object" || typeof object.nodeType !== "undefined") {
+  if (
+    object === null ||
+    typeof object !== "object" ||
+    typeof object.nodeType !== "undefined"
+  ) {
     // @ts-ignore
     return object;
   }
   // @ts-ignore
   const temp: DOMElement = {};
   for (const key in object) {
-    // @ts-ignore
-    temp[key] = typeof window.jQuery !== "undefined" && object[key] instanceof window.jQuery ? object[key] : cloneObject(object[key]);
+    temp[key] =
+      // @ts-ignore
+      typeof window.jQuery !== "undefined" &&
+      // @ts-ignore
+      object[key] instanceof window.jQuery
+        // @ts-ignore
+        ? object[key]
+        // @ts-ignore
+        : cloneObject(object[key]);
   }
   return temp;
 }

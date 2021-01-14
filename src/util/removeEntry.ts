@@ -4,7 +4,10 @@
  * @param {Array} stringArray
  * @param {String} stringToRemove
  */
-export default function removeEntry(stringArray: string[], stringToRemove: string) {
+export default function removeEntry(
+  stringArray: string[],
+  stringToRemove: string
+) {
   if (stringArray.includes(stringToRemove)) {
     stringArray.splice(stringArray.indexOf(stringToRemove), 1);
   }

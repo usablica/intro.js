@@ -7,7 +7,10 @@
  * @param {RegExp|String} classNameRegex can be regex or string
  * @returns null
  */
-export default function removeClass(element: HTMLElement, classNameRegex: string|RegExp) {
+export default function removeClass(
+  element: HTMLElement,
+  classNameRegex: string | RegExp
+) {
   if (element instanceof SVGElement) {
     const pre = element.getAttribute("class") || "";
 

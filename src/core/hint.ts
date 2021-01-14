@@ -9,7 +9,7 @@ import setAnchorAsButton from "../util/setAnchorAsButton";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import createElement from "../util/createElement";
-import {IntroJs} from "../index";
+import { IntroJs } from "../index";
 
 /**
  * Get a queryselector within the hint wrapper
@@ -17,7 +17,9 @@ import {IntroJs} from "../index";
  * @param {String} selector
  * @return {NodeList|Array}
  */
-export function hintQuerySelectorAll(selector: string): NodeListOf<Element> | Element[] {
+export function hintQuerySelectorAll(
+  selector: string
+): NodeListOf<Element> | Element[] {
   const hintsWrapper = document.querySelector(".introjs-hints");
   return hintsWrapper ? hintsWrapper.querySelectorAll(selector) : [];
 }
@@ -28,8 +30,10 @@ export function hintQuerySelectorAll(selector: string): NodeListOf<Element> | El
  * @api private
  * @method hideHint
  */
-export function hideHint(this: IntroJs, stepId: number|undefined|string) {
-  const hint = hintQuerySelectorAll(`.introjs-hint[data-step="${stepId}"]`)[0] as HTMLElement;
+export function hideHint(this: IntroJs, stepId: number | undefined | string) {
+  const hint = hintQuerySelectorAll(
+    `.introjs-hint[data-step="${stepId}"]`
+  )[0] as HTMLElement;
 
   removeHintTooltip.call(this);
 
@@ -82,7 +86,9 @@ export function showHints(this: IntroJs) {
  * @method showHint
  */
 export function showHint(stepId: number) {
-  const hint = hintQuerySelectorAll(`.introjs-hint[data-step="${stepId}"]`)[0] as HTMLElement;
+  const hint = hintQuerySelectorAll(
+    `.introjs-hint[data-step="${stepId}"]`
+  )[0] as HTMLElement;
 
   if (hint) {
     removeClass(hint, /introjs-hidehint/g);
@@ -129,7 +135,9 @@ export function removeHint(this: IntroJs, stepId: number) {
 export function addHints(this: IntroJs) {
   const self = this;
 
-  let hintsWrapper = document.querySelector(".introjs-hints") as HTMLElement|null;
+  let hintsWrapper = document.querySelector(
+    ".introjs-hints"
+  ) as HTMLElement | null;
 
   if (hintsWrapper === null) {
     hintsWrapper = createElement("div", {
@@ -143,7 +151,7 @@ export function addHints(this: IntroJs) {
    * @return {Function}
    */
   const getHintClick = (i: number) => (e?: Event) => {
-    const evt = e ? e : window.event as Event;
+    const evt = e ? e : (window.event as Event);
 
     if (evt.stopPropagation) {
       evt.stopPropagation();
@@ -219,7 +227,12 @@ export function addHints(this: IntroJs) {
  * @param {Object} hint
  * @param {Object} element
  */
-export function alignHintPosition(this: HTMLElement, position: string, style: CSSStyleDeclaration, element: HTMLElement) {
+export function alignHintPosition(
+  this: HTMLElement,
+  position: string,
+  style: CSSStyleDeclaration,
+  element: HTMLElement
+) {
   // get/calculate offset of target element
   const offset = getOffset.call(this, element);
   const iconWidth = 20;
@@ -382,7 +395,9 @@ export function populateHints(this: IntroJs, targetElm: HTMLElement) {
 
       if (typeof currentItem.element === "string") {
         //grab the element with given selector from the page
-        currentItem.element = document.querySelector(currentItem.element)! as HTMLElement;
+        currentItem.element = document.querySelector(
+          currentItem.element
+        )! as HTMLElement;
       }
 
       currentItem.hintPosition =

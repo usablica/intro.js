@@ -6,7 +6,7 @@ import { nextStep } from "./steps";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import createElement from "../util/createElement";
-import {IntroItem, IntroJs} from "../index";
+import { IntroItem, IntroJs } from "../index";
 
 /**
  * Initiate a new introduction/guide from an element in the page
@@ -17,7 +17,11 @@ import {IntroItem, IntroJs} from "../index";
  * @param {String} group
  * @returns {Boolean} Success or not?
  */
-export default function introForElement(this: IntroJs, targetElm: HTMLElement, group: string|null = null) {
+export default function introForElement(
+  this: IntroJs,
+  targetElm: HTMLElement,
+  group: string | null = null
+) {
   const allIntroSteps = targetElm.querySelectorAll("*[data-intro]");
   let introItems: Array<IntroItem> = [];
 
@@ -33,7 +37,9 @@ export default function introForElement(this: IntroJs, targetElm: HTMLElement, g
       //use querySelector function only when developer used CSS selector
       if (typeof currentItem.element === "string") {
         //grab the element with given selector from the page
-        currentItem.element = document.querySelector(currentItem.element)! as HTMLElement;
+        currentItem.element = document.querySelector(
+          currentItem.element
+        )! as HTMLElement;
       }
 
       //intro without element
@@ -172,7 +178,6 @@ export default function introForElement(this: IntroJs, targetElm: HTMLElement, g
       tempIntroItems.push(introItems[z]);
     }
   }
-
 
   introItems = tempIntroItems;
 

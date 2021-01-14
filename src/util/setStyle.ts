@@ -1,11 +1,11 @@
 type Styles = {
-  [key: string]: string|number
-}
+  [key: string]: string | number;
+};
 
 /**
  * Sets the style of an DOM element
  */
-export default function setStyle(element: HTMLElement, style: string|Styles) {
+export default function setStyle(element: HTMLElement, style: string | Styles) {
   let cssText = "";
 
   if (element.style.cssText) {

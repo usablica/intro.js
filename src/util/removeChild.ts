@@ -3,7 +3,10 @@ import setStyle from "./setStyle";
 /**
  * Removes `element` from `parentElement`
  */
-export default function removeChild(element: HTMLElement, animate: boolean = false) {
+export default function removeChild(
+  element: HTMLElement,
+  animate: boolean = false
+) {
   if (!element || !element.parentElement) return;
 
   const parentElement = element.parentElement;

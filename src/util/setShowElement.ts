@@ -1,6 +1,6 @@
 import addClass from "./addClass";
 import getPropValue from "./getPropValue";
-import {IntroItem} from "../index";
+import { IntroItem } from "../index";
 
 /**
  * To set the show element
@@ -24,4 +24,3 @@ export default function setShowElement({ element }: IntroItem) {
     addClass(element, "introjs-relativePosition");
   }
 }
-

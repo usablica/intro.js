@@ -12,7 +12,7 @@ import removeShowElement from "./removeShowElement";
 import createElement from "../util/createElement";
 import setStyle from "../util/setStyle";
 import appendChild from "../util/appendChild";
-import {IntroItem, IntroJs} from "../index";
+import { IntroItem, IntroJs } from "../index";
 
 /**
  * Gets the current progress percentage
@@ -90,19 +90,27 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
     const oldTooltipTitleLayer = oldReferenceLayer.querySelector(
       ".introjs-tooltip-title"
     ) as HTMLElement;
-    const oldArrowLayer = oldReferenceLayer.querySelector(".introjs-arrow") as HTMLElement;
+    const oldArrowLayer = oldReferenceLayer.querySelector(
+      ".introjs-arrow"
+    ) as HTMLElement;
     const oldtooltipContainer = oldReferenceLayer.querySelector(
       ".introjs-tooltip"
     ) as HTMLElement;
 
-    skipTooltipButton = oldReferenceLayer.querySelector(".introjs-skipbutton") as HTMLElement;
-    prevTooltipButton = oldReferenceLayer.querySelector(".introjs-prevbutton") as HTMLElement;
-    nextTooltipButton = oldReferenceLayer.querySelector(".introjs-nextbutton") as HTMLElement;
+    skipTooltipButton = oldReferenceLayer.querySelector(
+      ".introjs-skipbutton"
+    ) as HTMLElement;
+    prevTooltipButton = oldReferenceLayer.querySelector(
+      ".introjs-prevbutton"
+    ) as HTMLElement;
+    nextTooltipButton = oldReferenceLayer.querySelector(
+      ".introjs-nextbutton"
+    ) as HTMLElement;
 
     //update or reset the helper highlight class
     oldHelperLayer.className = highlightClass;
     //hide the tooltip
-    oldtooltipContainer.style.opacity = '0';
+    oldtooltipContainer.style.opacity = "0";
     oldtooltipContainer.style.display = "none";
 
     // if the target element is within a scrollable element
@@ -158,7 +166,7 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
         .setAttribute("aria-valuenow", _getProgress.call(self));
 
       //show the tooltip
-      oldtooltipContainer.style.opacity = '1';
+      oldtooltipContainer.style.opacity = "1";
 
       //reset button focus
       if (
@@ -241,12 +249,12 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
 
     const anchorClick = function (this: HTMLElement) {
       let step = this.getAttribute("data-stepnumber");
-      if(step) {
+      if (step) {
         self.goToStep(parseInt(step));
       }
     };
 
-    forEach(this._introItems, ({step}, i) => {
+    forEach(this._introItems, ({ step }, i) => {
       const innerLi = createElement("li");
       const anchorLink = createElement("a");
 
@@ -283,8 +291,8 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
       progressBar.className += " " + this._options.progressBarAdditionalClass;
     }
     progressBar.setAttribute("role", "progress");
-    progressBar.setAttribute("aria-valuemin", '0');
-    progressBar.setAttribute("aria-valuemax", '100');
+    progressBar.setAttribute("aria-valuemin", "0");
+    progressBar.setAttribute("aria-valuemax", "100");
     progressBar.setAttribute("aria-valuenow", _getProgress.call(this));
     progressBar.style.cssText = `width:${_getProgress.call(this)}%;`;
 

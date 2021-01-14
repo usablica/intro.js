@@ -6,10 +6,10 @@
  * @param String key
  * @return Object
  */
-import {IntroJs} from "../index";
+import { IntroJs } from "../index";
 
 const stamp = (() => {
-  const keys: {[key: string]: number} = {};
+  const keys: { [key: string]: number } = {};
   return function stamp(obj: any, key = "introjs-stamp"): string {
     // each group increments from 0
     keys[key] = keys[key] || 0;

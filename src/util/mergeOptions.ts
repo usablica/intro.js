@@ -6,7 +6,7 @@
  * @param obj2
  * @returns obj3 a new object based on obj1 and obj2
  */
-import {Options} from "../index";
+import { Options } from "../index";
 
 export default function mergeOptions(obj1: Options, obj2: Options): Options {
   const obj3 = {};

@@ -7,7 +7,11 @@ import setStyle from "./setStyle";
  * @param {Element} element
  * @param {Boolean} [animate=false]
  */
-export default function appendChild(parentElement: HTMLElement, element: HTMLElement, animate = false) {
+export default function appendChild(
+  parentElement: HTMLElement,
+  element: HTMLElement,
+  animate = false
+) {
   if (animate) {
     const existingOpacity = element.style.opacity || "1";
 

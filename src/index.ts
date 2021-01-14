@@ -24,14 +24,14 @@ import {
 
 export interface IntroItem {
   element: HTMLElement;
-  title?: string|null;
-  intro?: string|null;
+  title?: string | null;
+  intro?: string | null;
   step?: number;
   hint?: string;
   hintPosition?: string;
   hintAnimation?: boolean;
-  tooltipClass?: string|null;
-  highlightClass?: string|null;
+  tooltipClass?: string | null;
+  highlightClass?: string | null;
   position?: string;
   scrollTo?: string;
   disableInteraction?: boolean;
@@ -72,29 +72,47 @@ export interface Options {
 }
 
 export interface Step {
-  element?: HTMLElement|HTMLDivElement|HTMLParagraphElement|string|null,
-  intro: string,
-  position?: 'top'|'right'|'left'|'bottom'|'bottom-left-aligned'|'bottom-middle-aligned'|'bottom-right-aligned'|'auto'
+  element?: HTMLElement | HTMLDivElement | HTMLParagraphElement | string | null;
+  intro: string;
+  position?:
+    | "top"
+    | "right"
+    | "left"
+    | "bottom"
+    | "bottom-left-aligned"
+    | "bottom-middle-aligned"
+    | "bottom-right-aligned"
+    | "auto";
 }
 
-export type IntroChangeCallback = (intro?: IntroJs, element?: HTMLElement) => boolean
-export type IntroBeforeChangeCallback = (intro?: IntroJs, step?: number) => void
-export type IntroAfterChangeCallback = (intro?: IntroJs) => void
-export type IntroCompleteCallback = (intro?: IntroJs) => void
-export type IntroExitCallback = (intro?: IntroJs) => void
-export type IntroSkipCallback = (intro?: IntroJs) => void
-export type IntroBeforeExitCallback = (intro?: IntroJs) => void
-export type HintsAddedCallback = (intro?: IntroJs) => void
-export type HintClickCallback = (hintElement?: HTMLElement, item?: IntroItem, stepId?: number) => void
-export type HintCloseCallback = (intro?: IntroJs, step?: number) => void
+export type IntroChangeCallback = (
+  intro?: IntroJs,
+  element?: HTMLElement
+) => boolean;
+export type IntroBeforeChangeCallback = (
+  intro?: IntroJs,
+  step?: number
+) => void;
+export type IntroAfterChangeCallback = (intro?: IntroJs) => void;
+export type IntroCompleteCallback = (intro?: IntroJs) => void;
+export type IntroExitCallback = (intro?: IntroJs) => void;
+export type IntroSkipCallback = (intro?: IntroJs) => void;
+export type IntroBeforeExitCallback = (intro?: IntroJs) => void;
+export type HintsAddedCallback = (intro?: IntroJs) => void;
+export type HintClickCallback = (
+  hintElement?: HTMLElement,
+  item?: IntroItem,
+  stepId?: number
+) => void;
+export type HintCloseCallback = (intro?: IntroJs, step?: number) => void;
 
 export class IntroJs {
   _options: Options;
   _introItems: IntroItem[] = [];
-  _currentStep: number|undefined = undefined
-  _direction: string|undefined = undefined;
-  _currentStepNumber: number|undefined = undefined;
-  _lastShowElementTimer: number|undefined = undefined;
+  _currentStep: number | undefined = undefined;
+  _direction: string | undefined = undefined;
+  _currentStepNumber: number | undefined = undefined;
+  _lastShowElementTimer: number | undefined = undefined;
   _targetElement: HTMLElement | null = null;
 
   _introBeforeChangeCallback: IntroBeforeChangeCallback;
@@ -108,7 +126,7 @@ export class IntroJs {
   _introSkipCallback: IntroSkipCallback;
   _introBeforeExitCallback: IntroBeforeExitCallback;
 
-  constructor(obj: HTMLElement|null = null) {
+  constructor(obj: HTMLElement | null = null) {
     this._targetElement = obj;
     this._introItems = [];
 
@@ -190,7 +208,7 @@ export class IntroJs {
     this._options = mergeOptions(this._options, options);
     return this;
   }
-  start(group: number|undefined = undefined) {
+  start(group: number | undefined = undefined) {
     introForElement.call(this, this._targetElement, group);
     return this;
   }
@@ -282,7 +300,7 @@ export class IntroJs {
     }
     return this;
   }
-  onhintclick(providedCallback:HintClickCallback) {
+  onhintclick(providedCallback: HintClickCallback) {
     if (typeof providedCallback === "function") {
       this._hintClickCallback = providedCallback;
     } else {
@@ -357,14 +375,16 @@ export class IntroJs {
 }
 
 class IntroInstances {
-  readonly instances: {[key: string]: IntroJs} = {};
+  readonly instances: { [key: string]: IntroJs } = {};
 
   constructor() {
-    this.instances = {}
+    this.instances = {};
   }
 
-  createInstance(targetElm: HTMLElement|string|undefined = undefined): IntroJs {
-    let instance: IntroJs|null = null;
+  createInstance(
+    targetElm: HTMLElement | string | undefined = undefined
+  ): IntroJs {
+    let instance: IntroJs | null = null;
 
     if (typeof targetElm === "object") {
       //Ok, create a new instance
@@ -382,7 +402,7 @@ class IntroInstances {
       instance = new IntroJs(document.body);
     }
 
-    if(instance === null) {
+    if (instance === null) {
       throw new Error("There is no element with given selector.");
     }
 
@@ -395,11 +415,11 @@ class IntroInstances {
   }
 }
 
-const instances = new IntroInstances
+const instances = new IntroInstances();
 
-const introJs = (targetElm: HTMLElement|string|undefined = undefined) => {
-  return instances.createInstance(targetElm)
-}
+const introJs = (targetElm: HTMLElement | string | undefined = undefined) => {
+  return instances.createInstance(targetElm);
+};
 
 introJs.version = version;
 

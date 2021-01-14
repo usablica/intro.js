@@ -1,7 +1,7 @@
 import forEach from "../util/forEach";
 import showElement from "./showElement";
 import exitIntro from "./exitIntro";
-import {IntroJs} from "../index";
+import { IntroJs } from "../index";
 
 /**
  * Go to specific step of introduction

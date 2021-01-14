@@ -1,6 +1,6 @@
 import { nextStep, previousStep } from "./steps";
 import exitIntro from "./exitIntro";
-import {IntroJs} from "../index";
+import { IntroJs } from "../index";
 
 /**
  * on keyCode:
@@ -40,7 +40,7 @@ export default function onKeyDown(this: IntroJs, e: KeyboardEvent) {
     nextStep.call(this);
   } else if (code === "Enter" || code === "NumpadEnter" || code === 13) {
     //srcElement === ie
-    const target = e.target as HTMLElement || e.srcElement as HTMLElement;
+    const target = (e.target as HTMLElement) || (e.srcElement as HTMLElement);
     if (target && target.className.match("introjs-prevbutton")) {
       //user hit enter while focusing on previous button
       previousStep.call(this);

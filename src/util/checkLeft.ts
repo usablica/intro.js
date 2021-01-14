@@ -3,7 +3,7 @@
  *
  * @return boolean true, if tooltipLayerStyleRight is ok.  false, otherwise.
  */
-import {Offset} from "./getOffset";
+import { Offset } from "./getOffset";
 
 export default function checkLeft(
   targetOffset: Offset,
@@ -11,7 +11,13 @@ export default function checkLeft(
   tooltipOffset: Offset,
   tooltipLayer: HTMLElement
 ) {
-  if (targetOffset.left + targetOffset.width - tooltipLayerStyleRight - tooltipOffset.width < 0) {
+  if (
+    targetOffset.left +
+      targetOffset.width -
+      tooltipLayerStyleRight -
+      tooltipOffset.width <
+    0
+  ) {
     // off the left side of the window
     tooltipLayer.style.left = `${-targetOffset.left}px`;
     return false;

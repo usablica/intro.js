@@ -9,7 +9,10 @@ import forEach from "./forEach";
  * @param {String} className
  * @returns null
  */
-export default function addClass(element: HTMLElement|SVGElement, className: string) {
+export default function addClass(
+  element: HTMLElement | SVGElement,
+  className: string
+) {
   if (element instanceof SVGElement) {
     // svg
     const pre = element.getAttribute("class") || "";

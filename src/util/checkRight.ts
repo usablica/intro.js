@@ -1,4 +1,4 @@
-import {Offset} from "./getOffset";
+import { Offset } from "./getOffset";
 
 /**
  * Set tooltip left so it doesn't go off the right side of the window
@@ -13,11 +13,12 @@ export default function checkRight(
   tooltipLayer: HTMLElement
 ) {
   if (
-    targetOffset.left + tooltipLayerStyleLeft + tooltipOffset.width > windowSize.width
+    targetOffset.left + tooltipLayerStyleLeft + tooltipOffset.width >
+    windowSize.width
   ) {
     // off the right side of the window
     tooltipLayer.style.left = `${
-      windowSize.width -  tooltipOffset.width -  targetOffset.left
+      windowSize.width - tooltipOffset.width - targetOffset.left
     }px`;
     return false;
   }

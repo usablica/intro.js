@@ -1,12 +1,15 @@
 import getScrollParent from "./getScrollParent";
-import {IntroJs} from "../index";
+import { IntroJs } from "../index";
 
 /**
  * scroll a scrollable element to a child element
  *
  * @param {Object} targetElement
  */
-export default function scrollParentToElement(this: IntroJs, targetElement: HTMLElement) {
+export default function scrollParentToElement(
+  this: IntroJs,
+  targetElement: HTMLElement
+) {
   // @ts-ignore
   const element = targetElement.element;
 

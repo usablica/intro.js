@@ -1,7 +1,7 @@
 import { reAlignHints } from "./hint";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
-import {IntroJs} from "../index";
+import { IntroJs } from "../index";
 
 /**
  * Update placement of the intro objects on the screen

@@ -4,7 +4,7 @@ import addClass from "../util/addClass";
 import checkRight from "../util/checkRight";
 import checkLeft from "../util/checkLeft";
 import removeEntry from "../util/removeEntry";
-import {IntroJs} from "../index";
+import { IntroJs } from "../index";
 
 /**
  * auto-determine alignment
@@ -184,12 +184,12 @@ export default function placeTooltip(
   let currentTooltipPosition;
 
   //reset the old style
-  tooltipLayer.style.removeProperty('top');
-  tooltipLayer.style.removeProperty('right');
-  tooltipLayer.style.removeProperty('bottom');
-  tooltipLayer.style.removeProperty('left');
-  tooltipLayer.style.removeProperty('marginLeft');
-  tooltipLayer.style.removeProperty('marginTop');
+  tooltipLayer.style.removeProperty("top");
+  tooltipLayer.style.removeProperty("right");
+  tooltipLayer.style.removeProperty("bottom");
+  tooltipLayer.style.removeProperty("left");
+  tooltipLayer.style.removeProperty("marginLeft");
+  tooltipLayer.style.removeProperty("marginTop");
 
   arrowLayer.style.display = "inherit";
 
@@ -262,7 +262,7 @@ export default function placeTooltip(
           tooltipLayer
         )
       ) {
-        tooltipLayer.style.removeProperty('right');
+        tooltipLayer.style.removeProperty("right");
         checkRight(
           targetOffset,
           tooltipLayerStyleLeftRight,
@@ -363,7 +363,7 @@ export default function placeTooltip(
           tooltipLayer
         )
       ) {
-        tooltipLayer.style.removeProperty('right');
+        tooltipLayer.style.removeProperty("right");
         checkRight(
           targetOffset,
           tooltipLayerStyleLeftRight,

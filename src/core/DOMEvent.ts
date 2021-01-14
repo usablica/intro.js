@@ -1,5 +1,5 @@
 import stamp from "../util/stamp";
-import {IntroJs} from "../index";
+import { IntroJs } from "../index";
 
 /**
  * DOMEvent Handles all DOM events
@@ -24,8 +24,12 @@ const DOMEvent = (() => {
      * @return String
      */
     // @ts-ignore
-    this._id = (obj: any, type: string, listener: (data: any) => void, context: IntroJs) =>
-      type + stamp(listener) + (context ? `_${stamp(context)}` : "");
+    this._id = (
+      obj: any,
+      type: string,
+      listener: (data: any) => void,
+      context: IntroJs
+    ) => type + stamp(listener) + (context ? `_${stamp(context)}` : "");
     /**
      * Adds event listener
      *
@@ -37,9 +41,16 @@ const DOMEvent = (() => {
      * @return null
      */
     // @ts-ignore
-    this.on = function (obj: any, type: string, listener: (data: any) => void, context: IntroJs, useCapture: boolean) {
+    this.on = function (
+      obj: any,
+      type: string,
+      listener: (data: any) => void,
+      context: IntroJs,
+      useCapture: boolean
+    ) {
       const id = this._id.apply(this, arguments);
-      const handler = (e: Event) => listener.call(context || obj, e || window.event);
+      const handler = (e: Event) =>
+        listener.call(context || obj, e || window.event);
 
       if ("addEventListener" in obj) {
         obj.addEventListener(type, handler, useCapture);
@@ -62,7 +73,13 @@ const DOMEvent = (() => {
      * @return null
      */
     // @ts-ignore
-    this.off = function (obj: any, type: string, listener: (data: any) => void, context: IntroJs, useCapture: boolean) {
+    this.off = function (
+      obj: any,
+      type: string,
+      listener: (data: any) => void,
+      context: IntroJs,
+      useCapture: boolean
+    ) {
       const id = this._id.apply(this, arguments);
       const handler = obj[events_key] && obj[events_key][id];
 
@@ -79,7 +96,7 @@ const DOMEvent = (() => {
       obj[events_key][id] = null;
     };
   }
-// @ts-ignore
+  // @ts-ignore
   return new DOMEvent();
 })();
 

@@ -4,7 +4,7 @@ import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import removeShowElement from "./removeShowElement";
 import removeChild from "../util/removeChild";
-import {IntroJs} from "../index";
+import { IntroJs } from "../index";
 
 class ExitIntro {
   exit(this: IntroJs, targetElement: HTMLElement, force: boolean = false) {
@@ -29,7 +29,9 @@ class ExitIntro {
     }
 
     //remove all helper layers
-    const helperLayer = targetElement.querySelector(".introjs-helperLayer") as HTMLElement;
+    const helperLayer = targetElement.querySelector(
+      ".introjs-helperLayer"
+    ) as HTMLElement;
     removeChild(helperLayer, true);
 
     const referenceLayer = targetElement.querySelector(
@@ -44,7 +46,9 @@ class ExitIntro {
     removeChild(disableInteractionLayer);
 
     //remove intro floating element
-    const floatingElement = document.querySelector(".introjsFloatingElement") as HTMLElement;
+    const floatingElement = document.querySelector(
+      ".introjsFloatingElement"
+    ) as HTMLElement;
     removeChild(floatingElement);
 
     removeShowElement();
@@ -71,4 +75,4 @@ class ExitIntro {
  * @param {Object} targetElement
  * @param {Boolean} force - Setting to `true` will skip the result of beforeExit callback
  */
-export default (new ExitIntro()).exit
+export default new ExitIntro().exit;
