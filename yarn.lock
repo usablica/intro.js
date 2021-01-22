@@ -2006,7 +2006,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-clean-css@^4.1.6, clean-css@^4.2.3, clean-css@^4.x:
+clean-css@^4.1, clean-css@^4.1.6, clean-css@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.2.3.tgz#507b5de7d97b48ee53d84adb0160ff6216380f78"
   integrity sha512-VcMWDN54ZN/DS+g58HYL5/n4Zrqe8vHJpGA8KdgUXFU4fuP/aHNw8eld9SyEIyabIMJX/0RaY/fplOo5hYLSFA==
@@ -5992,12 +5992,12 @@ postcss-calc@^7.0.1:
     postcss-value-parser "^4.0.2"
 
 postcss-clean@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/postcss-clean/-/postcss-clean-1.1.0.tgz#c2d61d5d8caf19a585adba16897726c2674c4207"
-  integrity sha512-83g3GqMbCM5NL6MlbbPLJ/m2NrUepBF44MoDk4Gt04QGXeXKh9+ilQa0DzLnYnvqYHQCw83nckuEzBFr2muwbg==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/postcss-clean/-/postcss-clean-1.2.0.tgz#15ea3b22fccd4ca0214d0693f4e5a6517b5b02a0"
+  integrity sha512-L0ONqPN3zZnz+wJk3eyrWnsAdPq5toUfkpNiuWrgn/yXHEcys+Gm1PMRYSZ+B2GDdH/giIJCLh/0cFQgNtXB1w==
   dependencies:
-    clean-css "^4.x"
-    postcss "^6.x"
+    clean-css "^4.1"
+    postcss "^8.x"
 
 postcss-colormin@^4.0.3:
   version "4.0.3"
@@ -6336,7 +6336,7 @@ postcss@6.0.1:
     source-map "^0.5.6"
     supports-color "^3.2.3"
 
-postcss@^6.0.1, postcss@^6.x:
+postcss@^6.0.1:
   version "6.0.23"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-6.0.23.tgz#61c82cc328ac60e677645f979054eb98bc0e3324"
   integrity sha512-soOk1h6J3VMTZtVeVpv15/Hpdl2cBLX3CAw4TAbkpTJiNPk9YP/zWcD1ND+xEtvyuuvKzbxliTOIyvkSeSJ6ag==
@@ -6354,10 +6354,10 @@ postcss@^7, postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.17, postcss@^7.0.27, po
     source-map "^0.6.1"
     supports-color "^6.1.0"
 
-postcss@^8.1.1:
-  version "8.2.1"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.2.1.tgz#eabc5557c4558059b9d9e5b15bce7ffa9089c2a8"
-  integrity sha512-RhsqOOAQzTgh1UB/IZdca7F9WDb7SUCR2Vnv1x7DbvuuggQIpoDwjK+q0rzoPffhYvWNKX5JSwS4so4K3UC6vA==
+postcss@^8.1.1, postcss@^8.x:
+  version "8.2.4"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.2.4.tgz#20a98a39cf303d15129c2865a9ec37eda0031d04"
+  integrity sha512-kRFftRoExRVXZlwUuay9iC824qmXPcQQVzAjbCCgjpXnkdMCJYBu2gTwAaFBzv8ewND6O8xFb3aELmEkh9zTzg==
   dependencies:
     colorette "^1.2.1"
     nanoid "^3.1.20"
