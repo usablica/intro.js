@@ -15,11 +15,11 @@ export default function checkRight(
     windowSize.width
   ) {
     // off the right side of the window
-    tooltipLayer.left = `${
+    tooltipLayer.style.left = `${
       windowSize.width - tooltipOffset.width - targetOffset.left
     }px`;
     return false;
   }
-  tooltipLayer.left = `${tooltipLayerStyleLeft}px`;
+  tooltipLayer.style.left = `${tooltipLayerStyleLeft}px`;
   return true;
 }
