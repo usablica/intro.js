@@ -1,6 +1,6 @@
 import addClass from "./addClass";
 import getPropValue from "./getPropValue";
-import { IntroItem } from "../index";
+import { IntroItem } from "../IntroJs";
 
 /**
  * To set the show element

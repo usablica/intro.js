@@ -3,7 +3,7 @@ import isFixed from "../util/isFixed";
 import addClass from "../util/addClass";
 import removeClass from "../util/removeClass";
 import setStyle from "../util/setStyle";
-import { IntroJs } from "../index";
+import { IntroJs } from "../IntroJs";
 
 /**
  * Update the position of the helper layer on the screen
@@ -16,7 +16,7 @@ export default function setHelperLayerPosition(
   this: IntroJs,
   helperLayer: HTMLElement
 ) {
-  if (helperLayer && this._currentStep) {
+  if (helperLayer && typeof this._currentStep !== "undefined") {
     //prevent error when `this._currentStep` in undefined
     if (!this._introItems[this._currentStep]) return;
 

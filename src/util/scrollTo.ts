@@ -1,6 +1,6 @@
 import getWindowSize from "./getWindowSize";
 import elementInViewport from "./elementInViewport";
-import { IntroJs } from "../index";
+import { IntroJs } from "../IntroJs";
 
 /**
  * To change the scroll of `window` after highlighting an element

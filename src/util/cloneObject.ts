@@ -1,4 +1,4 @@
-import { IntroItem } from "../index";
+import { IntroItem } from "../IntroJs";
 
 /*
  * makes a copy of the object

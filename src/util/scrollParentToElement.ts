@@ -1,5 +1,5 @@
 import getScrollParent from "./getScrollParent";
-import { IntroJs } from "../index";
+import { IntroJs } from "../IntroJs";
 
 /**
  * scroll a scrollable element to a child element

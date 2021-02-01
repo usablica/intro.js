@@ -2,7 +2,7 @@ import getOffset from "../util/getOffset";
 import exitIntro from "./exitIntro";
 import createElement from "../util/createElement";
 import setStyle from "../util/setStyle";
-import { IntroJs } from "../index";
+import { IntroJs } from "../IntroJs";
 
 /**
  * Add overlay layer to the page

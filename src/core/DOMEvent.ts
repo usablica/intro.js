@@ -1,5 +1,5 @@
 import stamp from "../util/stamp";
-import { IntroJs } from "../index";
+import { IntroJs } from "../IntroJs";
 
 /**
  * DOMEvent Handles all DOM events

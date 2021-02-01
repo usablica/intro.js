@@ -9,7 +9,7 @@ import setAnchorAsButton from "../util/setAnchorAsButton";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import createElement from "../util/createElement";
-import { IntroJs } from "../index";
+import { IntroJs } from "../IntroJs";
 
 /**
  * Get a queryselector within the hint wrapper

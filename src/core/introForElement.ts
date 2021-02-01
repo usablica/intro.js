@@ -6,7 +6,7 @@ import { nextStep } from "./steps";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import createElement from "../util/createElement";
-import { IntroItem, IntroJs } from "../index";
+import { IntroItem, IntroJs } from "../IntroJs";
 
 /**
  * Initiate a new introduction/guide from an element in the page

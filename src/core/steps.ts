@@ -1,7 +1,7 @@
 import forEach from "../util/forEach";
 import showElement from "./showElement";
 import exitIntro from "./exitIntro";
-import { IntroJs } from "../index";
+import { IntroJs } from "../IntroJs";
 
 /**
  * Go to specific step of introduction
@@ -94,7 +94,7 @@ export function nextStep(this: IntroJs) {
 export function previousStep(this: IntroJs) {
   this._direction = "backward";
 
-  if (!this._currentStep) {
+  if (this._currentStep === undefined) {
     return false;
   }
 

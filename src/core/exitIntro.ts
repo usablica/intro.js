@@ -4,7 +4,7 @@ import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import removeShowElement from "./removeShowElement";
 import removeChild from "../util/removeChild";
-import { IntroJs } from "../index";
+import { IntroJs } from "../IntroJs";
 
 class ExitIntro {
   exit(this: IntroJs, targetElement: HTMLElement, force: boolean = false) {

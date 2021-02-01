@@ -6,7 +6,7 @@
  * @param String key
  * @return Object
  */
-import { IntroJs } from "../index";
+import { IntroJs } from "../IntroJs";
 
 const stamp = (() => {
   const keys: { [key: string]: number } = {};

@@ -4,7 +4,7 @@ import addClass from "../util/addClass";
 import checkRight from "../util/checkRight";
 import checkLeft from "../util/checkLeft";
 import removeEntry from "../util/removeEntry";
-import { IntroJs } from "../index";
+import { IntroJs } from "../IntroJs";
 
 /**
  * auto-determine alignment
@@ -194,7 +194,8 @@ export default function placeTooltip(
   arrowLayer.style.display = "inherit";
 
   //prevent error when `this._currentStep` is undefined
-  if (!this._currentStep || !this._introItems[this._currentStep]) return;
+  if (typeof this._currentStep === "undefined") return;
+  if (!this._introItems[this._currentStep]) return;
 
   //if we have a custom css class for each step
   currentStepObj = this._introItems[this._currentStep];

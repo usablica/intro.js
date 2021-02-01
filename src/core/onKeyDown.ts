@@ -1,6 +1,6 @@
 import { nextStep, previousStep } from "./steps";
 import exitIntro from "./exitIntro";
-import { IntroJs } from "../index";
+import { IntroJs } from "../IntroJs";
 
 /**
  * on keyCode:
