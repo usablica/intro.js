@@ -203,10 +203,10 @@ export default function placeTooltip(
     tooltipCssClass = this._options.tooltipClass;
   }
 
-  tooltipLayer.className = `introjs-tooltip ${tooltipCssClass || ''}`.replace(
-    /^\s+|\s+$/g,
-    ""
-  );
+  tooltipLayer.className = ["introjs-tooltip", tooltipCssClass]
+    .filter(Boolean)
+    .join(" ");
+
   tooltipLayer.setAttribute("role", "dialog");
 
   currentTooltipPosition = this._introItems[this._currentStep].position;
