@@ -135,10 +135,7 @@ function _determineAutoPosition(
   }
 
   if (possiblePositions.length) {
-    if (
-      desiredTooltipPosition !== "auto" &&
-      possiblePositions.includes(desiredTooltipPosition)
-    ) {
+    if (possiblePositions.includes(desiredTooltipPosition)) {
       // If the requested position is in the list, choose that
       calculatedPosition = desiredTooltipPosition;
     } else {
@@ -206,16 +203,16 @@ export default function placeTooltip(
     tooltipCssClass = this._options.tooltipClass;
   }
 
-  tooltipLayer.className = `introjs-tooltip ${tooltipCssClass}`.replace(
-    /^\s+|\s+$/g,
-    ""
-  );
+  tooltipLayer.className = ["introjs-tooltip", tooltipCssClass]
+    .filter(Boolean)
+    .join(" ");
+
   tooltipLayer.setAttribute("role", "dialog");
 
   currentTooltipPosition = this._introItems[this._currentStep].position;
 
   // Floating is always valid, no point in calculating
-  if (currentTooltipPosition !== "floating") {
+  if (currentTooltipPosition !== "floating" && this._options.autoPosition) {
     currentTooltipPosition = _determineAutoPosition.call(
       this,
       targetElement,

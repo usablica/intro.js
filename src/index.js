@@ -78,6 +78,8 @@ function IntroJs(obj) {
     scrollPadding: 30,
     /* Set the overlay opacity */
     overlayOpacity: 0.5,
+    /* To determine the tooltip position automatically based on the window.width/height */
+    autoPosition: true,
     /* Precedence of positions, when auto is enabled */
     positionPrecedence: ["bottom", "top", "right", "left"],
     /* Disable an interaction with element? */
