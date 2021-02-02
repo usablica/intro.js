@@ -21,9 +21,9 @@ import { IntroJs } from "../IntroJs";
  * @param e
  */
 export default function onKeyDown(this: IntroJs, e: KeyboardEvent) {
-  let code = e.code === null ? e.which : e.code;
+  let code = e.code === undefined ? e.which : e.code;
 
-  // if code/e.which is null
+  // if e.which is null
   if (code === null) {
     code = e.charCode === null ? e.keyCode : e.charCode;
   }
