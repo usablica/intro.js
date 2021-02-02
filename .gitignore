@@ -35,3 +35,6 @@ dist/
 
 # Lerna
 .changelog
+
+# ts files
+placeholder/

@@ -8,7 +8,8 @@ module.exports = {
             targets: {
               browsers: "> 0.5%, ie >= 11"
             }
-          }
+          },
+          '@babel/preset-typescript'
         ]
       ]
     }
@@ -27,7 +28,8 @@ module.exports = {
           version: 3,
           proposals: false
         }
-      }
+      },
+      '@babel/preset-typescript'
     ]
   ]
-}
+};

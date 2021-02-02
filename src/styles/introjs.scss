@@ -8,7 +8,8 @@ $black200: #eeeeee;
 $black100: #f4f4f4;
 $white: #ffffff;
 
-$font_family: "Helvetica Neue", Inter, ui-sans-serif, "Apple Color Emoji", Helvetica, Arial, sans-serif;
+$font_family: "Helvetica Neue", Inter, ui-sans-serif, "Apple Color Emoji",
+  Helvetica, Arial, sans-serif;
 $background_color_9: #08c;
 $background_color_10: rgba(136, 136, 136, 0.24);
 
@@ -274,7 +275,7 @@ tr.introjs-showElement {
     outline: none;
     text-decoration: none;
     background-color: $black200;
-    box-shadow: 0 0 0 0.2rem rgba($black500,.5);
+    box-shadow: 0 0 0 0.2rem rgba($black500, 0.5);
     border: 1px solid $black600;
     color: $black900;
   }
