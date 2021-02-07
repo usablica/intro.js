@@ -17,9 +17,9 @@ const outputPath = './dist';
 
 const banner = `/*!
  * Intro.js v${version}
- * https://github.com/usablica/intro.js
+ * https://introjs.com
  *
- * Copyright (C) 2017-2020 Afshin Mehrabani (@afshinmeh).
+ * Copyright (C) 2012-2021 Afshin Mehrabani (@afshinmeh).
  * https://raw.githubusercontent.com/usablica/intro.js/master/license.md
  *
  * Date: ${new Date().toUTCString()}
