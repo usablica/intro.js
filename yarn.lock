@@ -6032,9 +6032,9 @@ postcss-calc@^7.0.1:
     postcss-value-parser "^4.0.2"
 
 postcss-clean@^1.1.0:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/postcss-clean/-/postcss-clean-1.2.1.tgz#0b1636c2a961fc1862856616484689be7eaff417"
-  integrity sha512-ycO9+JlJiJz0eKR+dpv6MFuYt3Gnk/HB5zlj0m3ffeUaF9vzSc1DsXuM4GJxqy5+SjMTw09O9+0cKlUTXJl3tw==
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/postcss-clean/-/postcss-clean-1.2.2.tgz#7b44303dcecbc2b29a70ed18d22af427203fa256"
+  integrity sha512-DpuMWW19Dd2K9KY4wknMz3khq9q2yZYa2U37bnhzdtBdBv0ggIfUj5T2XD3ir6gKVlDkb5OtOqw1iQJWq6qvpw==
   dependencies:
     clean-css "^4.x"
     postcss "^6.x"
