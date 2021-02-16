@@ -2021,10 +2021,17 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-clean-css@^4.1.6, clean-css@^4.2.3, clean-css@^4.x:
+clean-css@^4.2.3, clean-css@^4.x:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.2.3.tgz#507b5de7d97b48ee53d84adb0160ff6216380f78"
   integrity sha512-VcMWDN54ZN/DS+g58HYL5/n4Zrqe8vHJpGA8KdgUXFU4fuP/aHNw8eld9SyEIyabIMJX/0RaY/fplOo5hYLSFA==
+  dependencies:
+    source-map "~0.6.0"
+
+clean-css@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-5.0.1.tgz#f84c6ad82c5a8246a680206da8bceef483ccc0b6"
+  integrity sha512-F1zAGOowUCg8yxT0O4UR+nmbMauf3YwbiUS60CPxpzJU7ulpamGzQomFrJSK4w/HqHtMmQKSHJUNue+dQQYQdg==
   dependencies:
     source-map "~0.6.0"
 
@@ -5176,17 +5183,16 @@ mimic-fn@^2.1.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
 
-minify@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/minify/-/minify-6.0.0.tgz#b7b16e1c39cf17763ed50736d7042073665adb46"
-  integrity sha512-KowQkxrGMJsovq1nK2RkL0eOFy7gI6t+gpTEh3GQ9J+VutzlL/MiXlxXA1OdhddgGaA/AsBkGAYTHDZzSa36cQ==
+minify@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/minify/-/minify-7.0.1.tgz#f368afeadcf1cd2525d18c32446112f595e951d0"
+  integrity sha512-U3CjnPKRjPu3DxZX7NsB833r2ijbw9af3fHsaChn6o7BHKvaT/zxYDQ8Q/3W7VFXGDrnkAx6XBx3ggEf5KJm7A==
   dependencies:
-    clean-css "^4.1.6"
+    clean-css "^5.0.1"
     css-b64-images "~0.2.5"
     debug "^4.1.0"
     html-minifier-terser "^5.1.1"
     terser "^5.3.2"
-    try-catch "^3.0.0"
     try-to-catch "^3.0.0"
 
 minimatch@^3.0.2, minimatch@^3.0.4, minimatch@~3.0.2:
@@ -7913,11 +7919,6 @@ trim-newlines@^1.0.0:
   integrity sha512-m6s2OdQe5wgpFMC+pAJ+q9djG82O2jcHPOI6RNg1yy9rCYR+WD6Nbpl32fDpfC56nirdRy+opFa/Vk7HYhqaew==
   dependencies:
     glob "^7.1.2"
-
-try-catch@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/try-catch/-/try-catch-3.0.0.tgz#7996d8b89895e2e8ae62cbdbeb4fe17470f8131b"
-  integrity sha512-3uAqUnoemzca1ENvZ72EVimR+E8lqBbzwZ9v4CEbLjkaV3Q+FtdmPUt7jRtoSoTiYjyIMxEkf6YgUpe/voJ1ng==
 
 try-to-catch@^3.0.0:
   version "3.0.0"
