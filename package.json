@@ -16,7 +16,7 @@
     "type": "git",
     "url": "https://github.com/usablica/intro.js"
   },
-  "main": "intro.js",
+  "main": "intro.es5.js",
   "scripts": {
     "prettier": "prettier --write 'src/**/*'",
     "test": "npm run test:jest && npm run test:jshint",
