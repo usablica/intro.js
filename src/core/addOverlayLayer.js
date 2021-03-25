@@ -1,4 +1,3 @@
-import getOffset from "../util/getOffset";
 import exitIntro from "./exitIntro";
 import createElement from "../util/createElement";
 import setStyle from "../util/setStyle";

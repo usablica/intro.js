@@ -28,20 +28,18 @@ export default function getOffset(element, relativeEl) {
   };
 
   if (
-    relativeEl.tagName.toLowerCase() !== "body" &&
-    relativeElPosition === "relative" ||
+    (relativeEl.tagName.toLowerCase() !== "body" &&
+      relativeElPosition === "relative") ||
     relativeElPosition === "sticky"
   ) {
-    return {
-      ...obj,
+    return Object.assign(obj, {
       top: x.top + scrollTop - xr.top,
       left: x.left + scrollLeft - xr.left,
-    };
+    });
   } else {
-    return {
-      ...obj,
+    return Object.assign(obj, {
       top: x.top + scrollTop,
       left: x.left + scrollLeft,
-    };
+    });
   }
 }
