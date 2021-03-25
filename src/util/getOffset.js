@@ -32,9 +32,11 @@ export default function getOffset(element, relativeEl) {
       relativeElPosition === "relative") ||
     relativeElPosition === "sticky"
   ) {
+    // when the container of our target element is _not_ body and has either "relative" or "sticky" position, we should not
+    // consider the scroll position but we need to include the relative x/y of the container element
     return Object.assign(obj, {
-      top: x.top + scrollTop - xr.top,
-      left: x.left + scrollLeft - xr.left,
+      top: x.top - xr.top,
+      left: x.left - xr.left,
     });
   } else {
     return Object.assign(obj, {
