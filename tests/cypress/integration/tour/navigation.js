@@ -47,7 +47,7 @@ context('Navigation', () => {
     cy.get('.introjs-showElement').should('not.exist');
   });
 
-  it('should navigate using the bullets', () => {
+  it('should navigate by clicking on the bullet items', () => {
     cy.get('.introjs-tooltiptext').contains('step one');
     cy.get('.introjs-bullets > ul > li:nth-child(1)').click();
     cy.get('.introjs-tooltiptext').contains('step one');
