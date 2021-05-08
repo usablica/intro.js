@@ -17,6 +17,13 @@ context('Navigation', () => {
     cy.get('.introjs-tooltiptext').contains('step two');
   });
 
+  it('previous button should be disabled', () => {
+    cy.get('.introjs-tooltiptext').contains('step one');
+    cy.get('.introjs-prevbutton').should('have.class', 'introjs-disabled');
+    cy.get('.introjs-prevbutton').click();
+    cy.get('.introjs-tooltiptext').contains('step one');
+  });
+
   it('should go to the previous step', () => {
     cy.get('.introjs-tooltiptext').contains('step one');
     cy.get('.introjs-nextbutton').click();
@@ -38,5 +45,13 @@ context('Navigation', () => {
     cy.get('.introjs-showElement').should('exist');
     cy.get('.introjs-skipbutton').click();
     cy.get('.introjs-showElement').should('not.exist');
+  });
+
+  it('should navigate using the bullets', () => {
+    cy.get('.introjs-tooltiptext').contains('step one');
+    cy.get('.introjs-bullets > ul > li:nth-child(1)').click();
+    cy.get('.introjs-tooltiptext').contains('step one');
+    cy.get('.introjs-bullets > ul > li:nth-child(2)').click();
+    cy.get('.introjs-tooltiptext').contains('step two');
   });
 });
