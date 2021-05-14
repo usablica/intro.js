@@ -55,8 +55,10 @@ function _disableInteraction() {
  * @method _showElement
  * @param {Object} targetElement
  */
-export default function _showElement(targetElement) {
-  if (typeof this._introChangeCallback !== "undefined") {
+export default function _showElement (targetElement) {
+  if (typeof targetElement.onchange === 'function') {
+    targetElement.onchange();
+  } else if (typeof this._introChangeCallback !== "undefined") {
     this._introChangeCallback.call(this, targetElement.element);
   }
 
@@ -69,7 +71,6 @@ export default function _showElement(targetElement) {
   let nextTooltipButton;
   let prevTooltipButton;
   let skipTooltipButton;
-  let scrollParent;
 
   //check for a current step highlight class
   if (typeof targetElement.highlightClass === "string") {
@@ -356,7 +357,9 @@ export default function _showElement(targetElement) {
         self._introCompleteCallback.call(self);
       }
 
-      if (typeof self._introSkipCallback === "function") {
+      if (typeof targetElement.onskip === 'function') {
+        targetElement.onskip.call(self);
+      } else if (typeof self._introSkipCallback === "function") {
         self._introSkipCallback.call(self);
       }
 
@@ -503,7 +506,9 @@ export default function _showElement(targetElement) {
 
   setShowElement(targetElement);
 
-  if (typeof this._introAfterChangeCallback !== "undefined") {
+  if (typeof targetElement.onafterchange === 'function') {
+    targetElement.onafterchange();
+  } else if (typeof this._introAfterChangeCallback !== "undefined") {
     this._introAfterChangeCallback.call(this, targetElement.element);
   }
 }

@@ -8,7 +8,7 @@ import exitIntro from "./exitIntro";
  * @api private
  * @method _goToStep
  */
-export function goToStep(step) {
+export function goToStep (step) {
   //because steps starts with zero
   this._currentStep = step - 2;
   if (typeof this._introItems !== "undefined") {
@@ -22,7 +22,7 @@ export function goToStep(step) {
  * @api private
  * @method _goToStepNumber
  */
-export function goToStepNumber(step) {
+export function goToStepNumber (step) {
   this._currentStepNumber = step;
   if (typeof this._introItems !== "undefined") {
     nextStep.call(this);
@@ -35,7 +35,7 @@ export function goToStepNumber(step) {
  * @api private
  * @method _nextStep
  */
-export function nextStep() {
+export function nextStep () {
   this._direction = "forward";
 
   if (typeof this._currentStepNumber !== "undefined") {
@@ -54,32 +54,28 @@ export function nextStep() {
   }
 
   const nextStep = this._introItems[this._currentStep];
-  let continueStep = true;
-
-  if (typeof this._introBeforeChangeCallback !== "undefined") {
-    continueStep = this._introBeforeChangeCallback.call(
-      this,
-      nextStep && nextStep.element
-    );
-  }
-
-  // if `onbeforechange` returned `false`, stop displaying the element
-  if (continueStep === false) {
-    --this._currentStep;
-    return false;
-  }
-
-  if (this._introItems.length <= this._currentStep) {
-    //end of the intro
-    //check if any callback is defined
-    if (typeof this._introCompleteCallback === "function") {
-      this._introCompleteCallback.call(this);
+  const continuation = (continueStep = true) => {
+    // if `onbeforechange` returned `false`, stop displaying the element
+    if (!continueStep) {
+      --this._currentStep;
+      return false;
     }
-    exitIntro.call(this, this._targetElement);
-    return;
-  }
 
-  showElement.call(this, nextStep);
+    if (this._introItems.length <= this._currentStep) {
+      //end of the intro
+      //check if any callback is defined
+      if (typeof this._introCompleteCallback === "function") {
+        this._introCompleteCallback.call(this);
+      }
+      exitIntro.call(this, this._targetElement);
+      return;
+    }
+
+    showElement.call(this, nextStep);
+  };
+
+  continueIfOK.call(this, nextStep, continuation);
+
 }
 
 /**
@@ -88,7 +84,7 @@ export function nextStep() {
  * @api private
  * @method _previousStep
  */
-export function previousStep() {
+export function previousStep () {
   this._direction = "backward";
 
   if (this._currentStep === 0) {
@@ -98,22 +94,17 @@ export function previousStep() {
   --this._currentStep;
 
   const nextStep = this._introItems[this._currentStep];
-  let continueStep = true;
+  const continuation = (continueStep = true) => {
+    // if `onbeforechange` returned `false`, stop displaying the element
+    if (!continueStep) {
+      ++this._currentStep;
+      return false;
+    }
 
-  if (typeof this._introBeforeChangeCallback !== "undefined") {
-    continueStep = this._introBeforeChangeCallback.call(
-      this,
-      nextStep && nextStep.element
-    );
-  }
+    showElement.call(this, nextStep);
+  };
 
-  // if `onbeforechange` returned `false`, stop displaying the element
-  if (continueStep === false) {
-    ++this._currentStep;
-    return false;
-  }
-
-  showElement.call(this, nextStep);
+  continueIfOK.call(this, nextStep, continuation);
 }
 
 /**
@@ -121,6 +112,23 @@ export function previousStep() {
  *
  * @returns {number | boolean}
  */
-export function currentStep() {
+export function currentStep () {
   return this._currentStep;
+}
+
+function continueIfOK (nextStep, doNext) {
+  if (nextStep && typeof nextStep.onbeforechange === "function") {
+    nextStep.onbeforechange(doNext);
+  } else if (typeof this._introBeforeChangeCallback !== "undefined") {
+    const continueStep = this._introBeforeChangeCallback.call(
+      this,
+      nextStep && nextStep.element
+    );
+
+    if (continueStep !== false) {
+      doNext.call(this);
+    }
+  } else {
+    doNext.call(this);
+  }
 }

@@ -16,8 +16,7 @@ import createElement from "../util/createElement";
  * @param {String} group
  * @returns {Boolean} Success or not?
  */
-export default function introForElement(targetElm, group) {
-  const allIntroSteps = targetElm.querySelectorAll("*[data-intro]");
+export default function introForElement (targetElm, group) {
   let introItems = [];
 
   if (this._options.steps) {
@@ -68,6 +67,9 @@ export default function introForElement(targetElm, group) {
       }
     });
   } else {
+    const allIntroSteps = targetElm.querySelectorAll("*[data-intro]");
+    const introWithStepCount = allIntroSteps.filter(elem => elem.getAttribute('data-step') !== null).length;
+
     //use steps from data-* annotations
     const elmsLength = allIntroSteps.length;
     let disableInteraction;
@@ -76,6 +78,9 @@ export default function introForElement(targetElm, group) {
     if (elmsLength < 1) {
       return false;
     }
+
+    const noStepIntroItems = [];
+    let nextStep = introWithStepCount;
 
     forEach(allIntroSteps, (currentElement) => {
       // PR #80
@@ -89,22 +94,21 @@ export default function introForElement(targetElm, group) {
         return;
       }
 
-      const step = parseInt(currentElement.getAttribute("data-step"), 10);
+      // add intro items without data-step
+      if (currentElement.getAttribute("data-step") === null) {
+        if (currentElement.hasAttribute("data-disable-interaction")) {
+          disableInteraction = !!currentElement.getAttribute(
+            "data-disable-interaction"
+          );
+        } else {
+          disableInteraction = this._options.disableInteraction;
+        }
 
-      if (currentElement.hasAttribute("data-disable-interaction")) {
-        disableInteraction = !!currentElement.getAttribute(
-          "data-disable-interaction"
-        );
-      } else {
-        disableInteraction = this._options.disableInteraction;
-      }
-
-      if (step > 0) {
-        introItems[step - 1] = {
+        noStepIntroItems.push({
           element: currentElement,
           title: currentElement.getAttribute("data-title") || "",
           intro: currentElement.getAttribute("data-intro"),
-          step: parseInt(currentElement.getAttribute("data-step"), 10),
+          step: nextStep++,
           tooltipClass: currentElement.getAttribute("data-tooltipclass"),
           highlightClass: currentElement.getAttribute("data-highlightclass"),
           position:
@@ -114,29 +118,9 @@ export default function introForElement(targetElm, group) {
             currentElement.getAttribute("data-scrollto") ||
             this._options.scrollTo,
           disableInteraction,
-        };
-      }
-    });
-
-    //next add intro items without data-step
-    //todo: we need a cleanup here, two loops are redundant
-    let nextStep = 0;
-
-    forEach(allIntroSteps, (currentElement) => {
-      // PR #80
-      // start intro for groups of elements
-      if (group && currentElement.getAttribute("data-intro-group") !== group) {
-        return;
-      }
-
-      if (currentElement.getAttribute("data-step") === null) {
-        while (true) {
-          if (typeof introItems[nextStep] === "undefined") {
-            break;
-          } else {
-            nextStep++;
-          }
-        }
+        });
+      } else {
+        const step = parseInt(currentElement.getAttribute("data-step"), 10);
 
         if (currentElement.hasAttribute("data-disable-interaction")) {
           disableInteraction = !!currentElement.getAttribute(
@@ -146,35 +130,31 @@ export default function introForElement(targetElm, group) {
           disableInteraction = this._options.disableInteraction;
         }
 
-        introItems[nextStep] = {
-          element: currentElement,
-          title: currentElement.getAttribute("data-title") || "",
-          intro: currentElement.getAttribute("data-intro"),
-          step: nextStep + 1,
-          tooltipClass: currentElement.getAttribute("data-tooltipclass"),
-          highlightClass: currentElement.getAttribute("data-highlightclass"),
-          position:
-            currentElement.getAttribute("data-position") ||
-            this._options.tooltipPosition,
-          scrollTo:
-            currentElement.getAttribute("data-scrollto") ||
-            this._options.scrollTo,
-          disableInteraction,
-        };
+        if (step > 0) {
+          introItems[step - 1] = {
+            element: currentElement,
+            title: currentElement.getAttribute("data-title") || "",
+            intro: currentElement.getAttribute("data-intro"),
+            step: parseInt(currentElement.getAttribute("data-step"), 10),
+            tooltipClass: currentElement.getAttribute("data-tooltipclass"),
+            highlightClass: currentElement.getAttribute("data-highlightclass"),
+            position:
+              currentElement.getAttribute("data-position") ||
+              this._options.tooltipPosition,
+            scrollTo:
+              currentElement.getAttribute("data-scrollto") ||
+              this._options.scrollTo,
+            disableInteraction,
+          };
+        }
       }
     });
-  }
 
-  //removing undefined/null elements
-  const tempIntroItems = [];
-  for (let z = 0; z < introItems.length; z++) {
-    if (introItems[z]) {
-      // copy non-falsy values to the end of the array
-      tempIntroItems.push(introItems[z]);
-    }
-  }
+    //removing undefined/null elements
+    introItems = introItems.filter(item => item);
 
-  introItems = tempIntroItems;
+    introItems = [...introItems, ...noStepIntroItems];
+  }
 
   //Ok, sort all items with given steps
   introItems.sort((a, b) => a.step - b.step);
