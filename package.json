@@ -41,7 +41,7 @@
     "jest": "^26.6.3",
     "jshint": "^2.12.0",
     "lerna-changelog": "^1.0.1",
-    "minify": "^6.0.0",
+    "minify": "^7.0.2",
     "node-sass": "^4.14.1",
     "postcss": "^8.1.1",
     "postcss-clean": "^1.1.0",
