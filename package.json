@@ -19,10 +19,11 @@
   "main": "intro.js",
   "scripts": {
     "prettier": "prettier --write 'src/**/*'",
-    "test": "npm run test:jest && npm run test:jshint",
+    "test": "npm run test:jest && npm run test:jshint && npm run test:cypress",
     "test:watch": "jest ./tests --verbose --watch",
     "test:jest": "jest ./tests --verbose",
     "test:jshint": "jshint ./src --verbose && jshint ./tests --verbose",
+    "test:cypress": "npm run build && cp -r ./dist ./tests/cypress/setup && cd ./tests && cypress run",
     "release": "./bin/release.sh || true",
     "build": "rollup -c",
     "build:watch": "rollup -c -w"
@@ -34,6 +35,8 @@
     "autoprefixer": "^9.0.0",
     "babel-jest": "^26.6.3",
     "core-js": "^3.6.5",
+    "cypress": "^7.2.0",
+    "cypress-visual-regression": "^1.5.7",
     "eslint": "^7.13.0",
     "jest": "^26.6.3",
     "jshint": "^2.12.0",

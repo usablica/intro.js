@@ -14,6 +14,9 @@
     "console": true,
     "global": true,
     "self": true,
+    "cy": true,
+    "context": true,
+    "Cypress": true,
 
     "afterAll": false,
     "afterEach": false,
