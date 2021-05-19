@@ -28,7 +28,7 @@
         <div class="container-fluid py-5">
           <h1 class="display-5 fw-bold">Custom jumbotron</h1>
           <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
-          <button class="btn btn-primary btn-lg" type="button">Example button</button>
+          <button class="btn btn-primary btn-lg" type="button" id="clickable-button" onclick="window.click()" onmouseover="this.innerHTML='Hovered'">Example button</button>
         </div>
       </div>
 
@@ -57,6 +57,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
 
+  <script type="text/javascript">
+    window.click = function() {
+      console.log(1);
+    }
+  </script>
   <script type="text/javascript" src="./dist/intro.js"></script>
 </body>
 </html>

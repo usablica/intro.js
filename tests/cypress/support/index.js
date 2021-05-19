@@ -22,3 +22,5 @@ Cypress.on('window:before:load', (win) => {
   node.innerHTML = 'html { scroll-behavior: inherit !important; }';
   htmlNode.appendChild(node);
 });
+
+import "cypress-real-events/support";
