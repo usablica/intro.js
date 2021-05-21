@@ -3,6 +3,30 @@ context('Highlight', () => {
     cy.visit('./cypress/setup/index.html');
   });
 
+  it('should highlight the target element', () => {
+    cy.window()
+      .then(window => {
+        window.introJs().setOptions({
+          steps: [{
+            intro: "step one"
+          }, {
+            element: "#clickable-button",
+            intro: "step two"
+          }]
+        }).start();
+
+        cy.wait(500);
+
+        cy.compareSnapshot('highlight-element-first-step', 0);
+
+        cy.nextStep();
+
+        cy.wait(800);
+
+        cy.compareSnapshot('highlight-element-second-step', 0);
+      });
+  });
+
   it('should let user interact with the target element', () => {
     cy.window()
       .then(window => {
@@ -17,7 +41,7 @@ context('Highlight', () => {
 
         let sp = cy.spy(window, "click");
 
-        cy.get('.introjs-nextbutton').click();
+        cy.nextStep();
         cy.get('.introjs-tooltiptext').contains('step two');
 
         cy.get(".introjs-helperLayer").realHover();

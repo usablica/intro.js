@@ -13,28 +13,28 @@ context('Navigation', () => {
 
   it('should go to the next step', () => {
     cy.get('.introjs-tooltiptext').contains('step one');
-    cy.get('.introjs-nextbutton').click();
+    cy.nextStep();
     cy.get('.introjs-tooltiptext').contains('step two');
   });
 
   it('previous button should be disabled', () => {
     cy.get('.introjs-tooltiptext').contains('step one');
     cy.get('.introjs-prevbutton').should('have.class', 'introjs-disabled');
-    cy.get('.introjs-prevbutton').click();
+    cy.prevStep();
     cy.get('.introjs-tooltiptext').contains('step one');
   });
 
   it('should go to the previous step', () => {
     cy.get('.introjs-tooltiptext').contains('step one');
-    cy.get('.introjs-nextbutton').click();
+    cy.nextStep();
     cy.get('.introjs-tooltiptext').contains('step two');
-    cy.get('.introjs-prevbutton').click();
+    cy.prevStep();
     cy.get('.introjs-tooltiptext').contains('step one');
   });
 
   it('should exit the tour after clicking on Done', () => {
     cy.get('.introjs-tooltiptext').contains('step one');
-    cy.get('.introjs-nextbutton').click();
+    cy.nextStep();
     cy.get('.introjs-tooltiptext').contains('step two');
     cy.get('.introjs-donebutton').should('exist');
     cy.get('.introjs-donebutton').click();
