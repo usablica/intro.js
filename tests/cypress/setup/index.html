@@ -34,17 +34,17 @@
 
       <div class="row align-items-md-stretch">
         <div class="col-md-6">
-          <div class="h-100 p-5 text-white bg-dark rounded-3">
+          <div class="h-100 p-5 text-white bg-dark rounded-3" id="relative-parent" style="position: relative">
             <h2>Change the background</h2>
             <p>Swap the background-color utility and add a `.text-*` color utility to mix up the jumbotron look. Then, mix and match with additional component themes and more.</p>
-            <button class="btn btn-outline-light" type="button">Example button</button>
+            <button class="btn btn-outline-light" type="button" id="clickable-relative-button" onclick="window.clickRelative()" onmouseover="this.innerHTML='Hovered Relative'">Example button</button>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="h-100 p-5 bg-light border rounded-3">
+          <div class="h-100 p-5 bg-light border rounded-3" id="absolute-parent" style="position: absolute">
             <h2>Add borders</h2>
             <p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of both column's content for equal-height.</p>
-            <button class="btn btn-outline-secondary" type="button">Example button</button>
+            <button class="btn btn-outline-secondary" type="button" id="clickable-absolute-button" onclick="window.clickAbsolute()" onmouseover="this.innerHTML='Hovered Absolute'">Example button</button>
           </div>
         </div>
       </div>
@@ -60,6 +60,12 @@
   <script type="text/javascript">
     window.click = function() {
       console.log(1);
+    }
+    window.clickRelative = function() {
+      console.log(2);
+    }
+    window.clickAbsolute = function() {
+      console.log(3);
     }
   </script>
   <script type="text/javascript" src="./dist/intro.js"></script>

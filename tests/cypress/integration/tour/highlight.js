@@ -27,7 +27,7 @@ context('Highlight', () => {
       });
   });
 
-  it('should interaction with the target element should be disabled when disabledInteraction is true', () => {
+  it('interaction with the target element should be disabled when disabledInteraction is true', () => {
     cy.window()
       .then(window => {
         window.introJs().setOptions({
@@ -39,6 +39,88 @@ context('Highlight', () => {
         }).start();
 
         let sp = cy.spy(window, "click");
+
+        cy.get(".introjs-helperLayer").realHover();
+        cy.get("#clickable-button").contains('Example button');
+
+        cy.get(".introjs-helperLayer").realClick().then(() => expect(sp).to.not.be.called);
+      });
+  });
+
+  it('should interaction with the target element the parent element has positive: relative', () => {
+    cy.window()
+      .then(window => {
+        window.introJs().setOptions({
+          steps: [{
+            element: "#clickable-relative-button",
+            intro: "step two"
+          }]
+        }).start();
+
+        let sp = cy.spy(window, "clickRelative");
+
+        cy.get(".introjs-helperLayer").realHover();
+        cy.get("#clickable-relative-button").contains('Hovered Relative');
+
+        cy.get(".introjs-helperLayer").realClick().then(() => expect(sp).to.be.calledOnce);
+      });
+  });
+
+  it('should not be able to interaction with the target element the parent element has positive: relative and z-index', () => {
+    cy.window()
+      .then(window => {
+        // related issue: https://github.com/usablica/intro.js/issues/1202
+        cy.get('#relative-parent').invoke('attr', 'style', 'z-index: 1;position: relative;');
+
+        window.introJs().setOptions({
+          steps: [{
+            element: "#clickable-relative-button",
+            intro: "step two"
+          }]
+        }).start();
+
+        let sp = cy.spy(window, "clickRelative");
+
+        cy.get(".introjs-helperLayer").realHover();
+        cy.get("#clickable-button").contains('Example button');
+
+        cy.get(".introjs-helperLayer").realClick().then(() => expect(sp).to.not.be.called);
+      });
+  });
+
+  it('should interaction with the target element the parent element has positive: absolute', () => {
+    cy.window()
+      .then(window => {
+        window.introJs().setOptions({
+          steps: [{
+            element: "#clickable-absolute-button",
+            intro: "step two"
+          }]
+        }).start();
+
+        let sp = cy.spy(window, "clickAbsolute");
+
+        cy.get(".introjs-helperLayer").realHover();
+        cy.get("#clickable-absolute-button").contains('Hovered Absolute');
+
+        cy.get(".introjs-helperLayer").realClick().then(() => expect(sp).to.be.calledOnce);
+      });
+  });
+
+  it('should not be able to interaction with the target element the parent element has positive: absolute and z-index', () => {
+    cy.window()
+      .then(window => {
+        // related issue: https://github.com/usablica/intro.js/issues/1202
+        cy.get('#absolute-parent').invoke('attr', 'style', 'z-index: 1;position: absolute;');
+
+        window.introJs().setOptions({
+          steps: [{
+            element: "#clickable-absolute-button",
+            intro: "step two"
+          }]
+        }).start();
+
+        let sp = cy.spy(window, "clickAbsolute");
 
         cy.get(".introjs-helperLayer").realHover();
         cy.get("#clickable-button").contains('Example button');
