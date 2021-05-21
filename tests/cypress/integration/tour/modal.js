@@ -17,12 +17,12 @@ context('Modal', () => {
 
       cy.compareSnapshot('first-step', 0);
 
-      cy.get('.introjs-nextbutton').click();
+      cy.nextStep();
       cy.wait(800);
 
       cy.compareSnapshot('second-step', 0);
 
-      cy.get('.introjs-nextbutton').click();
+      cy.nextStep();
       cy.wait(800);
 
       cy.compareSnapshot('exit', 0);
