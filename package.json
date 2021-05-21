@@ -48,7 +48,7 @@
     "postcss-clean": "^1.1.0",
     "postcss-normalize": "^8.0.1",
     "prettier": "2.2.1",
-    "rollup": "^1.32.1",
+    "rollup": "^2.48.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-eslint": "^7.0.0",
