@@ -135,7 +135,7 @@ export default function introForElement (targetElm, group) {
             element: currentElement,
             title: currentElement.getAttribute("data-title") || "",
             intro: currentElement.getAttribute("data-intro"),
-            step: parseInt(currentElement.getAttribute("data-step"), 10),
+            step,
             tooltipClass: currentElement.getAttribute("data-tooltipclass"),
             highlightClass: currentElement.getAttribute("data-highlightclass"),
             position:

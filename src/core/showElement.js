@@ -55,7 +55,7 @@ function _disableInteraction() {
  * @method _showElement
  * @param {Object} targetElement
  */
-export default function _showElement (targetElement) {
+export default function _showElement(targetElement) {
   if (typeof targetElement.onchange === 'function') {
     targetElement.onchange();
   } else if (typeof this._introChangeCallback !== "undefined") {
@@ -95,6 +95,22 @@ export default function _showElement (targetElement) {
     const oldtooltipContainer = oldReferenceLayer.querySelector(
       ".introjs-tooltip"
     );
+    const oldTooltipHeaderLayer = oldReferenceLayer.querySelector(
+      ".introjs-tooltip-header"
+    );
+
+    // remove previous step class
+    oldReferenceLayer.classList.remove(`step-${targetElement.step - 1}`);
+    // remove next step class in case going back
+    oldReferenceLayer.classList.remove(`step-${targetElement.step + 1}`);
+    // add current step class
+    oldReferenceLayer.classList.add(`step-${targetElement.step}`);
+
+    if (targetElement.title) {
+      oldTooltipHeaderLayer.classList.remove('no-title');
+    } else {
+      oldTooltipHeaderLayer.classList.add('no-title');
+    }
 
     skipTooltipButton = oldReferenceLayer.querySelector(".introjs-skipbutton");
     prevTooltipButton = oldReferenceLayer.querySelector(".introjs-prevbutton");
@@ -192,7 +208,7 @@ export default function _showElement (targetElement) {
       className: highlightClass,
     });
     const referenceLayer = createElement("div", {
-      className: "introjs-tooltipReferenceLayer",
+      className: `introjs-tooltipReferenceLayer step-${targetElement.step}`,
     });
     const arrowLayer = createElement("div", {
       className: "introjs-arrow",
@@ -232,6 +248,10 @@ export default function _showElement (targetElement) {
 
     tooltipTextLayer.innerHTML = targetElement.intro;
     tooltipTitleLayer.innerHTML = targetElement.title;
+
+    if (!targetElement.title) {
+      tooltipHeaderLayer.classList.add('no-title');
+    }
 
     if (this._options.showBullets === false) {
       bulletsLayer.style.display = "none";

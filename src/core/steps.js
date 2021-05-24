@@ -67,6 +67,7 @@ export function nextStep () {
       if (typeof this._introCompleteCallback === "function") {
         this._introCompleteCallback.call(this);
       }
+
       exitIntro.call(this, this._targetElement);
       return;
     }

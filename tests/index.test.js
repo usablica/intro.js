@@ -211,4 +211,129 @@ describe("intro", () => {
     expect(fixed.className).toContain("introjs-showElement");
     expect(fixed.className).not.toContain("introjs-relativePosition");
   });
+
+  test("should only add appropriate step classes on steps", () => {
+    const ijs = introJs()
+      .setOptions({
+        steps: [
+          {
+            intro: "step one",
+          },
+          {
+            intro: "step two",
+          }
+        ],
+      })
+      .start();
+
+    expect(className(".introjs-tooltipReferenceLayer")).toContain(
+      "step-1"
+    );
+
+    ijs.nextStep();
+
+    expect(className(".introjs-tooltipReferenceLayer")).toContain(
+      "step-2"
+    );
+  });
+
+  test("should add/remove no-title class on appropriate steps", () => {
+    const ijs = introJs()
+      .setOptions({
+        steps: [
+          {
+            intro: "step one",
+          },
+          {
+            title: "test title",
+            intro: "step two",
+          },
+          {
+            intro: "step three"
+          }
+        ],
+      })
+      .start();
+
+    expect(className(".introjs-tooltip-header")).toContain(
+      "no-title"
+    );
+
+    ijs.nextStep();
+
+    expect(className(".introjs-tooltip-header")).not.toContain(
+      "no-title"
+    );
+
+    ijs.nextStep();
+
+    expect(className(".introjs-tooltip-header")).toContain(
+      "no-title"
+    );
+  });
+
+  test("should call local step events instead of global when available", () => {
+    let calledLocalOnBeforeChange = false;
+    let calledLocalOnChange = false;
+    let calledGlobalOnBeforeChange = false;
+    let calledGlobalOnChange = false;
+
+    const ijs = introJs()
+      .setOptions({
+        steps: [
+          {
+            intro: "step one",
+          },
+          {
+            intro: "step two",
+            onbeforechange (next) {
+              calledLocalOnBeforeChange = true;
+
+              next();
+            },
+            onchange () {
+              calledLocalOnChange = true;
+            }
+          },
+          {
+            intro: "step three"
+          }
+        ],
+      })
+      .onbeforechange(() => {
+        calledGlobalOnBeforeChange = true;
+      })
+      .onchange(() => {
+        calledGlobalOnChange = true;
+      })
+      .start();
+
+    expect(calledLocalOnBeforeChange).toBe(false);
+    expect(calledLocalOnBeforeChange).toBe(false);
+    expect(calledGlobalOnBeforeChange).toBe(true);
+    expect(calledGlobalOnChange).toBe(true);
+
+    calledGlobalOnBeforeChange = false;
+    calledGlobalOnChange = false;
+
+    ijs.nextStep();
+
+    expect(calledLocalOnBeforeChange).toBe(true);
+    expect(calledLocalOnBeforeChange).toBe(true);
+    expect(calledGlobalOnBeforeChange).toBe(false);
+    expect(calledGlobalOnChange).toBe(false);
+
+    calledLocalOnBeforeChange = false;
+    calledLocalOnChange = false;
+
+    ijs.nextStep();
+
+    expect(calledLocalOnBeforeChange).toBe(false);
+    expect(calledLocalOnBeforeChange).toBe(false);
+    expect(calledGlobalOnBeforeChange).toBe(true);
+    expect(calledGlobalOnChange).toBe(true);
+
+    calledGlobalOnBeforeChange = false;
+    calledGlobalOnChange = false;
+  });
 });
