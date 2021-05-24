@@ -94,11 +94,21 @@
               {
                 element: '#step4',
                 intro: "Another step.",
-                position: 'bottom'
+                position: 'bottom',
+                onchange () {
+                  alert('changed to step 4')
+                }
               },
               {
-                element: '#step5',
-                intro: 'Get it, use it.'
+                intro: 'Get it, use it.',
+                onbeforechange (next) {
+                  // assign dynamically loaded element
+                  this.element = document.querySelector('#step5')
+                  this.position = 'bottom'
+
+                  // call next when done
+                  next()
+                }
               }
             ]
           });
