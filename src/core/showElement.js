@@ -20,7 +20,7 @@ import appendChild from "../util/appendChild";
  * @method _getProgress
  * @returns current progress percentage
  */
-function _getProgress() {
+function _getProgress () {
   // Steps are 0 indexed
   const currentStep = parseInt(this._currentStep + 1, 10);
   return (currentStep / this._introItems.length) * 100;
@@ -32,7 +32,7 @@ function _getProgress() {
  * @api private
  * @method _disableInteraction
  */
-function _disableInteraction() {
+function _disableInteraction () {
   let disableInteractionLayer = document.querySelector(
     ".introjs-disableInteraction"
   );
@@ -55,7 +55,7 @@ function _disableInteraction() {
  * @method _showElement
  * @param {Object} targetElement
  */
-export default function _showElement(targetElement) {
+export default function _showElement (targetElement) {
   if (typeof targetElement.onchange === 'function') {
     targetElement.onchange();
   } else if (typeof this._introChangeCallback !== "undefined") {
@@ -335,6 +335,14 @@ export default function _showElement(targetElement) {
     nextTooltipButton = createElement("a");
 
     nextTooltipButton.onclick = () => {
+      const refLayer = oldReferenceLayer || document.querySelector(
+        ".introjs-tooltipReferenceLayer"
+      );
+
+      if (refLayer && refLayer.classList.contains('waiting')) {
+        return;
+      }
+
       if (self._introItems.length - 1 !== self._currentStep) {
         nextStep.call(self);
       } else if (/introjs-donebutton/gi.test(nextTooltipButton.className)) {
@@ -353,6 +361,14 @@ export default function _showElement(targetElement) {
     prevTooltipButton = createElement("a");
 
     prevTooltipButton.onclick = () => {
+      const refLayer = oldReferenceLayer || document.querySelector(
+        ".introjs-tooltipReferenceLayer"
+      );
+
+      if (refLayer && refLayer.classList.contains('waiting')) {
+        return;
+      }
+
       if (self._currentStep !== 0) {
         previousStep.call(self);
       }

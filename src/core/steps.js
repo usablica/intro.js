@@ -55,6 +55,8 @@ export function nextStep () {
 
   const nextStep = this._introItems[this._currentStep];
   const continuation = (continueStep = true) => {
+    waiting.call(this, false);
+
     // if `onbeforechange` returned `false`, stop displaying the element
     if (!continueStep) {
       --this._currentStep;
@@ -76,7 +78,6 @@ export function nextStep () {
   };
 
   continueIfOK.call(this, nextStep, continuation);
-
 }
 
 /**
@@ -96,6 +97,8 @@ export function previousStep () {
 
   const nextStep = this._introItems[this._currentStep];
   const continuation = (continueStep = true) => {
+    waiting.call(this, false);
+
     // if `onbeforechange` returned `false`, stop displaying the element
     if (!continueStep) {
       ++this._currentStep;
@@ -117,7 +120,27 @@ export function currentStep () {
   return this._currentStep;
 }
 
+function waiting (status = true) {
+  const referenceLayer = document.querySelector(
+    ".introjs-tooltipReferenceLayer"
+  );
+
+  if (!referenceLayer) {
+    return;
+  }
+
+  if (status) {
+    referenceLayer.classList.add('waiting');
+    referenceLayer.classList.add(this._direction);
+  } else {
+    referenceLayer.classList.remove('waiting');
+    referenceLayer.classList.remove(this._direction);
+  }
+}
+
 function continueIfOK (nextStep, doNext) {
+  waiting.call(this);
+
   if (nextStep && typeof nextStep.onbeforechange === "function") {
     nextStep.onbeforechange(doNext);
   } else if (typeof this._introBeforeChangeCallback !== "undefined") {

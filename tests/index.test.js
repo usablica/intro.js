@@ -84,7 +84,7 @@ describe("intro", () => {
     expect(oncompleteMMock).toBeCalledTimes(1);
   });
 
-  test("should call not oncomplete when skip is clicked and there are two steps", () => {
+  test("should not call oncomplete when skip is clicked and there are two steps", () => {
     const onexitMock = jest.fn();
     const oncompleteMMock = jest.fn();
 
@@ -309,7 +309,7 @@ describe("intro", () => {
       .start();
 
     expect(calledLocalOnBeforeChange).toBe(false);
-    expect(calledLocalOnBeforeChange).toBe(false);
+    expect(calledLocalOnChange).toBe(false);
     expect(calledGlobalOnBeforeChange).toBe(true);
     expect(calledGlobalOnChange).toBe(true);
 
@@ -319,7 +319,7 @@ describe("intro", () => {
     ijs.nextStep();
 
     expect(calledLocalOnBeforeChange).toBe(true);
-    expect(calledLocalOnBeforeChange).toBe(true);
+    expect(calledLocalOnChange).toBe(true);
     expect(calledGlobalOnBeforeChange).toBe(false);
     expect(calledGlobalOnChange).toBe(false);
 
@@ -329,8 +329,8 @@ describe("intro", () => {
     ijs.nextStep();
 
     expect(calledLocalOnBeforeChange).toBe(false);
-    expect(calledLocalOnBeforeChange).toBe(false);
-    expect(calledGlobalOnBeforeChange).toBe(true);
+    expect(calledLocalOnChange).toBe(false);
+    expect(calledGlobalOnChange).toBe(true);
     expect(calledGlobalOnChange).toBe(true);
 
     calledGlobalOnBeforeChange = false;
