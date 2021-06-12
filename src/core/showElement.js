@@ -20,7 +20,7 @@ import appendChild from "../util/appendChild";
  * @method _getProgress
  * @returns current progress percentage
  */
-function _getProgress() {
+function _getProgress () {
   // Steps are 0 indexed
   const currentStep = parseInt(this._currentStep + 1, 10);
   return (currentStep / this._introItems.length) * 100;
@@ -32,7 +32,7 @@ function _getProgress() {
  * @api private
  * @method _disableInteraction
  */
-function _disableInteraction() {
+function _disableInteraction () {
   let disableInteractionLayer = document.querySelector(
     ".introjs-disableInteraction"
   );
@@ -55,8 +55,10 @@ function _disableInteraction() {
  * @method _showElement
  * @param {Object} targetElement
  */
-export default function _showElement(targetElement) {
-  if (typeof this._introChangeCallback !== "undefined") {
+export default function _showElement (targetElement) {
+  if (typeof targetElement.onchange === 'function') {
+    targetElement.onchange();
+  } else if (typeof this._introChangeCallback !== "undefined") {
     this._introChangeCallback.call(this, targetElement.element);
   }
 
@@ -69,7 +71,6 @@ export default function _showElement(targetElement) {
   let nextTooltipButton;
   let prevTooltipButton;
   let skipTooltipButton;
-  let scrollParent;
 
   //check for a current step highlight class
   if (typeof targetElement.highlightClass === "string") {
@@ -94,6 +95,22 @@ export default function _showElement(targetElement) {
     const oldtooltipContainer = oldReferenceLayer.querySelector(
       ".introjs-tooltip"
     );
+    const oldTooltipHeaderLayer = oldReferenceLayer.querySelector(
+      ".introjs-tooltip-header"
+    );
+
+    // remove previous step class
+    oldReferenceLayer.classList.remove(`step-${targetElement.step - 1}`);
+    // remove next step class in case going back
+    oldReferenceLayer.classList.remove(`step-${targetElement.step + 1}`);
+    // add current step class
+    oldReferenceLayer.classList.add(`step-${targetElement.step}`);
+
+    if (targetElement.title) {
+      oldTooltipHeaderLayer.classList.remove('no-title');
+    } else {
+      oldTooltipHeaderLayer.classList.add('no-title');
+    }
 
     skipTooltipButton = oldReferenceLayer.querySelector(".introjs-skipbutton");
     prevTooltipButton = oldReferenceLayer.querySelector(".introjs-prevbutton");
@@ -191,7 +208,7 @@ export default function _showElement(targetElement) {
       className: highlightClass,
     });
     const referenceLayer = createElement("div", {
-      className: "introjs-tooltipReferenceLayer",
+      className: `introjs-tooltipReferenceLayer step-${targetElement.step}`,
     });
     const arrowLayer = createElement("div", {
       className: "introjs-arrow",
@@ -231,6 +248,10 @@ export default function _showElement(targetElement) {
 
     tooltipTextLayer.innerHTML = targetElement.intro;
     tooltipTitleLayer.innerHTML = targetElement.title;
+
+    if (!targetElement.title) {
+      tooltipHeaderLayer.classList.add('no-title');
+    }
 
     if (this._options.showBullets === false) {
       bulletsLayer.style.display = "none";
@@ -314,6 +335,14 @@ export default function _showElement(targetElement) {
     nextTooltipButton = createElement("a");
 
     nextTooltipButton.onclick = () => {
+      const refLayer = oldReferenceLayer || document.querySelector(
+        ".introjs-tooltipReferenceLayer"
+      );
+
+      if (refLayer && refLayer.classList.contains('waiting')) {
+        return;
+      }
+
       if (self._introItems.length - 1 !== self._currentStep) {
         nextStep.call(self);
       } else if (/introjs-donebutton/gi.test(nextTooltipButton.className)) {
@@ -332,6 +361,14 @@ export default function _showElement(targetElement) {
     prevTooltipButton = createElement("a");
 
     prevTooltipButton.onclick = () => {
+      const refLayer = oldReferenceLayer || document.querySelector(
+        ".introjs-tooltipReferenceLayer"
+      );
+
+      if (refLayer && refLayer.classList.contains('waiting')) {
+        return;
+      }
+
       if (self._currentStep !== 0) {
         previousStep.call(self);
       }
@@ -356,7 +393,9 @@ export default function _showElement(targetElement) {
         self._introCompleteCallback.call(self);
       }
 
-      if (typeof self._introSkipCallback === "function") {
+      if (typeof targetElement.onskip === 'function') {
+        targetElement.onskip.call(self);
+      } else if (typeof self._introSkipCallback === "function") {
         self._introSkipCallback.call(self);
       }
 
@@ -503,7 +542,9 @@ export default function _showElement(targetElement) {
 
   setShowElement(targetElement);
 
-  if (typeof this._introAfterChangeCallback !== "undefined") {
+  if (typeof targetElement.onafterchange === 'function') {
+    targetElement.onafterchange();
+  } else if (typeof this._introAfterChangeCallback !== "undefined") {
     this._introAfterChangeCallback.call(this, targetElement.element);
   }
 }
