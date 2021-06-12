@@ -43,7 +43,7 @@
     "jshint": "^2.12.0",
     "lerna-changelog": "^1.0.1",
     "minify": "^7.0.2",
-    "node-sass": "^4.14.1",
+    "node-sass": "^6.0.0",
     "postcss": "^8.1.1",
     "postcss-clean": "^1.1.0",
     "postcss-normalize": "^8.0.1",
