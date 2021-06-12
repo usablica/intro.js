@@ -1,11 +1,8 @@
 import addOverlayLayer from "./addOverlayLayer";
-import cloneObject from "../util/cloneObject";
-import forEach from "../util/forEach";
 import DOMEvent from "./DOMEvent";
 import { nextStep } from "./steps";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
-import createElement from "../util/createElement";
 import fetchIntroSteps from "./fetchIntroSteps";
 
 /**
