@@ -29,6 +29,55 @@ describe("fetchIntroSteps", () => {
     expect(steps[1].step).toBe(2);
   });
 
+  test("should find and add elements from options.steps to the list", () => {
+    const targetElement = document.createElement("div");
+
+    const stepOne = document.createElement('div');
+    stepOne.setAttribute('id', 'first');
+
+    const stepTwo = document.createElement('div');
+    stepTwo.setAttribute('id', 'second');
+
+    document.body.appendChild(stepOne);
+    document.body.appendChild(stepTwo);
+
+    const steps = fetchIntroSteps.call(
+      {
+        _options: {
+          tooltipPosition: 'bottom',
+          steps: [{
+            element: '#first',
+            intro: 'first'
+          }, {
+            element: '#second',
+            intro: 'second',
+            position: 'top'
+          }, {
+            element: '#not_found',
+            intro: 'third'
+          }]
+        },
+      },
+      targetElement
+    );
+
+    expect(steps.length).toBe(3);
+
+    expect(steps[0].element).toBe(stepOne);
+    expect(steps[0].position).toBe('bottom');
+    expect(steps[0].intro).toBe('first');
+    expect(steps[0].step).toBe(1);
+
+    expect(steps[1].element).toBe(stepTwo);
+    expect(steps[1].position).toBe('top');
+    expect(steps[1].intro).toBe('second');
+    expect(steps[1].step).toBe(2);
+
+    expect(steps[2].position).toBe('floating');
+    expect(steps[2].intro).toBe('third');
+    expect(steps[2].step).toBe(3);
+  });
+
   test("should find the data-* elements from the DOM", () => {
     const targetElement = document.createElement("div");
 
@@ -122,6 +171,4 @@ describe("fetchIntroSteps", () => {
     expect(steps[0].intro).toBe('steps-first');
     expect(steps[1].intro).toBe('steps-second');
   });
-
-
 });
