@@ -7,10 +7,9 @@ import createElement from "../util/createElement";
  *
  * @api private
  * @param targetElm
- * @param group
  * @returns {[]}
  */
-export default function fetchIntroSteps(targetElm, group) {
+export default function fetchIntroSteps(targetElm) {
   const allIntroSteps = targetElm.querySelectorAll("*[data-intro]");
   let introItems = [];
 
@@ -73,9 +72,8 @@ export default function fetchIntroSteps(targetElm, group) {
     }
 
     forEach(allIntroSteps, (currentElement) => {
-      // PR #80
       // start intro for groups of elements
-      if (group && currentElement.getAttribute("data-intro-group") !== group) {
+      if (this._options.group && currentElement.getAttribute("data-intro-group") !== this._options.group) {
         return;
       }
 
@@ -118,9 +116,8 @@ export default function fetchIntroSteps(targetElm, group) {
     let nextStep = 0;
 
     forEach(allIntroSteps, (currentElement) => {
-      // PR #80
       // start intro for groups of elements
-      if (group && currentElement.getAttribute("data-intro-group") !== group) {
+      if (this._options.group && currentElement.getAttribute("data-intro-group") !== this._options.group) {
         return;
       }
 

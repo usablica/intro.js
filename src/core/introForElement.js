@@ -14,12 +14,11 @@ import fetchIntroSteps from "./fetchIntroSteps";
  * @api private
  * @method introForElement
  * @param {Object} targetElm
- * @param {String} group
  * @returns {Boolean} Success or not?
  */
-export default function introForElement(targetElm, group) {
+export default function introForElement(targetElm ) {
   //set it to the introJs object
-  const steps = fetchIntroSteps.call(this, targetElm, group);
+  const steps = fetchIntroSteps.call(this, targetElm);
 
   if (steps.length === 0) {
     return false;
