@@ -50,6 +50,8 @@ function IntroJs(obj) {
     tooltipPosition: "bottom",
     /* Next CSS class for tooltip boxes */
     tooltipClass: "",
+    /* Start intro for a group of elements */
+    group: "",
     /* CSS class that is added to the helperLayer */
     highlightClass: "",
     /* Close introduction when pressing Escape button? */
@@ -154,8 +156,8 @@ introJs.fn = IntroJs.prototype = {
     this._options = mergeOptions(this._options, options);
     return this;
   },
-  start(group) {
-    introForElement.call(this, this._targetElement, group);
+  start() {
+    introForElement.call(this, this._targetElement);
     return this;
   },
   goToStep(step) {
@@ -200,8 +202,8 @@ introJs.fn = IntroJs.prototype = {
     exitIntro.call(this, this._targetElement, force);
     return this;
   },
-  refresh() {
-    refresh.call(this);
+  refresh(refreshSteps) {
+    refresh.call(this, refreshSteps);
     return this;
   },
   onbeforechange(providedCallback) {
