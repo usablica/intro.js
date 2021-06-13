@@ -2,7 +2,7 @@
   "name": "intro.js",
   "repo": "usablica/intro.js",
   "description": "Lightweight, user-friendly onboarding tour library",
-  "version": "3.4.0",
+  "version": "4.0.0",
   "main": "intro.js",
   "scripts": [
     "intro.js"
