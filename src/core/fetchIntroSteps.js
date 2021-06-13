@@ -50,7 +50,8 @@ export default function fetchIntroSteps(targetElm) {
         currentItem.position = "floating";
       }
 
-      currentItem.position = currentItem.position || this._options.tooltipPosition;
+      currentItem.position =
+        currentItem.position || this._options.tooltipPosition;
       currentItem.scrollTo = currentItem.scrollTo || this._options.scrollTo;
 
       if (typeof currentItem.disableInteraction === "undefined") {
@@ -73,7 +74,10 @@ export default function fetchIntroSteps(targetElm) {
 
     forEach(allIntroSteps, (currentElement) => {
       // start intro for groups of elements
-      if (this._options.group && currentElement.getAttribute("data-intro-group") !== this._options.group) {
+      if (
+        this._options.group &&
+        currentElement.getAttribute("data-intro-group") !== this._options.group
+      ) {
         return;
       }
 
@@ -117,7 +121,10 @@ export default function fetchIntroSteps(targetElm) {
 
     forEach(allIntroSteps, (currentElement) => {
       // start intro for groups of elements
-      if (this._options.group && currentElement.getAttribute("data-intro-group") !== this._options.group) {
+      if (
+        this._options.group &&
+        currentElement.getAttribute("data-intro-group") !== this._options.group
+      ) {
         return;
       }
 

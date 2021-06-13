@@ -91,9 +91,8 @@ export default function _showElement(targetElement) {
       ".introjs-tooltip-title"
     );
     const oldArrowLayer = oldReferenceLayer.querySelector(".introjs-arrow");
-    const oldtooltipContainer = oldReferenceLayer.querySelector(
-      ".introjs-tooltip"
-    );
+    const oldtooltipContainer =
+      oldReferenceLayer.querySelector(".introjs-tooltip");
 
     skipTooltipButton = oldReferenceLayer.querySelector(".introjs-skipbutton");
     prevTooltipButton = oldReferenceLayer.querySelector(".introjs-prevbutton");

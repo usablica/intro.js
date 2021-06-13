@@ -13,7 +13,7 @@ import fetchIntroSteps from "./fetchIntroSteps";
  * @param {Object} targetElm
  * @returns {Boolean} Success or not?
  */
-export default function introForElement(targetElm ) {
+export default function introForElement(targetElm) {
   //set it to the introJs object
   const steps = fetchIntroSteps.call(this, targetElm);
 
