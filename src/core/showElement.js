@@ -80,7 +80,7 @@ export default function _showElement(targetElement) {
     highlightClass += ` ${this._options.highlightClass}`;
   }
 
-  if (oldHelperLayer !== null) {
+  if (oldHelperLayer !== null && oldReferenceLayer !== null) {
     const oldHelperNumberLayer = oldReferenceLayer.querySelector(
       ".introjs-helperNumberLayer"
     );
