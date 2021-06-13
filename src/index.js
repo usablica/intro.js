@@ -202,8 +202,8 @@ introJs.fn = IntroJs.prototype = {
     exitIntro.call(this, this._targetElement, force);
     return this;
   },
-  refresh() {
-    refresh.call(this);
+  refresh(refreshSteps) {
+    refresh.call(this, refreshSteps);
     return this;
   },
   onbeforechange(providedCallback) {

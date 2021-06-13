@@ -1,12 +1,14 @@
 import { reAlignHints } from "./hint";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
+import fetchIntroSteps from "./fetchIntroSteps";
 
 /**
  * Update placement of the intro objects on the screen
  * @api private
+ * @param {boolean} refreshSteps to refresh the intro steps as well
  */
-export default function refresh() {
+export default function refresh(refreshSteps) {
   // re-align intros
   setHelperLayerPosition.call(
     this,
@@ -20,6 +22,10 @@ export default function refresh() {
     this,
     document.querySelector(".introjs-disableInteraction")
   );
+
+  if (refreshSteps) {
+    this._introItems = fetchIntroSteps.call(this, this._targetElement);
+  }
 
   // re-align tooltip
   if (this._currentStep !== undefined && this._currentStep !== null) {
