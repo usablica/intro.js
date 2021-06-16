@@ -19,7 +19,8 @@
   "main": "intro.js",
   "scripts": {
     "prettier": "prettier --write 'src/**/*'",
-    "test": "npm run test:jest && npm run test:jshint && npm run test:cypress",
+    "test": "run-p test:prettier test:jest test:jshint test:cypress",
+    "test:prettier": "prettier --check 'src/**/*'",
     "test:watch": "jest ./tests --verbose --watch",
     "test:jest": "jest ./tests --verbose",
     "test:jshint": "jshint ./src --verbose && jshint ./tests --verbose",
@@ -44,6 +45,7 @@
     "lerna-changelog": "^1.0.1",
     "minify": "^7.0.2",
     "node-sass": "^6.0.0",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8.1.1",
     "postcss-clean": "^1.1.0",
     "postcss-normalize": "^8.0.1",
