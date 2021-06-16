@@ -105,10 +105,12 @@ function _createBullets(targetElement) {
  */
 export function _recreateBullets(oldReferenceLayer, targetElement) {
   if (this._options.showBullets) {
-    document.querySelector(".introjs-bullets").innerHTML = _createBullets.call(
-      this,
-      targetElement
-    ).innerHTML;
+    const existing = document.querySelector(".introjs-bullets");
+
+    existing.parentNode.replaceChild(
+      _createBullets.call(this, targetElement),
+      existing
+    );
   }
 }
 
