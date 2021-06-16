@@ -6,6 +6,7 @@ describe("refresh", () => {
     jest.spyOn(placeTooltip, "default").mockReturnValue(true);
 
     const targetElement = document.createElement("div");
+    document.body.appendChild(targetElement);
 
     const instance = introJs(targetElement).setOptions({
       steps: [{
@@ -16,6 +17,7 @@ describe("refresh", () => {
     instance.start();
 
     expect(instance._introItems.length).toBe(1);
+    expect(document.querySelectorAll(".introjs-bullets ul li").length).toBe(1);
 
     instance.setOptions({
       steps: [{
@@ -27,6 +29,7 @@ describe("refresh", () => {
 
     expect(instance._introItems.length).toBe(1);
     expect(instance._introItems[0].intro).toBe('first');
+    expect(document.querySelectorAll(".introjs-bullets ul li").length).toBe(1);
 
     instance.setOptions({
       steps: [{
@@ -39,5 +42,6 @@ describe("refresh", () => {
     expect(instance._introItems.length).toBe(2);
     expect(instance._introItems[0].intro).toBe('first');
     expect(instance._introItems[1].intro).toBe('second');
+    expect(document.querySelectorAll(".introjs-bullets ul li").length).toBe(2);
   });
 });
