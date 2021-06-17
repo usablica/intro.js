@@ -2,7 +2,7 @@ import { reAlignHints } from "./hint";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import fetchIntroSteps from "./fetchIntroSteps";
-import { _recreateBullets } from "./showElement";
+import { _recreateBullets, _updateProgressBar } from "./showElement";
 
 /**
  * Update placement of the intro objects on the screen
@@ -30,6 +30,7 @@ export default function refresh(refreshSteps) {
       referenceLayer,
       this._introItems[this._currentStep]
     );
+    _updateProgressBar.call(this, referenceLayer);
   }
 
   // re-align tooltip

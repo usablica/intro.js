@@ -132,6 +132,53 @@ function _updateBullets(oldReferenceLayer, targetElement) {
 }
 
 /**
+ * Creates the progress-bar layer and elements
+ * @returns {*}
+ * @private
+ */
+function _createProgressBar() {
+  const progressLayer = createElement("div");
+
+  progressLayer.className = "introjs-progress";
+
+  if (this._options.showProgress === false) {
+    progressLayer.style.display = "none";
+  }
+
+  const progressBar = createElement("div", {
+    className: "introjs-progressbar",
+  });
+
+  if (this._options.progressBarAdditionalClass) {
+    progressBar.className += " " + this._options.progressBarAdditionalClass;
+  }
+
+  progressBar.setAttribute("role", "progress");
+  progressBar.setAttribute("aria-valuemin", 0);
+  progressBar.setAttribute("aria-valuemax", 100);
+  progressBar.setAttribute("aria-valuenow", _getProgress.call(this));
+  progressBar.style.cssText = `width:${_getProgress.call(this)}%;`;
+
+  progressLayer.appendChild(progressBar);
+
+  return progressLayer;
+}
+
+/**
+ * Updates an existing progress bar variables
+ * @param oldReferenceLayer
+ * @private
+ */
+export function _updateProgressBar(oldReferenceLayer) {
+  oldReferenceLayer.querySelector(
+    ".introjs-progress .introjs-progressbar"
+  ).style.cssText = `width:${_getProgress.call(this)}%;`;
+  oldReferenceLayer
+    .querySelector(".introjs-progress .introjs-progressbar")
+    .setAttribute("aria-valuenow", _getProgress.call(this));
+}
+
+/**
  * Show an element on the page
  *
  * @api private
@@ -152,7 +199,6 @@ export default function _showElement(targetElement) {
   let nextTooltipButton;
   let prevTooltipButton;
   let skipTooltipButton;
-  let scrollParent;
 
   //check for a current step highlight class
   if (typeof targetElement.highlightClass === "string") {
@@ -226,12 +272,7 @@ export default function _showElement(targetElement) {
       //change active bullet
       _updateBullets.call(self, oldReferenceLayer, targetElement);
 
-      oldReferenceLayer.querySelector(
-        ".introjs-progress .introjs-progressbar"
-      ).style.cssText = `width:${_getProgress.call(self)}%;`;
-      oldReferenceLayer
-        .querySelector(".introjs-progress .introjs-progressbar")
-        .setAttribute("aria-valuenow", _getProgress.call(self));
+      _updateProgressBar.call(self, oldReferenceLayer);
 
       //show the tooltip
       oldtooltipContainer.style.opacity = 1;
@@ -285,7 +326,6 @@ export default function _showElement(targetElement) {
       className: "introjs-tooltip-title",
     });
 
-    const progressLayer = createElement("div");
     const buttonsLayer = createElement("div");
 
     setStyle(helperLayer, {
@@ -306,27 +346,6 @@ export default function _showElement(targetElement) {
     tooltipTextLayer.innerHTML = targetElement.intro;
     tooltipTitleLayer.innerHTML = targetElement.title;
 
-    progressLayer.className = "introjs-progress";
-
-    if (this._options.showProgress === false) {
-      progressLayer.style.display = "none";
-    }
-
-    const progressBar = createElement("div", {
-      className: "introjs-progressbar",
-    });
-
-    if (this._options.progressBarAdditionalClass) {
-      progressBar.className += " " + this._options.progressBarAdditionalClass;
-    }
-    progressBar.setAttribute("role", "progress");
-    progressBar.setAttribute("aria-valuemin", 0);
-    progressBar.setAttribute("aria-valuemax", 100);
-    progressBar.setAttribute("aria-valuenow", _getProgress.call(this));
-    progressBar.style.cssText = `width:${_getProgress.call(this)}%;`;
-
-    progressLayer.appendChild(progressBar);
-
     buttonsLayer.className = "introjs-tooltipbuttons";
     if (this._options.showButtons === false) {
       buttonsLayer.style.display = "none";
@@ -336,7 +355,7 @@ export default function _showElement(targetElement) {
     tooltipLayer.appendChild(tooltipHeaderLayer);
     tooltipLayer.appendChild(tooltipTextLayer);
     tooltipLayer.appendChild(_createBullets.call(this, targetElement));
-    tooltipLayer.appendChild(progressLayer);
+    tooltipLayer.appendChild(_createProgressBar.call(this));
 
     // add helper layer number
     const helperNumberLayer = createElement("div");
