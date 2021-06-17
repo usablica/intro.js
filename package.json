@@ -23,7 +23,7 @@
     "test:watch": "jest ./tests --verbose --watch",
     "test:jest": "jest ./tests --verbose",
     "test:jshint": "jshint ./src --verbose && jshint ./tests --verbose",
-    "test:cypress": "npm run build && cp -r ./dist ./tests/cypress/setup && cd ./tests && cypress run",
+    "test:cypress": "npm run build && cp -r ./dist ./tests/cypress/setup && cd ./tests && cypress run --env type=actual",
     "release": "./bin/release.sh || true",
     "build": "rollup -c",
     "build:watch": "rollup -c -w"
