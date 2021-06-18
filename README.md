@@ -6,6 +6,8 @@
 
 > Lightweight, user-friendly onboarding tour library
 
+<p align="center"><img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/introjs-demo.png"></p>
+
 ## Where to get
 You can obtain your local copy of Intro.js from:
 
@@ -42,8 +44,6 @@ introJs().start();
 Optionally, pass one parameter to `introJs` function to limit the presentation section.
 
 **For example** `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
-
-<p align="center"><img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/introjs-demo.png"></p>
 
 ## Documentation
 
