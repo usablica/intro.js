@@ -61,4 +61,51 @@ context('Modal', () => {
       cy.compareSnapshot('position-left', 0);
     });
   });
+
+  it('should update the modal after refresh(true)', () => {
+    cy.window().then((win) => {
+      const instance = win.introJs().setOptions({
+        showProgress: true,
+        showBullets: true,
+        steps: [{
+          element: '#main-section',
+          intro: 'step one',
+        }, {
+          element: '#clickable-button',
+          intro: 'step two'
+        }]
+      });
+
+      instance.start();
+
+      cy.wait(800).then(() => {
+        cy.compareSnapshot('refresh-first-step', 0);
+        cy.nextStep();
+
+        cy.wait(500).then(() => {
+          cy.compareSnapshot('refresh-second-step', 0);
+
+          cy.wait(500).then(() => {
+            instance.setOptions({
+              steps: [{
+                element: '#main-section',
+                intro: 'step one',
+              }, {
+                element: '#clickable-button',
+                intro: 'step two'
+              }, {
+                element: '#clickable-absolute-button',
+                intro: 'step three',
+              }]
+            }).refresh(true);
+
+            cy.nextStep();
+            cy.wait(500);
+            cy.compareSnapshot('refresh-third-step', 0);
+          });
+        });
+      });
+
+    });
+  });
 });
