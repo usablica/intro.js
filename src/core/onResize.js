@@ -1,5 +1,7 @@
 import refresh from "./refresh";
 
 export default function onResize() {
-  refresh.call(this);
+  if (document.querySelector('.introjs-tooltip') !== null) {
+    refresh.call(this);
+  }
 }
