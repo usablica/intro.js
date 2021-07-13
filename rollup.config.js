@@ -33,9 +33,6 @@ const jsPlugins = [
   filesize({
     showGzippedSize: true,
   }),
-  babel({
-    exclude: 'node_modules/**'
-  }),
   commonjs()
 ];
 
@@ -108,7 +105,7 @@ export default [
   {
     input: `${inputPath}/index.js`,
     output: {
-      file: `${outputPath}/${pkg.main}`,
+      file: `${outputPath}/${pkg.main.replace(/\.es5.js$/, '.js')}`,
       format: 'umd',
       banner,
       name: 'introJs'
@@ -118,13 +115,44 @@ export default [
   {
     input: `${inputPath}/index.js`,
     output: {
-      file: `${outputPath}/minified/${pkg.main.replace(/\.js$/, '.min.js')}`,
+      file: `${outputPath}/${pkg.main}`,
+      format: 'umd',
+      banner,
+      name: 'introJs'
+    },
+    plugins: [
+      ...jsPlugins,
+      babel({
+        exclude: 'node_modules/**'
+      })
+    ]
+  },
+  {
+    input: `${inputPath}/index.js`,
+    output: {
+      file: `${outputPath}/minified/${pkg.main.replace(/\.es5.js$/, '.js')}`,
       banner,
       format: 'umd',
       name: 'introJs'
     },
     plugins: [
       ...jsPlugins,
+      terser()
+    ]
+  },
+  {
+    input: `${inputPath}/index.js`,
+    output: {
+      file: `${outputPath}/minified/${pkg.main}`,
+      banner,
+      format: 'umd',
+      name: 'introJs'
+    },
+    plugins: [
+      ...jsPlugins,
+      babel({
+        exclude: 'node_modules/**'
+      }),
       terser()
     ]
   }
