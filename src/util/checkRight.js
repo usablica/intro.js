@@ -11,7 +11,7 @@ export default function checkRight(
   tooltipLayer
 ) {
   if (
-    targetOffset.left + tooltipLayerStyleLeft + tooltipOffset.width >
+    targetOffset.style.left + tooltipLayerStyleLeft + tooltipOffset.width >
     windowSize.width
   ) {
     // off the right side of the window
