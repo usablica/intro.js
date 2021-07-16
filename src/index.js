@@ -56,6 +56,8 @@ function IntroJs(obj) {
     highlightClass: "",
     /* Close introduction when pressing Escape button? */
     exitOnEsc: true,
+    /* don't do any action on keydown events? */
+    disableKeyboardActions: false,
     /* Close introduction when clicking on overlay layer? */
     exitOnOverlayClick: true,
     /* Show step numbers in introduction? */

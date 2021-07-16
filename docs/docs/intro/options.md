@@ -17,6 +17,7 @@ permalink: /intro/options/
  - `highlightClass`: Additional CSS class for the helperLayer
  - `buttonClass`: Additional CSS class for the buttons
  - `exitOnEsc`: Exit introduction when pressing Escape button, `true` or `false`
+ - `disableKeyboardActions`: don't do any action on keydown events, `true` or `false` (delfault is false)
  - `exitOnOverlayClick`: Exit introduction when clicking on overlay layer, `true` or `false`
  - `showStepNumbers`: Show steps number in the red circle or not, `true` or `false`
  - `keyboardNavigation`: Navigating with keyboard or not, `true` or `false`

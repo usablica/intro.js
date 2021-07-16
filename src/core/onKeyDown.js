@@ -20,6 +20,10 @@ import exitIntro from "./exitIntro";
  * @return type
  */
 export default function onKeyDown(e) {
+  if(this._options.disableKeyboardActions){
+    return;
+  }
+
   let code = e.code === undefined ? e.which : e.code;
 
   // if e.which is null
