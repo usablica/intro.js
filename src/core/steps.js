@@ -35,7 +35,7 @@ export function goToStepNumber(step) {
  * @api private
  * @method _nextStep
  */
-export function nextStep() {
+export async function nextStep() {
   this._direction = "forward";
 
   if (typeof this._currentStepNumber !== "undefined") {
@@ -57,7 +57,7 @@ export function nextStep() {
   let continueStep = true;
 
   if (typeof this._introBeforeChangeCallback !== "undefined") {
-    continueStep = this._introBeforeChangeCallback.call(
+    continueStep = await this._introBeforeChangeCallback.call(
       this,
       nextStep && nextStep.element
     );
@@ -73,7 +73,7 @@ export function nextStep() {
     //end of the intro
     //check if any callback is defined
     if (typeof this._introCompleteCallback === "function") {
-      this._introCompleteCallback.call(this);
+      await this._introCompleteCallback.call(this);
     }
     exitIntro.call(this, this._targetElement);
     return;
@@ -88,7 +88,7 @@ export function nextStep() {
  * @api private
  * @method _previousStep
  */
-export function previousStep() {
+export async function previousStep() {
   this._direction = "backward";
 
   if (this._currentStep === 0) {
@@ -101,7 +101,7 @@ export function previousStep() {
   let continueStep = true;
 
   if (typeof this._introBeforeChangeCallback !== "undefined") {
-    continueStep = this._introBeforeChangeCallback.call(
+    continueStep = await this._introBeforeChangeCallback.call(
       this,
       nextStep && nextStep.element
     );

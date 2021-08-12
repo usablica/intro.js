@@ -13,14 +13,14 @@ import removeChild from "../util/removeChild";
  * @param {Object} targetElement
  * @param {Boolean} force - Setting to `true` will skip the result of beforeExit callback
  */
-export default function exitIntro(targetElement, force) {
+export default async function exitIntro(targetElement, force) {
   let continueExit = true;
 
   // calling onbeforeexit callback
   //
   // If this callback return `false`, it would halt the process
   if (this._introBeforeExitCallback !== undefined) {
-    continueExit = this._introBeforeExitCallback.call(this);
+    continueExit = await this._introBeforeExitCallback.call(this);
   }
 
   // skip this check if `force` parameter is `true`
@@ -61,7 +61,7 @@ export default function exitIntro(targetElement, force) {
 
   //check if any callback is defined
   if (this._introExitCallback !== undefined) {
-    this._introExitCallback.call(this);
+    await this._introExitCallback.call(this);
   }
 
   //set the step to zero

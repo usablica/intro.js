@@ -1,5 +1,5 @@
 {
-  "esversion": 6,
+  "esversion": 8,
   "undef": true,
   "unused": true,
   "eqeqeq": true,

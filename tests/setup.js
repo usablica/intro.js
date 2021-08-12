@@ -1,4 +1,5 @@
 import { JSDOM } from "jsdom";
+import 'regenerator-runtime/runtime';
 
 const dom = new JSDOM();
 global.document = dom.window.document;

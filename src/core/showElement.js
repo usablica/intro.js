@@ -185,9 +185,9 @@ export function _updateProgressBar(oldReferenceLayer) {
  * @method _showElement
  * @param {Object} targetElement
  */
-export default function _showElement(targetElement) {
+export default async function _showElement(targetElement) {
   if (typeof this._introChangeCallback !== "undefined") {
-    this._introChangeCallback.call(this, targetElement.element);
+    await this._introChangeCallback.call(this, targetElement.element);
   }
 
   const self = this;
@@ -372,12 +372,12 @@ export default function _showElement(targetElement) {
     //next button
     nextTooltipButton = createElement("a");
 
-    nextTooltipButton.onclick = () => {
+    nextTooltipButton.onclick = async () => {
       if (self._introItems.length - 1 !== self._currentStep) {
         nextStep.call(self);
       } else if (/introjs-donebutton/gi.test(nextTooltipButton.className)) {
         if (typeof self._introCompleteCallback === "function") {
-          self._introCompleteCallback.call(self);
+          await self._introCompleteCallback.call(self);
         }
 
         exitIntro.call(self, self._targetElement);
@@ -407,16 +407,16 @@ export default function _showElement(targetElement) {
     setAnchorAsButton(skipTooltipButton);
     skipTooltipButton.innerHTML = this._options.skipLabel;
 
-    skipTooltipButton.onclick = () => {
+    skipTooltipButton.onclick = async () => {
       if (
         self._introItems.length - 1 === self._currentStep &&
         typeof self._introCompleteCallback === "function"
       ) {
-        self._introCompleteCallback.call(self);
+        await self._introCompleteCallback.call(self);
       }
 
       if (typeof self._introSkipCallback === "function") {
-        self._introSkipCallback.call(self);
+        await self._introSkipCallback.call(self);
       }
 
       exitIntro.call(self, self._targetElement);
@@ -563,6 +563,6 @@ export default function _showElement(targetElement) {
   setShowElement(targetElement);
 
   if (typeof this._introAfterChangeCallback !== "undefined") {
-    this._introAfterChangeCallback.call(this, targetElement.element);
+    await this._introAfterChangeCallback.call(this, targetElement.element);
   }
 }
