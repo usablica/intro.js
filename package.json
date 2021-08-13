@@ -2,6 +2,9 @@
   "name": "intro.js",
   "version": "4.1.0",
   "description": "Lightweight, user-friendly onboarding tour library",
+  "engines": {
+    "node": ">=14"
+  },
   "keywords": [
     "onboarding",
     "tour",
