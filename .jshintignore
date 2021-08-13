@@ -1,0 +1,2 @@
+./dist
+./tests/cypress/setup/dist
