@@ -50,6 +50,149 @@ function _disableInteraction(this: IntroJs) {
 }
 
 /**
+ * Creates the bullets layer
+ * @returns HTMLElement
+ * @private
+ */
+function _createBullets(this: IntroJs, targetElement: IntroItem) {
+  const self = this;
+
+  const bulletsLayer = createElement("div", {
+    className: "introjs-bullets",
+  });
+
+  if (this._options.showBullets === false) {
+    bulletsLayer.style.display = "none";
+  }
+
+  const ulContainer = createElement("ul");
+  ulContainer.setAttribute("role", "tablist");
+
+  const anchorClick = function (this: HTMLElement) {
+    self.goToStep(parseInt(this.getAttribute("data-stepnumber")!));
+  };
+
+  forEach(this._introItems, ({ step }, i) => {
+    const innerLi = createElement("li");
+    const anchorLink = createElement("a");
+
+    innerLi.setAttribute("role", "presentation");
+    anchorLink.setAttribute("role", "tab");
+
+    anchorLink.onclick = anchorClick;
+
+    if (i === targetElement.step! - 1) {
+      anchorLink.className = "active";
+    }
+
+    setAnchorAsButton(anchorLink);
+    anchorLink.innerHTML = "&nbsp;";
+    anchorLink.setAttribute("data-stepnumber", step);
+
+    innerLi.appendChild(anchorLink);
+    ulContainer.appendChild(innerLi);
+  });
+
+  bulletsLayer.appendChild(ulContainer);
+
+  return bulletsLayer;
+}
+
+/**
+ * Deletes and recreates the bullets layer
+ * @param oldReferenceLayer
+ * @param targetElement
+ * @private
+ */
+export function _recreateBullets(
+  this: IntroJs,
+  oldReferenceLayer: HTMLElement,
+  targetElement: HTMLElement
+) {
+  if (this._options.showBullets) {
+    const existing = document.querySelector(".introjs-bullets") as HTMLElement;
+
+    existing.parentNode!.replaceChild(
+      _createBullets.call(this, targetElement),
+      existing
+    );
+  }
+}
+
+/**
+ * Updates the bullets
+ *
+ * @param oldReferenceLayer
+ * @param targetElement
+ */
+function _updateBullets(
+  this: IntroJs,
+  oldReferenceLayer: HTMLElement,
+  targetElement: IntroItem
+) {
+  if (this._options.showBullets) {
+    const activeBullet = document.querySelector(
+      ".introjs-bullets li > a.active"
+    ) as HTMLElement;
+    const stepBullet = document.querySelector(
+      `.introjs-bullets li > a[data-stepnumber="${targetElement.step}"]`
+    ) as HTMLElement;
+    activeBullet.className = "";
+    stepBullet.className = "active";
+  }
+}
+
+/**
+ * Creates the progress-bar layer and elements
+ * @returns {*}
+ * @private
+ */
+function _createProgressBar(this: IntroJs) {
+  const progressLayer = createElement("div");
+
+  progressLayer.className = "introjs-progress";
+
+  if (this._options.showProgress === false) {
+    progressLayer.style.display = "none";
+  }
+
+  const progressBar = createElement("div", {
+    className: "introjs-progressbar",
+  });
+
+  if (this._options.progressBarAdditionalClass) {
+    progressBar.className += " " + this._options.progressBarAdditionalClass;
+  }
+
+  progressBar.setAttribute("role", "progress");
+  progressBar.setAttribute("aria-valuemin", "0");
+  progressBar.setAttribute("aria-valuemax", "100");
+  progressBar.setAttribute("aria-valuenow", _getProgress.call(this));
+  progressBar.style.cssText = `width:${_getProgress.call(this)}%;`;
+
+  progressLayer.appendChild(progressBar);
+
+  return progressLayer;
+}
+
+/**
+ * Updates an existing progress bar variables
+ * @param oldReferenceLayer
+ * @private
+ */
+export function _updateProgressBar(
+  this: IntroJs,
+  oldReferenceLayer: HTMLElement
+) {
+  const progressbar = document.querySelector(
+    ".introjs-progress .introjs-progressbar"
+  ) as HTMLElement;
+
+  progressbar.style.cssText = `width:${_getProgress.call(this)}%;`;
+  progressbar.setAttribute("aria-valuenow", _getProgress.call(this));
+}
+
+/**
  * Show an element on the page
  *
  * @api private
@@ -80,7 +223,7 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
     highlightClass += ` ${this._options.highlightClass}`;
   }
 
-  if (oldHelperLayer !== null) {
+  if (oldHelperLayer !== null && oldReferenceLayer !== null) {
     const oldHelperNumberLayer = oldReferenceLayer.querySelector(
       ".introjs-helperNumberLayer"
     ) as HTMLElement;
@@ -90,9 +233,7 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
     const oldTooltipTitleLayer = oldReferenceLayer.querySelector(
       ".introjs-tooltip-title"
     ) as HTMLElement;
-    const oldArrowLayer = oldReferenceLayer.querySelector(
-      ".introjs-arrow"
-    ) as HTMLElement;
+    const oldArrowLayer = oldReferenceLayer.querySelector(".introjs-arrow");
     const oldtooltipContainer = oldReferenceLayer.querySelector(
       ".introjs-tooltip"
     ) as HTMLElement;
@@ -150,20 +291,9 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
       );
 
       //change active bullet
-      if (self._options.showBullets) {
-        (oldReferenceLayer.querySelector(
-          ".introjs-bullets li > a.active"
-        ) as HTMLElement).className = "";
-        (oldReferenceLayer.querySelector(
-          `.introjs-bullets li > a[data-stepnumber="${targetElement.step}"]`
-        ) as HTMLElement).className = "active";
-      }
-      (oldReferenceLayer.querySelector(
-        ".introjs-progress .introjs-progressbar"
-      ) as HTMLElement).style.cssText = `width:${_getProgress.call(self)}%;`;
-      oldReferenceLayer
-        .querySelector(".introjs-progress .introjs-progressbar")!
-        .setAttribute("aria-valuenow", _getProgress.call(self));
+      _updateBullets.call(self, oldReferenceLayer, targetElement);
+
+      _updateProgressBar.call(self, oldReferenceLayer);
 
       //show the tooltip
       oldtooltipContainer.style.opacity = "1";
@@ -216,10 +346,7 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
     const tooltipTitleLayer = createElement("h1", {
       className: "introjs-tooltip-title",
     });
-    const bulletsLayer = createElement("div", {
-      className: "introjs-bullets",
-    });
-    const progressLayer = createElement("div");
+
     const buttonsLayer = createElement("div");
 
     setStyle(helperLayer, {
@@ -240,64 +367,6 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
     tooltipTextLayer.innerHTML = targetElement.intro!;
     tooltipTitleLayer.innerHTML = targetElement.title!;
 
-    if (this._options.showBullets === false) {
-      bulletsLayer.style.display = "none";
-    }
-
-    const ulContainer = createElement("ul");
-    ulContainer.setAttribute("role", "tablist");
-
-    const anchorClick = function (this: HTMLElement) {
-      let step = this.getAttribute("data-stepnumber");
-      if (step) {
-        self.goToStep(parseInt(step));
-      }
-    };
-
-    forEach(this._introItems, ({ step }, i) => {
-      const innerLi = createElement("li");
-      const anchorLink = createElement("a");
-
-      innerLi.setAttribute("role", "presentation");
-      anchorLink.setAttribute("role", "tab");
-
-      anchorLink.onclick = anchorClick;
-
-      if (i === targetElement.step! - 1) {
-        anchorLink.className = "active";
-      }
-
-      setAnchorAsButton(anchorLink);
-      anchorLink.innerHTML = "&nbsp;";
-      anchorLink.setAttribute("data-stepnumber", step);
-
-      innerLi.appendChild(anchorLink);
-      ulContainer.appendChild(innerLi);
-    });
-
-    bulletsLayer.appendChild(ulContainer);
-
-    progressLayer.className = "introjs-progress";
-
-    if (this._options.showProgress === false) {
-      progressLayer.style.display = "none";
-    }
-
-    const progressBar = createElement("div", {
-      className: "introjs-progressbar",
-    });
-
-    if (this._options.progressBarAdditionalClass) {
-      progressBar.className += " " + this._options.progressBarAdditionalClass;
-    }
-    progressBar.setAttribute("role", "progress");
-    progressBar.setAttribute("aria-valuemin", "0");
-    progressBar.setAttribute("aria-valuemax", "100");
-    progressBar.setAttribute("aria-valuenow", _getProgress.call(this));
-    progressBar.style.cssText = `width:${_getProgress.call(this)}%;`;
-
-    progressLayer.appendChild(progressBar);
-
     buttonsLayer.className = "introjs-tooltipbuttons";
     if (this._options.showButtons === false) {
       buttonsLayer.style.display = "none";
@@ -306,8 +375,8 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
     tooltipHeaderLayer.appendChild(tooltipTitleLayer);
     tooltipLayer.appendChild(tooltipHeaderLayer);
     tooltipLayer.appendChild(tooltipTextLayer);
-    tooltipLayer.appendChild(bulletsLayer);
-    tooltipLayer.appendChild(progressLayer);
+    tooltipLayer.appendChild(_createBullets.call(this, targetElement));
+    tooltipLayer.appendChild(_createProgressBar.call(this));
 
     // add helper layer number
     const helperNumberLayer = createElement("div");

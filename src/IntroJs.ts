@@ -21,7 +21,6 @@ import {
   previousStep,
 } from "./core/steps";
 
-
 export interface IntroItem {
   element: HTMLElement;
   title?: string | null;
@@ -48,6 +47,7 @@ export interface Options {
   doneLabel?: string;
   hideNext?: boolean;
   hidePrev?: boolean;
+  group?: string;
   highlightClass?: string;
   showStepNumbers?: boolean;
   keyboardNavigation?: boolean;
@@ -59,6 +59,7 @@ export interface Options {
   showBullets?: boolean;
   hintPosition?: string;
   scrollToElement?: boolean;
+  autoPosition?: boolean;
   scrollTo?: string;
   helperElementPadding?: number;
   skipLabel?: string;
@@ -149,6 +150,8 @@ export class IntroJs {
       tooltipPosition: "bottom",
       /* Next CSS class for tooltip boxes */
       tooltipClass: "",
+      /* Start intro for a group of elements */
+      group: "",
       /* CSS class that is added to the helperLayer */
       highlightClass: "",
       /* Close introduction when pressing Escape button? */
@@ -167,6 +170,8 @@ export class IntroJs {
       showProgress: false,
       /* Scroll to highlighted element? */
       scrollToElement: true,
+      /* To determine the tooltip position automatically based on the window.width/height */
+      autoPosition: true,
       /*
        * Should we scroll the tooltip or target element?
        *
@@ -254,8 +259,8 @@ export class IntroJs {
     exitIntro.call(this, this._targetElement, force);
     return this;
   }
-  refresh() {
-    refresh.call(this);
+  refresh(refreshSteps: boolean = false) {
+    refresh.call(this, refreshSteps);
     return this;
   }
   onbeforechange(providedCallback: IntroBeforeChangeCallback) {

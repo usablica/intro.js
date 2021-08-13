@@ -22,7 +22,10 @@ export default function setHelperLayerPosition(
 
     const currentElement = this._introItems[this._currentStep];
     if (currentElement) {
-      const elementPosition = getOffset(currentElement.element as HTMLElement);
+      const elementPosition = getOffset(
+        currentElement.element as HTMLElement,
+        this._targetElement
+      );
       let widthHeightPadding = this._options.helperElementPadding!;
 
       // If the target element is fixed, the tooltip should be fixed as well.

@@ -1,4 +1,4 @@
-import introJs from "../src";
+import introJs from "../src/index";
 import {
   content,
   className,

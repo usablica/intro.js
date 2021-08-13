@@ -1,7 +1,6 @@
 import stamp from "./util/stamp";
-import { version } from "../package.json";
 import { IntroJs } from "./IntroJs";
-
+import { version } from "../package.json";
 
 class IntroInstances {
   readonly instances: { [key: string]: IntroJs } = {};
@@ -51,5 +50,8 @@ const introJs = (targetElm: HTMLElement | string | undefined = undefined) => {
 };
 
 introJs.version = version;
+try {
+  (window as any).introJs = introJs;
+} catch (e) {}
 
 export default introJs;

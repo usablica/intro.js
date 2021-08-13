@@ -3,7 +3,7 @@
  *
  * @param {Array} arr
  * @param {Function} forEachFnc
- * @param {Function} completeFnc??
+ * @param {Function} [completeFnc]
  * @return {Null}
  */
 export default function forEach(

@@ -38,3 +38,9 @@ dist/
 
 # ts files
 placeholder/
+
+# Tests
+tests/cypress/setup/dist
+tests/cypress/videos/
+tests/cypress/snapshots/actual
+tests/cypress/snapshots/diff
