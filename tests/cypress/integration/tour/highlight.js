@@ -152,4 +152,53 @@ context('Highlight', () => {
         cy.get(".introjs-helperLayer").realClick().then(() => expect(sp).to.not.be.called);
       });
   });
+
+  it('should highlight a fixed element correctly', () => {
+    cy.viewport(550, 750);
+
+    cy.window()
+      .then(window => {
+        window.introJs().setOptions({
+          steps: [{
+            element: "#fixed",
+            intro: "step two"
+          }]
+        }).start();
+
+        cy.wait(500);
+
+        cy.compareSnapshot('highlight-fixed-element', {
+          capture: 'viewport',
+          errorThreshold: 0
+        });
+      });
+  });
+
+
+
+  it('should highlight a fixed element correctly after scroll', () => {
+    cy.viewport(550, 750);
+
+    cy.window()
+      .then(window => {
+
+        window.scrollTo({
+          top: 200
+        });
+
+        window.introJs().setOptions({
+          steps: [{
+            element: "#fixed",
+            intro: "step two"
+          }]
+        }).start();
+
+        cy.wait(500);
+
+        cy.compareSnapshot('highlight-fixed-element-scroll', {
+          capture: 'viewport',
+          errorThreshold: 0
+        });
+      });
+  });
 });

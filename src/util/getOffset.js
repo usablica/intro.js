@@ -21,6 +21,7 @@ export default function getOffset(element, relativeEl) {
   const x = element.getBoundingClientRect();
   const xr = relativeEl.getBoundingClientRect();
   const relativeElPosition = getPropValue(relativeEl, "position");
+  const elementPosition = getPropValue(element, "position");
 
   let obj = {
     width: x.width,
@@ -39,9 +40,16 @@ export default function getOffset(element, relativeEl) {
       left: x.left - xr.left,
     });
   } else {
-    return Object.assign(obj, {
-      top: x.top + scrollTop,
-      left: x.left + scrollLeft,
-    });
+    if (elementPosition === "fixed") {
+      return Object.assign(obj, {
+        top: x.top,
+        left: x.left,
+      });
+    } else {
+      return Object.assign(obj, {
+        top: x.top + scrollTop,
+        left: x.left + scrollLeft,
+      });
+    }
   }
 }
