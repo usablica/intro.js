@@ -201,4 +201,30 @@ context('Highlight', () => {
         });
       });
   });
+
+  it('should highlight a fixed parent element correctly after scroll', () => {
+    cy.viewport(550, 750);
+
+    cy.window()
+      .then(window => {
+
+        window.scrollTo({
+          top: 200
+        });
+
+        window.introJs().setOptions({
+          steps: [{
+            element: "#fixed-parent",
+            intro: "step two"
+          }]
+        }).start();
+
+        cy.wait(500);
+
+        cy.compareSnapshot('highlight-fixed-parent-element-scroll', {
+          capture: 'viewport',
+          errorThreshold: 0
+        });
+      });
+  });
 });

@@ -1,4 +1,5 @@
 import getPropValue from "./getPropValue";
+import isFixed from "./isFixed";
 
 /**
  * Get an element position on the page relative to another element (or body)
@@ -21,7 +22,6 @@ export default function getOffset(element, relativeEl) {
   const x = element.getBoundingClientRect();
   const xr = relativeEl.getBoundingClientRect();
   const relativeElPosition = getPropValue(relativeEl, "position");
-  const elementPosition = getPropValue(element, "position");
 
   let obj = {
     width: x.width,
@@ -40,7 +40,7 @@ export default function getOffset(element, relativeEl) {
       left: x.left - xr.left,
     });
   } else {
-    if (elementPosition === "fixed") {
+    if (isFixed(element)) {
       return Object.assign(obj, {
         top: x.top,
         left: x.left,
