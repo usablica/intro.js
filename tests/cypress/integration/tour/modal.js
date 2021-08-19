@@ -15,17 +15,17 @@ context('Modal', () => {
 
       cy.wait(500);
 
-      cy.compareSnapshot('first-step', 0);
+      cy.compareSnapshot('first-step', 0.05);
 
       cy.nextStep();
       cy.wait(800);
 
-      cy.compareSnapshot('second-step', 0);
+      cy.compareSnapshot('second-step', 0.05);
 
       cy.nextStep();
       cy.wait(800);
 
-      cy.compareSnapshot('exit', 0);
+      cy.compareSnapshot('exit', 0.05);
     });
   });
 
@@ -50,15 +50,15 @@ context('Modal', () => {
       }).start();
 
       cy.wait(800);
-      cy.compareSnapshot('position-bottom', 0);
+      cy.compareSnapshot('position-bottom', 0.05);
 
       cy.nextStep();
       cy.wait(500);
-      cy.compareSnapshot('position-right', 0);
+      cy.compareSnapshot('position-right', 0.05);
 
       cy.nextStep();
       cy.wait(500);
-      cy.compareSnapshot('position-left', 0);
+      cy.compareSnapshot('position-left', 0.05);
     });
   });
 
@@ -79,11 +79,11 @@ context('Modal', () => {
       instance.start();
 
       cy.wait(800).then(() => {
-        cy.compareSnapshot('refresh-first-step', 0);
+        cy.compareSnapshot('refresh-first-step', 0.05);
         cy.nextStep();
 
         cy.wait(500).then(() => {
-          cy.compareSnapshot('refresh-second-step', 0);
+          cy.compareSnapshot('refresh-second-step', 0.05);
 
           cy.wait(500).then(() => {
             instance.setOptions({
@@ -101,7 +101,7 @@ context('Modal', () => {
 
             cy.nextStep();
             cy.wait(500);
-            cy.compareSnapshot('refresh-third-step', 0);
+            cy.compareSnapshot('refresh-third-step', 0.05);
           });
         });
       });

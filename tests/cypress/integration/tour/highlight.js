@@ -17,13 +17,13 @@ context('Highlight', () => {
 
         cy.wait(500);
 
-        cy.compareSnapshot('highlight-element-first-step', 0);
+        cy.compareSnapshot('highlight-element-first-step', 0.05);
 
         cy.nextStep();
 
         cy.wait(800);
 
-        cy.compareSnapshot('highlight-element-second-step', 0);
+        cy.compareSnapshot('highlight-element-second-step', 0.05);
       });
   });
 
@@ -169,7 +169,7 @@ context('Highlight', () => {
 
         cy.compareSnapshot('highlight-fixed-element', {
           capture: 'viewport',
-          errorThreshold: 0
+          errorThreshold: 0.05
         });
       });
   });
@@ -197,7 +197,7 @@ context('Highlight', () => {
 
         cy.compareSnapshot('highlight-fixed-element-scroll', {
           capture: 'viewport',
-          errorThreshold: 0
+          errorThreshold: 0.05
         });
       });
   });
@@ -223,7 +223,7 @@ context('Highlight', () => {
 
         cy.compareSnapshot('highlight-fixed-parent-element-scroll', {
           capture: 'viewport',
-          errorThreshold: 0
+          errorThreshold: 0.05
         });
       });
   });
