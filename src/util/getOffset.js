@@ -1,4 +1,5 @@
 import getPropValue from "./getPropValue";
+import isFixed from "./isFixed";
 
 /**
  * Get an element position on the page relative to another element (or body)
@@ -39,9 +40,16 @@ export default function getOffset(element, relativeEl) {
       left: x.left - xr.left,
     });
   } else {
-    return Object.assign(obj, {
-      top: x.top + scrollTop,
-      left: x.left + scrollLeft,
-    });
+    if (isFixed(element)) {
+      return Object.assign(obj, {
+        top: x.top,
+        left: x.left,
+      });
+    } else {
+      return Object.assign(obj, {
+        top: x.top + scrollTop,
+        left: x.left + scrollLeft,
+      });
+    }
   }
 }
