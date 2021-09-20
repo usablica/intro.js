@@ -36,7 +36,7 @@
     "autoprefixer": "^9.0.0",
     "babel-jest": "^27.0.2",
     "core-js": "^3.6.5",
-    "cypress": "^7.2.0",
+    "cypress": "^8.4.1",
     "cypress-real-events": "^1.4.0",
     "cypress-visual-regression": "^1.5.7",
     "eslint": "^7.13.0",
