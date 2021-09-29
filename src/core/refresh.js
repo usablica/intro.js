@@ -38,6 +38,18 @@ export default function refresh(refreshSteps) {
     const oldArrowLayer = document.querySelector(".introjs-arrow");
     const oldtooltipContainer = document.querySelector(".introjs-tooltip");
 
+    if (!this._introItems[this._currentStep].element) {
+      return;
+    }
+
+    if (!oldtooltipContainer) {
+      return;
+    }
+
+    if (!oldArrowLayer) {
+      return;
+    }
+
     placeTooltip.call(
       this,
       this._introItems[this._currentStep].element,
