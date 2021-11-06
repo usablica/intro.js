@@ -16,6 +16,8 @@
     "self": true,
     "cy": true,
     "context": true,
+    "setTimeout": true,
+    "clearTimeout": true,
     "Cypress": true,
 
     "afterAll": false,

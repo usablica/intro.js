@@ -9,7 +9,6 @@ import setAnchorAsButton from "../util/setAnchorAsButton";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import createElement from "../util/createElement";
-import onResize from "./onResize";
 import debounce from "../util/debounce";
 
 /**
