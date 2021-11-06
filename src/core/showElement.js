@@ -377,7 +377,7 @@ export default function _showElement(targetElement) {
         nextStep.call(self);
       } else if (/introjs-donebutton/gi.test(nextTooltipButton.className)) {
         if (typeof self._introCompleteCallback === "function") {
-          self._introCompleteCallback.call(self);
+          self._introCompleteCallback.call(self, self._currentStep, "done");
         }
 
         exitIntro.call(self, self._targetElement);
@@ -412,7 +412,7 @@ export default function _showElement(targetElement) {
         self._introItems.length - 1 === self._currentStep &&
         typeof self._introCompleteCallback === "function"
       ) {
-        self._introCompleteCallback.call(self);
+        self._introCompleteCallback.call(self, self._currentStep, "skip");
       }
 
       if (typeof self._introSkipCallback === "function") {

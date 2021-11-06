@@ -13,7 +13,7 @@ describe("introForElement", () => {
 
     const self = {
       _options: {},
-      _introStartCallback: onstartCallback
+      _introStartCallback: onstartCallback,
     };
 
     introForElement.call(self, document.body);

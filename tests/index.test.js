@@ -216,15 +216,17 @@ describe("intro", () => {
     const fn = jest.fn();
 
     const intro = introJs();
-    intro.setOptions({
-      steps: [
-        {
-          intro: "step one",
-          element: document.querySelector("h1"),
-        }
-      ]
-    }).onstart(fn);
+    intro
+      .setOptions({
+        steps: [
+          {
+            intro: "step one",
+            element: document.querySelector("h1"),
+          },
+        ],
+      })
+      .onstart(fn);
 
-    expect(intro._introStartCallback).toBe(fn)
+    expect(intro._introStartCallback).toBe(fn);
   });
 });

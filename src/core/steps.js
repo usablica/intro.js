@@ -73,7 +73,7 @@ export function nextStep() {
     //end of the intro
     //check if any callback is defined
     if (typeof this._introCompleteCallback === "function") {
-      this._introCompleteCallback.call(this);
+      this._introCompleteCallback.call(this, this._currentStep, "end");
     }
     exitIntro.call(this, this._targetElement);
     return;

@@ -49,7 +49,7 @@ export default function onKeyDown(e) {
         this._introItems.length - 1 === this._currentStep &&
         typeof this._introCompleteCallback === "function"
       ) {
-        this._introCompleteCallback.call(this);
+        this._introCompleteCallback.call(this, this._currentStep, "skip");
       }
 
       exitIntro.call(this, this._targetElement);
