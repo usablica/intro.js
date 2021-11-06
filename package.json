@@ -18,9 +18,9 @@
   },
   "main": "intro.js",
   "scripts": {
-    "prettier": "prettier --write '(src|tests)/**/*.(js|ts|json|html)'",
+    "prettier": "prettier --write '(src|tests)/**/*.(js|ts|json|html)' '!tests/cypress/setup/dist'",
     "test": "run-p test:prettier test:jest test:jshint test:cypress",
-    "test:prettier": "prettier --check '(src|tests)/**/*.(js|ts|json|html)'",
+    "test:prettier": "prettier --check '(src|tests)/**/*.(js|ts|json|html)' '!tests/cypress/setup/dist'",
     "test:watch": "jest ./tests --verbose --watch",
     "test:jest": "jest ./tests --verbose",
     "test:jshint": "jshint ./src --verbose && jshint ./tests --verbose",
