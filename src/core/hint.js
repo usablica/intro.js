@@ -315,15 +315,16 @@ export function showHintDialog(stepId) {
 
   const tooltipWrapper = createElement("p");
   tooltipWrapper.innerHTML = item.hint;
-
-  const closeButton = createElement("a");
-  closeButton.className = this._options.buttonClass;
-  closeButton.setAttribute("role", "button");
-  closeButton.innerHTML = this._options.hintButtonLabel;
-  closeButton.onclick = hideHint.bind(this, stepId);
-
   tooltipTextLayer.appendChild(tooltipWrapper);
-  tooltipTextLayer.appendChild(closeButton);
+
+  if (this._options.hintShowButton) {
+    const closeButton = createElement("a");
+    closeButton.className = this._options.buttonClass;
+    closeButton.setAttribute("role", "button");
+    closeButton.innerHTML = this._options.hintButtonLabel;
+    closeButton.onclick = hideHint.bind(this, stepId);
+    tooltipTextLayer.appendChild(closeButton);
+  }
 
   arrowLayer.className = "introjs-arrow";
   tooltipLayer.appendChild(arrowLayer);

@@ -92,6 +92,8 @@ function IntroJs(obj) {
     hintPosition: "top-middle",
     /* Hint button label */
     hintButtonLabel: "Got it",
+    /* Display the "Got it" button? */
+    hintShowButton: true,
     /* Adding animation to hints? */
     hintAnimation: true,
     /* additional classes to put on the buttons */
