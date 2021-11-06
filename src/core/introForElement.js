@@ -14,6 +14,10 @@ import fetchIntroSteps from "./fetchIntroSteps";
  * @returns {Boolean} Success or not?
  */
 export default function introForElement(targetElm) {
+  if (this._introStartCallback !== undefined) {
+    this._introStartCallback.call(this, targetElm);
+  }
+
   //set it to the introJs object
   const steps = fetchIntroSteps.call(this, targetElm);
 

@@ -264,6 +264,14 @@ introJs.fn = IntroJs.prototype = {
     }
     return this;
   },
+  onstart(providedCallback) {
+    if (typeof providedCallback === "function") {
+      this._introStartCallback = providedCallback;
+    } else {
+      throw new Error("Provided callback for onstart was not a function.");
+    }
+    return this;
+  },
   onexit(providedCallback) {
     if (typeof providedCallback === "function") {
       this._introExitCallback = providedCallback;
