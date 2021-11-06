@@ -9,6 +9,8 @@ import setAnchorAsButton from "../util/setAnchorAsButton";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import createElement from "../util/createElement";
+import onResize from "./onResize";
+import debounce from "../util/debounce";
 
 /**
  * Get a queryselector within the hint wrapper
@@ -101,6 +103,12 @@ export function removeHints() {
   forEach(hints, (hint) => {
     removeHint.call(this, hint.getAttribute("data-step"));
   });
+
+  DOMEvent.off(document, "click", removeHintTooltip, this, false);
+  DOMEvent.off(window, "resize", reAlignHints, this, true);
+
+  if (this._hintsAutoRefreshFunction)
+    DOMEvent.off(window, "scroll", this._hintsAutoRefreshFunction, this, true);
 }
 
 /**
@@ -207,6 +215,14 @@ export function addHints() {
   // call the callback function (if any)
   if (typeof this._hintsAddedCallback !== "undefined") {
     this._hintsAddedCallback.call(this);
+  }
+
+  if (this._options.hintAutoRefreshInterval >= 0) {
+    this._hintsAutoRefreshFunction = debounce(
+      () => reAlignHints.call(this),
+      this._options.hintAutoRefreshInterval
+    );
+    DOMEvent.on(window, "scroll", this._hintsAutoRefreshFunction, this, true);
   }
 }
 
@@ -429,10 +445,6 @@ export function populateHints(targetElm) {
 
   addHints.call(this);
 
-  /*
-  todo:
-  these events should be removed at some point
-  */
   DOMEvent.on(document, "click", removeHintTooltip, this, false);
   DOMEvent.on(window, "resize", reAlignHints, this, true);
 }

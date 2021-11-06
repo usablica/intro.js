@@ -94,6 +94,8 @@ function IntroJs(obj) {
     hintButtonLabel: "Got it",
     /* Display the "Got it" button? */
     hintShowButton: true,
+    /* Hints auto-refresh interval in ms (set to -1 to disable) */
+    hintAutoRefreshInterval: 10,
     /* Adding animation to hints? */
     hintAnimation: true,
     /* additional classes to put on the buttons */
