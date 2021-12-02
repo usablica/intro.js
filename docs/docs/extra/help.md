@@ -13,7 +13,7 @@ If you are using the open-source license of Introjs, you can use [Github issues]
 
 #### Introjs support
 
-First of all, please consider obtaining a license for your Introjs instance if you haven't already. Then contact us using following email and our team will help you to get your answers.
+First of all, please consider obtaining a license for your Introjs instance if you haven't already. Then contact us using the following email and our team will help you to get your answers.
 
 <ul>
 <li>Do you need any help to setup your <b>Introjs</b>?</li> 
