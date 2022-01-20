@@ -6,7 +6,7 @@ categories: getting-started
 permalink: /getting-started/install
 ---
 
-In this page you can find different ways to obtain an Introjs version and install it.
+On this page, you can find different ways to obtain a version of Introjs and install it.
 
 #### Requirements
 
@@ -20,7 +20,7 @@ You can obtain your local copy of Intro.js from:
 
 ##### CDN
 
-Download it from CDN:
+Download it from a CDN:
 
   - [CDNJS](https://cdnjs.com/libraries/intro.js)
   - [JSDelivr](http://www.jsdelivr.com/projects/intro.js)
@@ -44,19 +44,19 @@ npm install intro.js --save
 
 ##### Git
 
-Download the source from git repository, using git clone [Git repo](https://github.com/usablica/intro.js.git)
+Download the source from our [GitHub repository](https://github.com/usablica/intro.js.git), using git clone.
 
-*We don't recommend to download the source from the Git because it might have some unstable changes.*
+*We don't recommend downloading the source from GitHub because it might have some unstable changes.*
 
 
 #### Setup
 
-After download the source, you need to add it to the page. Introjs has two main parts, the css and js files.
+After downloading the source, you need to add it to the page. Introjs has two main parts, the CSS and JS files.
 
-You need to add the `JS` file (`intro.js`) before closing the body tag (`</body>`) and adding the CSS file (`introjs.css`) to the header (`<head>`).
+You need to add the JS file (`intro.js`) before closing the body tag (`</body>`) and adding the CSS file (`introjs.css`) to the header (`<head>`).
 
-That's it! Now follow next steps or go to [Quick Start]({{ site.baseurl }}/getting-started/start) page.
+That's it! Now follow the next steps or go to [Quick Start]({{ site.baseurl }}/getting-started/start) page.
 
 ##### RTL
 
-You can use Introjs for RTL websites as well (e.g. Farsi). What you need to do is adding `introjs-rtl.css` file after the main CSS file (`introjs.css`)
+You can use Introjs for RTL websites as well (e.g. Farsi). What you need to do is add the `introjs-rtl.css` file after the main CSS file (`introjs.css`)
