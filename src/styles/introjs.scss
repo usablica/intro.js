@@ -232,7 +232,7 @@ tr.introjs-showElement {
   background-color: $black100;
   border-radius: 0.2em;
   zoom: 1;
-  *display: inline;
+  display: inline;
 
   &:hover {
     outline: none;
