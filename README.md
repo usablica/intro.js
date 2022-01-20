@@ -11,7 +11,7 @@
 ## Where to get
 You can obtain your local copy of Intro.js from:
 
-**1)** This github repository, using ```git clone https://github.com/usablica/intro.js.git```
+**1)** This GitHub repository, using ```git clone https://github.com/usablica/intro.js.git```
 
 **2)** Using bower ```bower install intro.js --save```
 
