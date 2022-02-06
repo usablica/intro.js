@@ -50,7 +50,7 @@ export default [
   {
     input: `${inputPath}/styles/introjs-rtl.scss`,
     output: {
-      file: `${outputPath}/introjs-rtl.min.css`,
+      file: `${outputPath}/minified/introjs-rtl.min.css`,
       format: 'es'
     },
     plugins: [
@@ -92,7 +92,7 @@ export default [
   {
     input: `${inputPath}/styles/introjs.scss`,
     output: {
-      file: `${outputPath}/introjs.min.css`,
+      file: `${outputPath}/minified/introjs.min.css`,
       format: 'es'
     },
     plugins: [
@@ -117,7 +117,7 @@ export default [
   {
     input: `${inputPath}/index.js`,
     output: {
-      file: `${outputPath}/${pkg.main.replace(/\.js$/, '.min.js')}`,
+      file: `${outputPath}/minified/${pkg.main.replace(/\.js$/, '.min.js')}`,
       banner,
       format: 'umd',
       name: 'introJs',
