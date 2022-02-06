@@ -1,14 +1,15 @@
 {
   "name": "intro.js",
-  "version": "4.3.0",
-  "description": "Lightweight, user-friendly onboarding tour library",
+  "version": "5.0.0",
+  "description": "User Onboarding and Product Walkthrough Library",
   "keywords": [
     "onboarding",
     "tour",
     "introjs",
     "intro",
     "guide",
-    "walkthrough"
+    "walkthrough",
+    "user-onboarding"
   ],
   "author": "Afshin Mehrabani <afshin.meh@gmail.com>",
   "homepage": "https://introjs.com",
