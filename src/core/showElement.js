@@ -68,7 +68,7 @@ function _createBullets(targetElement) {
   ulContainer.setAttribute("role", "tablist");
 
   const anchorClick = function () {
-    self.goToStep(this.getAttribute("data-stepnumber"));
+    self.goToStep(this.getAttribute("data-step-number"));
   };
 
   forEach(this._introItems, ({ step }, i) => {
@@ -86,7 +86,7 @@ function _createBullets(targetElement) {
 
     setAnchorAsButton(anchorLink);
     anchorLink.innerHTML = "&nbsp;";
-    anchorLink.setAttribute("data-stepnumber", step);
+    anchorLink.setAttribute("data-step-number", step);
 
     innerLi.appendChild(anchorLink);
     ulContainer.appendChild(innerLi);
@@ -128,7 +128,7 @@ function _updateBullets(oldReferenceLayer, targetElement) {
       ".introjs-bullets li > a.active"
     ).className = "";
     oldReferenceLayer.querySelector(
-      `.introjs-bullets li > a[data-stepnumber="${targetElement.step}"]`
+      `.introjs-bullets li > a[data-step-number="${targetElement.step}"]`
     ).className = "active";
   }
 }

@@ -102,13 +102,13 @@ export default function fetchIntroSteps(targetElm) {
           title: currentElement.getAttribute("data-title") || "",
           intro: currentElement.getAttribute("data-intro"),
           step: parseInt(currentElement.getAttribute("data-step"), 10),
-          tooltipClass: currentElement.getAttribute("data-tooltipclass"),
-          highlightClass: currentElement.getAttribute("data-highlightclass"),
+          tooltipClass: currentElement.getAttribute("data-tooltip-class"),
+          highlightClass: currentElement.getAttribute("data-highlight-class"),
           position:
             currentElement.getAttribute("data-position") ||
             this._options.tooltipPosition,
           scrollTo:
-            currentElement.getAttribute("data-scrollto") ||
+            currentElement.getAttribute("data-scroll-to") ||
             this._options.scrollTo,
           disableInteraction,
         };
@@ -150,13 +150,13 @@ export default function fetchIntroSteps(targetElm) {
           title: currentElement.getAttribute("data-title") || "",
           intro: currentElement.getAttribute("data-intro"),
           step: nextStep + 1,
-          tooltipClass: currentElement.getAttribute("data-tooltipclass"),
-          highlightClass: currentElement.getAttribute("data-highlightclass"),
+          tooltipClass: currentElement.getAttribute("data-tooltip-class"),
+          highlightClass: currentElement.getAttribute("data-highlight-class"),
           position:
             currentElement.getAttribute("data-position") ||
             this._options.tooltipPosition,
           scrollTo:
-            currentElement.getAttribute("data-scrollto") ||
+            currentElement.getAttribute("data-scroll-to") ||
             this._options.scrollTo,
           disableInteraction,
         };
