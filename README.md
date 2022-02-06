@@ -4,16 +4,20 @@
 [![](https://data.jsdelivr.com/v1/package/npm/intro.js/badge)](https://www.jsdelivr.com/package/npm/intro.js)
 [![npm](https://img.shields.io/npm/dm/intro.js)](https://www.jsdelivr.com/package/npm/intro.js)
 
-> Lightweight, user-friendly onboarding tour library
+> User Onboarding and Product Walkthrough Library
 
-<p align="center"><img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/introjs-demo.png"></p>
+<p align="center">
+  <a href="https://introjs.com">
+    <img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/introjs-demo.png">
+  </a>
+</p>
 
 ## Where to get
 You can obtain your local copy of Intro.js from:
 
 **1)** This GitHub repository, using ```git clone https://github.com/usablica/intro.js.git```
 
-**2)** Using bower ```bower install intro.js --save```
+**2)** Using yarn ```yarn add intro.js```
 
 **3)** Using npm ```npm install intro.js --save```
 
