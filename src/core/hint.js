@@ -419,7 +419,7 @@ export function populateHints(targetElm) {
     //first add intro items with data-step
     forEach(hints, (currentElement) => {
       // hint animation
-      let hintAnimation = currentElement.getAttribute("data-hintanimation");
+      let hintAnimation = currentElement.getAttribute("data-hint-animation");
 
       if (hintAnimation) {
         hintAnimation = hintAnimation === "true";
@@ -431,10 +431,10 @@ export function populateHints(targetElm) {
         element: currentElement,
         hint: currentElement.getAttribute("data-hint"),
         hintPosition:
-          currentElement.getAttribute("data-hintposition") ||
+          currentElement.getAttribute("data-hint-position") ||
           this._options.hintPosition,
         hintAnimation,
-        tooltipClass: currentElement.getAttribute("data-tooltipclass"),
+        tooltipClass: currentElement.getAttribute("data-tooltip-class"),
         position:
           currentElement.getAttribute("data-position") ||
           this._options.tooltipPosition,

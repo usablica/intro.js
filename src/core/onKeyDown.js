@@ -53,7 +53,7 @@ export default function onKeyDown(e) {
       }
 
       exitIntro.call(this, this._targetElement);
-    } else if (target && target.getAttribute("data-stepnumber")) {
+    } else if (target && target.getAttribute("data-step-number")) {
       // user hit enter while focusing on step bullet
       target.click();
     } else {
