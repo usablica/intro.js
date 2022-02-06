@@ -18,6 +18,7 @@
     "url": "https://github.com/usablica/intro.js"
   },
   "main": "intro.js",
+  "module": "intro.module.js",
   "scripts": {
     "prettier": "prettier --write '(src|tests)/**/*.(js|ts|json|html)' '!tests/cypress/setup/dist'",
     "test": "run-p test:prettier test:jest test:jshint test:cypress",
