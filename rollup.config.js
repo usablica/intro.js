@@ -36,12 +36,14 @@ const jsPlugins = [
   babel({
     exclude: 'node_modules/**'
   }),
-  commonjs()
+  commonjs(),
+  terser()
 ];
 
 const postCSSPlugins = [
   normalize,
-  autoprefixer
+  autoprefixer,
+  clean
 ];
 
 export default [
@@ -55,10 +57,7 @@ export default [
       postcss({
         sourceMap: true,
         extract: true,
-        plugins: [
-          ...postCSSPlugins,
-          clean
-        ]
+        plugins: postCSSPlugins
       })
     ]
   },
@@ -71,6 +70,7 @@ export default [
     plugins: [
       postcss({
         extract: true,
+        sourceMap: true,
         plugins: postCSSPlugins
       })
     ]
@@ -84,6 +84,7 @@ export default [
     plugins: [
       postcss({
         extract: true,
+        sourceMap: true,
         plugins: postCSSPlugins
       })
     ]
@@ -98,10 +99,7 @@ export default [
       postcss({
         extract: true,
         sourceMap: true,
-        plugins: [
-          ...postCSSPlugins,
-          clean
-        ]
+        plugins: postCSSPlugins
       })
     ]
   },
@@ -111,7 +109,8 @@ export default [
       file: `${outputPath}/${pkg.main}`,
       format: 'umd',
       banner,
-      name: 'introJs'
+      name: 'introJs',
+      sourcemap: true,
     },
     plugins: jsPlugins
   },
@@ -124,10 +123,7 @@ export default [
       name: 'introJs',
       sourcemap: true,
     },
-    plugins: [
-      ...jsPlugins,
-      terser()
-    ]
+    plugins: jsPlugins
   },
   {
     input: `${inputPath}/index.js`,
@@ -138,9 +134,6 @@ export default [
       name: 'introJs',
       sourcemap: true,
     },
-    plugins: [
-      ...jsPlugins,
-      terser()
-    ]
+    plugins: jsPlugins
   }
 ];
