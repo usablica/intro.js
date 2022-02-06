@@ -26,6 +26,7 @@
     "test:jshint": "jshint ./src --verbose && jshint ./tests --verbose",
     "test:cypress": "npm run build && cp -r ./dist ./tests/cypress/setup && cd ./tests && cypress run --env type=actual",
     "release": "./bin/release.sh || true",
+    "prebuild": "rimraf ./dist",
     "build": "rollup -c",
     "build:watch": "rollup -c -w"
   },
@@ -50,6 +51,7 @@
     "postcss-clean": "^1.1.0",
     "postcss-normalize": "^8.0.1",
     "prettier": "2.5.1",
+    "rimraf": "^3.0.2",
     "rollup": "^2.48.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.1.0",
