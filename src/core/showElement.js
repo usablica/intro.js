@@ -253,7 +253,7 @@ export default function _showElement(targetElement) {
     self._lastShowElementTimer = window.setTimeout(() => {
       // set current step to the label
       if (oldHelperNumberLayer !== null) {
-        oldHelperNumberLayer.innerHTML = `${targetElement.step} of ${this._introItems.length}`;
+        oldHelperNumberLayer.innerHTML = `${targetElement.step}${this._options.customStepNumbersSeparator}${this._introItems.length}`;
       }
 
       // set current tooltip text
@@ -364,7 +364,7 @@ export default function _showElement(targetElement) {
 
     if (this._options.showStepNumbers === true) {
       helperNumberLayer.className = "introjs-helperNumberLayer";
-      helperNumberLayer.innerHTML = `${targetElement.step} of ${this._introItems.length}`;
+      helperNumberLayer.innerHTML = `${targetElement.step}${this._options.customStepNumbersSeparator}${this._introItems.length}`;
       tooltipLayer.appendChild(helperNumberLayer);
     }
 

@@ -60,6 +60,8 @@ function IntroJs(obj) {
     exitOnOverlayClick: true,
     /* Show step numbers in introduction? */
     showStepNumbers: false,
+    /* show custom step number separator */
+    customStepNumbersSeparator: " of ",
     /* Let user use keyboard to navigate the tour? */
     keyboardNavigation: true,
     /* Show tour control buttons? */
