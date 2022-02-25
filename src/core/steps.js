@@ -103,10 +103,18 @@ export function previousStep() {
     return false;
   }
 
-  --this._currentStep;
 
-  const nextStep = this._introItems[this._currentStep];
+  const nextStep = this._introItems[this._currentStep - 1];
   let continueStep = true;
+
+  if (typeof this._introPreviousCallback !== "undefined") {
+    continueStep = this._introPreviousCallback.call(
+      this,
+      nextStep && nextStep.element
+    );
+  }
+
+  --this._currentStep;
 
   if (typeof this._introBeforeChangeCallback !== "undefined") {
     continueStep = this._introBeforeChangeCallback.call(

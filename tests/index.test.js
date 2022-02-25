@@ -93,6 +93,29 @@ describe("intro", () => {
     expect(onnextMock).toBeCalledTimes(1);
   });
 
+  test("should call onprevious when back is clicked", () => {
+    const onpreviousMock = jest.fn();
+
+    introJs()
+      .setOptions({
+        steps: [
+          {
+            intro: "first",
+          },
+          {
+            intro: "second",
+          },
+        ],
+      })
+      .onprevious(onpreviousMock)
+      .start();
+
+    nextButton().click();
+    prevButton().click();
+
+    expect(onpreviousMock).toBeCalledTimes(1);
+  });
+
   test("should call onexit when skip is clicked", () => {
     const onexitMock = jest.fn();
     const oncompleteMMock = jest.fn();
