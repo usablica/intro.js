@@ -47,14 +47,22 @@ export function nextStep() {
     });
   }
 
+  let nextStep;
+  let continueStep = true;
+
   if (typeof this._currentStep === "undefined") {
     this._currentStep = 0;
+    nextStep = this._introItems[0];
   } else {
+    nextStep = this._introItems[this._currentStep + 1];
+    if (typeof this._introNextCallback !== "undefined") {
+      continueStep = this._introNextCallback.call(
+        this,
+        nextStep && nextStep.element
+      );
+    }
     ++this._currentStep;
   }
-
-  const nextStep = this._introItems[this._currentStep];
-  let continueStep = true;
 
   if (typeof this._introBeforeChangeCallback !== "undefined") {
     continueStep = this._introBeforeChangeCallback.call(

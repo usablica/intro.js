@@ -236,6 +236,14 @@ introJs.fn = IntroJs.prototype = {
     }
     return this;
   },
+  onnext(providedCallback) {
+    if (typeof providedCallback === "function") {
+      this._introNextCallback = providedCallback;
+    } else {
+      throw new Error("Provided callback for onnext was not a function");
+    }
+    return this;
+  },
   oncomplete(providedCallback) {
     if (typeof providedCallback === "function") {
       this._introCompleteCallback = providedCallback;

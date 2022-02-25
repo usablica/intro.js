@@ -43,6 +43,7 @@ describe("intro", () => {
   test("should call onexit and oncomplete when there is one step", () => {
     const onexitMock = jest.fn();
     const oncompleteMMock = jest.fn();
+    const onnextMock = jest.fn();
 
     introJs()
       .setOptions({
@@ -54,12 +55,42 @@ describe("intro", () => {
       })
       .onexit(onexitMock)
       .oncomplete(oncompleteMMock)
+      .onnext(onnextMock)
       .start();
 
     nextButton().click();
 
     expect(onexitMock).toBeCalledTimes(1);
     expect(oncompleteMMock).toBeCalledTimes(1);
+    expect(onnextMock).toBeCalledTimes(0);
+  });
+
+  test("should call onnext when there is more than one step", () => {
+    const onexitMock = jest.fn();
+    const oncompleteMock = jest.fn();
+    const onnextMock = jest.fn();
+
+    introJs()
+      .setOptions({
+        steps: [
+          {
+            intro: "first",
+          },
+          {
+            intro: "second",
+          },
+        ],
+      })
+      .onexit(onexitMock)
+      .oncomplete(oncompleteMock)
+      .onnext(onnextMock)
+      .start();
+
+    nextButton().click();
+
+    expect(onexitMock).toBeCalledTimes(0);
+    expect(oncompleteMock).toBeCalledTimes(0);
+    expect(onnextMock).toBeCalledTimes(1);
   });
 
   test("should call onexit when skip is clicked", () => {
