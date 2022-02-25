@@ -73,11 +73,11 @@
         var intro = introJs();
         intro.onnext(function () {
           const nextStep = this.currentStep() + 1;
-          alert(`Next up: ${this._introItems[nextStep].intro}`);
+          return confirm(`Next intro: ${this._introItems[nextStep].intro}\nProceed?`);
         });
         intro.onprevious(function () {
           const nextStep = this.currentStep() - 1;
-          alert(`Next up: ${this._introItems[nextStep].intro}`);
+          return confirm(`Previous intro: ${this._introItems[nextStep].intro}\nProceed?`);
         });
         intro.start();
       }

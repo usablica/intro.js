@@ -56,10 +56,10 @@ export function nextStep() {
   } else {
     nextStep = this._introItems[this._currentStep + 1];
     if (typeof this._introNextCallback !== "undefined") {
-      continueStep = this._introNextCallback.call(
-        this,
-        nextStep && nextStep.element
-      );
+      continueStep = this._introNextCallback.call(this, nextStep && nextStep.element);
+      if (continueStep === false) {
+        return false;
+      }
     }
     ++this._currentStep;
   }
@@ -108,10 +108,10 @@ export function previousStep() {
   let continueStep = true;
 
   if (typeof this._introPreviousCallback !== "undefined") {
-    continueStep = this._introPreviousCallback.call(
-      this,
-      nextStep && nextStep.element
-    );
+    continueStep = this._introPreviousCallback.call(this, nextStep && nextStep.element);
+    if (continueStep === false) {
+      return false;
+    }
   }
 
   --this._currentStep;
