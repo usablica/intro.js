@@ -248,7 +248,7 @@ introJs.fn = IntroJs.prototype = {
     if (typeof providedCallback === "function") {
       this._introPreviousCallback = providedCallback;
     } else {
-      throw new Error("Provided callback for onnext was not a function");
+      throw new Error("Provided callback for onprevious was not a function");
     }
     return this;
   },
