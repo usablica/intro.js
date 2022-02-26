@@ -9,9 +9,11 @@ describe("refresh", () => {
     document.body.appendChild(targetElement);
 
     const instance = introJs(targetElement).setOptions({
-      steps: [{
-        intro: 'first',
-      }]
+      steps: [
+        {
+          intro: "first",
+        },
+      ],
     });
 
     instance.start();
@@ -19,29 +21,39 @@ describe("refresh", () => {
     expect(instance._introItems.length).toBe(1);
     expect(document.querySelectorAll(".introjs-bullets ul li").length).toBe(1);
 
-    instance.setOptions({
-      steps: [{
-        intro: 'first'
-      }, {
-        intro: 'second'
-      }]
-    }).refresh();
+    instance
+      .setOptions({
+        steps: [
+          {
+            intro: "first",
+          },
+          {
+            intro: "second",
+          },
+        ],
+      })
+      .refresh();
 
     expect(instance._introItems.length).toBe(1);
-    expect(instance._introItems[0].intro).toBe('first');
+    expect(instance._introItems[0].intro).toBe("first");
     expect(document.querySelectorAll(".introjs-bullets ul li").length).toBe(1);
 
-    instance.setOptions({
-      steps: [{
-        intro: 'first'
-      }, {
-        intro: 'second'
-      }]
-    }).refresh(true);
+    instance
+      .setOptions({
+        steps: [
+          {
+            intro: "first",
+          },
+          {
+            intro: "second",
+          },
+        ],
+      })
+      .refresh(true);
 
     expect(instance._introItems.length).toBe(2);
-    expect(instance._introItems[0].intro).toBe('first');
-    expect(instance._introItems[1].intro).toBe('second');
+    expect(instance._introItems[0].intro).toBe("first");
+    expect(instance._introItems[1].intro).toBe("second");
     expect(document.querySelectorAll(".introjs-bullets ul li").length).toBe(2);
   });
 });

@@ -211,4 +211,22 @@ describe("intro", () => {
     expect(fixed.className).toContain("introjs-showElement");
     expect(fixed.className).not.toContain("introjs-relativePosition");
   });
+
+  test("should set the onstart callback", () => {
+    const fn = jest.fn();
+
+    const intro = introJs();
+    intro
+      .setOptions({
+        steps: [
+          {
+            intro: "step one",
+            element: document.querySelector("h1"),
+          },
+        ],
+      })
+      .onstart(fn);
+
+    expect(intro._introStartCallback).toBe(fn);
+  });
 });

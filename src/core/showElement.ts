@@ -69,7 +69,7 @@ function _createBullets(this: IntroJs, targetElement: IntroItem) {
   ulContainer.setAttribute("role", "tablist");
 
   const anchorClick = function (this: HTMLElement) {
-    self.goToStep(parseInt(this.getAttribute("data-stepnumber")!));
+    self.goToStep(parseInt(this.getAttribute("data-step-number")!));
   };
 
   forEach(this._introItems, ({ step }, i) => {
@@ -87,7 +87,7 @@ function _createBullets(this: IntroJs, targetElement: IntroItem) {
 
     setAnchorAsButton(anchorLink);
     anchorLink.innerHTML = "&nbsp;";
-    anchorLink.setAttribute("data-stepnumber", step);
+    anchorLink.setAttribute("data-step-number", step);
 
     innerLi.appendChild(anchorLink);
     ulContainer.appendChild(innerLi);
@@ -112,10 +112,12 @@ export function _recreateBullets(
   if (this._options.showBullets) {
     const existing = document.querySelector(".introjs-bullets") as HTMLElement;
 
-    existing.parentNode!.replaceChild(
-      _createBullets.call(this, targetElement),
-      existing
-    );
+    if (existing) {
+      existing.parentNode!.replaceChild(
+        _createBullets.call(this, targetElement),
+        existing
+      );
+    }
   }
 }
 
@@ -134,10 +136,10 @@ function _updateBullets(
     const activeBullet = document.querySelector(
       ".introjs-bullets li > a.active"
     ) as HTMLElement;
-    const stepBullet = document.querySelector(
-      `.introjs-bullets li > a[data-stepnumber="${targetElement.step}"]`
-    ) as HTMLElement;
     activeBullet.className = "";
+    const stepBullet = document.querySelector(
+      `.introjs-bullets li > a[data-step-number="${targetElement.step}"]`
+    ) as HTMLElement;
     stepBullet.className = "active";
   }
 }
@@ -398,7 +400,7 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
         nextStep.call(self);
       } else if (/introjs-donebutton/gi.test(nextTooltipButton.className)) {
         if (typeof self._introCompleteCallback === "function") {
-          self._introCompleteCallback.call(self);
+          self._introCompleteCallback.call(self, self._currentStep, "done");
         }
 
         exitIntro.call(self, self._targetElement);
@@ -433,7 +435,7 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
         self._introItems.length - 1 === self._currentStep &&
         typeof self._introCompleteCallback === "function"
       ) {
-        self._introCompleteCallback.call(self);
+        self._introCompleteCallback.call(self, self._currentStep, "skip");
       }
 
       if (typeof self._introSkipCallback === "function") {

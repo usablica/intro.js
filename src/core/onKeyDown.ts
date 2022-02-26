@@ -50,11 +50,11 @@ export default function onKeyDown(this: IntroJs, e: KeyboardEvent) {
         this._introItems.length - 1 === this._currentStep &&
         typeof this._introCompleteCallback === "function"
       ) {
-        this._introCompleteCallback.call(this);
+        this._introCompleteCallback.call(this, this._currentStep, "skip");
       }
 
       exitIntro.call(this, this._targetElement);
-    } else if (target && target.getAttribute("data-stepnumber")) {
+    } else if (target && target.getAttribute("data-step-number")) {
       // user hit enter while focusing on step bullet
       target.click();
     } else {

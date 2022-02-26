@@ -1,4 +1,5 @@
 import getPropValue from "./getPropValue";
+import isFixed from "./isFixed";
 import { IntroItem } from "../IntroJs";
 
 export interface Offset {
@@ -50,9 +51,16 @@ export default function getOffset(
       left: x.left - xr.left,
     });
   } else {
-    return Object.assign(obj, {
-      top: x.top + scrollTop,
-      left: x.left + scrollLeft,
-    });
+    if (isFixed(element)) {
+      return Object.assign(obj, {
+        top: x.top,
+        left: x.left,
+      });
+    } else {
+      return Object.assign(obj, {
+        top: x.top + scrollTop,
+        left: x.left + scrollLeft,
+      });
+    }
   }
 }

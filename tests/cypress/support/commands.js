@@ -24,16 +24,16 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-const compareSnapshotCommand = require('cypress-visual-regression/dist/command');
+const compareSnapshotCommand = require("cypress-visual-regression/dist/command");
 
 compareSnapshotCommand({
-  capture: 'fullPage'
+  capture: "fullPage",
 });
 
-Cypress.Commands.add('nextStep', () => {
-  cy.get('.introjs-nextbutton').click();
+Cypress.Commands.add("nextStep", () => {
+  cy.get(".introjs-nextbutton").click();
 });
 
-Cypress.Commands.add('prevStep', () => {
-  cy.get('.introjs-prevbutton').click();
+Cypress.Commands.add("prevStep", () => {
+  cy.get(".introjs-prevbutton").click();
 });

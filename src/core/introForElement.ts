@@ -16,6 +16,10 @@ import { IntroItem, IntroJs } from "../IntroJs";
  */
 
 export default function introForElement(this: IntroJs, targetElm: HTMLElement) {
+  if (this._introStartCallback !== undefined) {
+    this._introStartCallback.call(this, targetElm);
+  }
+
   //set it to the introJs object
   const steps = fetchIntroSteps.call(this, targetElm);
 

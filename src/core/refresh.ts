@@ -39,12 +39,14 @@ export default function refresh(this: IntroJs, refreshSteps: boolean) {
     const oldArrowLayer = document.querySelector(".introjs-arrow");
     const oldtooltipContainer = document.querySelector(".introjs-tooltip");
 
-    placeTooltip.call(
-      this,
-      this._introItems[this._currentStep].element,
-      oldtooltipContainer,
-      oldArrowLayer
-    );
+    if (oldtooltipContainer && oldArrowLayer) {
+      placeTooltip.call(
+        this,
+        this._introItems[this._currentStep].element,
+        oldtooltipContainer,
+        oldArrowLayer
+      );
+    }
   }
 
   //re-align hints
