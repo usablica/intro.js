@@ -1,4 +1,4 @@
-import {DOMWindow, JSDOM} from "jsdom";
+import { DOMWindow, JSDOM } from "jsdom";
 
 export interface Global {
   document: Document;

@@ -224,10 +224,11 @@ export function addHints(this: IntroJs) {
     this._hintsAddedCallback.call(this);
   }
 
-  if (this._options.hintAutoRefreshInterval >= 0) {
-    this._hintsAutoRefreshFunction = debounce(
+  if (this._options.hintAutoRefreshInterval! >= 0) {
+    this._hintsAutoRefreshFunction = debounce.call(
+      this,
       () => reAlignHints.call(this),
-      this._options.hintAutoRefreshInterval
+      this._options.hintAutoRefreshInterval!
     );
     DOMEvent.on(window, "scroll", this._hintsAutoRefreshFunction, this, true);
   }
@@ -341,15 +342,15 @@ export function showHintDialog(this: IntroJs, stepId: number) {
 
   tooltipTextLayer.className = "introjs-tooltiptext";
 
-  const tooltipWrapper = createElement("p") as HTMLElement;;
-  tooltipWrapper.innerHTML = item.hint;
+  const tooltipWrapper = createElement("p") as HTMLElement;
+  tooltipWrapper.innerHTML = item.hint!;
   tooltipTextLayer.appendChild(tooltipWrapper);
 
   if (this._options.hintShowButton) {
-    const closeButton = createElement("a") as HTMLElement;;
-    closeButton.className = this._options.buttonClass;
+    const closeButton = createElement("a") as HTMLElement;
+    closeButton.className = this._options.buttonClass!;
     closeButton.setAttribute("role", "button");
-    closeButton.innerHTML = this._options.hintButtonLabel;
+    closeButton.innerHTML = this._options.hintButtonLabel!;
     closeButton.onclick = hideHint.bind(this, stepId);
     tooltipTextLayer.appendChild(closeButton);
   }

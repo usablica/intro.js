@@ -1,4 +1,4 @@
-export function find(selector: string|Element): HTMLElement {
+export function find(selector: string | Element): HTMLElement {
   if (typeof selector === "string") {
     return document.querySelector(selector) as HTMLElement;
   }
@@ -10,7 +10,7 @@ export function find(selector: string|Element): HTMLElement {
   throw Error("invalid selector");
 }
 
-export function content(selector: string|Element) {
+export function content(selector: string | Element) {
   const el = find(selector);
 
   if (el) {
@@ -20,7 +20,7 @@ export function content(selector: string|Element) {
   return null;
 }
 
-export function className(selector: string|Element) {
+export function className(selector: string | Element) {
   const el = find(selector);
 
   if (el) {
@@ -53,7 +53,11 @@ export function tooltipText() {
 /**
  * @returns {Element}
  */
-export function appendDummyElement(name?: string, text?: string, style: string = '') {
+export function appendDummyElement(
+  name?: string,
+  text?: string,
+  style: string = ""
+) {
   const el = document.createElement(name || "p") as HTMLElement;
   el.innerHTML = text || "hello world";
   el.style.cssText = style;

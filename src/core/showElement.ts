@@ -133,11 +133,11 @@ function _updateBullets(
   targetElement: IntroItem
 ) {
   if (this._options.showBullets) {
-    const activeBullet = document.querySelector(
+    const activeBullet = oldReferenceLayer.querySelector(
       ".introjs-bullets li > a.active"
     ) as HTMLElement;
     activeBullet.className = "";
-    const stepBullet = document.querySelector(
+    const stepBullet = oldReferenceLayer.querySelector(
       `.introjs-bullets li > a[data-step-number="${targetElement.step}"]`
     ) as HTMLElement;
     stepBullet.className = "active";
@@ -186,7 +186,7 @@ export function _updateProgressBar(
   this: IntroJs,
   oldReferenceLayer: HTMLElement
 ) {
-  const progressbar = document.querySelector(
+  const progressbar = oldReferenceLayer.querySelector(
     ".introjs-progress .introjs-progressbar"
   ) as HTMLElement;
 

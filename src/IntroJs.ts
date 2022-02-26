@@ -62,12 +62,14 @@ export interface Options {
   autoPosition?: boolean;
   scrollTo?: string;
   helperElementPadding?: number;
+  hintAutoRefreshInterval?: number;
   skipLabel?: string;
   nextToDone?: boolean;
   buttonClass?: string;
   nextLabel?: string;
   tooltipPosition?: string;
   hintAnimation?: boolean;
+  hintShowButton?: boolean;
   steps?: Array<Step>;
   hints?: Array<any>;
 }
@@ -98,8 +100,10 @@ export type IntroAfterChangeCallback = (intro?: IntroJs) => void;
 export type IntroCompleteCallback = (intro?: IntroJs) => void;
 export type IntroExitCallback = (intro?: IntroJs) => void;
 export type IntroSkipCallback = (intro?: IntroJs) => void;
+export type IntroStartCallback = (intro?: IntroJs) => void;
 export type IntroBeforeExitCallback = (intro?: IntroJs) => void;
 export type HintsAddedCallback = (intro?: IntroJs) => void;
+export type HintsAutoRefreshFunction = (intro?: IntroJs) => void;
 export type HintClickCallback = (
   hintElement?: HTMLElement,
   item?: IntroItem,
@@ -125,7 +129,9 @@ export class IntroJs {
   _hintCloseCallback: HintCloseCallback;
   _introExitCallback: IntroExitCallback;
   _introSkipCallback: IntroSkipCallback;
+  _introStartCallback: IntroStartCallback;
   _introBeforeExitCallback: IntroBeforeExitCallback;
+  _hintsAutoRefreshFunction: HintsAutoRefreshFunction;
 
   constructor(obj: HTMLElement | null = null) {
     this._targetElement = obj;
@@ -198,6 +204,10 @@ export class IntroJs {
       buttonClass: "introjs-button",
       /* additional classes to put on progress bar */
       progressBarAdditionalClass: false,
+      /* Display the "Got it" button? */
+      hintShowButton: true,
+      /* Hints auto-refresh interval in ms (set to -1 to disable) */
+      hintAutoRefreshInterval: 10,
     };
   }
 
@@ -318,6 +328,14 @@ export class IntroJs {
       this._hintCloseCallback = providedCallback;
     } else {
       throw new Error("Provided callback for onhintclose was not a function.");
+    }
+    return this;
+  }
+  onstart(providedCallback: IntroStartCallback) {
+    if (typeof providedCallback === "function") {
+      this._introStartCallback = providedCallback;
+    } else {
+      throw new Error("Provided callback for onstart was not a function.");
     }
     return this;
   }
