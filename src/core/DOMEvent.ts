@@ -17,7 +17,7 @@ const DOMEvent = (() => {
     /**
      * Gets a unique ID for an event listener
      *
-     * @param obj Object
+     * @param _obj Object
      * @param type event type
      * @param listener Function
      * @param context Object
@@ -25,7 +25,7 @@ const DOMEvent = (() => {
      */
     // @ts-ignore
     this._id = (
-      obj: any,
+      _obj: any,
       type: string,
       listener: (data: any) => void,
       context: IntroJs
@@ -76,8 +76,8 @@ const DOMEvent = (() => {
     this.off = function (
       obj: any,
       type: string,
-      listener: (data: any) => void,
-      context: IntroJs,
+      _listener: (data: any) => void,
+      _context: IntroJs,
       useCapture: boolean
     ) {
       const id = this._id.apply(this, arguments);

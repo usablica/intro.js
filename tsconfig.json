@@ -2,22 +2,30 @@
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,
+    "lib": ["es6"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "noEmitOnError": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "pretty": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2017",
     "allowSyntheticDefaultImports": true,
     "declaration": true,
+    "outDir": "dist",
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
     "resolveJsonModule": true,
-    "module": "ES2015",
-    "target": "es5",
-    "moduleResolution": "node",
     "removeComments": true,
-    "sourceMap": true
   },
-  "include": ["src/**/*.ts","src/**/*.ts","src/**/*.ts"],
   "files": [
     "src/index.ts"
   ],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts", "dist"],
+  "include": ["*"],
 }

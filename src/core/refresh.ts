@@ -10,14 +10,16 @@ import { _recreateBullets, _updateProgressBar } from "./showElement";
  * @api private
  * @param {boolean} refreshSteps to refresh the intro steps as well
  */
-export default function refresh(this: IntroJs, refreshSteps: boolean) {
+export default function refresh(this: IntroJs, refreshSteps: boolean = false) {
   const referenceLayer = document.querySelector(
     ".introjs-tooltipReferenceLayer"
-  );
-  const helperLayer = document.querySelector(".introjs-helperLayer");
+  ) as HTMLElement;
+  const helperLayer = document.querySelector(
+    ".introjs-helperLayer"
+  ) as HTMLElement;
   const disableInteractionLayer = document.querySelector(
     ".introjs-disableInteraction"
-  );
+  ) as HTMLElement;
 
   // re-align intros
   setHelperLayerPosition.call(this, helperLayer);
@@ -36,8 +38,12 @@ export default function refresh(this: IntroJs, refreshSteps: boolean) {
 
   // re-align tooltip
   if (this._currentStep !== undefined && this._currentStep !== null) {
-    const oldArrowLayer = document.querySelector(".introjs-arrow");
-    const oldtooltipContainer = document.querySelector(".introjs-tooltip");
+    const oldArrowLayer = document.querySelector(
+      ".introjs-arrow"
+    ) as HTMLElement;
+    const oldtooltipContainer = document.querySelector(
+      ".introjs-tooltip"
+    ) as HTMLElement;
 
     if (oldtooltipContainer && oldArrowLayer) {
       placeTooltip.call(

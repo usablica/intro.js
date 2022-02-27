@@ -1,6 +1,5 @@
 import getPropValue from "./getPropValue";
 import isFixed from "./isFixed";
-import { IntroItem } from "../IntroJs";
 
 export interface Offset {
   top: number;

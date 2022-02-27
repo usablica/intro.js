@@ -211,7 +211,12 @@ export function addHints(this: IntroJs) {
     item.element = hint;
 
     // align the hint position
-    alignHintPosition.call(this, item.hintPosition, hint, item.targetElement);
+    alignHintPosition.call(
+      this,
+      item.hintPosition,
+      hint.style,
+      item.targetElement
+    );
 
     hintsWrapper!.appendChild(hint);
   });
@@ -244,7 +249,7 @@ export function addHints(this: IntroJs) {
  * @param {Object} element
  */
 export function alignHintPosition(
-  this: HTMLElement,
+  this: IntroJs,
   position: string,
   style: CSSStyleDeclaration,
   element: HTMLElement
@@ -318,7 +323,7 @@ export function showHintDialog(this: IntroJs, stepId: number) {
   const removedStep = removeHintTooltip.call(this);
 
   // to toggle the tooltip
-  if (parseInt(removedStep, 10) === stepId) {
+  if (removedStep && parseInt(removedStep, 10) === stepId) {
     return;
   }
 

@@ -6,8 +6,6 @@
  * @param String key
  * @return Object
  */
-import { IntroJs } from "../IntroJs";
-
 const stamp = (() => {
   const keys: { [key: string]: number } = {};
   return function stamp(obj: any, key = "introjs-stamp"): string {

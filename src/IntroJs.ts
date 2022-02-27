@@ -89,27 +89,37 @@ export interface Step {
 }
 
 export type IntroChangeCallback = (
-  intro?: IntroJs,
+  this: IntroJs,
   element?: HTMLElement
 ) => boolean;
 export type IntroBeforeChangeCallback = (
-  intro?: IntroJs,
-  step?: number
+  this: IntroJs,
+  element?: any
+) => boolean;
+export type IntroAfterChangeCallback = (
+  this: IntroJs,
+  element?: HTMLElement
 ) => void;
-export type IntroAfterChangeCallback = (intro?: IntroJs) => void;
-export type IntroCompleteCallback = (intro?: IntroJs) => void;
-export type IntroExitCallback = (intro?: IntroJs) => void;
-export type IntroSkipCallback = (intro?: IntroJs) => void;
-export type IntroStartCallback = (intro?: IntroJs) => void;
-export type IntroBeforeExitCallback = (intro?: IntroJs) => void;
-export type HintsAddedCallback = (intro?: IntroJs) => void;
-export type HintsAutoRefreshFunction = (intro?: IntroJs) => void;
+export type IntroCompleteCallback = (
+  this: IntroJs,
+  currentStep: number | undefined,
+  status: string
+) => void;
+export type IntroExitCallback = (this: IntroJs) => void;
+export type IntroSkipCallback = (this: IntroJs) => void;
+export type IntroStartCallback = (this: IntroJs, element?: HTMLElement) => void;
+export type IntroBeforeExitCallback = (this: IntroJs) => boolean;
+export type HintsAddedCallback = (this: IntroJs) => void;
+export type HintsAutoRefreshFunction = (this: IntroJs) => void;
 export type HintClickCallback = (
   hintElement?: HTMLElement,
   item?: IntroItem,
   stepId?: number
 ) => void;
-export type HintCloseCallback = (intro?: IntroJs, step?: number) => void;
+export type HintCloseCallback = (
+  this: IntroJs,
+  step?: number | undefined | string
+) => void;
 
 export class IntroJs {
   _options: Options;
@@ -118,22 +128,22 @@ export class IntroJs {
   _direction: string | undefined = undefined;
   _currentStepNumber: number | undefined = undefined;
   _lastShowElementTimer: number | undefined = undefined;
-  _targetElement: HTMLElement | null = null;
+  _targetElement: HTMLElement;
 
-  _introBeforeChangeCallback: IntroBeforeChangeCallback;
-  _introChangeCallback: IntroChangeCallback;
-  _introAfterChangeCallback: IntroAfterChangeCallback;
-  _introCompleteCallback: IntroCompleteCallback;
-  _hintsAddedCallback: HintsAddedCallback;
-  _hintClickCallback: HintClickCallback;
-  _hintCloseCallback: HintCloseCallback;
-  _introExitCallback: IntroExitCallback;
-  _introSkipCallback: IntroSkipCallback;
-  _introStartCallback: IntroStartCallback;
-  _introBeforeExitCallback: IntroBeforeExitCallback;
-  _hintsAutoRefreshFunction: HintsAutoRefreshFunction;
+  _introBeforeChangeCallback: IntroBeforeChangeCallback | undefined;
+  _introChangeCallback: IntroChangeCallback | undefined;
+  _introAfterChangeCallback: IntroAfterChangeCallback | undefined;
+  _introCompleteCallback: IntroCompleteCallback | undefined;
+  _hintsAddedCallback: HintsAddedCallback | undefined;
+  _hintClickCallback: HintClickCallback | undefined;
+  _hintCloseCallback: HintCloseCallback | undefined;
+  _introExitCallback: IntroExitCallback | undefined;
+  _introSkipCallback: IntroSkipCallback | undefined;
+  _introStartCallback: IntroStartCallback | undefined;
+  _introBeforeExitCallback: IntroBeforeExitCallback | undefined;
+  _hintsAutoRefreshFunction: HintsAutoRefreshFunction | undefined;
 
-  constructor(obj: HTMLElement | null = null) {
+  constructor(obj: HTMLElement) {
     this._targetElement = obj;
     this._introItems = [];
 
@@ -223,8 +233,8 @@ export class IntroJs {
     this._options = mergeOptions(this._options, options);
     return this;
   }
-  start(group: number | undefined = undefined) {
-    introForElement.call(this, this._targetElement, group);
+  start() {
+    introForElement.call(this, this._targetElement);
     return this;
   }
   goToStep(step: number) {

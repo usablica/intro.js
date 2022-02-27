@@ -87,8 +87,8 @@ function _determineAutoPosition(
   const possiblePositions = this._options.positionPrecedence!.slice();
 
   const windowSize = getWindowSize();
-  const tooltipHeight = getOffset(tooltipLayer).height + 10;
-  const tooltipWidth = getOffset(tooltipLayer).width + 20;
+  const tooltipHeight = getOffset.call(this, tooltipLayer).height + 10;
+  const tooltipWidth = getOffset.call(this, tooltipLayer).width + 20;
   const targetElementRect = targetElement.getBoundingClientRect();
 
   // If we check all the possible areas, and there are no valid places for the tooltip, the element
@@ -211,7 +211,11 @@ export default function placeTooltip(
   currentTooltipPosition = this._introItems[this._currentStep].position;
 
   // Floating is always valid, no point in calculating
-  if (currentTooltipPosition !== "floating" && this._options.autoPosition) {
+  if (
+    currentTooltipPosition &&
+    currentTooltipPosition !== "floating" &&
+    this._options.autoPosition
+  ) {
     currentTooltipPosition = _determineAutoPosition.call(
       this,
       targetElement,
@@ -221,8 +225,8 @@ export default function placeTooltip(
   }
 
   let tooltipLayerStyleLeft;
-  let targetOffset = getOffset(targetElement);
-  let tooltipOffset = getOffset(tooltipLayer);
+  let targetOffset = getOffset.call(this, targetElement);
+  let tooltipOffset = getOffset.call(this, tooltipLayer);
   let windowSize = getWindowSize();
 
   addClass(tooltipLayer, `introjs-${currentTooltipPosition}`);
@@ -345,18 +349,18 @@ export default function placeTooltip(
     case "bottom-middle-aligned":
       arrowLayer.className = "introjs-arrow top-middle";
 
-      tooltipLayerStyleLeftRight =
+      let tooltipLayerBottomMiddle =
         targetOffset.width / 2 - tooltipOffset.width / 2;
 
       // a fix for middle aligned hints
       if (hintMode) {
-        tooltipLayerStyleLeftRight += 5;
+        tooltipLayerBottomMiddle += 5;
       }
 
       if (
         checkLeft(
           targetOffset,
-          tooltipLayerStyleLeftRight,
+          tooltipLayerBottomMiddle,
           tooltipOffset,
           tooltipLayer
         )
@@ -364,7 +368,7 @@ export default function placeTooltip(
         tooltipLayer.style.removeProperty("right");
         checkRight(
           targetOffset,
-          tooltipLayerStyleLeftRight,
+          tooltipLayerBottomMiddle,
           tooltipOffset,
           windowSize,
           tooltipLayer
