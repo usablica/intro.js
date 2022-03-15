@@ -44,6 +44,8 @@ function IntroJs(obj) {
     hidePrev: false,
     /* Hide next button in the last step? Otherwise, it will be disabled button (note: this will also hide the "Done" button) */
     hideNext: false,
+    /* Hide the skip button */
+    hideSkip: false,
     /* Change the Next button to Done in the last step of the intro? otherwise, it will render a disabled button */
     nextToDone: true,
     /* Default tooltip box position */

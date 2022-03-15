@@ -458,6 +458,16 @@ export default function _showElement(targetElement) {
     _disableInteraction.call(self);
   }
 
+  // hide skip button
+  if (this._options.hideSkip === true) {
+    if (
+      typeof skipTooltipButton !== "undefined" &&
+      skipTooltipButton !== null
+    ) {
+      skipTooltipButton.className = "".concat("introjs-skipbutton introjs-hidden");
+    }
+  }
+
   // when it's the first step of tour
   if (this._currentStep === 0 && this._introItems.length > 1) {
     if (

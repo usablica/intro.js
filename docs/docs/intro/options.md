@@ -12,6 +12,7 @@ permalink: /intro/options/
  - `doneLabel`: Done button label
  - `hidePrev`: Hide previous button in the first step? Otherwise, it will be disabled button.
  - `hideNext`: Hide next button in the last step? Otherwise, it will be disabled button.
+ - `hideSkip`: Hide the skip button.
  - `tooltipPosition`: Default tooltip position
  - `tooltipClass`: Adding CSS class to all tooltips
  - `highlightClass`: Additional CSS class for the helperLayer
