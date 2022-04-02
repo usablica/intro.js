@@ -32,6 +32,8 @@ function IntroJs(obj) {
   this._introItems = [];
 
   this._options = {
+    /* Is this tour instance active? Don't show the tour again if this flag is set to false */
+    isActive: true,
     /* Next button label in tooltip box */
     nextLabel: "Next",
     /* Previous button label in tooltip box */
@@ -149,6 +151,9 @@ introJs.instances = {};
 
 //Prototype
 introJs.fn = IntroJs.prototype = {
+  isActive() {
+    return this._options.isActive;
+  },
   clone() {
     return new IntroJs(this);
   },

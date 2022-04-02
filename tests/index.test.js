@@ -229,4 +229,16 @@ describe("intro", () => {
 
     expect(intro._introStartCallback).toBe(fn);
   });
+
+  test("should set a unique stamp for each instance", () => {
+    const intro1 = introJs();
+    const intro2 = introJs();
+    const intro3 = introJs();
+
+    expect(intro1["introjs-instance"]).not.toBeNull();
+    expect(intro2["introjs-instance"]).not.toBeNull();
+    expect(intro3["introjs-instance"]).not.toBeNull();
+    expect(intro1["introjs-instance"]).not.toBe(intro2["introjs-instance"]);
+    expect(intro2["introjs-instance"]).not.toBe(intro3["introjs-instance"]);
+  });
 });
