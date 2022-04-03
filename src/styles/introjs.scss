@@ -175,6 +175,32 @@ tr.introjs-showElement {
   padding: 20px;
 }
 
+.introjs-dontShowAgain {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.introjs-dontShowAgain input {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 2px;
+  display: inline;
+  width: 10px;
+  height: 10px;
+}
+
+.introjs-dontShowAgain label {
+  font-size: 14px;
+  display: inline-block;
+  font-weight: normal;
+  display: inline-block;
+  margin: 0 0 0 5px;
+  padding: 0;
+  background-color: $white;
+  color: $black600;
+  user-select: none;
+}
+
 .introjs-tooltip-title {
   font-size: 18px;
   margin: 0;

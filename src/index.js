@@ -3,6 +3,7 @@ import stamp from "./util/stamp";
 import exitIntro from "./core/exitIntro";
 import refresh from "./core/refresh";
 import introForElement from "./core/introForElement";
+import { getDontShowAgain, setDontShowAgain } from "./core/dontShowAgain";
 import { version } from "../package.json";
 import {
   populateHints,
@@ -88,6 +89,12 @@ function IntroJs(obj) {
     positionPrecedence: ["bottom", "top", "right", "left"],
     /* Disable an interaction with element? */
     disableInteraction: false,
+    /* To display the "Don't show again" checkbox in the tour */
+    dontShowAgain: false,
+    dontShowAgainLabel: "Don't show this again",
+    /* "Don't show again" cookie name and expiry (in days) */
+    dontShowAgainCookie: "introjs-dontShowAgain",
+    dontShowAgainCookieDays: 365,
     /* Set how much padding to be used around helper element */
     helperElementPadding: 10,
     /* Default hint position */
@@ -152,6 +159,10 @@ introJs.instances = {};
 //Prototype
 introJs.fn = IntroJs.prototype = {
   isActive() {
+    if (this._options.dontShowAgain && getDontShowAgain.call(this)) {
+      return false;
+    }
+
     return this._options.isActive;
   },
   clone() {
@@ -213,6 +224,10 @@ introJs.fn = IntroJs.prototype = {
   },
   refresh(refreshSteps) {
     refresh.call(this, refreshSteps);
+    return this;
+  },
+  setDontShowAgain(dontShowAgain) {
+    setDontShowAgain.call(this, dontShowAgain);
     return this;
   },
   onbeforechange(providedCallback) {
