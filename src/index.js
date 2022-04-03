@@ -61,8 +61,10 @@ function IntroJs(obj) {
     exitOnEsc: true,
     /* Close introduction when clicking on overlay layer? */
     exitOnOverlayClick: true,
-    /* Show step numbers in introduction? */
+    /* Display the pagination detail */
     showStepNumbers: false,
+    /* Pagination "of" label */
+    stepNumbersOfLabel: "of",
     /* Let user use keyboard to navigate the tour? */
     keyboardNavigation: true,
     /* Show tour control buttons? */
