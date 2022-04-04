@@ -253,7 +253,7 @@ export default function _showElement(targetElement) {
     self._lastShowElementTimer = window.setTimeout(() => {
       // set current step to the label
       if (oldHelperNumberLayer !== null) {
-        oldHelperNumberLayer.innerHTML = `${targetElement.step} of ${this._introItems.length}`;
+        oldHelperNumberLayer.innerHTML = `${targetElement.step} ${this._options.stepNumbersOfLabel} ${this._introItems.length}`;
       }
 
       // set current tooltip text
@@ -356,6 +356,30 @@ export default function _showElement(targetElement) {
     tooltipHeaderLayer.appendChild(tooltipTitleLayer);
     tooltipLayer.appendChild(tooltipHeaderLayer);
     tooltipLayer.appendChild(tooltipTextLayer);
+
+    // "Do not show again" checkbox
+    if (this._options.dontShowAgain) {
+      const dontShowAgainWrapper = createElement("div", {
+        className: "introjs-dontShowAgain",
+      });
+      const dontShowAgainCheckbox = createElement("input", {
+        type: "checkbox",
+        id: "introjs-dontShowAgain",
+        name: "introjs-dontShowAgain",
+      });
+      dontShowAgainCheckbox.onchange = (e) => {
+        this.setDontShowAgain(e.target.checked);
+      };
+      const dontShowAgainCheckboxLabel = createElement("label", {
+        htmlFor: "introjs-dontShowAgain",
+      });
+      dontShowAgainCheckboxLabel.innerText = this._options.dontShowAgainLabel;
+      dontShowAgainWrapper.appendChild(dontShowAgainCheckbox);
+      dontShowAgainWrapper.appendChild(dontShowAgainCheckboxLabel);
+
+      tooltipLayer.appendChild(dontShowAgainWrapper);
+    }
+
     tooltipLayer.appendChild(_createBullets.call(this, targetElement));
     tooltipLayer.appendChild(_createProgressBar.call(this));
 
@@ -364,7 +388,7 @@ export default function _showElement(targetElement) {
 
     if (this._options.showStepNumbers === true) {
       helperNumberLayer.className = "introjs-helperNumberLayer";
-      helperNumberLayer.innerHTML = `${targetElement.step} of ${this._introItems.length}`;
+      helperNumberLayer.innerHTML = `${targetElement.step} ${this._options.stepNumbersOfLabel} ${this._introItems.length}`;
       tooltipLayer.appendChild(helperNumberLayer);
     }
 
