@@ -48,7 +48,7 @@ context("Don't show again checkbox", () => {
           },
         ],
       });
-    
+
       instance.start();
 
       cy.wait(500);
