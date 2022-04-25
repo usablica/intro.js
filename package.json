@@ -43,7 +43,7 @@
     "cypress-real-events": "^1.4.0",
     "cypress-visual-regression": "^1.5.7",
     "eslint": "^8.0.1",
-    "jest": "^27.0.4",
+    "jest": "^28.0.0",
     "jshint": "^2.12.0",
     "lerna-changelog": "^2.1.0",
     "minify": "^8.0.2",
