@@ -86,6 +86,39 @@ describe("fetchIntroSteps", () => {
     expect(steps[2].step).toBe(3);
   });
 
+  test("should throw an error on calling step.element if it is not exists yet and return element after adding", () => {
+    const targetElement = document.createElement("div");
+    const elId = "later_added";
+    const steps = fetchIntroSteps.call(
+      {
+        _options: {
+          tooltipPosition: "bottom",
+          steps: [
+            {
+              element: "#" + elId,
+            },
+          ],
+        },
+      },
+      targetElement
+    );
+
+    expect(steps.length).toBe(1);
+
+    try {
+      const element = steps[0].element; // jshint ignore:line
+    } catch (e) {
+      if (!e.message.includes("There is no element with given selector:"))
+        throw e;
+    }
+
+    const laterAdded = document.createElement("div");
+    laterAdded.setAttribute("id", elId);
+    document.body.appendChild(laterAdded);
+
+    expect(steps[0].element).toBe(laterAdded);
+  });
+
   test("should find the data-* elements from the DOM", () => {
     const targetElement = document.createElement("div");
 
