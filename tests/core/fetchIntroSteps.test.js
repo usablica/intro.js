@@ -10,6 +10,7 @@ describe("fetchIntroSteps", () => {
           steps: [
             {
               element: "#element_does_not_exist",
+              position: "top",
               intro: "hello world",
             },
             {
@@ -23,7 +24,7 @@ describe("fetchIntroSteps", () => {
 
     expect(steps.length).toBe(2);
 
-    expect(steps[0].position).toBe("floating");
+    expect(steps[0].position).toBe("top");
     expect(steps[0].intro).toBe("hello world");
     expect(steps[0].step).toBe(1);
 
@@ -80,7 +81,7 @@ describe("fetchIntroSteps", () => {
     expect(steps[1].intro).toBe("second");
     expect(steps[1].step).toBe(2);
 
-    expect(steps[2].position).toBe("floating");
+    expect(steps[2].position).toBe("bottom");
     expect(steps[2].intro).toBe("third");
     expect(steps[2].step).toBe(3);
   });
