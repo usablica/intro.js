@@ -12,7 +12,10 @@ describe("cookie", () => {
     Object.defineProperty(window.document, "cookie", {
       get: () => _cookie,
       set: (v) => (_cookie = v),
-      split: (s) => _cookie.split(s),
+      // @ts-ignore
+      split: (s) => {
+        return _cookie.split(s);
+      },
     });
   });
 
