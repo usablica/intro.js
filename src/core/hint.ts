@@ -10,6 +10,7 @@ import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import createElement from "../util/createElement";
 import { IntroJs } from "../IntroJs";
+import debounce from "../util/debounce";
 
 /**
  * Get a queryselector within the hint wrapper
@@ -108,6 +109,12 @@ export function removeHints(this: IntroJs) {
   forEach(hints, (hint) => {
     removeHint.call(this, hint.getAttribute("data-step"));
   });
+
+  DOMEvent.off(document, "click", removeHintTooltip, this, false);
+  DOMEvent.off(window, "resize", reAlignHints, this, true);
+
+  if (this._hintsAutoRefreshFunction)
+    DOMEvent.off(window, "scroll", this._hintsAutoRefreshFunction, this, true);
 }
 
 /**
@@ -215,6 +222,14 @@ export function addHints(this: IntroJs) {
   // call the callback function (if any)
   if (typeof this._hintsAddedCallback !== "undefined") {
     this._hintsAddedCallback.call(this);
+  }
+
+  if (this._options.hintAutoRefreshInterval >= 0) {
+    this._hintsAutoRefreshFunction = debounce(
+      () => reAlignHints.call(this),
+      this._options.hintAutoRefreshInterval
+    );
+    DOMEvent.on(window, "scroll", this._hintsAutoRefreshFunction, this, true);
   }
 }
 
@@ -328,15 +343,16 @@ export function showHintDialog(this: IntroJs, stepId: number) {
 
   const tooltipWrapper = createElement("p") as HTMLElement;
   tooltipWrapper.innerHTML = item.hint!;
-
-  const closeButton = createElement("a");
-  closeButton.className = this._options.buttonClass!;
-  closeButton.setAttribute("role", "button");
-  closeButton.innerHTML = this._options.hintButtonLabel!;
-  closeButton.onclick = hideHint.bind(this, stepId);
-
   tooltipTextLayer.appendChild(tooltipWrapper);
-  tooltipTextLayer.appendChild(closeButton);
+
+  if (this._options.hintShowButton) {
+    const closeButton = createElement("a");
+    closeButton.className = this._options.buttonClass!;
+    closeButton.setAttribute("role", "button");
+    closeButton.innerHTML = this._options.hintButtonLabel!;
+    closeButton.onclick = hideHint.bind(this, stepId);
+    tooltipTextLayer.appendChild(closeButton);
+  }
 
   arrowLayer.className = "introjs-arrow";
   tooltipLayer.appendChild(arrowLayer);
@@ -419,7 +435,7 @@ export function populateHints(this: IntroJs, targetElm: HTMLElement) {
     //first add intro items with data-step
     forEach(hints, (currentElement) => {
       // hint animation
-      let hintAnimation = currentElement.getAttribute("data-hintanimation");
+      let hintAnimation = currentElement.getAttribute("data-hint-animation");
 
       if (hintAnimation) {
         hintAnimation = hintAnimation === "true";
@@ -431,10 +447,10 @@ export function populateHints(this: IntroJs, targetElm: HTMLElement) {
         element: currentElement,
         hint: currentElement.getAttribute("data-hint"),
         hintPosition:
-          currentElement.getAttribute("data-hintposition") ||
+          currentElement.getAttribute("data-hint-position") ||
           this._options.hintPosition,
         hintAnimation,
-        tooltipClass: currentElement.getAttribute("data-tooltipclass"),
+        tooltipClass: currentElement.getAttribute("data-tooltip-class"),
         position:
           currentElement.getAttribute("data-position") ||
           this._options.tooltipPosition,
@@ -444,10 +460,6 @@ export function populateHints(this: IntroJs, targetElm: HTMLElement) {
 
   addHints.call(this);
 
-  /*
-  todo:
-  these events should be removed at some point
-  */
   DOMEvent.on(document, "click", removeHintTooltip, this, false);
   DOMEvent.on(window, "resize", reAlignHints, this, true);
 

@@ -1,8 +1,0 @@
-{
-  "name": "intro.js",
-  "description": "Lightweight, user-friendly onboarding tour library",
-  "keywords": ["demo", "intro", "introduction"],
-  "homepage": "http://introjs.com",
-  "author": "Afshin Mehrabani",
-  "main": ["intro.js", "introjs.css"]
-}

@@ -18,10 +18,10 @@ const outputPath = './dist';
 
 const banner = `/*!
  * Intro.js v${version}
- * https://github.com/usablica/intro.js
+ * https://introjs.com
  *
- * Copyright (C) 2017-2020 Afshin Mehrabani (@afshinmeh).
- * https://raw.githubusercontent.com/usablica/intro.js/master/license.md
+ * Copyright (C) 2012-2022 Afshin Mehrabani (@afshinmeh).
+ * https://introjs.com
  *
  * Date: ${new Date().toUTCString()}
  */
@@ -38,12 +38,14 @@ const jsPlugins = [
   babel({
     exclude: 'node_modules/**'
   }),
-  commonjs()
+  commonjs(),
+  terser()
 ];
 
 const postCSSPlugins = [
   normalize,
-  autoprefixer
+  autoprefixer,
+  clean
 ];
 
 export default [
@@ -57,10 +59,7 @@ export default [
       postcss({
         sourceMap: true,
         extract: true,
-        plugins: [
-          ...postCSSPlugins,
-          clean
-        ]
+        plugins: postCSSPlugins
       })
     ]
   },
@@ -73,6 +72,7 @@ export default [
     plugins: [
       postcss({
         extract: true,
+        sourceMap: true,
         plugins: postCSSPlugins
       })
     ]
@@ -86,6 +86,7 @@ export default [
     plugins: [
       postcss({
         extract: true,
+        sourceMap: true,
         plugins: postCSSPlugins
       })
     ]
@@ -100,10 +101,7 @@ export default [
       postcss({
         extract: true,
         sourceMap: true,
-        plugins: [
-          ...postCSSPlugins,
-          clean
-        ]
+        plugins: postCSSPlugins
       })
     ]
   },
@@ -113,7 +111,8 @@ export default [
       file: `${outputPath}/${pkg.main}`,
       format: 'umd',
       banner,
-      name: 'introJs'
+      name: 'introJs',
+      sourcemap: true,
     },
     plugins: jsPlugins
   },
@@ -123,12 +122,20 @@ export default [
       file: `${outputPath}/minified/${pkg.main.replace(/\.js$/, '.min.js')}`,
       banner,
       format: 'umd',
-      name: 'introJs'
+      name: 'introJs',
+      sourcemap: true,
     },
-    plugins: [
-      ...jsPlugins,
-      terser()
-    ]
+    plugins: jsPlugins
+  },
+  {
+    input: `${inputPath}/index.ts`,
+    output: {
+      file: `${outputPath}/${pkg.main.replace(/\.js$/, '.module.js')}`,
+      banner,
+      format: 'es',
+      name: 'introJs',
+      sourcemap: true,
+    },
+    plugins: jsPlugins
   }
 ];
-
