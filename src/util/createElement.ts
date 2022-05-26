@@ -10,7 +10,7 @@ import setStyle from "./setStyle";
 export default function _createElement(
   tagname: string,
   attrs: { [key: string]: string } = {}
-) {
+): HTMLElement {
   let element = document.createElement(tagname) as HTMLElement;
 
   attrs = attrs || {};

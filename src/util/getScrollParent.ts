@@ -5,14 +5,14 @@
  * @return Element
  * @param element
  */
-export default function getScrollParent(element: Element): HTMLElement {
+export default function getScrollParent(element: HTMLElement): HTMLElement {
   let style = window.getComputedStyle(element);
   const excludeStaticParent = style.position === "absolute";
   const overflowRegex = /(auto|scroll)/;
 
   if (style.position === "fixed") return document.body;
 
-  for (let parent = element; (parent = parent.parentElement as Element); ) {
+  for (let parent = element; (parent = parent.parentElement as HTMLElement); ) {
     style = window.getComputedStyle(parent);
     if (excludeStaticParent && style.position === "static") {
       continue;

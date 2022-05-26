@@ -10,14 +10,11 @@ export default function scrollParentToElement(
   this: IntroJs,
   targetElement: HTMLElement
 ) {
-  // @ts-ignore
-  const element = targetElement.element;
-
   if (!this._options.scrollToElement) return;
 
-  const parent = getScrollParent(element);
+  const parent = getScrollParent(targetElement);
 
   if (parent === document.body) return;
 
-  parent.scrollTop = element.offsetTop - parent.offsetTop;
+  parent.scrollTop = targetElement.offsetTop - parent.offsetTop;
 }

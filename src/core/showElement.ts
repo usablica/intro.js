@@ -36,7 +36,7 @@ function _getProgress(this: IntroJs) {
 function _disableInteraction(this: IntroJs) {
   let disableInteractionLayer = document.querySelector(
     ".introjs-disableInteraction"
-  );
+  ) as HTMLElement;
 
   if (disableInteractionLayer === null) {
     disableInteractionLayer = createElement("div", {
@@ -68,8 +68,12 @@ function _createBullets(this: IntroJs, targetElement: IntroItem) {
   const ulContainer = createElement("ul");
   ulContainer.setAttribute("role", "tablist");
 
-  const anchorClick = function (this: HTMLElement) {
-    self.goToStep(parseInt(this.getAttribute("data-step-number")!));
+  const anchorClick = function (_ev: Event): any {
+    self.goToStep(
+      parseInt(
+        (_ev.target as HTMLButtonElement).getAttribute("data-step-number")!
+      )
+    );
   };
 
   forEach(this._introItems, ({ step }, i) => {
@@ -100,7 +104,7 @@ function _createBullets(this: IntroJs, targetElement: IntroItem) {
 
 /**
  * Deletes and recreates the bullets layer
- * @param oldReferenceLayer
+ * @param _oldReferenceLayer
  * @param targetElement
  * @private
  */
@@ -133,16 +137,14 @@ function _updateBullets(
   targetElement: IntroItem
 ) {
   if (this._options.showBullets) {
-    (
-      oldReferenceLayer.querySelector(
-        ".introjs-bullets li > a.active"
-      ) as HTMLElement
-    ).className = "";
-    (
-      oldReferenceLayer.querySelector(
-        `.introjs-bullets li > a[data-step-number="${targetElement.step}"]`
-      ) as HTMLElement
-    ).className = "active";
+    const activeBullet = oldReferenceLayer.querySelector(
+      ".introjs-bullets li > a.active"
+    ) as HTMLElement;
+    activeBullet.className = "";
+    const stepBullet = oldReferenceLayer.querySelector(
+      `.introjs-bullets li > a[data-step-number="${targetElement.step}"]`
+    ) as HTMLElement;
+    stepBullet.className = "active";
   }
 }
 
@@ -171,7 +173,7 @@ function _createProgressBar(this: IntroJs) {
   progressBar.setAttribute("role", "progress");
   progressBar.setAttribute("aria-valuemin", "0");
   progressBar.setAttribute("aria-valuemax", "100");
-  progressBar.setAttribute("aria-valuenow", _getProgress.call(this));
+  progressBar.setAttribute("aria-valuenow", _getProgress.call(this).toString());
   progressBar.style.cssText = `width:${_getProgress.call(this)}%;`;
 
   progressLayer.appendChild(progressBar);
@@ -188,16 +190,12 @@ export function _updateProgressBar(
   this: IntroJs,
   oldReferenceLayer: HTMLElement
 ) {
-  (
-    oldReferenceLayer.querySelector(
-      ".introjs-progress .introjs-progressbar"
-    ) as HTMLElement
-  ).style.cssText = `width:${_getProgress.call(this)}%;`;
-  (
-    oldReferenceLayer.querySelector(
-      ".introjs-progress .introjs-progressbar"
-    ) as HTMLElement
-  ).setAttribute("aria-valuenow", _getProgress.call(this));
+  const progressbar = oldReferenceLayer.querySelector(
+    ".introjs-progress .introjs-progressbar"
+  ) as HTMLElement;
+
+  progressbar.style.cssText = `width:${_getProgress.call(this)}%;`;
+  progressbar.setAttribute("aria-valuenow", _getProgress.call(this).toString());
 }
 
 /**
@@ -213,7 +211,9 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
   }
 
   const self = this;
-  const oldHelperLayer = document.querySelector(".introjs-helperLayer");
+  const oldHelperLayer = document.querySelector(
+    ".introjs-helperLayer"
+  ) as HTMLElement;
   const oldReferenceLayer = document.querySelector(
     ".introjs-tooltipReferenceLayer"
   ) as HTMLElement;
@@ -327,7 +327,7 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
       // change the scroll of the window, if needed
       scrollTo.call(
         self,
-        targetElement.scrollTo,
+        targetElement.scrollTo!,
         targetElement,
         oldtooltipLayer
       );
@@ -364,7 +364,7 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
     });
 
     // target is within a scrollable element
-    scrollParentToElement.call(self, targetElement);
+    scrollParentToElement.call(self, targetElement.element);
 
     //set new position to helper layer
     setHelperLayerPosition.call(self, helperLayer);
@@ -493,7 +493,7 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
     placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer);
 
     // change the scroll of the window, if needed
-    scrollTo.call(this, targetElement.scrollTo, targetElement, tooltipLayer);
+    scrollTo.call(this, targetElement.scrollTo!, targetElement, tooltipLayer);
 
     //end of new element if-else condition
   }

@@ -23,4 +23,12 @@ Cypress.on("window:before:load", (win) => {
   htmlNode.appendChild(node);
 });
 
+Cypress.on("uncaught:exception", (err, runnable) => {
+  console.error(err);
+  console.error(runnable);
+  // returning false here prevents Cypress from
+  // failing the test
+  return false;
+});
+
 import "cypress-real-events/support";

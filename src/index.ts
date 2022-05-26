@@ -1,5 +1,4 @@
 import stamp from "./util/stamp";
-// @ts-ignore
 import { version } from "../package.json";
 import { IntroJs } from "./IntroJs";
 
@@ -51,14 +50,8 @@ const introJs = (targetElm: HTMLElement | string | undefined = undefined) => {
 };
 
 introJs.version = version;
-// introJs.prototype.get = (target: IntroInstances, prop: string) => {
-//   /* This will return the property on the "parent" object
-//    */
-//   if (typeof instances.instances[prop] !== "undefined") {
-//     return instances.instances[prop];
-//   }
-//
-//   throw new Error("There is no element with given selector.");
-// };
+try {
+  (window as any).introJs = introJs;
+} catch (e) {}
 
 export default introJs;

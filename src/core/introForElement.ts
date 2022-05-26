@@ -3,8 +3,7 @@ import DOMEvent from "./DOMEvent";
 import { nextStep } from "./steps";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
-import createElement from "../util/createElement";
-import { IntroItem, IntroJs } from "../IntroJs";
+import { IntroJs } from "../IntroJs";
 import fetchIntroSteps from "./fetchIntroSteps";
 
 /**

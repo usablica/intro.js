@@ -10,7 +10,7 @@ import autoprefixer from 'autoprefixer';
 import normalize from 'postcss-normalize';
 import clean from 'postcss-clean';
 import postcss from 'rollup-plugin-postcss';
-import typescript from 'rollup-plugin-typescript2';
+import typescript from '@rollup/plugin-typescript';
 import { version } from './package.json';
 
 const inputPath = './src';

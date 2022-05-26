@@ -12,7 +12,7 @@ import { IntroItem, IntroJs } from "../IntroJs";
  */
 export default function fetchIntroSteps(this: IntroJs, targetElm: HTMLElement) {
   const allIntroSteps = targetElm.querySelectorAll("*[data-intro]");
-  let introItems: Array<IntroItem> = [];
+  let introItems: IntroItem[] = [];
 
   if (this._options.steps) {
     //use steps passed programmatically
