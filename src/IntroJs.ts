@@ -20,7 +20,7 @@ import {
   nextStep,
   previousStep,
 } from "./core/steps";
-
+import { getDontShowAgain, setDontShowAgain } from "./core/dontShowAgain";
 
 export interface IntroItem {
   element: HTMLElement;
@@ -38,6 +38,7 @@ export interface IntroItem {
 }
 
 export interface Options {
+  isActive?: boolean;
   showButtons?: boolean;
   scrollPadding?: number;
   prevLabel?: string;
@@ -67,8 +68,17 @@ export interface Options {
   nextLabel?: string;
   tooltipPosition?: string;
   hintAnimation?: boolean;
+  dontShowAgainCookie?: string;
+  dontShowAgainCookieDays?: number;
   steps?: Array<Step>;
   hints?: Array<any>;
+  group?: string;
+  autoPosition?: boolean;
+  dontShowAgain?: boolean;
+  dontShowAgainLabel?: string;
+  stepNumbersOfLabel?: string;
+  hintShowButton?: boolean;
+  hintAutoRefreshInterval?: number;
 }
 
 export interface Step {
@@ -96,8 +106,11 @@ export type IntroBeforeChangeCallback = (
 export type IntroAfterChangeCallback = (intro?: IntroJs) => void;
 export type IntroCompleteCallback = (intro?: IntroJs) => void;
 export type IntroExitCallback = (intro?: IntroJs) => void;
+export type IntroProvidedCallback = (intro?: IntroJs) => void;
 export type IntroSkipCallback = (intro?: IntroJs) => void;
 export type IntroBeforeExitCallback = (intro?: IntroJs) => void;
+export type IntroStartCallback = (intro?: IntroJs) => void;
+export type HintsAutoRefreshFunction = (intro?: IntroJs) => void;
 export type HintsAddedCallback = (intro?: IntroJs) => void;
 export type HintClickCallback = (
   hintElement?: HTMLElement,
@@ -123,14 +136,19 @@ export class IntroJs {
   _hintClickCallback: HintClickCallback;
   _hintCloseCallback: HintCloseCallback;
   _introExitCallback: IntroExitCallback;
+  _introProvidedCallback: IntroProvidedCallback;
   _introSkipCallback: IntroSkipCallback;
   _introBeforeExitCallback: IntroBeforeExitCallback;
+  _introStartCallback: IntroStartCallback;
+  _hintsAutoRefreshFunction: HintsAutoRefreshFunction;
 
   constructor(obj: HTMLElement | null = null) {
     this._targetElement = obj;
     this._introItems = [];
 
     this._options = {
+      /* Is this tour instance active? Don't show the tour again if this flag is set to false */
+      isActive: true,
       /* Next button label in tooltip box */
       nextLabel: "Next",
       /* Previous button label in tooltip box */
@@ -167,6 +185,11 @@ export class IntroJs {
       showProgress: false,
       /* Scroll to highlighted element? */
       scrollToElement: true,
+      /* "Don't show again" cookie name and expiry (in days) */
+      dontShowAgainCookie: "introjs-dontShowAgain",
+      dontShowAgainCookieDays: 365,
+      /* Pagination "of" label */
+      stepNumbersOfLabel: "of",
       /*
        * Should we scroll the tooltip or target element?
        *
@@ -193,7 +216,26 @@ export class IntroJs {
       buttonClass: "introjs-button",
       /* additional classes to put on progress bar */
       progressBarAdditionalClass: false,
+
+      /* Start intro for a group of elements */
+      group: "",
+      /* To determine the tooltip position automatically based on the window.width/height */
+      autoPosition: true,
+      /* To display the "Don't show again" checkbox in the tour */
+      dontShowAgain: false,
+      dontShowAgainLabel: "Don't show this again",
+      /* Display the "Got it" button? */
+      hintShowButton: true,
+      /* Hints auto-refresh interval in ms (set to -1 to disable) */
+      hintAutoRefreshInterval: 10,
     };
+  }
+  isActive() {
+    if (this._options.dontShowAgain && getDontShowAgain.call(this)) {
+      return false;
+    }
+
+    return this._options.isActive;
   }
 
   clone() {
@@ -208,8 +250,8 @@ export class IntroJs {
     this._options = mergeOptions(this._options, options);
     return this;
   }
-  start(group: number | undefined = undefined) {
-    introForElement.call(this, this._targetElement, group);
+  start() {
+    introForElement.call(this, this._targetElement);
     return this;
   }
   goToStep(step: number) {
@@ -254,8 +296,12 @@ export class IntroJs {
     exitIntro.call(this, this._targetElement, force);
     return this;
   }
-  refresh() {
-    refresh.call(this);
+  refresh(refreshSteps: boolean) {
+    refresh.call(this, refreshSteps);
+    return this;
+  }
+  setDontShowAgain(dontShowAgain: boolean) {
+    setDontShowAgain.call(this, dontShowAgain);
     return this;
   }
   onbeforechange(providedCallback: IntroBeforeChangeCallback) {
@@ -313,6 +359,14 @@ export class IntroJs {
       this._hintCloseCallback = providedCallback;
     } else {
       throw new Error("Provided callback for onhintclose was not a function.");
+    }
+    return this;
+  }
+  onstart(providedCallback: IntroProvidedCallback) {
+    if (typeof providedCallback === "function") {
+      this._introStartCallback = providedCallback;
+    } else {
+      throw new Error("Provided callback for onstart was not a function.");
     }
     return this;
   }

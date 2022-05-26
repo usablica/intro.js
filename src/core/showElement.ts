@@ -54,7 +54,7 @@ function _disableInteraction(this: IntroJs) {
  * @returns HTMLElement
  * @private
  */
-function _createBullets(targetElement: IntroItem) {
+function _createBullets(this: IntroJs, targetElement: IntroItem) {
   const self = this;
 
   const bulletsLayer = createElement("div", {
@@ -68,8 +68,8 @@ function _createBullets(targetElement: IntroItem) {
   const ulContainer = createElement("ul");
   ulContainer.setAttribute("role", "tablist");
 
-  const anchorClick = function () {
-    self.goToStep(this.getAttribute("data-step-number"));
+  const anchorClick = function (this: HTMLElement) {
+    self.goToStep(parseInt(this.getAttribute("data-step-number")!));
   };
 
   forEach(this._introItems, ({ step }, i) => {
@@ -81,7 +81,7 @@ function _createBullets(targetElement: IntroItem) {
 
     anchorLink.onclick = anchorClick;
 
-    if (i === targetElement.step - 1) {
+    if (i === targetElement.step! - 1) {
       anchorLink.className = "active";
     }
 
@@ -104,12 +104,16 @@ function _createBullets(targetElement: IntroItem) {
  * @param targetElement
  * @private
  */
-export function _recreateBullets(oldReferenceLayer: HTMLElement, targetElement: IntroItem) {
+export function _recreateBullets(
+  this: IntroJs,
+  oldReferenceLayer: HTMLElement,
+  targetElement: IntroItem
+) {
   if (this._options.showBullets) {
-    const existing = document.querySelector(".introjs-bullets");
+    const existing = document.querySelector(".introjs-bullets") as HTMLElement;
 
     if (existing) {
-      existing.parentNode.replaceChild(
+      existing.parentNode!.replaceChild(
         _createBullets.call(this, targetElement),
         existing
       );
@@ -123,13 +127,21 @@ export function _recreateBullets(oldReferenceLayer: HTMLElement, targetElement: 
  * @param oldReferenceLayer
  * @param targetElement
  */
-function _updateBullets(oldReferenceLayer: HTMLElement, targetElement: IntroItem) {
+function _updateBullets(
+  this: IntroJs,
+  oldReferenceLayer: HTMLElement,
+  targetElement: IntroItem
+) {
   if (this._options.showBullets) {
-    oldReferenceLayer.querySelector(
-      ".introjs-bullets li > a.active"
+    (
+      oldReferenceLayer.querySelector(
+        ".introjs-bullets li > a.active"
+      ) as HTMLElement
     ).className = "";
-    oldReferenceLayer.querySelector(
-      `.introjs-bullets li > a[data-step-number="${targetElement.step}"]`
+    (
+      oldReferenceLayer.querySelector(
+        `.introjs-bullets li > a[data-step-number="${targetElement.step}"]`
+      ) as HTMLElement
     ).className = "active";
   }
 }
@@ -139,7 +151,7 @@ function _updateBullets(oldReferenceLayer: HTMLElement, targetElement: IntroItem
  * @returns {*}
  * @private
  */
-function _createProgressBar() {
+function _createProgressBar(this: IntroJs) {
   const progressLayer = createElement("div");
 
   progressLayer.className = "introjs-progress";
@@ -157,8 +169,8 @@ function _createProgressBar() {
   }
 
   progressBar.setAttribute("role", "progress");
-  progressBar.setAttribute("aria-valuemin", 0);
-  progressBar.setAttribute("aria-valuemax", 100);
+  progressBar.setAttribute("aria-valuemin", "0");
+  progressBar.setAttribute("aria-valuemax", "100");
   progressBar.setAttribute("aria-valuenow", _getProgress.call(this));
   progressBar.style.cssText = `width:${_getProgress.call(this)}%;`;
 
@@ -172,13 +184,20 @@ function _createProgressBar() {
  * @param oldReferenceLayer
  * @private
  */
-export function _updateProgressBar(oldReferenceLayer: HTMLElement) {
-  oldReferenceLayer.querySelector(
-    ".introjs-progress .introjs-progressbar"
+export function _updateProgressBar(
+  this: IntroJs,
+  oldReferenceLayer: HTMLElement
+) {
+  (
+    oldReferenceLayer.querySelector(
+      ".introjs-progress .introjs-progressbar"
+    ) as HTMLElement
   ).style.cssText = `width:${_getProgress.call(this)}%;`;
-  oldReferenceLayer
-    .querySelector(".introjs-progress .introjs-progressbar")
-    .setAttribute("aria-valuenow", _getProgress.call(this));
+  (
+    oldReferenceLayer.querySelector(
+      ".introjs-progress .introjs-progressbar"
+    ) as HTMLElement
+  ).setAttribute("aria-valuenow", _getProgress.call(this));
 }
 
 /**
@@ -378,12 +397,12 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
         name: "introjs-dontShowAgain",
       });
       dontShowAgainCheckbox.onchange = (e) => {
-        this.setDontShowAgain(e.target.checked);
+        this.setDontShowAgain((e.target! as HTMLInputElement).checked);
       };
       const dontShowAgainCheckboxLabel = createElement("label", {
         htmlFor: "introjs-dontShowAgain",
-      });
-      dontShowAgainCheckboxLabel.innerText = this._options.dontShowAgainLabel;
+      }) as HTMLLabelElement;
+      dontShowAgainCheckboxLabel.innerText = this._options.dontShowAgainLabel!;
       dontShowAgainWrapper.appendChild(dontShowAgainCheckbox);
       dontShowAgainWrapper.appendChild(dontShowAgainCheckboxLabel);
 

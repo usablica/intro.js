@@ -1,4 +1,4 @@
-export function setCookie(name, value, days) {
+export function setCookie(name: string, value: string, days: number) {
   const cookie = { [name]: value, path: "/" };
 
   if (days) {
@@ -18,7 +18,7 @@ export function setCookie(name, value, days) {
 }
 
 export function getAllCookies() {
-  let cookie = {};
+  let cookie: { [name: string]: string } = {};
 
   document.cookie.split(";").forEach((el) => {
     let [k, v] = el.split("=");
@@ -28,10 +28,10 @@ export function getAllCookies() {
   return cookie;
 }
 
-export function getCookie(name) {
+export function getCookie(name: string) {
   return getAllCookies()[name];
 }
 
-export function deleteCookie(name) {
+export function deleteCookie(name: string) {
   setCookie(name, "", -1);
 }

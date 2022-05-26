@@ -224,10 +224,10 @@ export function addHints(this: IntroJs) {
     this._hintsAddedCallback.call(this);
   }
 
-  if (this._options.hintAutoRefreshInterval >= 0) {
-    this._hintsAutoRefreshFunction = debounce(
+  if (this._options.hintAutoRefreshInterval! >= 0) {
+    this._hintsAutoRefreshFunction = debounce.call(
       () => reAlignHints.call(this),
-      this._options.hintAutoRefreshInterval
+      this._options.hintAutoRefreshInterval!
     );
     DOMEvent.on(window, "scroll", this._hintsAutoRefreshFunction, this, true);
   }

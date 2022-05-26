@@ -1,4 +1,4 @@
-import introJs from "../src";
+import introJs from "../src/index";
 import {
   find,
   content,
@@ -240,10 +240,15 @@ describe("intro", () => {
     const intro2 = introJs();
     const intro3 = introJs();
 
+    // @ts-ignore
     expect(intro1["introjs-instance"]).not.toBeNull();
+    // @ts-ignore
     expect(intro2["introjs-instance"]).not.toBeNull();
+    // @ts-ignore
     expect(intro3["introjs-instance"]).not.toBeNull();
+    // @ts-ignore
     expect(intro1["introjs-instance"]).not.toBe(intro2["introjs-instance"]);
+    // @ts-ignore
     expect(intro2["introjs-instance"]).not.toBe(intro3["introjs-instance"]);
   });
 
@@ -306,6 +311,7 @@ describe("intro", () => {
       expect(intro.isActive()).toBeFalsy();
     });
     test("should be true if dontShowAgain is active but cookie is missing", () => {
+      // @ts-ignore
       getDontShowAgain.mockReturnValueOnce(false);
 
       const intro = introJs().setOptions({
@@ -317,6 +323,7 @@ describe("intro", () => {
     });
 
     test("should be false if dontShowAgain is active but isActive is true", () => {
+      // @ts-ignore
       getDontShowAgain.mockReturnValueOnce(true);
 
       const intro = introJs().setOptions({

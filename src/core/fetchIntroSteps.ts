@@ -1,6 +1,7 @@
 import forEach from "../util/forEach";
 import cloneObject from "../util/cloneObject";
 import createElement from "../util/createElement";
+import { IntroItem, IntroJs } from "../IntroJs";
 
 /**
  * Finds all Intro steps from the data-* attributes and the options.steps array
@@ -9,9 +10,9 @@ import createElement from "../util/createElement";
  * @param targetElm
  * @returns {[]}
  */
-export default function fetchIntroSteps(targetElm) {
+export default function fetchIntroSteps(this: IntroJs, targetElm: HTMLElement) {
   const allIntroSteps = targetElm.querySelectorAll("*[data-intro]");
-  let introItems = [];
+  let introItems: Array<IntroItem> = [];
 
   if (this._options.steps) {
     //use steps passed programmatically
@@ -24,9 +25,11 @@ export default function fetchIntroSteps(targetElm) {
       currentItem.title = currentItem.title || "";
 
       //use querySelector function only when developer used CSS selector
-      if (typeof currentItem.element === "string") {
+      if (currentItem && typeof currentItem.element === "string") {
         //grab the element with given selector from the page
-        currentItem.element = document.querySelector(currentItem.element);
+        currentItem.element = document.querySelector(
+          currentItem.element
+        )! as HTMLElement;
       }
 
       //intro without element
@@ -36,7 +39,7 @@ export default function fetchIntroSteps(targetElm) {
       ) {
         let floatingElementQuery = document.querySelector(
           ".introjsFloatingElement"
-        );
+        )! as HTMLElement;
 
         if (floatingElementQuery === null) {
           floatingElementQuery = createElement("div", {
@@ -176,7 +179,7 @@ export default function fetchIntroSteps(targetElm) {
   introItems = tempIntroItems;
 
   //Ok, sort all items with given steps
-  introItems.sort((a, b) => a.step - b.step);
+  introItems.sort((a, b) => a.step! - b.step!);
 
   return introItems;
 }

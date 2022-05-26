@@ -10,7 +10,7 @@ import { _recreateBullets, _updateProgressBar } from "./showElement";
  * @api private
  * @param {boolean} refreshSteps to refresh the intro steps as well
  */
-export default function refresh(this: IntroJs, refreshSteps) {
+export default function refresh(this: IntroJs, refreshSteps: boolean) {
   const referenceLayer = document.querySelector(
     ".introjs-tooltipReferenceLayer"
   );
@@ -29,7 +29,7 @@ export default function refresh(this: IntroJs, refreshSteps) {
     _recreateBullets.call(
       this,
       referenceLayer,
-      this._introItems[this._currentStep]
+      this._introItems[this._currentStep!]
     );
     _updateProgressBar.call(this, referenceLayer);
   }

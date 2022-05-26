@@ -1,4 +1,5 @@
 import { deleteCookie, getCookie, setCookie } from "../util/cookie";
+import { IntroJs } from "../IntroJs";
 
 const dontShowAgainCookieValue = "true";
 
@@ -9,15 +10,15 @@ const dontShowAgainCookieValue = "true";
  * @param {Boolean} dontShowAgain
  * @method setDontShowAgain
  */
-export function setDontShowAgain(dontShowAgain) {
+export function setDontShowAgain(this: IntroJs, dontShowAgain: boolean) {
   if (dontShowAgain) {
     setCookie(
-      this._options.dontShowAgainCookie,
+      this._options.dontShowAgainCookie!,
       dontShowAgainCookieValue,
-      this._options.dontShowAgainCookieDays
+      this._options.dontShowAgainCookieDays!
     );
   } else {
-    deleteCookie(this._options.dontShowAgainCookie);
+    deleteCookie(this._options.dontShowAgainCookie!);
   }
 }
 
@@ -27,7 +28,7 @@ export function setDontShowAgain(dontShowAgain) {
  * @api private
  * @method getDontShowAgain
  */
-export function getDontShowAgain() {
-  const dontShowCookie = getCookie(this._options.dontShowAgainCookie);
+export function getDontShowAgain(this: IntroJs) {
+  const dontShowCookie = getCookie(this._options.dontShowAgainCookie!);
   return dontShowCookie && dontShowCookie === dontShowAgainCookieValue;
 }

@@ -22,10 +22,10 @@ export default function cloneObject(object: HTMLElement): IntroItem {
       typeof window.jQuery !== "undefined" &&
       // @ts-ignore
       object[key] instanceof window.jQuery
-        // @ts-ignore
-        ? object[key]
-        // @ts-ignore
-        : cloneObject(object[key]);
+        ? // @ts-ignore
+          object[key]
+        : // @ts-ignore
+          cloneObject(object[key]);
   }
   return temp;
 }

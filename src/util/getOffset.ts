@@ -18,7 +18,10 @@ import isFixed from "./isFixed";
  * @param {Object} relativeEl
  * @returns Element's position info
  */
-export default function getOffset(element: HTMLElement, relativeEl): Offset {
+export default function getOffset(
+  element: HTMLElement,
+  relativeEl: HTMLElement | null = null
+): Offset {
   const body = document.body;
   const docEl = document.documentElement;
   const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;

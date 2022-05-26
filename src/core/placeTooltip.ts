@@ -185,8 +185,8 @@ export default function placeTooltip(
   tooltipLayer.style.removeProperty("right");
   tooltipLayer.style.removeProperty("bottom");
   tooltipLayer.style.removeProperty("left");
-  tooltipLayer.style.removeProperty("marginLeft");
-  tooltipLayer.style.removeProperty("marginTop");
+  tooltipLayer.style.removeProperty("margin-left");
+  tooltipLayer.style.removeProperty("margin-top");
 
   arrowLayer.style.display = "inherit";
 
