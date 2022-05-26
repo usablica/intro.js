@@ -110,7 +110,7 @@ function _createBullets(this: IntroJs, targetElement: IntroItem) {
  */
 export function _recreateBullets(
   this: IntroJs,
-  oldReferenceLayer: HTMLElement,
+  _oldReferenceLayer: HTMLElement,
   targetElement: IntroItem
 ) {
   if (this._options.showBullets) {
@@ -265,7 +265,7 @@ export default function _showElement(this: IntroJs, targetElement: IntroItem) {
     oldtooltipContainer.style.display = "none";
 
     // if the target element is within a scrollable element
-    scrollParentToElement.call(self, targetElement);
+    scrollParentToElement.call(self, targetElement.element);
 
     // set new position to helper layer
     setHelperLayerPosition.call(self, oldHelperLayer);

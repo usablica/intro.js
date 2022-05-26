@@ -304,7 +304,7 @@ export class IntroJs {
     exitIntro.call(this, this._targetElement, force);
     return this;
   }
-  refresh(refreshSteps: boolean  = false) {
+  refresh(refreshSteps: boolean = false) {
     refresh.call(this, refreshSteps);
     return this;
   }
