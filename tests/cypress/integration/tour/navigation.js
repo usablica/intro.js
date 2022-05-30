@@ -47,6 +47,14 @@ context("Navigation", () => {
     cy.get(".introjs-showElement").should("not.exist");
   });
 
+  it("should exit the tour after right btn pressed at the end", () => {
+    cy.get(".introjs-tooltiptext").contains("step one");
+    cy.nextStep();
+    cy.get(".introjs-tooltiptext").contains("step two");
+    cy.realPress("ArrowRight");
+    cy.get(".introjs-showElement").should("not.exist");
+  });
+
   it("should close the tour after clicking on the exit button", () => {
     cy.get(".introjs-showElement").should("exist");
     cy.get(".introjs-skipbutton").click();
