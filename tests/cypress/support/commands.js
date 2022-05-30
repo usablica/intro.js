@@ -34,6 +34,10 @@ Cypress.Commands.add("nextStep", () => {
   cy.get(".introjs-nextbutton").click();
 });
 
+Cypress.Commands.add("doneButton", () => {
+  cy.get(".introjs-donebutton").click();
+});
+
 Cypress.Commands.add("prevStep", () => {
   cy.get(".introjs-prevbutton").click();
 });
