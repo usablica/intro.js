@@ -1,6 +1,7 @@
 import forEach from "../util/forEach";
 import showElement from "./showElement";
 import exitIntro from "./exitIntro";
+import waitForElement from "../util/waitForElement";
 
 /**
  * Go to specific step of introduction
@@ -59,7 +60,8 @@ export function nextStep() {
   if (typeof this._introBeforeChangeCallback !== "undefined") {
     continueStep = this._introBeforeChangeCallback.call(
       this,
-      nextStep && nextStep.element
+      nextStep &&
+        (elementBySelectorNotExists(nextStep) ? undefined : nextStep.element)
     );
   }
 
@@ -79,7 +81,21 @@ export function nextStep() {
     return;
   }
 
-  showElement.call(this, nextStep);
+  if (elementBySelectorNotExists(nextStep)) {
+    waitForElement(nextStep._element, () => showElement.call(this, nextStep));
+  } else {
+    showElement.call(this, nextStep);
+  }
+}
+
+/**
+ * Return true if element locates by selector and doesn't exists yet
+ */
+function elementBySelectorNotExists(step) {
+  return (
+    typeof step._element === "string" &&
+    document.querySelector(step._element) === null
+  );
 }
 
 /**
