@@ -177,6 +177,44 @@ describe("intro", () => {
     expect(intro._introItems[step].element).toBe(laterAddedEl);
   });
 
+  test("should wait for element added after calling nextStep", (done) => {
+    const onbeforechangedMock = jest.fn();
+    const latterAddedElId = "later_added";
+    var laterAddedEl;
+    var stepCounter = 0;
+    const intro = introJs()
+      .setOptions({
+        steps: [
+          {
+            intro: "step one",
+          },
+          {
+            intro: "later aded",
+            element: "#" + latterAddedElId,
+          },
+        ],
+      })
+      .onchange(function (el) {
+        if (el && stepCounter === 1) expect(el).toBe(laterAddedEl);
+        stepCounter++;
+      })
+      .onbeforechange(onbeforechangedMock)
+      .start();
+
+    intro.nextStep();
+
+    laterAddedEl = appendDummyElement();
+    laterAddedEl.setAttribute("id", latterAddedElId);
+
+    expect(onbeforechangedMock).toBeCalledTimes(2);
+
+    const step = intro.currentStep();
+    expect(step).toBe(1);
+    expect(intro._introItems[step].element).toBe(laterAddedEl);
+    // waitForElement waits with waitForElementByTimeout cause there is no MutationObserver in JSDom, so we need to wait a bit longer than waitForElementByTimeout
+    setTimeout(done, 11500);
+  }, 15000);
+
   test("should highlight the target element", () => {
     const p = appendDummyElement();
 
