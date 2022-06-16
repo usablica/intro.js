@@ -38,6 +38,7 @@ export function goToStepNumber(step) {
  */
 export function nextStep() {
   this._direction = "forward";
+  if (this._waitingNextElement) return;
 
   if (typeof this._currentStepNumber !== "undefined") {
     forEach(this._introItems, ({ step }, i) => {
@@ -82,7 +83,11 @@ export function nextStep() {
   }
 
   if (elementBySelectorNotExists(nextStep)) {
-    waitForElement(nextStep._element, () => showElement.call(this, nextStep));
+    this._waitingNextElement = true;
+    waitForElement(nextStep._element, () => {
+      this._waitingNextElement = false;
+      showElement.call(this, nextStep);
+    });
   } else {
     showElement.call(this, nextStep);
   }
