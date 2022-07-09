@@ -403,7 +403,11 @@ export default async function _showElement(targetElement) {
         await nextStep.call(self);
       } else if (/introjs-donebutton/gi.test(nextTooltipButton.className)) {
         if (typeof self._introCompleteCallback === "function") {
-          await self._introCompleteCallback.call(self, self._currentStep, "done");
+          await self._introCompleteCallback.call(
+            self,
+            self._currentStep,
+            "done"
+          );
         }
 
         await exitIntro.call(self, self._targetElement);
