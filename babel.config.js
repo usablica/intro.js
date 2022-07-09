@@ -13,7 +13,6 @@ module.exports = {
       "@babel/env",
       {
         modules: false,
-        debug: true,
         useBuiltIns: "usage",
         forceAllTransforms: true,
         corejs: {
