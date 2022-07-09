@@ -52,8 +52,8 @@ export async function hideHint(stepId) {
 export function hideHints() {
   const hints = hintQuerySelectorAll(".introjs-hint");
 
-  forEach(hints, (hint) => {
-    hideHint.call(this, hint.getAttribute("data-step"));
+  forEach(hints, async (hint) => {
+    await hideHint.call(this, hint.getAttribute("data-step"));
   });
 }
 
@@ -63,7 +63,7 @@ export function hideHints() {
  * @api private
  * @method _showHints
  */
-export function showHints() {
+export async function showHints() {
   const hints = hintQuerySelectorAll(".introjs-hint");
 
   if (hints && hints.length) {
@@ -71,7 +71,7 @@ export function showHints() {
       showHint.call(this, hint.getAttribute("data-step"));
     });
   } else {
-    populateHints.call(this, this._targetElement);
+    await populateHints.call(this, this._targetElement);
   }
 }
 
@@ -388,7 +388,7 @@ export function removeHintTooltip() {
  * @param {Object} targetElm
  * @method _startHint
  */
-export function populateHints(targetElm) {
+export async function populateHints(targetElm) {
   this._introItems = [];
 
   if (this._options.hints) {
@@ -442,7 +442,7 @@ export function populateHints(targetElm) {
     });
   }
 
-  addHints.call(this);
+  await addHints.call(this);
 
   DOMEvent.on(document, "click", removeHintTooltip, this, false);
   DOMEvent.on(window, "resize", reAlignHints, this, true);

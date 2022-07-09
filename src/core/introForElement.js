@@ -33,7 +33,7 @@ export default async function introForElement(targetElm) {
   //add overlay layer to the page
   if (addOverlayLayer.call(this, targetElm)) {
     //then, start the show
-    nextStep.call(this);
+    await nextStep.call(this);
 
     if (this._options.keyboardNavigation) {
       DOMEvent.on(window, "keydown", onKeyDown, this, true);
