@@ -19,7 +19,7 @@ import exitIntro from "./exitIntro";
  * @param type var
  * @return type
  */
-export default function onKeyDown(e) {
+export default async function onKeyDown(e) {
   let code = e.code === undefined ? e.which : e.code;
 
   // if e.which is null
@@ -49,7 +49,7 @@ export default function onKeyDown(e) {
         this._introItems.length - 1 === this._currentStep &&
         typeof this._introCompleteCallback === "function"
       ) {
-        this._introCompleteCallback.call(this, this._currentStep, "skip");
+        await this._introCompleteCallback.call(this, this._currentStep, "skip");
       }
 
       exitIntro.call(this, this._targetElement);
