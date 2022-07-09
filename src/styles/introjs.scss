@@ -193,7 +193,6 @@ tr.introjs-showElement {
   font-size: 14px;
   display: inline-block;
   font-weight: normal;
-  display: inline-block;
   margin: 0 0 0 5px;
   padding: 0;
   background-color: $white;
@@ -203,25 +202,20 @@ tr.introjs-showElement {
 
 .introjs-tooltip-title {
   font-size: 18px;
+  width: 90%;
+  min-height: 1.5em;
   margin: 0;
   padding: 0;
   font-weight: 700;
-  float: left;
-  line-height: 32px;
+  line-height: 1.5;
 }
 
 .introjs-tooltip-header {
+  position: relative;
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 10px;
-
-  &:after {
-    content: ".";
-    visibility: hidden;
-    display: block;
-    height: 0;
-    clear: both;
-  }
+  min-height: 1.5em;
 }
 
 .introjs-tooltipbuttons {
@@ -243,7 +237,6 @@ tr.introjs-showElement {
   box-sizing: content-box;
   position: relative;
   overflow: visible;
-  display: inline-block;
 
   padding: 0.5rem 1rem;
 
@@ -292,15 +285,21 @@ tr.introjs-showElement {
 }
 
 .introjs-skipbutton {
-  box-sizing: content-box;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  display: inline-block;
+  width: 45px;
+  height: 45px;
+  line-height: 45px;
+
   color: $black600;
-  float: right;
-  font-size: 20px;
+  font-size: 22px;
   cursor: pointer;
   font-weight: bold;
-  line-height: 1;
   text-align: center;
-  padding: 7px 10px;
+  text-decoration: none;
 
   &:hover,
   &:focus {
