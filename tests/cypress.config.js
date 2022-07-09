@@ -1,7 +1,7 @@
-const { defineConfig } = require('cypress')
+const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
-  screenshotsFolder: './cypress/snapshots/actual',
+  screenshotsFolder: "./cypress/snapshots/actual",
   trashAssetsBeforeRuns: true,
   env: {
     failSilently: false,
@@ -10,7 +10,7 @@ module.exports = defineConfig({
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     setupNodeEvents(on, config) {
-      return require('./cypress/plugins/index.js')(on, config)
+      return require("./cypress/plugins/index.js")(on, config);
     },
   },
-})
+});
