@@ -61,10 +61,7 @@ describe("steps", () => {
     test("should call the onBeforeChange callback", async () => {
       const mock = jest.fn();
 
-      context = {
-        ...context,
-        _introBeforeChangeCallback: mock,
-      };
+      context._introBeforeChangeCallback = mock;
 
       await nextStep.call(context);
 
@@ -78,17 +75,14 @@ describe("steps", () => {
       const onBeforeChangeMock = jest.fn();
       const sideEffect = [];
 
-      context = {
-        ...context,
-        _introBeforeChangeCallback: async () => {
-          return new Promise((res) => {
-            setTimeout(() => {
-              sideEffect.push(1);
-              onBeforeChangeMock();
-              res();
-            }, 50);
-          });
-        },
+      context._introBeforeChangeCallback = async () => {
+        return new Promise((res) => {
+          setTimeout(() => {
+            sideEffect.push(1);
+            onBeforeChangeMock();
+            res();
+          }, 50);
+        });
       };
 
       expect(sideEffect).toHaveLength(0);
