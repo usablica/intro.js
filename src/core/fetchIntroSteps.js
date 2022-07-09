@@ -26,14 +26,37 @@ export default function fetchIntroSteps(targetElm) {
       //use querySelector function only when developer used CSS selector
       if (typeof currentItem.element === "string") {
         //grab the element with given selector from the page
-        currentItem.element = document.querySelector(currentItem.element);
-      }
-
-      //intro without element
-      if (
+        const el = document.querySelector(currentItem.element);
+        if (el !== null) {
+          currentItem.element = el;
+        } else {
+          // If element is not exists yet, we'll get it on step
+          const elSelector = currentItem.element;
+          Object.defineProperty(currentItem, "element", {
+            get() {
+              if (typeof this._element === "string") {
+                const result = document.querySelector(this._element);
+                if (result === null)
+                  throw new Error(
+                    "There is no element with given selector: " + this._element
+                  );
+                return result;
+              } else {
+                return this._element;
+              }
+            },
+            set(value) {
+              this._element = value;
+            },
+            enumerable: true,
+          });
+          currentItem.element = elSelector;
+        }
+      } else if (
         typeof currentItem.element === "undefined" ||
         currentItem.element === null
       ) {
+        //intro without element
         let floatingElementQuery = document.querySelector(
           ".introjsFloatingElement"
         );
@@ -58,7 +81,7 @@ export default function fetchIntroSteps(targetElm) {
         currentItem.disableInteraction = this._options.disableInteraction;
       }
 
-      if (currentItem.element !== null) {
+      if (currentItem._element !== null || currentItem.element !== null) {
         introItems.push(currentItem);
       }
     });

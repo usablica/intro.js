@@ -10,6 +10,7 @@ describe("fetchIntroSteps", () => {
           steps: [
             {
               element: "#element_does_not_exist",
+              position: "top",
               intro: "hello world",
             },
             {
@@ -23,7 +24,7 @@ describe("fetchIntroSteps", () => {
 
     expect(steps.length).toBe(2);
 
-    expect(steps[0].position).toBe("floating");
+    expect(steps[0].position).toBe("top");
     expect(steps[0].intro).toBe("hello world");
     expect(steps[0].step).toBe(1);
 
@@ -80,9 +81,42 @@ describe("fetchIntroSteps", () => {
     expect(steps[1].intro).toBe("second");
     expect(steps[1].step).toBe(2);
 
-    expect(steps[2].position).toBe("floating");
+    expect(steps[2].position).toBe("bottom");
     expect(steps[2].intro).toBe("third");
     expect(steps[2].step).toBe(3);
+  });
+
+  test("should throw an error on calling step.element if it is not exists yet and return element after adding", () => {
+    const targetElement = document.createElement("div");
+    const elId = "later_added";
+    const steps = fetchIntroSteps.call(
+      {
+        _options: {
+          tooltipPosition: "bottom",
+          steps: [
+            {
+              element: "#" + elId,
+            },
+          ],
+        },
+      },
+      targetElement
+    );
+
+    expect(steps.length).toBe(1);
+
+    try {
+      const element = steps[0].element; // jshint ignore:line
+    } catch (e) {
+      if (!e.message.includes("There is no element with given selector:"))
+        throw e;
+    }
+
+    const laterAdded = document.createElement("div");
+    laterAdded.setAttribute("id", elId);
+    document.body.appendChild(laterAdded);
+
+    expect(steps[0].element).toBe(laterAdded);
   });
 
   test("should find the data-* elements from the DOM", () => {
