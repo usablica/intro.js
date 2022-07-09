@@ -39,9 +39,9 @@
     "autoprefixer": "^9.0.0",
     "babel-jest": "^28.1.2",
     "core-js": "^3.6.5",
-    "cypress": "^7.2.0",
-    "cypress-real-events": "^1.4.0",
-    "cypress-visual-regression": "^1.5.7",
+    "cypress": "^10.3.0",
+    "cypress-real-events": "^1.7.1",
+    "cypress-visual-regression": "^1.7.0",
     "eslint": "^8.0.1",
     "jest": "^27.0.4",
     "jshint": "^2.12.0",
@@ -63,8 +63,7 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-postcss": "^4.0.0",
     "rollup-plugin-progress": "^1.1.2",
-    "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-uglify": "^6.0.4"
+    "rollup-plugin-terser": "^7.0.2"
   },
   "engine": [
     "node >=0.1.90"
