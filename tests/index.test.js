@@ -45,7 +45,7 @@ describe("intro", () => {
     );
   });
 
-  test("should call onexit and oncomplete when there is one step", () => {
+  test("should call onexit and oncomplete when there is one step", async () => {
     const onexitMock = jest.fn();
     const oncompleteMMock = jest.fn();
 
@@ -61,13 +61,13 @@ describe("intro", () => {
       .oncomplete(oncompleteMMock)
       .start();
 
-    nextButton().click();
+    await nextButton().click();
 
     expect(onexitMock).toBeCalledTimes(1);
     expect(oncompleteMMock).toBeCalledTimes(1);
   });
 
-  test("should call onexit when skip is clicked", () => {
+  test("should call onexit when skip is clicked", async () => {
     const onexitMock = jest.fn();
     const oncompleteMMock = jest.fn();
 
@@ -83,7 +83,7 @@ describe("intro", () => {
       .oncomplete(oncompleteMMock)
       .start();
 
-    skipButton().click();
+    await skipButton().click();
 
     expect(onexitMock).toBeCalledTimes(1);
     expect(oncompleteMMock).toBeCalledTimes(1);

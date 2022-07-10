@@ -178,12 +178,12 @@ introJs.fn = IntroJs.prototype = {
     this._options = mergeOptions(this._options, options);
     return this;
   },
-  start() {
-    introForElement.call(this, this._targetElement);
+  async start() {
+    await introForElement.call(this, this._targetElement);
     return this;
   },
-  goToStep(step) {
-    goToStep.call(this, step);
+  async goToStep(step) {
+    await goToStep.call(this, step);
     return this;
   },
   addStep(options) {
@@ -204,24 +204,24 @@ introJs.fn = IntroJs.prototype = {
 
     return this;
   },
-  goToStepNumber(step) {
-    goToStepNumber.call(this, step);
+  async goToStepNumber(step) {
+    await goToStepNumber.call(this, step);
 
     return this;
   },
-  nextStep() {
-    nextStep.call(this);
+  async nextStep() {
+    await nextStep.call(this);
     return this;
   },
-  previousStep() {
-    previousStep.call(this);
+  async previousStep() {
+    await previousStep.call(this);
     return this;
   },
   currentStep() {
     return currentStep.call(this);
   },
-  exit(force) {
-    exitIntro.call(this, this._targetElement, force);
+  async exit(force) {
+    await exitIntro.call(this, this._targetElement, force);
     return this;
   },
   refresh(refreshSteps) {
@@ -322,24 +322,24 @@ introJs.fn = IntroJs.prototype = {
     }
     return this;
   },
-  addHints() {
-    populateHints.call(this, this._targetElement);
+  async addHints() {
+    await populateHints.call(this, this._targetElement);
     return this;
   },
-  hideHint(stepId) {
-    hideHint.call(this, stepId);
+  async hideHint(stepId) {
+    await hideHint.call(this, stepId);
     return this;
   },
-  hideHints() {
-    hideHints.call(this);
+  async hideHints() {
+    await hideHints.call(this);
     return this;
   },
   showHint(stepId) {
     showHint.call(this, stepId);
     return this;
   },
-  showHints() {
-    showHints.call(this);
+  async showHints() {
+    await showHints.call(this);
     return this;
   },
   removeHints() {
@@ -350,8 +350,8 @@ introJs.fn = IntroJs.prototype = {
     removeHint().call(this, stepId);
     return this;
   },
-  showHintDialog(stepId) {
-    showHintDialog.call(this, stepId);
+  async showHintDialog(stepId) {
+    await showHintDialog.call(this, stepId);
     return this;
   },
 };
