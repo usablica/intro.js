@@ -31,7 +31,10 @@ export function hintQuerySelectorAll(
  * @api private
  * @method hideHint
  */
-export async function hideHint(this: IntroJs, stepId: number | undefined | string) {
+export async function hideHint(
+  this: IntroJs,
+  stepId: number | undefined | string
+) {
   const hint = hintQuerySelectorAll(
     `.introjs-hint[data-step="${stepId}"]`
   )[0] as HTMLElement;
@@ -245,7 +248,7 @@ export async function addHints(this: IntroJs) {
  * @api private
  * @method alignHintPosition
  * @param {String} position
- * @param {Object} hint
+ * @param style
  * @param {Object} element
  */
 export function alignHintPosition(
@@ -435,7 +438,7 @@ export async function populateHints(this: IntroJs, targetElm: HTMLElement) {
     const hints = targetElm.querySelectorAll("*[data-hint]");
 
     if (!hints || !hints.length) {
-      return false;
+      return;
     }
 
     //first add intro items with data-step

@@ -14,7 +14,10 @@ import fetchIntroSteps from "./fetchIntroSteps";
  * @param {Object} targetElm
  * @returns {Boolean} Success or not?
  */
-export default async function introForElement(this: IntroJs, targetElm: HTMLElement) {
+export default async function introForElement(
+  this: IntroJs,
+  targetElm: HTMLElement
+) {
   // don't start the tour if the instance is not active
   if (!this.isActive()) return;
 

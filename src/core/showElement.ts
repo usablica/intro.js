@@ -205,7 +205,10 @@ export function _updateProgressBar(
  * @method _showElement
  * @param {Object} targetElement
  */
-export default async function _showElement(this: IntroJs, targetElement: IntroItem) {
+export default async function _showElement(
+  this: IntroJs,
+  targetElement: IntroItem
+) {
   if (typeof this._introChangeCallback !== "undefined") {
     await this._introChangeCallback.call(this, targetElement.element);
   }

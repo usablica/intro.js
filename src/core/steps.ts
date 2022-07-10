@@ -67,7 +67,7 @@ export async function nextStep(this: IntroJs) {
   // if `onbeforechange` returned `false`, stop displaying the element
   if (continueStep === false) {
     --this._currentStep;
-    return false;
+    return;
   }
 
   if (this._introItems.length <= this._currentStep) {
@@ -93,7 +93,7 @@ export async function previousStep(this: IntroJs) {
   this._direction = "backward";
 
   if (this._currentStep === undefined || this._currentStep === 0) {
-    return false;
+    return;
   }
 
   --this._currentStep;
@@ -111,7 +111,7 @@ export async function previousStep(this: IntroJs) {
   // if `onbeforechange` returned `false`, stop displaying the element
   if (continueStep === false) {
     ++this._currentStep;
-    return false;
+    return;
   }
 
   await showElement.call(this, nextStep);

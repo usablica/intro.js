@@ -258,12 +258,12 @@ export class IntroJs {
     this._options = mergeOptions(this._options, options);
     return this;
   }
-  start() {
-    introForElement.call(this, this._targetElement);
+  async start() {
+    await introForElement.call(this, this._targetElement);
     return this;
   }
-  goToStep(step: number) {
-    goToStep.call(this, step);
+  async goToStep(step: number) {
+    await goToStep.call(this, step);
     return this;
   }
   addStep(options: Step) {
@@ -284,24 +284,24 @@ export class IntroJs {
 
     return this;
   }
-  goToStepNumber(step: number) {
-    goToStepNumber.call(this, step);
+  async goToStepNumber(step: number) {
+    await goToStepNumber.call(this, step);
 
     return this;
   }
-  nextStep() {
-    nextStep.call(this);
+  async nextStep() {
+    await nextStep.call(this);
     return this;
   }
-  previousStep() {
-    previousStep.call(this);
+  async previousStep() {
+    await previousStep.call(this);
     return this;
   }
   currentStep() {
     return currentStep.call(this);
   }
-  exit(force: boolean = false) {
-    exitIntro.call(this, this._targetElement, force);
+  async exit(force: boolean = false) {
+    await exitIntro.call(this, this._targetElement, force);
     return this;
   }
   refresh(refreshSteps: boolean = false) {
@@ -402,24 +402,24 @@ export class IntroJs {
     }
     return this;
   }
-  addHints() {
-    populateHints.call(this, this._targetElement);
+  async addHints() {
+    await populateHints.call(this, this._targetElement);
     return this;
   }
-  hideHint(stepId: number) {
-    hideHint.call(this, stepId);
+  async hideHint(stepId: number) {
+    await hideHint.call(this, stepId);
     return this;
   }
-  hideHints() {
-    hideHints.call(this);
+  async hideHints() {
+    await hideHints.call(this);
     return this;
   }
   showHint(stepId: number) {
     showHint.call(this, stepId);
     return this;
   }
-  showHints() {
-    showHints.call(this);
+  async showHints() {
+    await showHints.call(this);
     return this;
   }
   removeHints() {
@@ -430,8 +430,8 @@ export class IntroJs {
     removeHint.call(this, stepId);
     return this;
   }
-  showHintDialog(stepId: number) {
-    showHintDialog.call(this, stepId);
+  async showHintDialog(stepId: number) {
+    await showHintDialog.call(this, stepId);
     return this;
   }
 }

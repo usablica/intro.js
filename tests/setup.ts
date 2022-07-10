@@ -1,4 +1,8 @@
+import "regenerator-runtime/runtime";
 import { DOMWindow, JSDOM } from "jsdom";
+// @ts-ignore
+import * as matchers from "jest-extended";
+import expect from "expect";
 
 export interface Global {
   document: Document;
@@ -8,6 +12,8 @@ export interface Global {
 }
 
 declare var global: Global;
+
+expect.extend(matchers);
 
 const dom = new JSDOM();
 global.document = dom.window.document;
