@@ -30,8 +30,8 @@ export default function addOverlayLayer(this: IntroJs, targetElm: HTMLElement) {
       cursor: "pointer",
     });
 
-    overlayLayer.onclick = () => {
-      exitIntro.call(this, targetElm);
+    overlayLayer.onclick = async () => {
+      await exitIntro.call(this, targetElm);
     };
   }
 

@@ -9,11 +9,11 @@ import { IntroJs } from "../IntroJs";
  * @api private
  * @method _goToStep
  */
-export function goToStep(this: IntroJs, step: number) {
+export async function goToStep(this: IntroJs, step: number) {
   //because steps starts with zero
   this._currentStep = step - 2;
   if (typeof this._introItems !== "undefined") {
-    nextStep.call(this);
+    await nextStep.call(this);
   }
 }
 
@@ -23,10 +23,10 @@ export function goToStep(this: IntroJs, step: number) {
  * @api private
  * @method _goToStepNumber
  */
-export function goToStepNumber(this: IntroJs, step: number) {
+export async function goToStepNumber(this: IntroJs, step: number) {
   this._currentStepNumber = step;
   if (typeof this._introItems !== "undefined") {
-    nextStep.call(this);
+    await nextStep.call(this);
   }
 }
 
@@ -36,7 +36,7 @@ export function goToStepNumber(this: IntroJs, step: number) {
  * @api private
  * @method _nextStep
  */
-export function nextStep(this: IntroJs) {
+export async function nextStep(this: IntroJs) {
   this._direction = "forward";
 
   if (typeof this._currentStepNumber !== "undefined") {
@@ -58,7 +58,7 @@ export function nextStep(this: IntroJs) {
   let continueStep = true;
 
   if (typeof this._introBeforeChangeCallback !== "undefined") {
-    continueStep = this._introBeforeChangeCallback.call(
+    continueStep = await this._introBeforeChangeCallback.call(
       this,
       nextStep && nextStep.element
     );
@@ -74,15 +74,13 @@ export function nextStep(this: IntroJs) {
     //end of the intro
     //check if any callback is defined
     if (typeof this._introCompleteCallback === "function") {
-      this._introCompleteCallback.call(this, this._currentStep, "end");
+      await this._introCompleteCallback.call(this, this._currentStep, "end");
     }
-    exitIntro.call(this, this._targetElement);
+    await exitIntro.call(this, this._targetElement);
     return;
   }
 
-  showElement.call(this, nextStep);
-
-  return true;
+  await showElement.call(this, nextStep);
 }
 
 /**
@@ -91,10 +89,10 @@ export function nextStep(this: IntroJs) {
  * @api private
  * @method _previousStep
  */
-export function previousStep(this: IntroJs) {
+export async function previousStep(this: IntroJs) {
   this._direction = "backward";
 
-  if (this._currentStep === undefined) {
+  if (this._currentStep === undefined || this._currentStep === 0) {
     return false;
   }
 
@@ -104,7 +102,7 @@ export function previousStep(this: IntroJs) {
   let continueStep = true;
 
   if (typeof this._introBeforeChangeCallback !== "undefined") {
-    continueStep = this._introBeforeChangeCallback.call(
+    continueStep = await this._introBeforeChangeCallback.call(
       this,
       nextStep && nextStep.element
     );
@@ -116,9 +114,7 @@ export function previousStep(this: IntroJs) {
     return false;
   }
 
-  showElement.call(this, nextStep);
-
-  return true;
+  await showElement.call(this, nextStep);
 }
 
 /**

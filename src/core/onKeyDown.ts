@@ -20,7 +20,7 @@ import { IntroJs } from "../IntroJs";
  * @return type
  * @param e
  */
-export default function onKeyDown(this: IntroJs, e: KeyboardEvent) {
+export default async function onKeyDown(this: IntroJs, e: KeyboardEvent) {
   let code = e.code === undefined ? e.which : e.code;
 
   // if e.which is null
@@ -31,35 +31,35 @@ export default function onKeyDown(this: IntroJs, e: KeyboardEvent) {
   if ((code === "Escape" || code === 27) && this._options.exitOnEsc === true) {
     //escape key pressed, exit the intro
     //check if exit callback is defined
-    exitIntro.call(this, this._targetElement);
+    await exitIntro.call(this, this._targetElement);
   } else if (code === "ArrowLeft" || code === 37) {
     //left arrow
-    previousStep.call(this);
+    await previousStep.call(this);
   } else if (code === "ArrowRight" || code === 39) {
     //right arrow
-    nextStep.call(this);
+    await nextStep.call(this);
   } else if (code === "Enter" || code === "NumpadEnter" || code === 13) {
     //srcElement === ie
     const target = (e.target as HTMLElement) || (e.srcElement as HTMLElement);
     if (target && target.className.match("introjs-prevbutton")) {
       //user hit enter while focusing on previous button
-      previousStep.call(this);
+      await previousStep.call(this);
     } else if (target && target.className.match("introjs-skipbutton")) {
       //user hit enter while focusing on skip button
       if (
         this._introItems.length - 1 === this._currentStep &&
         typeof this._introCompleteCallback === "function"
       ) {
-        this._introCompleteCallback.call(this, this._currentStep, "skip");
+        await this._introCompleteCallback.call(this, this._currentStep, "skip");
       }
 
-      exitIntro.call(this, this._targetElement);
+      await exitIntro.call(this, this._targetElement);
     } else if (target && target.getAttribute("data-step-number")) {
       // user hit enter while focusing on step bullet
       target.click();
     } else {
       //default behavior for responding to enter
-      nextStep.call(this);
+      await nextStep.call(this);
     }
 
     //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers

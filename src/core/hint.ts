@@ -31,7 +31,7 @@ export function hintQuerySelectorAll(
  * @api private
  * @method hideHint
  */
-export function hideHint(this: IntroJs, stepId: number | undefined | string) {
+export async function hideHint(this: IntroJs, stepId: number | undefined | string) {
   const hint = hintQuerySelectorAll(
     `.introjs-hint[data-step="${stepId}"]`
   )[0] as HTMLElement;
@@ -44,7 +44,7 @@ export function hideHint(this: IntroJs, stepId: number | undefined | string) {
 
   // call the callback function (if any)
   if (typeof this._hintCloseCallback !== "undefined") {
-    this._hintCloseCallback.call(this, stepId);
+    await this._hintCloseCallback.call(this, stepId);
   }
 }
 
@@ -57,8 +57,8 @@ export function hideHint(this: IntroJs, stepId: number | undefined | string) {
 export function hideHints(this: IntroJs) {
   const hints = hintQuerySelectorAll(".introjs-hint");
 
-  forEach(hints, (hint) => {
-    hideHint.call(this, hint.getAttribute("data-step"));
+  forEach(hints, async (hint) => {
+    await hideHint.call(this, hint.getAttribute("data-step"));
   });
 }
 
@@ -68,7 +68,7 @@ export function hideHints(this: IntroJs) {
  * @api private
  * @method _showHints
  */
-export function showHints(this: IntroJs) {
+export async function showHints(this: IntroJs) {
   const hints = hintQuerySelectorAll(".introjs-hint");
 
   if (hints && hints.length) {
@@ -76,7 +76,7 @@ export function showHints(this: IntroJs) {
       showHint.call(this, hint.getAttribute("data-step"));
     });
   } else {
-    populateHints.call(this, this._targetElement);
+    await populateHints.call(this, this._targetElement);
   }
 }
 
@@ -139,7 +139,7 @@ export function removeHint(this: IntroJs, stepId: number) {
  * @api private
  * @method addHints
  */
-export function addHints(this: IntroJs) {
+export async function addHints(this: IntroJs) {
   const self = this;
 
   let hintsWrapper = document.querySelector(
@@ -226,7 +226,7 @@ export function addHints(this: IntroJs) {
 
   // call the callback function (if any)
   if (typeof this._hintsAddedCallback !== "undefined") {
-    this._hintsAddedCallback.call(this);
+    await this._hintsAddedCallback.call(this);
   }
 
   if (this._options.hintAutoRefreshInterval! >= 0) {
@@ -308,7 +308,7 @@ export function alignHintPosition(
  * @method _showHintDialog
  * @param {Number} stepId
  */
-export function showHintDialog(this: IntroJs, stepId: number) {
+export async function showHintDialog(this: IntroJs, stepId: number) {
   const hintElement = document.querySelector(
     `.introjs-hint[data-step="${stepId}"]`
   ) as HTMLElement;
@@ -316,7 +316,7 @@ export function showHintDialog(this: IntroJs, stepId: number) {
 
   // call the callback function (if any)
   if (typeof this._hintClickCallback !== "undefined") {
-    this._hintClickCallback.call(this, hintElement, item, stepId);
+    await this._hintClickCallback.call(this, hintElement, item, stepId);
   }
 
   // remove all open tooltips
@@ -408,7 +408,7 @@ export function removeHintTooltip() {
  * @param {Object} targetElm
  * @method _startHint
  */
-export function populateHints(this: IntroJs, targetElm: HTMLElement) {
+export async function populateHints(this: IntroJs, targetElm: HTMLElement) {
   this._introItems = [];
 
   if (this._options.hints) {
@@ -464,12 +464,10 @@ export function populateHints(this: IntroJs, targetElm: HTMLElement) {
     });
   }
 
-  addHints.call(this);
+  await addHints.call(this);
 
   DOMEvent.on(document, "click", removeHintTooltip, this, false);
   DOMEvent.on(window, "resize", reAlignHints, this, true);
-
-  return false;
 }
 
 /**

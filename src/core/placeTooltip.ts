@@ -231,6 +231,9 @@ export default function placeTooltip(
 
   addClass(tooltipLayer, `introjs-${currentTooltipPosition}`);
 
+  let tooltipLayerStyleLeftRight =
+    targetOffset.width / 2 - tooltipOffset.width / 2;
+
   switch (currentTooltipPosition) {
     case "top-right-aligned":
       arrowLayer.className = "introjs-arrow bottom-right";
@@ -247,9 +250,6 @@ export default function placeTooltip(
 
     case "top-middle-aligned":
       arrowLayer.className = "introjs-arrow bottom-middle";
-
-      let tooltipLayerStyleLeftRight =
-        targetOffset.width / 2 - tooltipOffset.width / 2;
 
       // a fix for middle aligned hints
       if (hintMode) {

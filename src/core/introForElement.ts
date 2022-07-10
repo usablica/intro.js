@@ -14,12 +14,12 @@ import fetchIntroSteps from "./fetchIntroSteps";
  * @param {Object} targetElm
  * @returns {Boolean} Success or not?
  */
-export default function introForElement(this: IntroJs, targetElm: HTMLElement) {
+export default async function introForElement(this: IntroJs, targetElm: HTMLElement) {
   // don't start the tour if the instance is not active
   if (!this.isActive()) return;
 
   if (this._introStartCallback !== undefined) {
-    this._introStartCallback.call(this, targetElm);
+    await this._introStartCallback.call(this, targetElm);
   }
 
   //set it to the introJs object
@@ -34,7 +34,7 @@ export default function introForElement(this: IntroJs, targetElm: HTMLElement) {
   //add overlay layer to the page
   if (addOverlayLayer.call(this, targetElm)) {
     //then, start the show
-    nextStep.call(this);
+    await nextStep.call(this);
 
     if (this._options.keyboardNavigation) {
       DOMEvent.on(window, "keydown", onKeyDown, this, true);

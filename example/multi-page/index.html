@@ -64,9 +64,9 @@
     <script type="text/javascript" src="../../dist/intro.js"></script>
     <script type="text/javascript">
       document.getElementById('startButton').onclick = function() {
-        introJs().setOption('doneLabel', 'Next page').start().oncomplete(function() {
+        introJs().setOption('doneLabel', 'Next page').oncomplete(function() {
           window.location.href = 'second.html?multipage=true';
-        });
+        }).start();
       };
     </script>
   </body>
