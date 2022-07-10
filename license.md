@@ -10,7 +10,7 @@ If you want to use Intro.js for a commercial application, theme or plugin the co
 
 ### Open-source license
 
-Copyright (C) 2012-2021 Afshin Mehrabani (afshin.meh@gmail.com)
+Copyright (C) 2012-2022 Afshin Mehrabani (afshin.meh@gmail.com)
 
 ### GNU AFFERO GENERAL PUBLIC LICENSE
 
