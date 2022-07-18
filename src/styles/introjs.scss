@@ -82,6 +82,8 @@ tr.introjs-showElement {
 
 // Enable introjs animations.
 .introjs-animated-tour {
+  scroll-behavior: smooth;
+
   .introjs-helperLayer {
     transition: all 0.3s ease-out;
   }
