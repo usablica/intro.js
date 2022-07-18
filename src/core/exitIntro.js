@@ -4,6 +4,7 @@ import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import removeShowElement from "./removeShowElement";
 import removeChild from "../util/removeChild";
+import removeClass from "../util/removeClass";
 
 /**
  * Exit from intro
@@ -54,6 +55,8 @@ export default async function exitIntro(targetElement, force) {
   removeChild(floatingElement);
 
   removeShowElement();
+
+  removeClass(targetElement, "introjs-animated-tour");
 
   //clean listeners
   DOMEvent.off(window, "keydown", onKeyDown, this, true);
