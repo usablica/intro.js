@@ -11,6 +11,7 @@ import placeTooltip from "./placeTooltip";
 import createElement from "../util/createElement";
 import { IntroJs } from "../IntroJs";
 import debounce from "../util/debounce";
+import getElement from "../util/getElement";
 
 /**
  * Get a queryselector within the hint wrapper
@@ -20,7 +21,7 @@ import debounce from "../util/debounce";
  */
 export function hintQuerySelectorAll(
   selector: string
-): NodeListOf<Element> | Element[] {
+): NodeListOf<HTMLElement> | HTMLElement[] {
   const hintsWrapper = document.querySelector(".introjs-hints");
   return hintsWrapper ? hintsWrapper.querySelectorAll(selector) : [];
 }
@@ -35,9 +36,7 @@ export async function hideHint(
   this: IntroJs,
   stepId: number | undefined | string
 ) {
-  const hint = hintQuerySelectorAll(
-    `.introjs-hint[data-step="${stepId}"]`
-  )[0] as HTMLElement;
+  const hint = hintQuerySelectorAll(`.introjs-hint[data-step="${stepId}"]`)[0];
 
   removeHintTooltip.call(this);
 
@@ -90,9 +89,7 @@ export async function showHints(this: IntroJs) {
  * @method showHint
  */
 export function showHint(stepId: number) {
-  const hint = hintQuerySelectorAll(
-    `.introjs-hint[data-step="${stepId}"]`
-  )[0] as HTMLElement;
+  const hint = hintQuerySelectorAll(`.introjs-hint[data-step="${stepId}"]`)[0];
 
   if (hint) {
     removeClass(hint, /introjs-hidehint/g);
@@ -145,14 +142,12 @@ export function removeHint(this: IntroJs, stepId: number) {
 export async function addHints(this: IntroJs) {
   const self = this;
 
-  let hintsWrapper = document.querySelector(
-    ".introjs-hints"
-  ) as HTMLElement | null;
+  let hintsWrapper = getElement(document, ".introjs-hints");
 
   if (hintsWrapper === null) {
     hintsWrapper = createElement("div", {
       className: "introjs-hints",
-    }) as HTMLElement;
+    });
   }
 
   /**
@@ -312,9 +307,10 @@ export function alignHintPosition(
  * @param {Number} stepId
  */
 export async function showHintDialog(this: IntroJs, stepId: number) {
-  const hintElement = document.querySelector(
+  const hintElement = getElement(
+    document,
     `.introjs-hint[data-step="${stepId}"]`
-  ) as HTMLElement;
+  )!;
   const item = this._introItems[stepId];
 
   // call the callback function (if any)
@@ -350,12 +346,12 @@ export async function showHintDialog(this: IntroJs, stepId: number) {
 
   tooltipTextLayer.className = "introjs-tooltiptext";
 
-  const tooltipWrapper = createElement("p") as HTMLElement;
+  const tooltipWrapper = createElement("p");
   tooltipWrapper.innerHTML = item.hint!;
   tooltipTextLayer.appendChild(tooltipWrapper);
 
   if (this._options.hintShowButton) {
-    const closeButton = createElement("a") as HTMLElement;
+    const closeButton = createElement("a");
     closeButton.className = this._options.buttonClass!;
     closeButton.setAttribute("role", "button");
     closeButton.innerHTML = this._options.hintButtonLabel!;
@@ -420,9 +416,7 @@ export async function populateHints(this: IntroJs, targetElm: HTMLElement) {
 
       if (typeof currentItem.element === "string") {
         //grab the element with given selector from the page
-        currentItem.element = document.querySelector(
-          currentItem.element
-        )! as HTMLElement;
+        currentItem.element = getElement(document, currentItem.element)!;
       }
 
       currentItem.hintPosition =

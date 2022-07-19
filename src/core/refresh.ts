@@ -4,6 +4,7 @@ import placeTooltip from "./placeTooltip";
 import { IntroJs } from "../IntroJs";
 import fetchIntroSteps from "./fetchIntroSteps";
 import { _recreateBullets, _updateProgressBar } from "./showElement";
+import getElement from "../util/getElement";
 
 /**
  * Update placement of the intro objects on the screen
@@ -11,15 +12,15 @@ import { _recreateBullets, _updateProgressBar } from "./showElement";
  * @param {boolean} refreshSteps to refresh the intro steps as well
  */
 export default function refresh(this: IntroJs, refreshSteps: boolean = false) {
-  const referenceLayer = document.querySelector(
+  const referenceLayer = getElement(
+    document,
     ".introjs-tooltipReferenceLayer"
-  ) as HTMLElement;
-  const helperLayer = document.querySelector(
-    ".introjs-helperLayer"
-  ) as HTMLElement;
-  const disableInteractionLayer = document.querySelector(
+  )!;
+  const helperLayer = getElement(document, ".introjs-helperLayer")!;
+  const disableInteractionLayer = getElement(
+    document,
     ".introjs-disableInteraction"
-  ) as HTMLElement;
+  )!;
 
   // re-align intros
   setHelperLayerPosition.call(this, helperLayer);
@@ -38,12 +39,8 @@ export default function refresh(this: IntroJs, refreshSteps: boolean = false) {
 
   // re-align tooltip
   if (this._currentStep !== undefined && this._currentStep !== null) {
-    const oldArrowLayer = document.querySelector(
-      ".introjs-arrow"
-    ) as HTMLElement;
-    const oldtooltipContainer = document.querySelector(
-      ".introjs-tooltip"
-    ) as HTMLElement;
+    const oldArrowLayer = getElement(document, ".introjs-arrow")!;
+    const oldtooltipContainer = getElement(document, ".introjs-tooltip")!;
 
     if (oldtooltipContainer && oldArrowLayer) {
       placeTooltip.call(

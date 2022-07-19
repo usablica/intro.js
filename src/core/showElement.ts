@@ -13,6 +13,7 @@ import createElement from "../util/createElement";
 import setStyle from "../util/setStyle";
 import appendChild from "../util/appendChild";
 import { IntroItem, IntroJs } from "../IntroJs";
+import getElement from "../util/getElement";
 
 /**
  * Gets the current progress percentage
@@ -34,14 +35,15 @@ function _getProgress(this: IntroJs) {
  * @method _disableInteraction
  */
 function _disableInteraction(this: IntroJs) {
-  let disableInteractionLayer = document.querySelector(
+  let disableInteractionLayer = getElement(
+    document,
     ".introjs-disableInteraction"
-  ) as HTMLElement;
+  );
 
   if (disableInteractionLayer === null) {
     disableInteractionLayer = createElement("div", {
       className: "introjs-disableInteraction",
-    }) as HTMLElement;
+    });
 
     this._targetElement!.appendChild(disableInteractionLayer);
   }
@@ -114,7 +116,7 @@ export function _recreateBullets(
   targetElement: IntroItem
 ) {
   if (this._options.showBullets) {
-    const existing = document.querySelector(".introjs-bullets") as HTMLElement;
+    const existing = getElement(document, ".introjs-bullets");
 
     if (existing) {
       existing.parentNode!.replaceChild(
@@ -137,13 +139,15 @@ function _updateBullets(
   targetElement: IntroItem
 ) {
   if (this._options.showBullets) {
-    const activeBullet = oldReferenceLayer.querySelector(
+    const activeBullet = getElement(
+      oldReferenceLayer,
       ".introjs-bullets li > a.active"
-    ) as HTMLElement;
+    )!;
     activeBullet.className = "";
-    const stepBullet = oldReferenceLayer.querySelector(
+    const stepBullet = getElement(
+      oldReferenceLayer,
       `.introjs-bullets li > a[data-step-number="${targetElement.step}"]`
-    ) as HTMLElement;
+    )!;
     stepBullet.className = "active";
   }
 }
@@ -190,9 +194,10 @@ export function _updateProgressBar(
   this: IntroJs,
   oldReferenceLayer: HTMLElement
 ) {
-  const progressbar = oldReferenceLayer.querySelector(
+  const progressbar = getElement(
+    oldReferenceLayer,
     ".introjs-progress .introjs-progressbar"
-  ) as HTMLElement;
+  )!;
 
   progressbar.style.cssText = `width:${_getProgress.call(this)}%;`;
   progressbar.setAttribute("aria-valuenow", _getProgress.call(this).toString());
@@ -214,12 +219,11 @@ export default async function _showElement(
   }
 
   const self = this;
-  const oldHelperLayer = document.querySelector(
-    ".introjs-helperLayer"
-  ) as HTMLElement;
-  const oldReferenceLayer = document.querySelector(
+  const oldHelperLayer = getElement(document, ".introjs-helperLayer");
+  const oldReferenceLayer = getElement(
+    document,
     ".introjs-tooltipReferenceLayer"
-  ) as HTMLElement;
+  );
   let highlightClass = "introjs-helperLayer";
   let nextTooltipButton: HTMLElement;
   let prevTooltipButton: HTMLElement;
@@ -235,31 +239,27 @@ export default async function _showElement(
   }
 
   if (oldHelperLayer !== null && oldReferenceLayer !== null) {
-    const oldHelperNumberLayer = oldReferenceLayer.querySelector(
+    const oldHelperNumberLayer = getElement(
+      oldReferenceLayer,
       ".introjs-helperNumberLayer"
-    ) as HTMLElement;
-    const oldtooltipLayer = oldReferenceLayer.querySelector(
+    )!;
+    const oldtooltipLayer = getElement(
+      oldReferenceLayer,
       ".introjs-tooltiptext"
-    ) as HTMLElement;
-    const oldTooltipTitleLayer = oldReferenceLayer.querySelector(
+    )!;
+    const oldTooltipTitleLayer = getElement(
+      oldReferenceLayer,
       ".introjs-tooltip-title"
-    ) as HTMLElement;
-    const oldArrowLayer = oldReferenceLayer.querySelector(
-      ".introjs-arrow"
-    ) as HTMLElement;
-    const oldtooltipContainer = oldReferenceLayer.querySelector(
+    )!;
+    const oldArrowLayer = getElement(oldReferenceLayer, ".introjs-arrow")!;
+    const oldtooltipContainer = getElement(
+      oldReferenceLayer,
       ".introjs-tooltip"
-    ) as HTMLElement;
+    )!;
 
-    skipTooltipButton = oldReferenceLayer.querySelector(
-      ".introjs-skipbutton"
-    ) as HTMLElement;
-    prevTooltipButton = oldReferenceLayer.querySelector(
-      ".introjs-prevbutton"
-    ) as HTMLElement;
-    nextTooltipButton = oldReferenceLayer.querySelector(
-      ".introjs-nextbutton"
-    ) as HTMLElement;
+    skipTooltipButton = getElement(oldReferenceLayer, ".introjs-skipbutton")!;
+    prevTooltipButton = getElement(oldReferenceLayer, ".introjs-prevbutton")!;
+    nextTooltipButton = getElement(oldReferenceLayer, ".introjs-nextbutton")!;
 
     //update or reset the helper highlight class
     oldHelperLayer.className = highlightClass;

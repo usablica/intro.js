@@ -23,7 +23,7 @@ export default function setHelperLayerPosition(
     const currentElement = this._introItems[this._currentStep];
     if (currentElement) {
       const elementPosition = getOffset(
-        currentElement.element as HTMLElement,
+        currentElement.element,
         this._targetElement
       );
       let widthHeightPadding = this._options.helperElementPadding!;
@@ -31,7 +31,7 @@ export default function setHelperLayerPosition(
       // If the target element is fixed, the tooltip should be fixed as well.
       // Otherwise, remove a fixed class that may be left over from the previous
       // step.
-      if (isFixed(currentElement.element as HTMLElement)) {
+      if (isFixed(currentElement.element)) {
         addClass(helperLayer, "introjs-fixedTooltip");
       } else {
         removeClass(helperLayer, "introjs-fixedTooltip");

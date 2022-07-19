@@ -5,6 +5,7 @@ import onResize from "./onResize";
 import removeShowElement from "./removeShowElement";
 import removeChild from "../util/removeChild";
 import { IntroJs } from "../IntroJs";
+import getElement from "../util/getElement";
 
 /**
  * Exit from intro
@@ -40,26 +41,24 @@ export default async function exitIntro(
   }
 
   //remove all helper layers
-  const helperLayer = targetElement.querySelector(
-    ".introjs-helperLayer"
-  ) as HTMLElement;
+  const helperLayer = getElement(targetElement, ".introjs-helperLayer")!;
   removeChild(helperLayer, true);
 
-  const referenceLayer = targetElement.querySelector(
+  const referenceLayer = getElement(
+    targetElement,
     ".introjs-tooltipReferenceLayer"
-  ) as HTMLElement;
+  )!;
   removeChild(referenceLayer);
 
   //remove disableInteractionLayer
-  const disableInteractionLayer = targetElement.querySelector(
+  const disableInteractionLayer = getElement(
+    targetElement,
     ".introjs-disableInteraction"
-  ) as HTMLElement;
+  )!;
   removeChild(disableInteractionLayer);
 
   //remove intro floating element
-  const floatingElement = document.querySelector(
-    ".introjsFloatingElement"
-  ) as HTMLElement;
+  const floatingElement = getElement(document, ".introjsFloatingElement")!;
   removeChild(floatingElement);
 
   removeShowElement();
