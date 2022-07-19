@@ -5307,10 +5307,10 @@
   "resolved" "https://registry.npmjs.org/min-indent/-/min-indent-1.0.1.tgz"
   "version" "1.0.1"
 
-"minify@^8.0.2":
-  "integrity" "sha512-NA3ia+/VbjxgPb6Oo7aebvi0WGKHyNWGPg4m018CmWT1Ar8CXLnpz7Ux1ccaVPfADjs3Yv8hc4NuBvUVdIZ21A=="
-  "resolved" "https://registry.npmjs.org/minify/-/minify-8.0.4.tgz"
-  "version" "8.0.4"
+"minify@^9.1.0":
+  "integrity" "sha512-1/VsCf9hNOE5dntVUaGGVfo5s2+k6LQsZx9HR2EX5/MUiNmDr0MTFGFD56ouz3yks8vjCVTrH1wir6gTF0anhw=="
+  "resolved" "https://registry.npmjs.org/minify/-/minify-9.1.0.tgz"
+  "version" "9.1.0"
   dependencies:
     "clean-css" "^5.0.1"
     "css-b64-images" "~0.2.5"
@@ -6426,10 +6426,10 @@
   "resolved" "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.1.2.tgz"
   "version" "1.1.2"
 
-"prettier@2.6.2":
-  "integrity" "sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew=="
-  "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.6.2.tgz"
-  "version" "2.6.2"
+"prettier@2.7.1":
+  "integrity" "sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g=="
+  "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.7.1.tgz"
+  "version" "2.7.1"
 
 "pretty-bytes@^5.6.0":
   "integrity" "sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg=="
