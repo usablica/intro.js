@@ -2,7 +2,10 @@
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,
-    "lib": ["es6"],
+    "lib": [
+      "es6",
+      "dom"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
@@ -21,7 +24,7 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "resolveJsonModule": true,
-    "removeComments": true,
+    "removeComments": true
   },
   "files": [
     "src/index.ts"
