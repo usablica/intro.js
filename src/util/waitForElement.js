@@ -13,7 +13,6 @@ export default function _waitForElement(elSelector, callback) {
   }
 
   if (typeof MutationObserver !== "undefined") {
-    /* jshint ignore:start */
     const observer = new MutationObserver(() => {
       if (document.querySelector(elSelector) !== null) {
         observer.disconnect();
@@ -27,7 +26,6 @@ export default function _waitForElement(elSelector, callback) {
       attributes: false,
       characterData: false,
     });
-    /* jshint ignore:end */
   } else {
     // Old browsers will wait by timeout
     waitForElementByTimeout(elSelector, callback, 1000, 10000);
