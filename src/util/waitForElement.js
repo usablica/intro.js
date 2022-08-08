@@ -28,7 +28,7 @@ export default function _waitForElement(elSelector, callback) {
     });
   } else {
     // Old browsers will wait by timeout
-    waitForElementByTimeout(elSelector, callback, 1000, 10000);
+    _waitForElementByTimeout(elSelector, callback, 1000, 10000);
   }
 }
 
@@ -38,7 +38,7 @@ export default function _waitForElement(elSelector, callback) {
  * @param {number} checkInterval In milliseconds
  * @param {number} maxTimeout In milliseconds
  */
-function waitForElementByTimeout(
+export function _waitForElementByTimeout(
   elSelector,
   callback,
   checkInterval,
