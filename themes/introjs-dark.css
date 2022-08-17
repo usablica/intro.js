@@ -218,7 +218,7 @@ tr.introjs-showElement > th {
   float: left;
   margin: 0 2px;
 }
-.introjs-bullets ul li a {
+.introjs-bullets ul li button {
   display: block;
   width: 8px;
   height: 8px;
@@ -228,10 +228,10 @@ tr.introjs-showElement > th {
   -webkit-border-radius: 10px;
   text-decoration: none;
 }
-.introjs-bullets ul li a:hover {
+.introjs-bullets ul li button:hover {
   background: rgba(255,255,255,0.2);
 }
-.introjs-bullets ul li a.active {
+.introjs-bullets ul li button.active {
   background: rgba(255,255,255,0.2);
 }
 .introjsFloatingElement {

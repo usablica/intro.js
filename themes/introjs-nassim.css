@@ -263,7 +263,7 @@
   float: left;
   margin: 0 2px;
 }
-.introjs-bullets ul li a {
+.introjs-bullets ul li button {
   display: block;
   width: 6px;
   height: 6px;
@@ -273,10 +273,10 @@
   -webkit-border-radius: 10px;
   text-decoration: none;
 }
-.introjs-bullets ul li a:hover {
+.introjs-bullets ul li button:hover {
   background: #999;
 }
-.introjs-bullets ul li a.active {
+.introjs-bullets ul li button.active {
   background: #999;
 }
 

@@ -124,10 +124,10 @@ export function _recreateBullets(oldReferenceLayer, targetElement) {
 function _updateBullets(oldReferenceLayer, targetElement) {
   if (this._options.showBullets) {
     oldReferenceLayer.querySelector(
-      ".introjs-bullets li > a.active"
+      ".introjs-bullets li > button.active"
     ).className = "";
     oldReferenceLayer.querySelector(
-      `.introjs-bullets li > a[data-step-number="${targetElement.step}"]`
+      `.introjs-bullets li > button[data-step-number="${targetElement.step}"]`
     ).className = "active";
   }
 }
