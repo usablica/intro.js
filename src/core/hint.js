@@ -169,10 +169,10 @@ export async function addHints() {
       return;
     }
 
-    const hint = createElement("a", {
+    const hint = createElement("button", {
       className: "introjs-hint",
     });
-    setAnchorAsButton(hint);
+    hint.setAttribute("type", "button");
 
     hint.onclick = getHintClick(i);
 

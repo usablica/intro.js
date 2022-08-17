@@ -414,7 +414,6 @@ export default async function _showElement(targetElement) {
       }
     };
 
-    setAnchorAsButton(nextTooltipButton);
     nextTooltipButton.innerHTML = this._options.nextLabel;
 
     //previous button
@@ -426,7 +425,6 @@ export default async function _showElement(targetElement) {
       }
     };
 
-    setAnchorAsButton(prevTooltipButton);
     prevTooltipButton.innerHTML = this._options.prevLabel;
 
     //skip button
@@ -434,7 +432,6 @@ export default async function _showElement(targetElement) {
       className: "introjs-skipbutton",
     });
 
-    setAnchorAsButton(skipTooltipButton);
     skipTooltipButton.innerHTML = this._options.skipLabel;
 
     skipTooltipButton.onclick = async () => {
@@ -515,6 +512,7 @@ export default async function _showElement(targetElement) {
         prevTooltipButton !== null
       ) {
         prevTooltipButton.className = `${this._options.buttonClass} introjs-prevbutton introjs-disabled`;
+        prevTooltipButton.setAttribute("disabled", "disabled");
       }
     }
   } else if (
@@ -555,6 +553,7 @@ export default async function _showElement(targetElement) {
           );
         } else {
           nextTooltipButton.className = `${this._options.buttonClass} introjs-nextbutton introjs-disabled`;
+          prevTooltipButton.setAttribute("disabled", "disabled");
         }
       }
     }
@@ -565,12 +564,14 @@ export default async function _showElement(targetElement) {
       prevTooltipButton !== null
     ) {
       prevTooltipButton.className = `${this._options.buttonClass} introjs-prevbutton`;
+      prevTooltipButton.removeAttribute("disabled");
     }
     if (
       typeof nextTooltipButton !== "undefined" &&
       nextTooltipButton !== null
     ) {
       nextTooltipButton.className = `${this._options.buttonClass} introjs-nextbutton`;
+      nextTooltipButton.removeAttribute("disabled");
       nextTooltipButton.innerHTML = this._options.nextLabel;
     }
   }
