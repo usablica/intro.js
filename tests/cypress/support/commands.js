@@ -31,9 +31,9 @@ compareSnapshotCommand({
 });
 
 Cypress.Commands.add("nextStep", () => {
-  cy.get(".introjs-nextbutton").click();
+  cy.get(".introjs-nextbutton").click({ force: true });
 });
 
 Cypress.Commands.add("prevStep", () => {
-  cy.get(".introjs-prevbutton").click();
+  cy.get(".introjs-prevbutton").click({ force: true });
 });
