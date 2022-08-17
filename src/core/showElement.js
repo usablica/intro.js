@@ -396,7 +396,7 @@ export default async function _showElement(targetElement) {
     referenceLayer.appendChild(tooltipLayer);
 
     //next button
-    nextTooltipButton = createElement("a");
+    nextTooltipButton = createElement("button");
 
     nextTooltipButton.onclick = async () => {
       if (self._introItems.length - 1 !== self._currentStep) {
@@ -418,7 +418,7 @@ export default async function _showElement(targetElement) {
     nextTooltipButton.innerHTML = this._options.nextLabel;
 
     //previous button
-    prevTooltipButton = createElement("a");
+    prevTooltipButton = createElement("button");
 
     prevTooltipButton.onclick = async () => {
       if (self._currentStep !== 0) {
@@ -430,7 +430,7 @@ export default async function _showElement(targetElement) {
     prevTooltipButton.innerHTML = this._options.prevLabel;
 
     //skip button
-    skipTooltipButton = createElement("a", {
+    skipTooltipButton = createElement("button", {
       className: "introjs-skipbutton",
     });
 
@@ -576,13 +576,13 @@ export default async function _showElement(targetElement) {
   }
 
   if (typeof prevTooltipButton !== "undefined" && prevTooltipButton !== null) {
-    prevTooltipButton.setAttribute("role", "button");
+    prevTooltipButton.setAttribute("type", "button");
   }
   if (typeof nextTooltipButton !== "undefined" && nextTooltipButton !== null) {
-    nextTooltipButton.setAttribute("role", "button");
+    nextTooltipButton.setAttribute("type", "button");
   }
   if (typeof skipTooltipButton !== "undefined" && skipTooltipButton !== null) {
-    skipTooltipButton.setAttribute("role", "button");
+    skipTooltipButton.setAttribute("type", "button");
   }
 
   //Set focus on "next" button, so that hitting Enter always moves you onto the next step

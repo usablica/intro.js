@@ -333,9 +333,9 @@ export async function showHintDialog(stepId) {
   tooltipTextLayer.appendChild(tooltipWrapper);
 
   if (this._options.hintShowButton) {
-    const closeButton = createElement("a");
+    const closeButton = createElement("button");
     closeButton.className = this._options.buttonClass;
-    closeButton.setAttribute("role", "button");
+    closeButton.setAttribute("type", "button");
     closeButton.innerHTML = this._options.hintButtonLabel;
     closeButton.onclick = hideHint.bind(this, stepId);
     tooltipTextLayer.appendChild(closeButton);
