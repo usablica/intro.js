@@ -233,6 +233,10 @@ tr.introjs-showElement {
 }
 
 .introjs-button {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
   box-sizing: content-box;
   position: relative;
   overflow: visible;
@@ -284,6 +288,10 @@ tr.introjs-showElement {
 }
 
 .introjs-skipbutton {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
   position: absolute;
   top: 0;
   right: 0;
@@ -359,7 +367,11 @@ tr.introjs-showElement {
       float: left;
       margin: 0 2px;
 
-      a {
+      button {
+        appearance: none;
+        border: 0;
+        background: none;
+        padding: 0;
         transition: width 0.1s ease-in;
         box-sizing: content-box;
         display: block;
