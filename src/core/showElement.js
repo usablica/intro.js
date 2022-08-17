@@ -4,7 +4,6 @@ import addClass from "../util/addClass";
 import scrollTo from "../util/scrollTo";
 import exitIntro from "./exitIntro";
 import forEach from "../util/forEach";
-import setAnchorAsButton from "../util/setAnchorAsButton";
 import { nextStep, previousStep } from "./steps";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
@@ -73,22 +72,22 @@ function _createBullets(targetElement) {
 
   forEach(this._introItems, ({ step }, i) => {
     const innerLi = createElement("li");
-    const anchorLink = createElement("a");
+    const anchorButton = createElement("button");
 
     innerLi.setAttribute("role", "presentation");
-    anchorLink.setAttribute("role", "tab");
+    anchorButton.setAttribute("type", "button");
+    anchorButton.setAttribute("role", "tab");
 
-    anchorLink.onclick = anchorClick;
+    anchorButton.onclick = anchorClick;
 
     if (i === targetElement.step - 1) {
-      anchorLink.className = "active";
+      anchorButton.className = "active";
     }
 
-    setAnchorAsButton(anchorLink);
-    anchorLink.innerHTML = "&nbsp;";
-    anchorLink.setAttribute("data-step-number", step);
+    anchorButton.innerHTML = "&nbsp;";
+    anchorButton.setAttribute("data-step-number", step);
 
-    innerLi.appendChild(anchorLink);
+    innerLi.appendChild(anchorButton);
     ulContainer.appendChild(innerLi);
   });
 

@@ -5,7 +5,6 @@ import getOffset from "../util/getOffset";
 import cloneObject from "../util/cloneObject";
 import forEach from "../util/forEach";
 import DOMEvent from "./DOMEvent";
-import setAnchorAsButton from "../util/setAnchorAsButton";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import createElement from "../util/createElement";
