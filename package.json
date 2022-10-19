@@ -37,7 +37,7 @@
     "@babel/preset-env": "^7.12.1",
     "@rollup/plugin-json": "^4.1.0",
     "autoprefixer": "^9.0.0",
-    "babel-jest": "^28.1.2",
+    "babel-jest": "^29.2.1",
     "core-js": "^3.6.5",
     "cypress": "^10.3.0",
     "cypress-real-events": "^1.7.1",
