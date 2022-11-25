@@ -5,7 +5,6 @@ import getOffset from "../util/getOffset";
 import cloneObject from "../util/cloneObject";
 import forEach from "../util/forEach";
 import DOMEvent from "./DOMEvent";
-import setAnchorAsButton from "../util/setAnchorAsButton";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import createElement from "../util/createElement";
@@ -169,10 +168,10 @@ export async function addHints() {
       return;
     }
 
-    const hint = createElement("a", {
+    const hint = createElement("button", {
       className: "introjs-hint",
     });
-    setAnchorAsButton(hint);
+    hint.setAttribute("type", "button");
 
     hint.onclick = getHintClick(i);
 
@@ -333,9 +332,9 @@ export async function showHintDialog(stepId) {
   tooltipTextLayer.appendChild(tooltipWrapper);
 
   if (this._options.hintShowButton) {
-    const closeButton = createElement("a");
+    const closeButton = createElement("button");
     closeButton.className = this._options.buttonClass;
-    closeButton.setAttribute("role", "button");
+    closeButton.setAttribute("type", "button");
     closeButton.innerHTML = this._options.hintButtonLabel;
     closeButton.onclick = hideHint.bind(this, stepId);
     tooltipTextLayer.appendChild(closeButton);
