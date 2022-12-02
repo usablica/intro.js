@@ -30,21 +30,25 @@ export default function scrollTo(scrollTo, { element }, tooltipLayer) {
     // the center of the target element or tooltip.
 
     if (top < 0 || element.clientHeight > winHeight) {
-      window.scrollBy(
-        0,
-        rect.top -
+      window.scrollBy({
+        top: rect.top -
           (winHeight / 2 - rect.height / 2) -
-          this._options.scrollPadding
-      ); // 30px padding from edge to look nice
+          // 30px padding from edge to look nice
+          this._options.scrollPadding,
+        left: 0,
+        behavior: 'smooth'
+      });
 
-      //Scroll down
     } else {
-      window.scrollBy(
-        0,
-        rect.top -
+      //Scroll down
+      window.scrollBy({
+        top: rect.top -
           (winHeight / 2 - rect.height / 2) +
-          this._options.scrollPadding
-      ); // 30px padding from edge to look nice
+          // 30px padding from edge to look nice
+          this._options.scrollPadding,
+        left: 0,
+        behavior: 'smooth'
+      });
     }
   }
 }

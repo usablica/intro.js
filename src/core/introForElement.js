@@ -3,6 +3,7 @@ import DOMEvent from "./DOMEvent";
 import { nextStep } from "./steps";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
+import addClass from "../util/addClass";
 import fetchIntroSteps from "./fetchIntroSteps";
 
 /**
@@ -32,6 +33,10 @@ export default async function introForElement(targetElm) {
 
   //add overlay layer to the page
   if (addOverlayLayer.call(this, targetElm)) {
+    if (this._options.tourAnimation) {
+      addClass(targetElm, "introjs-animated-tour");
+    }
+
     //then, start the show
     await nextStep.call(this);
 

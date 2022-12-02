@@ -109,6 +109,8 @@ function IntroJs(obj) {
     hintAutoRefreshInterval: 10,
     /* Adding animation to hints? */
     hintAnimation: true,
+    /* Whether to animate tour step transitions */
+    tourAnimation: true,
     /* additional classes to put on the buttons */
     buttonClass: "introjs-button",
     /* additional classes to put on progress bar */

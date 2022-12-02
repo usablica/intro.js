@@ -246,6 +246,7 @@ export default async function _showElement(targetElement) {
     removeShowElement();
 
     //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
+    let timeout = (self._options.tourAnimation) ? 350 : 1;
     if (self._lastShowElementTimer) {
       window.clearTimeout(self._lastShowElementTimer);
     }
@@ -302,7 +303,7 @@ export default async function _showElement(targetElement) {
         targetElement,
         oldtooltipLayer
       );
-    }, 350);
+    }, timeout);
 
     // end of old element if-else condition
   } else {
