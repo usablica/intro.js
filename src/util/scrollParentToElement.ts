@@ -8,7 +8,9 @@ export default function scrollParentToElement(targetElement: HTMLElement) {
 
   const parent = getScrollParent(targetElement);
 
-  if (parent === document.body) return;
+  const scrollEl = this._introItems[this._currentStep].scrollElRef || this._options.scrollElRef || parent;
+
+  if (scrollEl === document.body) return;
 
   parent.scrollTop = targetElement.offsetTop - parent.offsetTop;
 }

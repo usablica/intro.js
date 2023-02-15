@@ -10,9 +10,15 @@ export default function cloneObject<T extends Object>(source: T): T {
   const temp = {} as T;
 
   for (const key in source) {
-    // @ts-ignore:next-line
-    if ("jQuery" in window && source[key] instanceof window.jQuery) {
+    if (
+      // @ts-ignore:next-line
+      ("jQuery" in window && source[key] instanceof window.jQuery) ||
+      key === "scrollElRef"
+    ) {
       temp[key] = source[key];
+    } else if (key === "window") {
+      // @ts-ignore:next-line
+      temp[key] = window;
     } else {
       temp[key] = cloneObject(source[key]);
     }
