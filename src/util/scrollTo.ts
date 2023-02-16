@@ -36,8 +36,8 @@ export default function scrollTo(
       scrollEl.scrollBy(
         0,
         rect.top -
-          (winHeight / 2 - rect.height / 2) -
-          this._options.scrollPadding
+        (winHeight / 2 - rect.height / 2) -
+        this._options.scrollPadding
       ); // 30px padding from edge to look nice
 
       //Scroll down
@@ -45,8 +45,8 @@ export default function scrollTo(
       scrollEl.scrollBy(
         0,
         rect.top -
-          (winHeight / 2 - rect.height / 2) +
-          this._options.scrollPadding
+        (winHeight / 2 - rect.height / 2) +
+        this._options.scrollPadding
       ); // 30px padding from edge to look nice
     }
   }
