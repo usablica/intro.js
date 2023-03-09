@@ -69,7 +69,7 @@ export async function nextStep() {
     return false;
   }
 
-  if (this._introItems.length <= this._currentStep) {
+  if (!nextStep) {
     //end of the intro
     //check if any callback is defined
     if (typeof this._introCompleteCallback === "function") {
