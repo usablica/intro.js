@@ -1,8 +1,8 @@
-import * as cookie from "../../src/util/cookie";
+import * as cookie from "../../../src/util/cookie";
 import {
   setDontShowAgain,
   getDontShowAgain,
-} from "../../src/core/dontShowAgain";
+} from "../../../src/core/dontShowAgain";
 
 describe("dontShowAgain", () => {
   test("should call set cookie", () => {

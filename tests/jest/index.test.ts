@@ -1,4 +1,4 @@
-import introJs from "../src";
+import introJs from "../../src";
 import {
   find,
   content,
@@ -13,7 +13,7 @@ import {
 
 jest.mock("../src/core/dontShowAgain");
 
-import { getDontShowAgain, setDontShowAgain } from "../src/core/dontShowAgain";
+import { getDontShowAgain, setDontShowAgain } from "../../src/core/dontShowAgain";
 
 describe("intro", () => {
   beforeEach(() => {

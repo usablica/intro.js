@@ -10,7 +10,9 @@ import fetchIntroSteps from "./fetchIntroSteps";
  *
  * @api private
  */
-export default async function introForElement(targetElm: HTMLElement): Promise<Boolean> {
+export default async function introForElement(
+  targetElm: HTMLElement
+): Promise<Boolean> {
   // don't start the tour if the instance is not active
   if (!this.isActive()) return false;
 

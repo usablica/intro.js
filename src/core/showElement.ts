@@ -217,9 +217,15 @@ export default async function _showElement(targetElement: Step) {
     const oldtooltipContainer =
       oldReferenceLayer.querySelector<HTMLElement>(".introjs-tooltip");
 
-    skipTooltipButton = oldReferenceLayer.querySelector<HTMLElement>(".introjs-skipbutton");
-    prevTooltipButton = oldReferenceLayer.querySelector<HTMLElement>(".introjs-prevbutton");
-    nextTooltipButton = oldReferenceLayer.querySelector<HTMLElement>(".introjs-nextbutton");
+    skipTooltipButton = oldReferenceLayer.querySelector<HTMLElement>(
+      ".introjs-skipbutton"
+    );
+    prevTooltipButton = oldReferenceLayer.querySelector<HTMLElement>(
+      ".introjs-prevbutton"
+    );
+    nextTooltipButton = oldReferenceLayer.querySelector<HTMLElement>(
+      ".introjs-nextbutton"
+    );
 
     //update or reset the helper highlight class
     oldHelperLayer.className = highlightClass;

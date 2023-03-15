@@ -1,5 +1,5 @@
-import * as placeTooltip from "../../src/core/placeTooltip";
-import introJs from "../../src";
+import * as placeTooltip from "../../../src/core/placeTooltip";
+import introJs from "../../../src";
 
 describe("refresh", () => {
   test("should refresh the cached intro steps", () => {

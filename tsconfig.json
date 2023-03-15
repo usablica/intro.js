@@ -22,10 +22,9 @@
     "baseUrl": "./",
     "outDir": "dist"
   },
-  
   "include": [
-    "src/index.ts",
     "src/**/*",
-    "tests/**/*"
+    "src/index.ts",
+    "tests/jest/**/*"
   ]
 }

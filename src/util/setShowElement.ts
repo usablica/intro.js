@@ -17,7 +17,6 @@ export default function setShowElement(targetElement: HTMLElement) {
     currentElementPosition !== "sticky" &&
     currentElementPosition !== "fixed"
   ) {
-
     //change to new intro item
     addClass(targetElement, "introjs-relativePosition");
   }

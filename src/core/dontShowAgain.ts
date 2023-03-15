@@ -6,10 +6,8 @@ const dontShowAgainCookieValue = "true";
  * Set the "Don't show again" state
  *
  * @api private
- * @param {Boolean} dontShowAgain
- * @method setDontShowAgain
  */
-export function setDontShowAgain(dontShowAgain) {
+export function setDontShowAgain(dontShowAgain: boolean) {
   if (dontShowAgain) {
     setCookie(
       this._options.dontShowAgainCookie,
@@ -25,9 +23,8 @@ export function setDontShowAgain(dontShowAgain) {
  * Get the "Don't show again" state from cookies
  *
  * @api private
- * @method getDontShowAgain
  */
-export function getDontShowAgain() {
+export function getDontShowAgain(): boolean {
   const dontShowCookie = getCookie(this._options.dontShowAgainCookie);
   return dontShowCookie && dontShowCookie === dontShowAgainCookieValue;
 }

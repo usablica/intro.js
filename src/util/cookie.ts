@@ -1,4 +1,4 @@
-export function setCookie(name: string, value: string, days: number) {
+export function setCookie(name: string, value: string, days?: number) {
   const cookie = { [name]: value, path: "/", expires: undefined };
 
   if (days) {

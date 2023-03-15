@@ -1,5 +1,5 @@
-import { nextStep, previousStep } from "../../src/core/steps";
-import _showElement from "../../src/core/showElement";
+import { nextStep, previousStep } from "../../../src/core/steps";
+import _showElement from "../../../src/core/showElement";
 
 jest.mock("../../src/core/showElement");
 

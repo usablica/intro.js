@@ -1,4 +1,4 @@
-import setStyle from "../../src/util/setStyle";
+import setStyle from "../../../src/util/setStyle";
 
 describe("setStyle", () => {
   test("should set style when the list is empty", () => {

@@ -17,7 +17,9 @@ import { Step } from "./steps";
  */
 export function hintQuerySelectorAll(selector: string): HTMLElement[] {
   const hintsWrapper = document.querySelector(".introjs-hints");
-  return hintsWrapper ? Array.from(hintsWrapper.querySelectorAll(selector)) : [];
+  return hintsWrapper
+    ? Array.from(hintsWrapper.querySelectorAll(selector))
+    : [];
 }
 
 /**
@@ -248,22 +250,34 @@ export function alignHintPosition(
       break;
     case "middle-left":
       hintElement.style.left = `${offset.left}px`;
-      hintElement.style.top = `${offset.top + (offset.height - iconHeight) / 2}px`;
+      hintElement.style.top = `${
+        offset.top + (offset.height - iconHeight) / 2
+      }px`;
       break;
     case "middle-right":
       hintElement.style.left = `${offset.left + offset.width - iconWidth}px`;
-      hintElement.style.top = `${offset.top + (offset.height - iconHeight) / 2}px`;
+      hintElement.style.top = `${
+        offset.top + (offset.height - iconHeight) / 2
+      }px`;
       break;
     case "middle-middle":
-      hintElement.style.left = `${offset.left + (offset.width - iconWidth) / 2}px`;
-      hintElement.style.top = `${offset.top + (offset.height - iconHeight) / 2}px`;
+      hintElement.style.left = `${
+        offset.left + (offset.width - iconWidth) / 2
+      }px`;
+      hintElement.style.top = `${
+        offset.top + (offset.height - iconHeight) / 2
+      }px`;
       break;
     case "bottom-middle":
-      hintElement.style.left = `${offset.left + (offset.width - iconWidth) / 2}px`;
+      hintElement.style.left = `${
+        offset.left + (offset.width - iconWidth) / 2
+      }px`;
       hintElement.style.top = `${offset.top + offset.height - iconHeight}px`;
       break;
     case "top-middle":
-      hintElement.style.left = `${offset.left + (offset.width - iconWidth) / 2}px`;
+      hintElement.style.left = `${
+        offset.left + (offset.width - iconWidth) / 2
+      }px`;
       hintElement.style.top = `${offset.top}px`;
       break;
   }

@@ -1,4 +1,4 @@
-import fetchIntroSteps from "../../src/core/fetchIntroSteps";
+import fetchIntroSteps from "../../../src/core/fetchIntroSteps";
 
 describe("fetchIntroSteps", () => {
   test("should add floating element from options.steps to the list", () => {

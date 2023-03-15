@@ -1,4 +1,4 @@
-import createElement from "../../src/util/createElement";
+import createElement from "../../../src/util/createElement";
 
 describe("createElement", () => {
   test("should create an element", () => {

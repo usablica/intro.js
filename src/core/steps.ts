@@ -3,18 +3,18 @@ import showElement from "./showElement";
 import exitIntro from "./exitIntro";
 
 export type Step = {
-  step: number,
-  title: string,
-  intro: string,
-  tooltipClass: string,
-  highlightClass: string,
-  element: HTMLElement,
-  position: string,
-  scrollTo: HTMLElement,
-  disableInteraction: boolean,
-  hintAnimation?: boolean,
-  hintPosition?: string,
-}
+  step: number;
+  title: string;
+  intro: string;
+  tooltipClass: string;
+  highlightClass: string;
+  element: HTMLElement;
+  position: string;
+  scrollTo: HTMLElement;
+  disableInteraction: boolean;
+  hintAnimation?: boolean;
+  hintPosition?: string;
+};
 
 /**
  * Go to specific step of introduction
