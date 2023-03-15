@@ -50,10 +50,14 @@ export function tooltipText() {
   return find(".introjs-tooltiptext");
 }
 
-export function appendDummyElement(name, text, style): HTMLElement {
+export function appendDummyElement(
+  name?: string,
+  text?: string,
+  style?: string
+): HTMLElement {
   const el = document.createElement(name || "p");
   el.innerHTML = text || "hello world";
-  el.style = style;
+  el.setAttribute("style", style);
 
   document.body.appendChild(el);
 
