@@ -1,10 +1,14 @@
 import { nextStep, previousStep } from "../../../src/core/steps";
 import _showElement from "../../../src/core/showElement";
 
-jest.mock("../../src/core/showElement");
+jest.mock("../../../src/core/showElement");
 
 describe("steps", () => {
-  let context = {};
+  let context = {
+    _currentStep: 0,
+    _introItems: [],
+    _introBeforeChangeCallback: undefined
+  };
 
   beforeEach(() => {
     context = {
@@ -19,6 +23,7 @@ describe("steps", () => {
           position: "top",
         },
       ],
+    _introBeforeChangeCallback: undefined
     };
   });
 
@@ -51,7 +56,7 @@ describe("steps", () => {
 
     test("should call ShowElement", async () => {
       const showElementMock = jest.fn();
-      _showElement.mockImplementation(showElementMock);
+      (_showElement as jest.Mock).mockImplementation(showElementMock);
 
       await nextStep.call(context);
 
@@ -70,13 +75,13 @@ describe("steps", () => {
 
     test("should wait for the onBeforeChange promise object", async () => {
       const showElementMock = jest.fn();
-      _showElement.mockImplementation(showElementMock);
+      (_showElement as jest.Mock).mockImplementation(showElementMock);
 
       const onBeforeChangeMock = jest.fn();
       const sideEffect = [];
 
       context._introBeforeChangeCallback = async () => {
-        return new Promise((res) => {
+        return new Promise<void>((res) => {
           setTimeout(() => {
             sideEffect.push(1);
             onBeforeChangeMock();

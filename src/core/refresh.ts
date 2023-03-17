@@ -7,9 +7,8 @@ import { _recreateBullets, _updateProgressBar } from "./showElement";
 /**
  * Update placement of the intro objects on the screen
  * @api private
- * @param {boolean} refreshSteps to refresh the intro steps as well
  */
-export default function refresh(refreshSteps: boolean) {
+export default function refresh(refreshSteps?: boolean) {
   const referenceLayer = document.querySelector(
     ".introjs-tooltipReferenceLayer"
   );

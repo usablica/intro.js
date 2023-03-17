@@ -6,9 +6,9 @@ import introJs from "../../../src";
 
 describe("introForElement", () => {
   test("should call the onstart callback", () => {
-    jest.spyOn(fetchIntroSteps, "default").mockReturnValue(true);
+    jest.spyOn(fetchIntroSteps, "default").mockReturnValue([]);
     jest.spyOn(addOverlayLayer, "default").mockReturnValue(true);
-    jest.spyOn(nextStep, "nextStep").mockReturnValue(true);
+    jest.spyOn(nextStep, "nextStep").mockReturnValue(Promise.resolve(true));
 
     const onstartCallback = jest.fn();
 

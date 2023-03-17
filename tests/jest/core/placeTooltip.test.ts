@@ -17,6 +17,9 @@ describe("placeTooltip", () => {
     });
 
     jest.spyOn(Element.prototype, "getBoundingClientRect").mockReturnValue({
+      x: 0,
+      y: 0,
+      toJSON: jest.fn,
       width: 100,
       height: 100,
       top: 200,
@@ -96,6 +99,9 @@ describe("placeTooltip", () => {
     });
 
     jest.spyOn(Element.prototype, "getBoundingClientRect").mockReturnValue({
+      x: 0,
+      y: 0,
+      toJSON: jest.fn,
       width: 100,
       height: 100,
       top: 0,
@@ -145,6 +151,9 @@ describe("placeTooltip", () => {
     });
 
     jest.spyOn(Element.prototype, "getBoundingClientRect").mockReturnValue({
+      x: 0,
+      y: 0,
+      toJSON: jest.fn,
       width: 100,
       height: 100,
       top: 0,

@@ -3,7 +3,7 @@ import introJs from "../../../src";
 
 describe("refresh", () => {
   test("should refresh the cached intro steps", () => {
-    jest.spyOn(placeTooltip, "default").mockReturnValue(true);
+    jest.spyOn(placeTooltip, "default");
 
     const targetElement = document.createElement("div");
     document.body.appendChild(targetElement);

@@ -234,7 +234,7 @@ export default async function _showElement(targetElement: Step) {
     oldtooltipContainer.style.display = "none";
 
     // if the target element is within a scrollable element
-    scrollParentToElement.call(self, targetElement);
+    scrollParentToElement.call(self, targetElement.element);
 
     // set new position to helper layer
     setHelperLayerPosition.call(self, oldHelperLayer);
@@ -297,7 +297,7 @@ export default async function _showElement(targetElement: Step) {
       scrollTo.call(
         self,
         targetElement.scrollTo,
-        targetElement,
+        targetElement.element,
         oldtooltipLayer
       );
     }, 350);
@@ -333,7 +333,7 @@ export default async function _showElement(targetElement: Step) {
     });
 
     // target is within a scrollable element
-    scrollParentToElement.call(self, targetElement);
+    scrollParentToElement.call(self, targetElement.element);
 
     //set new position to helper layer
     setHelperLayerPosition.call(self, helperLayer);
@@ -466,7 +466,12 @@ export default async function _showElement(targetElement: Step) {
     placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer);
 
     // change the scroll of the window, if needed
-    scrollTo.call(this, targetElement.scrollTo, targetElement, tooltipLayer);
+    scrollTo.call(
+      this,
+      targetElement.scrollTo,
+      targetElement.element,
+      tooltipLayer
+    );
 
     //end of new element if-else condition
   }

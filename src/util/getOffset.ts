@@ -11,7 +11,7 @@ import isFixed from "./isFixed";
 export default function getOffset(
   element: HTMLElement,
   relativeEl?: HTMLElement
-) {
+): { width: number; height: number; left: number; top: number } {
   const body = document.body;
   const docEl = document.documentElement;
   const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;

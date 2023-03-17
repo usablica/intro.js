@@ -4,6 +4,7 @@ import addClass from "../util/addClass";
 import checkRight from "../util/checkRight";
 import checkLeft from "../util/checkLeft";
 import removeEntry from "../util/removeEntry";
+import { Step } from "./steps";
 
 /**
  * auto-determine alignment
@@ -159,11 +160,21 @@ export default function placeTooltip(
   hintMode: boolean
 ) {
   let tooltipCssClass = "";
-  let currentStepObj;
-  let tooltipOffset;
-  let targetOffset;
-  let windowSize;
-  let currentTooltipPosition;
+  let currentStepObj: Step;
+  let tooltipOffset: {
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+  };
+  let targetOffset: {
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+  };
+  let windowSize: { width: number; height: number };
+  let currentTooltipPosition: string;
 
   hintMode = hintMode || false;
 

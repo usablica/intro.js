@@ -203,7 +203,7 @@ class IntroJs {
     return this;
   }
 
-  refresh(refreshSteps: boolean) {
+  refresh(refreshSteps?: boolean) {
     refresh.call(this, refreshSteps);
     return this;
   }

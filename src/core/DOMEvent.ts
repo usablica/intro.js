@@ -29,7 +29,7 @@ const DOMEvent = (() => {
       context: Object,
       useCapture: boolean
     ) {
-      const id = this._id.apply(this, type, listener, context);
+      const id = this._id.apply(this, [type, listener, context]);
       const handler = (e) => listener.call(context || obj, e || window.event);
 
       if ("addEventListener" in obj) {
@@ -52,7 +52,7 @@ const DOMEvent = (() => {
       context: Object,
       useCapture: boolean
     ) {
-      const id = this._id.apply(this, type, listener, context);
+      const id = this._id.apply(this, [type, listener, context]);
       const handler = obj[events_key] && obj[events_key][id];
 
       if (!handler) {
