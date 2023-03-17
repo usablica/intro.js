@@ -1,5 +1,5 @@
 const { defineConfig } = require("cypress");
-const getCompareSnapshotsPlugin = require('cypress-visual-regression/dist/plugin');
+const getCompareSnapshotsPlugin = require("cypress-visual-regression/dist/plugin");
 
 module.exports = defineConfig({
   screenshotsFolder: "./cypress/snapshots/actual",
