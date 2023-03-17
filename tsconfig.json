@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "resolveJsonModule": true,

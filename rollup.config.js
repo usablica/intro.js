@@ -1,7 +1,6 @@
 import babel from 'rollup-plugin-babel';
 import resolve from 'rollup-plugin-node-resolve';
 import filesize from 'rollup-plugin-filesize';
-import commonjs from 'rollup-plugin-commonjs';
 import progress from 'rollup-plugin-progress';
 import typescript from '@rollup/plugin-typescript';
 import json from '@rollup/plugin-json';
@@ -38,7 +37,6 @@ const jsPlugins = [
   babel({
     exclude: 'node_modules/**'
   }),
-  commonjs(),
   terser()
 ];
 

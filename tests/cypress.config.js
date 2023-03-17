@@ -1,4 +1,5 @@
 const { defineConfig } = require("cypress");
+const getCompareSnapshotsPlugin = require('cypress-visual-regression/dist/plugin');
 
 module.exports = defineConfig({
   screenshotsFolder: "./cypress/snapshots/actual",
@@ -7,10 +8,8 @@ module.exports = defineConfig({
     failSilently: false,
   },
   e2e: {
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
     setupNodeEvents(on, config) {
-      return require("./cypress/plugins/index.js")(on, config);
+      getCompareSnapshotsPlugin(on, config);
     },
   },
 });
