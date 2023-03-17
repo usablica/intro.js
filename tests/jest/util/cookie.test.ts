@@ -11,7 +11,7 @@ describe("cookie", () => {
   beforeAll(() => {
     Object.defineProperty(window.document, "cookie", {
       get: () => _cookie,
-      set: (v) => (_cookie = v)
+      set: (v) => (_cookie = v),
     });
   });
 

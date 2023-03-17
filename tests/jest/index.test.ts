@@ -11,9 +11,12 @@ import {
   appendDummyElement,
 } from "./helper";
 
-jest.mock("../src/core/dontShowAgain");
+jest.mock("../../src/core/dontShowAgain");
 
-import { getDontShowAgain, setDontShowAgain } from "../../src/core/dontShowAgain";
+import {
+  getDontShowAgain,
+  setDontShowAgain,
+} from "../../src/core/dontShowAgain";
 
 describe("intro", () => {
   beforeEach(() => {
@@ -306,7 +309,7 @@ describe("intro", () => {
       expect(intro.isActive()).toBeFalsy();
     });
     test("should be true if dontShowAgain is active but cookie is missing", () => {
-      getDontShowAgain.mockReturnValueOnce(false);
+      (getDontShowAgain as jest.Mock).mockReturnValueOnce(false);
 
       const intro = introJs().setOptions({
         isActive: true,
@@ -317,7 +320,7 @@ describe("intro", () => {
     });
 
     test("should be false if dontShowAgain is active but isActive is true", () => {
-      getDontShowAgain.mockReturnValueOnce(true);
+      (getDontShowAgain as jest.Mock).mockReturnValueOnce(true);
 
       const intro = introJs().setOptions({
         isActive: true,

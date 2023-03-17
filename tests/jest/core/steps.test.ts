@@ -7,7 +7,7 @@ describe("steps", () => {
   let context = {
     _currentStep: 0,
     _introItems: [],
-    _introBeforeChangeCallback: undefined
+    _introBeforeChangeCallback: undefined,
   };
 
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe("steps", () => {
           position: "top",
         },
       ],
-    _introBeforeChangeCallback: undefined
+      _introBeforeChangeCallback: undefined,
     };
   });
 

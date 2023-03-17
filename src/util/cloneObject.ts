@@ -3,11 +3,7 @@
  * @api private
  */
 export default function cloneObject<T extends Object>(source: T): T {
-  if (
-    source === null ||
-    typeof source !== "object" ||
-    source.hasOwnProperty("nodeType")
-  ) {
+  if (source === null || typeof source !== "object" || "nodeType" in source) {
     return source;
   }
 
