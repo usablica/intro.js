@@ -189,10 +189,11 @@ export async function addHints() {
     hint.appendChild(hintPulse);
     hint.setAttribute("data-step", i.toString());
 
+    const targetElement = item.element;
     item.element = hint;
 
     // align the hint position
-    alignHintPosition.call(this, item.hintPosition, hint, item.element);
+    alignHintPosition.call(this, item.hintPosition, hint, targetElement);
 
     hintsWrapper.appendChild(hint);
   });
