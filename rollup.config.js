@@ -1,42 +1,45 @@
 import babel from 'rollup-plugin-babel';
-import resolve from 'rollup-plugin-node-resolve';
 import filesize from 'rollup-plugin-filesize';
-import commonjs from 'rollup-plugin-commonjs';
 import progress from 'rollup-plugin-progress';
+import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json';
+import resolve from '@rollup/plugin-node-resolve';
 import pkg from './package.json';
 import { terser } from 'rollup-plugin-terser';
 import autoprefixer from 'autoprefixer';
 import normalize from 'postcss-normalize';
 import clean from 'postcss-clean';
 import postcss from 'rollup-plugin-postcss';
-import { version } from './package.json';
 
 const inputPath = './src'
 const outputPath = './dist';
 
 const banner = `/*!
- * Intro.js v${version}
+ * Intro.js v${pkg.version}
  * https://introjs.com
  *
- * Copyright (C) 2012-2022 Afshin Mehrabani (@afshinmeh).
+ * Copyright (C) 2012-${new Date().getFullYear()} Afshin Mehrabani (@afshinmeh).
  * https://introjs.com
  *
  * Date: ${new Date().toUTCString()}
  */
 `;
 
+const extensions = ['.ts', '.js'];
+
 const jsPlugins = [
+  commonjs(),
   json(),
-  resolve(),
+  resolve({ extensions }),
   progress(),
   filesize({
     showGzippedSize: true,
   }),
   babel({
-    exclude: 'node_modules/**'
+    exclude: 'node_modules/**',
+    include: [`${inputPath}/**/*`],
+    extensions
   }),
-  commonjs(),
   terser()
 ];
 
@@ -104,7 +107,7 @@ export default [
     ]
   },
   {
-    input: `${inputPath}/index.js`,
+    input: `${inputPath}/index.ts`,
     output: {
       file: `${outputPath}/${pkg.main}`,
       format: 'umd',
@@ -115,7 +118,7 @@ export default [
     plugins: jsPlugins
   },
   {
-    input: `${inputPath}/index.js`,
+    input: `${inputPath}/index.ts`,
     output: {
       file: `${outputPath}/minified/${pkg.main.replace(/\.js$/, '.min.js')}`,
       banner,
@@ -126,11 +129,22 @@ export default [
     plugins: jsPlugins
   },
   {
-    input: `${inputPath}/index.js`,
+    input: `${inputPath}/index.ts`,
     output: {
-      file: `${outputPath}/${pkg.main.replace(/\.js$/, '.module.js')}`,
+      file: `${outputPath}/${pkg.module}`,
       banner,
       format: 'es',
+      name: 'introJs',
+      sourcemap: true,
+    },
+    plugins: jsPlugins
+  },
+  {
+    input: `${inputPath}/index.ts`,
+    output: {
+      file: `${outputPath}/${pkg.browser}`,
+      banner,
+      format: 'iife',
       name: 'introJs',
       sourcemap: true,
     },
