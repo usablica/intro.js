@@ -138,16 +138,5 @@ export default [
       sourcemap: true,
     },
     plugins: jsPlugins
-  },
-  {
-    input: `${inputPath}/index.ts`,
-    output: {
-      file: `${outputPath}/${pkg.browser}`,
-      banner,
-      format: 'iife',
-      name: 'introJs',
-      sourcemap: true,
-    },
-    plugins: jsPlugins
   }
 ];
