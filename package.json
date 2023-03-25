@@ -1,6 +1,6 @@
 {
   "name": "intro.js",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "User Onboarding and Product Walkthrough Library",
   "keywords": [
     "onboarding",
@@ -19,7 +19,6 @@
   },
   "main": "intro.js",
   "module": "intro.module.js",
-  "browser": "intro.iife.js",
   "scripts": {
     "prettier": "prettier --write '(src|tests)/**/*.(js|ts|json|html)' '!tests/cypress/setup/dist'",
     "test": "run-p test:prettier test:jest test:jshint test:cypress",
@@ -41,6 +40,7 @@
     "@rollup/plugin-json": "^5.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@types/jest": "^29.4.2",
+    "@types/node": "^18.15.9",
     "autoprefixer": "^9.0.0",
     "babel-jest": "^29.2.2",
     "core-js": "^3.6.5",
