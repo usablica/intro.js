@@ -10,6 +10,7 @@ import autoprefixer from 'autoprefixer';
 import normalize from 'postcss-normalize';
 import clean from 'postcss-clean';
 import postcss from 'rollup-plugin-postcss';
+import typescript from '@rollup/plugin-typescript';
 
 const inputPath = './src'
 const outputPath = './dist';
@@ -52,24 +53,13 @@ const postCSSPlugins = [
 export default [
   {
     input: `${inputPath}/styles/introjs-rtl.scss`,
-    output: {
-      file: `${outputPath}/minified/introjs-rtl.min.css`,
-      format: 'es'
-    },
-    plugins: [
-      postcss({
-        sourceMap: true,
-        extract: true,
-        plugins: postCSSPlugins
-      })
-    ]
-  },
-  {
-    input: `${inputPath}/styles/introjs-rtl.scss`,
-    output: {
+    output: [{
       file: `${outputPath}/introjs-rtl.css`,
       format: 'es'
-    },
+    }, {
+      file: `${outputPath}/minified/introjs-rtl.min.css`,
+      format: 'es'
+    }],
     plugins: [
       postcss({
         extract: true,
@@ -80,24 +70,13 @@ export default [
   },
   {
     input: `${inputPath}/styles/introjs.scss`,
-    output: {
+    output: [{
       file: `${outputPath}/introjs.css`,
       format: 'es'
-    },
-    plugins: [
-      postcss({
-        extract: true,
-        sourceMap: true,
-        plugins: postCSSPlugins
-      })
-    ]
-  },
-  {
-    input: `${inputPath}/styles/introjs.scss`,
-    output: {
+    }, {
       file: `${outputPath}/minified/introjs.min.css`,
       format: 'es'
-    },
+    }],
     plugins: [
       postcss({
         extract: true,
@@ -108,24 +87,19 @@ export default [
   },
   {
     input: `${inputPath}/index.ts`,
-    output: {
+    output: [{
       file: `${outputPath}/${pkg.main}`,
       format: 'umd',
       banner,
       name: 'introJs',
       sourcemap: true,
-    },
-    plugins: jsPlugins
-  },
-  {
-    input: `${inputPath}/index.ts`,
-    output: {
+    }, {
       file: `${outputPath}/minified/${pkg.main.replace(/\.js$/, '.min.js')}`,
-      banner,
       format: 'umd',
+      banner,
       name: 'introJs',
       sourcemap: true,
-    },
+    }],
     plugins: jsPlugins
   },
   {
@@ -137,6 +111,12 @@ export default [
       name: 'introJs',
       sourcemap: true,
     },
-    plugins: jsPlugins
+    plugins: [
+      ...jsPlugins,
+      typescript({
+        emitDeclarationOnly: true,
+        declaration: true,
+      })
+    ]
   }
 ];

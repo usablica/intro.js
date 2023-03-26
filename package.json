@@ -19,6 +19,7 @@
   },
   "main": "intro.js",
   "module": "intro.module.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "prettier": "prettier --write '(src|tests)/**/*.(js|ts|json|html)' '!tests/cypress/setup/dist'",
     "test": "run-p test:prettier test:jest test:jshint test:cypress",
@@ -39,6 +40,7 @@
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-json": "^5.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^11.0.0",
     "@types/jest": "^29.4.2",
     "@types/node": "^18.15.9",
     "autoprefixer": "^9.0.0",
@@ -82,6 +84,7 @@
     "*.js",
     "*.css",
     "*.map",
+    "*.d.ts",
     "themes/*",
     "minified/*"
   ],
