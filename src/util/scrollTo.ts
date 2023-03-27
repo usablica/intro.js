@@ -30,21 +30,23 @@ export default function scrollTo(
     // I have changed the scroll option and now it scrolls the window to
     // the center of the target element or tooltip.
 
+    const scrollEl = this._introItems[this._currentStep].scrollElRef || this._options.scrollElRef || window;
+
     if (top < 0 || targetElement.clientHeight > winHeight) {
-      window.scrollBy(
+      scrollEl.scrollBy(
         0,
         rect.top -
-          (winHeight / 2 - rect.height / 2) -
-          this._options.scrollPadding
+        (winHeight / 2 - rect.height / 2) -
+        this._options.scrollPadding
       ); // 30px padding from edge to look nice
 
       //Scroll down
     } else {
-      window.scrollBy(
+      scrollEl.scrollBy(
         0,
         rect.top -
-          (winHeight / 2 - rect.height / 2) +
-          this._options.scrollPadding
+        (winHeight / 2 - rect.height / 2) +
+        this._options.scrollPadding
       ); // 30px padding from edge to look nice
     }
   }

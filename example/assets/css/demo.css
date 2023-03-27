@@ -5,6 +5,9 @@ body {
   font-family: 'Raleway', sans-serif;
   padding-bottom: 40px;
 }
+body.no-padding {
+  padding: 0;
+}
 
 /* Custom container */
 .container-narrow {
@@ -13,6 +16,19 @@ body {
 }
 .container-narrow > hr {
   margin: 30px 0;
+}
+.container-narrow.flex {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.header-main {
+  height: 92px;
+}
+.container-main {
+  height: calc(100vh - 92px);
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 /* Main marketing message and sign up button */
