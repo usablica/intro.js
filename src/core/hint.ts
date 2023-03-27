@@ -173,7 +173,7 @@ export async function addHints() {
     }
 
     // hint's position should be fixed if the target element's position is fixed
-    if (isFixed(item.element)) {
+    if (isFixed(item.element as HTMLElement)) {
       addClass(hint, "introjs-fixedhint");
     }
 
@@ -396,7 +396,9 @@ export async function populateHints(targetElm: HTMLElement): Promise<boolean> {
 
       if (typeof currentItem.element === "string") {
         //grab the element with given selector from the page
-        currentItem.element = document.querySelector(currentItem.element);
+        currentItem.element = document.querySelector<HTMLElement>(
+          currentItem.element
+        );
       }
 
       currentItem.hintPosition =
