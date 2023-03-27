@@ -14,7 +14,7 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
 
   if (this._options.steps) {
     //use steps passed programmatically
-    forEach(this._options.steps, (step) => {
+    forEach(this._options.steps, (step: Step) => {
       const currentItem: Step = cloneObject(step);
 
       //set the step
@@ -25,7 +25,9 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
       //use querySelector function only when developer used CSS selector
       if (typeof currentItem.element === "string") {
         //grab the element with given selector from the page
-        currentItem.element = document.querySelector(currentItem.element);
+        currentItem.element = document.querySelector<HTMLElement>(
+          currentItem.element
+        );
       }
 
       //intro without element
@@ -64,7 +66,7 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
   } else {
     //use steps from data-* annotations
     const elmsLength = allIntroSteps.length;
-    let disableInteraction;
+    let disableInteraction: boolean;
 
     //if there's no element to intro
     if (elmsLength < 1) {

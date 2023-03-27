@@ -1,4 +1,3 @@
-import mergeOptions from "./util/mergeOptions";
 import stamp from "./util/stamp";
 import exitIntro from "./core/exitIntro";
 import refresh from "./core/refresh";
@@ -23,11 +22,12 @@ import {
   nextStep,
   previousStep,
 } from "./core/steps";
+import { Options, getDefaultOptions, setOption, setOptions } from "./option";
 
 class IntroJs {
   public _targetElement: HTMLElement;
   public _introItems: Step[] = [];
-  public _options: Record<string, any>;
+  public _options: Options;
   public _introBeforeChangeCallback: Function;
   public _introChangeCallback: Function;
   public _introAfterChangeCallback: Function;
@@ -42,89 +42,7 @@ class IntroJs {
 
   public constructor(targetElement: HTMLElement) {
     this._targetElement = targetElement;
-
-    this._options = {
-      /* Is this tour instance active? Don't show the tour again if this flag is set to false */
-      isActive: true,
-      /* Next button label in tooltip box */
-      nextLabel: "Next",
-      /* Previous button label in tooltip box */
-      prevLabel: "Back",
-      /* Skip button label in tooltip box */
-      skipLabel: "×",
-      /* Done button label in tooltip box */
-      doneLabel: "Done",
-      /* Hide previous button in the first step? Otherwise, it will be disabled button. */
-      hidePrev: false,
-      /* Hide next button in the last step? Otherwise, it will be disabled button (note: this will also hide the "Done" button) */
-      hideNext: false,
-      /* Change the Next button to Done in the last step of the intro? otherwise, it will render a disabled button */
-      nextToDone: true,
-      /* Default tooltip box position */
-      tooltipPosition: "bottom",
-      /* Next CSS class for tooltip boxes */
-      tooltipClass: "",
-      /* Start intro for a group of elements */
-      group: "",
-      /* CSS class that is added to the helperLayer */
-      highlightClass: "",
-      /* Close introduction when pressing Escape button? */
-      exitOnEsc: true,
-      /* Close introduction when clicking on overlay layer? */
-      exitOnOverlayClick: true,
-      /* Display the pagination detail */
-      showStepNumbers: false,
-      /* Pagination "of" label */
-      stepNumbersOfLabel: "of",
-      /* Let user use keyboard to navigate the tour? */
-      keyboardNavigation: true,
-      /* Show tour control buttons? */
-      showButtons: true,
-      /* Show tour bullets? */
-      showBullets: true,
-      /* Show tour progress? */
-      showProgress: false,
-      /* Scroll to highlighted element? */
-      scrollToElement: true,
-      /*
-       * Should we scroll the tooltip or target element?
-       *
-       * Options are: 'element' or 'tooltip'
-       */
-      scrollTo: "element",
-      /* Padding to add after scrolling when element is not in the viewport (in pixels) */
-      scrollPadding: 30,
-      /* Set the overlay opacity */
-      overlayOpacity: 0.5,
-      /* To determine the tooltip position automatically based on the window.width/height */
-      autoPosition: true,
-      /* Precedence of positions, when auto is enabled */
-      positionPrecedence: ["bottom", "top", "right", "left"],
-      /* Disable an interaction with element? */
-      disableInteraction: false,
-      /* To display the "Don't show again" checkbox in the tour */
-      dontShowAgain: false,
-      dontShowAgainLabel: "Don't show this again",
-      /* "Don't show again" cookie name and expiry (in days) */
-      dontShowAgainCookie: "introjs-dontShowAgain",
-      dontShowAgainCookieDays: 365,
-      /* Set how much padding to be used around helper element */
-      helperElementPadding: 10,
-      /* Default hint position */
-      hintPosition: "top-middle",
-      /* Hint button label */
-      hintButtonLabel: "Got it",
-      /* Display the "Got it" button? */
-      hintShowButton: true,
-      /* Hints auto-refresh interval in ms (set to -1 to disable) */
-      hintAutoRefreshInterval: 10,
-      /* Adding animation to hints? */
-      hintAnimation: true,
-      /* additional classes to put on the buttons */
-      buttonClass: "introjs-button",
-      /* additional classes to put on progress bar */
-      progressBarAdditionalClass: false,
-    };
+    this._options = getDefaultOptions();
   }
 
   isActive() {
@@ -139,13 +57,13 @@ class IntroJs {
     return new IntroJs(this._targetElement);
   }
 
-  setOption(option, value) {
-    this._options[option] = value;
+  setOption<K extends keyof Options>(key: K, value: Options[K]) {
+    this._options = setOption(this._options, key, value);
     return this;
   }
 
-  setOptions(options) {
-    this._options = mergeOptions(this._options, options);
+  setOptions(partialOptions: Partial<Options>) {
+    this._options = setOptions(this._options, partialOptions);
     return this;
   }
 
@@ -159,12 +77,12 @@ class IntroJs {
     return this;
   }
 
-  addStep(options) {
+  addStep(step: Step) {
     if (!this._options.steps) {
       this._options.steps = [];
     }
 
-    this._options.steps.push(options);
+    this._options.steps.push(step);
 
     return this;
   }
