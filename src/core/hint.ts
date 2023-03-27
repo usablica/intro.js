@@ -154,7 +154,9 @@ export async function addHints() {
     showHintDialog.call(self, i);
   };
 
-  for (const [i, item] of this._introItems.entries()) {
+  for (let i = 0; i < this._introItems.length; i++) {
+    const item = this._introItems[i];
+
     // avoid append a hint twice
     if (document.querySelector(`.introjs-hint[data-step="${i}"]`)) {
       return;

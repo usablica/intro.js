@@ -49,8 +49,9 @@ export async function nextStep() {
   this._direction = "forward";
 
   if (typeof this._currentStepNumber !== "undefined") {
-    for (const [i, { step }] of this._introItems) {
-      if (step === this._currentStepNumber) {
+    for (let i = 0; i < this._introItems.length; i++) {
+      const item = this._introItems[i];
+      if (item.step === this._currentStepNumber) {
         this._currentStep = i - 1;
         this._currentStepNumber = undefined;
       }

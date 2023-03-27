@@ -69,7 +69,9 @@ function _createBullets(targetElement: Step): HTMLElement {
     self.goToStep(this.getAttribute("data-step-number"));
   };
 
-  for (const [i, { step }] of this._introItems) {
+  for (let i = 0; i < this._introItems.length; i++) {
+    const { step } = this._introItems[i];
+
     const innerLi = createElement("li");
     const anchorLink = createElement("a");
 
