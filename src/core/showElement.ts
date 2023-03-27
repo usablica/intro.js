@@ -593,7 +593,7 @@ export default async function _showElement(targetElement: Step) {
     nextTooltipButton.focus();
   }
 
-  setShowElement(targetElement.element);
+  setShowElement(targetElement.element as HTMLElement);
 
   if (typeof this._introAfterChangeCallback !== "undefined") {
     await this._introAfterChangeCallback.call(this, targetElement.element);

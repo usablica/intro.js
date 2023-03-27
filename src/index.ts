@@ -277,7 +277,6 @@ const introJs = (targetElm?: string | HTMLElement) => {
   let instance: IntroJs;
 
   if (typeof targetElm === "object") {
-    //Ok, create a new instance
     instance = new IntroJs(targetElm);
   } else if (typeof targetElm === "string") {
     //select the target element with query selector
