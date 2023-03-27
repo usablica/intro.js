@@ -1,4 +1,3 @@
-import forEach from "../util/forEach";
 import showElement from "./showElement";
 import exitIntro from "./exitIntro";
 
@@ -50,12 +49,12 @@ export async function nextStep() {
   this._direction = "forward";
 
   if (typeof this._currentStepNumber !== "undefined") {
-    forEach(this._introItems, ({ step }, i) => {
+    for (const [i, { step }] of this._introItems) {
       if (step === this._currentStepNumber) {
         this._currentStep = i - 1;
         this._currentStepNumber = undefined;
       }
-    });
+    }
   }
 
   if (typeof this._currentStep === "undefined") {

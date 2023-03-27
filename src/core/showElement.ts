@@ -3,7 +3,6 @@ import scrollParentToElement from "../util/scrollParentToElement";
 import addClass from "../util/addClass";
 import scrollTo from "../util/scrollTo";
 import exitIntro from "./exitIntro";
-import forEach from "../util/forEach";
 import setAnchorAsButton from "../util/setAnchorAsButton";
 import { Step, nextStep, previousStep } from "./steps";
 import setHelperLayerPosition from "./setHelperLayerPosition";
@@ -70,7 +69,7 @@ function _createBullets(targetElement: Step): HTMLElement {
     self.goToStep(this.getAttribute("data-step-number"));
   };
 
-  forEach(this._introItems, ({ step }, i) => {
+  for (const [i, { step }] of this._introItems) {
     const innerLi = createElement("li");
     const anchorLink = createElement("a");
 
@@ -89,7 +88,7 @@ function _createBullets(targetElement: Step): HTMLElement {
 
     innerLi.appendChild(anchorLink);
     ulContainer.appendChild(innerLi);
-  });
+  }
 
   bulletsLayer.appendChild(ulContainer);
 

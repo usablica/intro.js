@@ -1,4 +1,3 @@
-import forEach from "../util/forEach";
 import cloneObject from "../util/cloneObject";
 import createElement from "../util/createElement";
 import { Step } from "./steps";
@@ -9,12 +8,14 @@ import { Step } from "./steps";
  * @api private
  */
 export default function fetchIntroSteps(targetElm: HTMLElement) {
-  const allIntroSteps = Array.from(targetElm.querySelectorAll("*[data-intro]"));
+  const allIntroSteps: HTMLElement[] = Array.from(
+    targetElm.querySelectorAll("*[data-intro]")
+  );
   let introItems: Step[] = [];
 
   if (this._options.steps) {
     //use steps passed programmatically
-    forEach(this._options.steps, (step: Step) => {
+    for (const step of this._options.steps) {
       const currentItem: Step = cloneObject(step);
 
       //set the step
@@ -62,7 +63,7 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
       if (currentItem.element !== null) {
         introItems.push(currentItem);
       }
-    });
+    }
   } else {
     //use steps from data-* annotations
     const elmsLength = allIntroSteps.length;
@@ -73,18 +74,18 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
       return [];
     }
 
-    forEach(allIntroSteps, (currentElement) => {
+    for (const currentElement of allIntroSteps) {
       // start intro for groups of elements
       if (
         this._options.group &&
         currentElement.getAttribute("data-intro-group") !== this._options.group
       ) {
-        return;
+        continue;
       }
 
       // skip hidden elements
       if (currentElement.style.display === "none") {
-        return;
+        continue;
       }
 
       const step = parseInt(currentElement.getAttribute("data-step"), 10);
@@ -114,19 +115,19 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
           disableInteraction,
         };
       }
-    });
+    }
 
     //next add intro items without data-step
     //todo: we need a cleanup here, two loops are redundant
     let nextStep = 0;
 
-    forEach(allIntroSteps, (currentElement) => {
+    for (const currentElement of allIntroSteps) {
       // start intro for groups of elements
       if (
         this._options.group &&
         currentElement.getAttribute("data-intro-group") !== this._options.group
       ) {
-        return;
+        continue;
       }
 
       if (currentElement.getAttribute("data-step") === null) {
@@ -162,7 +163,7 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
           disableInteraction,
         };
       }
-    });
+    }
   }
 
   //removing undefined/null elements

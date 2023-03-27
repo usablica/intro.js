@@ -1,4 +1,3 @@
-import forEach from "../util/forEach";
 import DOMEvent from "./DOMEvent";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
@@ -31,11 +30,13 @@ export default async function exitIntro(
 
   // remove overlay layers from the page
   const overlayLayers = Array.from(
-    targetElement.querySelectorAll(".introjs-overlay")
+    targetElement.querySelectorAll<HTMLElement>(".introjs-overlay")
   );
 
   if (overlayLayers && overlayLayers.length) {
-    forEach(overlayLayers, (overlayLayer) => removeChild(overlayLayer));
+    for (const overlayLayer of overlayLayers) {
+      removeChild(overlayLayer);
+    }
   }
 
   //remove all helper layers

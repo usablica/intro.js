@@ -3,7 +3,6 @@ import removeClass from "../util/removeClass";
 import isFixed from "../util/isFixed";
 import getOffset from "../util/getOffset";
 import cloneObject from "../util/cloneObject";
-import forEach from "../util/forEach";
 import DOMEvent from "./DOMEvent";
 import setAnchorAsButton from "../util/setAnchorAsButton";
 import setHelperLayerPosition from "./setHelperLayerPosition";
@@ -47,12 +46,12 @@ export async function hideHint(stepId: number) {
  *
  * @api private
  */
-export function hideHints() {
+export async function hideHints() {
   const hints = hintQuerySelectorAll(".introjs-hint");
 
-  forEach(hints, async (hint) => {
+  for (const hint of hints) {
     await hideHint.call(this, hint.getAttribute("data-step"));
-  });
+  }
 }
 
 /**
@@ -65,9 +64,9 @@ export async function showHints() {
   const hints = hintQuerySelectorAll(".introjs-hint");
 
   if (hints && hints.length) {
-    forEach(hints, (hint) => {
+    for (const hint of hints) {
       showHint.call(this, hint.getAttribute("data-step"));
-    });
+    }
   } else {
     await populateHints.call(this, this._targetElement);
   }
@@ -95,9 +94,9 @@ export function showHint(stepId: number) {
 export function removeHints() {
   const hints = hintQuerySelectorAll(".introjs-hint");
 
-  forEach(hints, (hint) => {
+  for (const hint of hints) {
     removeHint.call(this, hint.getAttribute("data-step"));
-  });
+  }
 
   DOMEvent.off(document, "click", removeHintTooltip, this, false);
   DOMEvent.off(window, "resize", reAlignHints, this, true);
@@ -155,7 +154,7 @@ export async function addHints() {
     showHintDialog.call(self, i);
   };
 
-  forEach(this._introItems, (item: Step, i: number) => {
+  for (const [i, item] of this._introItems.entries()) {
     // avoid append a hint twice
     if (document.querySelector(`.introjs-hint[data-step="${i}"]`)) {
       return;
@@ -196,7 +195,7 @@ export async function addHints() {
     alignHintPosition.call(this, item.hintPosition, hint, targetElement);
 
     hintsWrapper.appendChild(hint);
-  });
+  }
 
   // adding the hints wrapper
   document.body.appendChild(hintsWrapper);
@@ -391,7 +390,7 @@ export async function populateHints(targetElm: HTMLElement): Promise<boolean> {
   this._introItems = [];
 
   if (this._options.hints) {
-    forEach(this._options.hints, (hint) => {
+    for (const hint of this._options.hints) {
       const currentItem: Step = cloneObject(hint);
 
       if (typeof currentItem.element === "string") {
@@ -409,7 +408,7 @@ export async function populateHints(targetElm: HTMLElement): Promise<boolean> {
       if (currentItem.element !== null) {
         this._introItems.push(currentItem);
       }
-    });
+    }
   } else {
     const hints = Array.from(targetElm.querySelectorAll("*[data-hint]"));
 
@@ -418,14 +417,15 @@ export async function populateHints(targetElm: HTMLElement): Promise<boolean> {
     }
 
     //first add intro items with data-step
-    forEach(hints, (currentElement) => {
+    for (const currentElement of hints) {
       // hint animation
-      let hintAnimation = currentElement.getAttribute("data-hint-animation");
+      let hintAnimationAttr = currentElement.getAttribute(
+        "data-hint-animation"
+      );
 
-      if (hintAnimation) {
-        hintAnimation = hintAnimation === "true";
-      } else {
-        hintAnimation = this._options.hintAnimation;
+      let hintAnimation: boolean = this._options.hintAnimation;
+      if (hintAnimationAttr) {
+        hintAnimation = hintAnimationAttr === "true";
       }
 
       this._introItems.push({
@@ -440,7 +440,7 @@ export async function populateHints(targetElm: HTMLElement): Promise<boolean> {
           currentElement.getAttribute("data-position") ||
           this._options.tooltipPosition,
       });
-    });
+    }
   }
 
   await addHints.call(this);
@@ -457,11 +457,11 @@ export async function populateHints(targetElm: HTMLElement): Promise<boolean> {
  * @api private
  */
 export function reAlignHints() {
-  forEach(this._introItems, ({ targetElement, hintPosition, element }) => {
+  for (const { targetElement, hintPosition, element } of this._introItems) {
     if (typeof targetElement === "undefined") {
       return;
     }
 
     alignHintPosition.call(this, hintPosition, element, targetElement);
-  });
+  }
 }
