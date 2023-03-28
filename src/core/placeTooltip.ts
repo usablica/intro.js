@@ -5,6 +5,7 @@ import checkRight from "../util/checkRight";
 import checkLeft from "../util/checkLeft";
 import removeEntry from "../util/removeEntry";
 import { Step } from "./steps";
+import { IntroJs } from "src";
 
 /**
  * auto-determine alignment
@@ -68,12 +69,13 @@ function _determineAutoAlignment(
  * of screen space.
  */
 function _determineAutoPosition(
+  positionPrecedence: string[],
   targetElement: HTMLElement,
   tooltipLayer: HTMLElement,
   desiredTooltipPosition: string
 ): string {
   // Take a clone of position precedence. These will be the available
-  const possiblePositions = this._options.positionPrecedence.slice();
+  const possiblePositions = positionPrecedence.slice();
 
   const windowSize = getWindowSize();
   const tooltipHeight = getOffset(tooltipLayer).height + 10;
@@ -154,10 +156,11 @@ function _determineAutoPosition(
  * @api private
  */
 export default function placeTooltip(
+  intro: IntroJs,
   targetElement: HTMLElement,
   tooltipLayer: HTMLElement,
   arrowLayer: HTMLElement,
-  hintMode: boolean
+  hintMode: boolean = false
 ) {
   let tooltipCssClass = "";
   let currentStepObj: Step;
@@ -176,8 +179,6 @@ export default function placeTooltip(
   let windowSize: { width: number; height: number };
   let currentTooltipPosition: string;
 
-  hintMode = hintMode || false;
-
   //reset the old style
   tooltipLayer.style.top = null;
   tooltipLayer.style.right = null;
@@ -188,15 +189,15 @@ export default function placeTooltip(
 
   arrowLayer.style.display = "inherit";
 
-  //prevent error when `this._currentStep` is undefined
-  if (!this._introItems[this._currentStep]) return;
+  // prevent error when `_currentStep` is undefined
+  if (!intro._introItems[intro._currentStep]) return;
 
   //if we have a custom css class for each step
-  currentStepObj = this._introItems[this._currentStep];
+  currentStepObj = intro._introItems[intro._currentStep];
   if (typeof currentStepObj.tooltipClass === "string") {
     tooltipCssClass = currentStepObj.tooltipClass;
   } else {
-    tooltipCssClass = this._options.tooltipClass;
+    tooltipCssClass = intro._options.tooltipClass;
   }
 
   tooltipLayer.className = ["introjs-tooltip", tooltipCssClass]
@@ -205,19 +206,19 @@ export default function placeTooltip(
 
   tooltipLayer.setAttribute("role", "dialog");
 
-  currentTooltipPosition = this._introItems[this._currentStep].position;
+  currentTooltipPosition = intro._introItems[intro._currentStep].position;
 
   // Floating is always valid, no point in calculating
-  if (currentTooltipPosition !== "floating" && this._options.autoPosition) {
-    currentTooltipPosition = _determineAutoPosition.call(
-      this,
+  if (currentTooltipPosition !== "floating" && intro._options.autoPosition) {
+    currentTooltipPosition = _determineAutoPosition(
+      intro._options.positionPrecedence,
       targetElement,
       tooltipLayer,
       currentTooltipPosition
     );
   }
 
-  let tooltipLayerStyleLeft;
+  let tooltipLayerStyleLeft: number;
   targetOffset = getOffset(targetElement);
   tooltipOffset = getOffset(tooltipLayer);
   windowSize = getWindowSize();
@@ -299,7 +300,7 @@ export default function placeTooltip(
       }
       break;
     case "left":
-      if (!hintMode && this._options.showStepNumbers === true) {
+      if (!hintMode && intro._options.showStepNumbers === true) {
         tooltipLayer.style.top = "15px";
       }
 

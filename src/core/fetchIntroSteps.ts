@@ -1,21 +1,25 @@
+import { IntroJs } from "src";
 import cloneObject from "../util/cloneObject";
 import createElement from "../util/createElement";
-import { Step } from "./steps";
+import { ScrollTo, Step } from "./steps";
 
 /**
  * Finds all Intro steps from the data-* attributes and the options.steps array
  *
  * @api private
  */
-export default function fetchIntroSteps(targetElm: HTMLElement) {
+export default function fetchIntroSteps(
+  intro: IntroJs,
+  targetElm: HTMLElement
+) {
   const allIntroSteps: HTMLElement[] = Array.from(
     targetElm.querySelectorAll("*[data-intro]")
   );
   let introItems: Step[] = [];
 
-  if (this._options.steps) {
+  if (intro._options.steps) {
     //use steps passed programmatically
-    for (const step of this._options.steps) {
+    for (const step of intro._options.steps) {
       const currentItem: Step = cloneObject(step);
 
       //set the step
@@ -53,11 +57,11 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
       }
 
       currentItem.position =
-        currentItem.position || this._options.tooltipPosition;
-      currentItem.scrollTo = currentItem.scrollTo || this._options.scrollTo;
+        currentItem.position || intro._options.tooltipPosition;
+      currentItem.scrollTo = currentItem.scrollTo || intro._options.scrollTo;
 
       if (typeof currentItem.disableInteraction === "undefined") {
-        currentItem.disableInteraction = this._options.disableInteraction;
+        currentItem.disableInteraction = intro._options.disableInteraction;
       }
 
       if (currentItem.element !== null) {
@@ -77,8 +81,8 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
     for (const currentElement of allIntroSteps) {
       // start intro for groups of elements
       if (
-        this._options.group &&
-        currentElement.getAttribute("data-intro-group") !== this._options.group
+        intro._options.group &&
+        currentElement.getAttribute("data-intro-group") !== intro._options.group
       ) {
         continue;
       }
@@ -95,7 +99,7 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
           "data-disable-interaction"
         );
       } else {
-        disableInteraction = this._options.disableInteraction;
+        disableInteraction = intro._options.disableInteraction;
       }
 
       if (step > 0) {
@@ -108,10 +112,10 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
           highlightClass: currentElement.getAttribute("data-highlight-class"),
           position:
             currentElement.getAttribute("data-position") ||
-            this._options.tooltipPosition,
+            intro._options.tooltipPosition,
           scrollTo:
-            currentElement.getAttribute("data-scroll-to") ||
-            this._options.scrollTo,
+            (currentElement.getAttribute("data-scroll-to") as ScrollTo) ||
+            intro._options.scrollTo,
           disableInteraction,
         };
       }
@@ -124,8 +128,8 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
     for (const currentElement of allIntroSteps) {
       // start intro for groups of elements
       if (
-        this._options.group &&
-        currentElement.getAttribute("data-intro-group") !== this._options.group
+        intro._options.group &&
+        currentElement.getAttribute("data-intro-group") !== intro._options.group
       ) {
         continue;
       }
@@ -144,7 +148,7 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
             "data-disable-interaction"
           );
         } else {
-          disableInteraction = this._options.disableInteraction;
+          disableInteraction = intro._options.disableInteraction;
         }
 
         introItems[nextStep] = {
@@ -156,10 +160,10 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
           highlightClass: currentElement.getAttribute("data-highlight-class"),
           position:
             currentElement.getAttribute("data-position") ||
-            this._options.tooltipPosition,
+            intro._options.tooltipPosition,
           scrollTo:
-            currentElement.getAttribute("data-scroll-to") ||
-            this._options.scrollTo,
+            (currentElement.getAttribute("data-scroll-to") as ScrollTo) ||
+            intro._options.scrollTo,
           disableInteraction,
         };
       }

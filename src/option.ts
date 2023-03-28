@@ -1,4 +1,4 @@
-import { Step } from "./core/steps";
+import { ScrollTo, Step } from "./core/steps";
 
 export interface Options {
   steps: Step[];
@@ -46,10 +46,9 @@ export interface Options {
   scrollToElement: boolean;
   /*
    * Should we scroll the tooltip or target element?
-   *
-   * Options are: 'element' or 'tooltip'
+   * Options are: 'element', 'tooltip' or 'off'
    */
-  scrollTo: "element" | "tooltip";
+  scrollTo: ScrollTo;
   /* Padding to add after scrolling when element is not in the viewport (in pixels) */
   scrollPadding: number;
   /* Set the overlay opacity */

@@ -3,8 +3,11 @@ import getScrollParent from "./getScrollParent";
 /**
  * scroll a scrollable element to a child element
  */
-export default function scrollParentToElement(targetElement: HTMLElement) {
-  if (!this._options.scrollToElement) return;
+export default function scrollParentToElement(
+  scrollToElement: boolean,
+  targetElement: HTMLElement
+) {
+  if (!scrollToElement) return;
 
   const parent = getScrollParent(targetElement);
 

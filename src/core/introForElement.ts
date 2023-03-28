@@ -4,6 +4,7 @@ import { nextStep } from "./steps";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import fetchIntroSteps from "./fetchIntroSteps";
+import { IntroJs } from "src";
 
 /**
  * Initiate a new introduction/guide from an element in the page
@@ -11,30 +12,31 @@ import fetchIntroSteps from "./fetchIntroSteps";
  * @api private
  */
 export default async function introForElement(
+  intro: IntroJs,
   targetElm: HTMLElement
 ): Promise<Boolean> {
   // don't start the tour if the instance is not active
-  if (!this.isActive()) return false;
+  if (!intro.isActive()) return false;
 
-  if (this._introStartCallback !== undefined) {
-    await this._introStartCallback.call(this, targetElm);
+  if (intro._introStartCallback !== undefined) {
+    await intro._introStartCallback.call(intro, targetElm);
   }
 
   //set it to the introJs object
-  const steps = fetchIntroSteps.call(this, targetElm);
+  const steps = fetchIntroSteps(this, targetElm);
 
   if (steps.length === 0) {
     return false;
   }
 
-  this._introItems = steps;
+  intro._introItems = steps;
 
   //add overlay layer to the page
-  if (addOverlayLayer.call(this, targetElm)) {
+  if (addOverlayLayer(this, targetElm)) {
     //then, start the show
     await nextStep.call(this);
 
-    if (this._options.keyboardNavigation) {
+    if (intro._options.keyboardNavigation) {
       DOMEvent.on(window, "keydown", onKeyDown, this, true);
     }
     //for window resize

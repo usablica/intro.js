@@ -1,5 +1,6 @@
 import getWindowSize from "./getWindowSize";
 import elementInViewport from "./elementInViewport";
+import { ScrollTo } from "src/core/steps";
 
 /**
  * To change the scroll of `window` after highlighting an element
@@ -7,14 +8,16 @@ import elementInViewport from "./elementInViewport";
  * @api private
  */
 export default function scrollTo(
-  scrollTo: string,
+  scrollToElement: boolean,
+  scrollTo: ScrollTo,
+  scrollPadding: number,
   targetElement: HTMLElement,
   tooltipLayer: HTMLElement
 ) {
   if (scrollTo === "off") return;
   let rect: DOMRect;
 
-  if (!this._options.scrollToElement) return;
+  if (!scrollToElement) return;
 
   if (scrollTo === "tooltip") {
     rect = tooltipLayer.getBoundingClientRect();
@@ -33,18 +36,14 @@ export default function scrollTo(
     if (top < 0 || targetElement.clientHeight > winHeight) {
       window.scrollBy(
         0,
-        rect.top -
-          (winHeight / 2 - rect.height / 2) -
-          this._options.scrollPadding
+        rect.top - (winHeight / 2 - rect.height / 2) - scrollPadding
       ); // 30px padding from edge to look nice
 
       //Scroll down
     } else {
       window.scrollBy(
         0,
-        rect.top -
-          (winHeight / 2 - rect.height / 2) +
-          this._options.scrollPadding
+        rect.top - (winHeight / 2 - rect.height / 2) + scrollPadding
       ); // 30px padding from edge to look nice
     }
   }

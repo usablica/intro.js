@@ -16,7 +16,6 @@ import {
 } from "./core/hint";
 import {
   Step,
-  currentStep,
   goToStep,
   goToStepNumber,
   nextStep,
@@ -24,7 +23,10 @@ import {
 } from "./core/steps";
 import { Options, getDefaultOptions, setOption, setOptions } from "./option";
 
-class IntroJs {
+export class IntroJs {
+  public _currentStep: number | undefined;
+  public _currentStepNumber: number | undefined;
+  public _direction: "forward" | "backward";
   public _targetElement: HTMLElement;
   public _introItems: Step[] = [];
   public _options: Options;
@@ -39,6 +41,7 @@ class IntroJs {
   public _introExitCallback: Function;
   public _introSkipCallback: Function;
   public _introBeforeExitCallback: Function;
+  public _lastShowElementTimer: number;
 
   public constructor(targetElement: HTMLElement) {
     this._targetElement = targetElement;
@@ -68,7 +71,7 @@ class IntroJs {
   }
 
   async start() {
-    await introForElement.call(this, this._targetElement);
+    await introForElement(this, this._targetElement);
     return this;
   }
 
@@ -113,21 +116,21 @@ class IntroJs {
   }
 
   currentStep() {
-    return currentStep.call(this);
+    return this._currentStep;
   }
 
   async exit(force: boolean) {
-    await exitIntro.call(this, this._targetElement, force);
+    await exitIntro(this, this._targetElement, force);
     return this;
   }
 
   refresh(refreshSteps?: boolean) {
-    refresh.call(this, refreshSteps);
+    refresh(this, refreshSteps);
     return this;
   }
 
   setDontShowAgain(dontShowAgain: boolean) {
-    setDontShowAgain.call(this, dontShowAgain);
+    setDontShowAgain(this, dontShowAgain);
     return this;
   }
 
