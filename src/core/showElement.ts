@@ -195,9 +195,9 @@ export default async function _showElement(
     ".introjs-tooltipReferenceLayer"
   );
   let highlightClass = "introjs-helperLayer";
-  let nextTooltipButton;
-  let prevTooltipButton;
-  let skipTooltipButton;
+  let nextTooltipButton: HTMLElement;
+  let prevTooltipButton: HTMLElement;
+  let skipTooltipButton: HTMLElement;
 
   //check for a current step highlight class
   if (typeof targetElement.highlightClass === "string") {
@@ -209,16 +209,17 @@ export default async function _showElement(
   }
 
   if (oldHelperLayer !== null && oldReferenceLayer !== null) {
-    const oldHelperNumberLayer = oldReferenceLayer.querySelector(
+    const oldHelperNumberLayer = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-helperNumberLayer"
     );
-    const oldtooltipLayer = oldReferenceLayer.querySelector(
+    const oldtooltipLayer = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-tooltiptext"
     );
-    const oldTooltipTitleLayer = oldReferenceLayer.querySelector(
+    const oldTooltipTitleLayer = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-tooltip-title"
     );
-    const oldArrowLayer = oldReferenceLayer.querySelector(".introjs-arrow");
+    const oldArrowLayer =
+      oldReferenceLayer.querySelector<HTMLElement>(".introjs-arrow");
     const oldtooltipContainer =
       oldReferenceLayer.querySelector<HTMLElement>(".introjs-tooltip");
 
@@ -303,10 +304,11 @@ export default async function _showElement(
       }
 
       // change the scroll of the window, if needed
-      scrollTo.call(
-        intro,
+      scrollTo(
+        intro._options.scrollToElement,
         targetElement.scrollTo,
-        targetElement.element,
+        intro._options.scrollPadding,
+        targetElement.element as HTMLElement,
         oldtooltipLayer
       );
     }, 350);
