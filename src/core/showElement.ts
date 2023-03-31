@@ -113,8 +113,12 @@ export function _recreateBullets(intro: IntroJs, targetElement: Step) {
 /**
  * Updates the bullets
  */
-function _updateBullets(oldReferenceLayer, targetElement) {
-  if (this._options.showBullets) {
+function _updateBullets(
+  showBullets: boolean,
+  oldReferenceLayer: HTMLElement,
+  targetElement: Step
+) {
+  if (showBullets) {
     oldReferenceLayer.querySelector(
       ".introjs-bullets li > a.active"
     ).className = "";
@@ -240,11 +244,14 @@ export default async function _showElement(
     oldtooltipContainer.style.display = "none";
 
     // if the target element is within a scrollable element
-    scrollParentToElement.call(intro, targetElement.element);
+    scrollParentToElement(
+      intro._options.scrollToElement,
+      targetElement.element as HTMLElement
+    );
 
     // set new position to helper layer
-    setHelperLayerPosition.call(intro, oldHelperLayer);
-    setHelperLayerPosition.call(intro, oldReferenceLayer);
+    setHelperLayerPosition(intro, oldHelperLayer);
+    setHelperLayerPosition(intro, oldReferenceLayer);
 
     //remove old classes if the element still exist
     removeShowElement();
@@ -268,15 +275,19 @@ export default async function _showElement(
 
       //set the tooltip position
       oldtooltipContainer.style.display = "block";
-      placeTooltip.call(
+      placeTooltip(
         intro,
-        targetElement.element,
+        targetElement.element as HTMLElement,
         oldtooltipContainer,
         oldArrowLayer
       );
 
       //change active bullet
-      _updateBullets.call(intro, oldReferenceLayer, targetElement);
+      _updateBullets(
+        intro._options.showBullets,
+        oldReferenceLayer,
+        targetElement
+      );
 
       _updateProgressBar(
         oldReferenceLayer,
@@ -412,7 +423,7 @@ export default async function _showElement(
 
     nextTooltipButton.onclick = async () => {
       if (intro._introItems.length - 1 !== intro._currentStep) {
-        await nextStep.call(self);
+        await nextStep(intro);
       } else if (/introjs-donebutton/gi.test(nextTooltipButton.className)) {
         if (typeof intro._introCompleteCallback === "function") {
           await intro._introCompleteCallback.call(

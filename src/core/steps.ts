@@ -23,11 +23,11 @@ export type Step = {
  *
  * @api private
  */
-export async function goToStep(step: number) {
+export async function goToStep(intro: IntroJs, step: number) {
   //because steps starts with zero
-  this._currentStep = step - 2;
-  if (typeof this._introItems !== "undefined") {
-    await nextStep.call(this);
+  intro._currentStep = step - 2;
+  if (typeof intro._introItems !== "undefined") {
+    await nextStep(intro);
   }
 }
 
@@ -36,10 +36,10 @@ export async function goToStep(step: number) {
  *
  * @api private
  */
-export async function goToStepNumber(step: number) {
-  this._currentStepNumber = step;
-  if (typeof this._introItems !== "undefined") {
-    await nextStep.call(this);
+export async function goToStepNumber(intro: IntroJs, step: number) {
+  intro._currentStepNumber = step;
+  if (typeof intro._introItems !== "undefined") {
+    await nextStep(intro);
   }
 }
 
@@ -90,12 +90,12 @@ export async function nextStep(intro: IntroJs) {
       await intro._introCompleteCallback.call(intro, intro._currentStep, "end");
     }
 
-    await exitIntro.call(this, this._targetElement);
+    await exitIntro(intro, intro._targetElement);
 
     return false;
   }
 
-  await showElement.call(this, nextStep);
+  await showElement(intro, nextStep);
 
   return true;
 }

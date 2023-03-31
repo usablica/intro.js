@@ -49,7 +49,7 @@ export class IntroJs {
   }
 
   isActive() {
-    if (this._options.dontShowAgain && getDontShowAgain.call(this)) {
+    if (this._options.dontShowAgain && getDontShowAgain(this)) {
       return false;
     }
 
@@ -76,7 +76,7 @@ export class IntroJs {
   }
 
   async goToStep(step: number) {
-    await goToStep.call(this, step);
+    await goToStep(this, step);
     return this;
   }
 
@@ -101,17 +101,17 @@ export class IntroJs {
   }
 
   async goToStepNumber(step: number) {
-    await goToStepNumber.call(this, step);
+    await goToStepNumber(this, step);
     return this;
   }
 
   async nextStep() {
-    await nextStep.call(this);
+    await nextStep(this);
     return this;
   }
 
   async previousStep() {
-    await previousStep.call(this);
+    await previousStep(this);
     return this;
   }
 
