@@ -32,7 +32,7 @@ export default function addOverlayLayer(
     });
 
     overlayLayer.onclick = async () => {
-      await exitIntro.call(this, targetElm);
+      await exitIntro(intro, targetElm);
     };
   }
 

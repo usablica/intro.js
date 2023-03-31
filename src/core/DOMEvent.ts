@@ -1,3 +1,4 @@
+import { IntroJs } from "src";
 import stamp from "../util/stamp";
 
 /**
@@ -9,67 +10,66 @@ import stamp from "../util/stamp";
  * off - remove event
  */
 
-const DOMEvent = (() => {
-  function DOMEvent() {
-    const events_key = "introjs_event";
+class DOMEvent {
+  private readonly events_key: string = "introjs_event";
 
-    /**
-     * Gets a unique ID for an event listener
-     */
-    this._id = (type: string, listener: Function, context: Object): string =>
-      type + stamp(listener) + (context ? `_${stamp(context)}` : "");
-
-    /**
-     * Adds event listener
-     */
-    this.on = function (
-      obj: any,
-      type: string,
-      listener: Function,
-      context: Object,
-      useCapture: boolean
-    ) {
-      const id = this._id.apply(this, [type, listener, context]);
-      const handler = (e) => listener.call(context || obj, e || window.event);
-
-      if ("addEventListener" in obj) {
-        obj.addEventListener(type, handler, useCapture);
-      } else if ("attachEvent" in obj) {
-        obj.attachEvent(`on${type}`, handler);
-      }
-
-      obj[events_key] = obj[events_key] || {};
-      obj[events_key][id] = handler;
-    };
-
-    /**
-     * Removes event listener
-     */
-    this.off = function (
-      obj: any,
-      type: string,
-      listener: Function,
-      context: Object,
-      useCapture: boolean
-    ) {
-      const id = this._id.apply(this, [type, listener, context]);
-      const handler = obj[events_key] && obj[events_key][id];
-
-      if (!handler) {
-        return;
-      }
-
-      if ("removeEventListener" in obj) {
-        obj.removeEventListener(type, handler, useCapture);
-      } else if ("detachEvent" in obj) {
-        obj.detachEvent(`on${type}`, handler);
-      }
-
-      obj[events_key][id] = null;
-    };
+  /**
+   * Gets a unique ID for an event listener
+   */
+  private _id(type: string, listener: Function, context: IntroJs) {
+    return type + stamp(listener) + (context ? `_${stamp(context)}` : "");
   }
 
-  return new DOMEvent();
-})();
+  /**
+   * Adds event listener
+   */
+  public on(
+    obj: EventTarget,
+    type: string,
+    listener: Function,
+    context: IntroJs,
+    useCapture: boolean
+  ) {
+    const id = this._id(type, listener, context);
+    const handler = (e: Event) => listener(context || obj, e || window.event);
 
-export default DOMEvent;
+    if ("addEventListener" in obj) {
+      obj.addEventListener(type, handler, useCapture);
+    } else if ("attachEvent" in obj) {
+      // @ts-ignore
+      obj.attachEvent(`on${type}`, handler);
+    }
+
+    obj[this.events_key] = obj[this.events_key] || {};
+    obj[this.events_key][id] = handler;
+  }
+
+  /**
+   * Removes event listener
+   */
+  public off(
+    obj: EventTarget,
+    type: string,
+    listener: Function,
+    context: IntroJs,
+    useCapture: boolean
+  ) {
+    const id = this._id(type, listener, context);
+    const handler = obj[this.events_key] && obj[this.events_key][id];
+
+    if (!handler) {
+      return;
+    }
+
+    if ("removeEventListener" in obj) {
+      obj.removeEventListener(type, handler, useCapture);
+    } else if ("detachEvent" in obj) {
+      // @ts-ignore
+      obj.detachEvent(`on${type}`, handler);
+    }
+
+    obj[this.events_key][id] = null;
+  }
+}
+
+export default new DOMEvent();

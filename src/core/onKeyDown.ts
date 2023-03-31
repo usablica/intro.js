@@ -15,11 +15,8 @@ import exitIntro from "./exitIntro";
  *   (2) e.charCode, then
  *   (3) e.keyCode
  * https://github.com/jquery/jquery/blob/a6b0705294d336ae2f63f7276de0da1195495363/src/event.js#L638
- *
- * @param type var
- * @return type
  */
-export default async function onKeyDown(e) {
+export default async function onKeyDown(e: KeyboardEvent) {
   let code = e.code === undefined ? e.which : e.code;
 
   // if e.which is null
@@ -39,7 +36,7 @@ export default async function onKeyDown(e) {
     await nextStep.call(this);
   } else if (code === "Enter" || code === "NumpadEnter" || code === 13) {
     //srcElement === ie
-    const target = e.target || e.srcElement;
+    const target = (e.target || e.srcElement) as HTMLElement;
     if (target && target.className.match("introjs-prevbutton")) {
       //user hit enter while focusing on previous button
       await previousStep.call(this);

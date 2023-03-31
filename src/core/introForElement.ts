@@ -23,7 +23,7 @@ export default async function introForElement(
   }
 
   //set it to the introJs object
-  const steps = fetchIntroSteps(this, targetElm);
+  const steps = fetchIntroSteps(intro, targetElm);
 
   if (steps.length === 0) {
     return false;
@@ -32,15 +32,17 @@ export default async function introForElement(
   intro._introItems = steps;
 
   //add overlay layer to the page
-  if (addOverlayLayer(this, targetElm)) {
+  if (addOverlayLayer(intro, targetElm)) {
     //then, start the show
-    await nextStep.call(this);
+    await nextStep(intro);
 
+    targetElm.addEventListener;
     if (intro._options.keyboardNavigation) {
-      DOMEvent.on(window, "keydown", onKeyDown, this, true);
+      DOMEvent.on(window, "keydown", onKeyDown, intro, true);
     }
+
     //for window resize
-    DOMEvent.on(window, "resize", onResize, this, true);
+    DOMEvent.on(window, "resize", onResize, intro, true);
   }
 
   return false;
