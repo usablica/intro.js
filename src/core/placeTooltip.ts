@@ -5,7 +5,7 @@ import checkRight from "../util/checkRight";
 import checkLeft from "../util/checkLeft";
 import removeEntry from "../util/removeEntry";
 import { Step } from "./steps";
-import { IntroJs } from "src";
+import { IntroJs } from "src/intro";
 
 /**
  * auto-determine alignment

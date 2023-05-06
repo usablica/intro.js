@@ -2,6 +2,7 @@ import { ScrollTo, Step } from "./core/steps";
 
 export interface Options {
   steps: Step[];
+  hints: Step[];
   /* Is this tour instance active? Don't show the tour again if this flag is set to false */
   isActive: boolean;
   /* Next button label in tooltip box */
@@ -86,6 +87,7 @@ export interface Options {
 export function getDefaultOptions(): Options {
   return {
     steps: [],
+    hints: [],
     isActive: true,
     nextLabel: "Next",
     prevLabel: "Back",

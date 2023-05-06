@@ -1,4 +1,4 @@
-import { IntroJs } from "src";
+import { IntroJs } from "src/intro";
 import stamp from "../util/stamp";
 
 /**
@@ -26,7 +26,10 @@ class DOMEvent {
   public on(
     obj: EventTarget,
     type: string,
-    listener: Function,
+    listener: (
+      context: IntroJs | EventTarget,
+      e: Event
+    ) => void | undefined | string | Promise<string | void>,
     context: IntroJs,
     useCapture: boolean
   ) {
@@ -50,7 +53,10 @@ class DOMEvent {
   public off(
     obj: EventTarget,
     type: string,
-    listener: Function,
+    listener: (
+      context: IntroJs | EventTarget,
+      e: Event
+    ) => void | undefined | string | Promise<string | void>,
     context: IntroJs,
     useCapture: boolean
   ) {

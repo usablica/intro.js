@@ -1,19 +1,22 @@
 import showElement from "./showElement";
 import exitIntro from "./exitIntro";
-import { IntroJs } from "src";
+import { IntroJs } from "src/intro";
 
 export type ScrollTo = "off" | "element" | "tooltip";
 
 export type Step = {
   step?: number;
   title?: string;
-  intro: string;
+  intro?: string;
   tooltipClass?: string;
   highlightClass?: string;
   element?: HTMLElement | string;
   position?: string;
   scrollTo?: ScrollTo;
   disableInteraction?: boolean;
+
+  hint?: string,
+  hintTargetElement?: HTMLElement;
   hintAnimation?: boolean;
   hintPosition?: string;
 };

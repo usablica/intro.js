@@ -3,7 +3,7 @@ import isFixed from "../util/isFixed";
 import addClass from "../util/addClass";
 import removeClass from "../util/removeClass";
 import setStyle from "../util/setStyle";
-import { IntroJs } from "src";
+import { IntroJs } from "src/intro";
 
 /**
  * Update the position of the helper layer on the screen

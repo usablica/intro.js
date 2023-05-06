@@ -1,5 +1,6 @@
 import { nextStep, previousStep } from "./steps";
 import exitIntro from "./exitIntro";
+import { IntroJs } from "src/intro";
 
 /**
  * on keyCode:
@@ -16,7 +17,7 @@ import exitIntro from "./exitIntro";
  *   (3) e.keyCode
  * https://github.com/jquery/jquery/blob/a6b0705294d336ae2f63f7276de0da1195495363/src/event.js#L638
  */
-export default async function onKeyDown(e: KeyboardEvent) {
+export default async function onKeyDown(intro: IntroJs, e: KeyboardEvent) {
   let code = e.code === undefined ? e.which : e.code;
 
   // if e.which is null
@@ -24,38 +25,38 @@ export default async function onKeyDown(e: KeyboardEvent) {
     code = e.charCode === null ? e.keyCode : e.charCode;
   }
 
-  if ((code === "Escape" || code === 27) && this._options.exitOnEsc === true) {
+  if ((code === "Escape" || code === 27) && intro._options.exitOnEsc === true) {
     //escape key pressed, exit the intro
     //check if exit callback is defined
-    await exitIntro.call(this, this._targetElement);
+    await exitIntro(intro, intro._targetElement);
   } else if (code === "ArrowLeft" || code === 37) {
     //left arrow
-    await previousStep.call(this);
+    await previousStep(intro);
   } else if (code === "ArrowRight" || code === 39) {
     //right arrow
-    await nextStep.call(this);
+    await nextStep(intro);
   } else if (code === "Enter" || code === "NumpadEnter" || code === 13) {
     //srcElement === ie
     const target = (e.target || e.srcElement) as HTMLElement;
     if (target && target.className.match("introjs-prevbutton")) {
       //user hit enter while focusing on previous button
-      await previousStep.call(this);
+      await previousStep(intro);
     } else if (target && target.className.match("introjs-skipbutton")) {
       //user hit enter while focusing on skip button
       if (
-        this._introItems.length - 1 === this._currentStep &&
-        typeof this._introCompleteCallback === "function"
+        intro._introItems.length - 1 === intro._currentStep &&
+        typeof intro._introCompleteCallback === "function"
       ) {
-        await this._introCompleteCallback.call(this, this._currentStep, "skip");
+        await intro._introCompleteCallback.call(intro, intro._currentStep, "skip");
       }
 
-      await exitIntro.call(this, this._targetElement);
+      await exitIntro(intro, intro._targetElement);
     } else if (target && target.getAttribute("data-step-number")) {
       // user hit enter while focusing on step bullet
       target.click();
     } else {
       //default behavior for responding to enter
-      await nextStep.call(this);
+      await nextStep(intro);
     }
 
     //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers

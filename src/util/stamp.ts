@@ -1,4 +1,4 @@
-import { IntroJs } from "src";
+import { IntroJs } from "src/intro";
 
 /**
  * Mark any object with an incrementing number
