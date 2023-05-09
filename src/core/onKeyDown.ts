@@ -47,7 +47,7 @@ export default async function onKeyDown(intro: IntroJs, e: KeyboardEvent) {
         intro._introItems.length - 1 === intro._currentStep &&
         typeof intro._introCompleteCallback === "function"
       ) {
-        await intro._introCompleteCallback.call(intro, intro._currentStep, "skip");
+        await intro._introCompleteCallback(intro._currentStep, "skip");
       }
 
       await exitIntro(intro, intro._targetElement);

@@ -4,6 +4,29 @@ import { IntroJs } from "src/intro";
 
 export type ScrollTo = "off" | "element" | "tooltip";
 
+export type TooltipPosition =
+  | "floating"
+  | "top"
+  | "bottom"
+  | "left"
+  | "right"
+  | "top-right-aligned"
+  | "top-middle-aligned"
+  | "top-left-aligned"
+  | "bottom-right-aligned"
+  | "bottom-middle-aligned";
+
+export type HintPosition =
+  | "top-left"
+  | "top-right"
+  | "top-middle"
+  | "bottom-left"
+  | "bottom-right"
+  | "middle-left"
+  | "middle-right"
+  | "middle-middle"
+  | "bottom-middle";
+
 export type Step = {
   step?: number;
   title?: string;
@@ -11,14 +34,14 @@ export type Step = {
   tooltipClass?: string;
   highlightClass?: string;
   element?: HTMLElement | string;
-  position?: string;
+  position?: TooltipPosition;
   scrollTo?: ScrollTo;
   disableInteraction?: boolean;
 
-  hint?: string,
+  hint?: string;
   hintTargetElement?: HTMLElement;
   hintAnimation?: boolean;
-  hintPosition?: string;
+  hintPosition?: HintPosition;
 };
 
 /**
@@ -74,9 +97,8 @@ export async function nextStep(intro: IntroJs) {
   let continueStep = true;
 
   if (typeof intro._introBeforeChangeCallback !== "undefined") {
-    continueStep = await intro._introBeforeChangeCallback.call(
-      intro,
-      nextStep && nextStep.element
+    continueStep = await intro._introBeforeChangeCallback(
+      nextStep && (nextStep.element as HTMLElement)
     );
   }
 
@@ -90,7 +112,7 @@ export async function nextStep(intro: IntroJs) {
     //end of the intro
     //check if any callback is defined
     if (typeof intro._introCompleteCallback === "function") {
-      await intro._introCompleteCallback.call(intro, intro._currentStep, "end");
+      await intro._introCompleteCallback(intro._currentStep, "end");
     }
 
     await exitIntro(intro, intro._targetElement);
@@ -121,9 +143,8 @@ export async function previousStep(intro: IntroJs) {
   let continueStep = true;
 
   if (typeof intro._introBeforeChangeCallback !== "undefined") {
-    continueStep = await intro._introBeforeChangeCallback.call(
-      intro,
-      nextStep && nextStep.element
+    continueStep = await intro._introBeforeChangeCallback(
+      nextStep && (nextStep.element as HTMLElement)
     );
   }
 

@@ -9,7 +9,7 @@ import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import createElement from "../util/createElement";
 import debounce from "../util/debounce";
-import { Step } from "./steps";
+import { HintPosition, Step, TooltipPosition } from "./steps";
 import { IntroJs } from "src/intro";
 
 /**
@@ -38,7 +38,7 @@ export async function hideHint(intro: IntroJs, stepId: number) {
 
   // call the callback function (if any)
   if (typeof intro._hintCloseCallback !== "undefined") {
-    await intro._hintCloseCallback.call(intro, stepId);
+    await intro._hintCloseCallback(intro, stepId);
   }
 }
 
@@ -102,7 +102,13 @@ export function removeHints(intro: IntroJs) {
   DOMEvent.off(window, "resize", reAlignHints, intro, true);
 
   if (intro._hintsAutoRefreshFunction) {
-    DOMEvent.off(window, "scroll", intro._hintsAutoRefreshFunction, intro, true);
+    DOMEvent.off(
+      window,
+      "scroll",
+      intro._hintsAutoRefreshFunction,
+      intro,
+      true
+    );
   }
 }
 
@@ -208,7 +214,7 @@ export async function addHints(intro: IntroJs) {
 
   // call the callback function (if any)
   if (typeof intro._hintsAddedCallback !== "undefined") {
-    await intro._hintsAddedCallback.call(intro);
+    await intro._hintsAddedCallback(intro);
   }
 
   if (intro._options.hintAutoRefreshInterval >= 0) {
@@ -226,7 +232,7 @@ export async function addHints(intro: IntroJs) {
  * @api private
  */
 export function alignHintPosition(
-  position: string,
+  position: HintPosition,
   hintElement: HTMLElement,
   targetElement: HTMLElement
 ) {
@@ -306,7 +312,7 @@ export async function showHintDialog(intro: IntroJs, stepId: number) {
 
   // call the callback function (if any)
   if (typeof intro._hintClickCallback !== "undefined") {
-    await intro._hintClickCallback.call(intro, hintElement, item, stepId);
+    await intro._hintClickCallback(intro, hintElement, item, stepId);
   }
 
   // remove all open tooltips
@@ -423,7 +429,9 @@ export async function populateHints(
       }
     }
   } else {
-    const hints = Array.from(targetElm.querySelectorAll<HTMLElement>("*[data-hint]"));
+    const hints = Array.from(
+      targetElm.querySelectorAll<HTMLElement>("*[data-hint]")
+    );
 
     if (!hints || !hints.length) {
       return false;
@@ -444,14 +452,12 @@ export async function populateHints(
       intro._introItems.push({
         element: currentElement,
         hint: currentElement.getAttribute("data-hint"),
-        hintPosition:
-          currentElement.getAttribute("data-hint-position") ||
-          intro._options.hintPosition,
+        hintPosition: (currentElement.getAttribute("data-hint-position") ||
+          intro._options.hintPosition) as HintPosition,
         hintAnimation,
         tooltipClass: currentElement.getAttribute("data-tooltip-class"),
-        position:
-          currentElement.getAttribute("data-position") ||
-          intro._options.tooltipPosition,
+        position: (currentElement.getAttribute("data-position") ||
+          intro._options.tooltipPosition) as TooltipPosition,
       });
     }
   }
@@ -470,7 +476,11 @@ export async function populateHints(
  * @api private
  */
 export function reAlignHints(intro: IntroJs) {
-  for (const { hintTargetElement, hintPosition, element } of intro._introItems) {
+  for (const {
+    hintTargetElement,
+    hintPosition,
+    element,
+  } of intro._introItems) {
     alignHintPosition(hintPosition, element as HTMLElement, hintTargetElement);
   }
 }

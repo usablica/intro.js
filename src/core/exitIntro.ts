@@ -22,7 +22,7 @@ export default async function exitIntro(
   //
   // If this callback return `false`, it would halt the process
   if (intro._introBeforeExitCallback !== undefined) {
-    continueExit = await intro._introBeforeExitCallback.call(intro);
+    continueExit = await intro._introBeforeExitCallback();
   }
 
   // skip this check if `force` parameter is `true`
@@ -71,7 +71,7 @@ export default async function exitIntro(
 
   //check if any callback is defined
   if (intro._introExitCallback !== undefined) {
-    await intro._introExitCallback.call(intro);
+    await intro._introExitCallback();
   }
 
   //set the step to zero

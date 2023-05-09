@@ -4,7 +4,7 @@ import addClass from "../util/addClass";
 import checkRight from "../util/checkRight";
 import checkLeft from "../util/checkLeft";
 import removeEntry from "../util/removeEntry";
-import { Step } from "./steps";
+import { Step, TooltipPosition } from "./steps";
 import { IntroJs } from "src/intro";
 
 /**
@@ -69,11 +69,11 @@ function _determineAutoAlignment(
  * of screen space.
  */
 function _determineAutoPosition(
-  positionPrecedence: string[],
+  positionPrecedence: TooltipPosition[],
   targetElement: HTMLElement,
   tooltipLayer: HTMLElement,
-  desiredTooltipPosition: string
-): string {
+  desiredTooltipPosition: TooltipPosition
+): TooltipPosition {
   // Take a clone of position precedence. These will be the available
   const possiblePositions = positionPrecedence.slice();
 
@@ -84,7 +84,7 @@ function _determineAutoPosition(
 
   // If we check all the possible areas, and there are no valid places for the tooltip, the element
   // must take up most of the screen real estate. Show the tooltip floating in the middle of the screen.
-  let calculatedPosition = "floating";
+  let calculatedPosition: TooltipPosition = "floating";
 
   /*
    * auto determine position
@@ -110,7 +110,7 @@ function _determineAutoPosition(
     removeEntry(possiblePositions, "left");
   }
 
-  // @var {String}  ex: 'right-aligned'
+  // ex: 'right-aligned'
   const desiredAlignment = ((pos) => {
     const hyphenIndex = pos.indexOf("-");
     if (hyphenIndex !== -1) {
@@ -124,7 +124,9 @@ function _determineAutoPosition(
   if (desiredTooltipPosition) {
     // ex: "bottom-right-aligned"
     // should return 'bottom'
-    desiredTooltipPosition = desiredTooltipPosition.split("-")[0];
+    desiredTooltipPosition = desiredTooltipPosition.split(
+      "-"
+    )[0] as TooltipPosition;
   }
 
   if (possiblePositions.length) {
@@ -177,7 +179,7 @@ export default function placeTooltip(
     height: number;
   };
   let windowSize: { width: number; height: number };
-  let currentTooltipPosition: string;
+  let currentTooltipPosition: TooltipPosition;
 
   //reset the old style
   tooltipLayer.style.top = null;

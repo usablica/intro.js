@@ -1,4 +1,4 @@
-import { ScrollTo, Step } from "./core/steps";
+import { HintPosition, ScrollTo, Step, TooltipPosition } from "./core/steps";
 
 export interface Options {
   steps: Step[];
@@ -57,7 +57,7 @@ export interface Options {
   /* To determine the tooltip position automatically based on the window.width/height */
   autoPosition: boolean;
   /* Precedence of positions, when auto is enabled */
-  positionPrecedence: string[];
+  positionPrecedence: TooltipPosition[];
   /* Disable an interaction with element? */
   disableInteraction: boolean;
   /* To display the "Don't show again" checkbox in the tour */
@@ -69,7 +69,7 @@ export interface Options {
   /* Set how much padding to be used around helper element */
   helperElementPadding: number;
   /* Default hint position */
-  hintPosition: string;
+  hintPosition: HintPosition;
   /* Hint button label */
   hintButtonLabel: string;
   /* Display the "Got it" button? */

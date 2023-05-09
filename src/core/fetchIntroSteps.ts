@@ -1,7 +1,7 @@
 import { IntroJs } from "src/intro";
 import cloneObject from "../util/cloneObject";
 import createElement from "../util/createElement";
-import { ScrollTo, Step } from "./steps";
+import { ScrollTo, Step, TooltipPosition } from "./steps";
 
 /**
  * Finds all Intro steps from the data-* attributes and the options.steps array
@@ -57,7 +57,8 @@ export default function fetchIntroSteps(
       }
 
       currentItem.position =
-        currentItem.position || intro._options.tooltipPosition;
+        currentItem.position ||
+        (intro._options.tooltipPosition as TooltipPosition);
       currentItem.scrollTo = currentItem.scrollTo || intro._options.scrollTo;
 
       if (typeof currentItem.disableInteraction === "undefined") {
@@ -110,9 +111,8 @@ export default function fetchIntroSteps(
           step: parseInt(currentElement.getAttribute("data-step"), 10),
           tooltipClass: currentElement.getAttribute("data-tooltip-class"),
           highlightClass: currentElement.getAttribute("data-highlight-class"),
-          position:
-            currentElement.getAttribute("data-position") ||
-            intro._options.tooltipPosition,
+          position: (currentElement.getAttribute("data-position") ||
+            intro._options.tooltipPosition) as TooltipPosition,
           scrollTo:
             (currentElement.getAttribute("data-scroll-to") as ScrollTo) ||
             intro._options.scrollTo,
@@ -158,9 +158,8 @@ export default function fetchIntroSteps(
           step: nextStep + 1,
           tooltipClass: currentElement.getAttribute("data-tooltip-class"),
           highlightClass: currentElement.getAttribute("data-highlight-class"),
-          position:
-            currentElement.getAttribute("data-position") ||
-            intro._options.tooltipPosition,
+          position: (currentElement.getAttribute("data-position") ||
+            intro._options.tooltipPosition) as TooltipPosition,
           scrollTo:
             (currentElement.getAttribute("data-scroll-to") as ScrollTo) ||
             intro._options.scrollTo,

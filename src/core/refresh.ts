@@ -37,20 +37,22 @@ export default function refresh(intro: IntroJs, refreshSteps?: boolean) {
 
   // re-align tooltip
   if (this._currentStep !== undefined && this._currentStep !== null) {
-    const oldArrowLayer = document.querySelector(".introjs-arrow");
-    const oldtooltipContainer = document.querySelector(".introjs-tooltip");
+    const oldArrowLayer = document.querySelector<HTMLElement>(".introjs-arrow");
+    const oldTooltipContainer =
+      document.querySelector<HTMLElement>(".introjs-tooltip");
 
-    if (oldtooltipContainer && oldArrowLayer) {
-      placeTooltip.call(
-        this,
-        this._introItems[this._currentStep].element,
-        oldtooltipContainer,
+    if (oldTooltipContainer && oldArrowLayer) {
+      placeTooltip(
+        intro,
+        intro._introItems[intro._currentStep].element as HTMLElement,
+        oldTooltipContainer,
         oldArrowLayer
       );
     }
   }
 
   //re-align hints
-  reAlignHints.call(this);
-  return this;
+  reAlignHints(intro);
+
+  return intro;
 }

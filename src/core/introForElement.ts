@@ -19,7 +19,7 @@ export default async function introForElement(
   if (!intro.isActive()) return false;
 
   if (intro._introStartCallback !== undefined) {
-    await intro._introStartCallback.call(intro, targetElm);
+    await intro._introStartCallback(targetElm);
   }
 
   //set it to the introJs object

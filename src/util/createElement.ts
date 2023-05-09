@@ -19,7 +19,7 @@ export default function _createElement(
 
     if (k === "style") {
       setStyle(element, v);
-    } else if (typeof(v) === "string" && k.match(setAttRegex)) {
+    } else if (typeof v === "string" && k.match(setAttRegex)) {
       element.setAttribute(k, v);
     } else {
       element[k] = v;
