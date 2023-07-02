@@ -38,7 +38,7 @@ export async function hideHint(intro: IntroJs, stepId: number) {
 
   // call the callback function (if any)
   if (typeof intro._hintCloseCallback !== "undefined") {
-    await intro._hintCloseCallback(intro, stepId);
+    await intro._hintCloseCallback(stepId);
   }
 }
 
@@ -214,7 +214,7 @@ export async function addHints(intro: IntroJs) {
 
   // call the callback function (if any)
   if (typeof intro._hintsAddedCallback !== "undefined") {
-    await intro._hintsAddedCallback(intro);
+    await intro._hintsAddedCallback();
   }
 
   if (intro._options.hintAutoRefreshInterval >= 0) {
@@ -312,7 +312,7 @@ export async function showHintDialog(intro: IntroJs, stepId: number) {
 
   // call the callback function (if any)
   if (typeof intro._hintClickCallback !== "undefined") {
-    await intro._hintClickCallback(intro, hintElement, item, stepId);
+    await intro._hintClickCallback(hintElement, item, stepId);
   }
 
   // remove all open tooltips
