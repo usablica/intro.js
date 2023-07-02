@@ -28,7 +28,9 @@ export class IntroJs {
   public _targetElement: HTMLElement;
   public _introItems: Step[] = [];
   public _options: Options;
-  public _introBeforeChangeCallback?: (targetElement: HTMLElement) => boolean;
+  public _introBeforeChangeCallback?: (
+    targetElement: HTMLElement
+  ) => Promise<boolean> | boolean;
   public _introChangeCallback?: (targetElement: HTMLElement) => void;
   public _introAfterChangeCallback?: (targetElement: HTMLElement) => void;
   public _introCompleteCallback?: (

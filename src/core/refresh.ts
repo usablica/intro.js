@@ -36,7 +36,7 @@ export default function refresh(intro: IntroJs, refreshSteps?: boolean) {
   }
 
   // re-align tooltip
-  if (this._currentStep !== undefined && this._currentStep !== null) {
+  if (intro._currentStep !== undefined && intro._currentStep !== null) {
     const oldArrowLayer = document.querySelector<HTMLElement>(".introjs-arrow");
     const oldTooltipContainer =
       document.querySelector<HTMLElement>(".introjs-tooltip");

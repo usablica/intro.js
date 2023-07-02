@@ -281,23 +281,23 @@ describe("intro", () => {
   });
 
   test("should call setDontShowAgain when then checkbox is clicked", () => {
-    introJs()
-      .setOptions({
-        dontShowAgain: true,
-        steps: [
-          {
-            intro: "hello world",
-          },
-        ],
-      })
-      .start();
+    const intro = introJs().setOptions({
+      dontShowAgain: true,
+      steps: [
+        {
+          intro: "hello world",
+        },
+      ],
+    });
+
+    intro.start();
 
     const checkbox = find(".introjs-dontShowAgain input");
 
     checkbox.click();
 
     expect(setDontShowAgain).toBeCalledTimes(1);
-    expect(setDontShowAgain).toBeCalledWith(true);
+    expect(setDontShowAgain).toBeCalledWith(intro, true);
   });
 
   describe("isActive", () => {
