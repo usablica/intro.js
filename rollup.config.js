@@ -112,11 +112,11 @@ export default [
       sourcemap: true,
     },
     plugins: [
-      ...jsPlugins,
       typescript({
         emitDeclarationOnly: true,
         declaration: true,
-      })
+      }),
+      ...jsPlugins,
     ]
   }
 ];

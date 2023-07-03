@@ -1,10 +1,11 @@
+import { IntroJs } from "src/intro";
 import fetchIntroSteps from "../../../src/core/fetchIntroSteps";
 
 describe("fetchIntroSteps", () => {
   test("should add floating element from options.steps to the list", () => {
     const targetElement = document.createElement("div");
 
-    const steps = fetchIntroSteps.call(
+    const steps = fetchIntroSteps(
       {
         _options: {
           steps: [
@@ -17,7 +18,7 @@ describe("fetchIntroSteps", () => {
             },
           ],
         },
-      },
+      } as IntroJs,
       targetElement
     );
 
@@ -44,7 +45,7 @@ describe("fetchIntroSteps", () => {
     document.body.appendChild(stepOne);
     document.body.appendChild(stepTwo);
 
-    const steps = fetchIntroSteps.call(
+    const steps = fetchIntroSteps(
       {
         _options: {
           tooltipPosition: "bottom",
@@ -64,7 +65,7 @@ describe("fetchIntroSteps", () => {
             },
           ],
         },
-      },
+      } as IntroJs,
       targetElement
     );
 
@@ -98,12 +99,12 @@ describe("fetchIntroSteps", () => {
     targetElement.appendChild(stepOne);
     targetElement.appendChild(stepTwo);
 
-    const steps = fetchIntroSteps.call(
+    const steps = fetchIntroSteps(
       {
         _options: {
           tooltipPosition: "bottom",
         },
-      },
+      } as IntroJs,
       targetElement
     );
 
@@ -131,12 +132,12 @@ describe("fetchIntroSteps", () => {
     targetElement.appendChild(stepOne);
     targetElement.appendChild(stepTwo);
 
-    const steps = fetchIntroSteps.call(
+    const steps = fetchIntroSteps(
       {
         _options: {
           tooltipPosition: "bottom",
         },
-      },
+      } as IntroJs,
       targetElement
     );
 
@@ -161,7 +162,7 @@ describe("fetchIntroSteps", () => {
     targetElement.appendChild(stepOne);
     targetElement.appendChild(stepTwo);
 
-    const steps = fetchIntroSteps.call(
+    const steps = fetchIntroSteps(
       {
         _options: {
           steps: [
@@ -173,7 +174,7 @@ describe("fetchIntroSteps", () => {
             },
           ],
         },
-      },
+      } as IntroJs,
       targetElement
     );
 

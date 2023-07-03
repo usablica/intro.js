@@ -1,20 +1,25 @@
-import forEach from "../util/forEach";
+import { IntroJs } from "src/intro";
 import cloneObject from "../util/cloneObject";
 import createElement from "../util/createElement";
-import { Step } from "./steps";
+import { ScrollTo, Step, TooltipPosition } from "./steps";
 
 /**
  * Finds all Intro steps from the data-* attributes and the options.steps array
  *
  * @api private
  */
-export default function fetchIntroSteps(targetElm: HTMLElement) {
-  const allIntroSteps = Array.from(targetElm.querySelectorAll("*[data-intro]"));
+export default function fetchIntroSteps(
+  intro: IntroJs,
+  targetElm: HTMLElement
+) {
+  const allIntroSteps: HTMLElement[] = Array.from(
+    targetElm.querySelectorAll("*[data-intro]")
+  );
   let introItems: Step[] = [];
 
-  if (this._options.steps) {
+  if (intro._options.steps) {
     //use steps passed programmatically
-    forEach(this._options.steps, (step) => {
+    for (const step of intro._options.steps) {
       const currentItem: Step = cloneObject(step);
 
       //set the step
@@ -25,7 +30,9 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
       //use querySelector function only when developer used CSS selector
       if (typeof currentItem.element === "string") {
         //grab the element with given selector from the page
-        currentItem.element = document.querySelector(currentItem.element);
+        currentItem.element = document.querySelector<HTMLElement>(
+          currentItem.element
+        );
       }
 
       //intro without element
@@ -50,39 +57,40 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
       }
 
       currentItem.position =
-        currentItem.position || this._options.tooltipPosition;
-      currentItem.scrollTo = currentItem.scrollTo || this._options.scrollTo;
+        currentItem.position ||
+        (intro._options.tooltipPosition as TooltipPosition);
+      currentItem.scrollTo = currentItem.scrollTo || intro._options.scrollTo;
 
       if (typeof currentItem.disableInteraction === "undefined") {
-        currentItem.disableInteraction = this._options.disableInteraction;
+        currentItem.disableInteraction = intro._options.disableInteraction;
       }
 
       if (currentItem.element !== null) {
         introItems.push(currentItem);
       }
-    });
+    }
   } else {
     //use steps from data-* annotations
     const elmsLength = allIntroSteps.length;
-    let disableInteraction;
+    let disableInteraction: boolean;
 
     //if there's no element to intro
     if (elmsLength < 1) {
       return [];
     }
 
-    forEach(allIntroSteps, (currentElement) => {
+    for (const currentElement of allIntroSteps) {
       // start intro for groups of elements
       if (
-        this._options.group &&
-        currentElement.getAttribute("data-intro-group") !== this._options.group
+        intro._options.group &&
+        currentElement.getAttribute("data-intro-group") !== intro._options.group
       ) {
-        return;
+        continue;
       }
 
       // skip hidden elements
       if (currentElement.style.display === "none") {
-        return;
+        continue;
       }
 
       const step = parseInt(currentElement.getAttribute("data-step"), 10);
@@ -92,7 +100,7 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
           "data-disable-interaction"
         );
       } else {
-        disableInteraction = this._options.disableInteraction;
+        disableInteraction = intro._options.disableInteraction;
       }
 
       if (step > 0) {
@@ -103,28 +111,27 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
           step: parseInt(currentElement.getAttribute("data-step"), 10),
           tooltipClass: currentElement.getAttribute("data-tooltip-class"),
           highlightClass: currentElement.getAttribute("data-highlight-class"),
-          position:
-            currentElement.getAttribute("data-position") ||
-            this._options.tooltipPosition,
+          position: (currentElement.getAttribute("data-position") ||
+            intro._options.tooltipPosition) as TooltipPosition,
           scrollTo:
-            currentElement.getAttribute("data-scroll-to") ||
-            this._options.scrollTo,
+            (currentElement.getAttribute("data-scroll-to") as ScrollTo) ||
+            intro._options.scrollTo,
           disableInteraction,
         };
       }
-    });
+    }
 
     //next add intro items without data-step
     //todo: we need a cleanup here, two loops are redundant
     let nextStep = 0;
 
-    forEach(allIntroSteps, (currentElement) => {
+    for (const currentElement of allIntroSteps) {
       // start intro for groups of elements
       if (
-        this._options.group &&
-        currentElement.getAttribute("data-intro-group") !== this._options.group
+        intro._options.group &&
+        currentElement.getAttribute("data-intro-group") !== intro._options.group
       ) {
-        return;
+        continue;
       }
 
       if (currentElement.getAttribute("data-step") === null) {
@@ -141,7 +148,7 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
             "data-disable-interaction"
           );
         } else {
-          disableInteraction = this._options.disableInteraction;
+          disableInteraction = intro._options.disableInteraction;
         }
 
         introItems[nextStep] = {
@@ -151,16 +158,15 @@ export default function fetchIntroSteps(targetElm: HTMLElement) {
           step: nextStep + 1,
           tooltipClass: currentElement.getAttribute("data-tooltip-class"),
           highlightClass: currentElement.getAttribute("data-highlight-class"),
-          position:
-            currentElement.getAttribute("data-position") ||
-            this._options.tooltipPosition,
+          position: (currentElement.getAttribute("data-position") ||
+            intro._options.tooltipPosition) as TooltipPosition,
           scrollTo:
-            currentElement.getAttribute("data-scroll-to") ||
-            this._options.scrollTo,
+            (currentElement.getAttribute("data-scroll-to") as ScrollTo) ||
+            intro._options.scrollTo,
           disableInteraction,
         };
       }
-    });
+    }
   }
 
   //removing undefined/null elements

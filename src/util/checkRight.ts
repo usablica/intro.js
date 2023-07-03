@@ -4,11 +4,24 @@
  * @return boolean true, if tooltipLayerStyleLeft is ok.  false, otherwise.
  */
 export default function checkRight(
-  targetOffset,
-  tooltipLayerStyleLeft,
-  tooltipOffset,
-  windowSize,
-  tooltipLayer
+  targetOffset: {
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+  },
+  tooltipLayerStyleLeft: number,
+  tooltipOffset: {
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+  },
+  windowSize: {
+    width: number;
+    height: number;
+  },
+  tooltipLayer: HTMLElement
 ): boolean {
   if (
     targetOffset.left + tooltipLayerStyleLeft + tooltipOffset.width >

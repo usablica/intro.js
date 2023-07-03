@@ -1,3 +1,5 @@
+import { IntroJs } from "src/intro";
+
 /**
  * Mark any object with an incrementing number
  * used for keeping track of objects
@@ -8,7 +10,7 @@
  */
 const stamp = (() => {
   const keys = {};
-  return function stamp(obj, key = "introjs-stamp") {
+  return function stamp(obj: IntroJs | Function, key = "introjs-stamp") {
     // each group increments from 0
     keys[key] = keys[key] || 0;
 

@@ -23,6 +23,20 @@ describe("intro", () => {
     document.getElementsByTagName("html")[0].innerHTML = "";
   });
 
+  test("should set the targetElement to document.body", () => {
+    const intro = introJs();
+
+    expect(intro._targetElement).toBe(document.body);
+  });
+
+  test("should set the correct targetElement", () => {
+    const stubTargetElement = document.createElement("div");
+
+    const intro = introJs(stubTargetElement);
+
+    expect(intro._targetElement).toBe(stubTargetElement);
+  });
+
   test("should start floating intro with one step", () => {
     introJs()
       .setOptions({
@@ -281,23 +295,23 @@ describe("intro", () => {
   });
 
   test("should call setDontShowAgain when then checkbox is clicked", () => {
-    introJs()
-      .setOptions({
-        dontShowAgain: true,
-        steps: [
-          {
-            intro: "hello world",
-          },
-        ],
-      })
-      .start();
+    const intro = introJs().setOptions({
+      dontShowAgain: true,
+      steps: [
+        {
+          intro: "hello world",
+        },
+      ],
+    });
+
+    intro.start();
 
     const checkbox = find(".introjs-dontShowAgain input");
 
     checkbox.click();
 
     expect(setDontShowAgain).toBeCalledTimes(1);
-    expect(setDontShowAgain).toBeCalledWith(true);
+    expect(setDontShowAgain).toBeCalledWith(intro, true);
   });
 
   describe("isActive", () => {

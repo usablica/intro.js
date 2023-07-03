@@ -18,7 +18,7 @@ describe("introForElement", () => {
 
     context._introStartCallback = onstartCallback;
 
-    introForElement.call(context, document.body);
+    introForElement(context, document.body);
 
     expect(onstartCallback).toBeCalledTimes(1);
     expect(onstartCallback).toBeCalledWith(document.body);
@@ -33,7 +33,7 @@ describe("introForElement", () => {
       isActive: false,
     });
 
-    introForElement.call(context, document.body);
+    introForElement(context, document.body);
 
     expect(fetchIntroStepsMock).toBeCalledTimes(0);
     expect(addOverlayLayerMock).toBeCalledTimes(0);

@@ -1,15 +1,17 @@
 import exitIntro from "./exitIntro";
 import createElement from "../util/createElement";
 import setStyle from "../util/setStyle";
+import { IntroJs } from "src/intro";
 
 /**
  * Add overlay layer to the page
  *
  * @api private
- * @method _addOverlayLayer
- * @param {Object} targetElm
  */
-export default function addOverlayLayer(targetElm) {
+export default function addOverlayLayer(
+  intro: IntroJs,
+  targetElm: HTMLElement
+) {
   const overlayLayer = createElement("div", {
     className: "introjs-overlay",
   });
@@ -24,13 +26,13 @@ export default function addOverlayLayer(targetElm) {
 
   targetElm.appendChild(overlayLayer);
 
-  if (this._options.exitOnOverlayClick === true) {
+  if (intro._options.exitOnOverlayClick === true) {
     setStyle(overlayLayer, {
       cursor: "pointer",
     });
 
     overlayLayer.onclick = async () => {
-      await exitIntro.call(this, targetElm);
+      await exitIntro(intro, targetElm);
     };
   }
 

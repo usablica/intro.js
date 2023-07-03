@@ -1,4 +1,3 @@
-import forEach from "../util/forEach";
 import removeClass from "../util/removeClass";
 
 /**
@@ -7,9 +6,11 @@ import removeClass from "../util/removeClass";
  * @api private
  */
 export default function removeShowElement() {
-  const elms = Array.from(document.querySelectorAll(".introjs-showElement"));
+  const elms = Array.from(
+    document.querySelectorAll<HTMLElement>(".introjs-showElement")
+  );
 
-  forEach(elms, (elm) => {
+  for (const elm of elms) {
     removeClass(elm, /introjs-[a-zA-Z]+/g);
-  });
+  }
 }

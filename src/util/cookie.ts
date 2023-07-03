@@ -28,10 +28,10 @@ export function getAllCookies() {
   return cookie;
 }
 
-export function getCookie(name) {
+export function getCookie(name: string) {
   return getAllCookies()[name];
 }
 
-export function deleteCookie(name) {
+export function deleteCookie(name: string) {
   setCookie(name, "", -1);
 }

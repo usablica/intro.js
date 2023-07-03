@@ -1,28 +1,28 @@
-import forEach from "../util/forEach";
 import DOMEvent from "./DOMEvent";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import removeShowElement from "./removeShowElement";
 import removeChild from "../util/removeChild";
+import { IntroJs } from "src/intro";
 
 /**
  * Exit from intro
  *
  * @api private
- * @param {Object} targetElement
  * @param {Boolean} force - Setting to `true` will skip the result of beforeExit callback
  */
 export default async function exitIntro(
+  intro: IntroJs,
   targetElement: HTMLElement,
-  force: boolean
+  force: boolean = false
 ) {
   let continueExit = true;
 
   // calling onbeforeexit callback
   //
   // If this callback return `false`, it would halt the process
-  if (this._introBeforeExitCallback !== undefined) {
-    continueExit = await this._introBeforeExitCallback.call(this);
+  if (intro._introBeforeExitCallback !== undefined) {
+    continueExit = await intro._introBeforeExitCallback();
   }
 
   // skip this check if `force` parameter is `true`
@@ -31,11 +31,13 @@ export default async function exitIntro(
 
   // remove overlay layers from the page
   const overlayLayers = Array.from(
-    targetElement.querySelectorAll(".introjs-overlay")
+    targetElement.querySelectorAll<HTMLElement>(".introjs-overlay")
   );
 
   if (overlayLayers && overlayLayers.length) {
-    forEach(overlayLayers, (overlayLayer) => removeChild(overlayLayer));
+    for (const overlayLayer of overlayLayers) {
+      removeChild(overlayLayer);
+    }
   }
 
   //remove all helper layers
@@ -64,14 +66,14 @@ export default async function exitIntro(
   removeShowElement();
 
   //clean listeners
-  DOMEvent.off(window, "keydown", onKeyDown, this, true);
-  DOMEvent.off(window, "resize", onResize, this, true);
+  DOMEvent.off(window, "keydown", onKeyDown, intro, true);
+  DOMEvent.off(window, "resize", onResize, intro, true);
 
   //check if any callback is defined
-  if (this._introExitCallback !== undefined) {
-    await this._introExitCallback.call(this);
+  if (intro._introExitCallback !== undefined) {
+    await intro._introExitCallback();
   }
 
   //set the step to zero
-  this._currentStep = undefined;
+  intro._currentStep = undefined;
 }

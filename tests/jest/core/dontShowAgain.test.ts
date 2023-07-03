@@ -3,18 +3,19 @@ import {
   setDontShowAgain,
   getDontShowAgain,
 } from "../../../src/core/dontShowAgain";
+import { IntroJs } from "src/intro";
 
 describe("dontShowAgain", () => {
   test("should call set cookie", () => {
     const setCookieMock = jest.spyOn(cookie, "setCookie");
 
-    setDontShowAgain.call(
+    setDontShowAgain(
       {
         _options: {
           dontShowAgainCookie: "cookie-name",
           dontShowAgainCookieDays: 7,
         },
-      },
+      } as IntroJs,
       true
     );
 
@@ -26,13 +27,13 @@ describe("dontShowAgain", () => {
     const setCookieMock = jest.spyOn(cookie, "setCookie");
     const deleteCookieMock = jest.spyOn(cookie, "deleteCookie");
 
-    setDontShowAgain.call(
+    setDontShowAgain(
       {
         _options: {
           dontShowAgainCookie: "cookie-name",
           dontShowAgainCookieDays: 7,
         },
-      },
+      } as IntroJs,
       false
     );
 
@@ -45,12 +46,12 @@ describe("dontShowAgain", () => {
     jest.spyOn(cookie, "getCookie").mockReturnValue("true");
 
     expect(
-      getDontShowAgain.call({
+      getDontShowAgain({
         _options: {
           dontShowAgainCookie: "cookie-name",
           dontShowAgainCookieDays: 7,
         },
-      })
+      } as IntroJs)
     ).toBe(true);
   });
 
@@ -58,12 +59,12 @@ describe("dontShowAgain", () => {
     jest.spyOn(cookie, "getCookie").mockReturnValue("invalid-state");
 
     expect(
-      getDontShowAgain.call({
+      getDontShowAgain({
         _options: {
           dontShowAgainCookie: "cookie-name",
           dontShowAgainCookieDays: 7,
         },
-      })
+      } as IntroJs)
     ).toBe(false);
   });
 });

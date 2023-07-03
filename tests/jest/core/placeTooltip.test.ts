@@ -1,6 +1,7 @@
 import * as getOffset from "../../../src/util/getOffset";
 import * as getWindowSize from "../../../src/util/getWindowSize";
 import placeTooltip from "../../../src/core/placeTooltip";
+import { IntroJs } from "src/intro";
 
 describe("placeTooltip", () => {
   test("should automatically place the tooltip position when there is enough space", () => {
@@ -32,12 +33,12 @@ describe("placeTooltip", () => {
     const tooltipLayer = document.createElement("div");
     const arrowLayer = document.createElement("div");
 
-    placeTooltip.call(
+    placeTooltip(
       {
         _currentStep: 0,
         _introItems: [
           {
-            tooltip: "hello",
+            intro: "hello",
             position: "top",
           },
         ],
@@ -45,7 +46,7 @@ describe("placeTooltip", () => {
           positionPrecedence: ["top", "bottom", "left", "right"],
           autoPosition: true,
         },
-      },
+      } as IntroJs,
       targetElement,
       tooltipLayer,
       arrowLayer,
@@ -62,12 +63,12 @@ describe("placeTooltip", () => {
     const tooltipLayer = document.createElement("div");
     const arrowLayer = document.createElement("div");
 
-    placeTooltip.call(
+    placeTooltip(
       {
         _currentStep: 0,
         _introItems: [
           {
-            tooltip: "hello",
+            intro: "intro",
             position: "top",
           },
         ],
@@ -75,7 +76,7 @@ describe("placeTooltip", () => {
           positionPrecedence: ["top", "bottom"],
           autoPosition: false,
         },
-      },
+      } as IntroJs,
       targetElement,
       tooltipLayer,
       arrowLayer,
@@ -114,12 +115,12 @@ describe("placeTooltip", () => {
     const tooltipLayer = document.createElement("div");
     const arrowLayer = document.createElement("div");
 
-    placeTooltip.call(
+    placeTooltip(
       {
         _currentStep: 0,
         _introItems: [
           {
-            tooltip: "hello",
+            intro: "hello",
             position: "left",
           },
         ],
@@ -127,7 +128,7 @@ describe("placeTooltip", () => {
           positionPrecedence: ["top", "bottom", "left", "right"],
           autoPosition: true,
         },
-      },
+      } as IntroJs,
       targetElement,
       tooltipLayer,
       arrowLayer,
@@ -166,12 +167,12 @@ describe("placeTooltip", () => {
     const tooltipLayer = document.createElement("div");
     const arrowLayer = document.createElement("div");
 
-    placeTooltip.call(
+    placeTooltip(
       {
         _currentStep: 0,
         _introItems: [
           {
-            tooltip: "hello",
+            intro: "hello",
             position: "left",
           },
         ],
@@ -179,7 +180,7 @@ describe("placeTooltip", () => {
           positionPrecedence: ["top", "bottom", "left", "right"],
           autoPosition: true,
         },
-      },
+      } as IntroJs,
       targetElement,
       tooltipLayer,
       arrowLayer,
@@ -196,12 +197,12 @@ describe("placeTooltip", () => {
     const tooltipLayer = document.createElement("div");
     const arrowLayer = document.createElement("div");
 
-    placeTooltip.call(
+    placeTooltip(
       {
         _currentStep: 0,
         _introItems: [
           {
-            tooltip: "hello",
+            intro: "hello",
             position: "left",
           },
         ],
@@ -210,7 +211,7 @@ describe("placeTooltip", () => {
           autoPosition: true,
           tooltipClass: "newclass",
         },
-      },
+      } as IntroJs,
       targetElement,
       tooltipLayer,
       arrowLayer,
@@ -227,12 +228,12 @@ describe("placeTooltip", () => {
     const tooltipLayer = document.createElement("div");
     const arrowLayer = document.createElement("div");
 
-    placeTooltip.call(
+    placeTooltip(
       {
         _currentStep: 0,
         _introItems: [
           {
-            tooltip: "hello",
+            intro: "hello",
             position: "left",
             tooltipClass: "myclass",
           },
@@ -241,7 +242,7 @@ describe("placeTooltip", () => {
           positionPrecedence: ["top", "bottom", "left", "right"],
           autoPosition: true,
         },
-      },
+      } as IntroJs,
       targetElement,
       tooltipLayer,
       arrowLayer,

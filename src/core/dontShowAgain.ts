@@ -1,3 +1,4 @@
+import { IntroJs } from "src/intro";
 import { deleteCookie, getCookie, setCookie } from "../util/cookie";
 
 const dontShowAgainCookieValue = "true";
@@ -7,15 +8,15 @@ const dontShowAgainCookieValue = "true";
  *
  * @api private
  */
-export function setDontShowAgain(dontShowAgain: boolean) {
+export function setDontShowAgain(intro: IntroJs, dontShowAgain: boolean) {
   if (dontShowAgain) {
     setCookie(
-      this._options.dontShowAgainCookie,
+      intro._options.dontShowAgainCookie,
       dontShowAgainCookieValue,
-      this._options.dontShowAgainCookieDays
+      intro._options.dontShowAgainCookieDays
     );
   } else {
-    deleteCookie(this._options.dontShowAgainCookie);
+    deleteCookie(intro._options.dontShowAgainCookie);
   }
 }
 
@@ -24,7 +25,7 @@ export function setDontShowAgain(dontShowAgain: boolean) {
  *
  * @api private
  */
-export function getDontShowAgain(): boolean {
-  const dontShowCookie = getCookie(this._options.dontShowAgainCookie);
+export function getDontShowAgain(intro: IntroJs): boolean {
+  const dontShowCookie = getCookie(intro._options.dontShowAgainCookie);
   return dontShowCookie && dontShowCookie === dontShowAgainCookieValue;
 }

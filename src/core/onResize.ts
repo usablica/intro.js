@@ -1,5 +1,6 @@
+import { IntroJs } from "src/intro";
 import refresh from "./refresh";
 
-export default function onResize() {
-  refresh.call(this);
+export default function onResize(intro: IntroJs) {
+  refresh(intro);
 }

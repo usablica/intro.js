@@ -4,7 +4,8 @@ import addClass from "../util/addClass";
 import checkRight from "../util/checkRight";
 import checkLeft from "../util/checkLeft";
 import removeEntry from "../util/removeEntry";
-import { Step } from "./steps";
+import { Step, TooltipPosition } from "./steps";
+import { IntroJs } from "src/intro";
 
 /**
  * auto-determine alignment
@@ -68,12 +69,13 @@ function _determineAutoAlignment(
  * of screen space.
  */
 function _determineAutoPosition(
+  positionPrecedence: TooltipPosition[],
   targetElement: HTMLElement,
   tooltipLayer: HTMLElement,
-  desiredTooltipPosition: string
-): string {
+  desiredTooltipPosition: TooltipPosition
+): TooltipPosition {
   // Take a clone of position precedence. These will be the available
-  const possiblePositions = this._options.positionPrecedence.slice();
+  const possiblePositions = positionPrecedence.slice();
 
   const windowSize = getWindowSize();
   const tooltipHeight = getOffset(tooltipLayer).height + 10;
@@ -82,7 +84,7 @@ function _determineAutoPosition(
 
   // If we check all the possible areas, and there are no valid places for the tooltip, the element
   // must take up most of the screen real estate. Show the tooltip floating in the middle of the screen.
-  let calculatedPosition = "floating";
+  let calculatedPosition: TooltipPosition = "floating";
 
   /*
    * auto determine position
@@ -108,7 +110,7 @@ function _determineAutoPosition(
     removeEntry(possiblePositions, "left");
   }
 
-  // @var {String}  ex: 'right-aligned'
+  // ex: 'right-aligned'
   const desiredAlignment = ((pos) => {
     const hyphenIndex = pos.indexOf("-");
     if (hyphenIndex !== -1) {
@@ -122,7 +124,9 @@ function _determineAutoPosition(
   if (desiredTooltipPosition) {
     // ex: "bottom-right-aligned"
     // should return 'bottom'
-    desiredTooltipPosition = desiredTooltipPosition.split("-")[0];
+    desiredTooltipPosition = desiredTooltipPosition.split(
+      "-"
+    )[0] as TooltipPosition;
   }
 
   if (possiblePositions.length) {
@@ -154,10 +158,11 @@ function _determineAutoPosition(
  * @api private
  */
 export default function placeTooltip(
+  intro: IntroJs,
   targetElement: HTMLElement,
   tooltipLayer: HTMLElement,
   arrowLayer: HTMLElement,
-  hintMode: boolean
+  hintMode: boolean = false
 ) {
   let tooltipCssClass = "";
   let currentStepObj: Step;
@@ -174,9 +179,7 @@ export default function placeTooltip(
     height: number;
   };
   let windowSize: { width: number; height: number };
-  let currentTooltipPosition: string;
-
-  hintMode = hintMode || false;
+  let currentTooltipPosition: TooltipPosition;
 
   //reset the old style
   tooltipLayer.style.top = null;
@@ -188,15 +191,15 @@ export default function placeTooltip(
 
   arrowLayer.style.display = "inherit";
 
-  //prevent error when `this._currentStep` is undefined
-  if (!this._introItems[this._currentStep]) return;
+  // prevent error when `_currentStep` is undefined
+  if (!intro._introItems[intro._currentStep]) return;
 
   //if we have a custom css class for each step
-  currentStepObj = this._introItems[this._currentStep];
+  currentStepObj = intro._introItems[intro._currentStep];
   if (typeof currentStepObj.tooltipClass === "string") {
     tooltipCssClass = currentStepObj.tooltipClass;
   } else {
-    tooltipCssClass = this._options.tooltipClass;
+    tooltipCssClass = intro._options.tooltipClass;
   }
 
   tooltipLayer.className = ["introjs-tooltip", tooltipCssClass]
@@ -205,19 +208,19 @@ export default function placeTooltip(
 
   tooltipLayer.setAttribute("role", "dialog");
 
-  currentTooltipPosition = this._introItems[this._currentStep].position;
+  currentTooltipPosition = intro._introItems[intro._currentStep].position;
 
   // Floating is always valid, no point in calculating
-  if (currentTooltipPosition !== "floating" && this._options.autoPosition) {
-    currentTooltipPosition = _determineAutoPosition.call(
-      this,
+  if (currentTooltipPosition !== "floating" && intro._options.autoPosition) {
+    currentTooltipPosition = _determineAutoPosition(
+      intro._options.positionPrecedence,
       targetElement,
       tooltipLayer,
       currentTooltipPosition
     );
   }
 
-  let tooltipLayerStyleLeft;
+  let tooltipLayerStyleLeft: number;
   targetOffset = getOffset(targetElement);
   tooltipOffset = getOffset(tooltipLayer);
   windowSize = getWindowSize();
@@ -299,7 +302,7 @@ export default function placeTooltip(
       }
       break;
     case "left":
-      if (!hintMode && this._options.showStepNumbers === true) {
+      if (!hintMode && intro._options.showStepNumbers === true) {
         tooltipLayer.style.top = "15px";
       }
 
