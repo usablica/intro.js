@@ -98,7 +98,9 @@ export async function nextStep(intro: IntroJs) {
 
   if (typeof intro._introBeforeChangeCallback !== "undefined") {
     continueStep = await intro._introBeforeChangeCallback(
-      nextStep && (nextStep.element as HTMLElement)
+      nextStep && (nextStep.element as HTMLElement),
+      intro._currentStep,
+      intro._direction
     );
   }
 
@@ -144,7 +146,9 @@ export async function previousStep(intro: IntroJs) {
 
   if (typeof intro._introBeforeChangeCallback !== "undefined") {
     continueStep = await intro._introBeforeChangeCallback(
-      nextStep && (nextStep.element as HTMLElement)
+      nextStep && (nextStep.element as HTMLElement),
+      intro._currentStep,
+      intro._direction
     );
   }
 

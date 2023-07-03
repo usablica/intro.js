@@ -21,6 +21,33 @@ import {
 } from "./core/steps";
 import { Options, getDefaultOptions, setOption, setOptions } from "./option";
 
+type introBeforeChangeCallback = (
+  targetElement: HTMLElement,
+  currentStep: number,
+  direction: "backward" | "forward"
+) => Promise<boolean> | boolean;
+type introChangeCallback = (targetElement: HTMLElement) => void | Promise<void>;
+type introAfterChangeCallback = (
+  targetElement: HTMLElement
+) => void | Promise<void>;
+type introCompleteCallback = (
+  currentStep: number,
+  reason: "skip" | "end" | "done"
+) => void | Promise<void>;
+type introStartCallback = (targetElement: HTMLElement) => void | Promise<void>;
+type introExitCallback = () => void | Promise<void>;
+type introSkipCallback = (currentStep: number) => void | Promise<void>;
+type introBeforeExitCallback = (
+  targetElement: HTMLElement
+) => boolean | Promise<boolean>;
+type hintsAddedCallback = () => void | Promise<void>;
+type hintClickCallback = (
+  hintElement: HTMLElement,
+  item: Step,
+  stepId: number
+) => void | Promise<void>;
+type hintCloseCallback = (stepId: number) => void | Promise<void>;
+
 export class IntroJs {
   public _currentStep: number | undefined;
   public _currentStepNumber: number | undefined;
@@ -28,27 +55,18 @@ export class IntroJs {
   public _targetElement: HTMLElement;
   public _introItems: Step[] = [];
   public _options: Options;
-  public _introBeforeChangeCallback?: (
-    targetElement: HTMLElement
-  ) => Promise<boolean> | boolean;
-  public _introChangeCallback?: (targetElement: HTMLElement) => void;
-  public _introAfterChangeCallback?: (targetElement: HTMLElement) => void;
-  public _introCompleteCallback?: (
-    currentStep: number,
-    reason: "skip" | "end" | "done"
-  ) => void;
-  public _introStartCallback?: (targetElement: HTMLElement) => void;
-  public _introExitCallback?: () => void;
-  public _introSkipCallback?: () => void;
-  public _introBeforeExitCallback?: () => boolean;
+  public _introBeforeChangeCallback?: introBeforeChangeCallback;
+  public _introChangeCallback?: introChangeCallback;
+  public _introAfterChangeCallback?: introAfterChangeCallback;
+  public _introCompleteCallback?: introCompleteCallback;
+  public _introStartCallback?: introStartCallback;
+  public _introExitCallback?: introExitCallback;
+  public _introSkipCallback?: introSkipCallback;
+  public _introBeforeExitCallback?: introBeforeExitCallback;
 
-  public _hintsAddedCallback?: () => void;
-  public _hintClickCallback?: (
-    hintElement: HTMLElement,
-    item: Step,
-    stepId: number
-  ) => void;
-  public _hintCloseCallback?: (stepId: number) => void;
+  public _hintsAddedCallback?: hintsAddedCallback;
+  public _hintClickCallback?: hintClickCallback;
+  public _hintCloseCallback?: hintCloseCallback;
 
   public _lastShowElementTimer: number;
   public _hintsAutoRefreshFunction: (...args: any[]) => void;
@@ -144,7 +162,7 @@ export class IntroJs {
     return this;
   }
 
-  onbeforechange(providedCallback: (targetElement: HTMLElement) => boolean) {
+  onbeforechange(providedCallback: introBeforeChangeCallback) {
     if (typeof providedCallback === "function") {
       this._introBeforeChangeCallback = providedCallback;
     } else {
@@ -155,7 +173,7 @@ export class IntroJs {
     return this;
   }
 
-  onchange(providedCallback: (targetElement: HTMLElement) => void) {
+  onchange(providedCallback: introChangeCallback) {
     if (typeof providedCallback === "function") {
       this._introChangeCallback = providedCallback;
     } else {
@@ -164,7 +182,7 @@ export class IntroJs {
     return this;
   }
 
-  onafterchange(providedCallback: (targetElement: HTMLElement) => void) {
+  onafterchange(providedCallback: introAfterChangeCallback) {
     if (typeof providedCallback === "function") {
       this._introAfterChangeCallback = providedCallback;
     } else {
@@ -173,9 +191,7 @@ export class IntroJs {
     return this;
   }
 
-  oncomplete(
-    providedCallback: (currentStep: number, reason: "skip" | "end") => void
-  ) {
+  oncomplete(providedCallback: introCompleteCallback) {
     if (typeof providedCallback === "function") {
       this._introCompleteCallback = providedCallback;
     } else {
@@ -184,7 +200,7 @@ export class IntroJs {
     return this;
   }
 
-  onhintsadded(providedCallback: () => void) {
+  onhintsadded(providedCallback: hintsAddedCallback) {
     if (typeof providedCallback === "function") {
       this._hintsAddedCallback = providedCallback;
     } else {
@@ -193,13 +209,7 @@ export class IntroJs {
     return this;
   }
 
-  onhintclick(
-    providedCallback: (
-      hintElement: HTMLElement,
-      item: Step,
-      stepId: number
-    ) => void
-  ) {
+  onhintclick(providedCallback: hintClickCallback) {
     if (typeof providedCallback === "function") {
       this._hintClickCallback = providedCallback;
     } else {
@@ -208,7 +218,7 @@ export class IntroJs {
     return this;
   }
 
-  onhintclose(providedCallback: (stepId: number) => void) {
+  onhintclose(providedCallback: hintCloseCallback) {
     if (typeof providedCallback === "function") {
       this._hintCloseCallback = providedCallback;
     } else {
@@ -217,7 +227,7 @@ export class IntroJs {
     return this;
   }
 
-  onstart(providedCallback: (targetElement: HTMLElement) => void) {
+  onstart(providedCallback: introStartCallback) {
     if (typeof providedCallback === "function") {
       this._introStartCallback = providedCallback;
     } else {
@@ -226,7 +236,7 @@ export class IntroJs {
     return this;
   }
 
-  onexit(providedCallback: () => void) {
+  onexit(providedCallback: introExitCallback) {
     if (typeof providedCallback === "function") {
       this._introExitCallback = providedCallback;
     } else {
@@ -235,7 +245,7 @@ export class IntroJs {
     return this;
   }
 
-  onskip(providedCallback: () => void) {
+  onskip(providedCallback: introSkipCallback) {
     if (typeof providedCallback === "function") {
       this._introSkipCallback = providedCallback;
     } else {
@@ -244,7 +254,7 @@ export class IntroJs {
     return this;
   }
 
-  onbeforeexit(providedCallback: () => boolean) {
+  onbeforeexit(providedCallback: introBeforeExitCallback) {
     if (typeof providedCallback === "function") {
       this._introBeforeExitCallback = providedCallback;
     } else {
