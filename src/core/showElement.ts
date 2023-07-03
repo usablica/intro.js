@@ -465,7 +465,7 @@ export default async function _showElement(
       }
 
       if (typeof intro._introSkipCallback === "function") {
-        await intro._introSkipCallback();
+        await intro._introSkipCallback(intro._currentStep);
       }
 
       await exitIntro(intro, intro._targetElement);
