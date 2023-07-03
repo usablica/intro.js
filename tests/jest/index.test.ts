@@ -23,6 +23,20 @@ describe("intro", () => {
     document.getElementsByTagName("html")[0].innerHTML = "";
   });
 
+  test("should set the targetElement to document.body", () => {
+    const intro = introJs();
+
+    expect(intro._targetElement).toBe(document.body);
+  });
+
+  test("should set the correct targetElement", () => {
+    const stubTargetElement = document.createElement("div");
+
+    const intro = introJs(stubTargetElement);
+
+    expect(intro._targetElement).toBe(stubTargetElement);
+  });
+
   test("should start floating intro with one step", () => {
     introJs()
       .setOptions({
