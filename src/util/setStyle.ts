@@ -1,7 +1,10 @@
 /**
  * Sets the style of an DOM element
  */
-export default function setStyle(element: HTMLElement, style: string | Object) {
+export default function setStyle(
+  element: HTMLElement,
+  style: string | { [key: string]: string | number }
+) {
   let cssText = "";
 
   if (element.style.cssText) {
