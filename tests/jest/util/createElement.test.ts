@@ -14,6 +14,14 @@ describe("createElement", () => {
     expect(el.className).toBe("myClass");
   });
 
+  test("should create an element with data-* props", () => {
+    const el = createElement("div", {
+      "data-test-prop": "10",
+    });
+
+    expect(el.getAttribute("data-test-prop")).toBe("10");
+  });
+
   test("should create an element with onclick", () => {
     const mock = jest.fn();
     const el = createElement("div", {
