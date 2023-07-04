@@ -42,7 +42,7 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "^11.1.2",
     "@types/jest": "^29.4.2",
-    "@types/node": "^18.15.9",
+    "@types/node": "^20.3.3",
     "autoprefixer": "^9.0.0",
     "babel-jest": "^29.2.2",
     "core-js": "^3.6.5",
