@@ -22,6 +22,15 @@ describe("createElement", () => {
     expect(el.getAttribute("data-test-prop")).toBe("10");
   });
 
+  test("should create an element with correct style", () => {
+    const el = createElement("div", {
+      style: "background: red;font-size: 12px;",
+    });
+
+    expect(el.style.fontSize).toBe("12px");
+    expect(el.style.backgroundColor).toBe("red");
+  });
+
   test("should create an element with onclick", () => {
     const mock = jest.fn();
     const el = createElement("div", {

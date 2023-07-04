@@ -17,7 +17,7 @@ export default function _createElement(
   for (const k in attrs) {
     let v = attrs[k];
 
-    if (k === "style") {
+    if (k === "style" && typeof v !== "function") {
       setStyle(element, v);
     } else if (typeof v === "string" && k.match(setAttRegex)) {
       element.setAttribute(k, v);
