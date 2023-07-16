@@ -98,4 +98,29 @@ describe("exitIntro", () => {
     expect(fnOnExit).toBeCalledTimes(0);
     expect(fnOnBeforeExit).toBeCalledTimes(1);
   });
+
+  test("should continue when exit force is true and beforeExit callback returns false", async () => {
+    const fnOnExit = jest.fn();
+    const fnOnBeforeExit = jest.fn();
+    fnOnBeforeExit.mockReturnValue(false);
+
+    const intro = introJs(document.body);
+    intro
+      .setOptions({
+        steps: [
+          {
+            intro: "step one",
+            element: document.querySelector("h1"),
+          },
+        ],
+      })
+      .onexit(fnOnExit)
+      .onbeforeexit(fnOnBeforeExit);
+
+    await intro.start();
+    await intro.exit(true);
+
+    expect(fnOnExit).toBeCalledTimes(1);
+    expect(fnOnBeforeExit).toBeCalledTimes(1);
+  });
 });
