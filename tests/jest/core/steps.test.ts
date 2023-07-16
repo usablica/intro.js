@@ -3,6 +3,7 @@ import _showElement from "../../../src/core/showElement";
 import { IntroJs } from "src/intro";
 
 jest.mock("../../../src/core/showElement");
+jest.mock("../../../src/core/exitIntro");
 
 describe("steps", () => {
   let context: IntroJs = {
@@ -65,13 +66,31 @@ describe("steps", () => {
     });
 
     test("should call the onBeforeChange callback", async () => {
-      const mock = jest.fn();
-
-      context._introBeforeChangeCallback = mock;
+      const fnBeforeChangeCallback = jest.fn();
+      context._introBeforeChangeCallback = fnBeforeChangeCallback;
 
       await nextStep(context);
 
-      expect(mock).toHaveBeenCalledTimes(1);
+      expect(fnBeforeChangeCallback).toHaveBeenCalledTimes(1);
+      expect(fnBeforeChangeCallback).toHaveBeenCalledWith(
+        undefined,
+        1,
+        "forward"
+      );
+    });
+
+    test("should not continue when onBeforeChange return false", async () => {
+      const showElementMock = jest.fn();
+      (_showElement as jest.Mock).mockImplementation(showElementMock);
+      const fnBeforeChangeCallback = jest.fn();
+      fnBeforeChangeCallback.mockReturnValue(false);
+
+      context._introBeforeChangeCallback = fnBeforeChangeCallback;
+
+      await nextStep(context);
+
+      expect(fnBeforeChangeCallback).toHaveBeenCalledTimes(1);
+      expect(showElementMock).toHaveBeenCalledTimes(0);
     });
 
     test("should wait for the onBeforeChange promise object", async () => {
@@ -97,6 +116,16 @@ describe("steps", () => {
 
       expect(sideEffect).toHaveLength(1);
       expect(onBeforeChangeMock).toHaveBeenCalledBefore(showElementMock);
+    });
+
+    test("should call the complete callback", async () => {
+      const fnCompleteCallback = jest.fn();
+      context._introCompleteCallback = fnCompleteCallback;
+      await nextStep(context);
+      await nextStep(context);
+
+      expect(fnCompleteCallback).toBeCalledTimes(1);
+      expect(fnCompleteCallback).toHaveBeenCalledWith(2, "end");
     });
   });
 });
