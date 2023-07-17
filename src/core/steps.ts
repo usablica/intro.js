@@ -111,8 +111,8 @@ export async function nextStep(intro: IntroJs) {
   }
 
   if (intro._introItems.length <= intro._currentStep) {
-    //end of the intro
-    //check if any callback is defined
+    // end of the intro
+    // check if any callback is defined
     if (typeof intro._introCompleteCallback === "function") {
       await intro._introCompleteCallback(intro._currentStep, "end");
     }
