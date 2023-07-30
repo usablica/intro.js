@@ -1,12 +1,14 @@
 export default function debounce(
   func: Function,
   timeout: number
-): (...args) => void {
-  let timer;
+): (...args: any) => void {
+  let timer: number;
+
   return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.apply(this, args);
+    window.clearTimeout(timer);
+
+    timer = window.setTimeout(() => {
+      func(args);
     }, timeout);
   };
 }

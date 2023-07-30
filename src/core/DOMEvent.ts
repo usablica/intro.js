@@ -43,7 +43,9 @@ class DOMEvent {
       obj.attachEvent(`on${type}`, handler);
     }
 
+    // @ts-ignore
     obj[this.events_key] = obj[this.events_key] || {};
+    // @ts-ignore
     obj[this.events_key][id] = handler;
   }
 
@@ -61,6 +63,7 @@ class DOMEvent {
     useCapture: boolean
   ) {
     const id = this._id(type, listener, context);
+    // @ts-ignore
     const handler = obj[this.events_key] && obj[this.events_key][id];
 
     if (!handler) {
@@ -74,6 +77,7 @@ class DOMEvent {
       obj.detachEvent(`on${type}`, handler);
     }
 
+    // @ts-ignore
     obj[this.events_key][id] = null;
   }
 }

@@ -74,6 +74,6 @@ export default async function exitIntro(
     await intro._introExitCallback();
   }
 
-  //set the step to zero
-  intro._currentStep = undefined;
+  // set the step to default
+  intro._currentStep = -1;
 }

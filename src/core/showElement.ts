@@ -449,7 +449,7 @@ export default async function _showElement(
     prevTooltipButton = createElement("a");
 
     prevTooltipButton.onclick = async () => {
-      if (intro._currentStep !== 0) {
+      if (intro._currentStep > 0) {
         await previousStep(intro);
       }
     };

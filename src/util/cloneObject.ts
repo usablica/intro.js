@@ -2,7 +2,7 @@
  * Makes a copy of an object
  * @api private
  */
-export default function cloneObject<T extends Object>(source: T): T {
+export default function cloneObject<T>(source: T): T {
   if (source === null || typeof source !== "object" || "nodeType" in source) {
     return source;
   }

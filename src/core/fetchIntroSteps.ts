@@ -20,7 +20,7 @@ export default function fetchIntroSteps(
   if (intro._options.steps) {
     //use steps passed programmatically
     for (const step of intro._options.steps) {
-      const currentItem: IntroStep = cloneObject(step);
+      const currentItem = cloneObject(step);
 
       //set the step
       currentItem.step = introItems.length + 1;

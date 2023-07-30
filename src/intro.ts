@@ -50,7 +50,7 @@ type hintClickCallback = (
 type hintCloseCallback = (stepId: number) => void | Promise<void>;
 
 export class IntroJs {
-  public _currentStep: number | undefined;
+  public _currentStep: number = -1;
   public _currentStepNumber: number | undefined;
   public _direction: "forward" | "backward";
   public _targetElement: HTMLElement;

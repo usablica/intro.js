@@ -93,7 +93,7 @@ export async function nextStep(intro: IntroJs) {
     }
   }
 
-  if (typeof intro._currentStep === "undefined") {
+  if (intro._currentStep === -1) {
     intro._currentStep = 0;
   } else {
     ++intro._currentStep;
@@ -141,7 +141,7 @@ export async function nextStep(intro: IntroJs) {
 export async function previousStep(intro: IntroJs) {
   intro._direction = "backward";
 
-  if (intro._currentStep === 0 || intro._currentStep === undefined) {
+  if (intro._currentStep <= 0) {
     return false;
   }
 

@@ -41,6 +41,6 @@ introJs.version = version;
  * @property instances
  * @type Object
  */
-introJs.instances = {};
+introJs.instances = {} as { [key: number]: IntroJs };
 
 export default introJs;

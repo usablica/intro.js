@@ -22,6 +22,7 @@ export default function _createElement(
     } else if (typeof v === "string" && k.match(setAttRegex)) {
       element.setAttribute(k, v);
     } else {
+      // @ts-ignore
       element[k] = v;
     }
   }

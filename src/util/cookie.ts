@@ -1,5 +1,9 @@
 export function setCookie(name: string, value: string, days?: number) {
-  const cookie = { [name]: value, path: "/", expires: undefined };
+  const cookie: {
+    [name: string]: string | undefined;
+    path: string;
+    expires: string | undefined;
+  } = { [name]: value, path: "/", expires: undefined };
 
   if (days) {
     let date = new Date();
@@ -18,7 +22,7 @@ export function setCookie(name: string, value: string, days?: number) {
 }
 
 export function getAllCookies() {
-  let cookie = {};
+  let cookie: { [name: string]: string } = {};
 
   document.cookie.split(";").forEach((el) => {
     let [k, v] = el.split("=");
