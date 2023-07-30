@@ -13,7 +13,8 @@ import {
 import introForElement from "./core/introForElement";
 import refresh from "./core/refresh";
 import {
-  Step,
+  HintStep,
+  IntroStep,
   goToStep,
   goToStepNumber,
   nextStep,
@@ -43,17 +44,18 @@ type introBeforeExitCallback = (
 type hintsAddedCallback = () => void | Promise<void>;
 type hintClickCallback = (
   hintElement: HTMLElement,
-  item: Step,
+  item: HintStep,
   stepId: number
 ) => void | Promise<void>;
 type hintCloseCallback = (stepId: number) => void | Promise<void>;
 
 export class IntroJs {
-  public _currentStep: number;
+  public _currentStep: number | undefined;
   public _currentStepNumber: number | undefined;
   public _direction: "forward" | "backward";
   public _targetElement: HTMLElement;
-  public _introItems: Step[] = [];
+  public _introItems: IntroStep[] = [];
+  public _hintItems: HintStep[] = [];
   public _options: Options;
   public _introBeforeChangeCallback?: introBeforeChangeCallback;
   public _introChangeCallback?: introChangeCallback;
@@ -108,7 +110,7 @@ export class IntroJs {
     return this;
   }
 
-  addStep(step: Step) {
+  addStep(step: IntroStep) {
     if (!this._options.steps) {
       this._options.steps = [];
     }
@@ -118,7 +120,7 @@ export class IntroJs {
     return this;
   }
 
-  addSteps(steps: Step[]) {
+  addSteps(steps: IntroStep[]) {
     if (!steps.length) return this;
 
     for (let index = 0; index < steps.length; index++) {

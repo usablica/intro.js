@@ -4,7 +4,7 @@ import addClass from "../util/addClass";
 import checkRight from "../util/checkRight";
 import checkLeft from "../util/checkLeft";
 import removeEntry from "../util/removeEntry";
-import { Step, TooltipPosition } from "./steps";
+import { HintStep, IntroStep, TooltipPosition } from "./steps";
 import { IntroJs } from "src/intro";
 
 /**
@@ -160,13 +160,14 @@ function _determineAutoPosition(
  */
 export default function placeTooltip(
   intro: IntroJs,
-  targetElement: HTMLElement,
+  currentStep: IntroStep | HintStep,
   tooltipLayer: HTMLElement,
   arrowLayer: HTMLElement,
   hintMode: boolean = false
 ) {
+  if (!currentStep) return;
+
   let tooltipCssClass = "";
-  let currentStepObj: Step;
   let tooltipOffset: {
     top: number;
     left: number;
@@ -192,13 +193,9 @@ export default function placeTooltip(
 
   arrowLayer.style.display = "inherit";
 
-  // prevent error when `_currentStep` is undefined
-  if (!intro._introItems[intro._currentStep]) return;
-
   //if we have a custom css class for each step
-  currentStepObj = intro._introItems[intro._currentStep];
-  if (typeof currentStepObj.tooltipClass === "string") {
-    tooltipCssClass = currentStepObj.tooltipClass;
+  if (typeof currentStep.tooltipClass === "string") {
+    tooltipCssClass = currentStep.tooltipClass;
   } else {
     tooltipCssClass = intro._options.tooltipClass;
   }
@@ -209,20 +206,20 @@ export default function placeTooltip(
 
   tooltipLayer.setAttribute("role", "dialog");
 
-  currentTooltipPosition = intro._introItems[intro._currentStep].position;
+  currentTooltipPosition = currentStep.position;
 
   // Floating is always valid, no point in calculating
   if (currentTooltipPosition !== "floating" && intro._options.autoPosition) {
     currentTooltipPosition = _determineAutoPosition(
       intro._options.positionPrecedence,
-      targetElement,
+      currentStep.element as HTMLElement,
       tooltipLayer,
       currentTooltipPosition
     );
   }
 
   let tooltipLayerStyleLeft: number;
-  targetOffset = getOffset(targetElement);
+  targetOffset = getOffset(currentStep.element as HTMLElement);
   tooltipOffset = getOffset(tooltipLayer);
   windowSize = getWindowSize();
 

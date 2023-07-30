@@ -1,7 +1,7 @@
 import { IntroJs } from "src/intro";
 import cloneObject from "../util/cloneObject";
 import createElement from "../util/createElement";
-import { ScrollTo, Step, TooltipPosition } from "./steps";
+import { IntroStep, ScrollTo, TooltipPosition } from "./steps";
 
 /**
  * Finds all Intro steps from the data-* attributes and the options.steps array
@@ -15,12 +15,12 @@ export default function fetchIntroSteps(
   const allIntroSteps: HTMLElement[] = Array.from(
     targetElm.querySelectorAll("*[data-intro]")
   );
-  let introItems: Step[] = [];
+  let introItems: IntroStep[] = [];
 
   if (intro._options.steps) {
     //use steps passed programmatically
     for (const step of intro._options.steps) {
-      const currentItem: Step = cloneObject(step);
+      const currentItem: IntroStep = cloneObject(step);
 
       //set the step
       currentItem.step = introItems.length + 1;

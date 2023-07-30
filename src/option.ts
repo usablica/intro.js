@@ -1,8 +1,14 @@
-import { HintPosition, ScrollTo, Step, TooltipPosition } from "./core/steps";
+import {
+  HintPosition,
+  HintStep,
+  IntroStep,
+  ScrollTo,
+  TooltipPosition,
+} from "./core/steps";
 
 export interface Options {
-  steps: Step[];
-  hints: Step[];
+  steps: IntroStep[];
+  hints: HintStep[];
   /* Is this tour instance active? Don't show the tour again if this flag is set to false */
   isActive: boolean;
   /* Next button label in tooltip box */

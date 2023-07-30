@@ -4,7 +4,7 @@ import addClass from "../util/addClass";
 import scrollTo from "../util/scrollTo";
 import exitIntro from "./exitIntro";
 import setAnchorAsButton from "../util/setAnchorAsButton";
-import { Step, nextStep, previousStep } from "./steps";
+import { IntroStep, nextStep, previousStep } from "./steps";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import removeShowElement from "./removeShowElement";
@@ -49,7 +49,7 @@ function _disableInteraction(intro: IntroJs) {
  * Creates the bullets layer
  * @private
  */
-function _createBullets(intro: IntroJs, targetElement: Step): HTMLElement {
+function _createBullets(intro: IntroJs, targetElement: IntroStep): HTMLElement {
   const bulletsLayer = createElement("div", {
     className: "introjs-bullets",
   });
@@ -100,7 +100,7 @@ function _createBullets(intro: IntroJs, targetElement: Step): HTMLElement {
  * Deletes and recreates the bullets layer
  * @private
  */
-export function _recreateBullets(intro: IntroJs, targetElement: Step) {
+export function _recreateBullets(intro: IntroJs, targetElement: IntroStep) {
   if (intro._options.showBullets) {
     const existing = document.querySelector(".introjs-bullets");
 
@@ -119,7 +119,7 @@ export function _recreateBullets(intro: IntroJs, targetElement: Step) {
 function _updateBullets(
   showBullets: boolean,
   oldReferenceLayer: HTMLElement,
-  targetElement: Step
+  targetElement: IntroStep
 ) {
   if (showBullets) {
     const oldRefActiveBullet = oldReferenceLayer.querySelector(
@@ -198,7 +198,7 @@ export function _updateProgressBar(
  */
 export default async function _showElement(
   intro: IntroJs,
-  targetElement: Step
+  targetElement: IntroStep
 ) {
   if (typeof intro._introChangeCallback !== "undefined") {
     await intro._introChangeCallback(targetElement.element as HTMLElement);
@@ -289,12 +289,7 @@ export default async function _showElement(
 
       //set the tooltip position
       oldTooltipContainer.style.display = "block";
-      placeTooltip(
-        intro,
-        targetElement.element as HTMLElement,
-        oldTooltipContainer,
-        oldArrowLayer
-      );
+      placeTooltip(intro, targetElement, oldTooltipContainer, oldArrowLayer);
 
       //change active bullet
       _updateBullets(
@@ -498,12 +493,7 @@ export default async function _showElement(
     tooltipLayer.appendChild(buttonsLayer);
 
     // set proper position
-    placeTooltip(
-      intro,
-      targetElement.element as HTMLElement,
-      tooltipLayer,
-      arrowLayer
-    );
+    placeTooltip(intro, targetElement, tooltipLayer, arrowLayer);
 
     // change the scroll of the window, if needed
     scrollTo(

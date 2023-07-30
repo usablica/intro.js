@@ -28,7 +28,7 @@ export type HintPosition =
   | "middle-right"
   | "middle-middle";
 
-export type Step = {
+export type IntroStep = {
   step: number;
   title: string;
   intro: string;
@@ -38,11 +38,16 @@ export type Step = {
   position: TooltipPosition;
   scrollTo: ScrollTo;
   disableInteraction?: boolean;
+};
 
+export type HintStep = {
+  element?: HTMLElement | string;
+  tooltipClass?: string;
+  position: TooltipPosition;
   hint?: string;
   hintTargetElement?: HTMLElement;
   hintAnimation?: boolean;
-  hintPosition?: HintPosition;
+  hintPosition: HintPosition;
 };
 
 /**
