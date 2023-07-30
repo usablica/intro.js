@@ -61,8 +61,11 @@ function _createBullets(intro: IntroJs, targetElement: Step): HTMLElement {
   const ulContainer = createElement("ul");
   ulContainer.setAttribute("role", "tablist");
 
-  const anchorClick = function () {
-    intro.goToStep(this.getAttribute("data-step-number"));
+  const anchorClick = function (this: HTMLElement) {
+    const stepNumber = this.getAttribute("data-step-number");
+    if (stepNumber == null) return;
+
+    intro.goToStep(parseInt(stepNumber, 10));
   };
 
   for (let i = 0; i < intro._introItems.length; i++) {
@@ -101,7 +104,7 @@ export function _recreateBullets(intro: IntroJs, targetElement: Step) {
   if (intro._options.showBullets) {
     const existing = document.querySelector(".introjs-bullets");
 
-    if (existing) {
+    if (existing && existing.parentNode) {
       existing.parentNode.replaceChild(
         _createBullets(intro, targetElement),
         existing
@@ -119,12 +122,18 @@ function _updateBullets(
   targetElement: Step
 ) {
   if (showBullets) {
-    oldReferenceLayer.querySelector(
+    const oldRefActiveBullet = oldReferenceLayer.querySelector(
       ".introjs-bullets li > a.active"
-    ).className = "";
-    oldReferenceLayer.querySelector(
+    );
+
+    const oldRefBulletStepNumber = oldReferenceLayer.querySelector(
       `.introjs-bullets li > a[data-step-number="${targetElement.step}"]`
-    ).className = "active";
+    );
+
+    if (oldRefActiveBullet && oldRefBulletStepNumber) {
+      oldRefActiveBullet.className = "";
+      oldRefBulletStepNumber.className = "active";
+    }
   }
 }
 
@@ -173,6 +182,9 @@ export function _updateProgressBar(
   const progressBar = oldReferenceLayer.querySelector<HTMLElement>(
     ".introjs-progress .introjs-progressbar"
   );
+
+  if (!progressBar) return;
+
   const progress = _getProgress(currentStep, introItemsLength);
 
   progressBar.style.cssText = `width:${progress}%;`;
@@ -216,32 +228,34 @@ export default async function _showElement(
     const oldHelperNumberLayer = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-helperNumberLayer"
     );
-    const oldtooltipLayer = oldReferenceLayer.querySelector<HTMLElement>(
+    const oldTooltipLayer = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-tooltiptext"
-    );
+    ) as HTMLElement;
     const oldTooltipTitleLayer = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-tooltip-title"
-    );
-    const oldArrowLayer =
-      oldReferenceLayer.querySelector<HTMLElement>(".introjs-arrow");
-    const oldtooltipContainer =
-      oldReferenceLayer.querySelector<HTMLElement>(".introjs-tooltip");
+    ) as HTMLElement;
+    const oldArrowLayer = oldReferenceLayer.querySelector<HTMLElement>(
+      ".introjs-arrow"
+    ) as HTMLElement;
+    const oldTooltipContainer = oldReferenceLayer.querySelector<HTMLElement>(
+      ".introjs-tooltip"
+    ) as HTMLElement;
 
     skipTooltipButton = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-skipbutton"
-    );
+    ) as HTMLElement;
     prevTooltipButton = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-prevbutton"
-    );
+    ) as HTMLElement;
     nextTooltipButton = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-nextbutton"
-    );
+    ) as HTMLElement;
 
     //update or reset the helper highlight class
     oldHelperLayer.className = highlightClass;
     //hide the tooltip
-    oldtooltipContainer.style.opacity = "0";
-    oldtooltipContainer.style.display = "none";
+    oldTooltipContainer.style.opacity = "0";
+    oldTooltipContainer.style.display = "none";
 
     // if the target element is within a scrollable element
     scrollParentToElement(
@@ -268,17 +282,17 @@ export default async function _showElement(
       }
 
       // set current tooltip text
-      oldtooltipLayer.innerHTML = targetElement.intro;
+      oldTooltipLayer.innerHTML = targetElement.intro || "";
 
       // set current tooltip title
-      oldTooltipTitleLayer.innerHTML = targetElement.title;
+      oldTooltipTitleLayer.innerHTML = targetElement.title || "";
 
       //set the tooltip position
-      oldtooltipContainer.style.display = "block";
+      oldTooltipContainer.style.display = "block";
       placeTooltip(
         intro,
         targetElement.element as HTMLElement,
-        oldtooltipContainer,
+        oldTooltipContainer,
         oldArrowLayer
       );
 
@@ -296,7 +310,7 @@ export default async function _showElement(
       );
 
       //show the tooltip
-      oldtooltipContainer.style.opacity = "1";
+      oldTooltipContainer.style.opacity = "1";
 
       //reset button focus
       if (

@@ -28,14 +28,14 @@ export type HintPosition =
   | "bottom-middle";
 
 export type Step = {
-  step?: number;
-  title?: string;
-  intro?: string;
+  step: number;
+  title: string;
+  intro: string;
   tooltipClass?: string;
   highlightClass?: string;
   element?: HTMLElement | string;
   position?: TooltipPosition;
-  scrollTo?: ScrollTo;
+  scrollTo: ScrollTo;
   disableInteraction?: boolean;
 
   hint?: string;
@@ -135,7 +135,7 @@ export async function nextStep(intro: IntroJs) {
 export async function previousStep(intro: IntroJs) {
   intro._direction = "backward";
 
-  if (intro._currentStep === 0) {
+  if (intro._currentStep === 0 || intro._currentStep === undefined) {
     return false;
   }
 
