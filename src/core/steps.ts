@@ -11,9 +11,10 @@ export type TooltipPosition =
   | "left"
   | "right"
   | "top-right-aligned"
-  | "top-middle-aligned"
   | "top-left-aligned"
+  | "top-middle-aligned"
   | "bottom-right-aligned"
+  | "bottom-left-aligned"
   | "bottom-middle-aligned";
 
 export type HintPosition =
@@ -22,10 +23,10 @@ export type HintPosition =
   | "top-middle"
   | "bottom-left"
   | "bottom-right"
+  | "bottom-middle"
   | "middle-left"
   | "middle-right"
-  | "middle-middle"
-  | "bottom-middle";
+  | "middle-middle";
 
 export type Step = {
   step: number;
@@ -34,7 +35,7 @@ export type Step = {
   tooltipClass?: string;
   highlightClass?: string;
   element?: HTMLElement | string;
-  position?: TooltipPosition;
+  position: TooltipPosition;
   scrollTo: ScrollTo;
   disableInteraction?: boolean;
 

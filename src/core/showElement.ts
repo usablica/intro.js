@@ -334,7 +334,7 @@ export default async function _showElement(
         targetElement.scrollTo,
         intro._options.scrollPadding,
         targetElement.element as HTMLElement,
-        oldtooltipLayer
+        oldTooltipLayer
       );
     }, 350);
 
@@ -521,7 +521,7 @@ export default async function _showElement(
   const disableInteractionLayer = intro._targetElement.querySelector(
     ".introjs-disableInteraction"
   );
-  if (disableInteractionLayer) {
+  if (disableInteractionLayer && disableInteractionLayer.parentNode) {
     disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
   }
 

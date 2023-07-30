@@ -12,13 +12,13 @@ import { IntroJs } from "src/intro";
 export default function refresh(intro: IntroJs, refreshSteps?: boolean) {
   const referenceLayer = document.querySelector<HTMLElement>(
     ".introjs-tooltipReferenceLayer"
-  );
+  ) as HTMLElement;
   const helperLayer = document.querySelector<HTMLElement>(
     ".introjs-helperLayer"
-  );
+  ) as HTMLElement;
   const disableInteractionLayer = document.querySelector<HTMLElement>(
     ".introjs-disableInteraction"
-  );
+  ) as HTMLElement;
 
   // re-align intros
   setHelperLayerPosition(intro, helperLayer);
