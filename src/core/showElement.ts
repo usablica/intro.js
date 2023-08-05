@@ -29,7 +29,7 @@ function _getProgress(currentStep: number, introItemsLength: number) {
  *
  * @api private
  */
-function _disableInteraction(intro: IntroJs) {
+function _disableInteraction(intro: IntroJs, step: IntroStep) {
   let disableInteractionLayer = document.querySelector<HTMLElement>(
     ".introjs-disableInteraction"
   );
@@ -42,7 +42,7 @@ function _disableInteraction(intro: IntroJs) {
     intro._targetElement.appendChild(disableInteractionLayer);
   }
 
-  setHelperLayerPosition(intro, disableInteractionLayer);
+  setHelperLayerPosition(intro, step, disableInteractionLayer);
 }
 
 /**
@@ -264,8 +264,8 @@ export default async function _showElement(
     );
 
     // set new position to helper layer
-    setHelperLayerPosition(intro, oldHelperLayer);
-    setHelperLayerPosition(intro, oldReferenceLayer);
+    setHelperLayerPosition(intro, targetElement, oldHelperLayer);
+    setHelperLayerPosition(intro, targetElement, oldReferenceLayer);
 
     //remove old classes if the element still exist
     removeShowElement();
@@ -370,8 +370,8 @@ export default async function _showElement(
     );
 
     //set new position to helper layer
-    setHelperLayerPosition(intro, helperLayer);
-    setHelperLayerPosition(intro, referenceLayer);
+    setHelperLayerPosition(intro, targetElement, helperLayer);
+    setHelperLayerPosition(intro, targetElement, referenceLayer);
 
     //add helper layer to target element
     appendChild(intro._targetElement, helperLayer, true);
@@ -517,7 +517,7 @@ export default async function _showElement(
 
   //disable interaction
   if (targetElement.disableInteraction) {
-    _disableInteraction(intro);
+    _disableInteraction(intro, targetElement);
   }
 
   // when it's the first step of tour

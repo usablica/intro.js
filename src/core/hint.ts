@@ -374,24 +374,19 @@ export async function showHintDialog(intro: IntroJs, stepId: number) {
 
   // set current step for _placeTooltip function
   intro._currentStep = parseInt(step, 10);
+  const currentStep = intro._hintItems[intro._currentStep];
 
   // align reference layer position
   referenceLayer.className =
     "introjs-tooltipReferenceLayer introjs-hintReference";
   referenceLayer.setAttribute("data-step", step);
-  setHelperLayerPosition(intro, referenceLayer);
+  setHelperLayerPosition(intro, currentStep, referenceLayer);
 
   referenceLayer.appendChild(tooltipLayer);
   document.body.appendChild(referenceLayer);
 
   // set proper position
-  placeTooltip(
-    intro,
-    intro._hintItems[intro._currentStep],
-    tooltipLayer,
-    arrowLayer,
-    true
-  );
+  placeTooltip(intro, currentStep, tooltipLayer, arrowLayer, true);
 }
 
 /**

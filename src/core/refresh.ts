@@ -12,7 +12,10 @@ import { IntroJs } from "src/intro";
 export default function refresh(intro: IntroJs, refreshSteps?: boolean) {
   const currentStep = intro._currentStep;
 
-  if (currentStep === undefined || currentStep === null) return;
+  if (currentStep === undefined || currentStep === null || currentStep == -1)
+    return;
+
+  const step = intro._introItems[currentStep];
 
   const referenceLayer = document.querySelector<HTMLElement>(
     ".introjs-tooltipReferenceLayer"
@@ -25,13 +28,13 @@ export default function refresh(intro: IntroJs, refreshSteps?: boolean) {
   ) as HTMLElement;
 
   // re-align intros
-  setHelperLayerPosition(intro, helperLayer);
-  setHelperLayerPosition(intro, referenceLayer);
-  setHelperLayerPosition(intro, disableInteractionLayer);
+  setHelperLayerPosition(intro, step, helperLayer);
+  setHelperLayerPosition(intro, step, referenceLayer);
+  setHelperLayerPosition(intro, step, disableInteractionLayer);
 
   if (refreshSteps) {
     intro._introItems = fetchIntroSteps(intro, intro._targetElement);
-    _recreateBullets(intro, intro._introItems[currentStep]);
+    _recreateBullets(intro, step);
     _updateProgressBar(referenceLayer, currentStep, intro._introItems.length);
   }
 

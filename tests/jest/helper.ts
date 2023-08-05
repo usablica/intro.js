@@ -63,3 +63,24 @@ export function appendDummyElement(
 
   return el;
 }
+
+export function getBoundingClientRectSpy(
+  width: number,
+  height: number,
+  top: number,
+  left: number,
+  bottom: number,
+  right: number
+) {
+  return jest.fn(
+    () =>
+      ({
+        top,
+        left,
+        bottom,
+        right,
+        width,
+        height,
+      } as DOMRect)
+  );
+}
