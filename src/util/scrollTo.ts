@@ -1,5 +1,5 @@
-import getWindowSize from "./getWindowSize";
 import elementInViewport from "./elementInViewport";
+import getWindowSize from "./getWindowSize";
 import { ScrollTo } from "src/core/steps";
 
 /**

@@ -1,7 +1,7 @@
-import showElement from "./showElement";
-import exitIntro from "./exitIntro";
-import { IntroJs } from "src/intro";
 import isFunction from "../util/isFunction";
+import exitIntro from "./exitIntro";
+import showElement from "./showElement";
+import { IntroJs } from "src/intro";
 
 export type ScrollTo = "off" | "element" | "tooltip";
 
