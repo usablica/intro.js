@@ -1,7 +1,13 @@
-import stamp from "./util/stamp";
 import { version } from "../package.json";
 import { IntroJs } from "./intro";
+import stamp from "./util/stamp";
 
+/**
+ * Create a new IntroJS instance
+ *
+ * @param targetElm Optional target element to start the tour/hint on
+ * @returns
+ */
 const introJs = (targetElm?: string | HTMLElement) => {
   let instance: IntroJs;
 

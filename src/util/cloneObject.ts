@@ -1,4 +1,4 @@
-/*
+/**
  * Makes a copy of an object
  * @api private
  */
