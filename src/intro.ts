@@ -21,33 +21,51 @@ import {
   previousStep,
 } from "./core/steps";
 import { Options, getDefaultOptions, setOption, setOptions } from "./option";
+import isFunction from "./util/isFunction";
 
 type introBeforeChangeCallback = (
+  this: IntroJs,
   targetElement: HTMLElement,
   currentStep: number,
   direction: "backward" | "forward"
 ) => Promise<boolean> | boolean;
-type introChangeCallback = (targetElement: HTMLElement) => void | Promise<void>;
+type introChangeCallback = (
+  this: IntroJs,
+  targetElement: HTMLElement
+) => void | Promise<void>;
 type introAfterChangeCallback = (
+  this: IntroJs,
   targetElement: HTMLElement
 ) => void | Promise<void>;
 type introCompleteCallback = (
+  this: IntroJs,
   currentStep: number,
   reason: "skip" | "end" | "done"
 ) => void | Promise<void>;
-type introStartCallback = (targetElement: HTMLElement) => void | Promise<void>;
-type introExitCallback = () => void | Promise<void>;
-type introSkipCallback = (currentStep: number) => void | Promise<void>;
+type introStartCallback = (
+  this: IntroJs,
+  targetElement: HTMLElement
+) => void | Promise<void>;
+type introExitCallback = (this: IntroJs) => void | Promise<void>;
+type introSkipCallback = (
+  this: IntroJs,
+  currentStep: number
+) => void | Promise<void>;
 type introBeforeExitCallback = (
+  this: IntroJs,
   targetElement: HTMLElement
 ) => boolean | Promise<boolean>;
-type hintsAddedCallback = () => void | Promise<void>;
+type hintsAddedCallback = (this: IntroJs) => void | Promise<void>;
 type hintClickCallback = (
+  this: IntroJs,
   hintElement: HTMLElement,
   item: HintStep,
   stepId: number
 ) => void | Promise<void>;
-type hintCloseCallback = (stepId: number) => void | Promise<void>;
+type hintCloseCallback = (
+  this: IntroJs,
+  stepId: number
+) => void | Promise<void>;
 
 export class IntroJs {
   public _currentStep: number = -1;
@@ -165,7 +183,7 @@ export class IntroJs {
   }
 
   onbeforechange(providedCallback: introBeforeChangeCallback) {
-    if (typeof providedCallback === "function") {
+    if (isFunction(providedCallback)) {
       this._introBeforeChangeCallback = providedCallback;
     } else {
       throw new Error(
@@ -176,7 +194,7 @@ export class IntroJs {
   }
 
   onchange(providedCallback: introChangeCallback) {
-    if (typeof providedCallback === "function") {
+    if (isFunction(providedCallback)) {
       this._introChangeCallback = providedCallback;
     } else {
       throw new Error("Provided callback for onchange was not a function.");
@@ -185,7 +203,7 @@ export class IntroJs {
   }
 
   onafterchange(providedCallback: introAfterChangeCallback) {
-    if (typeof providedCallback === "function") {
+    if (isFunction(providedCallback)) {
       this._introAfterChangeCallback = providedCallback;
     } else {
       throw new Error("Provided callback for onafterchange was not a function");
@@ -194,7 +212,7 @@ export class IntroJs {
   }
 
   oncomplete(providedCallback: introCompleteCallback) {
-    if (typeof providedCallback === "function") {
+    if (isFunction(providedCallback)) {
       this._introCompleteCallback = providedCallback;
     } else {
       throw new Error("Provided callback for oncomplete was not a function.");
@@ -203,7 +221,7 @@ export class IntroJs {
   }
 
   onhintsadded(providedCallback: hintsAddedCallback) {
-    if (typeof providedCallback === "function") {
+    if (isFunction(providedCallback)) {
       this._hintsAddedCallback = providedCallback;
     } else {
       throw new Error("Provided callback for onhintsadded was not a function.");
@@ -212,7 +230,7 @@ export class IntroJs {
   }
 
   onhintclick(providedCallback: hintClickCallback) {
-    if (typeof providedCallback === "function") {
+    if (isFunction(providedCallback)) {
       this._hintClickCallback = providedCallback;
     } else {
       throw new Error("Provided callback for onhintclick was not a function.");
@@ -221,7 +239,7 @@ export class IntroJs {
   }
 
   onhintclose(providedCallback: hintCloseCallback) {
-    if (typeof providedCallback === "function") {
+    if (isFunction(providedCallback)) {
       this._hintCloseCallback = providedCallback;
     } else {
       throw new Error("Provided callback for onhintclose was not a function.");
@@ -230,7 +248,7 @@ export class IntroJs {
   }
 
   onstart(providedCallback: introStartCallback) {
-    if (typeof providedCallback === "function") {
+    if (isFunction(providedCallback)) {
       this._introStartCallback = providedCallback;
     } else {
       throw new Error("Provided callback for onstart was not a function.");
@@ -239,7 +257,7 @@ export class IntroJs {
   }
 
   onexit(providedCallback: introExitCallback) {
-    if (typeof providedCallback === "function") {
+    if (isFunction(providedCallback)) {
       this._introExitCallback = providedCallback;
     } else {
       throw new Error("Provided callback for onexit was not a function.");
@@ -248,7 +266,7 @@ export class IntroJs {
   }
 
   onskip(providedCallback: introSkipCallback) {
-    if (typeof providedCallback === "function") {
+    if (isFunction(providedCallback)) {
       this._introSkipCallback = providedCallback;
     } else {
       throw new Error("Provided callback for onskip was not a function.");
@@ -257,7 +275,7 @@ export class IntroJs {
   }
 
   onbeforeexit(providedCallback: introBeforeExitCallback) {
-    if (typeof providedCallback === "function") {
+    if (isFunction(providedCallback)) {
       this._introBeforeExitCallback = providedCallback;
     } else {
       throw new Error("Provided callback for onbeforeexit was not a function.");

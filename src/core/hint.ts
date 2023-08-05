@@ -11,6 +11,7 @@ import createElement from "../util/createElement";
 import debounce from "../util/debounce";
 import { HintPosition, HintStep, TooltipPosition } from "./steps";
 import { IntroJs } from "src/intro";
+import isFunction from "../util/isFunction";
 
 /**
  * Get a queryselector within the hint wrapper
@@ -37,8 +38,8 @@ export async function hideHint(intro: IntroJs, stepId: number) {
   }
 
   // call the callback function (if any)
-  if (typeof intro._hintCloseCallback !== "undefined") {
-    await intro._hintCloseCallback(stepId);
+  if (isFunction(intro._hintCloseCallback)) {
+    await intro._hintCloseCallback.call(intro, stepId);
   }
 }
 
@@ -222,8 +223,8 @@ export async function addHints(intro: IntroJs) {
   document.body.appendChild(hintsWrapper);
 
   // call the callback function (if any)
-  if (typeof intro._hintsAddedCallback !== "undefined") {
-    await intro._hintsAddedCallback();
+  if (isFunction(intro._hintsAddedCallback)) {
+    await intro._hintsAddedCallback.call(intro);
   }
 
   if (intro._options.hintAutoRefreshInterval >= 0) {
@@ -320,8 +321,8 @@ export async function showHintDialog(intro: IntroJs, stepId: number) {
   const item = intro._hintItems[stepId];
 
   // call the callback function (if any)
-  if (typeof intro._hintClickCallback !== "undefined") {
-    await intro._hintClickCallback(hintElement, item, stepId);
+  if (isFunction(intro._hintClickCallback)) {
+    await intro._hintClickCallback.call(intro, hintElement, item, stepId);
   }
 
   // remove all open tooltips

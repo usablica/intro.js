@@ -1,6 +1,7 @@
 import showElement from "./showElement";
 import exitIntro from "./exitIntro";
 import { IntroJs } from "src/intro";
+import isFunction from "../util/isFunction";
 
 export type ScrollTo = "off" | "element" | "tooltip";
 
@@ -102,8 +103,9 @@ export async function nextStep(intro: IntroJs) {
   const nextStep = intro._introItems[intro._currentStep];
   let continueStep = true;
 
-  if (typeof intro._introBeforeChangeCallback !== "undefined") {
-    continueStep = await intro._introBeforeChangeCallback(
+  if (isFunction(intro._introBeforeChangeCallback)) {
+    continueStep = await intro._introBeforeChangeCallback.call(
+      intro,
       nextStep && (nextStep.element as HTMLElement),
       intro._currentStep,
       intro._direction
@@ -119,8 +121,8 @@ export async function nextStep(intro: IntroJs) {
   if (intro._introItems.length <= intro._currentStep) {
     // end of the intro
     // check if any callback is defined
-    if (typeof intro._introCompleteCallback === "function") {
-      await intro._introCompleteCallback(intro._currentStep, "end");
+    if (isFunction(intro._introCompleteCallback)) {
+      await intro._introCompleteCallback.call(intro, intro._currentStep, "end");
     }
 
     await exitIntro(intro, intro._targetElement);
@@ -150,8 +152,9 @@ export async function previousStep(intro: IntroJs) {
   const nextStep = intro._introItems[intro._currentStep];
   let continueStep = true;
 
-  if (typeof intro._introBeforeChangeCallback !== "undefined") {
-    continueStep = await intro._introBeforeChangeCallback(
+  if (isFunction(intro._introBeforeChangeCallback)) {
+    continueStep = await intro._introBeforeChangeCallback.call(
+      intro,
       nextStep && (nextStep.element as HTMLElement),
       intro._currentStep,
       intro._direction

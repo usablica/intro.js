@@ -16,6 +16,7 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "declaration": true,
+    "strictBindCallApply": true,
     "rootDir": ".",
     "baseUrl": "./",
     "outDir": "dist"

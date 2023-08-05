@@ -12,6 +12,7 @@ import createElement from "../util/createElement";
 import setStyle from "../util/setStyle";
 import appendChild from "../util/appendChild";
 import { IntroJs } from "src/intro";
+import isFunction from "../util/isFunction";
 
 /**
  * Gets the current progress percentage
@@ -200,8 +201,8 @@ export default async function _showElement(
   intro: IntroJs,
   targetElement: IntroStep
 ) {
-  if (typeof intro._introChangeCallback !== "undefined") {
-    await intro._introChangeCallback(targetElement.element as HTMLElement);
+  if (isFunction(intro._introChangeCallback)) {
+    await intro._introChangeCallback.call(intro, targetElement.element);
   }
 
   const oldHelperLayer = document.querySelector<HTMLElement>(
@@ -434,8 +435,12 @@ export default async function _showElement(
       if (intro._introItems.length - 1 !== intro._currentStep) {
         await nextStep(intro);
       } else if (/introjs-donebutton/gi.test(nextTooltipButton.className)) {
-        if (typeof intro._introCompleteCallback === "function") {
-          await intro._introCompleteCallback(intro._currentStep, "done");
+        if (isFunction(intro._introCompleteCallback)) {
+          await intro._introCompleteCallback.call(
+            intro,
+            intro._currentStep,
+            "done"
+          );
         }
 
         await exitIntro(intro, intro._targetElement);
@@ -468,13 +473,17 @@ export default async function _showElement(
     skipTooltipButton.onclick = async () => {
       if (
         intro._introItems.length - 1 === intro._currentStep &&
-        typeof intro._introCompleteCallback === "function"
+        isFunction(intro._introCompleteCallback)
       ) {
-        await intro._introCompleteCallback(intro._currentStep, "skip");
+        await intro._introCompleteCallback.call(
+          intro,
+          intro._currentStep,
+          "skip"
+        );
       }
 
-      if (typeof intro._introSkipCallback === "function") {
-        await intro._introSkipCallback(intro._currentStep);
+      if (isFunction(intro._introSkipCallback)) {
+        await intro._introSkipCallback.call(intro, intro._currentStep);
       }
 
       await exitIntro(intro, intro._targetElement);
@@ -626,7 +635,7 @@ export default async function _showElement(
 
   setShowElement(targetElement.element as HTMLElement);
 
-  if (typeof intro._introAfterChangeCallback !== "undefined") {
-    await intro._introAfterChangeCallback(targetElement.element as HTMLElement);
+  if (isFunction(intro._introAfterChangeCallback)) {
+    await intro._introAfterChangeCallback.call(intro, targetElement.element);
   }
 }
