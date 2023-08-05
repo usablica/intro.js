@@ -34,14 +34,14 @@ export type IntroStep = {
   intro: string;
   tooltipClass?: string;
   highlightClass?: string;
-  element?: HTMLElement | string;
+  element?: HTMLElement | string | null;
   position: TooltipPosition;
   scrollTo: ScrollTo;
   disableInteraction?: boolean;
 };
 
 export type HintStep = {
-  element?: HTMLElement | string;
+  element?: HTMLElement | string | null;
   tooltipClass?: string;
   position: TooltipPosition;
   hint?: string;

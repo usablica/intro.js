@@ -16,7 +16,7 @@ describe("exitIntro", () => {
 
     intro.exit(false);
 
-    expect(intro._currentStep).toBeUndefined();
+    expect(intro._currentStep).toBe(-1);
   });
 
   test("should call the onexit and onbeforeexit callbacks", async () => {
@@ -30,7 +30,7 @@ describe("exitIntro", () => {
         steps: [
           {
             intro: "step one",
-            element: document.querySelector("h1"),
+            element: document.querySelector("h1") as HTMLElement,
           },
         ],
       })
@@ -110,7 +110,7 @@ describe("exitIntro", () => {
         steps: [
           {
             intro: "step one",
-            element: document.querySelector("h1"),
+            element: document.querySelector("h1") as HTMLElement,
           },
         ],
       })

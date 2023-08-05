@@ -259,10 +259,15 @@ describe("intro", () => {
     const intro2 = introJs();
     const intro3 = introJs();
 
-    expect(intro1["introjs-instance"]).not.toBeNull();
-    expect(intro2["introjs-instance"]).not.toBeNull();
-    expect(intro3["introjs-instance"]).not.toBeNull();
+    //@ts-ignore
+    expect(intro1["introjs-instance"]).toBeNumber();
+    //@ts-ignore
+    expect(intro2["introjs-instance"]).toBeNumber();
+    //@ts-ignore
+    expect(intro3["introjs-instance"]).toBeNumber();
+    //@ts-ignore
     expect(intro1["introjs-instance"]).not.toBe(intro2["introjs-instance"]);
+    //@ts-ignore
     expect(intro2["introjs-instance"]).not.toBe(intro3["introjs-instance"]);
   });
 

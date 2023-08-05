@@ -7,8 +7,8 @@ import {
 } from "./core/steps";
 
 export interface Options {
-  steps: IntroStep[];
-  hints: HintStep[];
+  steps: Partial<IntroStep>[];
+  hints: Partial<HintStep>[];
   /* Is this tour instance active? Don't show the tour again if this flag is set to false */
   isActive: boolean;
   /* Next button label in tooltip box */

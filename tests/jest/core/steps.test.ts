@@ -6,11 +6,7 @@ jest.mock("../../../src/core/showElement");
 jest.mock("../../../src/core/exitIntro");
 
 describe("steps", () => {
-  let context: IntroJs = {
-    _currentStep: 0,
-    _introItems: [],
-    _introBeforeChangeCallback: undefined,
-  } as IntroJs;
+  let context: IntroJs;
 
   beforeEach(() => {
     context = {
@@ -98,7 +94,7 @@ describe("steps", () => {
       (_showElement as jest.Mock).mockImplementation(showElementMock);
 
       const onBeforeChangeMock = jest.fn();
-      const sideEffect = [];
+      const sideEffect: number[] = [];
 
       context._introBeforeChangeCallback = async () => {
         return new Promise<boolean>((res) => {

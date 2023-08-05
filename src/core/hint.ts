@@ -9,7 +9,7 @@ import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import createElement from "../util/createElement";
 import debounce from "../util/debounce";
-import { HintPosition, TooltipPosition } from "./steps";
+import { HintPosition, HintStep, TooltipPosition } from "./steps";
 import { IntroJs } from "src/intro";
 
 /**
@@ -442,7 +442,7 @@ export async function populateHints(
         currentItem.hintAnimation || intro._options.hintAnimation;
 
       if (currentItem.element !== null) {
-        intro._hintItems.push(currentItem);
+        intro._hintItems.push(currentItem as HintStep);
       }
     }
   } else {

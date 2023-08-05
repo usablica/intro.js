@@ -17,7 +17,7 @@ export default function fetchIntroSteps(
   );
   let introItems: IntroStep[] = [];
 
-  if (intro._options.steps) {
+  if (intro._options.steps && intro._options.steps.length) {
     //use steps passed programmatically
     for (const step of intro._options.steps) {
       const currentItem = cloneObject(step);
@@ -65,7 +65,7 @@ export default function fetchIntroSteps(
       }
 
       if (currentItem.element !== null) {
-        introItems.push(currentItem);
+        introItems.push(currentItem as IntroStep);
       }
     }
   } else {
