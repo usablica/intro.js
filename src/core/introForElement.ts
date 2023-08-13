@@ -5,6 +5,7 @@ import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import fetchIntroSteps from "./fetchIntroSteps";
 import { IntroJs } from "src/intro";
+import isFunction from "../util/isFunction";
 
 /**
  * Initiate a new introduction/guide from an element in the page
@@ -18,8 +19,8 @@ export default async function introForElement(
   // don't start the tour if the instance is not active
   if (!intro.isActive()) return false;
 
-  if (intro._introStartCallback !== undefined) {
-    await intro._introStartCallback(targetElm);
+  if (isFunction(intro._introStartCallback)) {
+    await intro._introStartCallback.call(intro, targetElm);
   }
 
   //set it to the introJs object

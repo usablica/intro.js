@@ -27,5 +27,5 @@ export function setDontShowAgain(intro: IntroJs, dontShowAgain: boolean) {
  */
 export function getDontShowAgain(intro: IntroJs): boolean {
   const dontShowCookie = getCookie(intro._options.dontShowAgainCookie);
-  return dontShowCookie && dontShowCookie === dontShowAgainCookieValue;
+  return dontShowCookie !== "" && dontShowCookie === dontShowAgainCookieValue;
 }

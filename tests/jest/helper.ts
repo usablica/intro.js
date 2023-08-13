@@ -1,6 +1,6 @@
 export function find(selector: string | HTMLElement): HTMLElement {
   if (typeof selector === "string") {
-    return document.querySelector(selector);
+    return document.querySelector(selector) as HTMLElement;
   }
 
   if (selector instanceof Element) {
@@ -10,7 +10,7 @@ export function find(selector: string | HTMLElement): HTMLElement {
   throw Error("invalid selector");
 }
 
-export function content(selector: string | HTMLElement): string | undefined {
+export function content(selector: string | HTMLElement): string | null {
   const el = find(selector);
 
   if (el) {
@@ -20,7 +20,7 @@ export function content(selector: string | HTMLElement): string | undefined {
   return null;
 }
 
-export function className(selector: string | HTMLElement): string {
+export function className(selector: string | HTMLElement): string | null {
   const el = find(selector);
 
   if (el) {
@@ -57,9 +57,30 @@ export function appendDummyElement(
 ): HTMLElement {
   const el = document.createElement(name || "p");
   el.innerHTML = text || "hello world";
-  el.setAttribute("style", style);
+  el.setAttribute("style", style || "");
 
   document.body.appendChild(el);
 
   return el;
+}
+
+export function getBoundingClientRectSpy(
+  width: number,
+  height: number,
+  top: number,
+  left: number,
+  bottom: number,
+  right: number
+) {
+  return jest.fn(
+    () =>
+      ({
+        top,
+        left,
+        bottom,
+        right,
+        width,
+        height,
+      } as DOMRect)
+  );
 }

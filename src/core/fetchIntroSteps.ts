@@ -1,7 +1,7 @@
 import { IntroJs } from "src/intro";
 import cloneObject from "../util/cloneObject";
 import createElement from "../util/createElement";
-import { ScrollTo, Step, TooltipPosition } from "./steps";
+import { IntroStep, ScrollTo, TooltipPosition } from "./steps";
 
 /**
  * Finds all Intro steps from the data-* attributes and the options.steps array
@@ -15,12 +15,12 @@ export default function fetchIntroSteps(
   const allIntroSteps: HTMLElement[] = Array.from(
     targetElm.querySelectorAll("*[data-intro]")
   );
-  let introItems: Step[] = [];
+  let introItems: IntroStep[] = [];
 
-  if (intro._options.steps) {
+  if (intro._options.steps && intro._options.steps.length) {
     //use steps passed programmatically
     for (const step of intro._options.steps) {
-      const currentItem: Step = cloneObject(step);
+      const currentItem = cloneObject(step);
 
       //set the step
       currentItem.step = introItems.length + 1;
@@ -30,9 +30,8 @@ export default function fetchIntroSteps(
       //use querySelector function only when developer used CSS selector
       if (typeof currentItem.element === "string") {
         //grab the element with given selector from the page
-        currentItem.element = document.querySelector<HTMLElement>(
-          currentItem.element
-        );
+        currentItem.element =
+          document.querySelector<HTMLElement>(currentItem.element) || undefined;
       }
 
       //intro without element
@@ -66,7 +65,7 @@ export default function fetchIntroSteps(
       }
 
       if (currentItem.element !== null) {
-        introItems.push(currentItem);
+        introItems.push(currentItem as IntroStep);
       }
     }
   } else {
@@ -93,24 +92,25 @@ export default function fetchIntroSteps(
         continue;
       }
 
-      const step = parseInt(currentElement.getAttribute("data-step"), 10);
+      const step = parseInt(currentElement.getAttribute("data-step") || "", 10);
 
+      disableInteraction = intro._options.disableInteraction;
       if (currentElement.hasAttribute("data-disable-interaction")) {
         disableInteraction = !!currentElement.getAttribute(
           "data-disable-interaction"
         );
-      } else {
-        disableInteraction = intro._options.disableInteraction;
       }
 
       if (step > 0) {
         introItems[step - 1] = {
+          step: step,
           element: currentElement,
           title: currentElement.getAttribute("data-title") || "",
-          intro: currentElement.getAttribute("data-intro"),
-          step: parseInt(currentElement.getAttribute("data-step"), 10),
-          tooltipClass: currentElement.getAttribute("data-tooltip-class"),
-          highlightClass: currentElement.getAttribute("data-highlight-class"),
+          intro: currentElement.getAttribute("data-intro") || "",
+          tooltipClass:
+            currentElement.getAttribute("data-tooltip-class") || undefined,
+          highlightClass:
+            currentElement.getAttribute("data-highlight-class") || undefined,
           position: (currentElement.getAttribute("data-position") ||
             intro._options.tooltipPosition) as TooltipPosition,
           scrollTo:
@@ -154,10 +154,12 @@ export default function fetchIntroSteps(
         introItems[nextStep] = {
           element: currentElement,
           title: currentElement.getAttribute("data-title") || "",
-          intro: currentElement.getAttribute("data-intro"),
+          intro: currentElement.getAttribute("data-intro") || "",
           step: nextStep + 1,
-          tooltipClass: currentElement.getAttribute("data-tooltip-class"),
-          highlightClass: currentElement.getAttribute("data-highlight-class"),
+          tooltipClass:
+            currentElement.getAttribute("data-tooltip-class") || undefined,
+          highlightClass:
+            currentElement.getAttribute("data-highlight-class") || undefined,
           position: (currentElement.getAttribute("data-position") ||
             intro._options.tooltipPosition) as TooltipPosition,
           scrollTo:

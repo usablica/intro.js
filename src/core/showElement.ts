@@ -4,7 +4,7 @@ import addClass from "../util/addClass";
 import scrollTo from "../util/scrollTo";
 import exitIntro from "./exitIntro";
 import setAnchorAsButton from "../util/setAnchorAsButton";
-import { Step, nextStep, previousStep } from "./steps";
+import { IntroStep, nextStep, previousStep } from "./steps";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import removeShowElement from "./removeShowElement";
@@ -12,6 +12,7 @@ import createElement from "../util/createElement";
 import setStyle from "../util/setStyle";
 import appendChild from "../util/appendChild";
 import { IntroJs } from "src/intro";
+import isFunction from "../util/isFunction";
 
 /**
  * Gets the current progress percentage
@@ -29,7 +30,7 @@ function _getProgress(currentStep: number, introItemsLength: number) {
  *
  * @api private
  */
-function _disableInteraction(intro: IntroJs) {
+function _disableInteraction(intro: IntroJs, step: IntroStep) {
   let disableInteractionLayer = document.querySelector<HTMLElement>(
     ".introjs-disableInteraction"
   );
@@ -42,14 +43,14 @@ function _disableInteraction(intro: IntroJs) {
     intro._targetElement.appendChild(disableInteractionLayer);
   }
 
-  setHelperLayerPosition(intro, disableInteractionLayer);
+  setHelperLayerPosition(intro, step, disableInteractionLayer);
 }
 
 /**
  * Creates the bullets layer
  * @private
  */
-function _createBullets(intro: IntroJs, targetElement: Step): HTMLElement {
+function _createBullets(intro: IntroJs, targetElement: IntroStep): HTMLElement {
   const bulletsLayer = createElement("div", {
     className: "introjs-bullets",
   });
@@ -61,8 +62,11 @@ function _createBullets(intro: IntroJs, targetElement: Step): HTMLElement {
   const ulContainer = createElement("ul");
   ulContainer.setAttribute("role", "tablist");
 
-  const anchorClick = function () {
-    intro.goToStep(this.getAttribute("data-step-number"));
+  const anchorClick = function (this: HTMLElement) {
+    const stepNumber = this.getAttribute("data-step-number");
+    if (stepNumber == null) return;
+
+    intro.goToStep(parseInt(stepNumber, 10));
   };
 
   for (let i = 0; i < intro._introItems.length; i++) {
@@ -97,11 +101,11 @@ function _createBullets(intro: IntroJs, targetElement: Step): HTMLElement {
  * Deletes and recreates the bullets layer
  * @private
  */
-export function _recreateBullets(intro: IntroJs, targetElement: Step) {
+export function _recreateBullets(intro: IntroJs, targetElement: IntroStep) {
   if (intro._options.showBullets) {
     const existing = document.querySelector(".introjs-bullets");
 
-    if (existing) {
+    if (existing && existing.parentNode) {
       existing.parentNode.replaceChild(
         _createBullets(intro, targetElement),
         existing
@@ -116,15 +120,21 @@ export function _recreateBullets(intro: IntroJs, targetElement: Step) {
 function _updateBullets(
   showBullets: boolean,
   oldReferenceLayer: HTMLElement,
-  targetElement: Step
+  targetElement: IntroStep
 ) {
   if (showBullets) {
-    oldReferenceLayer.querySelector(
+    const oldRefActiveBullet = oldReferenceLayer.querySelector(
       ".introjs-bullets li > a.active"
-    ).className = "";
-    oldReferenceLayer.querySelector(
+    );
+
+    const oldRefBulletStepNumber = oldReferenceLayer.querySelector(
       `.introjs-bullets li > a[data-step-number="${targetElement.step}"]`
-    ).className = "active";
+    );
+
+    if (oldRefActiveBullet && oldRefBulletStepNumber) {
+      oldRefActiveBullet.className = "";
+      oldRefBulletStepNumber.className = "active";
+    }
   }
 }
 
@@ -173,6 +183,9 @@ export function _updateProgressBar(
   const progressBar = oldReferenceLayer.querySelector<HTMLElement>(
     ".introjs-progress .introjs-progressbar"
   );
+
+  if (!progressBar) return;
+
   const progress = _getProgress(currentStep, introItemsLength);
 
   progressBar.style.cssText = `width:${progress}%;`;
@@ -186,10 +199,10 @@ export function _updateProgressBar(
  */
 export default async function _showElement(
   intro: IntroJs,
-  targetElement: Step
+  targetElement: IntroStep
 ) {
-  if (typeof intro._introChangeCallback !== "undefined") {
-    await intro._introChangeCallback(targetElement.element as HTMLElement);
+  if (isFunction(intro._introChangeCallback)) {
+    await intro._introChangeCallback.call(intro, targetElement.element);
   }
 
   const oldHelperLayer = document.querySelector<HTMLElement>(
@@ -216,32 +229,34 @@ export default async function _showElement(
     const oldHelperNumberLayer = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-helperNumberLayer"
     );
-    const oldtooltipLayer = oldReferenceLayer.querySelector<HTMLElement>(
+    const oldTooltipLayer = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-tooltiptext"
-    );
+    ) as HTMLElement;
     const oldTooltipTitleLayer = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-tooltip-title"
-    );
-    const oldArrowLayer =
-      oldReferenceLayer.querySelector<HTMLElement>(".introjs-arrow");
-    const oldtooltipContainer =
-      oldReferenceLayer.querySelector<HTMLElement>(".introjs-tooltip");
+    ) as HTMLElement;
+    const oldArrowLayer = oldReferenceLayer.querySelector<HTMLElement>(
+      ".introjs-arrow"
+    ) as HTMLElement;
+    const oldTooltipContainer = oldReferenceLayer.querySelector<HTMLElement>(
+      ".introjs-tooltip"
+    ) as HTMLElement;
 
     skipTooltipButton = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-skipbutton"
-    );
+    ) as HTMLElement;
     prevTooltipButton = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-prevbutton"
-    );
+    ) as HTMLElement;
     nextTooltipButton = oldReferenceLayer.querySelector<HTMLElement>(
       ".introjs-nextbutton"
-    );
+    ) as HTMLElement;
 
     //update or reset the helper highlight class
     oldHelperLayer.className = highlightClass;
     //hide the tooltip
-    oldtooltipContainer.style.opacity = "0";
-    oldtooltipContainer.style.display = "none";
+    oldTooltipContainer.style.opacity = "0";
+    oldTooltipContainer.style.display = "none";
 
     // if the target element is within a scrollable element
     scrollParentToElement(
@@ -250,8 +265,8 @@ export default async function _showElement(
     );
 
     // set new position to helper layer
-    setHelperLayerPosition(intro, oldHelperLayer);
-    setHelperLayerPosition(intro, oldReferenceLayer);
+    setHelperLayerPosition(intro, targetElement, oldHelperLayer);
+    setHelperLayerPosition(intro, targetElement, oldReferenceLayer);
 
     //remove old classes if the element still exist
     removeShowElement();
@@ -268,19 +283,14 @@ export default async function _showElement(
       }
 
       // set current tooltip text
-      oldtooltipLayer.innerHTML = targetElement.intro;
+      oldTooltipLayer.innerHTML = targetElement.intro || "";
 
       // set current tooltip title
-      oldTooltipTitleLayer.innerHTML = targetElement.title;
+      oldTooltipTitleLayer.innerHTML = targetElement.title || "";
 
       //set the tooltip position
-      oldtooltipContainer.style.display = "block";
-      placeTooltip(
-        intro,
-        targetElement.element as HTMLElement,
-        oldtooltipContainer,
-        oldArrowLayer
-      );
+      oldTooltipContainer.style.display = "block";
+      placeTooltip(intro, targetElement, oldTooltipContainer, oldArrowLayer);
 
       //change active bullet
       _updateBullets(
@@ -296,7 +306,7 @@ export default async function _showElement(
       );
 
       //show the tooltip
-      oldtooltipContainer.style.opacity = "1";
+      oldTooltipContainer.style.opacity = "1";
 
       //reset button focus
       if (
@@ -320,7 +330,7 @@ export default async function _showElement(
         targetElement.scrollTo,
         intro._options.scrollPadding,
         targetElement.element as HTMLElement,
-        oldtooltipLayer
+        oldTooltipLayer
       );
     }, 350);
 
@@ -361,8 +371,8 @@ export default async function _showElement(
     );
 
     //set new position to helper layer
-    setHelperLayerPosition(intro, helperLayer);
-    setHelperLayerPosition(intro, referenceLayer);
+    setHelperLayerPosition(intro, targetElement, helperLayer);
+    setHelperLayerPosition(intro, targetElement, referenceLayer);
 
     //add helper layer to target element
     appendChild(intro._targetElement, helperLayer, true);
@@ -425,8 +435,12 @@ export default async function _showElement(
       if (intro._introItems.length - 1 !== intro._currentStep) {
         await nextStep(intro);
       } else if (/introjs-donebutton/gi.test(nextTooltipButton.className)) {
-        if (typeof intro._introCompleteCallback === "function") {
-          await intro._introCompleteCallback(intro._currentStep, "done");
+        if (isFunction(intro._introCompleteCallback)) {
+          await intro._introCompleteCallback.call(
+            intro,
+            intro._currentStep,
+            "done"
+          );
         }
 
         await exitIntro(intro, intro._targetElement);
@@ -440,7 +454,7 @@ export default async function _showElement(
     prevTooltipButton = createElement("a");
 
     prevTooltipButton.onclick = async () => {
-      if (intro._currentStep !== 0) {
+      if (intro._currentStep > 0) {
         await previousStep(intro);
       }
     };
@@ -459,13 +473,17 @@ export default async function _showElement(
     skipTooltipButton.onclick = async () => {
       if (
         intro._introItems.length - 1 === intro._currentStep &&
-        typeof intro._introCompleteCallback === "function"
+        isFunction(intro._introCompleteCallback)
       ) {
-        await intro._introCompleteCallback(intro._currentStep, "skip");
+        await intro._introCompleteCallback.call(
+          intro,
+          intro._currentStep,
+          "skip"
+        );
       }
 
-      if (typeof intro._introSkipCallback === "function") {
-        await intro._introSkipCallback(intro._currentStep);
+      if (isFunction(intro._introSkipCallback)) {
+        await intro._introSkipCallback.call(intro, intro._currentStep);
       }
 
       await exitIntro(intro, intro._targetElement);
@@ -484,12 +502,7 @@ export default async function _showElement(
     tooltipLayer.appendChild(buttonsLayer);
 
     // set proper position
-    placeTooltip(
-      intro,
-      targetElement.element as HTMLElement,
-      tooltipLayer,
-      arrowLayer
-    );
+    placeTooltip(intro, targetElement, tooltipLayer, arrowLayer);
 
     // change the scroll of the window, if needed
     scrollTo(
@@ -507,13 +520,13 @@ export default async function _showElement(
   const disableInteractionLayer = intro._targetElement.querySelector(
     ".introjs-disableInteraction"
   );
-  if (disableInteractionLayer) {
+  if (disableInteractionLayer && disableInteractionLayer.parentNode) {
     disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
   }
 
   //disable interaction
   if (targetElement.disableInteraction) {
-    _disableInteraction(intro);
+    _disableInteraction(intro, targetElement);
   }
 
   // when it's the first step of tour
@@ -622,7 +635,7 @@ export default async function _showElement(
 
   setShowElement(targetElement.element as HTMLElement);
 
-  if (typeof intro._introAfterChangeCallback !== "undefined") {
-    await intro._introAfterChangeCallback(targetElement.element as HTMLElement);
+  if (isFunction(intro._introAfterChangeCallback)) {
+    await intro._introAfterChangeCallback.call(intro, targetElement.element);
   }
 }

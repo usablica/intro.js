@@ -12,6 +12,7 @@ export default function getPropValue(
   let propValue = "";
   if ("currentStyle" in element) {
     //IE
+    // @ts-ignore
     propValue = element.currentStyle[propName];
   } else if (document.defaultView && document.defaultView.getComputedStyle) {
     //Others

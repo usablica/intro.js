@@ -1,4 +1,5 @@
 import "regenerator-runtime/runtime";
+//@ts-ignore
 import { JSDOM } from "jsdom";
 //import * as matchers from "jest-extended";
 //import expect from "expect";

@@ -3,11 +3,11 @@ import setStyle from "./setStyle";
 /**
  * Create a DOM element with various attributes
  */
-export default function _createElement(
-  tagname: string,
+export default function _createElement<K extends keyof HTMLElementTagNameMap>(
+  tagName: K,
   attrs?: { [key: string]: string | Function }
-): HTMLElement {
-  let element = document.createElement(tagname);
+): HTMLElementTagNameMap[K] {
+  let element = document.createElement<K>(tagName);
 
   attrs = attrs || {};
 
@@ -22,6 +22,7 @@ export default function _createElement(
     } else if (typeof v === "string" && k.match(setAttRegex)) {
       element.setAttribute(k, v);
     } else {
+      // @ts-ignore
       element[k] = v;
     }
   }

@@ -4,6 +4,7 @@ import onResize from "./onResize";
 import removeShowElement from "./removeShowElement";
 import removeChild from "../util/removeChild";
 import { IntroJs } from "src/intro";
+import isFunction from "../util/isFunction";
 
 /**
  * Exit from intro
@@ -22,7 +23,10 @@ export default async function exitIntro(
   //
   // If this callback return `false`, it would halt the process
   if (intro._introBeforeExitCallback !== undefined) {
-    continueExit = await intro._introBeforeExitCallback(targetElement);
+    continueExit = await intro._introBeforeExitCallback.call(
+      intro,
+      targetElement
+    );
   }
 
   // skip this check if `force` parameter is `true`
@@ -70,10 +74,10 @@ export default async function exitIntro(
   DOMEvent.off(window, "resize", onResize, intro, true);
 
   //check if any callback is defined
-  if (intro._introExitCallback !== undefined) {
-    await intro._introExitCallback();
+  if (isFunction(intro._introExitCallback)) {
+    await intro._introExitCallback.call(intro);
   }
 
-  //set the step to zero
-  intro._currentStep = undefined;
+  // set the step to default
+  intro._currentStep = -1;
 }

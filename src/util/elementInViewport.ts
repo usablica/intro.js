@@ -4,7 +4,7 @@
  *
  * @api private
  */
-export default function elementInViewport(el: HTMLElement) {
+export default function elementInViewport(el: HTMLElement): boolean {
   const rect = el.getBoundingClientRect();
 
   return (

@@ -2,6 +2,7 @@ import * as getOffset from "../../../src/util/getOffset";
 import * as getWindowSize from "../../../src/util/getWindowSize";
 import placeTooltip from "../../../src/core/placeTooltip";
 import { IntroJs } from "src/intro";
+import { IntroStep } from "src/core/steps";
 
 describe("placeTooltip", () => {
   test("should automatically place the tooltip position when there is enough space", () => {
@@ -29,25 +30,27 @@ describe("placeTooltip", () => {
       right: 300,
     });
 
-    const targetElement = document.createElement("div");
+    const currentStep: IntroStep = {
+      step: 0,
+      intro: "hello",
+      title: "hello",
+      position: "top",
+      element: document.createElement("div"),
+      scrollTo: "element",
+    };
     const tooltipLayer = document.createElement("div");
     const arrowLayer = document.createElement("div");
 
     placeTooltip(
       {
         _currentStep: 0,
-        _introItems: [
-          {
-            intro: "hello",
-            position: "top",
-          },
-        ],
+        _introItems: [currentStep],
         _options: {
           positionPrecedence: ["top", "bottom", "left", "right"],
           autoPosition: true,
         },
       } as IntroJs,
-      targetElement,
+      currentStep,
       tooltipLayer,
       arrowLayer,
       false
@@ -59,7 +62,14 @@ describe("placeTooltip", () => {
   });
 
   test("should skip auto positioning when autoPosition is false", () => {
-    const targetElement = document.createElement("div");
+    const currentStep: IntroStep = {
+      step: 0,
+      intro: "hello",
+      title: "hello",
+      position: "top",
+      element: document.createElement("div"),
+      scrollTo: "element",
+    };
     const tooltipLayer = document.createElement("div");
     const arrowLayer = document.createElement("div");
 
@@ -77,7 +87,7 @@ describe("placeTooltip", () => {
           autoPosition: false,
         },
       } as IntroJs,
-      targetElement,
+      currentStep,
       tooltipLayer,
       arrowLayer,
       false
@@ -111,25 +121,27 @@ describe("placeTooltip", () => {
       right: 0,
     });
 
-    const targetElement = document.createElement("div");
+    const currentStep: IntroStep = {
+      step: 0,
+      intro: "hello",
+      title: "hello",
+      position: "left",
+      element: document.createElement("div"),
+      scrollTo: "element",
+    };
     const tooltipLayer = document.createElement("div");
     const arrowLayer = document.createElement("div");
 
     placeTooltip(
       {
         _currentStep: 0,
-        _introItems: [
-          {
-            intro: "hello",
-            position: "left",
-          },
-        ],
+        _introItems: [currentStep],
         _options: {
           positionPrecedence: ["top", "bottom", "left", "right"],
           autoPosition: true,
         },
       } as IntroJs,
-      targetElement,
+      currentStep,
       tooltipLayer,
       arrowLayer,
       false
@@ -163,25 +175,27 @@ describe("placeTooltip", () => {
       right: 0,
     });
 
-    const targetElement = document.createElement("div");
+    const currentStep: IntroStep = {
+      step: 0,
+      intro: "hello",
+      title: "hello",
+      position: "left",
+      element: document.createElement("div"),
+      scrollTo: "element",
+    };
     const tooltipLayer = document.createElement("div");
     const arrowLayer = document.createElement("div");
 
     placeTooltip(
       {
         _currentStep: 0,
-        _introItems: [
-          {
-            intro: "hello",
-            position: "left",
-          },
-        ],
+        _introItems: [currentStep],
         _options: {
           positionPrecedence: ["top", "bottom", "left", "right"],
           autoPosition: true,
         },
       } as IntroJs,
-      targetElement,
+      currentStep,
       tooltipLayer,
       arrowLayer,
       false
@@ -193,26 +207,28 @@ describe("placeTooltip", () => {
   });
 
   test("should attach the global custom tooltip css class", () => {
-    const targetElement = document.createElement("div");
+    const currentStep: IntroStep = {
+      step: 0,
+      intro: "hello",
+      title: "hello",
+      position: "left",
+      element: document.createElement("div"),
+      scrollTo: "element",
+    };
     const tooltipLayer = document.createElement("div");
     const arrowLayer = document.createElement("div");
 
     placeTooltip(
       {
         _currentStep: 0,
-        _introItems: [
-          {
-            intro: "hello",
-            position: "left",
-          },
-        ],
+        _introItems: [currentStep],
         _options: {
           positionPrecedence: ["top", "bottom", "left", "right"],
           autoPosition: true,
           tooltipClass: "newclass",
         },
       } as IntroJs,
-      targetElement,
+      currentStep,
       tooltipLayer,
       arrowLayer,
       false
@@ -224,26 +240,28 @@ describe("placeTooltip", () => {
   });
 
   test("should attach the step custom tooltip css class", () => {
-    const targetElement = document.createElement("div");
+    const currentStep: IntroStep = {
+      step: 0,
+      intro: "hello",
+      title: "hello",
+      position: "left",
+      element: document.createElement("div"),
+      scrollTo: "element",
+      tooltipClass: "myclass",
+    };
     const tooltipLayer = document.createElement("div");
     const arrowLayer = document.createElement("div");
 
     placeTooltip(
       {
         _currentStep: 0,
-        _introItems: [
-          {
-            intro: "hello",
-            position: "left",
-            tooltipClass: "myclass",
-          },
-        ],
+        _introItems: [currentStep],
         _options: {
           positionPrecedence: ["top", "bottom", "left", "right"],
           autoPosition: true,
         },
       } as IntroJs,
-      targetElement,
+      currentStep,
       tooltipLayer,
       arrowLayer,
       false

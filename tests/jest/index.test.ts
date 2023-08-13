@@ -234,7 +234,7 @@ describe("intro", () => {
     expect(fixed.className).not.toContain("introjs-relativePosition");
   });
 
-  test("should set the onstart callback", () => {
+  test("should call the onstart callback", () => {
     const fn = jest.fn();
 
     const intro = introJs();
@@ -247,9 +247,11 @@ describe("intro", () => {
           },
         ],
       })
-      .onstart(fn);
+      .onstart(fn)
+      .start();
 
-    expect(intro._introStartCallback).toBe(fn);
+    expect(fn).toBeCalledTimes(1);
+    expect(fn).toBeCalledWith(window.document.body);
   });
 
   test("should set a unique stamp for each instance", () => {
@@ -257,10 +259,15 @@ describe("intro", () => {
     const intro2 = introJs();
     const intro3 = introJs();
 
-    expect(intro1["introjs-instance"]).not.toBeNull();
-    expect(intro2["introjs-instance"]).not.toBeNull();
-    expect(intro3["introjs-instance"]).not.toBeNull();
+    //@ts-ignore
+    expect(intro1["introjs-instance"]).toBeNumber();
+    //@ts-ignore
+    expect(intro2["introjs-instance"]).toBeNumber();
+    //@ts-ignore
+    expect(intro3["introjs-instance"]).toBeNumber();
+    //@ts-ignore
     expect(intro1["introjs-instance"]).not.toBe(intro2["introjs-instance"]);
+    //@ts-ignore
     expect(intro2["introjs-instance"]).not.toBe(intro3["introjs-instance"]);
   });
 
