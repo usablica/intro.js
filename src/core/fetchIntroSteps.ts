@@ -1,4 +1,4 @@
-import { IntroJs } from "src/intro";
+import { IntroJs } from "../intro";
 import cloneObject from "../util/cloneObject";
 import createElement from "../util/createElement";
 import { IntroStep, ScrollTo, TooltipPosition } from "./steps";

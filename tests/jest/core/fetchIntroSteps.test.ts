@@ -1,4 +1,4 @@
-import { IntroJs } from "src/intro";
+import { IntroJs } from "../../../src/intro";
 import fetchIntroSteps from "../../../src/core/fetchIntroSteps";
 
 describe("fetchIntroSteps", () => {

@@ -1,4 +1,4 @@
-import { IntroJs } from "src/intro";
+import { IntroJs } from "../intro";
 import stamp from "../util/stamp";
 
 /**

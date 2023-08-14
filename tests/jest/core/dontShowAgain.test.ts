@@ -3,7 +3,7 @@ import {
   setDontShowAgain,
   getDontShowAgain,
 } from "../../../src/core/dontShowAgain";
-import { IntroJs } from "src/intro";
+import { IntroJs } from "../../../src/intro";
 
 describe("dontShowAgain", () => {
   test("should call set cookie", () => {

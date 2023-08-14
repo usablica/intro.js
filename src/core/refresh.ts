@@ -3,7 +3,7 @@ import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import fetchIntroSteps from "./fetchIntroSteps";
 import { _recreateBullets, _updateProgressBar } from "./showElement";
-import { IntroJs } from "src/intro";
+import { IntroJs } from "../intro";
 
 /**
  * Update placement of the intro objects on the screen

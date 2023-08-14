@@ -128,7 +128,7 @@ export class IntroJs {
     return this;
   }
 
-  addStep(step: IntroStep) {
+  addStep(step: Partial<IntroStep>) {
     if (!this._options.steps) {
       this._options.steps = [];
     }
@@ -138,7 +138,7 @@ export class IntroJs {
     return this;
   }
 
-  addSteps(steps: IntroStep[]) {
+  addSteps(steps: Partial<IntroStep>[]) {
     if (!steps.length) return this;
 
     for (let index = 0; index < steps.length; index++) {

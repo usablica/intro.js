@@ -1,6 +1,6 @@
 import { nextStep, previousStep } from "./steps";
 import exitIntro from "./exitIntro";
-import { IntroJs } from "src/intro";
+import { IntroJs } from "../intro";
 import isFunction from "../util/isFunction";
 
 /**
