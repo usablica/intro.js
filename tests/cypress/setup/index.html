@@ -49,6 +49,7 @@
           id="fixed-parent"
           class="pb-3 mb-4 border-bottom"
           style="position: fixed"
+          data-hint="fixed header"
         >
           <a
             id="fixed"
@@ -77,8 +78,10 @@
 
         <div class="mt-5 p-5 mb-4 bg-light rounded-3">
           <div class="container-fluid py-5" id="main-section">
-            <h1 class="display-5 fw-bold">Custom jumbotron</h1>
-            <p class="col-md-8 fs-4">
+            <h1 class="display-5 fw-bold" data-intro="first header step">
+              Custom jumbotron
+            </h1>
+            <p class="col-md-8 fs-4" data-intro="second paragraph step">
               Using a series of utilities, you can create this jumbotron, just
               like the one in previous versions of Bootstrap. Check out the
               examples below for how you can remix and restyle it to your
@@ -88,6 +91,7 @@
               class="btn btn-primary btn-lg"
               type="button"
               id="clickable-button"
+              data-hint="a button"
               onclick="window.click()"
               onmouseover="this.innerHTML='Hovered'"
             >
@@ -103,7 +107,7 @@
               id="relative-parent"
               style="position: relative"
             >
-              <h2>Change the background</h2>
+              <h2 data-intro="third header step">Change the background</h2>
               <p>
                 Swap the background-color utility and add a `.text-*` color
                 utility to mix up the jumbotron look. Then, mix and match with
@@ -126,7 +130,9 @@
               id="absolute-parent"
               style="position: absolute"
             >
-              <h2>Add borders</h2>
+              <h2 data-intro="fourth header step" data-hint="secondary header">
+                Add borders
+              </h2>
               <p>
                 Or, keep it light and add a border for some added definition to
                 the boundaries of your content. Be sure to look under the hood
@@ -146,7 +152,12 @@
           </div>
         </div>
 
-        <footer class="pt-3 mt-4 text-muted border-top">&copy; 2021</footer>
+        <footer
+          class="pt-3 mt-4 text-muted border-top"
+          data-hint="this is the footer"
+        >
+          &copy; 2021
+        </footer>
       </div>
     </main>
 
