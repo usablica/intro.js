@@ -84,9 +84,10 @@
     "*.js",
     "*.css",
     "*.map",
-    "*.d.ts",
+    "**/*.d.ts",
     "themes/*",
-    "minified/*"
+    "minified/*",
+    "!tests/**/*"
   ],
   "license": "AGPL-3.0",
   "changelog": {
