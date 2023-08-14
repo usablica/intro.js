@@ -1,6 +1,6 @@
 import elementInViewport from "./elementInViewport";
 import getWindowSize from "./getWindowSize";
-import { ScrollTo } from "src/core/steps";
+import { ScrollTo } from "../core/steps";
 
 /**
  * To change the scroll of `window` after highlighting an element

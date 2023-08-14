@@ -5,7 +5,7 @@ import checkRight from "../util/checkRight";
 import checkLeft from "../util/checkLeft";
 import removeEntry from "../util/removeEntry";
 import { HintStep, IntroStep, TooltipPosition } from "./steps";
-import { IntroJs } from "src/intro";
+import { IntroJs } from "../intro";
 
 /**
  * auto-determine alignment

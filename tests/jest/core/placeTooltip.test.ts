@@ -1,8 +1,8 @@
 import * as getOffset from "../../../src/util/getOffset";
 import * as getWindowSize from "../../../src/util/getWindowSize";
 import placeTooltip from "../../../src/core/placeTooltip";
-import { IntroJs } from "src/intro";
-import { IntroStep } from "src/core/steps";
+import { IntroJs } from "../../../src/intro";
+import { IntroStep } from "../../../src/core/steps";
 
 describe("placeTooltip", () => {
   test("should automatically place the tooltip position when there is enough space", () => {

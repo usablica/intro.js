@@ -4,7 +4,7 @@ import { nextStep } from "./steps";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import fetchIntroSteps from "./fetchIntroSteps";
-import { IntroJs } from "src/intro";
+import { IntroJs } from "../intro";
 import isFunction from "../util/isFunction";
 
 /**

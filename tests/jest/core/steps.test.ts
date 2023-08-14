@@ -1,6 +1,6 @@
 import { nextStep, previousStep } from "../../../src/core/steps";
 import _showElement from "../../../src/core/showElement";
-import { IntroJs } from "src/intro";
+import { IntroJs } from "../../../src/intro";
 
 jest.mock("../../../src/core/showElement");
 jest.mock("../../../src/core/exitIntro");

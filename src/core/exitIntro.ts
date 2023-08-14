@@ -3,7 +3,7 @@ import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import removeShowElement from "./removeShowElement";
 import removeChild from "../util/removeChild";
-import { IntroJs } from "src/intro";
+import { IntroJs } from "../intro";
 import isFunction from "../util/isFunction";
 
 /**

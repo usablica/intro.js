@@ -11,7 +11,7 @@ import removeShowElement from "./removeShowElement";
 import createElement from "../util/createElement";
 import setStyle from "../util/setStyle";
 import appendChild from "../util/appendChild";
-import { IntroJs } from "src/intro";
+import { IntroJs } from "../intro";
 import isFunction from "../util/isFunction";
 
 /**
