@@ -1,6 +1,6 @@
 {
   "name": "intro.js",
-  "version": "7.0.1",
+  "version": "7.1.0",
   "description": "User Onboarding and Product Walkthrough Library",
   "keywords": [
     "onboarding",
@@ -84,9 +84,10 @@
     "*.js",
     "*.css",
     "*.map",
-    "*.d.ts",
+    "**/*.d.ts",
     "themes/*",
-    "minified/*"
+    "minified/*",
+    "!tests/**/*"
   ],
   "license": "AGPL-3.0",
   "changelog": {
