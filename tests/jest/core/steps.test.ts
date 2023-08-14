@@ -1,6 +1,7 @@
 import { nextStep, previousStep } from "../../../src/core/steps";
 import _showElement from "../../../src/core/showElement";
 import { IntroJs } from "../../../src/intro";
+import introJs from "../../../src";
 
 jest.mock("../../../src/core/showElement");
 jest.mock("../../../src/core/exitIntro");
@@ -122,6 +123,40 @@ describe("steps", () => {
 
       expect(fnCompleteCallback).toBeCalledTimes(1);
       expect(fnCompleteCallback).toHaveBeenCalledWith(2, "end");
+    });
+
+    test("should be able to add steps using addStep()", async () => {
+      const intro = introJs();
+
+      intro.addStep({
+        element: document.createElement("div"),
+        intro: "test step",
+      });
+
+      await intro.start();
+
+      expect(intro._introItems).toHaveLength(1);
+      expect(intro._introItems[0].intro).toBe("test step");
+    });
+
+    test("should be able to add steps using addSteps()", async () => {
+      const intro = introJs();
+
+      intro.addSteps([
+        {
+          intro: "first step",
+        },
+        {
+          element: document.createElement("div"),
+          intro: "second step",
+        },
+      ]);
+
+      await intro.start();
+
+      expect(intro._introItems).toHaveLength(2);
+      expect(intro._introItems[0].intro).toBe("first step");
+      expect(intro._introItems[1].intro).toBe("second step");
     });
   });
 });
