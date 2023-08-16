@@ -61,7 +61,7 @@
     "postcss": "^8.4.21",
     "postcss-clean": "^1.2.0",
     "postcss-normalize": "^8.0.1",
-    "prettier": "2.8.8",
+    "prettier": "3.0.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.48.0",
     "rollup-plugin-babel": "^4.4.0",
