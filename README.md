@@ -84,6 +84,9 @@ Now you can run this command to minify all static resources:
 ## Support/Discussion
 - [Stackoverflow](http://stackoverflow.com/questions/tagged/intro.js)
 
+## Usage Trends
+- [Usage Trends of Product Walkthrough Libraries](https://npm-compare.com/intro.js,@reactour/tour,driver.js,vue-tour)
+
 ## License
 
 ### Commercial license
