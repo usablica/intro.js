@@ -88,6 +88,8 @@ export interface Options {
   buttonClass: string;
   /* additional classes to put on progress bar */
   progressBarAdditionalClass: boolean;
+  /* function for creating stepNumber label */
+  getStepNumber:(stepIndex:number,stepsCount:number,stepNumbersOfLabel:string)=>string
 }
 
 export function getDefaultOptions(): Options {
@@ -135,6 +137,9 @@ export function getDefaultOptions(): Options {
     hintAnimation: true,
     buttonClass: "introjs-button",
     progressBarAdditionalClass: false,
+    getStepNumber(stepIndex,stepsCount,stepNumbersOfLabel){
+      return  `${stepIndex} ${stepNumbersOfLabel} ${stepsCount}`;
+    }
   };
 }
 
