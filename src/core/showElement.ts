@@ -199,7 +199,7 @@ export function _updateProgressBar(
  */
 export default async function _showElement(
   intro: IntroJs,
-  targetElement: IntroStep
+  targetElement: IntroStep,
 ) {
   if (isFunction(intro._introChangeCallback)) {
     await intro._introChangeCallback.call(intro, targetElement.element);
@@ -279,7 +279,7 @@ export default async function _showElement(
     intro._lastShowElementTimer = window.setTimeout(() => {
       // set current step to the label
       if (oldHelperNumberLayer !== null) {
-        oldHelperNumberLayer.innerHTML = `${targetElement.step} ${intro._options.stepNumbersOfLabel} ${intro._introItems.length}`;
+        oldHelperNumberLayer.innerHTML = intro._options.getStepNumber(targetElement.step,intro._introItems.length,intro._options.stepNumbersOfLabel)
       }
 
       // set current tooltip text
@@ -421,7 +421,7 @@ export default async function _showElement(
 
     if (intro._options.showStepNumbers === true) {
       helperNumberLayer.className = "introjs-helperNumberLayer";
-      helperNumberLayer.innerHTML = `${targetElement.step} ${intro._options.stepNumbersOfLabel} ${intro._introItems.length}`;
+      helperNumberLayer.innerHTML=intro._options.getStepNumber(targetElement.step,intro._introItems.length,intro._options.stepNumbersOfLabel)
       tooltipLayer.appendChild(helperNumberLayer);
     }
 
