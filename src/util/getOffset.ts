@@ -19,6 +19,20 @@ export default function getOffset(
 
   relativeEl = relativeEl || body;
 
+  let iframeOffset = { top: 0, left: 0 };
+
+  // Check if the element is inside an iframe
+  if (element.ownerDocument !== document) {
+    const iframeElement = element.ownerDocument.defaultView?.frameElement as HTMLElement | null;
+    if (iframeElement) {
+      const iframeRect = iframeElement.getBoundingClientRect();
+      iframeOffset = {
+        top: iframeRect.top + scrollTop,
+        left: iframeRect.left + scrollLeft,
+      };
+    }
+  }
+
   const x = element.getBoundingClientRect();
   const xr = relativeEl.getBoundingClientRect();
   const relativeElPosition = getPropValue(relativeEl, "position");
@@ -33,23 +47,24 @@ export default function getOffset(
       relativeElPosition === "relative") ||
     relativeElPosition === "sticky"
   ) {
-    // when the container of our target element is _not_ body and has either "relative" or "sticky" position, we should not
-    // consider the scroll position but we need to include the relative x/y of the container element
     return Object.assign(obj, {
-      top: x.top - xr.top,
-      left: x.left - xr.left,
+      top: x.top - xr.top + iframeOffset.top,
+      left: x.left - xr.left + iframeOffset.left,
     });
   } else {
     if (isFixed(element)) {
       return Object.assign(obj, {
-        top: x.top,
-        left: x.left,
+        top: x.top + iframeOffset.top,
+        left: x.left + iframeOffset.left,
       });
     } else {
       return Object.assign(obj, {
-        top: x.top + scrollTop,
-        left: x.left + scrollLeft,
+        top: x.top + scrollTop + iframeOffset.top,
+        left: x.left + scrollLeft + iframeOffset.left,
       });
     }
   }
 }
+
+
+
