@@ -78,6 +78,8 @@ export default function fetchIntroSteps(
       return [];
     }
 
+    const itemsWithoutStep: IntroStep[] = [];
+
     for (const currentElement of allIntroSteps) {
       // start intro for groups of elements
       if (
@@ -92,7 +94,11 @@ export default function fetchIntroSteps(
         continue;
       }
 
-      const step = parseInt(currentElement.getAttribute("data-step") || "", 10);
+      // get the step for the current element or set as 0 if is not present
+      const step = parseInt(
+        currentElement.getAttribute("data-step") || "0",
+        10
+      );
 
       disableInteraction = intro._options.disableInteraction;
       if (currentElement.hasAttribute("data-disable-interaction")) {
@@ -100,73 +106,38 @@ export default function fetchIntroSteps(
           "data-disable-interaction"
         );
       }
+      const newIntroStep: IntroStep = {
+        step: step,
+        element: currentElement,
+        title: currentElement.getAttribute("data-title") || "",
+        intro: currentElement.getAttribute("data-intro") || "",
+        tooltipClass:
+          currentElement.getAttribute("data-tooltip-class") || undefined,
+        highlightClass:
+          currentElement.getAttribute("data-highlight-class") || undefined,
+        position: (currentElement.getAttribute("data-position") ||
+          intro._options.tooltipPosition) as TooltipPosition,
+        scrollTo:
+          (currentElement.getAttribute("data-scroll-to") as ScrollTo) ||
+          intro._options.scrollTo,
+        disableInteraction,
+      };
 
       if (step > 0) {
-        introItems[step - 1] = {
-          step: step,
-          element: currentElement,
-          title: currentElement.getAttribute("data-title") || "",
-          intro: currentElement.getAttribute("data-intro") || "",
-          tooltipClass:
-            currentElement.getAttribute("data-tooltip-class") || undefined,
-          highlightClass:
-            currentElement.getAttribute("data-highlight-class") || undefined,
-          position: (currentElement.getAttribute("data-position") ||
-            intro._options.tooltipPosition) as TooltipPosition,
-          scrollTo:
-            (currentElement.getAttribute("data-scroll-to") as ScrollTo) ||
-            intro._options.scrollTo,
-          disableInteraction,
-        };
+        introItems[step - 1] = newIntroStep;
+      } else {
+        itemsWithoutStep.push(newIntroStep);
       }
     }
 
-    //next add intro items without data-step
-    //todo: we need a cleanup here, two loops are redundant
-    let nextStep = 0;
+    //fill items without step in blanks and update their step
+    for (let i = 0; itemsWithoutStep.length > 0; i++) {
+      if (typeof introItems[i] === "undefined") {
+        const newStep = itemsWithoutStep.shift();
+        if (!newStep) break;
 
-    for (const currentElement of allIntroSteps) {
-      // start intro for groups of elements
-      if (
-        intro._options.group &&
-        currentElement.getAttribute("data-intro-group") !== intro._options.group
-      ) {
-        continue;
-      }
-
-      if (currentElement.getAttribute("data-step") === null) {
-        while (true) {
-          if (typeof introItems[nextStep] === "undefined") {
-            break;
-          } else {
-            nextStep++;
-          }
-        }
-
-        if (currentElement.hasAttribute("data-disable-interaction")) {
-          disableInteraction = !!currentElement.getAttribute(
-            "data-disable-interaction"
-          );
-        } else {
-          disableInteraction = intro._options.disableInteraction;
-        }
-
-        introItems[nextStep] = {
-          element: currentElement,
-          title: currentElement.getAttribute("data-title") || "",
-          intro: currentElement.getAttribute("data-intro") || "",
-          step: nextStep + 1,
-          tooltipClass:
-            currentElement.getAttribute("data-tooltip-class") || undefined,
-          highlightClass:
-            currentElement.getAttribute("data-highlight-class") || undefined,
-          position: (currentElement.getAttribute("data-position") ||
-            intro._options.tooltipPosition) as TooltipPosition,
-          scrollTo:
-            (currentElement.getAttribute("data-scroll-to") as ScrollTo) ||
-            intro._options.scrollTo,
-          disableInteraction,
-        };
+        newStep.step = i + 1;
+        introItems[i] = newStep;
       }
     }
   }
