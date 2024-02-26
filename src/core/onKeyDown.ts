@@ -32,10 +32,10 @@ export default async function onKeyDown(intro: IntroJs, e: KeyboardEvent) {
     await exitIntro(intro, intro._targetElement);
   } else if (code === "ArrowLeft" || code === 37) {
     //left arrow
-    await previousStep(intro);
+    document.dir === 'rtl' ? await nextStep(intro) : await previousStep(intro);
   } else if (code === "ArrowRight" || code === 39) {
     //right arrow
-    await nextStep(intro);
+    document.dir === 'rtl' ? await previousStep(intro) : await nextStep(intro);
   } else if (code === "Enter" || code === "NumpadEnter" || code === 13) {
     //srcElement === ie
     const target = (e.target || e.srcElement) as HTMLElement;
