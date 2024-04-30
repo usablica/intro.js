@@ -3,8 +3,10 @@ import fetchIntroSteps from "../../../src/core/fetchIntroSteps";
 
 describe("fetchIntroSteps", () => {
   test("should add floating element from options.steps to the list", () => {
+    // Arrange
     const targetElement = document.createElement("div");
 
+    // Act
     const steps = fetchIntroSteps(
       {
         _options: {
@@ -22,6 +24,7 @@ describe("fetchIntroSteps", () => {
       targetElement
     );
 
+    // Assert
     expect(steps.length).toBe(2);
 
     expect(steps[0].position).toBe("floating");
@@ -34,6 +37,7 @@ describe("fetchIntroSteps", () => {
   });
 
   test("should find and add elements from options.steps to the list", () => {
+    // Arrange
     const targetElement = document.createElement("div");
 
     const stepOne = document.createElement("div");
@@ -45,6 +49,7 @@ describe("fetchIntroSteps", () => {
     document.body.appendChild(stepOne);
     document.body.appendChild(stepTwo);
 
+    // Act
     const steps = fetchIntroSteps(
       {
         _options: {
@@ -69,6 +74,7 @@ describe("fetchIntroSteps", () => {
       targetElement
     );
 
+    // Assert
     expect(steps.length).toBe(3);
 
     expect(steps[0].element).toBe(stepOne);
@@ -87,6 +93,7 @@ describe("fetchIntroSteps", () => {
   });
 
   test("should find the data-* elements from the DOM", () => {
+    // Arrange
     const targetElement = document.createElement("div");
 
     const stepOne = document.createElement("div");
@@ -99,6 +106,7 @@ describe("fetchIntroSteps", () => {
     targetElement.appendChild(stepOne);
     targetElement.appendChild(stepTwo);
 
+    // Act
     const steps = fetchIntroSteps(
       {
         _options: {
@@ -108,6 +116,7 @@ describe("fetchIntroSteps", () => {
       targetElement
     );
 
+    // Assert
     expect(steps.length).toBe(2);
 
     expect(steps[0].position).toBe("bottom");
@@ -120,6 +129,7 @@ describe("fetchIntroSteps", () => {
   });
 
   test("should respect the custom step attribute (DOM)", () => {
+    // Arrange
     const targetElement = document.createElement("div");
 
     const stepOne = document.createElement("div");
@@ -132,6 +142,7 @@ describe("fetchIntroSteps", () => {
     targetElement.appendChild(stepOne);
     targetElement.appendChild(stepTwo);
 
+    // Act
     const steps = fetchIntroSteps(
       {
         _options: {
@@ -141,6 +152,7 @@ describe("fetchIntroSteps", () => {
       targetElement
     );
 
+    // Assert
     expect(steps.length).toBe(2);
 
     expect(steps[0].intro).toBe("first");
@@ -151,6 +163,7 @@ describe("fetchIntroSteps", () => {
   });
 
   test("should ignore DOM elements when options.steps is available", () => {
+    // Arrange
     const targetElement = document.createElement("div");
 
     const stepOne = document.createElement("div");
@@ -162,6 +175,7 @@ describe("fetchIntroSteps", () => {
     targetElement.appendChild(stepOne);
     targetElement.appendChild(stepTwo);
 
+    // Act
     const steps = fetchIntroSteps(
       {
         _options: {
@@ -178,8 +192,56 @@ describe("fetchIntroSteps", () => {
       targetElement
     );
 
+    // Assert
     expect(steps.length).toBe(2);
     expect(steps[0].intro).toBe("steps-first");
     expect(steps[1].intro).toBe("steps-second");
+  });
+
+  it("should correctly sort based on data-step", () => {
+    // Arrange
+    const targetElement = document.createElement("div");
+
+    const stepOne = document.createElement("div");
+    stepOne.setAttribute("data-intro", "one");
+
+    const stepTwo = document.createElement("div");
+    stepTwo.setAttribute("data-intro", "two");
+
+    const stepThree = document.createElement("div");
+    stepThree.setAttribute("data-intro", "three");
+    stepThree.setAttribute("data-step", "3");
+
+    const stepFour = document.createElement("div");
+    stepFour.setAttribute("data-intro", "four");
+    stepFour.setAttribute("data-step", "5");
+
+    targetElement.appendChild(stepThree);
+    targetElement.appendChild(stepOne);
+    targetElement.appendChild(stepFour);
+    targetElement.appendChild(stepTwo);
+
+    // Act
+    const steps = fetchIntroSteps(
+      {
+        _options: {},
+      } as IntroJs,
+      targetElement
+    );
+
+    // Assert
+    expect(steps.length).toBe(4);
+
+    expect(steps[0].intro).toBe("one");
+    expect(steps[0].step).toBe(1);
+
+    expect(steps[1].intro).toBe("two");
+    expect(steps[1].step).toBe(2);
+
+    expect(steps[2].intro).toBe("three");
+    expect(steps[2].step).toBe(3);
+
+    expect(steps[3].intro).toBe("four");
+    expect(steps[3].step).toBe(5);
   });
 });

@@ -12,9 +12,6 @@ export default function fetchIntroSteps(
   intro: IntroJs,
   targetElm: HTMLElement
 ) {
-  const allIntroSteps: HTMLElement[] = Array.from(
-    targetElm.querySelectorAll("*[data-intro]")
-  );
   let introItems: IntroStep[] = [];
 
   if (intro._options.steps && intro._options.steps.length) {
@@ -69,56 +66,51 @@ export default function fetchIntroSteps(
       }
     }
   } else {
-    //use steps from data-* annotations
-    const elmsLength = allIntroSteps.length;
-    let disableInteraction: boolean;
+    const elements: HTMLElement[] = Array.from(
+      targetElm.querySelectorAll("*[data-intro]")
+    );
 
     //if there's no element to intro
-    if (elmsLength < 1) {
+    if (elements.length < 1) {
       return [];
     }
 
     const itemsWithoutStep: IntroStep[] = [];
 
-    for (const currentElement of allIntroSteps) {
+    for (const element of elements) {
       // start intro for groups of elements
       if (
         intro._options.group &&
-        currentElement.getAttribute("data-intro-group") !== intro._options.group
+        element.getAttribute("data-intro-group") !== intro._options.group
       ) {
         continue;
       }
 
       // skip hidden elements
-      if (currentElement.style.display === "none") {
+      if (element.style.display === "none") {
         continue;
       }
 
       // get the step for the current element or set as 0 if is not present
-      const step = parseInt(
-        currentElement.getAttribute("data-step") || "0",
-        10
-      );
+      const step = parseInt(element.getAttribute("data-step") || "0", 10);
 
-      disableInteraction = intro._options.disableInteraction;
-      if (currentElement.hasAttribute("data-disable-interaction")) {
-        disableInteraction = !!currentElement.getAttribute(
-          "data-disable-interaction"
-        );
+      let disableInteraction = intro._options.disableInteraction;
+      if (element.hasAttribute("data-disable-interaction")) {
+        disableInteraction = !!element.getAttribute("data-disable-interaction");
       }
+
       const newIntroStep: IntroStep = {
-        step: step,
-        element: currentElement,
-        title: currentElement.getAttribute("data-title") || "",
-        intro: currentElement.getAttribute("data-intro") || "",
-        tooltipClass:
-          currentElement.getAttribute("data-tooltip-class") || undefined,
+        step,
+        element,
+        title: element.getAttribute("data-title") || "",
+        intro: element.getAttribute("data-intro") || "",
+        tooltipClass: element.getAttribute("data-tooltip-class") || undefined,
         highlightClass:
-          currentElement.getAttribute("data-highlight-class") || undefined,
-        position: (currentElement.getAttribute("data-position") ||
+          element.getAttribute("data-highlight-class") || undefined,
+        position: (element.getAttribute("data-position") ||
           intro._options.tooltipPosition) as TooltipPosition,
         scrollTo:
-          (currentElement.getAttribute("data-scroll-to") as ScrollTo) ||
+          (element.getAttribute("data-scroll-to") as ScrollTo) ||
           intro._options.scrollTo,
         disableInteraction,
       };
@@ -130,7 +122,7 @@ export default function fetchIntroSteps(
       }
     }
 
-    //fill items without step in blanks and update their step
+    // fill items without step in blanks and update their step
     for (let i = 0; itemsWithoutStep.length > 0; i++) {
       if (typeof introItems[i] === "undefined") {
         const newStep = itemsWithoutStep.shift();
@@ -142,18 +134,10 @@ export default function fetchIntroSteps(
     }
   }
 
-  //removing undefined/null elements
-  const tempIntroItems = [];
-  for (let z = 0; z < introItems.length; z++) {
-    if (introItems[z]) {
-      // copy non-falsy values to the end of the array
-      tempIntroItems.push(introItems[z]);
-    }
-  }
+  // removing undefined/null elements
+  introItems = introItems.filter((n) => n);
 
-  introItems = tempIntroItems;
-
-  //Ok, sort all items with given steps
+  // Sort all items with given steps
   introItems.sort((a, b) => a.step - b.step);
 
   return introItems;
