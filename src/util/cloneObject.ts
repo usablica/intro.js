@@ -11,7 +11,11 @@ export default function cloneObject<T>(source: T): T {
 
   for (const key in source) {
     // @ts-ignore:next-line
-    if ("jQuery" in window && window.jQuery && source[key] instanceof window.jQuery) {
+    if (
+      "jQuery" in window &&
+      window.jQuery &&
+      source[key] instanceof (window.jQuery as any)
+    ) {
       temp[key] = source[key];
     } else {
       temp[key] = cloneObject(source[key]);
