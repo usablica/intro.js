@@ -10,7 +10,6 @@ export default function cloneObject<T>(source: T): T {
   const temp = {} as T;
 
   for (const key in source) {
-    // @ts-ignore:next-line
     if (
       "jQuery" in window &&
       window.jQuery &&
