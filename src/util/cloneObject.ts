@@ -14,7 +14,7 @@ export default function cloneObject<T>(source: T): T {
     if (
       "jQuery" in window &&
       window.jQuery &&
-      source[key] instanceof window.jQuery
+      source[key] instanceof (window.jQuery as any)
     ) {
       temp[key] = source[key];
     } else {
