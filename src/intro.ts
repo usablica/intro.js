@@ -1,5 +1,5 @@
 import { getDontShowAgain, setDontShowAgain } from "./core/dontShowAgain";
-import exitIntro from "./core/exitIntro";
+import exitIntro from "./packages/tour/exitIntro";
 import {
   hideHint,
   hideHints,
@@ -10,7 +10,7 @@ import {
   showHintDialog,
   showHints,
 } from "./core/hint";
-import introForElement from "./core/introForElement";
+import introForElement from "./packages/tour/introForElement";
 import refresh from "./core/refresh";
 import {
   HintStep,
@@ -165,11 +165,6 @@ export class IntroJs {
 
   currentStep() {
     return this._currentStep;
-  }
-
-  async exit(force: boolean) {
-    await exitIntro(this, this._targetElement, force);
-    return this;
   }
 
   refresh(refreshSteps?: boolean) {

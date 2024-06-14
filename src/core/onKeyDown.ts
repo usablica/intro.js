@@ -1,7 +1,8 @@
 import { nextStep, previousStep } from "./steps";
-import exitIntro from "./exitIntro";
+import exitIntro from "../packages/tour/exitIntro";
 import { IntroJs } from "../intro";
 import isFunction from "../util/isFunction";
+import { Tour } from "src/packages/tour/tour";
 
 /**
  * on keyCode:
@@ -18,7 +19,7 @@ import isFunction from "../util/isFunction";
  *   (3) e.keyCode
  * https://github.com/jquery/jquery/blob/a6b0705294d336ae2f63f7276de0da1195495363/src/event.js#L638
  */
-export default async function onKeyDown(intro: IntroJs, e: KeyboardEvent) {
+export default async function onKeyDown(tour: Tour, e: KeyboardEvent) {
   let code = e.code === undefined ? e.which : e.code;
 
   // if e.which is null
@@ -26,10 +27,10 @@ export default async function onKeyDown(intro: IntroJs, e: KeyboardEvent) {
     code = e.charCode === null ? e.keyCode : e.charCode;
   }
 
-  if ((code === "Escape" || code === 27) && intro._options.exitOnEsc === true) {
+  if ((code === "Escape" || code === 27) && tour.getOption('exitOnEsc') === true) {
     //escape key pressed, exit the intro
     //check if exit callback is defined
-    await exitIntro(intro, intro._targetElement);
+    await exitIntro(tour, tour.getTargetElement());
   } else if (code === "ArrowLeft" || code === 37) {
     //left arrow
     await previousStep(intro);

@@ -1,14 +1,7 @@
-import {
-  HintPosition,
-  HintStep,
-  IntroStep,
-  ScrollTo,
-  TooltipPosition,
-} from "./core/steps";
+import { IntroStep, ScrollTo, TooltipPosition } from "../../core/steps";
 
-export interface Options {
+export interface TourOptions {
   steps: Partial<IntroStep>[];
-  hints: Partial<HintStep>[];
   /* Is this tour instance active? Don't show the tour again if this flag is set to false */
   isActive: boolean;
   /* Next button label in tooltip box */
@@ -74,26 +67,15 @@ export interface Options {
   dontShowAgainCookieDays: number;
   /* Set how much padding to be used around helper element */
   helperElementPadding: number;
-  /* Default hint position */
-  hintPosition: HintPosition;
-  /* Hint button label */
-  hintButtonLabel: string;
-  /* Display the "Got it" button? */
-  hintShowButton: boolean;
-  /* Hints auto-refresh interval in ms (set to -1 to disable) */
-  hintAutoRefreshInterval: number;
-  /* Adding animation to hints? */
-  hintAnimation: boolean;
   /* additional classes to put on the buttons */
   buttonClass: string;
   /* additional classes to put on progress bar */
   progressBarAdditionalClass: boolean;
 }
 
-export function getDefaultOptions(): Options {
+export function getDefaultTourOptions(): TourOptions {
   return {
     steps: [],
-    hints: [],
     isActive: true,
     nextLabel: "Next",
     prevLabel: "Back",
@@ -128,28 +110,7 @@ export function getDefaultOptions(): Options {
     dontShowAgainCookieDays: 365,
     helperElementPadding: 10,
 
-    hintPosition: "top-middle",
-    hintButtonLabel: "Got it",
-    hintShowButton: true,
-    hintAutoRefreshInterval: 10,
-    hintAnimation: true,
     buttonClass: "introjs-button",
     progressBarAdditionalClass: false,
   };
-}
-
-export function setOption<T, K extends keyof T>(
-  options: T,
-  key: K,
-  value: T[K]
-): T {
-  options[key] = value;
-  return options;
-}
-
-export function setOptions<T>(options: T, partialOptions: Partial<T>): T {
-  for (const [key, value] of Object.entries(partialOptions)) {
-    options = setOption(options, key as keyof T, value as T[keyof T]);
-  }
-  return options;
 }

@@ -1,10 +1,14 @@
-import DOMEvent from "./DOMEvent";
-import onKeyDown from "./onKeyDown";
+import DOMEvent from "../../core/DOMEvent";
+import onKeyDown from "../../core/onKeyDown";
 import onResize from "./onResize";
-import removeShowElement from "./removeShowElement";
-import removeChild from "../util/removeChild";
-import { IntroJs } from "../intro";
-import isFunction from "../util/isFunction";
+import removeShowElement from "../../core/removeShowElement";
+import removeChild from "../../util/removeChild";
+import isFunction from "../../util/isFunction";
+import { Tour } from "./tour";
+import {
+  introBeforeExitCallback,
+  introExitCallback,
+} from "./callback";
 
 /**
  * Exit from intro
@@ -13,8 +17,10 @@ import isFunction from "../util/isFunction";
  * @param {Boolean} force - Setting to `true` will skip the result of beforeExit callback
  */
 export default async function exitIntro(
-  intro: IntroJs,
+  tour: Tour,
   targetElement: HTMLElement,
+  beforeExitCallback?: introBeforeExitCallback,
+  exitCallback?: introExitCallback,
   force: boolean = false
 ) {
   let continueExit = true;
@@ -22,11 +28,8 @@ export default async function exitIntro(
   // calling onbeforeexit callback
   //
   // If this callback return `false`, it would halt the process
-  if (intro._introBeforeExitCallback !== undefined) {
-    continueExit = await intro._introBeforeExitCallback.call(
-      intro,
-      targetElement
-    );
+  if (isFunction(beforeExitCallback)) {
+    continueExit = await beforeExitCallback.call(tour, targetElement);
   }
 
   // skip this check if `force` parameter is `true`
@@ -70,14 +73,14 @@ export default async function exitIntro(
   removeShowElement();
 
   //clean listeners
-  DOMEvent.off(window, "keydown", onKeyDown, intro, true);
-  DOMEvent.off(window, "resize", onResize, intro, true);
+  DOMEvent.off(window, "keydown", onKeyDown, tour, true);
+  DOMEvent.off(window, "resize", onResize, tour, true);
 
   //check if any callback is defined
-  if (isFunction(intro._introExitCallback)) {
-    await intro._introExitCallback.call(intro);
+  if (isFunction(exitCallback)) {
+    await exitCallback.call(tour);
   }
 
   // set the step to default
-  intro._currentStep = -1;
+  tour.setCurrentStep(-1);
 }

@@ -2,7 +2,7 @@ import setShowElement from "../util/setShowElement";
 import scrollParentToElement from "../util/scrollParentToElement";
 import addClass from "../util/addClass";
 import scrollTo from "../util/scrollTo";
-import exitIntro from "./exitIntro";
+import exitIntro from "../packages/tour/exitIntro";
 import setAnchorAsButton from "../util/setAnchorAsButton";
 import { IntroStep, nextStep, previousStep } from "./steps";
 import setHelperLayerPosition from "./setHelperLayerPosition";

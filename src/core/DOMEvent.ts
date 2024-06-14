@@ -1,4 +1,3 @@
-import { IntroJs } from "../intro";
 import stamp from "../util/stamp";
 
 /**
@@ -16,21 +15,21 @@ class DOMEvent {
   /**
    * Gets a unique ID for an event listener
    */
-  private _id(type: string, listener: Function, context: IntroJs) {
+  private _id<T>(type: string, listener: Function, context: T) {
     return type + stamp(listener) + (context ? `_${stamp(context)}` : "");
   }
 
   /**
    * Adds event listener
    */
-  public on(
+  public on<T>(
     obj: EventTarget,
     type: string,
     listener: (
-      context: IntroJs | EventTarget,
+      context: T | EventTarget,
       e: Event
     ) => void | undefined | string | Promise<string | void>,
-    context: IntroJs,
+    context: T,
     useCapture: boolean
   ) {
     const id = this._id(type, listener, context);
@@ -52,14 +51,14 @@ class DOMEvent {
   /**
    * Removes event listener
    */
-  public off(
+  public off<T>(
     obj: EventTarget,
     type: string,
     listener: (
-      context: IntroJs | EventTarget,
+      context: T | EventTarget,
       e: Event
     ) => void | undefined | string | Promise<string | void>,
-    context: IntroJs,
+    context: T,
     useCapture: boolean
   ) {
     const id = this._id(type, listener, context);

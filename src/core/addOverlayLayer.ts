@@ -1,4 +1,4 @@
-import exitIntro from "./exitIntro";
+import exitIntro from "../packages/tour/exitIntro";
 import createElement from "../util/createElement";
 import setStyle from "../util/setStyle";
 import { IntroJs } from "../intro";
