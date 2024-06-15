@@ -1,5 +1,5 @@
 import { nextStep, previousStep } from "../../../src/packages/tour/steps";
-import _showElement from "../../../src/core/showElement";
+import _showElement from "../../../src/packages/tour/showElement";
 import { IntroJs } from "../../../src/intro";
 import introJs from "../../../src";
 

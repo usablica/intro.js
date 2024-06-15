@@ -80,6 +80,10 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  getSteps(): TourStep[] {
+    return this._steps;
+  }
+
   getStep(step: number): TourStep {
     return this._steps[step];
   }
@@ -121,6 +125,10 @@ export class Tour implements Package<TourOptions> {
     return this._direction;
   }
 
+  /**
+   * Check if the current step is the last step
+   * @returns boolean
+   */
   isEnd(): boolean {
     return this.getCurrentStep() === this._steps.length - 1;
   }

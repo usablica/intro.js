@@ -1,5 +1,5 @@
 import exitIntro from "./exitIntro";
-import showElement from "../../core/showElement";
+import showElement from "./showElement";
 import { Tour } from "./tour";
 
 export type ScrollTo = "off" | "element" | "tooltip";

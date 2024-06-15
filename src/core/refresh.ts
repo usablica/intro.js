@@ -2,7 +2,7 @@ import { reAlignHints } from "./hint";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import fetchIntroSteps from "./fetchIntroSteps";
-import { _recreateBullets, _updateProgressBar } from "./showElement";
+import { _recreateBullets, _updateProgressBar } from "../packages/tour/showElement";
 import { IntroJs } from "../intro";
 
 /**
