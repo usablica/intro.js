@@ -1,4 +1,4 @@
-import { IntroStep } from "../../core/steps";
+import { goToStep, nextStep, TourStep } from "./steps";
 import { Package } from "../package";
 import {
   introAfterChangeCallback,
@@ -14,31 +14,115 @@ import { getDefaultTourOptions, TourOptions } from "./option";
 import { setOptions, setOption } from "../../option";
 import introForElement from "src/packages/tour/introForElement";
 import exitIntro from "./exitIntro";
+import isFunction from "src/util/isFunction";
 
 export class Tour implements Package<TourOptions> {
-  private _steps: IntroStep[] = [];
+  private _steps: TourStep[] = [];
   private _currentStep: number = -1;
-  public _currentStepNumber: number | undefined;
-  public _direction: "forward" | "backward";
-  private _targetElement: HTMLElement;
+  private _direction: "forward" | "backward";
+  private readonly _targetElement: HTMLElement;
   private _options: TourOptions;
-  public _introBeforeChangeCallback?: introBeforeChangeCallback;
-  public _introChangeCallback?: introChangeCallback;
-  public _introAfterChangeCallback?: introAfterChangeCallback;
-  public _introCompleteCallback?: introCompleteCallback;
-  public _introStartCallback?: introStartCallback;
-  public _introExitCallback?: introExitCallback;
-  public _introSkipCallback?: introSkipCallback;
-  public _introBeforeExitCallback?: introBeforeExitCallback;
+  private readonly callbacks: {
+    beforeChange?: introBeforeChangeCallback;
+    change?: introChangeCallback;
+    afterChange?: introAfterChangeCallback;
+    complete?: introCompleteCallback;
+    start?: introStartCallback;
+    exit?: introExitCallback;
+    skip?: introSkipCallback;
+    beforeExit?: introBeforeExitCallback;
+  } = {};
 
   public constructor(targetElement: HTMLElement) {
     this._targetElement = targetElement;
     this._options = getDefaultTourOptions();
   }
 
+  callback<K extends keyof typeof this.callbacks>(
+    callbackName: K
+  ): (typeof this.callbacks)[K] | undefined {
+    const callback = this.callbacks[callbackName];
+    if (isFunction(callback)) {
+      return callback;
+    }
+    return undefined;
+  }
+
+  /**
+   * Go to a specific step of the tour
+   * @param step step number
+   * @returns Tour instance
+   */
+  async goToStep(step: number) {
+    // because steps starts from zero index
+    this.setCurrentStep(step - 2);
+    await nextStep(this);
+    return this;
+  }
+
+  /**
+   * Go to a specific step of the tour with the explicit [data-step] number
+   * @param stepNumber
+   * @returns
+   */
+  async goToStepNumber(stepNumber: number) {
+    for (let i = 0; i < this._steps.length; i++) {
+      const item = this._steps[i];
+
+      if (item.step === stepNumber) {
+        this.setCurrentStep(i - 1);
+        break;
+      }
+    }
+
+    await nextStep(this);
+
+    return this;
+  }
+
+  getStep(step: number): TourStep {
+    return this._steps[step];
+  }
+
+  getCurrentStep(): number {
+    return this._currentStep;
+  }
+
   setCurrentStep(step: number): this {
+    if (step >= this._currentStep) {
+      this._direction = "forward";
+    } else {
+      this._direction = "backward";
+    }
+
     this._currentStep = step;
     return this;
+  }
+
+  incrementCurrentStep(): this {
+    if (this.getCurrentStep() === -1) {
+      this.setCurrentStep(0);
+    } else {
+      this.setCurrentStep(this.getCurrentStep() + 1);
+    }
+
+    return this;
+  }
+
+  decrementCurrentStep(): this {
+    if (this.getCurrentStep() > 0) {
+      this.setCurrentStep(this._currentStep - 1);
+    }
+
+    return this;
+  }
+
+  getDirection() {
+    return this._direction;
+  }
+
+  isEnd(): boolean {
+    return this.getCurrentStep() === this._steps.length - 1;
   }
 
   getTargetElement(): HTMLElement {
@@ -59,7 +143,7 @@ export class Tour implements Package<TourOptions> {
     return this._options[key];
   }
 
-  setSteps(steps: IntroStep[]): this {
+  setSteps(steps: TourStep[]): this {
     this._steps = steps;
     return this;
   }
@@ -72,25 +156,22 @@ export class Tour implements Package<TourOptions> {
     throw new Error("Method not implemented.");
   }
 
-  render(): this {
-    console.log("Tour");
-
+  async render(): Promise<this> {
+    await introForElement(this, this._targetElement);
     return this;
   }
 
+  /**
+   * @deprecated `start()` is deprecated, please use `render()` instead.
+   * @returns
+   */
   async start() {
     await introForElement(this, this._targetElement);
     return this;
   }
 
   async exit(force: boolean) {
-    await exitIntro(
-      this,
-      this._targetElement,
-      this._introBeforeExitCallback,
-      this._introExitCallback,
-      force
-    );
+    await exitIntro(this, force);
     return this;
   }
 }

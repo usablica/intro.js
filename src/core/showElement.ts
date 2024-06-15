@@ -4,7 +4,7 @@ import addClass from "../util/addClass";
 import scrollTo from "../util/scrollTo";
 import exitIntro from "../packages/tour/exitIntro";
 import setAnchorAsButton from "../util/setAnchorAsButton";
-import { IntroStep, nextStep, previousStep } from "./steps";
+import { IntroStep, nextStep, previousStep } from "../packages/tour/steps";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import removeShowElement from "./removeShowElement";

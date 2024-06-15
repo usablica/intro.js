@@ -19,7 +19,7 @@ import {
   goToStepNumber,
   nextStep,
   previousStep,
-} from "./core/steps";
+} from "./packages/tour/steps";
 import { Options, getDefaultOptions, setOption, setOptions } from "./option";
 import isFunction from "./util/isFunction";
 

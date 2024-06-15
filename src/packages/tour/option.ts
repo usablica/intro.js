@@ -1,4 +1,4 @@
-import { IntroStep, ScrollTo, TooltipPosition } from "../../core/steps";
+import { IntroStep, ScrollTo, TooltipPosition } from "./steps";
 
 export interface TourOptions {
   steps: Partial<IntroStep>[];

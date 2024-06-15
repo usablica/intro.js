@@ -1,5 +1,5 @@
 import { IntroJs } from "../../../src/intro";
-import { IntroStep } from "../../../src/core/steps";
+import { IntroStep } from "../../../src/packages/tour/steps";
 import setHelperLayerPosition from "../../../src/core/setHelperLayerPosition";
 import _createElement from "../../../src/util/createElement";
 import { getBoundingClientRectSpy } from "../helper";

@@ -4,5 +4,5 @@ export interface Package<TOption> {
   setOption<K extends keyof TOption>(key: K, value: TOption[K]): this;
   clone(): ThisType<this>;
   isActive(): boolean;
-  render(): this;
+  render(): Promise<this>;
 }

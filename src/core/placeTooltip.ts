@@ -4,7 +4,7 @@ import addClass from "../util/addClass";
 import checkRight from "../util/checkRight";
 import checkLeft from "../util/checkLeft";
 import removeEntry from "../util/removeEntry";
-import { HintStep, IntroStep, TooltipPosition } from "./steps";
+import { HintStep, IntroStep, TooltipPosition } from "../packages/tour/steps";
 import { IntroJs } from "../intro";
 
 /**

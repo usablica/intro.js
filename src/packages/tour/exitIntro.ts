@@ -3,12 +3,7 @@ import onKeyDown from "../../core/onKeyDown";
 import onResize from "./onResize";
 import removeShowElement from "../../core/removeShowElement";
 import removeChild from "../../util/removeChild";
-import isFunction from "../../util/isFunction";
 import { Tour } from "./tour";
-import {
-  introBeforeExitCallback,
-  introExitCallback,
-} from "./callback";
 
 /**
  * Exit from intro
@@ -16,21 +11,14 @@ import {
  * @api private
  * @param {Boolean} force - Setting to `true` will skip the result of beforeExit callback
  */
-export default async function exitIntro(
-  tour: Tour,
-  targetElement: HTMLElement,
-  beforeExitCallback?: introBeforeExitCallback,
-  exitCallback?: introExitCallback,
-  force: boolean = false
-) {
-  let continueExit = true;
+export default async function exitIntro(tour: Tour, force: boolean = false) {
+  const targetElement = tour.getTargetElement();
+  let continueExit: boolean | undefined = true;
 
   // calling onbeforeexit callback
   //
   // If this callback return `false`, it would halt the process
-  if (isFunction(beforeExitCallback)) {
-    continueExit = await beforeExitCallback.call(tour, targetElement);
-  }
+  continueExit = await tour.callback("beforeExit")?.call(tour, targetElement);
 
   // skip this check if `force` parameter is `true`
   // otherwise, if `onbeforeexit` returned `false`, don't exit the intro
@@ -77,9 +65,7 @@ export default async function exitIntro(
   DOMEvent.off(window, "resize", onResize, tour, true);
 
   //check if any callback is defined
-  if (isFunction(exitCallback)) {
-    await exitCallback.call(tour);
-  }
+  await tour.callback("exit")?.call(tour);
 
   // set the step to default
   tour.setCurrentStep(-1);

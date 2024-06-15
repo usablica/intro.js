@@ -4,7 +4,7 @@ import addClass from "../util/addClass";
 import removeClass from "../util/removeClass";
 import setStyle from "../util/setStyle";
 import { IntroJs } from "../intro";
-import { HintStep, IntroStep } from "./steps";
+import { HintStep, IntroStep } from "../packages/tour/steps";
 
 /**
  * Update the position of the helper layer on the screen

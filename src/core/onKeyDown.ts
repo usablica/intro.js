@@ -1,4 +1,4 @@
-import { nextStep, previousStep } from "./steps";
+import { nextStep, previousStep } from "../packages/tour/steps";
 import exitIntro from "../packages/tour/exitIntro";
 import { IntroJs } from "../intro";
 import isFunction from "../util/isFunction";

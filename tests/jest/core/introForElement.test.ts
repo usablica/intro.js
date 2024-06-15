@@ -1,7 +1,7 @@
 import introForElement from "../../../src/packages/tour/introForElement";
 import * as fetchIntroSteps from "../../../src/core/fetchIntroSteps";
 import * as addOverlayLayer from "../../../src/core/addOverlayLayer";
-import * as nextStep from "../../../src/core/steps";
+import * as nextStep from "../../../src/packages/tour/steps";
 import introJs from "../../../src";
 
 describe("introForElement", () => {

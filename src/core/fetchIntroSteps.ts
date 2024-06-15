@@ -1,7 +1,7 @@
 import { IntroJs } from "../intro";
 import cloneObject from "../util/cloneObject";
 import createElement from "../util/createElement";
-import { IntroStep, ScrollTo, TooltipPosition } from "./steps";
+import { IntroStep, ScrollTo, TooltipPosition } from "../packages/tour/steps";
 
 /**
  * Finds all Intro steps from the data-* attributes and the options.steps array

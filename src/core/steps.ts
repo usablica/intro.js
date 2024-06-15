@@ -1,7 +1,7 @@
-import isFunction from "../util/isFunction";
-import exitIntro from "../packages/tour/exitIntro";
-import showElement from "./showElement";
-import { IntroJs } from "../intro";
+import isFunction from "../../util/isFunction";
+import exitIntro from "./exitIntro";
+import showElement from "../../core/showElement";
+import { IntroJs } from "../../intro";
 
 export type ScrollTo = "off" | "element" | "tooltip";
 

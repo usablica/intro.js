@@ -9,7 +9,7 @@ import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";
 import createElement from "../util/createElement";
 import debounce from "../util/debounce";
-import { HintPosition, HintStep, TooltipPosition } from "./steps";
+import { HintPosition, HintStep, TooltipPosition } from "../packages/tour/steps";
 import { IntroJs } from "../intro";
 import isFunction from "../util/isFunction";
 
