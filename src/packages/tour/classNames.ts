@@ -19,3 +19,4 @@ export const dontShowAgainClassName = "introjs-dontShowAgain";
 export const hiddenButtonClassName = "introjs-hidden";
 export const disabledButtonClassName = "introjs-disabled";
 export const fullButtonClassName = "introjs-fullbutton";
+export const activeClassName = "active";

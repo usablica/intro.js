@@ -12,6 +12,7 @@ import createElement from "../../util/createElement";
 import setStyle from "../../util/setStyle";
 import appendChild from "../../util/appendChild";
 import {
+  activeClassName,
   arrowClassName,
   bulletsClassName,
   disabledButtonClassName,
@@ -110,7 +111,7 @@ function _createBullets(tour: Tour, step: TourStep): HTMLElement {
     anchorLink.onclick = anchorClick;
 
     if (i === step.step - 1) {
-      addClass(anchorLink, "active");
+      addClass(anchorLink, activeClassName);
     }
 
     setAnchorAsButton(anchorLink);
@@ -150,7 +151,7 @@ function _updateBullets(
 ) {
   if (showBullets) {
     const oldRefActiveBullet = queryElement(
-      `.${bulletsClassName} li > a.active`,
+      `.${bulletsClassName} li > a.${activeClassName}`,
       oldReferenceLayer
     );
 
@@ -161,7 +162,7 @@ function _updateBullets(
 
     if (oldRefActiveBullet && oldRefBulletStepNumber) {
       oldRefActiveBullet.className = "";
-      addClass(oldRefBulletStepNumber, "active");
+      addClass(oldRefBulletStepNumber, activeClassName);
     }
   }
 }
