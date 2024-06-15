@@ -5,7 +5,7 @@ import scrollTo from "../../util/scrollTo";
 import exitIntro from "./exitIntro";
 import setAnchorAsButton from "../../util/setAnchorAsButton";
 import { TourStep, nextStep, previousStep } from "./steps";
-import setHelperLayerPosition from "../../core/setHelperLayerPosition";
+import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "../../core/placeTooltip";
 import removeShowElement from "../../core/removeShowElement";
 import createElement from "../../util/createElement";
@@ -266,7 +266,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
       tooltipTitleClassName,
       oldReferenceLayer
     );
-    const oldArrowLayer = queryElementByClassName(
+    const oldArrowLayer = getElementByClassName(
       arrowClassName,
       oldReferenceLayer
     );
@@ -331,7 +331,16 @@ export default async function _showElement(tour: Tour, step: TourStep) {
 
       //set the tooltip position
       oldTooltipContainer.style.display = "block";
-      placeTooltip(tour, step, oldTooltipContainer, oldArrowLayer);
+      placeTooltip(
+        oldTooltipContainer,
+        oldArrowLayer,
+        step.element as HTMLElement,
+        step.position,
+        tour.getOption("positionPrecedence"),
+        tour.getOption("showStepNumbers"),
+        tour.getOption("autoPosition"),
+        step.tooltipClass ?? tour.getOption("tooltipClass")
+      );
 
       //change active bullet
       _updateBullets(tour.getOption("showBullets"), oldReferenceLayer, step);
@@ -533,7 +542,16 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     tooltipLayer.appendChild(buttonsLayer);
 
     // set proper position
-    placeTooltip(tour, step, tooltipLayer, arrowLayer);
+    placeTooltip(
+      tooltipLayer,
+      arrowLayer,
+      step.element as HTMLElement,
+      step.position,
+      tour.getOption("positionPrecedence"),
+      tour.getOption("showStepNumbers"),
+      tour.getOption("autoPosition"),
+      step.tooltipClass ?? tour.getOption("tooltipClass")
+    );
 
     // change the scroll of the window, if needed
     scrollTo(

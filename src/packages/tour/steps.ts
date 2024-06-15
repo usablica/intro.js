@@ -1,21 +1,9 @@
+import { TooltipPosition } from "../../core/placeTooltip";
 import exitIntro from "./exitIntro";
 import showElement from "./showElement";
 import { Tour } from "./tour";
 
 export type ScrollTo = "off" | "element" | "tooltip";
-
-export type TooltipPosition =
-  | "floating"
-  | "top"
-  | "bottom"
-  | "left"
-  | "right"
-  | "top-right-aligned"
-  | "top-left-aligned"
-  | "top-middle-aligned"
-  | "bottom-right-aligned"
-  | "bottom-left-aligned"
-  | "bottom-middle-aligned";
 
 export type TourStep = {
   step: number;

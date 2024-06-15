@@ -1,4 +1,4 @@
-import stamp from "../util/stamp";
+import stamp from "./stamp";
 
 /**
  * DOMEvent Handles all DOM events

@@ -1,3 +1,4 @@
+export const overlayClassName = "introjs-overlay";
 export const disableInteractionClassName = "introjs-disableInteraction";
 export const bulletsClassName = "introjs-bullets";
 export const progressClassName = "introjs-progress";
@@ -20,3 +21,5 @@ export const hiddenButtonClassName = "introjs-hidden";
 export const disabledButtonClassName = "introjs-disabled";
 export const fullButtonClassName = "introjs-fullbutton";
 export const activeClassName = "active";
+export const fixedTooltipClassName = "introjs-fixedTooltip";
+export const floatingElementClassName = "introjsFloatingElement";

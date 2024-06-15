@@ -1,7 +1,8 @@
-import { IntroStep, ScrollTo, TooltipPosition } from "./steps";
+import { TooltipPosition } from "../../core/placeTooltip";
+import { TourStep, ScrollTo } from "./steps";
 
 export interface TourOptions {
-  steps: Partial<IntroStep>[];
+  steps: Partial<TourStep>[];
   /* Is this tour instance active? Don't show the tour again if this flag is set to false */
   isActive: boolean;
   /* Next button label in tooltip box */
@@ -111,6 +112,6 @@ export function getDefaultTourOptions(): TourOptions {
     helperElementPadding: 10,
 
     buttonClass: "introjs-button",
-    progressBarAdditionalClass: false,
+    progressBarAdditionalClass: "",
   };
 }

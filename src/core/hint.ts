@@ -3,7 +3,7 @@ import removeClass from "../util/removeClass";
 import isFixed from "../util/isFixed";
 import getOffset from "../util/getOffset";
 import cloneObject from "../util/cloneObject";
-import DOMEvent from "./DOMEvent";
+import DOMEvent from "../util/DOMEvent";
 import setAnchorAsButton from "../util/setAnchorAsButton";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "./placeTooltip";

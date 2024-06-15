@@ -1,5 +1,5 @@
 import addOverlayLayer from "../../core/addOverlayLayer";
-import DOMEvent from "../../core/DOMEvent";
+import DOMEvent from "../../util/DOMEvent";
 import { nextStep } from "./steps";
 import onKeyDown from "../../core/onKeyDown";
 import onResize from "./onResize";

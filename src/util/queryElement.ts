@@ -6,11 +6,25 @@ export const queryElement = (
   return (container ?? document).querySelector(selector);
 };
 
+export const queryElements = (
+  selector: string,
+  container?: HTMLElement
+): NodeListOf<HTMLElement> => {
+  return (container ?? document).querySelectorAll(selector);
+};
+
 export const queryElementByClassName = (
   className: string,
   container?: HTMLElement
 ): HTMLElement | null => {
   return queryElement(`.${className}`, container);
+};
+
+export const queryElementsByClassName = (
+  className: string,
+  container?: HTMLElement
+): NodeListOf<HTMLElement> => {
+  return queryElements(`.${className}`, container);
 };
 
 export const getElementByClassName = (

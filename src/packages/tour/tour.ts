@@ -1,4 +1,4 @@
-import { goToStep, nextStep, TourStep } from "./steps";
+import { nextStep, TourStep } from "./steps";
 import { Package } from "../package";
 import {
   introAfterChangeCallback,
@@ -12,9 +12,10 @@ import {
 } from "./callback";
 import { getDefaultTourOptions, TourOptions } from "./option";
 import { setOptions, setOption } from "../../option";
-import introForElement from "src/packages/tour/introForElement";
+import introForElement from "./introForElement";
 import exitIntro from "./exitIntro";
-import isFunction from "src/util/isFunction";
+import isFunction from "../../util/isFunction";
+import { getDontShowAgain, setDontShowAgain } from "./dontShowAgain";
 
 export class Tour implements Package<TourOptions> {
   private _steps: TourStep[] = [];
@@ -161,7 +162,23 @@ export class Tour implements Package<TourOptions> {
   }
 
   isActive(): boolean {
-    throw new Error("Method not implemented.");
+    if (
+      this.getOption("dontShowAgain") &&
+      getDontShowAgain(this.getOption("dontShowAgainCookie"))
+    ) {
+      return false;
+    }
+
+    return this.getOption("isActive");
+  }
+
+  setDontShowAgain(dontShowAgain: boolean) {
+    setDontShowAgain(
+      dontShowAgain,
+      this.getOption("dontShowAgainCookie"),
+      this.getOption("dontShowAgainCookieDays")
+    );
+    return this;
   }
 
   async render(): Promise<this> {

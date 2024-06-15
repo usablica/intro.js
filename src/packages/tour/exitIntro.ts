@@ -1,9 +1,20 @@
-import DOMEvent from "../../core/DOMEvent";
+import DOMEvent from "../../util/DOMEvent";
 import onKeyDown from "../../core/onKeyDown";
 import onResize from "./onResize";
 import removeShowElement from "../../core/removeShowElement";
 import removeChild from "../../util/removeChild";
 import { Tour } from "./tour";
+import {
+  disableInteractionClassName,
+  floatingElementClassName,
+  helperLayerClassName,
+  overlayClassName,
+  tooltipReferenceLayerClassName,
+} from "./classNames";
+import {
+  queryElementByClassName,
+  queryElementsByClassName,
+} from "src/util/queryElement";
 
 /**
  * Exit from intro
@@ -26,7 +37,7 @@ export default async function exitIntro(tour: Tour, force: boolean = false) {
 
   // remove overlay layers from the page
   const overlayLayers = Array.from(
-    targetElement.querySelectorAll<HTMLElement>(".introjs-overlay")
+    queryElementsByClassName(overlayClassName, targetElement)
   );
 
   if (overlayLayers && overlayLayers.length) {
@@ -36,25 +47,29 @@ export default async function exitIntro(tour: Tour, force: boolean = false) {
   }
 
   //remove all helper layers
-  const helperLayer = targetElement.querySelector<HTMLElement>(
-    ".introjs-helperLayer"
+  const helperLayer = queryElementByClassName(
+    helperLayerClassName,
+    targetElement
   );
   removeChild(helperLayer, true);
 
-  const referenceLayer = targetElement.querySelector<HTMLElement>(
-    ".introjs-tooltipReferenceLayer"
+  const referenceLayer = queryElementByClassName(
+    tooltipReferenceLayerClassName,
+    targetElement
   );
   removeChild(referenceLayer);
 
   //remove disableInteractionLayer
-  const disableInteractionLayer = targetElement.querySelector<HTMLElement>(
-    ".introjs-disableInteraction"
+  const disableInteractionLayer = queryElementByClassName(
+    disableInteractionClassName,
+    targetElement
   );
   removeChild(disableInteractionLayer);
 
   //remove intro floating element
-  const floatingElement = document.querySelector<HTMLElement>(
-    ".introjsFloatingElement"
+  const floatingElement = queryElementByClassName(
+    floatingElementClassName,
+    targetElement
   );
   removeChild(floatingElement);
 
