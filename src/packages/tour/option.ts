@@ -70,7 +70,7 @@ export interface TourOptions {
   /* additional classes to put on the buttons */
   buttonClass: string;
   /* additional classes to put on progress bar */
-  progressBarAdditionalClass: boolean;
+  progressBarAdditionalClass: string;
 }
 
 export function getDefaultTourOptions(): TourOptions {

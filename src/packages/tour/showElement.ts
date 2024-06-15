@@ -11,10 +11,36 @@ import removeShowElement from "../../core/removeShowElement";
 import createElement from "../../util/createElement";
 import setStyle from "../../util/setStyle";
 import appendChild from "../../util/appendChild";
-import { arrowClassName, bulletsClassName, disabledButtonClassName, disableInteractionClassName, doneButtonClassName, dontShowAgainClassName, fullButtonClassName, helperLayerClassName, helperNumberLayerClassName, hiddenButtonClassName, nextButtonClassName, previousButtonClassName, progressBarClassName, progressClassName, skipButtonClassName, tooltipButtonsClassName, tooltipClassName, tooltipHeaderClassName, tooltipReferenceLayerClassName, tooltipTextClassName, tooltipTitleClassName } from "./classNames";
+import {
+  arrowClassName,
+  bulletsClassName,
+  disabledButtonClassName,
+  disableInteractionClassName,
+  doneButtonClassName,
+  dontShowAgainClassName,
+  fullButtonClassName,
+  helperLayerClassName,
+  helperNumberLayerClassName,
+  hiddenButtonClassName,
+  nextButtonClassName,
+  previousButtonClassName,
+  progressBarClassName,
+  progressClassName,
+  skipButtonClassName,
+  tooltipButtonsClassName,
+  tooltipClassName,
+  tooltipHeaderClassName,
+  tooltipReferenceLayerClassName,
+  tooltipTextClassName,
+  tooltipTitleClassName,
+} from "./classNames";
 import { Tour } from "./tour";
 import { dataStepNumberAttribute } from "./dataAttributes";
-import { getElementByClassName, queryElement, queryElementByClassName } from "src/util/queryElement";
+import {
+  getElementByClassName,
+  queryElement,
+  queryElementByClassName,
+} from "../../util/queryElement";
 
 /**
  * Gets the current progress percentage
@@ -84,7 +110,7 @@ function _createBullets(tour: Tour, step: TourStep): HTMLElement {
     anchorLink.onclick = anchorClick;
 
     if (i === step.step - 1) {
-      anchorLink.className = "active";
+      addClass(anchorLink, "active");
     }
 
     setAnchorAsButton(anchorLink);
@@ -128,13 +154,14 @@ function _updateBullets(
       oldReferenceLayer
     );
 
-    const oldRefBulletStepNumber = oldReferenceLayer.querySelector(
-      `.${bulletsClassName} li > a[${dataStepNumberAttribute}="${step.step}"]`
+    const oldRefBulletStepNumber = queryElement(
+      `.${bulletsClassName} li > a[${dataStepNumberAttribute}="${step.step}"]`,
+      oldReferenceLayer
     );
 
     if (oldRefActiveBullet && oldRefBulletStepNumber) {
       oldRefActiveBullet.className = "";
-      oldRefBulletStepNumber.className = "active";
+      addClass(oldRefBulletStepNumber, "active");
     }
   }
 }
@@ -146,9 +173,9 @@ function _updateBullets(
 function _createProgressBar(tour: Tour) {
   const progressLayer = createElement("div");
 
-  progressLayer.className = progressClassName;
+  addClass(progressLayer, progressClassName);
 
-  if (tour.getOption('showProgress') === false) {
+  if (tour.getOption("showProgress") === false) {
     progressLayer.style.display = "none";
   }
 
@@ -157,7 +184,7 @@ function _createProgressBar(tour: Tour) {
   });
 
   if (tour.getOption("progressBarAdditionalClass")) {
-    progressBar.className += " " + tour.getOption("progressBarAdditionalClass");
+    addClass(progressBar, tour.getOption("progressBarAdditionalClass"));
   }
 
   const progress = _getProgress(tour.getCurrentStep(), tour.getSteps().length);
@@ -205,7 +232,9 @@ export default async function _showElement(tour: Tour, step: TourStep) {
   tour.callback("change")?.call(tour, step.element);
 
   const oldHelperLayer = queryElementByClassName(helperLayerClassName);
-  const oldReferenceLayer = queryElementByClassName(tooltipReferenceLayerClassName);
+  const oldReferenceLayer = queryElementByClassName(
+    tooltipReferenceLayerClassName
+  );
 
   let highlightClass = helperLayerClassName;
   let nextTooltipButton: HTMLElement;
@@ -261,7 +290,8 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     );
 
     //update or reset the helper highlight class
-    oldHelperLayer.className = highlightClass;
+    addClass(oldHelperLayer, highlightClass);
+
     //hide the tooltip
     oldTooltipContainer.style.opacity = "0";
     oldTooltipContainer.style.display = "none";
@@ -385,7 +415,8 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     tooltipTextLayer.innerHTML = step.intro;
     tooltipTitleLayer.innerHTML = step.title;
 
-    buttonsLayer.className = tooltipButtonsClassName;
+    addClass(buttonsLayer, tooltipButtonsClassName);
+
     if (tour.getOption("showButtons") === false) {
       buttonsLayer.style.display = "none";
     }
@@ -425,7 +456,8 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     const helperNumberLayer = createElement("div");
 
     if (tour.getOption("showStepNumbers") === true) {
-      helperNumberLayer.className = helperNumberLayerClassName;
+      addClass(helperNumberLayer, helperNumberLayerClassName);
+
       helperNumberLayer.innerHTML = `${step.step} ${tour.getOption(
         "stepNumbersOfLabel"
       )} ${tour.getSteps().length}`;
@@ -531,44 +563,52 @@ export default async function _showElement(tour: Tour, step: TourStep) {
   // when it's the first step of tour
   if (tour.getCurrentStep() === 0 && tour.getSteps().length > 1) {
     if (nextTooltipButton) {
-      nextTooltipButton.className = `${tour.getOption(
-        "buttonClass"
-      )} ${nextButtonClassName}`;
+      addClass(
+        nextTooltipButton,
+        `${tour.getOption("buttonClass")} ${nextButtonClassName}`
+      );
       nextTooltipButton.innerHTML = tour.getOption("nextLabel");
     }
 
-    if (tour.getOption('hidePrev') === true) {
+    if (tour.getOption("hidePrev") === true) {
       if (prevTooltipButton) {
-        prevTooltipButton.className = `${tour.getOption(
-          "buttonClass"
-        )} ${previousButtonClassName} ${hiddenButtonClassName}`;
+        addClass(
+          prevTooltipButton,
+          `${tour.getOption(
+            "buttonClass"
+          )} ${previousButtonClassName} ${hiddenButtonClassName}`
+        );
       }
       if (nextTooltipButton) {
         addClass(nextTooltipButton, fullButtonClassName);
       }
     } else {
       if (prevTooltipButton) {
-        prevTooltipButton.className = `${tour.getOption(
-          "buttonClass"
-        )} ${previousButtonClassName} ${disableInteractionClassName}`;
+        addClass(
+          prevTooltipButton,
+          `${tour.getOption(
+            "buttonClass"
+          )} ${previousButtonClassName} ${disableInteractionClassName}`
+        );
       }
     }
-  } else if (
-    tour.isEnd() ||
-    tour.getSteps().length === 1
-  ) {
+  } else if (tour.isEnd() || tour.getSteps().length === 1) {
     // last step of tour
     if (prevTooltipButton) {
-      prevTooltipButton.className = `${tour.getOption(
-        "buttonClass"
-      )} ${previousButtonClassName}`;
+      addClass(
+        prevTooltipButton,
+        `${tour.getOption("buttonClass")} ${previousButtonClassName}`
+      );
     }
 
-    if (tour.getOption('hideNext') === true) {
+    if (tour.getOption("hideNext") === true) {
       if (nextTooltipButton) {
-        nextTooltipButton.className = `${tour.getOption(
-          "buttonClass"
-        )} ${nextButtonClassName} ${hiddenButtonClassName}`;
+        addClass(
+          nextTooltipButton,
+          `${tour.getOption(
+            "buttonClass"
+          )} ${nextButtonClassName} ${hiddenButtonClassName}`
+        );
       }
       if (prevTooltipButton) {
         addClass(prevTooltipButton, fullButtonClassName);
@@ -584,23 +624,28 @@ export default async function _showElement(tour: Tour, step: TourStep) {
             )} ${nextButtonClassName} ${doneButtonClassName}`
           );
         } else {
-          nextTooltipButton.className = `${tour.getOption(
-            "buttonClass"
-          )} ${nextButtonClassName} ${disabledButtonClassName}`;
+          addClass(
+            nextTooltipButton,
+            `${tour.getOption(
+              "buttonClass"
+            )} ${nextButtonClassName} ${disabledButtonClassName}`
+          );
         }
       }
     }
   } else {
     // steps between start and end
     if (prevTooltipButton) {
-      prevTooltipButton.className = `${tour.getOption(
-        "buttonClass"
-      )} ${previousButtonClassName}`;
+      addClass(
+        prevTooltipButton,
+        `${tour.getOption("buttonClass")} ${previousButtonClassName}`
+      );
     }
     if (nextTooltipButton) {
-      nextTooltipButton.className = `${tour.getOption(
-        "buttonClass"
-      )} ${nextButtonClassName}`;
+      addClass(
+        nextTooltipButton,
+        `${tour.getOption("buttonClass")} ${nextButtonClassName}`
+      );
       nextTooltipButton.innerHTML = tour.getOption("nextLabel");
     }
   }
