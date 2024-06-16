@@ -1,10 +1,9 @@
 import getOffset from "../util/getOffset";
 import isFixed from "../util/isFixed";
-import addClass from "../util/className";
+import { addClass } from "../util/className";
 import removeClass from "../util/removeClass";
 import setStyle from "../util/setStyle";
-import { IntroJs } from "../intro";
-import { HintStep, IntroStep } from "../packages/tour/steps";
+import { TooltipPosition } from "./placeTooltip";
 
 /**
  * Update the position of the helper layer on the screen
@@ -12,36 +11,36 @@ import { HintStep, IntroStep } from "../packages/tour/steps";
  * @api private
  */
 export default function setHelperLayerPosition(
-  intro: IntroJs,
-  step: IntroStep | HintStep,
-  helperLayer: HTMLElement
+  targetElement: HTMLElement,
+  helperLayer: HTMLElement,
+  stepElement: HTMLElement,
+  stepPosition: TooltipPosition,
+  helperElementPadding: number
 ) {
-  if (!helperLayer || !step) return;
+  if (!helperLayer || !targetElement || !stepElement) {
+    return;
+  }
 
-  const elementPosition = getOffset(
-    step.element as HTMLElement,
-    intro._targetElement
-  );
-  let widthHeightPadding = intro._options.helperElementPadding;
+  const elementPosition = getOffset(stepElement as HTMLElement, targetElement);
 
   // If the target element is fixed, the tooltip should be fixed as well.
   // Otherwise, remove a fixed class that may be left over from the previous
   // step.
-  if (step.element instanceof Element && isFixed(step.element)) {
+  if (stepElement instanceof Element && isFixed(stepElement)) {
     addClass(helperLayer, "introjs-fixedTooltip");
   } else {
     removeClass(helperLayer, "introjs-fixedTooltip");
   }
 
-  if (step.position === "floating") {
-    widthHeightPadding = 0;
+  if (stepPosition === "floating") {
+    helperElementPadding = 0;
   }
 
   //set new position to helper layer
   setStyle(helperLayer, {
-    width: `${elementPosition.width + widthHeightPadding}px`,
-    height: `${elementPosition.height + widthHeightPadding}px`,
-    top: `${elementPosition.top - widthHeightPadding / 2}px`,
-    left: `${elementPosition.left - widthHeightPadding / 2}px`,
+    width: `${elementPosition.width + helperElementPadding}px`,
+    height: `${elementPosition.height + helperElementPadding}px`,
+    top: `${elementPosition.top - helperElementPadding / 2}px`,
+    left: `${elementPosition.left - helperElementPadding / 2}px`,
   });
 }

@@ -3,7 +3,7 @@ import DOMEvent from "../../util/DOMEvent";
 import { nextStep } from "./steps";
 import onKeyDown from "../../core/onKeyDown";
 import onResize from "./onResize";
-import fetchIntroSteps from "../../core/fetchIntroSteps";
+import fetchIntroSteps from "./fetchSteps";
 import isFunction from "../../util/isFunction";
 import { Tour } from "./tour";
 

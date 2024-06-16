@@ -11,7 +11,7 @@ import {
   showHints,
 } from "./core/hint";
 import introForElement from "./packages/tour/introForElement";
-import refresh from "./core/refresh";
+import refresh from "./packages/tour/refresh";
 import {
   HintStep,
   IntroStep,

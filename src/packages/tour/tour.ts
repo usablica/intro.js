@@ -81,6 +81,26 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  addStep(step: Partial<TourStep>) {
+    if (!this._options.steps) {
+      this._options.steps = [];
+    }
+
+    this._options.steps.push(step);
+
+    return this;
+  }
+
+  addSteps(steps: Partial<TourStep>[]) {
+    if (!steps.length) return this;
+
+    for (const step of steps) {
+      this.addStep(step);
+    }
+
+    return this;
+  }
+
   getSteps(): TourStep[] {
     return this._steps;
   }
@@ -197,6 +217,83 @@ export class Tour implements Package<TourOptions> {
 
   async exit(force: boolean) {
     await exitIntro(this, force);
+    return this;
+  }
+
+  onbeforechange(callback: introBeforeChangeCallback) {
+    if (isFunction(callback)) {
+      this.callbacks.beforeChange = callback;
+    } else {
+      throw new Error(
+        "Provided callback for onbeforechange was not a function"
+      );
+    }
+    return this;
+  }
+
+  onchange(callback: introChangeCallback) {
+    if (isFunction(callback)) {
+      this.callbacks.change = callback;
+    } else {
+      throw new Error("Provided callback for onchange was not a function.");
+    }
+    return this;
+  }
+
+  onafterchange(callback: introAfterChangeCallback) {
+    if (isFunction(callback)) {
+      this.callbacks.afterChange = callback;
+    } else {
+      throw new Error("Provided callback for onafterchange was not a function");
+    }
+    return this;
+  }
+
+  oncomplete(callback: introCompleteCallback) {
+    if (isFunction(callback)) {
+      this.callbacks.complete = callback;
+    } else {
+      throw new Error("Provided callback for oncomplete was not a function.");
+    }
+    return this;
+  }
+
+  onstart(callback: introStartCallback) {
+    if (isFunction(callback)) {
+      this.callbacks.start = callback;
+    } else {
+      throw new Error("Provided callback for onstart was not a function.");
+    }
+
+    return this;
+  }
+
+  onexit(callback: introExitCallback) {
+    if (isFunction(callback)) {
+      this.callbacks.exit = callback;
+    } else {
+      throw new Error("Provided callback for onexit was not a function.");
+    }
+
+    return this;
+  }
+
+  onskip(callback: introSkipCallback) {
+    if (isFunction(callback)) {
+      this.callbacks.skip = callback;
+    } else {
+      throw new Error("Provided callback for onskip was not a function.");
+    }
+
+    return this;
+  }
+
+  onbeforeexit(callback: introBeforeExitCallback) {
+    if (isFunction(callback)) {
+      this.callbacks.beforeExit = callback;
+    } else {
+      throw new Error("Provided callback for onbeforeexit was not a function.");
+    }
     return this;
   }
 }

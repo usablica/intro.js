@@ -20,7 +20,7 @@ export interface TourOptions {
   /* Change the Next button to Done in the last step of the intro? otherwise, it will render a disabled button */
   nextToDone: boolean;
   /* Default tooltip box position */
-  tooltipPosition: string;
+  tooltipPosition: TooltipPosition;
   /* Next CSS class for tooltip boxes */
   tooltipClass: string;
   /* Start intro for a group of elements */
