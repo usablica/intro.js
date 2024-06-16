@@ -1,10 +1,9 @@
-import addOverlayLayer from "../../core/addOverlayLayer";
+import addOverlayLayer from "./addOverlayLayer";
 import DOMEvent from "../../util/DOMEvent";
 import { nextStep } from "./steps";
-import onKeyDown from "../../core/onKeyDown";
+import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
-import fetchIntroSteps from "./fetchSteps";
-import isFunction from "../../util/isFunction";
+import { fetchSteps } from "./steps";
 import { Tour } from "./tour";
 
 /**
@@ -12,19 +11,16 @@ import { Tour } from "./tour";
  *
  * @api private
  */
-export default async function introForElement(
-  tour: Tour,
-  targetElm: HTMLElement
-): Promise<Boolean> {
+export const render = async (tour: Tour): Promise<Boolean> => {
   // don't start the tour if the instance is not active
-  if (!tour.isActive()) return false;
-
-  if (isFunction(tour._introStartCallback)) {
-    await tour._introStartCallback.call(tour, targetElm);
+  if (!tour.isActive()) {
+    return false;
   }
 
+  await tour.callback("start")?.call(tour, tour.getTargetElement());
+
   //set it to the introJs object
-  const steps = fetchIntroSteps(tour, targetElm);
+  const steps = fetchSteps(tour);
 
   if (steps.length === 0) {
     return false;
@@ -33,11 +29,10 @@ export default async function introForElement(
   tour.setSteps(steps);
 
   //add overlay layer to the page
-  if (addOverlayLayer(tour, targetElm)) {
+  if (addOverlayLayer(tour)) {
     //then, start the show
     await nextStep(tour);
 
-    targetElm.addEventListener;
     if (tour.getOption("keyboardNavigation")) {
       DOMEvent.on(window, "keydown", onKeyDown, tour, true);
     }
@@ -47,4 +42,4 @@ export default async function introForElement(
   }
 
   return false;
-}
+};

@@ -27,6 +27,8 @@ export const appendMockSteps = (targetElement: HTMLElement = document.body) => {
   targetElement.appendChild(mockElementTwo);
   targetElement.appendChild(mockElementThree);
   targetElement.appendChild(mockElementFour);
+
+  return [mockElementOne, mockElementTwo, mockElementThree, mockElementFour];
 };
 
 export const getMockSteps = (): Partial<TourStep>[] => {

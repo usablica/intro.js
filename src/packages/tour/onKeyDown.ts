@@ -1,8 +1,8 @@
-import { nextStep, previousStep } from "../packages/tour/steps";
-import exitIntro from "../packages/tour/exitIntro";
-import { IntroJs } from "../intro";
-import isFunction from "../util/isFunction";
-import { Tour } from "src/packages/tour/tour";
+import { nextStep, previousStep } from "./steps";
+import exitIntro from "./exitIntro";
+import { Tour } from "./tour";
+import { previousButtonClassName, skipButtonClassName } from "./classNames";
+import { dataStepNumberAttribute } from "./dataAttributes";
 
 /**
  * on keyCode:
@@ -27,42 +27,40 @@ export default async function onKeyDown(tour: Tour, e: KeyboardEvent) {
     code = e.charCode === null ? e.keyCode : e.charCode;
   }
 
-  if ((code === "Escape" || code === 27) && tour.getOption('exitOnEsc') === true) {
+  if (
+    (code === "Escape" || code === 27) &&
+    tour.getOption("exitOnEsc") === true
+  ) {
     //escape key pressed, exit the intro
     //check if exit callback is defined
-    await exitIntro(tour, tour.getTargetElement());
+    await exitIntro(tour);
   } else if (code === "ArrowLeft" || code === 37) {
     //left arrow
-    await previousStep(intro);
+    await previousStep(tour);
   } else if (code === "ArrowRight" || code === 39) {
     //right arrow
-    await nextStep(intro);
+    await nextStep(tour);
   } else if (code === "Enter" || code === "NumpadEnter" || code === 13) {
     //srcElement === ie
     const target = (e.target || e.srcElement) as HTMLElement;
-    if (target && target.className.match("introjs-prevbutton")) {
+    if (target && target.className.match(previousButtonClassName)) {
       //user hit enter while focusing on previous button
-      await previousStep(intro);
-    } else if (target && target.className.match("introjs-skipbutton")) {
-      //user hit enter while focusing on skip button
-      if (
-        intro._introItems.length - 1 === intro._currentStep &&
-        isFunction(intro._introCompleteCallback)
-      ) {
-        await intro._introCompleteCallback.call(
-          intro,
-          intro._currentStep,
-          "skip"
-        );
+      await previousStep(tour);
+    } else if (target && target.className.match(skipButtonClassName)) {
+      // user hit enter while focusing on skip button
+      if (tour.isEnd()) {
+        await tour
+          .callback("complete")
+          ?.call(tour, tour.getCurrentStep(), "skip");
       }
 
-      await exitIntro(intro, intro._targetElement);
-    } else if (target && target.getAttribute("data-step-number")) {
+      await exitIntro(tour);
+    } else if (target && target.getAttribute(dataStepNumberAttribute)) {
       // user hit enter while focusing on step bullet
       target.click();
     } else {
       //default behavior for responding to enter
-      await nextStep(intro);
+      await nextStep(tour);
     }
 
     //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers

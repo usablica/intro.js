@@ -12,7 +12,7 @@ import {
 } from "./callback";
 import { getDefaultTourOptions, TourOptions } from "./option";
 import { setOptions, setOption } from "../../option";
-import introForElement from "./introForElement";
+import { render } from "./render";
 import exitIntro from "./exitIntro";
 import isFunction from "../../util/isFunction";
 import { getDontShowAgain, setDontShowAgain } from "./dontShowAgain";
@@ -202,7 +202,7 @@ export class Tour implements Package<TourOptions> {
   }
 
   async render(): Promise<this> {
-    await introForElement(this, this._targetElement);
+    await render(this);
     return this;
   }
 
@@ -211,7 +211,7 @@ export class Tour implements Package<TourOptions> {
    * @returns
    */
   async start() {
-    await introForElement(this, this._targetElement);
+    await this.render();
     return this;
   }
 
@@ -220,7 +220,15 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  /**
+   * @deprecated onbeforechange is deprecated, please use onBeforeChange instead. 
+   * @returns 
+   */
   onbeforechange(callback: introBeforeChangeCallback) {
+    return this.onBeforeChange(callback);
+  }
+
+  onBeforeChange(callback: introBeforeChangeCallback) {
     if (isFunction(callback)) {
       this.callbacks.beforeChange = callback;
     } else {
@@ -230,8 +238,16 @@ export class Tour implements Package<TourOptions> {
     }
     return this;
   }
+  
 
+  /**
+   * @deprecated onchange is deprecated, please use onChange instead. 
+   */
   onchange(callback: introChangeCallback) {
+    this.onChange(callback);
+  }
+
+  onChange(callback: introChangeCallback) {
     if (isFunction(callback)) {
       this.callbacks.change = callback;
     } else {
@@ -240,7 +256,14 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  /**
+   * @deprecated onafterchange is deprecated, please use onAfterChange instead.
+   */
   onafterchange(callback: introAfterChangeCallback) {
+    this.onAfterChange(callback);
+  }
+
+  onAfterChange(callback: introAfterChangeCallback) {
     if (isFunction(callback)) {
       this.callbacks.afterChange = callback;
     } else {
@@ -249,7 +272,14 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  /**
+   * @deprecated oncomplete is deprecated, please use onComplete instead.
+   */
   oncomplete(callback: introCompleteCallback) {
+    return this.onComplete(callback);
+  }
+
+  onComplete(callback: introCompleteCallback) {
     if (isFunction(callback)) {
       this.callbacks.complete = callback;
     } else {
@@ -258,7 +288,15 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+
+  /**
+   * @deprecated onstart is deprecated, please use onStart instead.
+   */
   onstart(callback: introStartCallback) {
+    return this.onStart(callback);
+  }
+
+  onStart(callback: introStartCallback) {
     if (isFunction(callback)) {
       this.callbacks.start = callback;
     } else {
@@ -268,7 +306,14 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  /**
+   * @deprecated onexit is deprecated, please use onExit instead. 
+   */
   onexit(callback: introExitCallback) {
+    return this.onExit(callback);
+  }
+
+  onExit(callback: introExitCallback) {
     if (isFunction(callback)) {
       this.callbacks.exit = callback;
     } else {
@@ -278,7 +323,14 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  /**
+   * @deprecated onskip is deprecated, please use onSkip instead.
+   */
   onskip(callback: introSkipCallback) {
+    return this.onSkip(callback);
+  }
+
+  onSkip(callback: introSkipCallback) {
     if (isFunction(callback)) {
       this.callbacks.skip = callback;
     } else {
@@ -288,7 +340,14 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  /**
+   * @deprecated onbeforeexit is deprecated, please use onBeforeExit instead. 
+   */
   onbeforeexit(callback: introBeforeExitCallback) {
+    return this.onBeforeExit(callback);
+  }
+
+  onBeforeExit(callback: introBeforeExitCallback) {
     if (isFunction(callback)) {
       this.callbacks.beforeExit = callback;
     } else {

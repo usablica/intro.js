@@ -1,7 +1,6 @@
 import getOffset from "../../util/getOffset";
 import isFixed from "../../util/isFixed";
-import addClass from "../../util/className";
-import removeClass from "../../util/removeClass";
+import { addClass, removeClass } from "../../util/className";
 import setStyle from "../../util/setStyle";
 import { TourStep } from "./steps";
 import { Tour } from "./tour";

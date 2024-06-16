@@ -1,7 +1,7 @@
 import { fetchSteps, nextStep, previousStep } from "./steps";
 import _showElement from "./showElement";
 import { appendMockSteps, getMockSteps, getMockTour } from "./tests/mock";
-import _createElement from "src/util/createElement";
+import createElement from "../../util/createElement";
 
 jest.mock("./showElement");
 jest.mock("./exitIntro");
@@ -143,7 +143,7 @@ describe("steps", () => {
       // Arrange
       const mockTour = getMockTour();
       mockTour.addStep({
-        element: document.createElement("div"),
+        element: createElement("div"),
         intro: "test step",
       });
 
@@ -164,7 +164,7 @@ describe("steps", () => {
           intro: "first step",
         },
         {
-          element: document.createElement("div"),
+          element: createElement("div"),
           intro: "second step",
         },
       ]);
@@ -203,13 +203,7 @@ describe("steps", () => {
     test("should find and add elements from options.steps to the list", () => {
       // Arrange
       const mockTour = getMockTour();
-
-      const stepOne = document.createElement("div");
-      stepOne.setAttribute("id", "first");
-      const stepTwo = document.createElement("div");
-      stepTwo.setAttribute("id", "second");
-      document.body.appendChild(stepOne);
-      document.body.appendChild(stepTwo);
+      const [mockStepOneElement, mockStepTwoElement, _, __] = appendMockSteps();
 
       // Act
       const steps = fetchSteps(mockTour);
@@ -217,12 +211,12 @@ describe("steps", () => {
       // Assert
       expect(steps.length).toBe(7);
 
-      expect(steps[0].element).toBe(stepOne);
+      expect(steps[0].element).toBe(mockStepOneElement);
       expect(steps[0].position).toBe("bottom");
       expect(steps[0].intro).toBe("first");
       expect(steps[0].step).toBe(1);
 
-      expect(steps[1].element).toBe(stepTwo);
+      expect(steps[1].element).toBe(mockStepTwoElement);
       expect(steps[1].position).toBe("top");
       expect(steps[1].intro).toBe("second");
       expect(steps[1].step).toBe(2);
@@ -234,7 +228,7 @@ describe("steps", () => {
 
     test("should find the data-* elements from the DOM", () => {
       // Arrange
-      const targetElement = document.createElement("div");
+      const targetElement = createElement("div");
       appendMockSteps(targetElement);
       const mockTour = getMockTour(targetElement);
 
@@ -255,19 +249,9 @@ describe("steps", () => {
 
     test("should respect the custom step attribute (DOM)", () => {
       // Arrange
-      const targetElement = document.createElement("div");
+      appendMockSteps();
 
-      const stepOne = document.createElement("div");
-      stepOne.setAttribute("data-intro", "second");
-      stepOne.setAttribute("data-step", "5");
-
-      const stepTwo = document.createElement("div");
-      stepTwo.setAttribute("data-intro", "first");
-
-      targetElement.appendChild(stepOne);
-      targetElement.appendChild(stepTwo);
-
-      const mockTour = getMockTour(targetElement);
+      const mockTour = getMockTour();
 
       // Act
       const steps = fetchSteps(mockTour);

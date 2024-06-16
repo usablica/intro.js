@@ -1,7 +1,7 @@
 import DOMEvent from "../../util/DOMEvent";
-import onKeyDown from "../../core/onKeyDown";
+import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
-import removeShowElement from "../../core/removeShowElement";
+import removeShowElement from "./removeShowElement";
 import removeChild from "../../util/removeChild";
 import { Tour } from "./tour";
 import {

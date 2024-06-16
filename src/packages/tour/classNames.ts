@@ -23,3 +23,4 @@ export const fullButtonClassName = "introjs-fullbutton";
 export const activeClassName = "active";
 export const fixedTooltipClassName = "introjs-fixedTooltip";
 export const floatingElementClassName = "introjsFloatingElement";
+export const showElementClassName = "introjs-showElement";

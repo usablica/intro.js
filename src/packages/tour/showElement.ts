@@ -7,7 +7,7 @@ import setAnchorAsButton from "../../util/setAnchorAsButton";
 import { TourStep, nextStep, previousStep } from "./steps";
 import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "../../core/placeTooltip";
-import removeShowElement from "../../core/removeShowElement";
+import removeShowElement from "./removeShowElement";
 import createElement from "../../util/createElement";
 import setStyle from "../../util/setStyle";
 import appendChild from "../../util/appendChild";
