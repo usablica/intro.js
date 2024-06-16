@@ -1,4 +1,4 @@
-import isFunction from "../../../src/util/isFunction";
+import isFunction from "./isFunction";
 
 describe("isFunction", () => {
   it("should return false when string is passed", () => {

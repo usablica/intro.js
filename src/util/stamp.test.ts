@@ -1,5 +1,5 @@
-import { IntroJs } from "../../../src/intro";
-import stamp from "../../../src/util/stamp";
+import { IntroJs } from "../intro";
+import stamp from "./stamp";
 
 describe("stamp", () => {
   test("should stamp an IntroJS object", () => {

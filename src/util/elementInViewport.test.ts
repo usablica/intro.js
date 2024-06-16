@@ -1,5 +1,5 @@
-import _createElement from "../../../src/util/createElement";
-import elementInViewport from "../../../src/util/elementInViewport";
+import _createElement from "./createElement";
+import elementInViewport from "./elementInViewport";
 
 describe("elementInViewport", () => {
   test("should return true when element is in viewport", () => {

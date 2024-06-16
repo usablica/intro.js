@@ -3,7 +3,7 @@ import {
   getCookie,
   setCookie,
   deleteCookie,
-} from "../../../src/util/cookie";
+} from "./cookie";
 
 describe("cookie", () => {
   let _cookie = "";
