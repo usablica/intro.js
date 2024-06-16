@@ -2,7 +2,7 @@ module.exports = {
   testEnvironment: 'node',
   clearMocks: true,
   setupFilesAfterEnv: ["jest-extended/all"],
-  roots: ["<rootDir>/tests/jest"],
+  roots: ["<rootDir>/tests/jest", "<rootDir>/src"],
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {
       ...require('./tsconfig.test.json')

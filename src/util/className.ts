@@ -2,7 +2,10 @@
  * Append CSS classes to an element
  * @api private
  */
-export const addClass = (element: HTMLElement, ...classNames: string[]) => {
+export const addClass = (
+  element: HTMLElement | SVGElement,
+  ...classNames: string[]
+) => {
   for (const className of classNames) {
     if (element instanceof SVGElement) {
       // svg
@@ -24,7 +27,15 @@ export const addClass = (element: HTMLElement, ...classNames: string[]) => {
   }
 };
 
-export const setClass = (element: HTMLElement, ...classNames: string[]) => {
+/**
+ * Set CSS classes to an element
+ * @param element element to set class
+ * @param classNames list of class names
+ */
+export const setClass = (
+  element: HTMLElement | SVGElement,
+  ...classNames: string[]
+) => {
   const className = classNames.filter(Boolean).join(" ");
 
   if (element instanceof SVGElement) {
