@@ -1,4 +1,4 @@
-import addClass from "../util/addClass";
+import addClass from "../util/className";
 import removeClass from "../util/removeClass";
 import isFixed from "../util/isFixed";
 import getOffset from "../util/getOffset";

@@ -1,4 +1,4 @@
-import addClass from "./addClass";
+import addClass from "./className";
 import getPropValue from "./getPropValue";
 
 /**

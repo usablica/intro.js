@@ -1,4 +1,4 @@
-import addClass from "../../../src/util/addClass";
+import addClass from "../../../src/util/className";
 
 describe("addClass", () => {
   test("should append when className is empty", () => {

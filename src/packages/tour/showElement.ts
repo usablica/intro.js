@@ -1,8 +1,8 @@
 import setShowElement from "../../util/setShowElement";
 import scrollParentToElement from "../../util/scrollParentToElement";
-import addClass from "../../util/addClass";
 import scrollTo from "../../util/scrollTo";
 import exitIntro from "./exitIntro";
+import { addClass, setClass } from "../../util/className";
 import setAnchorAsButton from "../../util/setAnchorAsButton";
 import { TourStep, nextStep, previousStep } from "./steps";
 import setHelperLayerPosition from "./setHelperLayerPosition";
@@ -111,7 +111,7 @@ function _createBullets(tour: Tour, step: TourStep): HTMLElement {
     anchorLink.onclick = anchorClick;
 
     if (i === step.step - 1) {
-      addClass(anchorLink, activeClassName);
+      setClass(anchorLink, activeClassName);
     }
 
     setAnchorAsButton(anchorLink);
@@ -162,7 +162,7 @@ function _updateBullets(
 
     if (oldRefActiveBullet && oldRefBulletStepNumber) {
       oldRefActiveBullet.className = "";
-      addClass(oldRefBulletStepNumber, activeClassName);
+      setClass(oldRefBulletStepNumber, activeClassName);
     }
   }
 }
@@ -174,7 +174,7 @@ function _updateBullets(
 function _createProgressBar(tour: Tour) {
   const progressLayer = createElement("div");
 
-  addClass(progressLayer, progressClassName);
+  setClass(progressLayer, progressClassName);
 
   if (tour.getOption("showProgress") === false) {
     progressLayer.style.display = "none";
@@ -291,7 +291,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     );
 
     //update or reset the helper highlight class
-    addClass(oldHelperLayer, highlightClass);
+    setClass(oldHelperLayer, highlightClass);
 
     //hide the tooltip
     oldTooltipContainer.style.opacity = "0";
@@ -425,7 +425,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     tooltipTextLayer.innerHTML = step.intro;
     tooltipTitleLayer.innerHTML = step.title;
 
-    addClass(buttonsLayer, tooltipButtonsClassName);
+    setClass(buttonsLayer, tooltipButtonsClassName);
 
     if (tour.getOption("showButtons") === false) {
       buttonsLayer.style.display = "none";
@@ -466,7 +466,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     const helperNumberLayer = createElement("div");
 
     if (tour.getOption("showStepNumbers") === true) {
-      addClass(helperNumberLayer, helperNumberLayerClassName);
+      setClass(helperNumberLayer, helperNumberLayerClassName);
 
       helperNumberLayer.innerHTML = `${step.step} ${tour.getOption(
         "stepNumbersOfLabel"
@@ -582,20 +582,21 @@ export default async function _showElement(tour: Tour, step: TourStep) {
   // when it's the first step of tour
   if (tour.getCurrentStep() === 0 && tour.getSteps().length > 1) {
     if (nextTooltipButton) {
-      addClass(
+      setClass(
         nextTooltipButton,
-        `${tour.getOption("buttonClass")} ${nextButtonClassName}`
+        tour.getOption("buttonClass"),
+        nextButtonClassName
       );
       nextTooltipButton.innerHTML = tour.getOption("nextLabel");
     }
 
     if (tour.getOption("hidePrev") === true) {
       if (prevTooltipButton) {
-        addClass(
+        setClass(
           prevTooltipButton,
-          `${tour.getOption(
-            "buttonClass"
-          )} ${previousButtonClassName} ${hiddenButtonClassName}`
+          tour.getOption("buttonClass"),
+          previousButtonClassName,
+          hiddenButtonClassName
         );
       }
       if (nextTooltipButton) {
@@ -603,30 +604,31 @@ export default async function _showElement(tour: Tour, step: TourStep) {
       }
     } else {
       if (prevTooltipButton) {
-        addClass(
+        setClass(
           prevTooltipButton,
-          `${tour.getOption(
-            "buttonClass"
-          )} ${previousButtonClassName} ${disableInteractionClassName}`
+          tour.getOption("buttonClass"),
+          previousButtonClassName,
+          disableInteractionClassName
         );
       }
     }
   } else if (tour.isEnd() || tour.getSteps().length === 1) {
     // last step of tour
     if (prevTooltipButton) {
-      addClass(
+      setClass(
         prevTooltipButton,
-        `${tour.getOption("buttonClass")} ${previousButtonClassName}`
+        tour.getOption("buttonClass"),
+        previousButtonClassName
       );
     }
 
     if (tour.getOption("hideNext") === true) {
       if (nextTooltipButton) {
-        addClass(
+        setClass(
           nextTooltipButton,
-          `${tour.getOption(
-            "buttonClass"
-          )} ${nextButtonClassName} ${hiddenButtonClassName}`
+          tour.getOption("buttonClass"),
+          nextButtonClassName,
+          hiddenButtonClassName
         );
       }
       if (prevTooltipButton) {
@@ -638,16 +640,16 @@ export default async function _showElement(tour: Tour, step: TourStep) {
           nextTooltipButton.innerHTML = tour.getOption("doneLabel");
           addClass(
             nextTooltipButton,
-            `${tour.getOption(
-              "buttonClass"
-            )} ${nextButtonClassName} ${doneButtonClassName}`
+            tour.getOption("buttonClass"),
+            nextButtonClassName,
+            doneButtonClassName
           );
         } else {
-          addClass(
+          setClass(
             nextTooltipButton,
-            `${tour.getOption(
-              "buttonClass"
-            )} ${nextButtonClassName} ${disabledButtonClassName}`
+            tour.getOption("buttonClass"),
+            nextButtonClassName,
+            disabledButtonClassName
           );
         }
       }
@@ -655,15 +657,17 @@ export default async function _showElement(tour: Tour, step: TourStep) {
   } else {
     // steps between start and end
     if (prevTooltipButton) {
-      addClass(
+      setClass(
         prevTooltipButton,
-        `${tour.getOption("buttonClass")} ${previousButtonClassName}`
+        tour.getOption("buttonClass"),
+        previousButtonClassName
       );
     }
     if (nextTooltipButton) {
-      addClass(
+      setClass(
         nextTooltipButton,
-        `${tour.getOption("buttonClass")} ${nextButtonClassName}`
+        tour.getOption("buttonClass"),
+        nextButtonClassName
       );
       nextTooltipButton.innerHTML = tour.getOption("nextLabel");
     }

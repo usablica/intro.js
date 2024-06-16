@@ -1,6 +1,6 @@
 import getOffset from "../util/getOffset";
 import isFixed from "../util/isFixed";
-import addClass from "../util/addClass";
+import addClass from "../util/className";
 import removeClass from "../util/removeClass";
 import setStyle from "../util/setStyle";
 import { IntroJs } from "../intro";
