@@ -5,7 +5,6 @@ import exitIntro from "./exitIntro";
 import { addClass, setClass } from "../../util/className";
 import setAnchorAsButton from "../../util/setAnchorAsButton";
 import { TourStep, nextStep, previousStep } from "./steps";
-import setHelperLayerPosition from "./setHelperLayerPosition";
 import placeTooltip from "../../core/placeTooltip";
 import removeShowElement from "./removeShowElement";
 import createElement from "../../util/createElement";
@@ -42,6 +41,7 @@ import {
   queryElement,
   queryElementByClassName,
 } from "../../util/queryElement";
+import { setPositionRelativeToStep } from "./position";
 
 /**
  * Gets the current progress percentage
@@ -72,7 +72,12 @@ export const _disableInteraction = (tour: Tour, step: TourStep) => {
     tour.getTargetElement().appendChild(disableInteractionLayer);
   }
 
-  setHelperLayerPosition(tour, step, disableInteractionLayer);
+  setPositionRelativeToStep(
+    tour.getTargetElement(),
+    disableInteractionLayer,
+    step,
+    tour.getOption("helperElementPadding")
+  );
 };
 
 /**
@@ -304,8 +309,19 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     );
 
     // set new position to helper layer
-    setHelperLayerPosition(tour, step, oldHelperLayer);
-    setHelperLayerPosition(tour, step, oldReferenceLayer);
+    const helperLayerPadding = tour.getOption("helperElementPadding");
+    setPositionRelativeToStep(
+      tour.getTargetElement(),
+      oldHelperLayer,
+      step,
+      helperLayerPadding
+    );
+    setPositionRelativeToStep(
+      tour.getTargetElement(),
+      oldReferenceLayer,
+      step,
+      helperLayerPadding
+    );
 
     //remove old classes if the element still exist
     removeShowElement();
@@ -415,8 +431,19 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     );
 
     //set new position to helper layer
-    setHelperLayerPosition(tour, step, helperLayer);
-    setHelperLayerPosition(tour, step, referenceLayer);
+    const helperLayerPadding = tour.getOption("helperElementPadding");
+    setPositionRelativeToStep(
+      tour.getTargetElement(),
+      helperLayer,
+      step,
+      helperLayerPadding
+    );
+    setPositionRelativeToStep(
+      tour.getTargetElement(),
+      referenceLayer,
+      step,
+      helperLayerPadding
+    );
 
     //add helper layer to target element
     appendChild(tour.getTargetElement(), helperLayer, true);

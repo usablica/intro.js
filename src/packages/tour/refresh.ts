@@ -1,11 +1,14 @@
-import { reAlignHints } from "../../core/hint";
-import setHelperLayerPosition from "../../core/setHelperLayerPosition";
 import placeTooltip from "../../core/placeTooltip";
-import fetchIntroSteps from "./fetchSteps";
 import { _recreateBullets, _updateProgressBar } from "./showElement";
 import { Tour } from "./tour";
 import { getElementByClassName } from "src/util/queryElement";
-import { disableInteractionClassName, helperLayerClassName, tooltipReferenceLayerClassName } from "./classNames";
+import {
+  disableInteractionClassName,
+  helperLayerClassName,
+  tooltipReferenceLayerClassName,
+} from "./classNames";
+import { setPositionRelativeToStep } from "./position";
+import { fetchSteps } from "./steps";
 
 /**
  * Update placement of the intro objects on the screen
@@ -28,33 +31,30 @@ export default function refresh(tour: Tour, refreshSteps?: boolean) {
 
   // re-align intros
   const targetElement = tour.getTargetElement();
-  const helperLayerPadding = tour.getOption('helperElementPadding');
-  setHelperLayerPosition(
+  const helperLayerPadding = tour.getOption("helperElementPadding");
+  setPositionRelativeToStep(
     targetElement,
     helperLayer,
-    step.element as HTMLElement,
-    step.position,
+    step,
     helperLayerPadding
   );
-  setHelperLayerPosition(
+  setPositionRelativeToStep(
     targetElement,
     referenceLayer,
-    step.element as HTMLElement,
-    step.position,
+    step,
     helperLayerPadding
   );
-  setHelperLayerPosition(
+  setPositionRelativeToStep(
     targetElement,
     disableInteractionLayer,
-    step.element as HTMLElement,
-    step.position,
+    step,
     helperLayerPadding
   );
 
   if (refreshSteps) {
-    intro._introItems = fetchIntroSteps(intro, intro._targetElement);
-    _recreateBullets(intro, step);
-    _updateProgressBar(referenceLayer, currentStep, intro._introItems.length);
+    tour.setSteps(fetchSteps(tour));
+    _recreateBullets(tour, step);
+    _updateProgressBar(referenceLayer, currentStep, tour.getSteps().length);
   }
 
   // re-align tooltip
@@ -64,15 +64,16 @@ export default function refresh(tour: Tour, refreshSteps?: boolean) {
 
   if (oldTooltipContainer && oldArrowLayer) {
     placeTooltip(
-      intro,
-      intro._introItems[currentStep],
       oldTooltipContainer,
-      oldArrowLayer
+      oldArrowLayer,
+      step.element as HTMLElement,
+      step.position,
+      tour.getOption("positionPrecedence"),
+      tour.getOption("showStepNumbers"),
+      tour.getOption("autoPosition"),
+      step.tooltipClass ?? tour.getOption("tooltipClass")
     );
   }
 
-  //re-align hints
-  reAlignHints(intro);
-
-  return intro;
+  return tour;
 }

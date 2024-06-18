@@ -1,5 +1,5 @@
 import { queryElementsByClassName } from "src/util/queryElement";
-import removeClass from "../../util/removeClass";
+import { removeClass } from "../../util/className";
 import { showElementClassName } from "./classNames";
 
 /**
