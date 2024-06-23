@@ -5,6 +5,10 @@ import * as nextStep from "./steps";
 import { getMockTour } from "./tests/mock";
 
 describe("render", () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+  });
+
   test("should call the onstart callback", () => {
     jest.spyOn(steps, "fetchSteps").mockReturnValue([]);
     jest.spyOn(addOverlayLayer, "default").mockReturnValue(true);
@@ -37,4 +41,22 @@ describe("render", () => {
     expect(addOverlayLayerMock).toBeCalledTimes(0);
     expect(nextStepMock).toBeCalledTimes(0);
   });
+
+  test("should fetch the steps", async () => {
+    // Arrange
+    const targetElement = document.createElement("div");
+    document.body.appendChild(targetElement);
+
+    const mockTour = getMockTour();
+    mockTour.addStep({
+      intro: "first",
+    });
+
+    // Act
+    await mockTour.render();
+
+    // Assert
+    expect(mockTour.getSteps()).toHaveLength(1);
+    expect(document.querySelectorAll(".introjs-bullets ul li").length).toBe(1);
+  })
 });

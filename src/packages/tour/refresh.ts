@@ -1,7 +1,7 @@
 import placeTooltip from "../../core/placeTooltip";
 import { _recreateBullets, _updateProgressBar } from "./showElement";
 import { Tour } from "./tour";
-import { getElementByClassName } from "../../util/queryElement";
+import { getElementByClassName, queryElementByClassName } from "../../util/queryElement";
 import {
   disableInteractionClassName,
   helperLayerClassName,
@@ -25,7 +25,7 @@ export default function refresh(tour: Tour, refreshSteps?: boolean) {
 
   const referenceLayer = getElementByClassName(tooltipReferenceLayerClassName);
   const helperLayer = getElementByClassName(helperLayerClassName);
-  const disableInteractionLayer = getElementByClassName(
+  const disableInteractionLayer = queryElementByClassName(
     disableInteractionClassName
   );
 
@@ -44,12 +44,16 @@ export default function refresh(tour: Tour, refreshSteps?: boolean) {
     step,
     helperLayerPadding
   );
-  setPositionRelativeToStep(
-    targetElement,
-    disableInteractionLayer,
-    step,
-    helperLayerPadding
-  );
+
+  // not all steps have a disableInteractionLayer
+  if (disableInteractionLayer) {
+    setPositionRelativeToStep(
+      targetElement,
+      disableInteractionLayer,
+      step,
+      helperLayerPadding
+    );
+  }
 
   if (refreshSteps) {
     tour.setSteps(fetchSteps(tour));

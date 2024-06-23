@@ -16,6 +16,7 @@ import { render } from "./render";
 import exitIntro from "./exitIntro";
 import isFunction from "../../util/isFunction";
 import { getDontShowAgain, setDontShowAgain } from "./dontShowAgain";
+import refresh from "./refresh";
 
 export class Tour implements Package<TourOptions> {
   private _steps: TourStep[] = [];
@@ -222,21 +223,36 @@ export class Tour implements Package<TourOptions> {
 
   /**
    * @deprecated `start()` is deprecated, please use `render()` instead.
-   * @returns
+   * @returns {Tour}
    */
   async start() {
     await this.render();
     return this;
   }
 
-  async exit(force: boolean) {
-    await exitIntro(this, force);
+  /**
+   * Exit the tour
+   * @param {boolean} force whether to force exit the tour
+   * @returns {Tour}
+   */
+  async exit(force?: boolean) {
+    await exitIntro(this, force ?? false);
     return this;
   }
 
   /**
-   * @deprecated onbeforechange is deprecated, please use onBeforeChange instead. 
-   * @returns 
+   * Refresh the tour
+   * @param {boolean} refreshSteps whether to refresh the tour steps
+   * @returns {Tour}
+   */
+  refresh(refreshSteps?: boolean) {
+    refresh(this, refreshSteps);
+    return this;
+  }
+
+  /**
+   * @deprecated onbeforechange is deprecated, please use onBeforeChange instead.
+   * @returns
    */
   onbeforechange(callback: introBeforeChangeCallback) {
     return this.onBeforeChange(callback);
@@ -252,10 +268,9 @@ export class Tour implements Package<TourOptions> {
     }
     return this;
   }
-  
 
   /**
-   * @deprecated onchange is deprecated, please use onChange instead. 
+   * @deprecated onchange is deprecated, please use onChange instead.
    */
   onchange(callback: introChangeCallback) {
     this.onChange(callback);
@@ -302,7 +317,6 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
-
   /**
    * @deprecated onstart is deprecated, please use onStart instead.
    */
@@ -321,7 +335,7 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
-   * @deprecated onexit is deprecated, please use onExit instead. 
+   * @deprecated onexit is deprecated, please use onExit instead.
    */
   onexit(callback: introExitCallback) {
     return this.onExit(callback);
@@ -355,7 +369,7 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
-   * @deprecated onbeforeexit is deprecated, please use onBeforeExit instead. 
+   * @deprecated onbeforeexit is deprecated, please use onBeforeExit instead.
    */
   onbeforeexit(callback: introBeforeExitCallback) {
     return this.onBeforeExit(callback);
