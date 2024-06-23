@@ -1,23 +1,11 @@
 import * as cookie from "../../../src/util/cookie";
-import {
-  setDontShowAgain,
-  getDontShowAgain,
-} from "../../../src/core/dontShowAgain";
-import { IntroJs } from "../../../src/intro";
+import { setDontShowAgain, getDontShowAgain } from "./dontShowAgain";
 
 describe("dontShowAgain", () => {
   test("should call set cookie", () => {
     const setCookieMock = jest.spyOn(cookie, "setCookie");
 
-    setDontShowAgain(
-      {
-        _options: {
-          dontShowAgainCookie: "cookie-name",
-          dontShowAgainCookieDays: 7,
-        },
-      } as IntroJs,
-      true
-    );
+    setDontShowAgain(true, "cookie-name", 7);
 
     expect(setCookieMock).toBeCalledTimes(1);
     expect(setCookieMock).toBeCalledWith("cookie-name", "true", 7);
@@ -27,15 +15,7 @@ describe("dontShowAgain", () => {
     const setCookieMock = jest.spyOn(cookie, "setCookie");
     const deleteCookieMock = jest.spyOn(cookie, "deleteCookie");
 
-    setDontShowAgain(
-      {
-        _options: {
-          dontShowAgainCookie: "cookie-name",
-          dontShowAgainCookieDays: 7,
-        },
-      } as IntroJs,
-      false
-    );
+    setDontShowAgain(false, "cookie-name", 7);
 
     expect(setCookieMock).toBeCalledTimes(0);
     expect(deleteCookieMock).toBeCalledTimes(1);
@@ -45,26 +25,12 @@ describe("dontShowAgain", () => {
   test("should return true when cookie is valid", () => {
     jest.spyOn(cookie, "getCookie").mockReturnValue("true");
 
-    expect(
-      getDontShowAgain({
-        _options: {
-          dontShowAgainCookie: "cookie-name",
-          dontShowAgainCookieDays: 7,
-        },
-      } as IntroJs)
-    ).toBe(true);
+    expect(getDontShowAgain("cookie-name")).toBe(true);
   });
 
   test("should return false when cookie is invalid", () => {
     jest.spyOn(cookie, "getCookie").mockReturnValue("invalid-state");
 
-    expect(
-      getDontShowAgain({
-        _options: {
-          dontShowAgainCookie: "cookie-name",
-          dontShowAgainCookieDays: 7,
-        },
-      } as IntroJs)
-    ).toBe(false);
+    expect(getDontShowAgain("cookie-name")).toBe(false);
   });
 });

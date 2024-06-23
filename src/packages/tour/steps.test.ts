@@ -63,7 +63,7 @@ describe("steps", () => {
       // Arrange
       const mockTour = getMockTour();
       const fnBeforeChangeCallback = jest.fn();
-      mockTour.onbeforechange(fnBeforeChangeCallback);
+      mockTour.onBeforeChange(fnBeforeChangeCallback);
 
       // Act
       await nextStep(mockTour);

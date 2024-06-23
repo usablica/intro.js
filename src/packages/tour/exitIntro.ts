@@ -2,7 +2,7 @@ import DOMEvent from "../../util/DOMEvent";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import removeShowElement from "./removeShowElement";
-import removeChild from "../../util/removeChild";
+import { removeChild, removeAnimatedChild } from "../../util/removeChild";
 import { Tour } from "./tour";
 import {
   disableInteractionClassName,
@@ -14,7 +14,7 @@ import {
 import {
   queryElementByClassName,
   queryElementsByClassName,
-} from "src/util/queryElement";
+} from "../../util/queryElement";
 
 /**
  * Exit from intro
@@ -51,7 +51,7 @@ export default async function exitIntro(tour: Tour, force: boolean = false) {
     helperLayerClassName,
     targetElement
   );
-  removeChild(helperLayer, true);
+  await removeAnimatedChild(helperLayer);
 
   const referenceLayer = queryElementByClassName(
     tooltipReferenceLayerClassName,

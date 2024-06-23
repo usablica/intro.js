@@ -151,7 +151,7 @@ export class Tour implements Package<TourOptions> {
    * @returns boolean
    */
   isEnd(): boolean {
-    return this.getCurrentStep() === this._steps.length - 1;
+    return this.getCurrentStep() >= this._steps.length;
   }
 
   getTargetElement(): HTMLElement {

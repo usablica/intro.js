@@ -1,4 +1,4 @@
-import _createElement from "src/util/createElement";
+import createElement from "../../../util/createElement";
 import { TourStep } from "../steps";
 import { Tour } from "../tour";
 import {
@@ -8,18 +8,18 @@ import {
 } from "../dataAttributes";
 
 export const appendMockSteps = (targetElement: HTMLElement = document.body) => {
-  const mockElementOne = _createElement("div");
+  const mockElementOne = createElement("div");
   mockElementOne.setAttribute(dataIntroAttribute, "Mock element");
 
-  const mockElementTwo = _createElement("b");
+  const mockElementTwo = createElement("b");
   mockElementTwo.setAttribute(dataIntroAttribute, "Mock element left position");
   mockElementTwo.setAttribute(dataPosition, "left");
 
-  const mockElementThree = _createElement("a");
+  const mockElementThree = createElement("a");
   mockElementThree.setAttribute(dataIntroAttribute, "Mock element last");
   mockElementThree.setAttribute(dataStepAttribute, "20");
 
-  const mockElementFour = _createElement("h1");
+  const mockElementFour = createElement("h1");
   mockElementFour.setAttribute(dataIntroAttribute, "Mock element second to last");
   mockElementFour.setAttribute(dataStepAttribute, "10");
 

@@ -1,4 +1,3 @@
-import setShowElement from "../../util/setShowElement";
 import scrollParentToElement from "../../util/scrollParentToElement";
 import scrollTo from "../../util/scrollTo";
 import exitIntro from "./exitIntro";
@@ -42,6 +41,7 @@ import {
   queryElementByClassName,
 } from "../../util/queryElement";
 import { setPositionRelativeToStep } from "./position";
+import getPropValue from "../../util/getPropValue";
 
 /**
  * Gets the current progress percentage
@@ -225,6 +225,27 @@ export function _updateProgressBar(
 
   progressBar.style.cssText = `width:${progress}%;`;
   progressBar.setAttribute("aria-valuenow", progress.toString());
+}
+
+/**
+ * To set the show element
+ * This function set a relative (in most cases) position and changes the z-index
+ *
+ * @api private
+ */
+function setShowElement(targetElement: HTMLElement) {
+  addClass(targetElement, "introjs-showElement");
+
+  const currentElementPosition = getPropValue(targetElement, "position");
+  if (
+    currentElementPosition !== "absolute" &&
+    currentElementPosition !== "relative" &&
+    currentElementPosition !== "sticky" &&
+    currentElementPosition !== "fixed"
+  ) {
+    //change to new intro item
+    addClass(targetElement, "introjs-relativePosition");
+  }
 }
 
 let _lastShowElementTimer: number;

@@ -1,7 +1,7 @@
 import { TooltipPosition } from "../../core/placeTooltip";
 import exitIntro from "./exitIntro";
 import showElement from "./showElement";
-import { queryElement, queryElements } from "src/util/queryElement";
+import { queryElement, queryElements } from "../../util/queryElement";
 import cloneObject from "../../util/cloneObject";
 import createElement from "../../util/createElement";
 import { Tour } from "./tour";

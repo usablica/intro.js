@@ -1,7 +1,7 @@
 import placeTooltip from "../../core/placeTooltip";
 import { _recreateBullets, _updateProgressBar } from "./showElement";
 import { Tour } from "./tour";
-import { getElementByClassName } from "src/util/queryElement";
+import { getElementByClassName } from "../../util/queryElement";
 import {
   disableInteractionClassName,
   helperLayerClassName,
