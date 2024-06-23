@@ -81,6 +81,11 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  /**
+   * Add a step to the tour options.
+   * This method should be used in conjunction with the `render()` method.
+   * @param step Partial<TourStep>
+   */
   addStep(step: Partial<TourStep>) {
     if (!this._options.steps) {
       this._options.steps = [];
@@ -91,6 +96,11 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  /**
+   * Add multiple steps to the tour options.
+   * This method should be used in conjunction with the `render()` method.
+   * @param steps Partial<TourStep>[]
+   */
   addSteps(steps: Partial<TourStep>[]) {
     if (!steps.length) return this;
 
@@ -98,6 +108,15 @@ export class Tour implements Package<TourOptions> {
       this.addStep(step);
     }
 
+    return this;
+  }
+
+  /**
+   * Set the steps of the tour
+   * @param steps TourStep[]
+   */
+  setSteps(steps: TourStep[]): this {
+    this._steps = steps;
     return this;
   }
 
@@ -170,11 +189,6 @@ export class Tour implements Package<TourOptions> {
 
   getOption<K extends keyof TourOptions>(key: K): TourOptions[K] {
     return this._options[key];
-  }
-
-  setSteps(steps: TourStep[]): this {
-    this._steps = steps;
-    return this;
   }
 
   clone(): ThisType<this> {

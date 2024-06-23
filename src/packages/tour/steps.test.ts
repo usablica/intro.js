@@ -1,6 +1,6 @@
 import { fetchSteps, nextStep, previousStep } from "./steps";
 import _showElement from "./showElement";
-import { appendMockSteps, getMockSteps, getMockTour } from "./tests/mock";
+import { appendMockSteps, getMockPartialSteps, getMockSteps, getMockTour } from "./tests/mock";
 import createElement from "../../util/createElement";
 
 jest.mock("./showElement");
@@ -51,6 +51,7 @@ describe("steps", () => {
       const showElementMock = jest.fn();
       (_showElement as jest.Mock).mockImplementation(showElementMock);
       const mockTour = getMockTour();
+      mockTour.setSteps(getMockSteps());
 
       // Act
       await nextStep(mockTour);
@@ -62,6 +63,7 @@ describe("steps", () => {
     test("should call the onBeforeChange callback", async () => {
       // Arrange
       const mockTour = getMockTour();
+      mockTour.setSteps(getMockSteps());
       const fnBeforeChangeCallback = jest.fn();
       mockTour.onBeforeChange(fnBeforeChangeCallback);
 
@@ -72,7 +74,7 @@ describe("steps", () => {
       expect(fnBeforeChangeCallback).toHaveBeenCalledTimes(1);
       expect(fnBeforeChangeCallback).toHaveBeenCalledWith(
         undefined,
-        1,
+        0,
         "forward"
       );
     });
@@ -85,7 +87,7 @@ describe("steps", () => {
       const fnBeforeChangeCallback = jest.fn();
       fnBeforeChangeCallback.mockReturnValue(false);
 
-      mockTour.onbeforechange(fnBeforeChangeCallback);
+      mockTour.onBeforeChange(fnBeforeChangeCallback);
 
       // Act
       await nextStep(mockTour);
@@ -98,13 +100,14 @@ describe("steps", () => {
     test("should wait for the onBeforeChange promise object", async () => {
       // Arrange
       const mockTour = getMockTour();
+      mockTour.setSteps(getMockSteps());
       const showElementMock = jest.fn();
       (_showElement as jest.Mock).mockImplementation(showElementMock);
 
       const onBeforeChangeMock = jest.fn();
       const sideEffect: number[] = [];
 
-      mockTour.onbeforechange(async () => {
+      mockTour.onBeforeChange(async () => {
         return new Promise<boolean>((res) => {
           setTimeout(() => {
             sideEffect.push(1);
@@ -127,10 +130,12 @@ describe("steps", () => {
     test("should call the complete callback", async () => {
       // Arrange
       const mockTour = getMockTour();
+      mockTour.setSteps(getMockSteps().slice(0, 2));
       const fnCompleteCallback = jest.fn();
-      mockTour.oncomplete(fnCompleteCallback);
+      mockTour.onComplete(fnCompleteCallback);
 
       // Act
+      await nextStep(mockTour);
       await nextStep(mockTour);
       await nextStep(mockTour);
 
@@ -189,62 +194,88 @@ describe("steps", () => {
       const steps = fetchSteps(mockTour);
 
       // Assert
-      expect(steps.length).toBe(4);
+      expect(steps.length).toBe(5);
 
       expect(steps[0].position).toBe("floating");
+      expect(steps[0].title).toBe("Floating title 1");
       expect(steps[0].intro).toBe("Step One of the tour");
       expect(steps[0].step).toBe(1);
 
       expect(steps[1].position).toBe("floating");
+      expect(steps[1].title).toBe("Floating title 2");
       expect(steps[1].intro).toBe("Step Two of the tour");
       expect(steps[1].step).toBe(2);
     });
 
     test("should find and add elements from options.steps to the list", () => {
       // Arrange
+      document.body.appendChild(createElement("h1"));
+
       const mockTour = getMockTour();
-      const [mockStepOneElement, mockStepTwoElement, _, __] = appendMockSteps();
+      mockTour.addSteps(getMockPartialSteps());
 
       // Act
       const steps = fetchSteps(mockTour);
 
       // Assert
-      expect(steps.length).toBe(7);
+      expect(steps.length).toBe(5);
 
-      expect(steps[0].element).toBe(mockStepOneElement);
-      expect(steps[0].position).toBe("bottom");
-      expect(steps[0].intro).toBe("first");
+      expect(steps[0].position).toBe("floating");
+      expect(steps[0].title).toBe("Floating title 1");
+      expect(steps[0].intro).toBe("Step One of the tour");
       expect(steps[0].step).toBe(1);
 
-      expect(steps[1].element).toBe(mockStepTwoElement);
-      expect(steps[1].position).toBe("top");
-      expect(steps[1].intro).toBe("second");
+      expect(steps[1].position).toBe("floating");
+      expect(steps[1].title).toBe("Floating title 2");
+      expect(steps[1].intro).toBe("Step Two of the tour");
       expect(steps[1].step).toBe(2);
 
-      expect(steps[2].position).toBe("floating");
-      expect(steps[2].intro).toBe("third");
+      expect(steps[2].position).toBe("top");
+      expect(steps[2].title).toBe("First title");
+      expect(steps[2].intro).toBe("Step Three of the tour");
       expect(steps[2].step).toBe(3);
+
+      expect(steps[3].element).toStrictEqual(getMockPartialSteps()[3].element);
+      expect(steps[3].position).toBe("right");
+      expect(steps[3].intro).toBe("Step Four of the tour");
+      expect(steps[3].step).toBe(4);
+
+      expect(steps[4].position).toBe("floating");
+      expect(steps[4].intro).toBe("Element not found");
+      expect(steps[4].step).toBe(5);
     });
 
-    test("should find the data-* elements from the DOM", () => {
+    test("should find the data-* elements from the DOM with the correct order", () => {
       // Arrange
       const targetElement = createElement("div");
-      appendMockSteps(targetElement);
+      const [mockElementOne, mockElementTwo, mockElementThree, mockElementFour] = appendMockSteps(targetElement);
       const mockTour = getMockTour(targetElement);
 
       // Act
       const steps = fetchSteps(mockTour);
 
       // Assert
-      expect(steps.length).toBe(2);
+      expect(steps.length).toBe(4);
 
       expect(steps[0].position).toBe("bottom");
-      expect(steps[0].intro).toBe("first");
+      expect(steps[0].intro).toBe("Mock element");
+      expect(steps[0].element).toBe(mockElementOne);
       expect(steps[0].step).toBe(1);
 
       expect(steps[1].position).toBe("left");
-      expect(steps[1].intro).toBe("second");
+      expect(steps[1].intro).toBe("Mock element left position");
+      expect(steps[1].element).toBe(mockElementTwo);
       expect(steps[1].step).toBe(2);
+
+      expect(steps[2].position).toBe("bottom");
+      expect(steps[2].intro).toBe("Mock element second to last");
+      expect(steps[2].element).toBe(mockElementThree);
+      expect(steps[2].step).toBe(10);
+
+      expect(steps[3].position).toBe("bottom");
+      expect(steps[3].intro).toBe("Mock element last");
+      expect(steps[3].element).toBe(mockElementFour);
+      expect(steps[3].step).toBe(20);
     });
 
     test("should respect the custom step attribute (DOM)", () => {
@@ -257,13 +288,13 @@ describe("steps", () => {
       const steps = fetchSteps(mockTour);
 
       // Assert
-      expect(steps.length).toBe(2);
+      expect(steps.length).toBe(4);
 
-      expect(steps[0].intro).toBe("first");
-      expect(steps[0].step).toBe(1);
+      expect(steps[2].intro).toBe("Mock element second to last");
+      expect(steps[2].step).toBe(10);
 
-      expect(steps[1].intro).toBe("second");
-      expect(steps[1].step).toBe(5);
+      expect(steps[3].intro).toBe("Mock element last");
+      expect(steps[3].step).toBe(20);
     });
 
     test("should ignore DOM elements when options.steps is available", () => {
@@ -276,34 +307,9 @@ describe("steps", () => {
       const steps = fetchSteps(mockTour);
 
       // Assert
-      expect(steps.length).toBe(2);
-      expect(steps[0].intro).toBe("steps-first");
-      expect(steps[1].intro).toBe("steps-second");
-    });
-
-    it("should correctly sort based on data-step", () => {
-      // Arrange
-      const targetElement = document.createElement("div");
-      appendMockSteps(targetElement);
-      const mockTour = getMockTour(targetElement);
-
-      // Act
-      const steps = fetchSteps(mockTour);
-
-      // Assert
-      expect(steps.length).toBe(4);
-
-      expect(steps[0].intro).toBe("one");
-      expect(steps[0].step).toBe(1);
-
-      expect(steps[1].intro).toBe("two");
-      expect(steps[1].step).toBe(2);
-
-      expect(steps[2].intro).toBe("three");
-      expect(steps[2].step).toBe(3);
-
-      expect(steps[3].intro).toBe("four");
-      expect(steps[3].step).toBe(5);
+      expect(steps.length).toBe(5);
+      expect(steps[0].intro).toBe("Step One of the tour");
+      expect(steps[1].intro).toBe("Step Two of the tour");
     });
   });
 });

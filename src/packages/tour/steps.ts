@@ -158,7 +158,9 @@ export const fetchSteps = (tour: Tour) => {
       }
     }
   } else {
-    const elements = Array.from(queryElements(`*[${dataIntroAttribute}]`));
+    const elements = Array.from(
+      queryElements(`*[${dataIntroAttribute}]`, tour.getTargetElement())
+    );
 
     // if there's no element to intro
     if (elements.length < 1) {
