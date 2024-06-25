@@ -4,7 +4,7 @@ import exitIntro from "./exitIntro";
 import { addClass, setClass } from "../../util/className";
 import setAnchorAsButton from "../../util/setAnchorAsButton";
 import { TourStep, nextStep, previousStep } from "./steps";
-import placeTooltip from "../../core/placeTooltip";
+import { placeTooltip } from "../../packages/tooltip";
 import removeShowElement from "./removeShowElement";
 import createElement from "../../util/createElement";
 import setStyle from "../../util/setStyle";

@@ -1,4 +1,4 @@
-import { TooltipPosition } from "../../core/placeTooltip";
+import { TooltipPosition } from "../../packages/tooltip";
 import exitIntro from "./exitIntro";
 import showElement from "./showElement";
 import { queryElement, queryElements } from "../../util/queryElement";

@@ -36,3 +36,16 @@ export const getElementByClassName = (
   }
   return element;
 };
+
+export const getElement = (
+  selector: string,
+  container?: HTMLElement | null
+) => {
+  const element = queryElement(selector, container);
+
+  if (!element) {
+    throw new Error(`Element with selector ${selector} not found`);
+  }
+
+  return element;
+};

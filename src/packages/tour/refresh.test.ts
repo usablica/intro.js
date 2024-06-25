@@ -1,10 +1,10 @@
-import * as placeTooltip from "../../core/placeTooltip";
+import * as tooltip from "../../packages/tooltip";
 import { getMockTour } from "./tests/mock";
 
 describe("refresh", () => {
   test("should not refetch the steps when refreshStep is false", async () => {
     // Arrange
-    jest.spyOn(placeTooltip, "default");
+    jest.spyOn(tooltip, "placeTooltip");
 
     const targetElement = document.createElement("div");
     document.body.appendChild(targetElement);
@@ -36,14 +36,13 @@ describe("refresh", () => {
     expect(mockTour.getStep(0).intro).toBe("first");
     expect(document.querySelectorAll(".introjs-bullets ul li").length).toBe(1);
 
-
     // cleanup
     await mockTour.exit();
   });
 
   test("should fetch the steps when refreshStep is true", async () => {
     // Arrange
-    jest.spyOn(placeTooltip, "default");
+    jest.spyOn(tooltip, "placeTooltip");
 
     const targetElement = document.createElement("div");
     document.body.appendChild(targetElement);

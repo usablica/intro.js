@@ -223,7 +223,6 @@ export class Tour implements Package<TourOptions> {
 
   /**
    * @deprecated `start()` is deprecated, please use `render()` instead.
-   * @returns {Tour}
    */
   async start() {
     await this.render();
@@ -233,7 +232,6 @@ export class Tour implements Package<TourOptions> {
   /**
    * Exit the tour
    * @param {boolean} force whether to force exit the tour
-   * @returns {Tour}
    */
   async exit(force?: boolean) {
     await exitIntro(this, force ?? false);
@@ -243,7 +241,6 @@ export class Tour implements Package<TourOptions> {
   /**
    * Refresh the tour
    * @param {boolean} refreshSteps whether to refresh the tour steps
-   * @returns {Tour}
    */
   refresh(refreshSteps?: boolean) {
     refresh(this, refreshSteps);
@@ -252,7 +249,6 @@ export class Tour implements Package<TourOptions> {
 
   /**
    * @deprecated onbeforechange is deprecated, please use onBeforeChange instead.
-   * @returns
    */
   onbeforechange(callback: introBeforeChangeCallback) {
     return this.onBeforeChange(callback);

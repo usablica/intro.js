@@ -1,4 +1,4 @@
-import { TooltipPosition } from "../../core/placeTooltip";
+import { TooltipPosition } from "../../packages/tooltip";
 import { TourStep, ScrollTo } from "./steps";
 
 export interface TourOptions {

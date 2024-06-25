@@ -1,4 +1,4 @@
-import { TooltipPosition } from "../../core/placeTooltip";
+import { TooltipPosition } from "../../packages/tooltip";
 import { Hint } from "./hint";
 import cloneObject from "../../util/cloneObject";
 import { queryElement, queryElements } from "../../util/queryElement";

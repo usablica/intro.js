@@ -1,4 +1,4 @@
-import { TooltipPosition } from "../../core/placeTooltip";
+import { TooltipPosition } from "../../packages/tooltip";
 import { HintItem, HintPosition } from "./hintItem";
 
 export interface HintOptions {

@@ -1,22 +1,11 @@
-import getOffset from "../util/getOffset";
-import getWindowSize from "../util/getWindowSize";
-import { addClass, setClass } from "../util/className";
-import checkRight from "../util/checkRight";
-import checkLeft from "../util/checkLeft";
-import removeEntry from "../util/removeEntry";
+import getOffset from "../../util/getOffset";
+import getWindowSize from "../../util/getWindowSize";
+import { addClass, setClass } from "../../util/className";
+import checkRight from "../../util/checkRight";
+import checkLeft from "../../util/checkLeft";
+import removeEntry from "../../util/removeEntry";
+import { TooltipPosition } from "./tooltipPosition";
 
-export type TooltipPosition =
-  | "floating"
-  | "top"
-  | "bottom"
-  | "left"
-  | "right"
-  | "top-right-aligned"
-  | "top-left-aligned"
-  | "top-middle-aligned"
-  | "bottom-right-aligned"
-  | "bottom-left-aligned"
-  | "bottom-middle-aligned";
 
 /**
  * auto-determine alignment
@@ -169,7 +158,7 @@ function _determineAutoPosition(
  *
  * @api private
  */
-export default function placeTooltip(
+export const placeTooltip = (
   tooltipLayer: HTMLElement,
   arrowLayer: HTMLElement,
   targetElement: HTMLElement,
@@ -179,7 +168,7 @@ export default function placeTooltip(
   autoPosition = true,
   tooltipClassName = "",
   hintMode: boolean = false
-) {
+) => {
   let tooltipOffset: {
     top: number;
     left: number;

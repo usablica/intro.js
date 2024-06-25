@@ -13,7 +13,7 @@ import createElement from "../../util/createElement";
 import { setClass } from "../../util/className";
 import { hideHint } from "./hide";
 import { setPositionRelativeTo } from "../../util/setPositionRelativeTo";
-import placeTooltip from "../../core/placeTooltip";
+import { placeTooltip } from "../../packages/tooltip";
 
 /**
  * Removes open hint (tooltip hint)
