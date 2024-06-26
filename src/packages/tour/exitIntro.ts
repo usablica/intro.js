@@ -1,6 +1,3 @@
-import DOMEvent from "../../util/DOMEvent";
-import onKeyDown from "./onKeyDown";
-import onResize from "./onResize";
 import removeShowElement from "./removeShowElement";
 import { removeChild, removeAnimatedChild } from "../../util/removeChild";
 import { Tour } from "./tour";
@@ -22,7 +19,10 @@ import {
  * @api private
  * @param {Boolean} force - Setting to `true` will skip the result of beforeExit callback
  */
-export default async function exitIntro(tour: Tour, force: boolean = false) {
+export default async function exitIntro(
+  tour: Tour,
+  force: boolean = false
+): Promise<boolean> {
   const targetElement = tour.getTargetElement();
   let continueExit: boolean | undefined = true;
 
@@ -33,7 +33,7 @@ export default async function exitIntro(tour: Tour, force: boolean = false) {
 
   // skip this check if `force` parameter is `true`
   // otherwise, if `onbeforeexit` returned `false`, don't exit the intro
-  if (!force && continueExit === false) return;
+  if (!force && continueExit === false) return false;
 
   // remove overlay layers from the page
   const overlayLayers = Array.from(
@@ -75,13 +75,11 @@ export default async function exitIntro(tour: Tour, force: boolean = false) {
 
   removeShowElement();
 
-  //clean listeners
-  DOMEvent.off(window, "keydown", onKeyDown, tour, true);
-  DOMEvent.off(window, "resize", onResize, tour, true);
-
   //check if any callback is defined
   await tour.callback("exit")?.call(tour);
 
   // set the step to default
   tour.setCurrentStep(-1);
+
+  return true;
 }

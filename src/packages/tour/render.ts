@@ -1,8 +1,5 @@
 import addOverlayLayer from "./addOverlayLayer";
-import DOMEvent from "../../util/DOMEvent";
 import { nextStep } from "./steps";
-import onKeyDown from "./onKeyDown";
-import onResize from "./onResize";
 import { fetchSteps } from "./steps";
 import { Tour } from "./tour";
 
@@ -33,12 +30,7 @@ export const render = async (tour: Tour): Promise<Boolean> => {
     //then, start the show
     await nextStep(tour);
 
-    if (tour.getOption("keyboardNavigation")) {
-      DOMEvent.on(window, "keydown", onKeyDown, tour, true);
-    }
-
-    //for window resize
-    DOMEvent.on(window, "resize", onResize, tour, true);
+    return true;
   }
 
   return false;

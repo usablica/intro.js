@@ -17,6 +17,10 @@ import exitIntro from "./exitIntro";
 import isFunction from "../../util/isFunction";
 import { getDontShowAgain, setDontShowAgain } from "./dontShowAgain";
 import refresh from "./refresh";
+import { getContainerElement } from "../../util/containerElement";
+import DOMEvent from "../../util/DOMEvent";
+import onKeyDown from "./onKeyDown";
+import onResize from "./onResize";
 
 export class Tour implements Package<TourOptions> {
   private _steps: TourStep[] = [];
@@ -24,6 +28,7 @@ export class Tour implements Package<TourOptions> {
   private _direction: "forward" | "backward";
   private readonly _targetElement: HTMLElement;
   private _options: TourOptions;
+
   private readonly callbacks: {
     beforeChange?: introBeforeChangeCallback;
     change?: introChangeCallback;
@@ -35,8 +40,12 @@ export class Tour implements Package<TourOptions> {
     beforeExit?: introBeforeExitCallback;
   } = {};
 
-  public constructor(targetElement: HTMLElement) {
-    this._targetElement = targetElement;
+  // Event handlers
+  private _keyboardNavigationHandler?: (e: KeyboardEvent) => Promise<void>;
+  private _refreshOnResizeHandler?: (e: Event) => void;
+
+  public constructor(elementOrSelector?: string | HTMLElement) {
+    this._targetElement = getContainerElement(elementOrSelector);
     this._options = getDefaultTourOptions();
   }
 
@@ -216,8 +225,58 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  /**
+   * Enable keyboard navigation for the tour 
+   */
+  enableKeyboardNavigation() {
+    if (this.getOption("keyboardNavigation")) {
+      this._keyboardNavigationHandler = (e: KeyboardEvent) =>
+        onKeyDown(this, e);
+      DOMEvent.on(window, "keydown", this._keyboardNavigationHandler, true);
+    }
+
+    return this;
+  }
+
+  /**
+   * Disable keyboard navigation for the tour
+   */
+  disableKeyboardNavigation() {
+    if (this._keyboardNavigationHandler) {
+      DOMEvent.off(window, "keydown", this._keyboardNavigationHandler, true);
+      this._keyboardNavigationHandler = undefined;
+    }
+
+    return this;
+  }
+
+  /**
+   * Enable refresh on resize for the tour
+   */
+  enableRefreshOnResize() {
+    this._refreshOnResizeHandler = (_: Event) => onResize(this);
+    DOMEvent.on(window, "resize", this._refreshOnResizeHandler, true);
+  }
+
+  /**
+   * Disable refresh on resize for the tour
+   */
+  disableRefreshOnResize() {
+    if (this._refreshOnResizeHandler) {
+      DOMEvent.off(window, "resize", this._refreshOnResizeHandler, true);
+      this._refreshOnResizeHandler = undefined;
+    }
+  }
+
+  /**
+   * Render the tour on the page
+   */
   async render(): Promise<this> {
-    await render(this);
+    if (await render(this)) {
+      this.enableKeyboardNavigation();
+      this.enableRefreshOnResize();
+    }
+
     return this;
   }
 
@@ -234,7 +293,11 @@ export class Tour implements Package<TourOptions> {
    * @param {boolean} force whether to force exit the tour
    */
   async exit(force?: boolean) {
-    await exitIntro(this, force ?? false);
+    if (await exitIntro(this, force ?? false)) {
+      this.disableKeyboardNavigation();
+      this.disableRefreshOnResize();
+    }
+
     return this;
   }
 

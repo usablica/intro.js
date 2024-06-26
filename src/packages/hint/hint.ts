@@ -25,7 +25,7 @@ export class Hint implements Package<HintOptions> {
     hintClick?: hintClickCallback;
     hintClose?: hintCloseCallback;
   } = {};
-  private _hintsAutoRefreshFunction: (() => void) | undefined;
+  private _hintsAutoRefreshFunction?: (() => void);
 
   public constructor(targetElement: HTMLElement) {
     this._targetElement = targetElement;
@@ -72,7 +72,7 @@ export class Hint implements Package<HintOptions> {
         hintAutoRefreshInterval
       );
 
-      DOMEvent.on(window, "scroll", this._hintsAutoRefreshFunction, this, true);
+      DOMEvent.on(window, "scroll", this._hintsAutoRefreshFunction, true);
     }
 
     return this;
@@ -84,9 +84,10 @@ export class Hint implements Package<HintOptions> {
         window,
         "scroll",
         this._hintsAutoRefreshFunction,
-        this,
         true
       );
+
+      this._hintsAutoRefreshFunction = undefined;
     }
 
     return this;

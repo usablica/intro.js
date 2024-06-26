@@ -1,5 +1,3 @@
-import stamp from "./stamp";
-
 /**
  * DOMEvent Handles all DOM events
  *
@@ -9,75 +7,45 @@ import stamp from "./stamp";
  * off - remove event
  */
 
+interface Events {
+  keydown: KeyboardEvent;
+  resize: Event;
+  scroll: Event;
+}
+
+type Listener<T> = (e: T) => void | undefined | string | Promise<string | void>;
+
 class DOMEvent {
-  private readonly events_key: string = "introjs_event";
-
-  /**
-   * Gets a unique ID for an event listener
-   */
-  private _id<T>(type: string, listener: Function, context: T) {
-    return type + stamp(listener) + (context ? `_${stamp(context)}` : "");
-  }
-
   /**
    * Adds event listener
    */
-  public on<T>(
+  public on<T extends keyof Events>(
     obj: EventTarget,
-    type: string,
-    listener: (
-      context: T | EventTarget,
-      e: Event
-    ) => void | undefined | string | Promise<string | void>,
-    context: T,
+    type: T,
+    listener: Listener<Events[T]>,
     useCapture: boolean
   ) {
-    const id = this._id(type, listener, context);
-    const handler = (e: Event) => listener(context || obj, e || window.event);
-
     if ("addEventListener" in obj) {
-      obj.addEventListener(type, handler, useCapture);
+      obj.addEventListener(type, listener, useCapture);
     } else if ("attachEvent" in obj) {
-      // @ts-ignore
-      obj.attachEvent(`on${type}`, handler);
+      (obj as any).attachEvent(`on${type}`, listener);
     }
-
-    // @ts-ignore
-    obj[this.events_key] = obj[this.events_key] || {};
-    // @ts-ignore
-    obj[this.events_key][id] = handler;
   }
 
   /**
    * Removes event listener
    */
-  public off<T>(
+  public off<T extends keyof Events>(
     obj: EventTarget,
-    type: string,
-    listener: (
-      context: T | EventTarget,
-      e: Event
-    ) => void | undefined | string | Promise<string | void>,
-    context: T,
+    type: T,
+    listener: Listener<Events[T]>,
     useCapture: boolean
   ) {
-    const id = this._id(type, listener, context);
-    // @ts-ignore
-    const handler = obj[this.events_key] && obj[this.events_key][id];
-
-    if (!handler) {
-      return;
-    }
-
     if ("removeEventListener" in obj) {
-      obj.removeEventListener(type, handler, useCapture);
+      obj.removeEventListener(type, listener, useCapture);
     } else if ("detachEvent" in obj) {
-      // @ts-ignore
-      obj.detachEvent(`on${type}`, handler);
+      (obj as any).detachEvent(`on${type}`, listener);
     }
-
-    // @ts-ignore
-    obj[this.events_key][id] = null;
   }
 }
 
