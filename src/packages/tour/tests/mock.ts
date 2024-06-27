@@ -16,7 +16,10 @@ export const appendMockSteps = (targetElement: HTMLElement = document.body) => {
   mockElementTwo.setAttribute(dataPosition, "left");
 
   const mockElementThree = createElement("h1");
-  mockElementThree.setAttribute(dataIntroAttribute, "Mock element second to last");
+  mockElementThree.setAttribute(
+    dataIntroAttribute,
+    "Mock element second to last"
+  );
   mockElementThree.setAttribute(dataStepAttribute, "10");
 
   const mockElementFour = createElement("a");
@@ -102,7 +105,6 @@ export const getMockSteps = (): TourStep[] => {
     },
   ];
 };
-
 
 export const getMockTour = (targetElement: HTMLElement = document.body) => {
   return new Tour(targetElement);

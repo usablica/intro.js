@@ -6,7 +6,6 @@ import checkLeft from "../../util/checkLeft";
 import removeEntry from "../../util/removeEntry";
 import { TooltipPosition } from "./tooltipPosition";
 
-
 /**
  * auto-determine alignment
  */
@@ -374,4 +373,4 @@ export const placeTooltip = (
       );
       tooltipLayer.style.top = `${targetOffset.height + 20}px`;
   }
-}
+};

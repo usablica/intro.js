@@ -22,6 +22,9 @@ import DOMEvent from "../../util/DOMEvent";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 
+/**
+ * Intro.js Tour class
+ */
 export class Tour implements Package<TourOptions> {
   private _steps: TourStep[] = [];
   private _currentStep: number = -1;
@@ -226,7 +229,7 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
-   * Enable keyboard navigation for the tour 
+   * Enable keyboard navigation for the tour
    */
   enableKeyboardNavigation() {
     if (this.getOption("keyboardNavigation")) {
@@ -251,7 +254,7 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
-   * Enable refresh on resize for the tour
+   * Enable refresh on window resize for the tour
    */
   enableRefreshOnResize() {
     this._refreshOnResizeHandler = (_: Event) => onResize(this);
@@ -259,7 +262,7 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
-   * Disable refresh on resize for the tour
+   * Disable refresh on window resize for the tour
    */
   disableRefreshOnResize() {
     if (this._refreshOnResizeHandler) {

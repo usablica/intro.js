@@ -69,7 +69,9 @@ describe("className", () => {
 
       addClass(el, "secondClass", "thirdClass");
 
-      expect(el.getAttribute('class')).toBe("firstClass secondClass thirdClass");
+      expect(el.getAttribute("class")).toBe(
+        "firstClass secondClass thirdClass"
+      );
     });
 
     test("should not append duplicate list of classNames to an empty className of SVG", () => {
@@ -78,117 +80,117 @@ describe("className", () => {
 
       addClass(el, "firstClass", "firstClass", "firstClass");
 
-      expect(el.getAttribute('class')).toBe("firstClass");
+      expect(el.getAttribute("class")).toBe("firstClass");
     });
   });
 
-  describe('removeClass', () => {
-    it('should do nothing when the class name is not found', () => {
+  describe("removeClass", () => {
+    it("should do nothing when the class name is not found", () => {
       // Arrange
-      const el = document.createElement('div');
-      el.className = 'firstClass';
+      const el = document.createElement("div");
+      el.className = "firstClass";
 
       // Act
-      removeClass(el, 'secondClass');
+      removeClass(el, "secondClass");
 
       // Assert
-      expect(el.className).toBe('firstClass');
+      expect(el.className).toBe("firstClass");
     });
 
-    it('should remove middle class name from an element', () => {
+    it("should remove middle class name from an element", () => {
       // Arrange
-      const el = document.createElement('div');
-      el.className = 'firstClass secondClass thirdClass';
+      const el = document.createElement("div");
+      el.className = "firstClass secondClass thirdClass";
 
       // Act
-      removeClass(el, 'secondClass');
+      removeClass(el, "secondClass");
 
       // Assert
-      expect(el.className).toBe('firstClass thirdClass');
+      expect(el.className).toBe("firstClass thirdClass");
     });
 
-    it('should remove the first class name from an element', () => {
+    it("should remove the first class name from an element", () => {
       // Arrange
-      const el = document.createElement('div');
-      el.className = 'firstClass secondClass thirdClass';
+      const el = document.createElement("div");
+      el.className = "firstClass secondClass thirdClass";
 
       // Act
-      removeClass(el, 'firstClass');
+      removeClass(el, "firstClass");
 
       // Assert
-      expect(el.className).toBe('secondClass thirdClass');
+      expect(el.className).toBe("secondClass thirdClass");
     });
 
-    it('should remove the last class name from an element', () => {
+    it("should remove the last class name from an element", () => {
       // Arrange
-      const el = document.createElement('div');
-      el.className = 'firstClass secondClass thirdClass';
+      const el = document.createElement("div");
+      el.className = "firstClass secondClass thirdClass";
 
       // Act
-      removeClass(el, 'thirdClass');
+      removeClass(el, "thirdClass");
 
       // Assert
-      expect(el.className).toBe('firstClass secondClass');
+      expect(el.className).toBe("firstClass secondClass");
     });
 
-    it('should remove the only class name from an element', () => {
+    it("should remove the only class name from an element", () => {
       // Arrange
-      const el = document.createElement('div');
-      el.className = 'secondClass';
+      const el = document.createElement("div");
+      el.className = "secondClass";
 
       // Act
-      removeClass(el, 'secondClass');
+      removeClass(el, "secondClass");
 
       // Assert
-      expect(el.className).toBe('');
+      expect(el.className).toBe("");
     });
 
-    it('should remove the first class name from an SVG element', () => {
+    it("should remove the first class name from an SVG element", () => {
       // Arrange
-      const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      el.setAttribute('class', 'firstClass secondClass thirdClass');
+      const el = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      el.setAttribute("class", "firstClass secondClass thirdClass");
 
       // Act
-      removeClass(el, 'firstClass');
+      removeClass(el, "firstClass");
 
       // Assert
-      expect(el.getAttribute('class')).toBe('secondClass thirdClass');
+      expect(el.getAttribute("class")).toBe("secondClass thirdClass");
     });
 
-    it('should remove middle class name from an SVG element', () => {
+    it("should remove middle class name from an SVG element", () => {
       // Arrange
-      const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      el.setAttribute('class', 'firstClass secondClass thirdClass');
+      const el = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      el.setAttribute("class", "firstClass secondClass thirdClass");
 
       // Act
-      removeClass(el, 'secondClass');
+      removeClass(el, "secondClass");
 
       // Assert
-      expect(el.getAttribute('class')).toBe('firstClass thirdClass');
+      expect(el.getAttribute("class")).toBe("firstClass thirdClass");
     });
 
-    it('should remove the last class name from an SVG element', () => {
+    it("should remove the last class name from an SVG element", () => {
       // Arrange
-      const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      el.setAttribute('class', 'firstClass secondClass');
+      const el = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      el.setAttribute("class", "firstClass secondClass");
 
       // Act
-      removeClass(el, 'secondClass');
+      removeClass(el, "secondClass");
 
       // Assert
-      expect(el.getAttribute('class')).toBe('firstClass');
+      expect(el.getAttribute("class")).toBe("firstClass");
     });
 
-    it('should remove the only class name from an SVG element', () => {
+    it("should remove the only class name from an SVG element", () => {
       // Arrange
-      const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      el.setAttribute('class', 'secondClass');
+      const el = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      el.setAttribute("class", "secondClass");
 
       // Act
-      removeClass(el, 'secondClass');
+      removeClass(el, "secondClass");
 
       // Assert
-      expect(el.getAttribute('class')).toBe('');
+      expect(el.getAttribute("class")).toBe("");
     });
   });
 });

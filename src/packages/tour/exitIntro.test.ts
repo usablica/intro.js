@@ -18,7 +18,7 @@ describe("exitIntro", () => {
 
     const mockTour = getMockTour();
     mockTour.addStep({ element: document.querySelector("h1") });
-    mockTour.onExit(fnOnExit)
+    mockTour.onExit(fnOnExit);
     mockTour.onBeforeExit(fnOnBeforeExit);
 
     await mockTour.render();
@@ -38,7 +38,7 @@ describe("exitIntro", () => {
 
     const mockTour = getMockTour();
     mockTour.addStep({ element: document.querySelector("h1") });
-    mockTour.onExit(fnOnExit)
+    mockTour.onExit(fnOnExit);
     mockTour.onBeforeExit(fnOnBeforeExit);
 
     await mockTour.render();
@@ -50,7 +50,7 @@ describe("exitIntro", () => {
     expect(fnOnBeforeExit).toHaveBeenCalledWith(document.body);
 
     // test cleanup
-    document.body.innerHTML = '';
+    document.body.innerHTML = "";
   });
 
   test("should not continue when exit force is true", async () => {
@@ -60,7 +60,7 @@ describe("exitIntro", () => {
 
     const mockTour = getMockTour();
     mockTour.addStep({ element: document.querySelector("h1") });
-    mockTour.onExit(fnOnExit)
+    mockTour.onExit(fnOnExit);
     mockTour.onBeforeExit(fnOnBeforeExit);
 
     await mockTour.render();
@@ -70,7 +70,7 @@ describe("exitIntro", () => {
     expect(fnOnBeforeExit).toBeCalledTimes(1);
 
     // test cleanup
-    document.body.innerHTML = '';
+    document.body.innerHTML = "";
   });
 
   test("should continue when exit force is true and beforeExit callback returns false", async () => {
@@ -80,7 +80,7 @@ describe("exitIntro", () => {
 
     const mockTour = getMockTour();
     mockTour.addStep({ element: document.querySelector("h1") });
-    mockTour.onExit(fnOnExit)
+    mockTour.onExit(fnOnExit);
     mockTour.onBeforeExit(fnOnBeforeExit);
 
     await mockTour.render();

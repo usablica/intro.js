@@ -1,9 +1,4 @@
-import {
-  getAllCookies,
-  getCookie,
-  setCookie,
-  deleteCookie,
-} from "./cookie";
+import { getAllCookies, getCookie, setCookie, deleteCookie } from "./cookie";
 
 describe("cookie", () => {
   let _cookie = "";

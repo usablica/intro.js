@@ -73,7 +73,7 @@ export const alignHintPosition = (
       hintElement.style.top = `${offset.top}px`;
       break;
   }
-}
+};
 
 /**
  * Re-aligns all hint elements

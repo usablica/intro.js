@@ -1,6 +1,11 @@
 import { fetchSteps, nextStep, previousStep } from "./steps";
 import _showElement from "./showElement";
-import { appendMockSteps, getMockPartialSteps, getMockSteps, getMockTour } from "./tests/mock";
+import {
+  appendMockSteps,
+  getMockPartialSteps,
+  getMockSteps,
+  getMockTour,
+} from "./tests/mock";
 import createElement from "../../util/createElement";
 
 jest.mock("./showElement");
@@ -248,7 +253,12 @@ describe("steps", () => {
     test("should find the data-* elements from the DOM with the correct order", () => {
       // Arrange
       const targetElement = createElement("div");
-      const [mockElementOne, mockElementTwo, mockElementThree, mockElementFour] = appendMockSteps(targetElement);
+      const [
+        mockElementOne,
+        mockElementTwo,
+        mockElementThree,
+        mockElementFour,
+      ] = appendMockSteps(targetElement);
       const mockTour = getMockTour(targetElement);
 
       // Act

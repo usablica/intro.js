@@ -58,5 +58,5 @@ describe("render", () => {
     // Assert
     expect(mockTour.getSteps()).toHaveLength(1);
     expect(document.querySelectorAll(".introjs-bullets ul li").length).toBe(1);
-  })
+  });
 });
