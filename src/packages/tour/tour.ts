@@ -1,4 +1,4 @@
-import { nextStep, TourStep } from "./steps";
+import { nextStep, previousStep, TourStep } from "./steps";
 import { Package } from "../package";
 import {
   introAfterChangeCallback,
@@ -47,11 +47,25 @@ export class Tour implements Package<TourOptions> {
   private _keyboardNavigationHandler?: (e: KeyboardEvent) => Promise<void>;
   private _refreshOnResizeHandler?: (e: Event) => void;
 
-  public constructor(elementOrSelector?: string | HTMLElement) {
+  /**
+   * Create a new Tour instance
+   * @param elementOrSelector Optional target element or CSS query to start the Tour on
+   * @param options Optional Tour options
+   */
+  public constructor(
+    elementOrSelector?: string | HTMLElement,
+    options?: Partial<TourOptions>
+  ) {
     this._targetElement = getContainerElement(elementOrSelector);
-    this._options = getDefaultTourOptions();
+    this._options = options
+      ? setOptions(this._options, options)
+      : getDefaultTourOptions();
   }
 
+  /**
+   * Get a specific callback function
+   * @param callbackName callback name
+   */
   callback<K extends keyof typeof this.callbacks>(
     callbackName: K
   ): (typeof this.callbacks)[K] | undefined {
@@ -65,10 +79,9 @@ export class Tour implements Package<TourOptions> {
   /**
    * Go to a specific step of the tour
    * @param step step number
-   * @returns Tour instance
    */
   async goToStep(step: number) {
-    // because steps starts from zero index
+    // step - 2 because steps starts from zero index and nextStep() increments the step
     this.setCurrentStep(step - 2);
     await nextStep(this);
     return this;
@@ -76,14 +89,14 @@ export class Tour implements Package<TourOptions> {
 
   /**
    * Go to a specific step of the tour with the explicit [data-step] number
-   * @param stepNumber
-   * @returns
+   * @param stepNumber [data-step] value of the step
    */
   async goToStepNumber(stepNumber: number) {
     for (let i = 0; i < this._steps.length; i++) {
       const item = this._steps[i];
 
       if (item.step === stepNumber) {
+        // i - 1 because nextStep() increments the step
         this.setCurrentStep(i - 1);
         break;
       }
@@ -97,7 +110,7 @@ export class Tour implements Package<TourOptions> {
   /**
    * Add a step to the tour options.
    * This method should be used in conjunction with the `render()` method.
-   * @param step Partial<TourStep>
+   * @param step step to add
    */
   addStep(step: Partial<TourStep>) {
     if (!this._options.steps) {
@@ -112,7 +125,7 @@ export class Tour implements Package<TourOptions> {
   /**
    * Add multiple steps to the tour options.
    * This method should be used in conjunction with the `render()` method.
-   * @param steps Partial<TourStep>[]
+   * @param steps steps to add
    */
   addSteps(steps: Partial<TourStep>[]) {
     if (!steps.length) return this;
@@ -126,25 +139,46 @@ export class Tour implements Package<TourOptions> {
 
   /**
    * Set the steps of the tour
-   * @param steps TourStep[]
+   * @param steps steps to set
    */
   setSteps(steps: TourStep[]): this {
     this._steps = steps;
     return this;
   }
 
+  /**
+   * Get all available steps of the tour
+   */
   getSteps(): TourStep[] {
     return this._steps;
   }
 
+  /**
+   * Get a specific step of the tour
+   * @param {number} step step number
+   */
   getStep(step: number): TourStep {
     return this._steps[step];
   }
 
+  /**
+   * Get the current step of the tour
+   */
   getCurrentStep(): number {
     return this._currentStep;
   }
 
+  /**
+   * @deprecated `currentStep()` is deprecated, please use `getCurrentStep()` instead.
+   */
+  currentStep(): number {
+    return this._currentStep;
+  }
+
+  /**
+   * Set the current step of the tour and the direction of the tour
+   * @param step
+   */
   setCurrentStep(step: number): this {
     if (step >= this._currentStep) {
       this._direction = "forward";
@@ -156,6 +190,9 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  /**
+   * Increment the current step of the tour (does not render the tour step, must be called in conjunction with `nextStep`)
+   */
   incrementCurrentStep(): this {
     if (this.getCurrentStep() === -1) {
       this.setCurrentStep(0);
@@ -166,6 +203,9 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  /**
+   * Decrement the current step of the tour (does not render the tour step, must be in conjunction with `previousStep`)
+   */
   decrementCurrentStep(): this {
     if (this.getCurrentStep() > 0) {
       this.setCurrentStep(this._currentStep - 1);
@@ -174,40 +214,80 @@ export class Tour implements Package<TourOptions> {
     return this;
   }
 
+  /**
+   * Get the direction of the tour (forward or backward)
+   */
   getDirection() {
     return this._direction;
   }
 
   /**
+   * Go to the next step of the tour
+   */
+  async nextStep() {
+    await nextStep(this);
+    return this;
+  }
+
+  /**
+   * Go to the previous step of the tour
+   */
+  async previousStep() {
+    await previousStep(this);
+    return this;
+  }
+
+  /**
    * Check if the current step is the last step
-   * @returns boolean
    */
   isEnd(): boolean {
     return this.getCurrentStep() >= this._steps.length;
   }
 
+  /**
+   * Get the target element of the tour
+   */
   getTargetElement(): HTMLElement {
     return this._targetElement;
   }
 
+  /**
+   * Set the options for the tour
+   * @param partialOptions key/value pair of options
+   */
   setOptions(partialOptions: Partial<TourOptions>): this {
     this._options = setOptions(this._options, partialOptions);
     return this;
   }
 
+  /**
+   * Set a specific option for the tour
+   * @param key option key
+   * @param value option value
+   */
   setOption<K extends keyof TourOptions>(key: K, value: TourOptions[K]): this {
     this._options = setOption(this._options, key, value);
     return this;
   }
 
+  /**
+   * Get a specific option for the tour
+   * @param key option key
+   */
   getOption<K extends keyof TourOptions>(key: K): TourOptions[K] {
     return this._options[key];
   }
 
+  /**
+   * Clone the current tour instance
+   */
   clone(): ThisType<this> {
-    return new Tour(this._targetElement);
+    return new Tour(this._targetElement, this._options);
   }
 
+  /**
+   * Returns true if the tour instance is active
+   */
   isActive(): boolean {
     if (
       this.getOption("dontShowAgain") &&
@@ -219,6 +299,12 @@ export class Tour implements Package<TourOptions> {
     return this.getOption("isActive");
   }
 
+  /**
+   * Set the `dontShowAgain` option for the tour so that the tour does not show twice to the same user
+   * This is a persistent option that is stored in the browser's cookies
+   *
+   * @param dontShowAgain boolean value to set the `dontShowAgain` option
+   */
   setDontShowAgain(dontShowAgain: boolean) {
     setDontShowAgain(
       dontShowAgain,
@@ -320,14 +406,18 @@ export class Tour implements Package<TourOptions> {
     return this.onBeforeChange(callback);
   }
 
+  /**
+   * Add a callback to be called before the tour changes steps
+   * @param {Function} callback callback function to be called
+   */
   onBeforeChange(callback: introBeforeChangeCallback) {
-    if (isFunction(callback)) {
-      this.callbacks.beforeChange = callback;
-    } else {
+    if (!isFunction(callback)) {
       throw new Error(
-        "Provided callback for onbeforechange was not a function"
+        "Provided callback for onBeforeChange was not a function"
       );
     }
+
+    this.callbacks.beforeChange = callback;
     return this;
   }
 
@@ -338,12 +428,16 @@ export class Tour implements Package<TourOptions> {
     this.onChange(callback);
   }
 
+  /**
+   * Add a callback to be called when the tour changes steps
+   * @param {Function} callback callback function to be called
+   */
   onChange(callback: introChangeCallback) {
-    if (isFunction(callback)) {
-      this.callbacks.change = callback;
-    } else {
-      throw new Error("Provided callback for onchange was not a function.");
+    if (!isFunction(callback)) {
+      throw new Error("Provided callback for onChange was not a function.");
     }
+
+    this.callbacks.change = callback;
     return this;
   }
 
@@ -354,12 +448,16 @@ export class Tour implements Package<TourOptions> {
     this.onAfterChange(callback);
   }
 
+  /**
+   * Add a callback to be called after the tour changes steps
+   * @param {Function} callback callback function to be called
+   */
   onAfterChange(callback: introAfterChangeCallback) {
-    if (isFunction(callback)) {
-      this.callbacks.afterChange = callback;
-    } else {
-      throw new Error("Provided callback for onafterchange was not a function");
+    if (!isFunction(callback)) {
+      throw new Error("Provided callback for onAfterChange was not a function");
     }
+
+    this.callbacks.afterChange = callback;
     return this;
   }
 
@@ -370,12 +468,16 @@ export class Tour implements Package<TourOptions> {
     return this.onComplete(callback);
   }
 
+  /**
+   * Add a callback to be called when the tour is completed
+   * @param {Function} callback callback function to be called
+   */
   onComplete(callback: introCompleteCallback) {
-    if (isFunction(callback)) {
-      this.callbacks.complete = callback;
-    } else {
+    if (!isFunction(callback)) {
       throw new Error("Provided callback for oncomplete was not a function.");
     }
+
+    this.callbacks.complete = callback;
     return this;
   }
 
@@ -386,13 +488,16 @@ export class Tour implements Package<TourOptions> {
     return this.onStart(callback);
   }
 
+  /**
+   * Add a callback to be called when the tour is started
+   * @param {Function} callback callback function to be called
+   */
   onStart(callback: introStartCallback) {
-    if (isFunction(callback)) {
-      this.callbacks.start = callback;
-    } else {
+    if (!isFunction(callback)) {
       throw new Error("Provided callback for onstart was not a function.");
     }
 
+    this.callbacks.start = callback;
     return this;
   }
 
@@ -403,13 +508,16 @@ export class Tour implements Package<TourOptions> {
     return this.onExit(callback);
   }
 
+  /**
+   * Add a callback to be called when the tour is exited
+   * @param {Function} callback callback function to be called
+   */
   onExit(callback: introExitCallback) {
-    if (isFunction(callback)) {
-      this.callbacks.exit = callback;
-    } else {
+    if (!isFunction(callback)) {
       throw new Error("Provided callback for onexit was not a function.");
     }
 
+    this.callbacks.exit = callback;
     return this;
   }
 
@@ -420,13 +528,16 @@ export class Tour implements Package<TourOptions> {
     return this.onSkip(callback);
   }
 
+  /**
+   * Add a callback to be called when the tour is skipped
+   * @param {Function} callback callback function to be called
+   */
   onSkip(callback: introSkipCallback) {
-    if (isFunction(callback)) {
-      this.callbacks.skip = callback;
-    } else {
+    if (!isFunction(callback)) {
       throw new Error("Provided callback for onskip was not a function.");
     }
 
+    this.callbacks.skip = callback;
     return this;
   }
 
@@ -437,12 +548,16 @@ export class Tour implements Package<TourOptions> {
     return this.onBeforeExit(callback);
   }
 
+  /**
+   * Add a callback to be called before the tour is exited
+   * @param {Function} callback callback function to be called
+   */
   onBeforeExit(callback: introBeforeExitCallback) {
-    if (isFunction(callback)) {
-      this.callbacks.beforeExit = callback;
-    } else {
+    if (!isFunction(callback)) {
       throw new Error("Provided callback for onbeforeexit was not a function.");
     }
+
+    this.callbacks.beforeExit = callback;
     return this;
   }
 }
