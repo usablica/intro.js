@@ -1,8 +1,5 @@
 import { Hint } from "./hint";
 import { dataStepAttribute } from "./dataAttributes";
-import DOMEvent from "src/util/DOMEvent";
-import { removeHintTooltip } from "./tooltip";
-import { reAlignHints } from "./position";
 import { hintElement, hintElements } from "./selector";
 
 /**
@@ -21,9 +18,6 @@ export function removeHints(hint: Hint) {
 
     removeHint(parseInt(step, 10));
   }
-
-  DOMEvent.off(document, "click", removeHintTooltip, hint, false);
-  DOMEvent.off(window, "resize", reAlignHints, hint, true);
 
   hint.disableHintAutoRefresh();
 }

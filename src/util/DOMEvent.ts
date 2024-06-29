@@ -11,6 +11,7 @@ interface Events {
   keydown: KeyboardEvent;
   resize: Event;
   scroll: Event;
+  click: MouseEvent;
 }
 
 type Listener<T> = (e: T) => void | undefined | string | Promise<string | void>;

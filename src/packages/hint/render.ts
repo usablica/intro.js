@@ -1,7 +1,6 @@
 import { queryElement, queryElementByClassName } from "../../util/queryElement";
 import { Hint } from "./hint";
-import { fetchHintItems, HintPosition } from "./hintItem";
-import DOMEvent from "../../util/DOMEvent";
+import { HintPosition } from "./hintItem";
 import {
   fixedHintClassName,
   hintClassName,
@@ -15,8 +14,8 @@ import { dataStepAttribute } from "./dataAttributes";
 import setAnchorAsButton from "../../util/setAnchorAsButton";
 import { addClass } from "../../util/className";
 import isFixed from "../../util/isFixed";
-import { alignHintPosition, reAlignHints } from "./position";
-import { removeHintTooltip, showHintDialog } from "./tooltip";
+import { alignHintPosition } from "./position";
+import { showHintDialog } from "./tooltip";
 
 /**
  * Returns an event handler unique to the hint iteration
@@ -108,19 +107,4 @@ export async function renderHints(hint: Hint) {
   hint.callback("hintsAdded")?.call(hint);
 
   hint.enableHintAutoRefresh();
-}
-
-/**
- * Render hints on the page
- * @api private
- */
-export async function render(hint: Hint): Promise<boolean> {
-  fetchHintItems(hint);
-
-  await renderHints(hint);
-
-  DOMEvent.on(document, "click", removeHintTooltip, hint, false);
-  DOMEvent.on(window, "resize", reAlignHints, hint, true);
-
-  return true;
 }

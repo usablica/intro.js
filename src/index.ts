@@ -1,4 +1,5 @@
 import { version } from "../package.json";
+import { Hint } from "./packages/hint/hint";
 import { Tour } from "./packages/tour";
 
 /**
@@ -11,6 +12,9 @@ const introJs = {
    */
   tour: (elementOrSelector?: string | HTMLElement) =>
     new Tour(elementOrSelector),
+
+  hint: (elementOrSelector?: string | HTMLElement) =>
+    new Hint(elementOrSelector),
 
   /**
    * Current Intro.js version

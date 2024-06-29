@@ -14,6 +14,10 @@ import { setClass } from "../../util/className";
 import { hideHint } from "./hide";
 import { setPositionRelativeTo } from "../../util/setPositionRelativeTo";
 import { placeTooltip } from "../../packages/tooltip";
+import DOMEvent from "src/util/DOMEvent";
+
+// The hint close function used when the user clicks outside the hint
+let _hintCloseFunction: () => void | undefined;
 
 /**
  * Removes open hint (tooltip hint)
@@ -136,4 +140,11 @@ export async function showHintDialog(hint: Hint, stepId: number) {
     hint.getOption("autoPosition"),
     hintItem.tooltipClass ?? hint.getOption("tooltipClass")
   );
+
+  _hintCloseFunction = () => {
+    removeHintTooltip();
+    DOMEvent.off(document, "click", _hintCloseFunction, false);
+  };
+
+  DOMEvent.on(document, "click", _hintCloseFunction, false);
 }
