@@ -1,6 +1,6 @@
 import { setPositionRelativeTo } from "./setPositionRelativeTo";
 import createElement from "./createElement";
-import { getBoundingClientRectSpy } from "../../cypress/helper";
+import { getBoundingClientRectSpy } from "../../tests/jest/helper";
 
 describe("setPositionRelativeTo", () => {
   it("should return if helperLayer or currentStep is null", () => {
