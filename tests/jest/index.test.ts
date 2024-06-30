@@ -9,7 +9,7 @@ import {
   doneButton,
   tooltipText,
   appendDummyElement,
-} from "./helper";
+} from "../../cypress/helper";
 
 jest.mock("../../src/core/dontShowAgain");
 

@@ -21,9 +21,12 @@
     "baseUrl": "./",
     "outDir": "dist"
   },
-  "include": [
-    "src/**/*",
-    "src/index.ts",
-    "tests/jest/**/*"
+  "include": ["src/**/*", "src/index.ts", "tests/jest/**/*"],
+  "exclude": [
+    "./cypress.config.ts",
+    "cypress",
+    "dist",
+    "node_modules",
+    "**/*.cy.ts"
   ]
 }

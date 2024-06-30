@@ -7,7 +7,9 @@ module.exports = defineConfig({
   env: {
     failSilently: false,
   },
+  supportFile: "./cypress/support/index.ts",
   e2e: {
+    specPattern: "**/*.*cy.*",
     setupNodeEvents(on, config) {
       getCompareSnapshotsPlugin(on, config);
     },
