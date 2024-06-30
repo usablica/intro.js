@@ -10,7 +10,7 @@ import {
   showHintDialog,
   showHints,
 } from "./core/hint";
-import introForElement from "./packages/tour/render";
+import introForElement from "./packages/tour/start";
 import refresh from "./packages/tour/refresh";
 import {
   HintStep,

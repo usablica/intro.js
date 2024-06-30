@@ -1,4 +1,4 @@
-import { render } from "./render";
+import { start } from "./start";
 import * as steps from "./steps";
 import * as addOverlayLayer from "./addOverlayLayer";
 import * as nextStep from "./steps";
@@ -19,7 +19,7 @@ describe("render", () => {
     const mockTour = getMockTour();
     mockTour.onStart(onstartCallback);
 
-    render(mockTour);
+    start(mockTour);
 
     expect(onstartCallback).toBeCalledTimes(1);
     expect(onstartCallback).toBeCalledWith(document.body);
@@ -35,7 +35,7 @@ describe("render", () => {
     const mockTour = getMockTour();
     mockTour.setOption("isActive", false);
 
-    render(mockTour);
+    start(mockTour);
 
     expect(fetchIntroStepsMock).toBeCalledTimes(0);
     expect(addOverlayLayerMock).toBeCalledTimes(0);
@@ -53,7 +53,7 @@ describe("render", () => {
     });
 
     // Act
-    await mockTour.render();
+    await mockTour.start();
 
     // Assert
     expect(mockTour.getSteps()).toHaveLength(1);

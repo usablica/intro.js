@@ -4,11 +4,11 @@ import { fetchSteps } from "./steps";
 import { Tour } from "./tour";
 
 /**
- * Initiate a new introduction/guide from an element in the page
+ * Initiate a new tour the page
  *
  * @api private
  */
-export const render = async (tour: Tour): Promise<Boolean> => {
+export const start = async (tour: Tour): Promise<Boolean> => {
   // don't start the tour if the instance is not active
   if (!tour.isActive()) {
     return false;

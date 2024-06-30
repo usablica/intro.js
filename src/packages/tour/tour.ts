@@ -12,7 +12,7 @@ import {
 } from "./callback";
 import { getDefaultTourOptions, TourOptions } from "./option";
 import { setOptions, setOption } from "../../option";
-import { render } from "./render";
+import { start } from "./start";
 import exitIntro from "./exitIntro";
 import isFunction from "../../util/isFunction";
 import { getDontShowAgain, setDontShowAgain } from "./dontShowAgain";
@@ -360,20 +360,12 @@ export class Tour implements Package<TourOptions> {
   /**
    * Render the tour on the page
    */
-  async render(): Promise<this> {
-    if (await render(this)) {
+  async start() {
+    if (await start(this)) {
       this.enableKeyboardNavigation();
       this.enableRefreshOnResize();
     }
 
-    return this;
-  }
-
-  /**
-   * @deprecated `start()` is deprecated, please use `render()` instead.
-   */
-  async start() {
-    await this.render();
     return this;
   }
 
