@@ -10,8 +10,10 @@ import {
   tooltipText,
 } from "../../../tests/jest/helper";
 import * as dontShowAgain from "./dontShowAgain";
-import { getMockPartialSteps } from "./tests/mock";
+import { getMockPartialSteps, getMockTour } from "./tests/mock";
 import { Tour } from "./tour";
+
+const flushPromises = () => new Promise(setImmediate);
 
 describe("Tour", () => {
   beforeEach(() => {
@@ -40,10 +42,19 @@ describe("Tour", () => {
   });
 
   describe("start", () => {
+    let mockTour: Tour;
+
+    beforeEach(() => {
+      mockTour = getMockTour();
+    });
+
+    afterEach(async () => {
+      await mockTour.exit();
+    });
+
     test("should start floating intro with one step", async () => {
       // Arrange & Act
-      const tour = new Tour();
-      await tour
+      await mockTour
         .setOptions({
           steps: [
             {
@@ -63,28 +74,23 @@ describe("Tour", () => {
       expect(className(".introjs-showElement")).toContain(
         "introjs-relativePosition"
       );
-
-      // Cleanup
-      await tour.exit();
     });
 
     test("should start floating intro with two steps", async () => {
       // Arrange
-      const tour = new Tour();
+      mockTour.setOptions({
+        steps: [
+          {
+            intro: "step one",
+          },
+          {
+            intro: "step two",
+          },
+        ],
+      });
 
       // Act
-      await tour
-        .setOptions({
-          steps: [
-            {
-              intro: "step one",
-            },
-            {
-              intro: "step two",
-            },
-          ],
-        })
-        .start();
+      await mockTour.start();
 
       // Assert
       expect(content(tooltipText())).toBe("step one");
@@ -108,19 +114,17 @@ describe("Tour", () => {
     test("should highlight the target element", async () => {
       // Arrange
       const p = appendDummyElement();
-      const tour = new Tour();
+      mockTour.setOptions({
+        steps: [
+          {
+            intro: "step one",
+            element: document.querySelector("p"),
+          },
+        ],
+      });
 
       // Act
-      await tour
-        .setOptions({
-          steps: [
-            {
-              intro: "step one",
-              element: document.querySelector("p"),
-            },
-          ],
-        })
-        .start();
+      await mockTour.start();
 
       // Assert
       expect(p.className).toContain("introjs-showElement");
@@ -130,19 +134,17 @@ describe("Tour", () => {
     test("should not highlight the target element if queryString is incorrect", async () => {
       // Arrange
       const p = appendDummyElement();
-      const tour = new Tour();
+      mockTour.setOptions({
+        steps: [
+          {
+            intro: "step one",
+            element: document.querySelector("div"),
+          },
+        ],
+      });
 
       // Act
-      await tour
-        .setOptions({
-          steps: [
-            {
-              intro: "step one",
-              element: document.querySelector("div"),
-            },
-          ],
-        })
-        .start();
+      await mockTour.start();
 
       // Assert
       expect(p.className).not.toContain("introjs-showElement");
@@ -159,30 +161,27 @@ describe("Tour", () => {
         "position: absolute"
       );
       const fixed = appendDummyElement("h2", "hello world", "position: fixed");
-
-      const tour = new Tour();
+      mockTour.setOptions({
+        steps: [
+          {
+            intro: "step one",
+            element: document.querySelector("h1"),
+          },
+          {
+            intro: "step two",
+            element: document.querySelector("h2"),
+          },
+        ],
+      });
 
       // Act
-      await tour
-        .setOptions({
-          steps: [
-            {
-              intro: "step one",
-              element: document.querySelector("h1"),
-            },
-            {
-              intro: "step two",
-              element: document.querySelector("h2"),
-            },
-          ],
-        })
-        .start();
+      await mockTour.start();
 
       // Assert
       expect(absolute.className).toContain("introjs-showElement");
       expect(absolute.className).not.toContain("introjs-relativePosition");
 
-      await tour.nextStep();
+      await mockTour.nextStep();
 
       expect(fixed.className).toContain("introjs-showElement");
       expect(fixed.className).not.toContain("introjs-relativePosition");
@@ -191,10 +190,7 @@ describe("Tour", () => {
     test("should call the onstart callback", async () => {
       // Arrange
       const fn = jest.fn();
-      const tour = new Tour();
-
-      // Act
-      await tour
+      mockTour
         .setOptions({
           steps: [
             {
@@ -203,8 +199,10 @@ describe("Tour", () => {
             },
           ],
         })
-        .onStart(fn)
-        .start();
+        .onStart(fn);
+
+      // Act
+      await mockTour.start();
 
       // Assert
       expect(fn).toBeCalledTimes(1);
@@ -214,10 +212,9 @@ describe("Tour", () => {
     test("should call onexit and oncomplete when there is one step", async () => {
       // Arrange
       const onexitMock = jest.fn();
-      const oncompleteMMock = jest.fn();
+      const oncompleteMock = jest.fn();
 
-      const tour = new Tour();
-      await tour
+      mockTour
         .setOptions({
           steps: [
             {
@@ -226,24 +223,24 @@ describe("Tour", () => {
           ],
         })
         .onExit(onexitMock)
-        .onComplete(oncompleteMMock)
-        .start();
+        .onComplete(oncompleteMock);
 
       // Act
-      await nextButton().click();
+      await mockTour.start();
+      nextButton().click();
+      await flushPromises();
 
       // Assert
       expect(onexitMock).toBeCalledTimes(1);
-      expect(oncompleteMMock).toBeCalledTimes(1);
+      expect(oncompleteMock).toBeCalledTimes(1);
     });
 
     test("should call onexit when skip is clicked", async () => {
       // Arrange
       const onexitMock = jest.fn();
-      const oncompleteMMock = jest.fn();
+      const oncompleteMock = jest.fn();
 
-      const tour = new Tour();
-      await tour
+      mockTour
         .setOptions({
           steps: [
             {
@@ -252,23 +249,23 @@ describe("Tour", () => {
           ],
         })
         .onExit(onexitMock)
-        .onComplete(oncompleteMMock)
-        .start();
+        .onComplete(oncompleteMock);
 
       // Act
-      await skipButton().click();
+      await mockTour.start();
+      skipButton().click();
+      await flushPromises();
 
       // Assert
       expect(onexitMock).toBeCalledTimes(1);
-      expect(oncompleteMMock).toBeCalledTimes(1);
+      expect(oncompleteMock).toBeCalledTimes(1);
     });
 
     test("should call not oncomplete when skip is clicked and there are two steps", async () => {
       // Arrange
       const onexitMock = jest.fn();
       const oncompleteMMock = jest.fn();
-      const tour = new Tour();
-      await tour
+      mockTour
         .setOptions({
           steps: [
             {
@@ -280,11 +277,12 @@ describe("Tour", () => {
           ],
         })
         .onExit(onexitMock)
-        .onComplete(oncompleteMMock)
-        .start();
+        .onComplete(oncompleteMMock);
 
       // Act
+      await mockTour.start();
       skipButton().click();
+      await flushPromises();
 
       // Assert
       expect(onexitMock).toBeCalledTimes(1);
@@ -293,19 +291,17 @@ describe("Tour", () => {
 
     test("should not append the dontShowAgain checkbox when its inactive", async () => {
       // Arrange
-      const tour = new Tour();
+      mockTour.setOptions({
+        dontShowAgain: false,
+        steps: [
+          {
+            intro: "hello world",
+          },
+        ],
+      });
 
       // Act
-      await tour
-        .setOptions({
-          dontShowAgain: false,
-          steps: [
-            {
-              intro: "hello world",
-            },
-          ],
-        })
-        .start();
+      await mockTour.start();
 
       // Assert
       expect(find(".introjs-dontShowAgain")).toBeNull();
@@ -313,30 +309,7 @@ describe("Tour", () => {
 
     test("should append the dontShowAgain checkbox", async () => {
       // Arrange
-      const tour = new Tour();
-
-      // Act
-      await tour
-        .setOptions({
-          dontShowAgain: true,
-          steps: [
-            {
-              intro: "hello world",
-            },
-          ],
-        })
-        .start();
-
-      // Assert
-      expect(find(".introjs-dontShowAgain")).not.toBeNull();
-    });
-
-    test("should call setDontShowAgain when then checkbox is clicked", async () => {
-      // Arrange
-      const setDontShowAgainSpy = jest.spyOn(dontShowAgain, "setDontShowAgain");
-      const tour = new Tour();
-
-      tour.setOptions({
+      mockTour.setOptions({
         dontShowAgain: true,
         steps: [
           {
@@ -346,7 +319,27 @@ describe("Tour", () => {
       });
 
       // Act
-      await tour.start();
+      await mockTour.start();
+
+      // Assert
+      expect(find(".introjs-dontShowAgain")).not.toBeNull();
+    });
+
+    test("should call setDontShowAgain when then checkbox is clicked", async () => {
+      // Arrange
+      const setDontShowAgainSpy = jest.spyOn(dontShowAgain, "setDontShowAgain");
+
+      mockTour.setOptions({
+        dontShowAgain: true,
+        steps: [
+          {
+            intro: "hello world",
+          },
+        ],
+      });
+
+      // Act
+      await mockTour.start();
       const checkbox = find(".introjs-dontShowAgain input");
       checkbox.click();
 
@@ -354,8 +347,8 @@ describe("Tour", () => {
       expect(setDontShowAgainSpy).toBeCalledTimes(1);
       expect(setDontShowAgainSpy).toBeCalledWith(
         true,
-        tour.getOption("dontShowAgainCookie"),
-        tour.getOption("dontShowAgainCookieDays")
+        mockTour.getOption("dontShowAgainCookie"),
+        mockTour.getOption("dontShowAgainCookieDays")
       );
     });
 
@@ -377,16 +370,15 @@ describe("Tour", () => {
 
     it("should not enable keyboard navigation and resize when start is false", async () => {
       // Arrange
-      const tour = new Tour();
-      tour.enableKeyboardNavigation = jest.fn();
-      tour.enableRefreshOnResize = jest.fn();
+      mockTour.enableKeyboardNavigation = jest.fn();
+      mockTour.enableRefreshOnResize = jest.fn();
 
       // Act
-      await tour.start();
+      await mockTour.start();
 
       // Assert
-      expect(tour.enableKeyboardNavigation).not.toBeCalled();
-      expect(tour.enableRefreshOnResize).not.toBeCalled();
+      expect(mockTour.enableKeyboardNavigation).not.toBeCalled();
+      expect(mockTour.enableRefreshOnResize).not.toBeCalled();
     });
   });
 
