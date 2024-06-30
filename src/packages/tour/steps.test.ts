@@ -158,7 +158,7 @@ describe("steps", () => {
       });
 
       // Act
-      await mockTour.render();
+      await mockTour.start();
 
       // Assert
       expect(mockTour.getSteps()).toHaveLength(1);
@@ -180,7 +180,7 @@ describe("steps", () => {
       ]);
 
       // Act
-      await mockTour.render();
+      await mockTour.start();
 
       // Assert
       expect(mockTour.getSteps()).toHaveLength(2);

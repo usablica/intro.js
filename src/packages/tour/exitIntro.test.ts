@@ -4,7 +4,7 @@ describe("exitIntro", () => {
   test("should reset the _currentStep", async () => {
     const mockTour = getMockTour();
     mockTour.addStep({ element: document.querySelector("h1") });
-    await mockTour.render();
+    await mockTour.start();
 
     await mockTour.exit(false);
 
@@ -21,7 +21,7 @@ describe("exitIntro", () => {
     mockTour.onExit(fnOnExit);
     mockTour.onBeforeExit(fnOnBeforeExit);
 
-    await mockTour.render();
+    await mockTour.start();
     await mockTour.exit(false);
 
     expect(fnOnExit).toBeCalledTimes(1);
@@ -41,7 +41,7 @@ describe("exitIntro", () => {
     mockTour.onExit(fnOnExit);
     mockTour.onBeforeExit(fnOnBeforeExit);
 
-    await mockTour.render();
+    await mockTour.start();
     await mockTour.exit(false);
 
     expect(fnOnExit).toBeCalledTimes(0);
@@ -63,7 +63,7 @@ describe("exitIntro", () => {
     mockTour.onExit(fnOnExit);
     mockTour.onBeforeExit(fnOnBeforeExit);
 
-    await mockTour.render();
+    await mockTour.start();
     await mockTour.exit(false);
 
     expect(fnOnExit).toBeCalledTimes(0);
@@ -83,7 +83,7 @@ describe("exitIntro", () => {
     mockTour.onExit(fnOnExit);
     mockTour.onBeforeExit(fnOnBeforeExit);
 
-    await mockTour.render();
+    await mockTour.start();
     await mockTour.exit(true);
 
     expect(fnOnExit).toBeCalledTimes(1);

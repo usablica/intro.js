@@ -109,7 +109,7 @@ export class Tour implements Package<TourOptions> {
 
   /**
    * Add a step to the tour options.
-   * This method should be used in conjunction with the `render()` method.
+   * This method should be used in conjunction with the `start()` method.
    * @param step step to add
    */
   addStep(step: Partial<TourStep>) {
@@ -124,7 +124,7 @@ export class Tour implements Package<TourOptions> {
 
   /**
    * Add multiple steps to the tour options.
-   * This method should be used in conjunction with the `render()` method.
+   * This method should be used in conjunction with the `start()` method.
    * @param steps steps to add
    */
   addSteps(steps: Partial<TourStep>[]) {
@@ -191,7 +191,7 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
-   * Increment the current step of the tour (does not render the tour step, must be called in conjunction with `nextStep`)
+   * Increment the current step of the tour (does not start the tour step, must be called in conjunction with `nextStep`)
    */
   incrementCurrentStep(): this {
     if (this.getCurrentStep() === -1) {
@@ -204,7 +204,7 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
-   * Decrement the current step of the tour (does not render the tour step, must be in conjunction with `previousStep`)
+   * Decrement the current step of the tour (does not start the tour step, must be in conjunction with `previousStep`)
    */
   decrementCurrentStep(): this {
     if (this.getCurrentStep() > 0) {
@@ -358,7 +358,7 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
-   * Render the tour on the page
+   * Starts the tour and shows the first step
    */
   async start() {
     if (await start(this)) {

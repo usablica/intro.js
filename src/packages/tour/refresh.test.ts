@@ -15,7 +15,7 @@ describe("refresh", () => {
       intro: "first",
     });
 
-    await mockTour.render();
+    await mockTour.start();
 
     // Act
     mockTour.setOptions({
@@ -53,7 +53,7 @@ describe("refresh", () => {
       intro: "first",
     });
 
-    await mockTour.render();
+    await mockTour.start();
 
     // Act
     mockTour.setOptions({

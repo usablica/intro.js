@@ -4,7 +4,7 @@ import * as addOverlayLayer from "./addOverlayLayer";
 import * as nextStep from "./steps";
 import { getMockTour } from "./tests/mock";
 
-describe("render", () => {
+describe("start", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });

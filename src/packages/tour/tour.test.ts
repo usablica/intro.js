@@ -6,7 +6,7 @@ describe("Tour", () => {
     jest.resetAllMocks();
   });
 
-  describe("render", () => {
+  describe("start", () => {
     it("should clean up all event listeners", async () => {
       // Arrange
       const tour = new Tour();
@@ -15,7 +15,7 @@ describe("Tour", () => {
       const removeEventListenerSpy = jest.spyOn(window, "removeEventListener");
 
       // Act
-      await tour.render();
+      await tour.start();
       await tour.exit();
 
       // Assert
@@ -23,14 +23,14 @@ describe("Tour", () => {
       expect(removeEventListenerSpy).toBeCalledTimes(2);
     });
 
-    it("should not enable keyboard navigation and resize when render is false", async () => {
+    it("should not enable keyboard navigation and resize when start is false", async () => {
       // Arrange
       const tour = new Tour();
       tour.enableKeyboardNavigation = jest.fn();
       tour.enableRefreshOnResize = jest.fn();
 
       // Act
-      await tour.render();
+      await tour.start();
 
       // Assert
       expect(tour.enableKeyboardNavigation).not.toBeCalled();
