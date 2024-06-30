@@ -1,4 +1,4 @@
-import getOffset from "src/util/getOffset";
+import getOffset from "../../util/getOffset";
 import { HintPosition } from "./hintItem";
 import { Hint } from "./hint";
 

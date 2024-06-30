@@ -14,7 +14,7 @@ import { setClass } from "../../util/className";
 import { hideHint } from "./hide";
 import { setPositionRelativeTo } from "../../util/setPositionRelativeTo";
 import { placeTooltip } from "../../packages/tooltip";
-import DOMEvent from "src/util/DOMEvent";
+import DOMEvent from "../../util/DOMEvent";
 
 // The hint close function used when the user clicks outside the hint
 let _hintCloseFunction: () => void | undefined;

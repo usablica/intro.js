@@ -1,7 +1,7 @@
 import { Hint } from "./hint";
 import { hideHintClassName } from "./className";
 import { dataStepAttribute } from "./dataAttributes";
-import { removeClass } from "src/util/className";
+import { removeClass } from "../../util/className";
 import { fetchHintItems } from "./hintItem";
 import { hintElement, hintElements } from "./selector";
 

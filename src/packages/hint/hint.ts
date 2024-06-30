@@ -1,12 +1,12 @@
 import { Package } from "../package";
 import { getDefaultHintOptions, HintOptions } from "./option";
 import { fetchHintItems, HintItem } from "./hintItem";
-import { setOption, setOptions } from "src/option";
+import { setOption, setOptions } from "../../option";
 import isFunction from "../../util/isFunction";
 import debounce from "../../util/debounce";
 import { reAlignHints } from "./position";
-import DOMEvent from "src/util/DOMEvent";
-import { getContainerElement } from "src/util/containerElement";
+import DOMEvent from "../../util/DOMEvent";
+import { getContainerElement } from "../../util/containerElement";
 import { renderHints } from "./render";
 import { hideHint, hideHints } from "./hide";
 import { showHint, showHints } from "./show";
