@@ -279,11 +279,6 @@ export default async function _showElement(tour: Tour, step: TourStep) {
   }
 
   if (oldHelperLayer !== null && oldReferenceLayer !== null) {
-    const oldHelperNumberLayer = getElementByClassName(
-      helperNumberLayerClassName,
-      oldReferenceLayer
-    );
-
     const oldTooltipLayer = getElementByClassName(
       tooltipTextClassName,
       oldReferenceLayer
@@ -351,6 +346,11 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     if (_lastShowElementTimer) {
       window.clearTimeout(_lastShowElementTimer);
     }
+
+    const oldHelperNumberLayer = queryElementByClassName(
+      helperNumberLayerClassName,
+      oldReferenceLayer
+    );
 
     _lastShowElementTimer = window.setTimeout(() => {
       // set current step to the label
