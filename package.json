@@ -27,11 +27,12 @@
     "test:watch": "jest --watch",
     "test:jest": "jest --coverage --silent --ci --coverage --coverageReporters=\"text\" --coverageReporters=\"text-summary\"",
     "test:jshint": "jshint ./src --verbose && jshint ./tests --verbose",
-    "test:cypress": "npm run build && cp -r ./dist ./tests/cypress/setup && cd ./tests && cypress run --env type=actual",
+    "test:cypress": "start-server-and-test dev http://localhost:10001/dist/intro.js 'cypress run --env type=actual'",
     "release": "./bin/release.sh || true",
     "prebuild": "rimraf ./dist",
     "build": "rollup -c",
-    "build:watch": "rollup -c -w"
+    "build:watch": "rollup -c -w",
+    "dev": "npm run build -- --configPlugin serve"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
@@ -72,7 +73,9 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-postcss": "^4.0.0",
     "rollup-plugin-progress": "^1.1.2",
+    "rollup-plugin-serve": "^1.1.1",
     "rollup-plugin-terser": "^7.0.2",
+    "start-server-and-test": "^2.0.4",
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.0",
     "typescript": "^5.1.6"

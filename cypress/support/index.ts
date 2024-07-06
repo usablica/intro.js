@@ -1,8 +1,8 @@
 /// <reference types="./index.d.ts" />
 
-import compareSnapshotCommand from "cypress-visual-regression/dist/command";
+import { addCompareSnapshotCommand } from "cypress-visual-regression/dist/command";
 
-compareSnapshotCommand({
+addCompareSnapshotCommand({
   capture: "fullPage",
 });
 

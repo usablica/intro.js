@@ -1,5 +1,5 @@
-const { defineConfig } = require("cypress");
-const getCompareSnapshotsPlugin = require("cypress-visual-regression/dist/plugin");
+import { defineConfig } from "cypress";
+import { configureVisualRegression } from "cypress-visual-regression";
 
 module.exports = defineConfig({
   screenshotsFolder: "./cypress/snapshots/actual",
@@ -7,11 +7,11 @@ module.exports = defineConfig({
   env: {
     failSilently: false,
   },
-  supportFile: "./cypress/support/index.ts",
   e2e: {
+    supportFile: "./cypress/support/index.ts",
     specPattern: "**/*.*cy.*",
     setupNodeEvents(on, config) {
-      getCompareSnapshotsPlugin(on, config);
+      configureVisualRegression(on);
     },
   },
 });

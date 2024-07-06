@@ -1,7 +1,7 @@
 context("Start", () => {
   it("should start the tour with data-intro attributes", () => {
     cy.visit("./cypress/setup/index.html").then((window) => {
-      const instance = window.introJs();
+      const instance = window.introJs.tour();
       instance.start();
 
       cy.get(".introjs-tooltiptext").contains("first header step");
@@ -18,7 +18,7 @@ context("Start", () => {
 
   it("should prefer tour configs over data-intro attributes", () => {
     cy.visit("./cypress/setup/index.html").then((window) => {
-      const instance = window.introJs().setOptions({
+      const instance = window.introJs.tour().setOptions({
         steps: [
           {
             intro: "step one",
@@ -37,7 +37,7 @@ context("Start", () => {
 
   it("should not throw an exception after calling start mulitple times", () => {
     cy.visit("./cypress/setup/index.html").then((window) => {
-      const instance = window.introJs().setOptions({
+      const instance = window.introJs.tour().setOptions({
         steps: [
           {
             intro: "step one",
