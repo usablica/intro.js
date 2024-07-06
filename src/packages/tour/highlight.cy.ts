@@ -5,8 +5,8 @@ context("Highlight", () => {
 
   it("should highlight the target element", () => {
     cy.window().then((window) => {
-      window
-        .introJs()
+      window.introJs
+        .tour()
         .setOptions({
           steps: [
             {
@@ -34,8 +34,8 @@ context("Highlight", () => {
 
   it("should let user interact with the target element", () => {
     cy.window().then((window) => {
-      window
-        .introJs()
+      window.introJs
+        .tour()
         .setOptions({
           steps: [
             {
@@ -65,8 +65,8 @@ context("Highlight", () => {
 
   it("interaction with the target element should be disabled when disabledInteraction is true", () => {
     cy.window().then((window) => {
-      window
-        .introJs()
+      window.introJs
+        .tour()
         .setOptions({
           disableInteraction: true,
           steps: [
@@ -91,8 +91,8 @@ context("Highlight", () => {
 
   it("should interaction with the target element the parent element has positive: relative", () => {
     cy.window().then((window) => {
-      window
-        .introJs()
+      window.introJs
+        .tour()
         .setOptions({
           steps: [
             {
@@ -123,8 +123,8 @@ context("Highlight", () => {
         "z-index: 1;position: relative;"
       );
 
-      window
-        .introJs()
+      window.introJs
+        .tour()
         .setOptions({
           steps: [
             {
@@ -148,8 +148,8 @@ context("Highlight", () => {
 
   it("should interaction with the target element the parent element has positive: absolute", () => {
     cy.window().then((window) => {
-      window
-        .introJs()
+      window.introJs
+        .tour()
         .setOptions({
           steps: [
             {
@@ -180,8 +180,8 @@ context("Highlight", () => {
         "z-index: 1;position: absolute;"
       );
 
-      window
-        .introJs()
+      window.introJs
+        .tour()
         .setOptions({
           steps: [
             {
@@ -207,8 +207,8 @@ context("Highlight", () => {
     cy.viewport(550, 750);
 
     cy.window().then((window) => {
-      window
-        .introJs()
+      window.introJs
+        .tour()
         .setOptions({
           steps: [
             {
@@ -236,8 +236,8 @@ context("Highlight", () => {
         top: 200,
       });
 
-      window
-        .introJs()
+      window.introJs
+        .tour()
         .setOptions({
           steps: [
             {
@@ -265,8 +265,8 @@ context("Highlight", () => {
         top: 200,
       });
 
-      window
-        .introJs()
+      window.introJs
+        .tour()
         .setOptions({
           steps: [
             {

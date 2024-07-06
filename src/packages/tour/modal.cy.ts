@@ -6,7 +6,8 @@ context("Modal", () => {
   it("should match the popup", () => {
     cy.window().then((win) => {
       win
-        .introJs()
+        .introJs
+        .tour()
         .setOptions({
           steps: [
             {
@@ -40,7 +41,8 @@ context("Modal", () => {
       cy.viewport("macbook-13");
 
       win
-        .introJs()
+        .introJs
+        .tour()
         .setOptions({
           steps: [
             {
@@ -77,7 +79,7 @@ context("Modal", () => {
 
   it("should update the modal after refresh(true)", () => {
     cy.window().then((win) => {
-      const instance = win.introJs().setOptions({
+      const instance = win.introJs.tour().setOptions({
         showProgress: true,
         showBullets: true,
         steps: [

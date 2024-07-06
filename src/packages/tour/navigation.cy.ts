@@ -2,7 +2,8 @@ context("Navigation", () => {
   beforeEach(() => {
     cy.visit("./cypress/setup/index.html").then((window) => {
       window
-        .introJs()
+        .introJs
+        .tour()
         .setOptions({
           steps: [
             {

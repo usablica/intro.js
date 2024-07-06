@@ -6,5 +6,8 @@ declare namespace Cypress {
   }
   interface Window {
     introJs: any;
+    click: () => void;
+    clickRelative: () => void;
+    clickAbsolute: () => void;
   }
 }

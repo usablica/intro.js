@@ -5,7 +5,7 @@ context("Exit", () => {
 
   it("should remove leftovers from the DOM", () => {
     cy.window().then((window) => {
-      const instance = window.introJs().setOptions({
+      const instance = window.introJs.tour().setOptions({
         steps: [
           {
             intro: "step one",
@@ -32,7 +32,7 @@ context("Exit", () => {
 
   it("should exit the tour after clicking on the skip icon", () => {
     cy.window().then((window) => {
-      const instance = window.introJs().setOptions({
+      const instance = window.introJs.tour().setOptions({
         steps: [
           {
             intro: "step one",
@@ -57,7 +57,7 @@ context("Exit", () => {
 
   it("should exit the tour after clicking on the overlay layer", () => {
     cy.window().then((window) => {
-      const instance = window.introJs().setOptions({
+      const instance = window.introJs.tour().setOptions({
         steps: [
           {
             intro: "step one",
@@ -82,7 +82,7 @@ context("Exit", () => {
 
   it("should not exit the tour after clicking on the tooltip layer", () => {
     cy.window().then((window) => {
-      const instance = window.introJs().setOptions({
+      const instance = window.introJs.tour().setOptions({
         steps: [
           {
             intro: "step one",
