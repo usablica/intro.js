@@ -26,7 +26,7 @@ export type TourStep = {
   intro: string;
   tooltipClass?: string;
   highlightClass?: string;
-  element?: HTMLElement | string | null;
+  element?: Element | HTMLElement | string | null;
   position: TooltipPosition;
   scrollTo: ScrollTo;
   disableInteraction?: boolean;

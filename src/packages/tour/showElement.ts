@@ -566,7 +566,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     skipTooltipButton.innerHTML = tour.getOption("skipLabel");
 
     skipTooltipButton.onclick = async () => {
-      if (tour.isEnd()) {
+      if (tour.isLastStep()) {
         await tour
           .callback("complete")
           ?.call(tour, tour.getCurrentStep(), "skip");
@@ -656,7 +656,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
           prevTooltipButton,
           tour.getOption("buttonClass"),
           previousButtonClassName,
-          disableInteractionClassName
+          disabledButtonClassName
         );
       }
     }

@@ -245,6 +245,13 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
+   * Check if the current step is the last step of the tour
+   */
+  isLastStep(): boolean {
+    return this.getCurrentStep() === this._steps.length - 1;
+  }
+
+  /**
    * Get the target element of the tour
    */
   getTargetElement(): HTMLElement {

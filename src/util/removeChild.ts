@@ -10,14 +10,14 @@ export const removeChild = (element: HTMLElement | null) => {
 };
 
 export const removeAnimatedChild = async (element: HTMLElement | null) => {
-  new Promise<void>((resolve) => {
-    if (!element) return;
+  if (!element) return;
 
-    setStyle(element, {
-      opacity: "0",
-    });
+  setStyle(element, {
+    opacity: "0",
+  });
 
-    window.setTimeout(() => {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
       try {
         // removeChild(..) throws an exception if the child has already been removed (https://developer.mozilla.org/en-US/docs/Web/API/Node/removeChild)
         // this try-catch is added to make sure this function doesn't throw an exception if the child has been removed

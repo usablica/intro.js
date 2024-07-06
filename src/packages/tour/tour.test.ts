@@ -1,5 +1,5 @@
+import { queryElementByClassName } from "../../util/queryElement";
 import {
-  appendDummyElement,
   className,
   content,
   doneButton,
@@ -8,12 +8,12 @@ import {
   prevButton,
   skipButton,
   tooltipText,
+  waitFor,
 } from "../../../tests/jest/helper";
 import * as dontShowAgain from "./dontShowAgain";
 import { getMockPartialSteps, getMockTour } from "./tests/mock";
 import { Tour } from "./tour";
-
-const flushPromises = () => new Promise(setImmediate);
+import { helperLayerClassName, overlayClassName } from "./classNames";
 
 describe("Tour", () => {
   beforeEach(() => {
@@ -46,6 +46,13 @@ describe("Tour", () => {
 
     beforeEach(() => {
       mockTour = getMockTour();
+
+      document.body.innerHTML = `<div>
+          <h1 id='title'>Title</h1>
+          <p id='paragraph'>Paragraph</p>
+          <div id='position-absolute' style='position: absolute;'>Position Absolute</div>
+          <div id='position-fixed' style='position: fixed;'>Position Fixed</div>
+        </div>`;
     });
 
     afterEach(async () => {
@@ -113,12 +120,12 @@ describe("Tour", () => {
 
     test("should highlight the target element", async () => {
       // Arrange
-      const p = appendDummyElement();
+      const mockElement = document.querySelector("#paragraph");
       mockTour.setOptions({
         steps: [
           {
             intro: "step one",
-            element: document.querySelector("p"),
+            element: mockElement,
           },
         ],
       });
@@ -127,18 +134,40 @@ describe("Tour", () => {
       await mockTour.start();
 
       // Assert
-      expect(p.className).toContain("introjs-showElement");
-      expect(p.className).toContain("introjs-relativePosition");
+      expect(mockElement?.className).toContain("introjs-showElement");
+      expect(mockElement?.className).toContain("introjs-relativePosition");
+    });
+
+    test("should remove the container element after exit() is called", async () => {
+      // Arrange
+      const mockElement = document.querySelector("#paragraph");
+      mockTour.setOptions({
+        steps: [
+          {
+            intro: "step one",
+            element: mockElement,
+          },
+        ],
+      });
+
+      // Act
+      await mockTour.start();
+      await mockTour.exit();
+
+      // Assert
+      expect(mockElement?.className).not.toContain("introjs-showElement");
+      expect(queryElementByClassName(helperLayerClassName)).toBeNull();
+      expect(queryElementByClassName(overlayClassName)).toBeNull();
     });
 
     test("should not highlight the target element if queryString is incorrect", async () => {
       // Arrange
-      const p = appendDummyElement();
+      const mockElement = document.querySelector("#non-existing-element");
       mockTour.setOptions({
         steps: [
           {
             intro: "step one",
-            element: document.querySelector("div"),
+            element: mockElement,
           },
         ],
       });
@@ -147,29 +176,19 @@ describe("Tour", () => {
       await mockTour.start();
 
       // Assert
-      expect(p.className).not.toContain("introjs-showElement");
       expect(className(".introjs-showElement")).toContain(
         "introjsFloatingElement"
       );
     });
 
-    test("should not add relativePosition if target element is fixed or absolute", async () => {
+    test("should not add relativePosition if target element is fixed", async () => {
       // Arrange
-      const absolute = appendDummyElement(
-        "h1",
-        "hello world",
-        "position: absolute"
-      );
-      const fixed = appendDummyElement("h2", "hello world", "position: fixed");
+      const fixedMockElement = document.querySelector("#position-fixed");
       mockTour.setOptions({
         steps: [
           {
             intro: "step one",
-            element: document.querySelector("h1"),
-          },
-          {
-            intro: "step two",
-            element: document.querySelector("h2"),
+            element: fixedMockElement,
           },
         ],
       });
@@ -178,13 +197,32 @@ describe("Tour", () => {
       await mockTour.start();
 
       // Assert
-      expect(absolute.className).toContain("introjs-showElement");
-      expect(absolute.className).not.toContain("introjs-relativePosition");
+      expect(fixedMockElement?.className).toContain("introjs-showElement");
+      expect(fixedMockElement?.className).not.toContain(
+        "introjs-relativePosition"
+      );
+    });
 
-      await mockTour.nextStep();
+    test("should not add relativePosition if target element is fixed or absolute", async () => {
+      // Arrange
+      const absoluteMockElement = document.querySelector("#position-absolute");
+      mockTour.setOptions({
+        steps: [
+          {
+            intro: "step one",
+            element: absoluteMockElement,
+          },
+        ],
+      });
 
-      expect(fixed.className).toContain("introjs-showElement");
-      expect(fixed.className).not.toContain("introjs-relativePosition");
+      // Act
+      await mockTour.start();
+
+      // Assert
+      expect(absoluteMockElement?.className).toContain("introjs-showElement");
+      expect(absoluteMockElement?.className).not.toContain(
+        "introjs-relativePosition"
+      );
     });
 
     test("should call the onstart callback", async () => {
@@ -228,7 +266,7 @@ describe("Tour", () => {
       // Act
       await mockTour.start();
       nextButton().click();
-      await flushPromises();
+      await waitFor(1000);
 
       // Assert
       expect(onexitMock).toBeCalledTimes(1);
@@ -254,7 +292,7 @@ describe("Tour", () => {
       // Act
       await mockTour.start();
       skipButton().click();
-      await flushPromises();
+      await waitFor(1000);
 
       // Assert
       expect(onexitMock).toBeCalledTimes(1);
@@ -282,7 +320,7 @@ describe("Tour", () => {
       // Act
       await mockTour.start();
       skipButton().click();
-      await flushPromises();
+      await waitFor(1000);
 
       // Assert
       expect(onexitMock).toBeCalledTimes(1);

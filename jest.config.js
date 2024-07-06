@@ -17,6 +17,7 @@ module.exports = {
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
     'src/**/*.{ts,tsx,js,jsx}',
+    '!src/**/*.cy.ts',
     '!src/**/*.d.ts',
     '!src/**/*.test.ts',
   ],
