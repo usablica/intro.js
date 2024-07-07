@@ -19,6 +19,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm run build
-    - run: npm test
+    - run: npm test:jest
       env:
         CI: true
+    - name: Cypress run
+      uses: cypress-io/github-action@v6
