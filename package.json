@@ -32,7 +32,7 @@
     "prebuild": "rimraf ./dist",
     "build": "rollup -c",
     "build:watch": "rollup -c -w",
-    "dev": "npm run build:watch -- --configPlugin serve",
+    "dev": "npm run build:watch -- --configPlugin serve"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
