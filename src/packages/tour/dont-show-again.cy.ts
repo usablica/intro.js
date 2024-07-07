@@ -6,8 +6,7 @@ context("Don't show again checkbox", () => {
 
   it("should render the 'Dont show Again' checkbox", () => {
     cy.window().then((window) => {
-      window
-        .introJs
+      window.introJs
         .tour()
         .setOptions({
           dontShowAgain: true,

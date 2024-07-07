@@ -5,8 +5,7 @@ context("Modal", () => {
 
   it("should match the popup", () => {
     cy.window().then((win) => {
-      win
-        .introJs
+      win.introJs
         .tour()
         .setOptions({
           steps: [
@@ -40,8 +39,7 @@ context("Modal", () => {
     cy.window().then((win) => {
       cy.viewport("macbook-13");
 
-      win
-        .introJs
+      win.introJs
         .tour()
         .setOptions({
           steps: [

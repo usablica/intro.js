@@ -5,8 +5,7 @@ context("ProgressBar", () => {
 
   it("should match the popup", () => {
     cy.window().then((win) => {
-      win
-        .introJs
+      win.introJs
         .tour()
         .setOptions({
           showProgress: true,
