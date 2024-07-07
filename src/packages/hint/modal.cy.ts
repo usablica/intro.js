@@ -1,7 +1,7 @@
 context("Hints Modal", () => {
   it("should be able to open and close hint modals", () => {
     cy.visit("./cypress/setup/index.html").then((window) => {
-      const instance = window.introJs();
+      const instance = window.introJs.hint();
 
       instance.showHints();
 
@@ -18,7 +18,7 @@ context("Hints Modal", () => {
 
   it("should display the correct modal content", () => {
     cy.visit("./cypress/setup/index.html").then((window) => {
-      const instance = window.introJs();
+      const instance = window.introJs.hint();
 
       instance.showHints();
 
@@ -42,7 +42,7 @@ context("Hints Modal", () => {
 
   it("clicking on the same hint should close the modal", () => {
     cy.visit("./cypress/setup/index.html").then((window) => {
-      const instance = window.introJs();
+      const instance = window.introJs.hint();
 
       instance.showHints();
 

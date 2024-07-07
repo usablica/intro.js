@@ -1,7 +1,7 @@
 context("RemoveHints", () => {
   it("should remove all hints after calling removeHints()", () => {
     cy.visit("./cypress/setup/index.html").then((window) => {
-      const instance = window.introJs().setOptions({
+      const instance = window.introJs.hint().setOptions({
         hints: [
           {
             element: "#fixed-parent",

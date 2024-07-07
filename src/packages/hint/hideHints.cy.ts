@@ -1,7 +1,7 @@
 context("HideHints", () => {
   it("should hide all hints after calling hideHints()", () => {
     cy.visit("./cypress/setup/index.html").then(async (window) => {
-      const instance = window.introJs();
+      const instance = window.introJs.hint();
 
       instance.showHints();
 

@@ -48,7 +48,7 @@ export async function renderHints(hint: Hint) {
     });
   }
 
-  const hints = hint.getOption("hints");
+  const hints = hint.getHints();
   for (let i = 0; i < hints.length; i++) {
     const hintItem = hints[i];
 

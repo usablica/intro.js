@@ -1,7 +1,7 @@
 context("ShowHints", () => {
   it("should render all hints using the data-hint attributes", () => {
     cy.visit("./cypress/setup/index.html").then((window) => {
-      const instance = window.introJs();
+      const instance = window.introJs.hint();
 
       instance.showHints();
 
@@ -11,7 +11,7 @@ context("ShowHints", () => {
 
   it("should render all hints on the page with the given JSON options", () => {
     cy.visit("./cypress/setup/index.html").then((window) => {
-      const instance = window.introJs().setOptions({
+      const instance = window.introJs.hint().setOptions({
         hints: [
           {
             element: "#fixed-parent",
@@ -36,7 +36,7 @@ context("ShowHints", () => {
 
   it("should prefer JSON options over data-hint attributes", () => {
     cy.visit("./cypress/setup/index.html").then((window) => {
-      const instance = window.introJs().setOptions({
+      const instance = window.introJs.hint().setOptions({
         hints: [
           {
             element: "#fixed-parent",
