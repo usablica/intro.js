@@ -22,5 +22,4 @@ jobs:
     - run: npm run test:jest
       env:
         CI: true
-    - name: Cypress run
     - run: npm run test:cypress
