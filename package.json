@@ -27,13 +27,12 @@
     "test:watch": "jest --watch",
     "test:jest": "jest --coverage --silent --ci --coverage --coverageReporters=\"text\" --coverageReporters=\"text-summary\"",
     "test:jshint": "jshint ./src --verbose && jshint ./tests --verbose",
-    "test:cypress": "start-server-and-test dev http://localhost:10001/dist/intro.js 'cypress run --env type=regression'",
+    "test:cypress": "start-server-and-test dev http://localhost:10001/dist/intro.js 'docker run -it -v $PWD:/e2e -w /e2e --entrypoint=cypress cypress/included run --env type=regression'",
     "release": "./bin/release.sh || true",
     "prebuild": "rimraf ./dist",
     "build": "rollup -c",
     "build:watch": "rollup -c -w",
     "dev": "npm run build:watch -- --configPlugin serve",
-    "cypress": "start-server-and-test dev http://localhost:10001/dist/intro.js 'cypress open --env type=regression'"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
