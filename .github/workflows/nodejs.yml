@@ -19,7 +19,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build
-    - run: npm run test:jest
+    - run: npm run test
       env:
         CI: true
-    - run: npm run test:cypress
