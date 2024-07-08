@@ -12,6 +12,6 @@ export const hintElements = () =>
 
 export const hintElement = (stepId: number) =>
   queryElementsByClassName(
-    `.${hintClassName}[${dataStepAttribute}="${stepId}"]`,
+    `${hintClassName}[${dataStepAttribute}="${stepId}"]`,
     hintsContainer()
   )[0];

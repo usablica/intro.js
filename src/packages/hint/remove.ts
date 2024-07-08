@@ -14,7 +14,7 @@ export function removeHints(hint: Hint) {
   for (const hintElement of Array.from(elements)) {
     const step = hintElement.getAttribute(dataStepAttribute);
 
-    if (!step) continue;
+    if (step === null) continue;
 
     removeHint(parseInt(step, 10));
   }

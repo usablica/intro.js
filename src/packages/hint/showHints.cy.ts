@@ -1,9 +1,9 @@
 context("ShowHints", () => {
   it("should render all hints using the data-hint attributes", () => {
-    cy.visit("./cypress/setup/index.html").then((window) => {
+    cy.visit("./cypress/setup/index.html").then(async (window) => {
       const instance = window.introJs.hint();
 
-      instance.showHints();
+      await instance.showHints();
 
       cy.get(".introjs-hint").should("have.length", 4);
     });

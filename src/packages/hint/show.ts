@@ -2,7 +2,6 @@ import { Hint } from "./hint";
 import { hideHintClassName } from "./className";
 import { dataStepAttribute } from "./dataAttributes";
 import { removeClass } from "../../util/className";
-import { fetchHintItems } from "./hintItem";
 import { hintElement, hintElements } from "./selector";
 
 /**
@@ -22,7 +21,8 @@ export async function showHints(hint: Hint) {
       showHint(parseInt(step, 10));
     }
   } else {
-    await fetchHintItems(hint);
+    // or render hints if there are none
+    await hint.render();
   }
 }
 
