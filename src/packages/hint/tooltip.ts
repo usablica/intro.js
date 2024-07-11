@@ -120,8 +120,8 @@ export async function showHintDialog(hint: Hint, stepId: number) {
   const helperLayerPadding = hint.getOption("helperElementPadding");
   setPositionRelativeTo(
     hint.getTargetElement(),
-    hintItem.element as HTMLElement,
     referenceLayer,
+    hintItem.element as HTMLElement,
     helperLayerPadding
   );
 
