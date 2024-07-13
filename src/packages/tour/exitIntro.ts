@@ -46,13 +46,6 @@ export default async function exitIntro(
     }
   }
 
-  //remove all helper layers
-  const helperLayer = queryElementByClassName(
-    helperLayerClassName,
-    targetElement
-  );
-  await removeAnimatedChild(helperLayer);
-
   const referenceLayer = queryElementByClassName(
     tooltipReferenceLayerClassName,
     targetElement
@@ -74,6 +67,13 @@ export default async function exitIntro(
   removeChild(floatingElement);
 
   removeShowElement();
+
+  //remove all helper layers
+  const helperLayer = queryElementByClassName(
+    helperLayerClassName,
+    targetElement
+  );
+  await removeAnimatedChild(helperLayer);
 
   //check if any callback is defined
   await tour.callback("exit")?.call(tour);

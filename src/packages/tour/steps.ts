@@ -1,7 +1,11 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import exitIntro from "./exitIntro";
 import showElement from "./showElement";
-import { queryElement, queryElements } from "../../util/queryElement";
+import {
+  queryElement,
+  queryElementByClassName,
+  queryElements,
+} from "../../util/queryElement";
 import cloneObject from "../../util/cloneObject";
 import createElement from "../../util/createElement";
 import { Tour } from "./tour";
@@ -132,7 +136,9 @@ export const fetchSteps = (tour: Tour) => {
 
       // tour without element
       if (!step.element) {
-        let floatingElementQuery = queryElement(floatingElementClassName);
+        let floatingElementQuery = queryElementByClassName(
+          floatingElementClassName
+        );
 
         if (!floatingElementQuery) {
           floatingElementQuery = createElement("div", {

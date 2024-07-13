@@ -440,7 +440,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     const buttonsLayer = createElement("div");
 
     setStyle(helperLayer, {
-      "box-shadow": `0 0 1px 2px rgba(33, 33, 33, 0.8), rgba(33, 33, 33, ${tour
+      "box-shadow": `rgba(33, 33, 33, ${tour
         .getOption("overlayOpacity")
         .toString()}) 0 0 0 5000px`,
     });
