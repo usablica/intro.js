@@ -14,6 +14,11 @@ export const start = async (tour: Tour): Promise<Boolean> => {
     return false;
   }
 
+  // don't start the tour if it's already started
+  if (tour.hasStarted()) {
+    return false;
+  }
+
   await tour.callback("start")?.call(tour, tour.getTargetElement());
 
   //set it to the introJs object

@@ -59,6 +59,20 @@ describe("Tour", () => {
       await mockTour.exit();
     });
 
+    test("should not start the tour twice", async () => {
+      // Arrange
+      mockTour.addSteps(getMockPartialSteps());
+      const onStartMock = jest.fn();
+      mockTour.onStart(onStartMock);
+
+      // Act
+      await mockTour.start();
+      await mockTour.start();
+
+      // Assert
+      expect(onStartMock).toBeCalledTimes(1);
+    });
+
     test("should start floating intro with one step", async () => {
       // Arrange & Act
       await mockTour
@@ -554,6 +568,41 @@ describe("Tour", () => {
 
       // Assert
       expect(tour.isActive()).toBeFalsy();
+    });
+  });
+
+  describe("hasStarted", () => {
+    test("should be false if the tour has not started", async () => {
+      const mockTour = getMockTour();
+      mockTour.addSteps(getMockPartialSteps());
+
+      // Act
+      expect(mockTour.hasStarted()).toBeFalsy();
+    });
+
+    test("it should be true if the tour has started", async () => {
+      // Arrange
+      const mockTour = getMockTour();
+      mockTour.addSteps(getMockPartialSteps());
+
+      // Act
+      await mockTour.start();
+
+      // Act
+      expect(mockTour.hasStarted()).toBeTruthy();
+    });
+
+    test("it should be false if the tour has started and exited", async () => {
+      // Arrange
+      const mockTour = getMockTour();
+      mockTour.addSteps(getMockPartialSteps());
+
+      // Act
+      await mockTour.start();
+      await mockTour.exit();
+
+      // Act
+      expect(mockTour.hasStarted()).toBeFalsy();
     });
   });
 });

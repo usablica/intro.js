@@ -1,5 +1,4 @@
 import { nextStep, previousStep } from "./steps";
-import exitIntro from "./exitIntro";
 import { Tour } from "./tour";
 import { previousButtonClassName, skipButtonClassName } from "./classNames";
 import { dataStepNumberAttribute } from "./dataAttributes";
@@ -33,7 +32,7 @@ export default async function onKeyDown(tour: Tour, e: KeyboardEvent) {
   ) {
     //escape key pressed, exit the intro
     //check if exit callback is defined
-    await exitIntro(tour);
+    await tour.exit();
   } else if (code === "ArrowLeft" || code === 37) {
     //left arrow
     await previousStep(tour);
@@ -54,7 +53,7 @@ export default async function onKeyDown(tour: Tour, e: KeyboardEvent) {
           ?.call(tour, tour.getCurrentStep(), "skip");
       }
 
-      await exitIntro(tour);
+      await tour.exit();
     } else if (target && target.getAttribute(dataStepNumberAttribute)) {
       // user hit enter while focusing on step bullet
       target.click();

@@ -1,6 +1,5 @@
 import scrollParentToElement from "../../util/scrollParentToElement";
 import scrollTo from "../../util/scrollTo";
-import exitIntro from "./exitIntro";
 import { addClass, setClass } from "../../util/className";
 import setAnchorAsButton from "../../util/setAnchorAsButton";
 import { TourStep, nextStep, previousStep } from "./steps";
@@ -529,7 +528,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     nextTooltipButton = createElement("a");
 
     nextTooltipButton.onclick = async () => {
-      if (!tour.isEnd()) {
+      if (!tour.isLastStep()) {
         await nextStep(tour);
       } else if (
         new RegExp(doneButtonClassName, "gi").test(nextTooltipButton.className)
@@ -538,7 +537,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
           .callback("complete")
           ?.call(tour, tour.getCurrentStep(), "done");
 
-        await exitIntro(tour);
+        await tour.exit();
       }
     };
 
@@ -574,7 +573,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
 
       await tour.callback("skip")?.call(tour, tour.getCurrentStep());
 
-      await exitIntro(tour);
+      await tour.exit();
     };
 
     tooltipHeaderLayer.appendChild(skipTooltipButton);
@@ -660,7 +659,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
         );
       }
     }
-  } else if (tour.isEnd() || tour.getSteps().length === 1) {
+  } else if (tour.isLastStep() || tour.getSteps().length === 1) {
     // last step of tour
     if (prevTooltipButton) {
       setClass(

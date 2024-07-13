@@ -1,4 +1,3 @@
-import exitIntro from "./exitIntro";
 import createElement from "../../util/createElement";
 import setStyle from "../../util/setStyle";
 import { Tour } from "./tour";
@@ -30,7 +29,7 @@ export default function addOverlayLayer(tour: Tour) {
     });
 
     overlayLayer.onclick = async () => {
-      await exitIntro(tour);
+      await tour.exit();
     };
   }
 

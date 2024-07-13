@@ -1,5 +1,4 @@
 import { TooltipPosition } from "../../packages/tooltip";
-import exitIntro from "./exitIntro";
 import showElement from "./showElement";
 import {
   queryElement,
@@ -65,7 +64,7 @@ export async function nextStep(tour: Tour) {
   if (tour.isEnd()) {
     // check if any callback is defined
     await tour.callback("complete")?.call(tour, tour.getCurrentStep(), "end");
-    await exitIntro(tour);
+    await tour.exit();
 
     return false;
   }

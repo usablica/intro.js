@@ -307,6 +307,13 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
+   * Returns true if the tour has started
+   */
+  hasStarted(): boolean {
+    return this.getCurrentStep() > -1;
+  }
+
+  /**
    * Set the `dontShowAgain` option for the tour so that the tour does not show twice to the same user
    * This is a persistent option that is stored in the browser's cookies
    *
