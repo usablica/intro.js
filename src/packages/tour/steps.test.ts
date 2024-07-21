@@ -5,7 +5,7 @@ import {
   getMockPartialSteps,
   getMockSteps,
   getMockTour,
-} from "./tests/mock";
+} from "./mock";
 import createElement from "../../util/createElement";
 
 jest.mock("./showElement");

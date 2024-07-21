@@ -2,7 +2,7 @@ import { start } from "./start";
 import * as steps from "./steps";
 import * as addOverlayLayer from "./addOverlayLayer";
 import * as nextStep from "./steps";
-import { getMockTour } from "./tests/mock";
+import { getMockTour } from "./mock";
 
 describe("start", () => {
   beforeEach(() => {

@@ -1,4 +1,4 @@
-import { getMockTour } from "./tests/mock";
+import { getMockTour } from "./mock";
 
 describe("exitIntro", () => {
   test("should reset the _currentStep", async () => {

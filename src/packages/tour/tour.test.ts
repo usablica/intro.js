@@ -11,7 +11,7 @@ import {
   waitFor,
 } from "../../../tests/jest/helper";
 import * as dontShowAgain from "./dontShowAgain";
-import { getMockPartialSteps, getMockTour } from "./tests/mock";
+import { getMockPartialSteps, getMockTour } from "./mock";
 import { Tour } from "./tour";
 import { helperLayerClassName, overlayClassName } from "./classNames";
 

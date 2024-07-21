@@ -1,11 +1,11 @@
-import createElement from "../../../util/createElement";
-import { TourStep } from "../steps";
-import { Tour } from "../tour";
+import createElement from "../../util/createElement";
+import { TourStep } from "./steps";
+import { Tour } from "./tour";
 import {
   dataIntroAttribute,
   dataPosition,
   dataStepAttribute,
-} from "../dataAttributes";
+} from "./dataAttributes";
 
 export const appendMockSteps = (targetElement: HTMLElement = document.body) => {
   const mockElementOne = createElement("div");

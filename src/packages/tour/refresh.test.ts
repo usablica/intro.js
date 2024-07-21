@@ -1,5 +1,5 @@
 import * as tooltip from "../../packages/tooltip";
-import { getMockTour } from "./tests/mock";
+import { getMockTour } from "./mock";
 
 describe("refresh", () => {
   test("should not refetch the steps when refreshStep is false", async () => {
