@@ -1,52 +1,66 @@
 import { version } from "../package.json";
-import { IntroJs } from "./intro";
-import stamp from "./util/stamp";
+import { Hint } from "./packages/hint";
+import { Tour } from "./packages/tour";
+
+class LegacyIntroJs extends Tour {
+  /**
+   * @deprecated introJs().addHints() is deprecated, please use introJs.hint().addHints() instead
+   * @param args
+   */
+  addHints(..._: any[]) {
+    console.error(
+      "introJs().addHints() is deprecated, please use introJs.hint.addHints() instead."
+    );
+  }
+
+  /**
+   * @deprecated introJs().addHint() is deprecated, please use introJs.hint.addHint() instead
+   * @param args
+   */
+  addHint(..._: any[]) {
+    console.error(
+      "introJs().addHint() is deprecated, please use introJs.hint.addHint() instead."
+    );
+  }
+
+  /**
+   * @deprecated introJs().removeHints() is deprecated, please use introJs.hint.hideHints() instead
+   * @param args
+   */
+  removeHints(..._: any[]) {
+    console.error(
+      "introJs().removeHints() is deprecated, please use introJs.hint.removeHints() instead."
+    );
+  }
+}
 
 /**
- * Create a new IntroJS instance
- *
- * @param targetElm Optional target element to start the tour/hint on
- * @returns
+ * Intro.js module
  */
-const introJs = (targetElm?: string | HTMLElement) => {
-  let instance: IntroJs;
-
-  if (typeof targetElm === "object") {
-    instance = new IntroJs(targetElm);
-  } else if (typeof targetElm === "string") {
-    //select the target element with query selector
-    const targetElement = document.querySelector<HTMLElement>(targetElm);
-
-    if (targetElement) {
-      instance = new IntroJs(targetElement);
-    } else {
-      throw new Error("There is no element with given selector.");
-    }
-  } else {
-    instance = new IntroJs(document.body);
-  }
-  // add instance to list of _instances
-  // passing group to stamp to increment
-  // from 0 onward somewhat reliably
-  introJs.instances[stamp(instance, "introjs-instance")] = instance;
-
-  return instance;
+const introJs = (elementOrSelector?: string | HTMLElement) => {
+  console.warn(
+    "introJs() is deprecated. Please use introJs.tour() or introJs.hint() instead."
+  );
+  return new LegacyIntroJs(elementOrSelector);
 };
 
 /**
- * Current IntroJs version
- *
- * @property version
- * @type String
+ * Create a new Intro.js Tour instance
+ * @param elementOrSelector Optional target element to start the Tour on
  */
-introJs.version = version;
+introJs.tour = (elementOrSelector?: string | HTMLElement) =>
+  new Tour(elementOrSelector);
 
 /**
- * key-val object helper for introJs instances
- *
- * @property instances
- * @type Object
+ * Create a new Intro.js Hint instance
+ * @param elementOrSelector Optional target element to start the Hint on
  */
-introJs.instances = {} as { [key: number]: IntroJs };
+introJs.hint = (elementOrSelector?: string | HTMLElement) =>
+  new Hint(elementOrSelector);
+
+/**
+ * Current Intro.js version
+ */
+introJs.version = version;
 
 export default introJs;

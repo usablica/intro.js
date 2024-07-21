@@ -1,0 +1,10 @@
+export const dataStepNumberAttribute = "data-step-number";
+export const dataIntroAttribute = "data-intro";
+export const dataStepAttribute = "data-step";
+export const dataIntroGroupAttribute = "data-intro-group";
+export const dataDisableInteraction = "data-disable-interaction";
+export const dataTitleAttribute = "data-title";
+export const dataTooltipClass = "data-tooltip-class";
+export const dataHighlightClass = "data-highlight-class";
+export const dataPosition = "data-position";
+export const dataScrollTo = "data-scroll-to";

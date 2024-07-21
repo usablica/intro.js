@@ -37,7 +37,7 @@ dist/
 .changelog
 
 # Tests
-tests/cypress/setup/dist
-tests/cypress/videos/
-tests/cypress/snapshots/actual
-tests/cypress/snapshots/diff
+cypress/setup/dist
+cypress/videos/
+cypress/snapshots/actual
+cypress/snapshots/diff

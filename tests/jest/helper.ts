@@ -50,20 +50,6 @@ export function tooltipText() {
   return find(".introjs-tooltiptext");
 }
 
-export function appendDummyElement(
-  name?: string,
-  text?: string,
-  style?: string
-): HTMLElement {
-  const el = document.createElement(name || "p");
-  el.innerHTML = text || "hello world";
-  el.setAttribute("style", style || "");
-
-  document.body.appendChild(el);
-
-  return el;
-}
-
 export function getBoundingClientRectSpy(
   width: number,
   height: number,
@@ -84,3 +70,6 @@ export function getBoundingClientRectSpy(
       } as DOMRect)
   );
 }
+
+export const waitFor = (timeout: number) =>
+  new Promise((resolve) => setTimeout(resolve, timeout));
