@@ -1556,4 +1556,630 @@ describe("van", () => {
       });
     });
   });
+
+  describe("e2e", () => {
+    it('should render Counter and update dom accordingly', async () => {
+      const hiddenDom = createHiddenDom();
+      const Counter = () => {
+        const counter = van.state(0)
+        return div(
+          div("❤️: ", counter),
+          button({ onclick: () => ++counter.val! }, "👍"),
+          button({ onclick: () => --counter.val! }, "👎"),
+        )
+      }
+
+      van.add(hiddenDom, Counter())
+
+      expect((<Element>hiddenDom.firstChild).querySelector("div")!.innerHTML).toBe("❤️: 0")
+
+      const [incrementBtn, decrementBtn] = hiddenDom.getElementsByTagName("button")
+
+      incrementBtn.click()
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).querySelector("div")!.innerHTML).toBe("❤️: 1")
+
+      incrementBtn.click()
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).querySelector("div")!.innerHTML).toBe("❤️: 2")
+
+      decrementBtn.click()
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).querySelector("div")!.innerHTML).toBe("❤️: 1")
+    });
+
+    it('should render ul li', () => {
+      const List = ({ items }: { items: string[] }) =>
+        ul(items.map((it: any) => li(it)));
+      expect(List({ items: ["Item 1", "Item 2", "Item 3"] }).outerHTML).toBe(
+        "<ul><li>Item 1</li><li>Item 2</li><li>Item 3</li></ul>"
+      );
+    })
+
+    it('should render table', () => {
+      const Table = ({ head, data }:
+        { head?: readonly string[], data: readonly (string | number)[][] }) => table(
+          head ? thead(tr(head.map(h => th(h)))) : [],
+          tbody(data.map(row => tr(
+            row.map(col => td(col))
+          ))),
+        )
+
+      expect(Table({
+        head: ["ID", "Name", "Country"],
+        data: [
+          [1, "John Doe", "US"],
+          [2, "Jane Smith", "CA"],
+          [3, "Bob Johnson", "AU"],
+        ],
+      }).outerHTML).toBe("<table><thead><tr><th>ID</th><th>Name</th><th>Country</th></tr></thead><tbody><tr><td>1</td><td>John Doe</td><td>US</td></tr><tr><td>2</td><td>Jane Smith</td><td>CA</td></tr><tr><td>3</td><td>Bob Johnson</td><td>AU</td></tr></tbody></table>")
+
+      expect(Table({
+        data: [
+          [1, "John Doe", "US"],
+          [2, "Jane Smith", "CA"],
+        ],
+      }).outerHTML).toBe("<table><tbody><tr><td>1</td><td>John Doe</td><td>US</td></tr><tr><td>2</td><td>Jane Smith</td><td>CA</td></tr></tbody></table>")
+    })
+
+    it('should render and update dom after changing state', async () => {
+      const hiddenDom = createHiddenDom();
+      // Create a new state object with init value 1
+      const counter = van.state(1)
+
+      // Log whenever the value of the state is updated
+      van.derive(() => console.log(`Counter: ${counter.val}`))
+
+      // Derived state
+      const counterSquared = van.derive(() => counter.val! * counter.val!)
+
+      // Used as a child node
+      const dom1 = div(counter)
+
+      // Used as a property
+      const dom2 = input({ type: "number", value: counter, disabled: true })
+
+      // Used in a state-derived property
+      const dom3 = div({ style: () => `font-size: ${counter.val}em;` }, "Text")
+
+      // Used in a state-derived child
+      const dom4 = div(counter, sup(2), () => ` = ${counterSquared.val}`)
+
+      // Button to increment the value of the state
+      const incrementBtn = button({ onclick: () => ++counter.val! }, "Increment")
+      const resetBtn = button({ onclick: () => counter.val = 1 }, "Reset")
+
+      van.add(hiddenDom, incrementBtn, resetBtn, dom1, dom2, dom3, dom4)
+
+      expect(hiddenDom.innerHTML).toBe('<button>Increment</button><button>Reset</button><div>1</div><input type="number" disabled=""><div style="font-size: 1em;">Text</div><div>1<sup>2</sup> = 1</div>')
+      expect(dom2.value).toBe("1")
+
+      incrementBtn.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<button>Increment</button><button>Reset</button><div>2</div><input type="number" disabled=""><div style="font-size: 2em;">Text</div><div>2<sup>2</sup> = 4</div>')
+      expect(dom2.value).toBe("2")
+
+      incrementBtn.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<button>Increment</button><button>Reset</button><div>3</div><input type="number" disabled=""><div style="font-size: 3em;">Text</div><div>3<sup>2</sup> = 9</div>')
+      expect(dom2.value).toBe("3")
+
+      resetBtn.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<button>Increment</button><button>Reset</button><div>1</div><input type="number" disabled=""><div style="font-size: 1em;">Text</div><div>1<sup>2</sup> = 1</div>')
+      expect(dom2.value).toBe("1")
+    })
+
+    it('should update dom based on derived state', async () => {
+      const hiddenDom = createHiddenDom();
+      const DerivedState = () => {
+        const text = van.state("VanJS")
+        const length = van.derive(() => text.val!.length)
+        return span(
+          "The length of ",
+          input({ type: "text", value: text, oninput: (e: any) => text.val = e.target.value }),
+          " is ", length, ".",
+        )
+      }
+
+      van.add(hiddenDom, DerivedState())
+      const dom = <Element>(hiddenDom.firstChild)
+      expect(dom.outerHTML).toBe('<span>The length of <input type="text"> is 5.</span>')
+
+      const inputDom = dom.querySelector("input")!
+      inputDom.value = "Mini-Van"
+      inputDom.dispatchEvent(new Event("input"))
+
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe('<span>The length of <input type="text"> is 8.</span>')
+    })
+
+    it('should update props based on state', async () => {
+      const hiddenDom = createHiddenDom();
+      const ConnectedProps = () => {
+        const text = van.state("")
+        return span(
+          input({ type: "text", value: text, oninput: (e: any) => text.val = e.target.value }),
+          input({ type: "text", value: text, oninput: (e: any) => text.val = e.target.value }),
+        )
+      }
+      van.add(hiddenDom, ConnectedProps())
+
+      const [input1, input2] = hiddenDom.querySelectorAll("input")
+      input1.value += "123"
+      input1.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations)
+      expect(input1.value).toBe("123")
+      expect(input2.value).toBe("123")
+
+      input2.value += "abc"
+      input2.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations)
+      expect(input1.value).toBe("123abc")
+      expect(input2.value).toBe("123abc")
+    })
+
+    it('should update css based on state', async () => {
+      const hiddenDom = createHiddenDom();
+      const FontPreview = () => {
+        const size = van.state(16), color = van.state("black")
+        return span(
+          "Size: ",
+          input({
+            type: "range", min: 10, max: 36, value: size,
+            oninput: (e: any) => size.val = Number((<HTMLInputElement>e.target).value)
+          }),
+          " Color: ",
+          select({ oninput: (e: any) => color.val = (<HTMLInputElement>e.target).value, value: color },
+            ["black", "blue", "green", "red", "brown"].map(c => option({ value: c }, c)),
+          ),
+          span(
+            {
+              class: "preview",
+              style: () => `font-size: ${size.val}px; color: ${color.val};`,
+            }, " Hello 🍦VanJS"),
+        )
+      }
+      van.add(hiddenDom, FontPreview())
+      expect((<any>hiddenDom.querySelector("span.preview")).style.cssText).toBe(
+        "font-size: 16px; color: black;"
+      );
+
+      hiddenDom.querySelector("input")!.value = "20"
+      hiddenDom.querySelector("input")!.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations)
+      expect((<any>hiddenDom.querySelector("span.preview")).style.cssText).toBe(
+        "font-size: 20px; color: black;"
+      );
+
+      hiddenDom.querySelector("select")!.value = "blue"
+      hiddenDom.querySelector("select")!.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations)
+      expect((<any>hiddenDom.querySelector("span.preview")).style.cssText).toBe(
+        "font-size: 20px; color: blue;"
+      );
+    });
+
+    it('should bind event listener based on derived state', async () => {
+      const hiddenDom = createHiddenDom();
+      const Counter = () => {
+        const counter = van.state(0)
+        const action = van.state("👍")
+        return span(
+          "❤️ ", counter, " ",
+          select({ oninput: (e: any) => action.val = e.target.value, value: action },
+            option({ value: "👍" }, "👍"), option({ value: "👎" }, "👎"),
+          ), " ",
+          button({
+            onclick: van.derive(() => action.val === "👍" ?
+              () => ++counter.val! : () => --counter.val!)
+          }, "Run"),
+        )
+      }
+
+      van.add(hiddenDom, Counter())
+      const dom = <Element>(hiddenDom.firstChild)
+      expect(dom.outerHTML).toBe('<span>❤️ 0 <select><option value="👍">👍</option><option value="👎">👎</option></select> <button>Run</button></span>')
+
+      dom.querySelector("button")!.click()
+      dom.querySelector("button")!.click()
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe('<span>❤️ 2 <select><option value="👍">👍</option><option value="👎">👎</option></select> <button>Run</button></span>')
+
+      dom.querySelector("select")!.value = "👎"
+      dom.querySelector("select")!.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations)
+      dom.querySelector("button")!.click()
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe('<span>❤️ 1 <select><option value="👍">👍</option><option value="👎">👎</option></select> <button>Run</button></span>')
+    });
+
+    it('should render nested ul li', async () => {
+      const hiddenDom = createHiddenDom();
+      const SortedList = () => {
+        const items = van.state("a,b,c"), sortedBy = van.state("Ascending")
+        return span(
+          "Comma-separated list: ",
+          input({
+            oninput: (e: any) => items.val = (<HTMLInputElement>e.target).value,
+            type: "text", value: items
+          }), " ",
+          select({ oninput: (e: any) => sortedBy.val = (<HTMLInputElement>e.target).value, value: sortedBy },
+            option({ value: "Ascending" }, "Ascending"),
+            option({ value: "Descending" }, "Descending"),
+          ),
+          // A State-derived child node
+          () => sortedBy.val === "Ascending" ?
+            ul(items.val!.split(",").sort().map(i => li(i))) :
+            ul(items.val!.split(",").sort().reverse().map(i => li(i))),
+        )
+      }
+      van.add(hiddenDom, SortedList())
+
+      hiddenDom.querySelector("input")!.value = "a,b,c,d"
+      hiddenDom.querySelector("input")!.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.querySelector("ul")!.outerHTML).toBe(
+        "<ul><li>a</li><li>b</li><li>c</li><li>d</li></ul>")
+
+      hiddenDom.querySelector("select")!.value = "Descending"
+      hiddenDom.querySelector("select")!.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.querySelector("ul")!.outerHTML).toBe(
+        "<ul><li>d</li><li>c</li><li>b</li><li>a</li></ul>")
+    })
+
+    it('should render editable ul li', async() => {
+      const hiddenDom = createHiddenDom();
+      const ListItem = ({ text }: {text: string}) => {
+        const deleted = van.state(false)
+        return () => deleted.val ? null : li(
+          text,
+          a({ onclick: () => deleted.val = true }, "❌"),
+        )
+      }
+
+      const EditableList = () => {
+        const listDom = ul()
+        const textDom = input({ type: "text" })
+        return div(
+          textDom, " ",
+          button({ onclick: () => van.add(listDom, ListItem({ text: textDom.value })) }, "➕"),
+          listDom,
+        )
+      }
+      van.add(hiddenDom, EditableList())
+
+      hiddenDom.querySelector("input")!.value = "abc"
+      hiddenDom.querySelector("button")!.click()
+      hiddenDom.querySelector("input")!.value = "123"
+      hiddenDom.querySelector("button")!.click()
+      hiddenDom.querySelector("input")!.value = "def"
+      hiddenDom.querySelector("button")!.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.querySelector("ul")!.outerHTML).toBe(
+        "<ul><li>abc<a>❌</a></li><li>123<a>❌</a></li><li>def<a>❌</a></li></ul>")
+
+      {
+        [...hiddenDom.querySelectorAll("li")].find(e => e.innerHTML.startsWith("123"))!
+          .querySelector("a")!.click()
+        await sleep(waitMsForDerivations)
+        expect(hiddenDom.querySelector("ul")!.outerHTML).toBe(
+          "<ul><li>abc<a>❌</a></li><li>def<a>❌</a></li></ul>")
+      }
+      {
+        [...hiddenDom.querySelectorAll("li")].find(e => e.innerHTML.startsWith("abc"))!
+          .querySelector("a")!.click()
+        await sleep(waitMsForDerivations)
+        expect(hiddenDom.querySelector("ul")!.outerHTML).toBe(
+          "<ul><li>def<a>❌</a></li></ul>")
+      }
+      {
+        [...hiddenDom.querySelectorAll("li")].find(e => e.innerHTML.startsWith("def"))!
+          .querySelector("a")!.click()
+        await sleep(waitMsForDerivations)
+        expect(hiddenDom.querySelector("ul")!.outerHTML).toBe("<ul></ul>")
+      }
+    })
+
+    it('should update dom based on polymorphic state', async () => {
+      const stateProto = Object.getPrototypeOf(van.state())
+      const hiddenDom = createHiddenDom();
+      let numYellowButtonClicked = 0
+
+      const val = <T>(v: T | State<T> | (() => T)) => {
+        const protoOfV = Object.getPrototypeOf(v ?? 0)
+        if (protoOfV === stateProto) return (<State<T>>v).val
+        if (protoOfV === Function.prototype) return (<() => T>v)()
+        return <T>v
+      }
+
+      const Button = ({
+        color,
+        text,
+        onclick,
+      }: {
+        color: State<string> | string | (() => string);
+        text: State<string> | string;
+        onclick: State<() => void> | (() => void);
+      }) =>
+        button(
+          { style: () => `background-color: ${val(color)};`, onclick },
+          text
+        );
+
+      const App = () => {
+        const colorState = van.state("green")
+        const textState = van.state("Turn Red")
+
+        const turnRed = () => {
+          colorState.val = "red"
+          textState.val = "Turn Green"
+          onclickState.val = turnGreen
+        }
+        const turnGreen = () => {
+          colorState.val = "green"
+          textState.val = "Turn Red"
+          onclickState.val = turnRed
+        }
+        const onclickState = van.state(turnRed)
+
+        const lightness = van.state(255)
+
+        return span(
+          Button({ color: "yellow", text: "Click Me", onclick: () => ++numYellowButtonClicked }), " ",
+          Button({ color: colorState, text: textState, onclick: onclickState }), " ",
+          Button({
+            color: () => `rgb(${lightness.val}, ${lightness.val}, ${lightness.val})`,
+            text: "Get Darker",
+            onclick: () => lightness.val = Math.max(lightness.val! - 10, 0),
+          }),
+        )
+      }
+
+      van.add(hiddenDom, App())
+
+      expect(hiddenDom.innerHTML).toBe('<span><button style="background-color: yellow;">Click Me</button> <button style="background-color: green;">Turn Red</button> <button style="background-color: rgb(255, 255, 255);">Get Darker</button></span>')
+      const [button1, button2, button3] = hiddenDom.querySelectorAll("button")
+
+      button1.click()
+      expect(numYellowButtonClicked).toBe(1)
+      button1.click()
+      expect(numYellowButtonClicked).toBe(2)
+
+      button2.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<span><button style="background-color: yellow;">Click Me</button> <button style="background-color: red;">Turn Green</button> <button style="background-color: rgb(255, 255, 255);">Get Darker</button></span>')
+      button2.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<span><button style="background-color: yellow;">Click Me</button> <button style="background-color: green;">Turn Red</button> <button style="background-color: rgb(255, 255, 255);">Get Darker</button></span>')
+
+      button3.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<span><button style="background-color: yellow;">Click Me</button> <button style="background-color: green;">Turn Red</button> <button style="background-color: rgb(245, 245, 245);">Get Darker</button></span>')
+      button3.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<span><button style="background-color: yellow;">Click Me</button> <button style="background-color: green;">Turn Red</button> <button style="background-color: rgb(235, 235, 235);">Get Darker</button></span>')
+    });
+
+    it('should update dom based on state', async () => {
+      const hiddenDom = createHiddenDom();
+      const TurnBold = () => {
+        const vanJS = van.state(<any>"VanJS")
+        return span(
+          button({ onclick: () => vanJS.val = b("VanJS") }, "Turn Bold"),
+          " Welcome to ", vanJS, ". ", vanJS, " is awesome!"
+        )
+      }
+
+      van.add(hiddenDom, TurnBold())
+      const dom = <Element>(hiddenDom.firstChild)
+      expect(dom.outerHTML).toBe("<span><button>Turn Bold</button> Welcome to VanJS. VanJS is awesome!</span>")
+
+      dom.querySelector("button")!.click()
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<span><button>Turn Bold</button> Welcome to . <b>VanJS</b> is awesome!</span>")
+    })
+
+    it('should batch updates', async () => {
+      const hiddenDom = createHiddenDom();
+      const name = van.state("")
+
+      const Name1 = () => {
+        const numRendered = van.state(0)
+        return div(
+          () => {
+            ++numRendered.val!
+            return name.val!.trim().length === 0 ?
+              p("Please enter your name") :
+              p("Hello ", b(name))
+          },
+          p(i("The <p> element has been rendered ", numRendered, " time(s).")),
+        )
+      }
+
+      const Name2 = () => {
+        const numRendered = van.state(0)
+        const isNameEmpty = van.derive(() => name.val!.trim().length === 0)
+        return div(
+          () => {
+            ++numRendered.val!
+            return isNameEmpty.val ?
+              p("Please enter your name") :
+              p("Hello ", b(name))
+          },
+          p(i("The <p> element has been rendered ", numRendered, " time(s).")),
+        )
+      }
+
+      van.add(hiddenDom,
+        p("Your name is: ", input({ type: "text", value: name, oninput: (e: any) => name.val = e.target.value })),
+        Name1(),
+        Name2(),
+      )
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe(
+        '<p>Your name is: <input type="text"></p><div><p>Please enter your name</p><p><i>The &lt;p&gt; element has been rendered 1 time(s).</i></p></div><div><p>Please enter your name</p><p><i>The &lt;p&gt; element has been rendered 1 time(s).</i></p></div>'
+      );
+
+      hiddenDom.querySelector("input")!.value = "T"
+      hiddenDom.querySelector("input")!.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations)
+      hiddenDom.querySelector("input")!.value = "Ta"
+      hiddenDom.querySelector("input")!.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations)
+      hiddenDom.querySelector("input")!.value = "Tao"
+      hiddenDom.querySelector("input")!.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations)
+
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<p>Your name is: <input type="text"></p><div><p>Hello <b>Tao</b></p><p><i>The &lt;p&gt; element has been rendered 4 time(s).</i></p></div><div><p>Hello <b>Tao</b></p><p><i>The &lt;p&gt; element has been rendered 2 time(s).</i></p></div>')
+
+      hiddenDom.querySelector("input")!.value = ""
+      hiddenDom.querySelector("input")!.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations * 2)
+      expect(hiddenDom.innerHTML).toBe('<p>Your name is: <input type="text"></p><div><p>Please enter your name</p><p><i>The &lt;p&gt; element has been rendered 5 time(s).</i></p></div><div><p>Please enter your name</p><p><i>The &lt;p&gt; element has been rendered 3 time(s).</i></p></div>')
+
+      hiddenDom.querySelector("input")!.value = "X"
+      hiddenDom.querySelector("input")!.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations)
+      hiddenDom.querySelector("input")!.value = "Xi"
+      hiddenDom.querySelector("input")!.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations)
+      hiddenDom.querySelector("input")!.value = "Xin"
+      hiddenDom.querySelector("input")!.dispatchEvent(new Event("input"))
+      await sleep(waitMsForDerivations)
+
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<p>Your name is: <input type="text"></p><div><p>Hello <b>Xin</b></p><p><i>The &lt;p&gt; element has been rendered 8 time(s).</i></p></div><div><p>Hello <b>Xin</b></p><p><i>The &lt;p&gt; element has been rendered 4 time(s).</i></p></div>')
+    })
+
+    it("should hydrate the given element", async () => {
+      const stateProto = Object.getPrototypeOf(van.state());
+
+      const val = <T>(v: T | State<T>) =>
+        Object.getPrototypeOf(v ?? 0) === stateProto ? (<State<T>>v).val : <T>v;
+
+      const hiddenDom = createHiddenDom();
+      const counterInit = 5;
+
+      const Counter = ({
+        id,
+        init = 0,
+        buttonStyle = "👍👎",
+      }: {
+        id?: string;
+        init?: number;
+        buttonStyle?: string | State<string>;
+      }) => {
+        const { button, div } = van.tags;
+
+        const [up, down] = [...Object(val(buttonStyle))];
+        const counter = van.state(init);
+        return div(
+          { ...(id ? { id } : {}), "data-counter": counter },
+          "❤️ ",
+          counter,
+          " ",
+          button({ onclick: () => ++counter.val! }, up),
+          button({ onclick: () => --counter.val! }, down)
+        );
+      };
+      const selectDom = select(
+        { value: "👆👇" },
+        option("👆👇"),
+        option("👍👎"),
+        option("🔼🔽"),
+        option("⏫⏬"),
+        option("📈📉")
+      );
+      const buttonStyle = van.state(selectDom.value);
+      selectDom.oninput = (e) =>
+        (buttonStyle.val = (<HTMLSelectElement>e!.target).value);
+      // Static DOM before hydration
+      hiddenDom.innerHTML = div(
+        h2("Basic Counter"),
+        Counter({ init: counterInit }),
+        h2("Styled Counter"),
+        p("Select the button style: ", selectDom),
+        Counter({ init: counterInit, buttonStyle })
+      ).innerHTML;
+
+      const clickBtns = async (
+        dom: HTMLElement,
+        numUp: number,
+        numDown: number
+      ) => {
+        const [upBtn, downBtn] = [...dom.querySelectorAll("button")];
+        for (let i = 0; i < numUp; ++i) {
+          upBtn.click();
+          await sleep(waitMsForDerivations);
+        }
+        for (let i = 0; i < numDown; ++i) {
+          downBtn.click();
+          await sleep(waitMsForDerivations);
+        }
+      };
+
+      const counterHTML = (counter: number, buttonStyle: string) => {
+        const [up, down] = [...buttonStyle];
+        return div(
+          { "data-counter": counter },
+          "❤️ ",
+          counter,
+          " ",
+          button(up),
+          button(down)
+        ).innerHTML;
+      };
+
+      // Before hydration, counters are not reactive
+      let [basicCounter, styledCounter] = hiddenDom.querySelectorAll("div");
+      await clickBtns(basicCounter, 3, 1);
+      await clickBtns(styledCounter, 2, 5);
+      [basicCounter, styledCounter] = hiddenDom.querySelectorAll("div");
+      expect(basicCounter.innerHTML).toBe(counterHTML(5, "👍👎"));
+      expect(styledCounter.innerHTML).toBe(counterHTML(5, "👆👇"));
+
+      // Selecting a new button style won't change the actual buttons
+      selectDom.value = "🔼🔽";
+      selectDom.dispatchEvent(new Event("input"));
+      await sleep(waitMsForDerivations);
+      [basicCounter, styledCounter] = hiddenDom.querySelectorAll("div");
+      expect(styledCounter.innerHTML).toBe(counterHTML(5, "👆👇"));
+      selectDom.value = "👆👇";
+      selectDom.dispatchEvent(new Event("input"));
+
+      van.hydrate(basicCounter, (dom) =>
+        Counter({
+          id: "basic-counter",
+          init: Number(dom.getAttribute("data-counter")),
+        })
+      );
+      van.hydrate(styledCounter, (dom) =>
+        Counter({
+          id: "styled-counter",
+          init: Number(dom.getAttribute("data-counter")),
+          buttonStyle: buttonStyle,
+        })
+      );
+
+      // After hydration, counters are reactive
+      [basicCounter, styledCounter] = hiddenDom.querySelectorAll("div");
+      await clickBtns(basicCounter, 3, 1);
+      await clickBtns(styledCounter, 2, 5);
+      [basicCounter, styledCounter] = hiddenDom.querySelectorAll("div");
+      expect(basicCounter.innerHTML).toBe(counterHTML(7, "👍👎"));
+      expect(styledCounter.innerHTML).toBe(counterHTML(2, "👆👇"));
+
+      // Selecting a new button style will change the actual buttons
+      const prevStyledCounter = styledCounter;
+      selectDom.value = "🔼🔽";
+      selectDom.dispatchEvent(new Event("input"));
+      await sleep(waitMsForDerivations);
+      [basicCounter, styledCounter] = hiddenDom.querySelectorAll("div");
+      expect(styledCounter.innerHTML).toBe(counterHTML(2, "🔼🔽"));
+      expect(styledCounter !== prevStyledCounter);
+    });
+  })
 });
