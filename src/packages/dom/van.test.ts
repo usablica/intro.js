@@ -938,5 +938,326 @@ describe("van", () => {
       expect(a.val).toBe(104)
       expect(b.val).toBe(103)
     });
+
+    it('should dynamically update dom based on derived state', async () => {
+      const hiddenDom = createHiddenDom();
+      const verticalPlacement = van.state(false)
+      const button1Text = van.state("Button 1"), button2Text = van.state("Button 2"), button3Text = van.state("Button 3")
+
+      const domFunc = () => verticalPlacement.val ? div(
+        div(button(button1Text)),
+        div(button(button2Text)),
+        div(button(button3Text)),
+      ) : div(
+        button(button1Text), button(button2Text), button(button3Text),
+      )
+      expect(van.add(hiddenDom, domFunc)).toBe(hiddenDom)
+
+      const dom = <Element>hiddenDom.firstChild
+      expect(dom.outerHTML).toBe("<div><button>Button 1</button><button>Button 2</button><button>Button 3</button></div>")
+      button2Text.val = "Button 2: Extra"
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div><button>Button 1</button><button>Button 2: Extra</button><button>Button 3</button></div>")
+
+      verticalPlacement.val = true
+      await sleep(waitMsForDerivations)
+
+      // dom is disconnected from the document thus it won't be updated
+      expect(dom.outerHTML).toBe("<div><button>Button 1</button><button>Button 2: Extra</button><button>Button 3</button></div>")
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe("<div><div><button>Button 1</button></div><div><button>Button 2: Extra</button></div><div><button>Button 3</button></div></div>")
+      button2Text.val = "Button 2: Extra Extra"
+      await sleep(waitMsForDerivations)
+      // Since dom is disconnected from document, its inner button won't be reactive to state changes
+      expect(dom.outerHTML).toBe("<div><button>Button 1</button><button>Button 2: Extra</button><button>Button 3</button></div>")
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe("<div><div><button>Button 1</button></div><div><button>Button 2: Extra Extra</button></div><div><button>Button 3</button></div></div>")
+    });
+
+    it('should update dom based on conditional derived state', async () => {
+      const hiddenDom = createHiddenDom();
+      const cond = van.state(true)
+      const button1 = van.state("Button 1"), button2 = van.state("Button 2")
+      const button3 = van.state("Button 3"), button4 = van.state("Button 4")
+      let numFuncCalled = 0
+      const domFunc = () => (++numFuncCalled, cond.val ?
+        div(button(button1.val), button(button2.val)) :
+        div(button(button3.val), button(button4.val)))
+      expect(van.add(hiddenDom, domFunc)).toBe(hiddenDom)
+
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe("<div><button>Button 1</button><button>Button 2</button></div>")
+      expect(numFuncCalled).toBe(1)
+
+      button1.val = "Button 1-1"
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe("<div><button>Button 1-1</button><button>Button 2</button></div>")
+      expect(numFuncCalled).toBe(2)
+
+      button2.val = "Button 2-1"
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe("<div><button>Button 1-1</button><button>Button 2-1</button></div>")
+      expect(numFuncCalled).toBe(3)
+
+      // Changing button3 or button4 won't triggered the effect as they're not its current dependencies
+      button3.val = "Button 3-1"
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe("<div><button>Button 1-1</button><button>Button 2-1</button></div>")
+      expect(numFuncCalled).toBe(3)
+
+      button4.val = "Button 4-1"
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe("<div><button>Button 1-1</button><button>Button 2-1</button></div>")
+      expect(numFuncCalled).toBe(3)
+
+      cond.val = false
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe("<div><button>Button 3-1</button><button>Button 4-1</button></div>")
+      expect(numFuncCalled).toBe(4)
+
+      button3.val = "Button 3-2"
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe("<div><button>Button 3-2</button><button>Button 4-1</button></div>")
+      expect(numFuncCalled).toBe(5)
+
+      button4.val = "Button 4-2"
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe("<div><button>Button 3-2</button><button>Button 4-2</button></div>")
+      expect(numFuncCalled).toBe(6)
+
+      // Changing button1 or button2 won't triggered the effect as they're not its current dependencies
+      button1.val = "Button 1-2"
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe("<div><button>Button 3-2</button><button>Button 4-2</button></div>")
+      expect(numFuncCalled).toBe(6)
+
+      button1.val = "Button 2-2"
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe("<div><button>Button 3-2</button><button>Button 4-2</button></div>")
+      expect(numFuncCalled).toBe(6)
+    });
+
+    it('should rearrange dom when state changes', async () => {
+      const hiddenDom = createHiddenDom();
+      const numItems = van.state(0)
+      const items = van.derive(() => [...Array(numItems.val).keys()].map(i => `Item ${i + 1}`))
+      const selectedIndex = van.derive(() => (items.val, 0))
+
+      const domFunc = (dom?: Element) => {
+        // If items aren't changed, we don't need to regenerate the entire dom
+        if (dom && items.val === items.oldVal) {
+          const itemDoms = dom.childNodes;
+          (<Element>itemDoms[selectedIndex.oldVal!]).classList.remove("selected");
+          (<Element>itemDoms[selectedIndex.val!]).classList.add("selected")
+          return dom
+        }
+
+        return ul(
+          items.val!.map((item: string, i: number) => li({ class: i === selectedIndex.val ? "selected" : "" }, item))
+        )
+      }
+      van.add(hiddenDom, domFunc)
+
+      numItems.val = 3
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe('<ul><li class="selected">Item 1</li><li class="">Item 2</li><li class="">Item 3</li></ul>')
+      const rootDom1stIteration = <Element>hiddenDom.firstChild
+
+      selectedIndex.val = 1
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe('<ul><li class="">Item 1</li><li class="selected">Item 2</li><li class="">Item 3</li></ul>')
+      // Items aren't changed, thus we don't need to regenerate the dom
+      expect(hiddenDom.firstChild!).toBe(rootDom1stIteration)
+
+      numItems.val = 5
+      await sleep(waitMsForDerivations)
+      // Items are changed, thus the dom for the list is regenerated
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe('<ul><li class="selected">Item 1</li><li class="">Item 2</li><li class="">Item 3</li><li class="">Item 4</li><li class="">Item 5</li></ul>')
+      expect(hiddenDom.firstChild !== rootDom1stIteration)
+      // rootDom1stIteration is disconnected from the document and remain unchanged
+      expect(rootDom1stIteration.outerHTML).toBe('<ul><li class="">Item 1</li><li class="selected">Item 2</li><li class="">Item 3</li></ul>')
+      const rootDom2ndIteration = hiddenDom.firstChild!
+
+      selectedIndex.val = 2
+      await sleep(waitMsForDerivations)
+      expect((<Element>hiddenDom.firstChild).outerHTML).toBe('<ul><li class="">Item 1</li><li class="">Item 2</li><li class="selected">Item 3</li><li class="">Item 4</li><li class="">Item 5</li></ul>')
+      // Items aren't changed, thus we don't need to regenerate the dom
+      expect(hiddenDom.firstChild!).toBe(rootDom2ndIteration)
+      // rootDom1stIteration won't be updated as it has already been disconnected from the document
+      expect(rootDom1stIteration.outerHTML).toBe('<ul><li class="">Item 1</li><li class="selected">Item 2</li><li class="">Item 3</li></ul>')
+    });
+
+    it('should remove dom when it returns null', async () => {
+      const hiddenDom = createHiddenDom();
+      const line1 = van.state("Line 1"), line2 = van.state("Line 2"), line3 = van.state(<string | null>"Line 3"), line4 = van.state(""), line5 = van.state(null)
+
+      const dom = div(
+        () => line1.val === "" ? null : p(line1.val),
+        () => line2.val === "" ? null : p(line2.val),
+        p(line3),
+        // line4 won't appear in the DOM tree as its initial value is null
+        () => line4.val === "" ? null : p(line4.val),
+        // line5 won't appear in the DOM tree as its initial value is null
+        p(line5),
+      )
+      van.add(hiddenDom, dom)
+
+      expect(dom.outerHTML).toBe("<div><p>Line 1</p><p>Line 2</p><p>Line 3</p><p></p></div>")
+      // Delete Line 2
+      line2.val = ""
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div><p>Line 1</p><p>Line 3</p><p></p></div>")
+
+      // Deleted dom won't be brought back, even the underlying state is changed back
+      line2.val = "Line 2"
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div><p>Line 1</p><p>Line 3</p><p></p></div>")
+
+      // Delete Line 3
+      line3.val = null
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div><p>Line 1</p><p></p><p></p></div>")
+
+      // Deleted dom won't be brought back, even the underlying state is changed back
+      line3.val = "Line 3"
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div><p>Line 1</p><p></p><p></p></div>")
+    })
+
+    it('should remove dom when it returns undefined', async () => {
+      const hiddenDom = createHiddenDom();
+      const line1 = van.state("Line 1"), line2 = van.state("Line 2"), line3 = van.state(<string | undefined>"Line 3"), line4 = van.state(""), line5 = van.state(undefined)
+
+      const dom = div(
+        () => line1.val === "" ? null : p(line1.val),
+        () => line2.val === "" ? null : p(line2.val),
+        p(line3),
+        // line4 won't appear in the DOM tree as its initial value is null
+        () => line4.val === "" ? null : p(line4.val),
+        // line5 won't appear in the DOM tree as its initial value is null
+        p(line5),
+      )
+      van.add(hiddenDom, dom)
+
+      expect(dom.outerHTML).toBe("<div><p>Line 1</p><p>Line 2</p><p>Line 3</p><p></p></div>")
+      // Delete Line 2
+      line2.val = ""
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div><p>Line 1</p><p>Line 3</p><p></p></div>")
+
+      // Deleted dom won't be brought back, even the underlying state is changed back
+      line2.val = "Line 2"
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div><p>Line 1</p><p>Line 3</p><p></p></div>")
+
+      // Delete Line 3
+      line3.val = undefined
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div><p>Line 1</p><p></p><p></p></div>")
+
+      // Deleted dom won't be brought back, even the underlying state is changed back
+      line3.val = "Line 3"
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div><p>Line 1</p><p></p><p></p></div>")
+    });
+
+    it('should not remove dom when it returns 0', async () => {
+      const hiddenDom = createHiddenDom();
+      const state1 = van.state(0), state2 = van.state(1)
+      const dom = div(state1, () => 1 - state1.val!, state2, () => 1 - state2.val!)
+      van.add(hiddenDom, dom)
+
+      expect(dom.outerHTML).toBe("<div>0110</div>")
+
+      state1.val = 1, state2.val = 0
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div>1001</div>")
+    })
+    
+    it('should update dom when primitive state changes', async () => {
+      const hiddenDom = createHiddenDom();
+      const a = van.state(1), b = van.state(2), deleted = van.state(false)
+      const dom = div(() => deleted.val ? null : a.val! + b.val!)
+      expect(dom.outerHTML).toBe("<div>3</div>")
+      van.add(hiddenDom, dom)
+
+      a.val = 6
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div>8</div>")
+
+      b.val = 5
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div>11</div>")
+
+      deleted.val = true
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div></div>")
+
+      // Deleted dom won't be brought back, even the underlying state is changed back
+      deleted.val = false
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div></div>")
+    })
+
+    it('should not update when state is not connected', async () => {
+      const hiddenDom = createHiddenDom();
+      const part1 = "👋Hello ", part2 = van.state("🗺️World")
+
+      expect(
+        van.add(
+          hiddenDom,
+          () => `${part1}${part2.val}, from: ${part1}${part2.oldVal}`
+        )
+      ).toBe(hiddenDom);
+
+      const dom = <Element>hiddenDom.firstChild
+      expect(dom.textContent!).toBe("👋Hello 🗺️World, from: 👋Hello 🗺️World")
+      expect(hiddenDom.innerHTML).toBe("👋Hello 🗺️World, from: 👋Hello 🗺️World")
+
+      part2.val = "🍦VanJS"
+      await sleep(waitMsForDerivations)
+
+      // dom is disconnected from the document thus it won't be updated
+      expect(dom.textContent!).toBe("👋Hello 🗺️World, from: 👋Hello 🗺️World")
+      expect(hiddenDom.innerHTML).toBe("👋Hello 🍦VanJS, from: 👋Hello 🗺️World")
+    });
+
+    it('should not update dom when oldVal is referenced', async () => {
+      const hiddenDom = createHiddenDom();
+      const text = van.state("Old Text")
+
+      expect(van.add(hiddenDom, () => `From: "${text.oldVal}" to: "${text.val}"`)).toBe(hiddenDom)
+
+      const dom = <Element>hiddenDom.firstChild
+      expect(dom.textContent!).toBe('From: "Old Text" to: "Old Text"')
+      expect(hiddenDom.innerHTML).toBe('From: "Old Text" to: "Old Text"')
+
+      text.val = "New Text"
+      await sleep(waitMsForDerivations)
+
+      // dom is disconnected from the document thus it won't be updated
+      expect(dom.textContent).toBe('From: "Old Text" to: "Old Text"')
+      expect(hiddenDom.innerHTML).toBe('From: "Old Text" to: "New Text"')
+    });
+
+    it('should not update when state derived children throws error', async () => {
+      const hiddenDom = createHiddenDom();
+      const num = van.state(0)
+
+      expect(van.add(hiddenDom,
+        num,
+        () => {
+          if (num.val! > 0) throw new Error()
+          return span("ok")
+        },
+        num
+      )).toBe(hiddenDom)
+
+      expect(hiddenDom.innerHTML).toBe("0<span>ok</span>0")
+
+      num.val = 1
+      await sleep(waitMsForDerivations)
+      // The binding function 2nd child of hiddenDom throws an error.
+      // We want to validate the 2nd child won't be updated because of the error,
+      // but other DOM nodes are updated as usual
+      expect(hiddenDom.innerHTML).toBe("1<span>ok</span>1")
+    });
   });
 });
