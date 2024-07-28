@@ -452,8 +452,8 @@ const add = (dom: Element, ...children: readonly ChildDom[]): Element => {
       protoOfC === stateProto
         ? bind(() => c.val)
         : protoOfC === funcProto
-          ? bind(c)
-          : c;
+        ? bind(c)
+        : c;
     child != _undefined && dom.append(child);
   }
   return dom;
@@ -494,8 +494,8 @@ const tag = (ns: string | null, name: string, ...args: any): Element => {
           dom.addEventListener(event, v);
         }
       : propSetter
-        ? propSetter.bind(dom)
-        : dom.setAttribute.bind(dom, k);
+      ? propSetter.bind(dom)
+      : dom.setAttribute.bind(dom, k);
 
     let protoOfV = protoOf(v ?? 0);
 
