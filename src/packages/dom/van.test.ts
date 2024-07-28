@@ -633,4 +633,310 @@ describe("van", () => {
       expect(dom.outerHTML).toBe("<div><pre>Line 1</pre><pre>Line 2</pre><pre>Line 3</pre></div>")
     });
   });
+
+  describe('state', () => {
+    it('should return the correct oldVal and val', async () => {
+      const hiddenDom = createHiddenDom();
+      const s = van.state("State Version 1")
+      expect(s.val).toBe("State Version 1")
+      expect(s.oldVal).toBe("State Version 1")
+
+      // If the state object doesn't have any bindings, we directly update the `oldVal`
+      s.val = "State Version 2"
+      expect(s.val).toBe("State Version 2")
+      expect(s.oldVal).toBe("State Version 2")
+
+      van.add(hiddenDom, s)
+      // If the state object has some bindings, `oldVal` refers to its old value until DOM update completes
+      s.val = "State Version 3"
+      expect(s.val).toBe("State Version 3")
+      expect(s.oldVal).toBe("State Version 2")
+      await sleep(waitMsForDerivations)
+      expect(s.val).toBe("State Version 3")
+      expect(s.oldVal).toBe("State Version 3")
+    });
+
+    it('should not trigger derived states when rawVal is set', async () => {
+      const hiddenDom = createHiddenDom();
+      const history: number[] = []
+      const a = van.state(3), b = van.state(5)
+      const s = van.derive(() => a.rawVal! + b.val!)
+      van.derive(() => history.push(a.rawVal! + b.val!))
+
+      van.add(hiddenDom,
+        input({ type: "text", value: () => a.rawVal! + b.val! }),
+        p(() => a.rawVal! + b.val!)
+      )
+
+      await sleep(waitMsForDerivations)
+      expect(s.val).toBe(8)
+      expect(history).toStrictEqual([8])
+      expect(hiddenDom.querySelector("input")!.value).toBe("8")
+      expect(hiddenDom.querySelector("p")!.innerHTML).toBe("8")
+
+      // Changing the `val` of `a` won't trigger the derived states, side effects, state-derived
+      // properties and state-derived child nodes, as the value of `a` is accessed via `a.rawVal`.
+      ++a.val!
+      await sleep(waitMsForDerivations)
+      expect(s.val).toBe(8)
+      expect(history).toStrictEqual([8])
+      expect(hiddenDom.querySelector("input")!.value).toBe("8")
+      expect(hiddenDom.querySelector("p")!.innerHTML).toBe("8")
+
+      // Changing the `val` of `b` will trigger the derived states, side effects, state-derived
+      // properties and state-derived child nodes, as the value of `b` is accessed via `b.rawVal`.
+      ++b.val!
+      await sleep(waitMsForDerivations)
+      expect(s.val).toBe(10)
+      expect(history).toStrictEqual([8,10])
+      expect(hiddenDom.querySelector("input")!.value).toBe("10")
+      expect(hiddenDom.querySelector("p")!.innerHTML).toBe("10")
+    });
+  });
+
+  describe('derive', () => {
+    it('should trigger callback when val changes', async () => {
+      const history: string[] = []
+      const s = van.state("This")
+      van.derive(() => history.push(s.val!))
+      expect(history).toStrictEqual(["This"])
+
+      s.val = "is"
+      await sleep(waitMsForDerivations)
+      expect(history).toStrictEqual(["This","is"]);
+
+      s.val = "a"
+      await sleep(waitMsForDerivations)
+      expect(history).toStrictEqual(["This","is","a"]);
+
+      s.val = "test"
+      await sleep(waitMsForDerivations)
+      expect(history).toStrictEqual(["This","is","a","test"])
+
+      s.val = "test"
+      await sleep(waitMsForDerivations)
+      expect(history).toStrictEqual(["This","is","a","test"])
+
+      s.val = "test2"
+      // "Test2" won't be added into `history` as `s` will be set to "test3" immediately
+      s.val = "test3"
+      await sleep(waitMsForDerivations)
+      expect(history).toStrictEqual(["This","is","a","test","test3"])
+    });
+
+    it("should trigger derived state callback when val changes", async () => {
+      const numItems = van.state(0)
+      const items = van.derive(() => [...Array(numItems.val).keys()].map(i => `Item ${i + 1}`))
+      const selectedIndex = van.derive(() => (items.val, 0))
+      const selectedItem = van.derive(() => items.val![selectedIndex.val!])
+
+      numItems.val = 3
+      await sleep(waitMsForDerivations)
+      expect(numItems.val).toBe(3)
+      expect(items.val!.join(",")).toBe("Item 1,Item 2,Item 3")
+      expect(selectedIndex.val).toBe(0)
+      expect(selectedItem.val).toBe("Item 1")
+
+      selectedIndex.val = 2
+      await sleep(waitMsForDerivations)
+      expect(selectedIndex.val).toBe(2)
+      expect(selectedItem.val).toBe("Item 3")
+
+      numItems.val = 5
+      await sleep(waitMsForDerivations)
+      expect(numItems.val).toBe(5)
+      expect(items.val!.join(",")).toBe("Item 1,Item 2,Item 3,Item 4,Item 5")
+      expect(selectedIndex.val).toBe(0)
+      expect(selectedItem.val).toBe("Item 1")
+
+      selectedIndex.val = 3
+      await sleep(waitMsForDerivations)
+      expect(selectedIndex.val).toBe(3)
+      expect(selectedItem.val).toBe("Item 4")
+    });
+
+    it('should trigger compute conditional derived state', async () => {
+      const cond = van.state(true)
+      const a = van.state(1), b = van.state(2), c = van.state(3), d = van.state(4)
+      let numEffectTriggered = 0
+      const sum = van.derive(() => (++numEffectTriggered, cond.val ? a.val! + b.val! : c.val! + d.val!))
+
+      expect(sum.val).toBe(3)
+      expect(numEffectTriggered).toBe(1)
+
+      a.val = 11
+      await sleep(waitMsForDerivations)
+      expect(sum.val).toBe(13)
+      expect(numEffectTriggered).toBe(2)
+
+      b.val = 12
+      await sleep(waitMsForDerivations)
+      expect(sum.val).toBe(23)
+      expect(numEffectTriggered).toBe(3)
+
+      // Changing c or d won't triggered the effect as they're not its current dependencies
+      c.val = 13
+      await sleep(waitMsForDerivations)
+      expect(sum.val).toBe(23)
+      expect(numEffectTriggered).toBe(3)
+
+      d.val = 14
+      await sleep(waitMsForDerivations)
+      expect(sum.val).toBe(23)
+      expect(numEffectTriggered).toBe(3)
+
+      cond.val = false
+      await sleep(waitMsForDerivations)
+      expect(sum.val).toBe(27)
+      expect(numEffectTriggered).toBe(4)
+
+      c.val = 23
+      await sleep(waitMsForDerivations)
+      expect(sum.val).toBe(37)
+      expect(numEffectTriggered).toBe(5)
+
+      d.val = 24
+      await sleep(waitMsForDerivations)
+      expect(sum.val).toBe(47)
+      expect(numEffectTriggered).toBe(6)
+
+      // Changing a or b won't triggered the effect as they're not its current dependencies
+      a.val = 21
+      await sleep(waitMsForDerivations)
+      expect(sum.val).toBe(47)
+      expect(numEffectTriggered).toBe(6)
+
+      b.val = 22
+      await sleep(waitMsForDerivations)
+      expect(sum.val).toBe(47)
+      expect(numEffectTriggered).toBe(6)
+    });
+
+    it('should not change state when derive throws error', async () => {
+      const s0 = van.state(1)
+      const s1 = van.derive(() => s0.val! * 2)
+      const s2 = van.derive(() => {
+        if (s0.val! > 1) throw new Error()
+        return s0.val
+      })
+      const s3 = van.derive(() => s0.val! * s0.val!)
+
+      expect(s1.val).toBe(2)
+      expect(s2.val).toBe(1)
+      expect(s3.val).toBe(1)
+
+      s0.val = 3
+      await sleep(waitMsForDerivations)
+      // The derivation function for `s2` throws an error.
+      // We want to validate the `val` of `s2` remains the same because of the error,
+      // but other derived states are updated as usual.
+      expect(s1.val).toBe(6)
+      expect(s2.val).toBe(1)
+      expect(s3.val).toBe(9)
+    });
+
+    it('should update dom when derived state changes', async () => {
+      const hiddenDom = createHiddenDom();
+      const CheckboxCounter = () => {
+        const checked = van.state(false), numChecked = van.state(0)
+        van.derive(() => {
+          if (checked.val) ++numChecked.val!
+        })
+
+        return div(
+          input({ type: "checkbox", checked, onclick: e => checked.val = ((e as Event).target as HTMLInputElement).checked }),
+          " Checked ", numChecked, " times. ",
+          button({ onclick: () => numChecked.val = 0 }, "Reset"),
+        )
+      }
+
+      van.add(hiddenDom, CheckboxCounter())
+
+      expect(hiddenDom.innerHTML).toBe('<div><input type="checkbox"> Checked 0 times. <button>Reset</button></div>')
+
+      hiddenDom.querySelector("input")!.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<div><input type="checkbox"> Checked 1 times. <button>Reset</button></div>')
+
+      hiddenDom.querySelector("input")!.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<div><input type="checkbox"> Checked 1 times. <button>Reset</button></div>')
+
+      hiddenDom.querySelector("input")!.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<div><input type="checkbox"> Checked 2 times. <button>Reset</button></div>')
+
+      hiddenDom.querySelector("button")!.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<div><input type="checkbox"> Checked 0 times. <button>Reset</button></div>')
+    })
+
+    it('should batch derived state updates', async () => {
+      const a = van.state(3), b = van.state(5)
+      let numDerivations = 0
+      const s = van.derive(() => {
+        ++numDerivations
+        return a.val! + b.val!
+      })
+
+      expect(s.val).toBe(8)
+      expect(numDerivations).toBe(1)
+
+      // Both `a` and `b` will change. `s` will only be re-derived once
+      ++a.val!, ++b.val!
+      await sleep(waitMsForDerivations)
+      expect(s.val).toBe(10)
+      expect(numDerivations).toBe(2)
+
+      // `a` will change, and then change back. No derivation will happen
+      ++a.val!, --a.val!
+      await sleep(waitMsForDerivations)
+      expect(s.val).toBe(10)
+      expect(numDerivations).toBe(2)
+    });
+
+    it('should batch multilayer derived state updates', async () => {
+      const hiddenDom = createHiddenDom();
+      const a = van.state(1), b = van.derive(() => a.val! * a.val!)
+      const c = van.derive(() => b.val! * b.val!), d = van.derive(() => c.val! * c.val!)
+
+      let numSDerived = 0, numSSquaredDerived = 0
+      const s = van.derive(() => {
+        ++numSDerived
+        return a.val! + b.val! + c.val! + d.val!
+      })
+
+      van.add(hiddenDom, "a = ", a, " b = ", b, " c = ", c, " d = ", d, " s = ", s,
+        " s^2 = ", () => {
+          ++numSSquaredDerived
+          return s.val! * s.val!
+        }
+      )
+
+      expect(hiddenDom.innerHTML).toBe("a = 1 b = 1 c = 1 d = 1 s = 4 s^2 = 16")
+      expect(numSDerived).toBe(1)
+      expect(numSSquaredDerived).toBe(1)
+
+      ++a.val!
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe("a = 2 b = 4 c = 16 d = 256 s = 278 s^2 = 77284")
+      // `s` is derived 4 times, triggered by `a`, `b`, `c`, `d`, respectively.
+      expect(numSDerived).toBe(5)
+      // `s^2` (the `s` derived Text node), is only derived once per one DOM update cycle.
+      expect(numSSquaredDerived).toBe(2)
+    });
+
+    it('should stop updating when there is a cycle in the derivation', async () => {
+      const a = van.state(1);;
+      const b = van.derive(() => a.val! + 1)
+      van.derive(() => a.val = b.val! + 1)
+
+      // `a` and `b` are circular dependency. But derivations will stop after limited number of
+      // iterations.
+      ++a.val!
+      await sleep(waitMsForDerivations)
+      expect(a.val).toBe(104)
+      expect(b.val).toBe(103)
+    });
+  });
 });
