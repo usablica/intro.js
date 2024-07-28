@@ -1260,4 +1260,81 @@ describe("van", () => {
       expect(hiddenDom.innerHTML).toBe("1<span>ok</span>1")
     });
   });
+
+  describe('hydrate', () => {
+    it('should hydrate the given dom with the provided state', async () => {
+      const hiddenDom = createHiddenDom();
+      const Counter = (init: number) => {
+        const counter = van.state(init)
+        return button({ "data-counter": counter, onclick: () => ++counter.val! },
+          () => `Count: ${counter.val}`,
+        )
+      }
+      // Static DOM before hydration
+      hiddenDom.innerHTML = Counter(5).outerHTML
+
+      // Before hydration, the counter is not reactive
+      hiddenDom.querySelector("button")!.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<button data-counter="5">Count: 5</button>')
+
+      van.hydrate(hiddenDom.querySelector("button")!,
+        (dom: HTMLElement) => Counter(Number(dom.getAttribute("data-counter"))))
+
+      // After hydration, the counter is reactive
+      hiddenDom.querySelector("button")!.click()
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe('<button data-counter="6">Count: 6</button>')
+  });
+
+  it('should remove dom when it returns null', async () => {
+      const hiddenDom = createHiddenDom();
+      // Remove the DOM node upon hydration
+      van.add(hiddenDom, div())
+      van.hydrate(hiddenDom.querySelector("div")!, () => null)
+      expect(hiddenDom.innerHTML).toBe("")
+
+      // Remove the DOM node after the state update
+      van.add(hiddenDom, div())
+      const s = van.state(1)
+      van.hydrate(<HTMLElement>hiddenDom.querySelector("div"), () => s.val === 1 ? pre() : null)
+      expect(hiddenDom.innerHTML).toBe("<pre></pre>")
+      s.val = 2
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe("")
+  })
+
+  it('should remove dom when it returns undefined', async () => {
+  const hiddenDom = createHiddenDom();
+      // Remove the DOM node upon hydration
+      van.add(hiddenDom, div())
+      van.hydrate(hiddenDom.querySelector("div")!, () => undefined)
+      expect(hiddenDom.innerHTML).toBe("")
+
+      // Remove the DOM node after the state update
+      van.add(hiddenDom, div())
+      const s = van.state(1)
+      van.hydrate(<HTMLElement>hiddenDom.querySelector("div"), () => s.val === 1 ? pre() : undefined)
+      expect(hiddenDom.innerHTML).toBe("<pre></pre>")
+      s.val = 2
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe("")
+  });
+
+  it('should not remove dom when it returns 0', async () => {
+  const hiddenDom = createHiddenDom();
+      van.add(hiddenDom, div(), div())
+
+      const s = van.state(0)
+      const [dom1, dom2] = hiddenDom.querySelectorAll("div")
+
+      van.hydrate(dom1, <any>(() => s.val))
+      van.hydrate(dom2, <any>(() => 1 - s.val!))
+      expect(hiddenDom.innerHTML).toBe("01")
+
+      s.val = 1
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.innerHTML).toBe("10")
+  });
+  });
 });
