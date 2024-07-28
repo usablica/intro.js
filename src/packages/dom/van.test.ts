@@ -307,5 +307,206 @@ describe("van", () => {
       await sleep(waitMsForDerivations)
       expect(dom.outerHTML).toBe('<div data-type="line" data-id="3" data-line="line=3">This is a test line</div>')
     });
+
+    it('should not update data attributes when state is disconnected', async () => {
+      const lineNum = van.state(1)
+      const dom = div({
+        "data-type": "line",
+        "data-id": lineNum,
+        "data-line": () => `line=${lineNum.val}`,
+      },
+        "This is a test line",
+      )
+      expect(dom.outerHTML).toBe('<div data-type="line" data-id="1" data-line="line=1">This is a test line</div>')
+
+      lineNum.val = 3
+      await sleep(waitMsForDerivations)
+      // Attributes won't change as dom is not connected to document
+      expect(dom.outerHTML).toBe('<div data-type="line" data-id="1" data-line="line=1">This is a test line</div>')
+    });
+
+    it('should update readonly props when state is connected', async () => {
+      const form = van.state("form1")
+      const dom = button({ form }, "Button")
+      van.add(createHiddenDom(), dom)
+      expect(dom.outerHTML).toBe('<button form="form1">Button</button>')
+
+      form.val = "form2"
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe('<button form="form2">Button</button>')
+
+      expect(input({ list: "datalist1" }).outerHTML).toBe('<input list="datalist1">')
+    })
+
+    it('should not update readonly props when state is disconnected', async () => {
+      const form = van.state("form1")
+      const dom = button({ form }, "Button")
+      expect(dom.outerHTML).toBe('<button form="form1">Button</button>')
+
+      form.val = "form2"
+      await sleep(waitMsForDerivations)
+      // Attributes won't change as dom is not connected to document
+      expect(dom.outerHTML).toBe('<button form="form1">Button</button>')
+
+      expect(input({ list: "datalist1" }).outerHTML).toBe('<input list="datalist1">')
+    });
+
+    it("should add custom event handler", () => {
+      const dom = div(
+        button({ oncustom: () => van.add(dom, p("Event triggered!")) })
+      );
+      dom.querySelector("button")!.dispatchEvent(new Event("custom"));
+      expect(dom.innerHTML).toBe("<button></button><p>Event triggered!</p>");
+    });
+
+    it("should add custom event handler with state", async () => {
+      const hiddenDom = createHiddenDom();
+      const oncustom = van.state(() =>
+        van.add(hiddenDom, p("Handler 1 triggered!"))
+      );
+      van.add(hiddenDom, button({ oncustom }));
+      hiddenDom.querySelector("button")!.dispatchEvent(new Event("custom"));
+      expect(hiddenDom.innerHTML).toBe(
+        "<button></button><p>Handler 1 triggered!</p>"
+      );
+
+      oncustom.val = () => van.add(hiddenDom, p("Handler 2 triggered!"));
+      await sleep(waitMsForDerivations);
+      hiddenDom.querySelector("button")!.dispatchEvent(new Event("custom"));
+      expect(hiddenDom.innerHTML).toBe(
+        "<button></button><p>Handler 1 triggered!</p><p>Handler 2 triggered!</p>"
+      );
+    });
+
+    it('should add state derived custom event handler', async () => {
+      const handlerType = van.state(1);
+      const hiddenDom = createHiddenDom();
+      van.add(
+        hiddenDom,
+        button({
+          oncustom: van.derive(() =>
+            handlerType.val === 1
+              ? () => van.add(hiddenDom, p("Handler 1 triggered!"))
+              : () => van.add(hiddenDom, p("Handler 2 triggered!"))
+          ),
+        })
+      );
+      hiddenDom.querySelector("button")!.dispatchEvent(new Event("custom"));
+      expect(hiddenDom.innerHTML).toBe(
+        "<button></button><p>Handler 1 triggered!</p>"
+      );
+
+      handlerType.val = 2;
+      await sleep(waitMsForDerivations);
+      hiddenDom.querySelector("button")!.dispatchEvent(new Event("custom"));
+      expect(hiddenDom.innerHTML).toBe(
+        "<button></button><p>Handler 1 triggered!</p><p>Handler 2 triggered!</p>"
+      );
+    });
+
+    it('should add child as connected state', async () => {
+      const hiddenDom = createHiddenDom();
+      const line2 = van.state(<string | null>"Line 2")
+      const dom = div(
+        pre("Line 1"),
+        pre(line2),
+        pre("Line 3")
+      )
+      van.add(hiddenDom, dom)
+      expect(dom.outerHTML).toBe("<div><pre>Line 1</pre><pre>Line 2</pre><pre>Line 3</pre></div>")
+
+      line2.val = "Line 2: Extra Stuff"
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div><pre>Line 1</pre><pre>Line 2: Extra Stuff</pre><pre>Line 3</pre></div>")
+
+      // null to remove text DOM
+      line2.val = null
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div><pre>Line 1</pre><pre></pre><pre>Line 3</pre></div>")
+
+      // Resetting the state won't bring the text DOM back
+      line2.val = "Line 2"
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<div><pre>Line 1</pre><pre></pre><pre>Line 3</pre></div>")
+    });
+
+    it('should not update child when state is disconnected', async () => {
+      const line2 = van.state(<string | null>"Line 2")
+      const dom = div(
+        pre("Line 1"),
+        pre(line2),
+        pre("Line 3")
+      )
+      expect(dom.outerHTML).toBe("<div><pre>Line 1</pre><pre>Line 2</pre><pre>Line 3</pre></div>")
+
+      line2.val = "Line 2: Extra Stuff"
+      await sleep(waitMsForDerivations)
+      // Content won't change as dom is not connected to document
+      expect(dom.outerHTML).toBe("<div><pre>Line 1</pre><pre>Line 2</pre><pre>Line 3</pre></div>")
+
+      line2.val = null
+      await sleep(waitMsForDerivations)
+      // Content won't change as dom is not connected to document
+      expect(dom.outerHTML).toBe("<div><pre>Line 1</pre><pre>Line 2</pre><pre>Line 3</pre></div>")
+    });
+
+    it('should not delete dom when child is a state', async () => {
+      const text = van.state("Text")
+      const dom = p(text)
+      van.add(createHiddenDom(), dom)
+      expect(dom.outerHTML).toBe("<p>Text</p>")
+      text.val = ""
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<p></p>")
+      text.val = "Text"
+      await sleep(waitMsForDerivations)
+      expect(dom.outerHTML).toBe("<p>Text</p>")
+    });
+
+    it('should create svg elements', () => {
+      const { circle, path, svg } = van.tags("http://www.w3.org/2000/svg");
+      const dom = svg(
+        { width: "16px", viewBox: "0 0 50 50" },
+        circle({
+          cx: "25",
+          cy: "25",
+          r: "20",
+          stroke: "black",
+          "stroke-width": "2",
+          fill: "yellow",
+        }),
+        circle({
+          cx: "16",
+          cy: "20",
+          r: "2",
+          stroke: "black",
+          "stroke-width": "2",
+          fill: "black",
+        }),
+        circle({
+          cx: "34",
+          cy: "20",
+          r: "2",
+          stroke: "black",
+          "stroke-width": "2",
+          fill: "black",
+        }),
+        path({
+          d: "M 15 30 Q 25 40, 35 30",
+          stroke: "black",
+          "stroke-width": "2",
+          fill: "transparent",
+        })
+      );
+      expect(dom.outerHTML).toBe(
+        '<svg width="16px" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" stroke="black" stroke-width="2" fill="yellow"></circle><circle cx="16" cy="20" r="2" stroke="black" stroke-width="2" fill="black"></circle><circle cx="34" cy="20" r="2" stroke="black" stroke-width="2" fill="black"></circle><path d="M 15 30 Q 25 40, 35 30" stroke="black" stroke-width="2" fill="transparent"></path></svg>'
+      );
+    });
+
+    it('should create math elements', () => {
+      const { math, mi, mn, mo, mrow, msup } = van.tags("http://www.w3.org/1998/Math/MathML")
+      const dom = math(msup(mi("e"), mrow(mi("i"), mi("π"))), mo("+"), mn("1"), mo("="), mn("0"))
+      expect(dom.outerHTML).toBe('<math><msup><mi>e</mi><mrow><mi>i</mi><mi>π</mi></mrow></msup><mo>+</mo><mn>1</mn><mo>=</mo><mn>0</mn></math>')
+    })
   });
 });
