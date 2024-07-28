@@ -1,4 +1,4 @@
-import van from "./van";
+import van, { State } from "./van";
 
 const {
   a,
@@ -1336,5 +1336,224 @@ describe("van", () => {
       await sleep(waitMsForDerivations)
       expect(hiddenDom.innerHTML).toBe("10")
   });
+  });
+
+  describe("gc", () => {
+    it("should bind basic state and derived state", async () => {
+      const hiddenDom = createHiddenDom();
+      const counter = van.state(0);
+      const bindingsPropKey = Object.entries(counter).find(([_, v]) =>
+        Array.isArray(v)
+      )![0];
+
+      van.add(hiddenDom, () => span(`Counter: ${counter.val}`));
+
+      for (let i = 0; i < 100; ++i) ++counter.val!;
+      await sleep(waitMsForDerivations);
+
+      expect(hiddenDom.innerHTML).toBe("<span>Counter: 100</span>");
+      expect(Object(counter)[bindingsPropKey]).toHaveLength(2);
+    });
+
+    it("should clean up nested bindings", async () => {
+      const hiddenDom = createHiddenDom();
+      const renderPre = van.state(false),
+        text = van.state("Text");
+      const bindingsPropKey = Object.entries(renderPre).find(([_, v]) =>
+        Array.isArray(v)
+      )![0];
+      const dom = div(() =>
+        (renderPre.val ? pre : div)(() => `--${text.val}--`)
+      );
+      van.add(hiddenDom, dom);
+
+      for (let i = 0; i < 20; ++i) {
+        renderPre.val = !renderPre.val;
+        await sleep(waitMsForDerivations);
+      }
+
+      // Wait until GC kicks in
+      await sleep(1000);
+
+      expect(Object(renderPre)[bindingsPropKey]).toHaveLength(1);
+      expect(Object(text)[bindingsPropKey]).toHaveLength(1);
+    });
+
+    it("should clean up conditional bindings", async () => {
+      const hiddenDom = createHiddenDom();
+      const cond = van.state(true);
+      const a = van.state(0),
+        b = van.state(0),
+        c = van.state(0),
+        d = van.state(0);
+      const bindingsPropKey = Object.entries(cond).find(([_, v]) =>
+        Array.isArray(v)
+      )![0];
+      const dom = div(() => (cond.val ? a.val! + b.val! : c.val! + d.val!));
+      van.add(hiddenDom, dom);
+
+      const allStates: State<number | boolean>[] = [cond, a, b, c, d];
+      for (let i = 0; i < 100; ++i) {
+        const randomState =
+          allStates[Math.floor(Math.random() * allStates.length)];
+        if (randomState === cond) randomState.val = !randomState.val;
+        else ++(<State<number>>randomState).val!;
+        await sleep(waitMsForDerivations);
+      }
+
+      allStates.every((s) => {
+        expect(Object(s)[bindingsPropKey].length).toBeGreaterThanOrEqual(1);
+        expect(Object(s)[bindingsPropKey].length).toBeLessThanOrEqual(15);
+      });
+
+      // Wait until GC kicks in
+      await sleep(1000);
+      allStates.every((s) =>
+        expect(Object(s)[bindingsPropKey]).toHaveLength(1)
+      );
+    });
+
+    it("should correctly call derived state function", async () => {
+      const history: any[] = [];
+      const a = van.state(0);
+      const listenersPropKey = Object.entries(a).filter(([_, v]) =>
+        Array.isArray(v)
+      )[1][0];
+
+      van.derive(() => history.push(a.val));
+
+      for (let i = 0; i < 100; ++i) {
+        ++a.val!;
+        await sleep(waitMsForDerivations);
+      }
+
+      expect(history.length).toBe(101);
+      expect(Object(a)[listenersPropKey]).toHaveLength(2);
+    });
+
+    it("should clean up derived state function", async () => {
+      const hiddenDom = createHiddenDom();
+      const renderPre = van.state(false),
+        prefix = van.state("Prefix");
+      const bindingsPropKey = Object.entries(renderPre).find(([_, v]) =>
+        Array.isArray(v)
+      )![0];
+      const listenersPropKey = Object.entries(renderPre).filter(([_, v]) =>
+        Array.isArray(v)
+      )[1][0];
+      const dom = div(() => {
+        const text = van.derive(() => `${prefix.val} - Suffix`);
+        return (renderPre.val ? pre : div)(() => `--${text.val}--`);
+      });
+      van.add(hiddenDom, dom);
+
+      for (let i = 0; i < 20; ++i) {
+        renderPre.val = !renderPre.val;
+        await sleep(waitMsForDerivations);
+      }
+
+      // Wait until GC kicks in
+      await sleep(1000);
+
+      expect(Object(renderPre)[bindingsPropKey]).toHaveLength(1);
+      expect(Object(prefix)[listenersPropKey]).toHaveLength(1);
+    });
+
+    it("should clean up derived state in props", async () => {
+      const hiddenDom = createHiddenDom();
+      const renderPre = van.state(false),
+        class1 = van.state(true);
+      const bindingsPropKey = Object.entries(renderPre).find(([_, v]) =>
+        Array.isArray(v)
+      )![0];
+      const listenersPropKey = Object.entries(renderPre).filter(([_, v]) =>
+        Array.isArray(v)
+      )[1][0];
+      const dom = div(() =>
+        (renderPre.val ? pre : div)(
+          { class: () => (class1.val ? "class1" : "class2") },
+          "Text"
+        )
+      );
+      van.add(hiddenDom, dom);
+
+      for (let i = 0; i < 20; ++i) {
+        renderPre.val = !renderPre.val;
+        await sleep(waitMsForDerivations);
+      }
+
+      // Wait until GC kicks in
+      await sleep(1000);
+
+      expect(Object(renderPre)[bindingsPropKey]).toHaveLength(1);
+      expect(Object(class1)[listenersPropKey]).toHaveLength(1);
+    });
+
+    it("should clean up derived state as event handler", async () => {
+      const hiddenDom = createHiddenDom();
+      const renderPre = van.state(false),
+        handlerType = van.state(1);
+      const bindingsPropKey = Object.entries(renderPre).find(([_, v]) =>
+        Array.isArray(v)
+      )![0];
+      const listenersPropKey = Object.entries(renderPre).filter(([_, v]) =>
+        Array.isArray(v)
+      )[1][0];
+      const dom = div(() =>
+        (renderPre.val ? pre : div)(
+          button({
+            oncustom: van.derive(() =>
+              handlerType.val === 1
+                ? () => van.add(hiddenDom, p("Handler 1 triggered!"))
+                : () => van.add(hiddenDom, p("Handler 2 triggered!"))
+            ),
+          })
+        )
+      );
+      van.add(hiddenDom, dom);
+
+      for (let i = 0; i < 20; ++i) {
+        renderPre.val = !renderPre.val;
+        await sleep(waitMsForDerivations);
+      }
+
+      // Wait until GC kicks in
+      await sleep(1000);
+
+      expect(Object(renderPre)[bindingsPropKey]).toHaveLength(1);
+      expect(Object(handlerType)[listenersPropKey]).toHaveLength(1);
+    });
+
+    it("should clean up conditionally derived states", async () => {
+      const cond = van.state(true);
+      const a = van.state(0),
+        b = van.state(0),
+        c = van.state(0),
+        d = van.state(0);
+      const listenersPropKey = Object.entries(a).filter(([_, v]) =>
+        Array.isArray(v)
+      )[1][0];
+      van.derive(() => (cond.val ? a.val! + b.val! : c.val! + d.val!));
+
+      const allStates: State<number | boolean>[] = [cond, a, b, c, d];
+      for (let i = 0; i < 100; ++i) {
+        const randomState =
+          allStates[Math.floor(Math.random() * allStates.length)];
+        if (randomState === cond) randomState.val = !randomState.val;
+        else ++(<State<number>>randomState).val!;
+      }
+
+      allStates.every((s) => {
+        expect(Object(s)[listenersPropKey].length).toBeGreaterThanOrEqual(1);
+        expect(Object(s)[listenersPropKey].length).toBeLessThanOrEqual(10);
+      });
+
+      // Wait until GC kicks in
+      await sleep(1000);
+      allStates.every((s) => {
+        expect(Object(s)[listenersPropKey].length).toBeGreaterThanOrEqual(1);
+        expect(Object(s)[listenersPropKey].length).toBeLessThanOrEqual(4);
+      });
+    });
   });
 });
