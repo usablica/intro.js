@@ -509,4 +509,128 @@ describe("van", () => {
       expect(dom.outerHTML).toBe('<math><msup><mi>e</mi><mrow><mi>i</mi><mi>π</mi></mrow></msup><mo>+</mo><mn>1</mn><mo>=</mo><mn>0</mn></math>')
     })
   });
+
+  describe('add', () => {
+    it("should add elements to the document", () => {
+      const dom = ul();
+      expect(van.add(dom, li("Item 1"), li("Item 2"))).toBe(dom);
+      expect(dom.outerHTML).toBe("<ul><li>Item 1</li><li>Item 2</li></ul>");
+      expect(van.add(dom, li("Item 3"), li("Item 4"), li("Item 5"))).toBe(dom);
+      expect(dom.outerHTML).toBe(
+        "<ul><li>Item 1</li><li>Item 2</li><li>Item 3</li><li>Item 4</li><li>Item 5</li></ul>"
+      );
+      // No-op if no children specified
+      expect(van.add(dom)).toBe(dom);
+      expect(dom.outerHTML).toBe(
+        "<ul><li>Item 1</li><li>Item 2</li><li>Item 3</li><li>Item 4</li><li>Item 5</li></ul>"
+      );
+    });
+
+    it('should add nested elements', () => {
+      const dom = ul()
+      expect(van.add(dom, [li("Item 1"), li("Item 2")])).toBe(dom)
+      expect(dom.outerHTML).toBe("<ul><li>Item 1</li><li>Item 2</li></ul>")
+    });
+
+    it('should add deeply nested elements', () => {
+      const dom = ul();
+      van.add(dom, [li("Item 1"), li("Item 2")]);
+      // Deeply nested
+      expect(van.add(dom, [[li("Item 3"), [li("Item 4")]], li("Item 5")])).toBe(dom)
+      expect(dom.outerHTML).toBe("<ul><li>Item 1</li><li>Item 2</li><li>Item 3</li><li>Item 4</li><li>Item 5</li></ul>")
+    });
+
+    it('should ignore empty array', () => {
+      const dom = ul()
+      van.add(dom, [li("Item 1"), li("Item 2")]);
+      // No-op if no children specified
+      expect(van.add(dom, [[[]]])).toBe(dom)
+      expect(dom.outerHTML).toBe("<ul><li>Item 1</li><li>Item 2</li></ul>")
+    });
+
+    it('should ignore null or undefined children', () => {
+      const dom = ul()
+      expect(
+        van.add(dom, li("Item 1"), li("Item 2"), undefined, li("Item 3"), null)
+      ).toBe(dom);
+      expect(dom.outerHTML).toBe(
+        "<ul><li>Item 1</li><li>Item 2</li><li>Item 3</li></ul>"
+      );
+      expect(
+        van.add(dom, [
+          li("Item 4"),
+          li("Item 5"),
+          undefined,
+          li("Item 6"),
+          null,
+        ])
+      ).toBe(dom);
+      expect(dom.outerHTML).toBe(
+        "<ul><li>Item 1</li><li>Item 2</li><li>Item 3</li><li>Item 4</li><li>Item 5</li><li>Item 6</li></ul>"
+      );
+    });
+
+    it('should ignore nested null or undefined children', () => {
+      const dom = ul()
+      van.add(dom, li("Item 1"), li("Item 2"), undefined, li("Item 3"), null);
+      van.add(dom, [li("Item 4"), li("Item 5"), undefined, li("Item 6"), null]);
+      expect(
+        van.add(dom, [
+          [undefined, li("Item 7"), null, [li("Item 8")]],
+          null,
+          li("Item 9"),
+          undefined,
+        ])
+      ).toBe(dom);
+      expect(dom.outerHTML).toBe(
+        "<ul><li>Item 1</li><li>Item 2</li><li>Item 3</li><li>Item 4</li><li>Item 5</li><li>Item 6</li><li>Item 7</li><li>Item 8</li><li>Item 9</li></ul>"
+      );
+    });
+
+    it('should add children as connected state', async () => {
+      const hiddenDom = createHiddenDom();
+      const line2 = van.state(<string | null>"Line 2")
+      expect(van.add(hiddenDom,
+        pre("Line 1"),
+        pre(line2),
+        pre("Line 3")
+      )).toBe(hiddenDom)
+      expect(hiddenDom.outerHTML).toBe('<div class="hidden"><pre>Line 1</pre><pre>Line 2</pre><pre>Line 3</pre></div>')
+
+      line2.val = "Line 2: Extra Stuff"
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.outerHTML).toBe('<div class="hidden"><pre>Line 1</pre><pre>Line 2: Extra Stuff</pre><pre>Line 3</pre></div>')
+
+      // null to remove text DOM
+      line2.val = null
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.outerHTML).toBe('<div class="hidden"><pre>Line 1</pre><pre></pre><pre>Line 3</pre></div>')
+
+      // Resetting the state won't bring the text DOM back
+      line2.val = "Line 2"
+      await sleep(waitMsForDerivations)
+      expect(hiddenDom.outerHTML).toBe('<div class="hidden"><pre>Line 1</pre><pre></pre><pre>Line 3</pre></div>')
+    });
+
+    it('should not change children when state is disconnected', async () => {
+      const line2 = van.state(<string | null>"Line 2")
+      const dom = div()
+      expect(van.add(dom,
+        pre("Line 1"),
+        pre(line2),
+        pre("Line 3")
+      )).toBe(dom)
+      expect(dom.outerHTML).toBe("<div><pre>Line 1</pre><pre>Line 2</pre><pre>Line 3</pre></div>")
+
+      line2.val = "Line 2: Extra Stuff"
+      await sleep(waitMsForDerivations)
+      // Content won't change as dom is not connected to document
+      expect(dom.outerHTML).toBe("<div><pre>Line 1</pre><pre>Line 2</pre><pre>Line 3</pre></div>")
+
+      line2.val = null
+      await sleep(waitMsForDerivations)
+      // Content won't change as dom is not connected to document
+      expect(dom.outerHTML).toBe("<div><pre>Line 1</pre><pre>Line 2</pre><pre>Line 3</pre></div>")
+    });
+  });
 });
