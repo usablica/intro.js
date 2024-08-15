@@ -670,6 +670,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
         tour.getOption("buttonClass"),
         previousButtonClassName
       );
+      prevTooltipButton.innerHTML = tour.getOption("prevLabel");
     }
 
     if (tour.getOption("hideNext") === true) {
