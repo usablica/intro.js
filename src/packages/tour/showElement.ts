@@ -659,6 +659,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
           previousButtonClassName,
           disabledButtonClassName
         );
+        prevTooltipButton.innerHTML = tour.getOption("prevLabel");
       }
     }
   } else if (tour.isLastStep() || tour.getSteps().length === 1) {
@@ -711,6 +712,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
         tour.getOption("buttonClass"),
         previousButtonClassName
       );
+      prevTooltipButton.innerHTML = tour.getOption("prevLabel");
     }
     if (nextTooltipButton) {
       setClass(
