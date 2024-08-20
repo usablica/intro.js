@@ -2,6 +2,9 @@
   "compilerOptions": {
     "target": "es2015",
     "allowSyntheticDefaultImports": true,
+    "moduleResolution": "Bundler",
+    "importHelpers": true,
+    "resolveJsonModule": true,
     "allowJs": true,
     "alwaysStrict": true,
     "sourceMap": true,

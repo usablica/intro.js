@@ -174,13 +174,6 @@ export const placeTooltip = (
     width: number;
     height: number;
   };
-  let targetOffset: {
-    top: number;
-    left: number;
-    width: number;
-    height: number;
-  };
-  let windowSize: { width: number; height: number };
 
   //reset the old style
   tooltipLayer.style.top = "";
@@ -207,9 +200,9 @@ export const placeTooltip = (
   }
 
   let tooltipLayerStyleLeft: number;
-  targetOffset = getOffset(targetElement as HTMLElement);
+  let targetOffset = getOffset(targetElement as HTMLElement);
   tooltipOffset = getOffset(tooltipLayer);
-  windowSize = getWindowSize();
+  let windowSize = getWindowSize();
 
   addClass(tooltipLayer, `introjs-${position}`);
 
