@@ -4,7 +4,6 @@ import van, { ChildDom, State } from "../dom/van";
 import {
   arrowClassName,
   tooltipClassName,
-  tooltipTextClassName,
 } from "../tour/classNames";
 import { determineAutoPosition, TooltipPosition } from "./tooltipPosition";
 
@@ -301,8 +300,8 @@ const alignTooltip = (
 };
 
 export type TooltipProps = {
-  position: TooltipPosition;
-  targetOffset: Offset;
+  position: State<TooltipPosition>;
+  targetOffset: State<Offset>;
   hintMode: boolean;
   showStepNumbers: boolean;
 
@@ -313,7 +312,7 @@ export type TooltipProps = {
 
 export const Tooltip = (
   {
-    position: initialPosition,
+    position,
     targetOffset,
     hintMode = false,
     showStepNumbers = false,
@@ -324,7 +323,6 @@ export const Tooltip = (
   }: TooltipProps,
   children?: ChildDom[]
 ) => {
-  const position = van.state<TooltipPosition>(initialPosition);
   const top = van.state<string>("auto");
   const right = van.state<string>("auto");
   const bottom = van.state<string>("auto");
@@ -337,7 +335,7 @@ export const Tooltip = (
   const tooltipWidth = van.state<number>(300);
   const windowSize = getWindowSize();
   const tooltipBottomOverflow = van.derive(
-    () => targetOffset.top + tooltipHeight.val! > windowSize.height
+    () => targetOffset.val!.top + tooltipHeight.val! > windowSize.height
   );
 
   van.derive(() => {
@@ -350,7 +348,7 @@ export const Tooltip = (
     ) {
       position.val = determineAutoPosition(
         positionPrecedence,
-        targetOffset,
+        targetOffset.val!,
         tooltipWidth.val,
         tooltipHeight.val,
         position.val
@@ -367,7 +365,7 @@ export const Tooltip = (
     ) {
       alignTooltip(
         position.val,
-        targetOffset,
+        targetOffset.val!,
         tooltipWidth.val,
         tooltipHeight.val,
         top,

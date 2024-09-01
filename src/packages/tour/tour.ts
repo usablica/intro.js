@@ -21,6 +21,7 @@ import { getContainerElement } from "../../util/containerElement";
 import DOMEvent from "../../util/DOMEvent";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
+import van from "../dom/van";
 
 /**
  * Intro.js Tour class
@@ -28,6 +29,7 @@ import onResize from "./onResize";
 export class Tour implements Package<TourOptions> {
   private _steps: TourStep[] = [];
   private _currentStep: number = -1;
+  public currentStepSignal = van.state<number>(-1);
   private _direction: "forward" | "backward";
   private readonly _targetElement: HTMLElement;
   private _options: TourOptions;
@@ -186,6 +188,7 @@ export class Tour implements Package<TourOptions> {
       this._direction = "backward";
     }
 
+    this.currentStepSignal.val = step;
     this._currentStep = step;
     return this;
   }
@@ -225,6 +228,7 @@ export class Tour implements Package<TourOptions> {
    * Go to the next step of the tour
    */
   async nextStep() {
+    this.currentStepSignal.val! += 1;
     await nextStep(this);
     return this;
   }

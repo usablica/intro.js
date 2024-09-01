@@ -41,6 +41,9 @@ import {
 } from "../../util/queryElement";
 import { setPositionRelativeToStep } from "./position";
 import getPropValue from "../../util/getPropValue";
+import { TourTooltip } from "./tourTooltip";
+import getOffset from "../..//util/getOffset";
+import van from "../dom/van";
 
 /**
  * Gets the current progress percentage
@@ -263,9 +266,6 @@ export default async function _showElement(tour: Tour, step: TourStep) {
   );
 
   let highlightClass = helperLayerClassName;
-  let nextTooltipButton: HTMLElement;
-  let prevTooltipButton: HTMLElement;
-  let skipTooltipButton: HTMLElement;
 
   //check for a current step highlight class
   if (typeof step.highlightClass === "string") {
@@ -282,31 +282,8 @@ export default async function _showElement(tour: Tour, step: TourStep) {
       tooltipTextClassName,
       oldReferenceLayer
     );
-    const oldTooltipTitleLayer = getElementByClassName(
-      tooltipTitleClassName,
-      oldReferenceLayer
-    );
-    const oldArrowLayer = getElementByClassName(
-      arrowClassName,
-      oldReferenceLayer
-    );
     const oldTooltipContainer = getElementByClassName(
       tooltipClassName,
-      oldReferenceLayer
-    );
-
-    skipTooltipButton = getElementByClassName(
-      skipButtonClassName,
-      oldReferenceLayer
-    );
-
-    prevTooltipButton = getElementByClassName(
-      previousButtonClassName,
-      oldReferenceLayer
-    );
-
-    nextTooltipButton = getElementByClassName(
-      nextButtonClassName,
       oldReferenceLayer
     );
 
@@ -346,61 +323,9 @@ export default async function _showElement(tour: Tour, step: TourStep) {
       window.clearTimeout(_lastShowElementTimer);
     }
 
-    const oldHelperNumberLayer = queryElementByClassName(
-      helperNumberLayerClassName,
-      oldReferenceLayer
-    );
-
     _lastShowElementTimer = window.setTimeout(() => {
-      // set current step to the label
-      if (oldHelperNumberLayer !== null) {
-        oldHelperNumberLayer.innerHTML = `${step.step} ${tour.getOption(
-          "stepNumbersOfLabel"
-        )} ${tour.getSteps().length}`;
-      }
-
-      // set current tooltip text
-      oldTooltipLayer.innerHTML = step.intro || "";
-
-      // set current tooltip title
-      oldTooltipTitleLayer.innerHTML = step.title || "";
-
-      //set the tooltip position
-      oldTooltipContainer.style.display = "block";
-      placeTooltip(
-        oldTooltipContainer,
-        oldArrowLayer,
-        step.element as HTMLElement,
-        step.position,
-        tour.getOption("positionPrecedence"),
-        tour.getOption("showStepNumbers"),
-        tour.getOption("autoPosition"),
-        step.tooltipClass ?? tour.getOption("tooltipClass")
-      );
-
-      //change active bullet
-      _updateBullets(tour.getOption("showBullets"), oldReferenceLayer, step);
-
-      _updateProgressBar(
-        oldReferenceLayer,
-        tour.getCurrentStep(),
-        tour.getSteps().length
-      );
-
       //show the tooltip
       oldTooltipContainer.style.opacity = "1";
-
-      //reset button focus
-      if (
-        nextTooltipButton &&
-        new RegExp(doneButtonClassName, "gi").test(nextTooltipButton.className)
-      ) {
-        // skip button is now "done" button
-        nextTooltipButton.focus();
-      } else if (nextTooltipButton) {
-        //still in the tour, focus on next
-        nextTooltipButton.focus();
-      }
 
       // change the scroll of the window, if needed
       scrollTo(
@@ -420,23 +345,6 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     const referenceLayer = createElement("div", {
       className: tooltipReferenceLayerClassName,
     });
-    const arrowLayer = createElement("div", {
-      className: arrowClassName,
-    });
-    const tooltipLayer = createElement("div", {
-      className: tooltipClassName,
-    });
-    const tooltipTextLayer = createElement("div", {
-      className: tooltipTextClassName,
-    });
-    const tooltipHeaderLayer = createElement("div", {
-      className: tooltipHeaderClassName,
-    });
-    const tooltipTitleLayer = createElement("h1", {
-      className: tooltipTitleClassName,
-    });
-
-    const buttonsLayer = createElement("div");
 
     setStyle(helperLayer, {
       // the inner box shadow is the border for the highlighted element
@@ -471,136 +379,75 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     appendChild(tour.getTargetElement(), helperLayer, true);
     appendChild(tour.getTargetElement(), referenceLayer);
 
-    tooltipTextLayer.innerHTML = step.intro;
-    tooltipTitleLayer.innerHTML = step.title;
+    const tooltip = TourTooltip({
+      positionPrecedence: tour.getOption("positionPrecedence"),
+      autoPosition: tour.getOption("autoPosition"),
+      showStepNumbers: tour.getOption("showStepNumbers"),
 
-    setClass(buttonsLayer, tooltipButtonsClassName);
+      steps: tour.getSteps(),
+      currentStep: tour.currentStepSignal,
 
-    if (tour.getOption("showButtons") === false) {
-      buttonsLayer.style.display = "none";
-    }
+      onBulletClick: (stepNumber: number) => {
+        tour.goToStep(stepNumber);
+      },
 
-    tooltipHeaderLayer.appendChild(tooltipTitleLayer);
-    tooltipLayer.appendChild(tooltipHeaderLayer);
-    tooltipLayer.appendChild(tooltipTextLayer);
+      bullets: tour.getOption("showBullets"),
 
-    // "Do not show again" checkbox
-    if (tour.getOption("dontShowAgain")) {
-      const dontShowAgainWrapper = createElement("div", {
-        className: dontShowAgainClassName,
-      });
-      const dontShowAgainCheckbox = createElement("input", {
-        type: "checkbox",
-        id: dontShowAgainClassName,
-        name: dontShowAgainClassName,
-      });
-      dontShowAgainCheckbox.onchange = (e) => {
-        tour.setDontShowAgain((<HTMLInputElement>e.target).checked);
-      };
-      const dontShowAgainCheckboxLabel = createElement("label", {
-        htmlFor: dontShowAgainClassName,
-      });
-      dontShowAgainCheckboxLabel.innerText =
-        tour.getOption("dontShowAgainLabel");
-      dontShowAgainWrapper.appendChild(dontShowAgainCheckbox);
-      dontShowAgainWrapper.appendChild(dontShowAgainCheckboxLabel);
+      buttons: tour.getOption("showButtons"),
+      nextLabel: "Next",
+      onNextClick: async (e: any) => {
+        if (!tour.isLastStep()) {
+          await nextStep(tour);
+        } else if (
+          new RegExp(doneButtonClassName, "gi").test(
+            (e.target as HTMLElement).className
+          )
+        ) {
+          await tour
+            .callback("complete")
+            ?.call(tour, tour.getCurrentStep(), "done");
 
-      tooltipLayer.appendChild(dontShowAgainWrapper);
-    }
+          await tour.exit();
+        }
+      },
+      prevLabel: tour.getOption("prevLabel"),
+      onPrevClick: async () => {
+        if (tour.getCurrentStep() > 0) {
+          await previousStep(tour);
+        }
+      },
+      skipLabel: tour.getOption("skipLabel"),
+      onSkipClick: async () => {
+        if (tour.isLastStep()) {
+          await tour
+            .callback("complete")
+            ?.call(tour, tour.getCurrentStep(), "skip");
+        }
 
-    tooltipLayer.appendChild(_createBullets(tour, step));
-    tooltipLayer.appendChild(_createProgressBar(tour));
-
-    // add helper layer number
-    const helperNumberLayer = createElement("div");
-
-    if (tour.getOption("showStepNumbers") === true) {
-      setClass(helperNumberLayer, helperNumberLayerClassName);
-
-      helperNumberLayer.innerHTML = `${step.step} ${tour.getOption(
-        "stepNumbersOfLabel"
-      )} ${tour.getSteps().length}`;
-      tooltipLayer.appendChild(helperNumberLayer);
-    }
-
-    tooltipLayer.appendChild(arrowLayer);
-    referenceLayer.appendChild(tooltipLayer);
-
-    //next button
-    nextTooltipButton = createElement("a");
-
-    nextTooltipButton.onclick = async () => {
-      if (!tour.isLastStep()) {
-        await nextStep(tour);
-      } else if (
-        new RegExp(doneButtonClassName, "gi").test(nextTooltipButton.className)
-      ) {
-        await tour
-          .callback("complete")
-          ?.call(tour, tour.getCurrentStep(), "done");
+        await tour.callback("skip")?.call(tour, tour.getCurrentStep());
 
         await tour.exit();
-      }
-    };
+      },
+      buttonClass: tour.getOption("buttonClass"),
+      nextToDone: tour.getOption("nextToDone"),
+      doneLabel: tour.getOption("doneLabel"),
+      hideNext: tour.getOption("hideNext"),
+      hidePrev: tour.getOption("hidePrev"),
 
-    setAnchorAsButton(nextTooltipButton);
-    nextTooltipButton.innerHTML = tour.getOption("nextLabel");
+      progress: tour.getOption("showProgress"),
+      progressBarAdditionalClass: tour.getOption("progressBarAdditionalClass"),
 
-    //previous button
-    prevTooltipButton = createElement("a");
+      stepNumbers: tour.getOption("showStepNumbers"),
+      stepNumbersOfLabel: tour.getOption("stepNumbersOfLabel"),
 
-    prevTooltipButton.onclick = async () => {
-      if (tour.getCurrentStep() > 0) {
-        await previousStep(tour);
-      }
-    };
-
-    setAnchorAsButton(prevTooltipButton);
-    prevTooltipButton.innerHTML = tour.getOption("prevLabel");
-
-    //skip button
-    skipTooltipButton = createElement("a", {
-      className: skipButtonClassName,
+      dontShowAgain: tour.getOption("dontShowAgain"),
+      onDontShowAgainChange: (e: any) => {
+        tour.setDontShowAgain((<HTMLInputElement>e.target).checked);
+      },
+      dontShowAgainLabel: tour.getOption("dontShowAgainLabel"),
     });
 
-    setAnchorAsButton(skipTooltipButton);
-    skipTooltipButton.innerHTML = tour.getOption("skipLabel");
-
-    skipTooltipButton.onclick = async () => {
-      if (tour.isLastStep()) {
-        await tour
-          .callback("complete")
-          ?.call(tour, tour.getCurrentStep(), "skip");
-      }
-
-      await tour.callback("skip")?.call(tour, tour.getCurrentStep());
-
-      await tour.exit();
-    };
-
-    tooltipHeaderLayer.appendChild(skipTooltipButton);
-
-    // in order to prevent displaying previous button always
-    if (tour.getSteps().length > 1) {
-      buttonsLayer.appendChild(prevTooltipButton);
-    }
-
-    // we always need the next button because this
-    // button changes to "Done" in the last step of the tour
-    buttonsLayer.appendChild(nextTooltipButton);
-    tooltipLayer.appendChild(buttonsLayer);
-
-    // set proper position
-    placeTooltip(
-      tooltipLayer,
-      arrowLayer,
-      step.element as HTMLElement,
-      step.position,
-      tour.getOption("positionPrecedence"),
-      tour.getOption("showStepNumbers"),
-      tour.getOption("autoPosition"),
-      step.tooltipClass ?? tour.getOption("tooltipClass")
-    );
+    referenceLayer.appendChild(tooltip);
 
     // change the scroll of the window, if needed
     scrollTo(
@@ -608,7 +455,7 @@ export default async function _showElement(tour: Tour, step: TourStep) {
       step.scrollTo,
       tour.getOption("scrollPadding"),
       step.element as HTMLElement,
-      tooltipLayer
+      tooltip
     );
 
     //end of new element if-else condition
@@ -626,115 +473,6 @@ export default async function _showElement(tour: Tour, step: TourStep) {
   //disable interaction
   if (step.disableInteraction) {
     _disableInteraction(tour, step);
-  }
-
-  // when it's the first step of tour
-  if (tour.getCurrentStep() === 0 && tour.getSteps().length > 1) {
-    if (nextTooltipButton) {
-      setClass(
-        nextTooltipButton,
-        tour.getOption("buttonClass"),
-        nextButtonClassName
-      );
-      nextTooltipButton.innerHTML = tour.getOption("nextLabel");
-    }
-
-    if (tour.getOption("hidePrev") === true) {
-      if (prevTooltipButton) {
-        setClass(
-          prevTooltipButton,
-          tour.getOption("buttonClass"),
-          previousButtonClassName,
-          hiddenButtonClassName
-        );
-      }
-      if (nextTooltipButton) {
-        addClass(nextTooltipButton, fullButtonClassName);
-      }
-    } else {
-      if (prevTooltipButton) {
-        setClass(
-          prevTooltipButton,
-          tour.getOption("buttonClass"),
-          previousButtonClassName,
-          disabledButtonClassName
-        );
-      }
-    }
-  } else if (tour.isLastStep() || tour.getSteps().length === 1) {
-    // last step of tour
-    if (prevTooltipButton) {
-      setClass(
-        prevTooltipButton,
-        tour.getOption("buttonClass"),
-        previousButtonClassName
-      );
-    }
-
-    if (tour.getOption("hideNext") === true) {
-      if (nextTooltipButton) {
-        setClass(
-          nextTooltipButton,
-          tour.getOption("buttonClass"),
-          nextButtonClassName,
-          hiddenButtonClassName
-        );
-      }
-      if (prevTooltipButton) {
-        addClass(prevTooltipButton, fullButtonClassName);
-      }
-    } else {
-      if (nextTooltipButton) {
-        if (tour.getOption("nextToDone") === true) {
-          nextTooltipButton.innerHTML = tour.getOption("doneLabel");
-          addClass(
-            nextTooltipButton,
-            tour.getOption("buttonClass"),
-            nextButtonClassName,
-            doneButtonClassName
-          );
-        } else {
-          setClass(
-            nextTooltipButton,
-            tour.getOption("buttonClass"),
-            nextButtonClassName,
-            disabledButtonClassName
-          );
-        }
-      }
-    }
-  } else {
-    // steps between start and end
-    if (prevTooltipButton) {
-      setClass(
-        prevTooltipButton,
-        tour.getOption("buttonClass"),
-        previousButtonClassName
-      );
-    }
-    if (nextTooltipButton) {
-      setClass(
-        nextTooltipButton,
-        tour.getOption("buttonClass"),
-        nextButtonClassName
-      );
-      nextTooltipButton.innerHTML = tour.getOption("nextLabel");
-    }
-  }
-
-  if (prevTooltipButton) {
-    prevTooltipButton.setAttribute("role", "button");
-  }
-  if (nextTooltipButton) {
-    nextTooltipButton.setAttribute("role", "button");
-  }
-  if (skipTooltipButton) {
-    skipTooltipButton.setAttribute("role", "button");
-  }
-
-  //Set focus on "next" button, so that hitting Enter always moves you onto the next step
-  if (nextTooltipButton) {
-    nextTooltipButton.focus();
   }
 
   setShowElement(step.element as HTMLElement);

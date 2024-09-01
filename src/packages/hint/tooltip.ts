@@ -13,6 +13,7 @@ import { setPositionRelativeTo } from "../../util/setPositionRelativeTo";
 import DOMEvent from "../../util/DOMEvent";
 import getOffset from "../../util/getOffset";
 import { HintTooltip } from "./hintTooltip";
+import van from "../dom/van";
 
 // The hint close function used when the user clicks outside the hint
 let _hintCloseFunction: () => void | undefined;
@@ -90,9 +91,9 @@ export async function showHintDialog(hint: Hint, stepId: number) {
   if (!hintItem) return;
 
   const tooltipLayer = HintTooltip({
-    position: hintItem.position,
+    position: van.state(hintItem.position),
     text: item.hint || "",
-    targetOffset: getOffset(hintItem.element as HTMLElement),
+    targetOffset: van.state(getOffset(hintItem.element as HTMLElement)),
     // hints don't have step numbers
     showStepNumbers: false,
 
