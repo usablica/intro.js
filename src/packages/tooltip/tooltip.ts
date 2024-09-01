@@ -1,6 +1,6 @@
 import getOffset, { Offset } from "../../util/getOffset";
 import getWindowSize from "../../util/getWindowSize";
-import van, { State } from "../dom/van";
+import van, { ChildDom, State } from "../dom/van";
 import {
   arrowClassName,
   tooltipClassName,
@@ -8,7 +8,7 @@ import {
 } from "../tour/classNames";
 import { determineAutoPosition, TooltipPosition } from "./tooltipPosition";
 
-const { div, p, a } = van.tags;
+const { div, p } = van.tags;
 
 export const TooltipArrow = (props: {
   tooltipPosition: State<TooltipPosition>;
@@ -300,7 +300,7 @@ const alignTooltip = (
   }
 };
 
-type TooltipProps = {
+export type TooltipProps = {
   position: TooltipPosition;
   text: string;
   targetOffset: Offset;
@@ -310,29 +310,22 @@ type TooltipProps = {
   // auto-alignment properties
   autoPosition: boolean;
   positionPrecedence: TooltipPosition[];
-
-  closeButtonEnabled: boolean;
-  closeButtonOnClick: () => void;
-  closeButtonLabel: string;
-  closeButtonClassName: string;
 };
 
-export const Tooltip = ({
-  position: initialPosition,
-  text,
-  targetOffset,
-  hintMode = false,
-  showStepNumbers = false,
+export const Tooltip = (
+  {
+    position: initialPosition,
+    text,
+    targetOffset,
+    hintMode = false,
+    showStepNumbers = false,
 
-  // auto-alignment properties
-  autoPosition = true,
-  positionPrecedence = [],
-
-  closeButtonEnabled,
-  closeButtonOnClick,
-  closeButtonLabel,
-  closeButtonClassName,
-}: TooltipProps) => {
+    // auto-alignment properties
+    autoPosition = true,
+    positionPrecedence = [],
+  }: TooltipProps,
+  children?: ChildDom[]
+) => {
   const position = van.state<TooltipPosition>(initialPosition);
   const top = van.state<string>("auto");
   const right = van.state<string>("auto");
@@ -404,18 +397,7 @@ export const Tooltip = ({
         tooltipPosition: position,
         tooltipBottomOverflow: tooltipBottomOverflow,
       }),
-      div({ className: tooltipTextClassName }, [
-        p(text),
-        closeButtonEnabled ??
-          a(
-            {
-              className: closeButtonClassName,
-              role: "button",
-              onclick: closeButtonOnClick,
-            },
-            closeButtonLabel
-          ),
-      ]),
+      div({ className: tooltipTextClassName }, [p(text), children]),
     ]
   );
 

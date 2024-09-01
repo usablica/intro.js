@@ -11,8 +11,8 @@ import { setClass } from "../../util/className";
 import { hideHint } from "./hide";
 import { setPositionRelativeTo } from "../../util/setPositionRelativeTo";
 import DOMEvent from "../../util/DOMEvent";
-import { Tooltip } from "../tooltip/tooltip";
 import getOffset from "../../util/getOffset";
+import { HintTooltip } from "./hintTooltip";
 
 // The hint close function used when the user clicks outside the hint
 let _hintCloseFunction: () => void | undefined;
@@ -89,13 +89,12 @@ export async function showHintDialog(hint: Hint, stepId: number) {
 
   if (!hintItem) return;
 
-  const tooltipLayer = Tooltip({
+  const tooltipLayer = HintTooltip({
     position: hintItem.position,
     text: item.hint || "",
     targetOffset: getOffset(hintItem.element as HTMLElement),
     // hints don't have step numbers
     showStepNumbers: false,
-    hintMode: true,
 
     autoPosition: hint.getOption("autoPosition"),
     positionPrecedence: hint.getOption("positionPrecedence"),
