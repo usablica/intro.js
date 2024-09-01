@@ -8,7 +8,7 @@ import {
 } from "../tour/classNames";
 import { determineAutoPosition, TooltipPosition } from "./tooltipPosition";
 
-const { div, p } = van.tags;
+const { div } = van.tags;
 
 export const TooltipArrow = (props: {
   tooltipPosition: State<TooltipPosition>;
@@ -302,7 +302,6 @@ const alignTooltip = (
 
 export type TooltipProps = {
   position: TooltipPosition;
-  text: string;
   targetOffset: Offset;
   hintMode: boolean;
   showStepNumbers: boolean;
@@ -315,7 +314,6 @@ export type TooltipProps = {
 export const Tooltip = (
   {
     position: initialPosition,
-    text,
     targetOffset,
     hintMode = false,
     showStepNumbers = false,
@@ -397,7 +395,7 @@ export const Tooltip = (
         tooltipPosition: position,
         tooltipBottomOverflow: tooltipBottomOverflow,
       }),
-      div({ className: tooltipTextClassName }, [p(text), children]),
+      [children],
     ]
   );
 
