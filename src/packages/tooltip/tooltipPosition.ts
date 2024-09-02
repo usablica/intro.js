@@ -1,6 +1,6 @@
 import getWindowSize from "../../util/getWindowSize";
 import removeEntry from "../../util/removeEntry";
-import getOffset, { Offset } from "../../util/getOffset";
+import { Offset } from "../../util/getOffset";
 
 export type TooltipPosition =
   | "floating"

@@ -1,5 +1,4 @@
 import { placeTooltip } from "../../packages/tooltip";
-import { _recreateBullets, _updateProgressBar } from "./showElement";
 import { Tour } from "./tour";
 import {
   getElementByClassName,
@@ -60,8 +59,7 @@ export default function refresh(tour: Tour, refreshSteps?: boolean) {
 
   if (refreshSteps) {
     tour.setSteps(fetchSteps(tour));
-    _recreateBullets(tour, step);
-    _updateProgressBar(referenceLayer, currentStep, tour.getSteps().length);
+    // TODO: how to refresh the tooltip here? do we need to convert the steps into a state?
   }
 
   // re-align tooltip
