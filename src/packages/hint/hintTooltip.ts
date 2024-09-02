@@ -26,17 +26,20 @@ export const HintTooltip = ({
       hintMode: true,
     },
     [
-      div({ className: tooltipTextClassName }, p(text)),
-      closeButtonEnabled
-        ? a(
-            {
-              className: closeButtonClassName,
-              role: "button",
-              onclick: closeButtonOnClick,
-            },
-            closeButtonLabel
-          )
-        : null,
+      div(
+        { className: tooltipTextClassName },
+        p(text),
+        closeButtonEnabled
+          ? a(
+              {
+                className: closeButtonClassName,
+                role: "button",
+                onclick: closeButtonOnClick,
+              },
+              closeButtonLabel
+            )
+          : null
+      ),
     ]
   );
 };

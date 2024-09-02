@@ -329,6 +329,8 @@ export const Tooltip = (
   const left = van.state<string>("auto");
   const marginLeft = van.state<string>("auto");
   const marginTop = van.state<string>("auto");
+  const opacity = van.state<number>(0);
+  const display = van.state<string>("none");
   // setting a default height for the tooltip instead of 0 to avoid flickering
   const tooltipHeight = van.state<number>(150);
   // max width of the tooltip according to its CSS class
@@ -337,7 +339,10 @@ export const Tooltip = (
   const tooltipBottomOverflow = van.derive(
     () => targetOffset.val!.top + tooltipHeight.val! > windowSize.height
   );
+  const isActive = van.state(false);
+  let isActiveTimeout = 0;
 
+  // auto-align tooltip based on position precedence and target offset
   van.derive(() => {
     if (
       position.val !== "floating" &&
@@ -356,6 +361,7 @@ export const Tooltip = (
     }
   });
 
+  // align tooltip based on position and target offset
   van.derive(() => {
     if (
       tooltipWidth.val !== undefined &&
@@ -381,10 +387,26 @@ export const Tooltip = (
     }
   });
 
+  // show/hide tooltip
+  van.derive(() => {
+    if (isActive.val) {
+      display.val = "block";
+
+      // wait for the tooltip to be rendered before setting opacity
+      setTimeout(() => {
+        opacity.val = 1;
+      }, 1);
+    } else {
+      // hide the tooltip by setting display to none then opacity to 0 to avoid flickering and enable transitions
+      display.val = "none";
+      opacity.val = 0;
+    }
+  });
+
   const tooltip = div(
     {
       style: () =>
-        `top: ${top.val}; right: ${right.val}; bottom: ${bottom.val}; left: ${left.val}; margin-left: ${marginLeft.val}; margin-top: ${marginTop.val};`,
+        `top: ${top.val}; right: ${right.val}; bottom: ${bottom.val}; left: ${left.val}; margin-left: ${marginLeft.val}; margin-top: ${marginTop.val}; opacity: ${opacity.val}; display: ${display.val};`,
       className: () => `${tooltipClassName} introjs-${position.val}`,
       role: "dialog",
     },
@@ -397,14 +419,27 @@ export const Tooltip = (
     ]
   );
 
-  // wait for the tooltip to be rendered before calculating the position
-  setTimeout(() => {
-    if (tooltip) {
-      const tooltipOffset = getOffset(tooltip);
-      tooltipHeight.val = tooltipOffset.height;
-      tooltipWidth.val = tooltipOffset.width;
+  // recalculate tooltip width/height when targetOffset changes
+  // a targetOffset change means the tooltip width/height needs to be recalculated
+  van.derive(() => {
+    if (tooltip && targetOffset.val) {
+      isActive.val = false;
+
+      // wait for the tooltip to be rendered before calculating the position
+      setTimeout(() => {
+        const tooltipOffset = getOffset(tooltip);
+        tooltipHeight.val = tooltipOffset.height;
+        tooltipWidth.val = tooltipOffset.width;
+      }, 1);
+
+      setTimeout(() => {
+        isActive.val = true;
+
+        // reset the timeout to a higher value to avoid flickering
+        isActiveTimeout = 350;
+      }, isActiveTimeout);
     }
-  }, 1);
+  });
 
   return tooltip;
 };

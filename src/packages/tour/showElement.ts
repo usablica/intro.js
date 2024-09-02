@@ -282,17 +282,10 @@ export default async function _showElement(tour: Tour, step: TourStep) {
       tooltipTextClassName,
       oldReferenceLayer
     );
-    const oldTooltipContainer = getElementByClassName(
-      tooltipClassName,
-      oldReferenceLayer
-    );
+
 
     //update or reset the helper highlight class
     setClass(oldHelperLayer, highlightClass);
-
-    //hide the tooltip
-    oldTooltipContainer.style.opacity = "0";
-    oldTooltipContainer.style.display = "none";
 
     // if the target element is within a scrollable element
     scrollParentToElement(
@@ -324,9 +317,6 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     }
 
     _lastShowElementTimer = window.setTimeout(() => {
-      //show the tooltip
-      oldTooltipContainer.style.opacity = "1";
-
       // change the scroll of the window, if needed
       scrollTo(
         tour.getOption("scrollToElement"),
