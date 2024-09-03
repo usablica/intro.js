@@ -22,6 +22,7 @@ import DOMEvent from "../../util/DOMEvent";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import van from "../dom/van";
+import appendChild from "src/util/appendChild";
 
 /**
  * Intro.js Tour class
@@ -33,6 +34,7 @@ export class Tour implements Package<TourOptions> {
   private _direction: "forward" | "backward";
   private readonly _targetElement: HTMLElement;
   private _options: TourOptions;
+  private _root: HTMLElement;
 
   private readonly callbacks: {
     beforeChange?: introBeforeChangeCallback;
@@ -375,10 +377,24 @@ export class Tour implements Package<TourOptions> {
     }
   }
 
+  public appendToRoot(element: HTMLElement, animate = false) {
+    appendChild(this._root, element, animate);
+  }
+
+  private createRoot() {
+    if (!this._root) {
+      const { div } = van.tags;
+      this._root = div({ className: "introjs" });
+      this.getTargetElement().appendChild(this._root);
+    }
+  }
+
   /**
    * Starts the tour and shows the first step
    */
   async start() {
+    this.createRoot();
+
     if (await start(this)) {
       this.enableKeyboardNavigation();
       this.enableRefreshOnResize();

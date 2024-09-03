@@ -4,7 +4,7 @@ import { addClass, setClass } from "../../util/className";
 import { TourStep, nextStep, previousStep } from "./steps";
 import removeShowElement from "./removeShowElement";
 import createElement from "../../util/createElement";
-import setStyle from "../../util/setStyle";
+import setStyle, { style } from "../../util/style";
 import appendChild from "../../util/appendChild";
 import {
   disableInteractionClassName,
@@ -21,6 +21,35 @@ import {
 import { setPositionRelativeToStep } from "./position";
 import getPropValue from "../../util/getPropValue";
 import { TourTooltip } from "./tourTooltip";
+import van from "../dom/van";
+
+const { div } = van.tags;
+
+/**
+ * Add disableinteraction layer and adjust the size and position of the layer
+ *
+ * @api private
+ */
+export const _disableInteraction = (tour: Tour, step: TourStep) => {
+    let disableInteractionLayer = queryElementByClassName(
+      disableInteractionClassName
+    );
+
+    if (disableInteractionLayer === null) {
+      disableInteractionLayer = createElement("div", {
+        className: disableInteractionClassName,
+      });
+
+      tour.getTargetElement().appendChild(disableInteractionLayer);
+    }
+
+    setPositionRelativeToStep(
+      tour.getTargetElement(),
+      disableInteractionLayer,
+      step,
+      tour.getOption("helperElementPadding")
+    );
+  };
 
 /**
  * To set the show element
@@ -76,7 +105,6 @@ export default async function _showElement(tour: Tour, step: TourStep) {
       oldReferenceLayer
     );
 
-
     //update or reset the helper highlight class
     setClass(oldHelperLayer, highlightClass);
 
@@ -122,19 +150,18 @@ export default async function _showElement(tour: Tour, step: TourStep) {
 
     // end of old element if-else condition
   } else {
-    const helperLayer = createElement("div", {
+    const helperLayer = div({
       className: highlightClass,
+      style: style({
+        // the inner box shadow is the border for the highlighted element
+        // the outer box shadow is the overlay effect
+        "box-shadow": `0 0 1px 2px rgba(33, 33, 33, 0.8), rgba(33, 33, 33, ${tour
+          .getOption("overlayOpacity")
+          .toString()}) 0 0 0 5000px`,
+      }),
     });
-    const referenceLayer = createElement("div", {
+    const referenceLayer = div({
       className: tooltipReferenceLayerClassName,
-    });
-
-    setStyle(helperLayer, {
-      // the inner box shadow is the border for the highlighted element
-      // the outer box shadow is the overlay effect
-      "box-shadow": `0 0 1px 2px rgba(33, 33, 33, 0.8), rgba(33, 33, 33, ${tour
-        .getOption("overlayOpacity")
-        .toString()}) 0 0 0 5000px`,
     });
 
     // target is within a scrollable element
@@ -159,8 +186,8 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     );
 
     //add helper layer to target element
-    appendChild(tour.getTargetElement(), helperLayer, true);
-    appendChild(tour.getTargetElement(), referenceLayer);
+    tour.appendToRoot(helperLayer, true);
+    tour.appendToRoot(referenceLayer);
 
     const tooltip = TourTooltip({
       positionPrecedence: tour.getOption("positionPrecedence"),
@@ -230,7 +257,8 @@ export default async function _showElement(tour: Tour, step: TourStep) {
       dontShowAgainLabel: tour.getOption("dontShowAgainLabel"),
     });
 
-    referenceLayer.appendChild(tooltip);
+    van.add(referenceLayer, tooltip);
+    //referenceLayer.appendChild(tooltip);
 
     // change the scroll of the window, if needed
     scrollTo(
@@ -254,6 +282,11 @@ export default async function _showElement(tour: Tour, step: TourStep) {
   }
 
   setShowElement(step.element as HTMLElement);
+
+  //disable interaction
+  if (step.disableInteraction) {
+    _disableInteraction(tour, step);
+  }
 
   await tour.callback("afterChange")?.call(tour, step.element);
 }

@@ -1,13 +1,9 @@
 import getOffset from "./getOffset";
 import isFixed from "./isFixed";
 import { removeClass, addClass } from "./className";
-import setStyle from "./setStyle";
+import setStyle from "./style";
 
-/**
- * Sets the position of the element relative to the target element
- * @api private
- */
-export const setPositionRelativeTo = (
+export const getPositionRelativeTo = (
   relativeElement: HTMLElement,
   element: HTMLElement,
   targetElement: HTMLElement,
@@ -28,11 +24,33 @@ export const setPositionRelativeTo = (
 
   const position = getOffset(targetElement, relativeElement);
 
-  //set new position to helper layer
-  setStyle(element, {
+  return {
     width: `${position.width + padding}px`,
     height: `${position.height + padding}px`,
     top: `${position.top - padding / 2}px`,
     left: `${position.left - padding / 2}px`,
-  });
+  };
+};
+
+/**
+ * Sets the position of the element relative to the target element
+ * @api private
+ */
+export const setPositionRelativeTo = (
+  relativeElement: HTMLElement,
+  element: HTMLElement,
+  targetElement: HTMLElement,
+  padding: number
+) => {
+  const styles = getPositionRelativeTo(
+    relativeElement,
+    element,
+    targetElement,
+    padding
+  );
+
+  if (!styles) return;
+
+  //set new position to helper layer
+  setStyle(element, styles);
 };

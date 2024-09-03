@@ -1,4 +1,4 @@
-import { setPositionRelativeTo } from "../../util/setPositionRelativeTo";
+import { setPositionRelativeTo } from "../../util/positionRelativeTo";
 import { TourStep } from "./steps";
 
 /**

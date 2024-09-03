@@ -1,4 +1,4 @@
-import setStyle from "./setStyle";
+import setStyle from "./style";
 
 /**
  * Removes `element` from `parentElement`

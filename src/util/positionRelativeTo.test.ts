@@ -1,4 +1,4 @@
-import { setPositionRelativeTo } from "./setPositionRelativeTo";
+import { setPositionRelativeTo } from "./positionRelativeTo";
 import createElement from "./createElement";
 import { getBoundingClientRectSpy } from "../../tests/jest/helper";
 

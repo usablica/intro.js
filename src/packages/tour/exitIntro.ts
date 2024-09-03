@@ -46,11 +46,11 @@ export default async function exitIntro(
     }
   }
 
-  const referenceLayer = queryElementByClassName(
-    tooltipReferenceLayerClassName,
-    targetElement
-  );
-  removeChild(referenceLayer);
+  //const referenceLayer = queryElementByClassName(
+  //  tooltipReferenceLayerClassName,
+  //  targetElement
+  //);
+  //removeChild(referenceLayer);
 
   //remove disableInteractionLayer
   const disableInteractionLayer = queryElementByClassName(

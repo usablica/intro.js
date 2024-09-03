@@ -425,66 +425,77 @@ export const TourTooltip = ({
   dontShowAgainLabel,
   ...props
 }: TourTooltipProps) => {
-  const children = [];
-
-  const step = van.derive(() => steps[currentStep.val!]);
-  const title = van.derive(() => step.val!.title);
-  const text = van.derive(() => step.val!.intro);
-  const position = van.derive(() => step.val!.position);
-  const targetOffset = van.derive(() => getOffset(step.val!.element as HTMLElement));
-
-  children.push(Header({ title: title.val!, skipLabel, onSkipClick }));
-
-  children.push(
-      div({ className: tooltipTextClassName }, p(text)),
-);
-
-  if (dontShowAgain) {
-    children.push(DontShowAgain({ dontShowAgainLabel, onDontShowAgainChange }));
-  }
-
-  if (bullets) {
-    children.push(Bullets({ steps, currentStep, onBulletClick }));
-  }
-
-  if (progress) {
-    children.push(
-      ProgressBar({ steps, currentStep, progressBarAdditionalClass })
-    );
-  }
-
-  if (stepNumbers) {
-    children.push(StepNumber({ step: step.val!, steps, stepNumbersOfLabel }));
-  }
-
-  if (buttons) {
-    children.push(
-      Buttons({
-        steps,
-        currentStep,
-
-        nextLabel: nextLabel,
-        onNextClick: onNextClick,
-
-        prevLabel: prevLabel,
-        onPrevClick: onPrevClick,
-
-        buttonClass,
-        nextToDone,
-        doneLabel,
-        hideNext,
-        hidePrev,
-      })
-    );
-  }
-
-  return Tooltip(
-    {
-      ...props,
-      hintMode: false,
-      position,
-      targetOffset
-    },
-    children
+  const step = van.derive(() =>
+    currentStep.val !== undefined ? steps[currentStep.val] : null
   );
+
+  return () => {
+    // there is nothing to be shown if the step is not defined
+    if (!step.val) {
+      return null;
+    }
+
+    const children = [];
+    const title = van.derive(() => step.val!.title);
+    const text = van.derive(() => step.val!.intro);
+    const position = van.derive(() => step.val!.position);
+    const targetOffset = van.derive(() =>
+      getOffset(step.val!.element as HTMLElement)
+    );
+
+    children.push(Header({ title: title.val!, skipLabel, onSkipClick }));
+
+    children.push(div({ className: tooltipTextClassName }, p(text)));
+
+    if (dontShowAgain) {
+      children.push(
+        DontShowAgain({ dontShowAgainLabel, onDontShowAgainChange })
+      );
+    }
+
+    if (bullets) {
+      children.push(Bullets({ steps, currentStep, onBulletClick }));
+    }
+
+    if (progress) {
+      children.push(
+        ProgressBar({ steps, currentStep, progressBarAdditionalClass })
+      );
+    }
+
+    if (stepNumbers) {
+      children.push(StepNumber({ step: step.val!, steps, stepNumbersOfLabel }));
+    }
+
+    if (buttons) {
+      children.push(
+        Buttons({
+          steps,
+          currentStep,
+
+          nextLabel: nextLabel,
+          onNextClick: onNextClick,
+
+          prevLabel: prevLabel,
+          onPrevClick: onPrevClick,
+
+          buttonClass,
+          nextToDone,
+          doneLabel,
+          hideNext,
+          hidePrev,
+        })
+      );
+    }
+
+    return Tooltip(
+      {
+        ...props,
+        hintMode: false,
+        position,
+        targetOffset,
+      },
+      children
+    );
+  };
 };

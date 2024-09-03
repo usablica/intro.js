@@ -9,7 +9,7 @@ import { Hint } from "./hint";
 import createElement from "../../util/createElement";
 import { setClass } from "../../util/className";
 import { hideHint } from "./hide";
-import { setPositionRelativeTo } from "../../util/setPositionRelativeTo";
+import { setPositionRelativeTo } from "../../util/positionRelativeTo";
 import DOMEvent from "../../util/DOMEvent";
 import getOffset from "../../util/getOffset";
 import { HintTooltip } from "./hintTooltip";
