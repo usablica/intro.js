@@ -1,9 +1,6 @@
-import { style } from "../../util/style";
 import { Tour } from "./tour";
-import { overlayClassName } from "./classNames";
 import van from "../dom/van";
-
-const { div } = van.tags;
+import { OverlayLayer } from "./overlayLayer";
 
 /**
  * Add overlay layer to the page
@@ -13,25 +10,14 @@ const { div } = van.tags;
 export default function addOverlayLayer(tour: Tour) {
   const exitOnOverlayClick = tour.getOption("exitOnOverlayClick") === true;
 
-  const overlayLayer = div({
-    className: overlayClassName,
-    style: style({
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      position: "fixed",
-      cursor: exitOnOverlayClick ? "pointer" : "auto",
-    }),
+  const overlayLayer = OverlayLayer({
+    exitOnOverlayClick,
+    onExitTour: async () => {
+      return tour.exit();
+    },
   });
 
   van.add(tour.getRoot(), overlayLayer);
-
-  if (exitOnOverlayClick) {
-    overlayLayer.onclick = async () => {
-      await tour.exit();
-    };
-  }
 
   return true;
 }
