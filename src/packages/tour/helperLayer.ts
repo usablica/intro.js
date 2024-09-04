@@ -1,5 +1,5 @@
 import { style } from "../../util/style";
-import van, { State } from "../dom/van";
+import van from "../dom/van";
 import { helperLayerClassName } from "./classNames";
 import { setPositionRelativeToStep } from "./position";
 import { TourStep } from "./steps";
@@ -29,8 +29,7 @@ const getClassName = ({
 };
 
 export type HelperLayerProps = {
-  currentStep: State<number>;
-  steps: TourStep[];
+  step: TourStep;
   targetElement: HTMLElement;
   tourHighlightClass: string;
   overlayOpacity: number;
@@ -38,40 +37,33 @@ export type HelperLayerProps = {
 };
 
 export const HelperLayer = ({
-  currentStep,
-  steps,
+  step,
   targetElement,
   tourHighlightClass,
   overlayOpacity,
-  helperLayerPadding
+  helperLayerPadding,
 }: HelperLayerProps) => {
-  const step = van.derive(() =>
-    currentStep.val !== undefined ? steps[currentStep.val] : null
+  if (!step) {
+    return null;
+  }
+
+  const className = getClassName({ step: step, tourHighlightClass });
+
+  const helperLayer = div({
+    className,
+    style: style({
+      // the inner box shadow is the border for the highlighted element
+      // the outer box shadow is the overlay effect
+      "box-shadow": `0 0 1px 2px rgba(33, 33, 33, 0.8), rgba(33, 33, 33, ${overlayOpacity.toString()}) 0 0 0 5000px`,
+    }),
+  });
+
+  setPositionRelativeToStep(
+    targetElement,
+    helperLayer,
+    step,
+    helperLayerPadding
   );
 
-  return () => {
-    if (!step.val) {
-      return null;
-    }
-
-    const className = getClassName({ step: step.val, tourHighlightClass });
-
-    const helperLayer = div({
-      className,
-      style: style({
-        // the inner box shadow is the border for the highlighted element
-        // the outer box shadow is the overlay effect
-        "box-shadow": `0 0 1px 2px rgba(33, 33, 33, 0.8), rgba(33, 33, 33, ${overlayOpacity.toString()}) 0 0 0 5000px`,
-      }),
-    });
-
-    setPositionRelativeToStep(
-      targetElement,
-      helperLayer,
-      step.val,
-      helperLayerPadding
-    );
-
-    return helperLayer;
-  };
+  return helperLayer;
 };

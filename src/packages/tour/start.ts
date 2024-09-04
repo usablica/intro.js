@@ -1,4 +1,3 @@
-import addOverlayLayer from "./addOverlayLayer";
 import { nextStep } from "./steps";
 import { fetchSteps } from "./steps";
 import { Tour } from "./tour";
@@ -30,13 +29,8 @@ export const start = async (tour: Tour): Promise<Boolean> => {
 
   tour.setSteps(steps);
 
-  //add overlay layer to the page
-  if (addOverlayLayer(tour)) {
-    //then, start the show
-    await nextStep(tour);
+  //then, start the show
+  await nextStep(tour);
 
-    return true;
-  }
-
-  return false;
+  return true;
 };

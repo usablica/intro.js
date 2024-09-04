@@ -8,16 +8,16 @@ import { OverlayLayer } from "./overlayLayer";
  * @api private
  */
 export default function addOverlayLayer(tour: Tour) {
-  const exitOnOverlayClick = tour.getOption("exitOnOverlayClick") === true;
+  //const exitOnOverlayClick = tour.getOption("exitOnOverlayClick") === true;
 
-  const overlayLayer = OverlayLayer({
-    exitOnOverlayClick,
-    onExitTour: async () => {
-      return tour.exit();
-    },
-  });
+  //const overlayLayer = OverlayLayer({
+  //  exitOnOverlayClick,
+  //  onExitTour: async () => {
+  //    return tour.exit();
+  //  },
+  //});
 
-  van.add(tour.getRoot(), overlayLayer);
+  //van.add(tour.getRoot(), overlayLayer);
 
   return true;
 }

@@ -1,24 +1,21 @@
 import van from "../dom/van";
-import { Tour } from "../tour";
-import { doneButtonClassName, tooltipReferenceLayerClassName } from "../tour/classNames";
-import { setPositionRelativeToStep } from "../tour/position";
-import { nextStep, previousStep } from "../tour/steps";
-import { TourTooltip } from "../tour/tourTooltip";
+import { ReferenceLayer } from "./referenceLayer";
+import { HelperLayer } from "./helperLayer";
+import { Tour } from "./tour";
+import { DisableInteraction } from "./disableInteraction";
+import { OverlayLayer } from "./overlayLayer";
+import { nextStep, previousStep } from "./steps";
+import { doneButtonClassName } from "./classNames";
 
 const { div } = van.tags;
 
-export type ReferenceLayerProps = {
-    tour: Tour
+export type TourRootProps = {
+  tour: Tour;
 };
 
-export const ReferenceLayer = ({
-    tour
-}: ReferenceLayerProps) => {
+export const TourRoot = ({ tour }: TourRootProps) => {
   const currentStep = tour.currentStepSignal;
   const steps = tour.getSteps();
-  const targetElement = tour.getTargetElement();
-  const helperElementPadding = tour.getOption("helperElementPadding");
-
   const step = van.derive(() =>
     currentStep.val !== undefined ? steps[currentStep.val] : null
   );
@@ -28,9 +25,27 @@ export const ReferenceLayer = ({
       return null;
     }
 
-    const referenceLayer = div({
-      className: tooltipReferenceLayerClassName,
-    }, TourTooltip({
+    const exitOnOverlayClick = tour.getOption("exitOnOverlayClick") === true;
+    const overlayLayer = OverlayLayer({
+      exitOnOverlayClick,
+      onExitTour: async () => {
+        return tour.exit();
+      },
+    });
+
+    const helperLayer = HelperLayer({
+      step: step.val,
+      targetElement: tour.getTargetElement(),
+      tourHighlightClass: tour.getOption("highlightClass"),
+      overlayOpacity: tour.getOption("overlayOpacity"),
+      helperLayerPadding: tour.getOption("helperElementPadding"),
+    });
+
+    const referenceLayer = ReferenceLayer({
+      step: step.val,
+      targetElement: tour.getTargetElement(),
+      helperElementPadding: tour.getOption("helperElementPadding"),
+
       positionPrecedence: tour.getOption("positionPrecedence"),
       autoPosition: tour.getOption("autoPosition"),
       showStepNumbers: tour.getOption("showStepNumbers"),
@@ -99,15 +114,23 @@ export const ReferenceLayer = ({
         tour.setDontShowAgain((<HTMLInputElement>e.target).checked);
       },
       dontShowAgainLabel: tour.getOption("dontShowAgainLabel"),
-    }));
+    });
 
-    setPositionRelativeToStep(
-      targetElement,
+    const disableInteraction = step.val.disableInteraction
+      ? DisableInteraction({
+          currentStep: tour.currentStepSignal,
+          steps: tour.getSteps(),
+          targetElement: tour.getTargetElement(),
+          helperElementPadding: tour.getOption("helperElementPadding"),
+        })
+      : null;
+
+    return div(
+      { className: "introjs-tour" },
+      overlayLayer,
+      helperLayer,
       referenceLayer,
-      step.val,
-      helperElementPadding
+      disableInteraction
     );
-
-    return referenceLayer;
   };
 };
