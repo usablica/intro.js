@@ -36,15 +36,15 @@ export default async function exitIntro(
   if (!force && continueExit === false) return false;
 
   // remove overlay layers from the page
-  const overlayLayers = Array.from(
-    queryElementsByClassName(overlayClassName, targetElement)
-  );
+  // const overlayLayers = Array.from(
+  //   queryElementsByClassName(overlayClassName, targetElement)
+  // );
 
-  if (overlayLayers && overlayLayers.length) {
-    for (const overlayLayer of overlayLayers) {
-      removeChild(overlayLayer);
-    }
-  }
+  // if (overlayLayers && overlayLayers.length) {
+  //   for (const overlayLayer of overlayLayers) {
+  //     removeChild(overlayLayer);
+  //   }
+  // }
 
   //const referenceLayer = queryElementByClassName(
   //  tooltipReferenceLayerClassName,
@@ -53,11 +53,11 @@ export default async function exitIntro(
   //removeChild(referenceLayer);
 
   //remove disableInteractionLayer
-  const disableInteractionLayer = queryElementByClassName(
-    disableInteractionClassName,
-    targetElement
-  );
-  removeChild(disableInteractionLayer);
+  // const disableInteractionLayer = queryElementByClassName(
+  //   disableInteractionClassName,
+  //   targetElement
+  // );
+  // removeChild(disableInteractionLayer);
 
   //remove intro floating element
   const floatingElement = queryElementByClassName(
@@ -69,11 +69,11 @@ export default async function exitIntro(
   removeShowElement();
 
   //remove all helper layers
-  const helperLayer = queryElementByClassName(
-    helperLayerClassName,
-    targetElement
-  );
-  await removeAnimatedChild(helperLayer);
+  // const helperLayer = queryElementByClassName(
+  //   helperLayerClassName,
+  //   targetElement
+  // );
+  // await removeAnimatedChild(helperLayer);
 
   //check if any callback is defined
   await tour.callback("exit")?.call(tour);

@@ -15,32 +15,7 @@ import getPropValue from "../../util/getPropValue";
 import van from "../dom/van";
 import { HelperLayer } from "./helperLayer";
 import { ReferenceLayer } from "../tooltip/referenceLayer";
-
-/**
- * Add disableinteraction layer and adjust the size and position of the layer
- *
- * @api private
- */
-export const _disableInteraction = (tour: Tour, step: TourStep) => {
-    let disableInteractionLayer = queryElementByClassName(
-      disableInteractionClassName
-    );
-
-    if (disableInteractionLayer === null) {
-      disableInteractionLayer = createElement("div", {
-        className: disableInteractionClassName,
-      });
-
-      tour.getTargetElement().appendChild(disableInteractionLayer);
-    }
-
-    setPositionRelativeToStep(
-      tour.getTargetElement(),
-      disableInteractionLayer,
-      step,
-      tour.getOption("helperElementPadding")
-    );
-  };
+import { DisableInteraction } from "./disableInteraction";
 
 /**
  * To set the show element
@@ -88,29 +63,28 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     });
 
     const referenceLayer = ReferenceLayer({
-      tour
+      tour,
     });
 
     //add helper layer to target element
     van.add(tour.getRoot(), helperLayer);
     van.add(tour.getRoot(), referenceLayer);
-  }
 
-  // removing previous disable interaction layer
-  const disableInteractionLayer = queryElementByClassName(
-    disableInteractionClassName,
-    tour.getTargetElement()
-  );
-  if (disableInteractionLayer && disableInteractionLayer.parentNode) {
-    disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
+    // disable interaction
+    if (step.disableInteraction) {
+      van.add(
+        tour.getRoot(),
+        DisableInteraction({
+          currentStep: tour.currentStepSignal,
+          steps: tour.getSteps(),
+          targetElement: tour.getTargetElement(),
+          helperElementPadding: tour.getOption("helperElementPadding"),
+        })
+      );
+    }
   }
 
   setShowElement(step.element as HTMLElement);
-
-  //disable interaction
-  if (step.disableInteraction) {
-    _disableInteraction(tour, step);
-  }
 
   await tour.callback("afterChange")?.call(tour, step.element);
 }
