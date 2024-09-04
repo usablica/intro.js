@@ -25,7 +25,7 @@ export default function addOverlayLayer(tour: Tour) {
     }),
   });
 
-  tour.appendToRoot(overlayLayer);
+  van.add(tour.getRoot(), overlayLayer);
 
   if (exitOnOverlayClick) {
     overlayLayer.onclick = async () => {

@@ -4,8 +4,6 @@ import { addClass, setClass } from "../../util/className";
 import { TourStep, nextStep, previousStep } from "./steps";
 import removeShowElement from "./removeShowElement";
 import createElement from "../../util/createElement";
-import setStyle, { style } from "../../util/style";
-import appendChild from "../../util/appendChild";
 import {
   disableInteractionClassName,
   doneButtonClassName,
@@ -22,6 +20,7 @@ import { setPositionRelativeToStep } from "./position";
 import getPropValue from "../../util/getPropValue";
 import { TourTooltip } from "./tourTooltip";
 import van from "../dom/van";
+import { HelperLayer } from "./helperLayer";
 
 const { div } = van.tags;
 
@@ -150,16 +149,15 @@ export default async function _showElement(tour: Tour, step: TourStep) {
 
     // end of old element if-else condition
   } else {
-    const helperLayer = div({
-      className: highlightClass,
-      style: style({
-        // the inner box shadow is the border for the highlighted element
-        // the outer box shadow is the overlay effect
-        "box-shadow": `0 0 1px 2px rgba(33, 33, 33, 0.8), rgba(33, 33, 33, ${tour
-          .getOption("overlayOpacity")
-          .toString()}) 0 0 0 5000px`,
-      }),
+    const helperLayer = HelperLayer({
+      currentStep: tour.currentStepSignal,
+      steps: tour.getSteps(),
+      targetElement: tour.getTargetElement(),
+      tourHighlightClass: tour.getOption("highlightClass"),
+      overlayOpacity: tour.getOption("overlayOpacity"),
+      helperLayerPadding: tour.getOption("helperElementPadding"),
     });
+
     const referenceLayer = div({
       className: tooltipReferenceLayerClassName,
     });
@@ -174,19 +172,13 @@ export default async function _showElement(tour: Tour, step: TourStep) {
     const helperLayerPadding = tour.getOption("helperElementPadding");
     setPositionRelativeToStep(
       tour.getTargetElement(),
-      helperLayer,
-      step,
-      helperLayerPadding
-    );
-    setPositionRelativeToStep(
-      tour.getTargetElement(),
       referenceLayer,
       step,
       helperLayerPadding
     );
 
     //add helper layer to target element
-    tour.appendToRoot(helperLayer, true);
+    van.add(tour.getRoot(), helperLayer);
     tour.appendToRoot(referenceLayer);
 
     const tooltip = TourTooltip({

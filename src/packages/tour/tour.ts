@@ -22,7 +22,7 @@ import DOMEvent from "../../util/DOMEvent";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import van from "../dom/van";
-import appendChild from "src/util/appendChild";
+import appendChild from "../../util/appendChild";
 
 /**
  * Intro.js Tour class
@@ -376,6 +376,9 @@ export class Tour implements Package<TourOptions> {
       this._refreshOnResizeHandler = undefined;
     }
   }
+
+  // temporary
+  public getRoot = () => this._root;
 
   public appendToRoot(element: HTMLElement, animate = false) {
     appendChild(this._root, element, animate);
