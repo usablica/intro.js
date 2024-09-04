@@ -1,28 +1,20 @@
-import scrollParentToElement from "../../util/scrollParentToElement";
-import scrollTo from "../../util/scrollTo";
-import { addClass, setClass } from "../../util/className";
-import { TourStep, nextStep, previousStep } from "./steps";
+import { addClass } from "../../util/className";
+import { TourStep } from "./steps";
 import removeShowElement from "./removeShowElement";
 import createElement from "../../util/createElement";
 import {
   disableInteractionClassName,
-  doneButtonClassName,
   helperLayerClassName,
-  tooltipReferenceLayerClassName,
-  tooltipTextClassName,
 } from "./classNames";
 import { Tour } from "./tour";
 import {
-  getElementByClassName,
   queryElementByClassName,
 } from "../../util/queryElement";
 import { setPositionRelativeToStep } from "./position";
 import getPropValue from "../../util/getPropValue";
-import { TourTooltip } from "./tourTooltip";
 import van from "../dom/van";
 import { HelperLayer } from "./helperLayer";
-
-const { div } = van.tags;
+import { ReferenceLayer } from "../tooltip/referenceLayer";
 
 /**
  * Add disableinteraction layer and adjust the size and position of the layer
@@ -71,8 +63,6 @@ function setShowElement(targetElement: HTMLElement) {
   }
 }
 
-let _lastShowElementTimer: number;
-
 /**
  * Show an element on the page
  *
@@ -82,73 +72,12 @@ export default async function _showElement(tour: Tour, step: TourStep) {
   tour.callback("change")?.call(tour, step.element);
 
   const oldHelperLayer = queryElementByClassName(helperLayerClassName);
-  const oldReferenceLayer = queryElementByClassName(
-    tooltipReferenceLayerClassName
-  );
 
-  let highlightClass = helperLayerClassName;
+  //remove old classes if the element still exist
+  removeShowElement();
 
-  //check for a current step highlight class
-  if (typeof step.highlightClass === "string") {
-    highlightClass += ` ${step.highlightClass}`;
-  }
-
-  //check for options highlight class
-  if (typeof tour.getOption("highlightClass") === "string") {
-    highlightClass += ` ${tour.getOption("highlightClass")}`;
-  }
-
-  if (oldHelperLayer !== null && oldReferenceLayer !== null) {
-    const oldTooltipLayer = getElementByClassName(
-      tooltipTextClassName,
-      oldReferenceLayer
-    );
-
-    //update or reset the helper highlight class
-    setClass(oldHelperLayer, highlightClass);
-
-    // if the target element is within a scrollable element
-    scrollParentToElement(
-      tour.getOption("scrollToElement"),
-      step.element as HTMLElement
-    );
-
-    // set new position to helper layer
-    const helperLayerPadding = tour.getOption("helperElementPadding");
-    setPositionRelativeToStep(
-      tour.getTargetElement(),
-      oldHelperLayer,
-      step,
-      helperLayerPadding
-    );
-    setPositionRelativeToStep(
-      tour.getTargetElement(),
-      oldReferenceLayer,
-      step,
-      helperLayerPadding
-    );
-
-    //remove old classes if the element still exist
-    removeShowElement();
-
-    //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
-    if (_lastShowElementTimer) {
-      window.clearTimeout(_lastShowElementTimer);
-    }
-
-    _lastShowElementTimer = window.setTimeout(() => {
-      // change the scroll of the window, if needed
-      scrollTo(
-        tour.getOption("scrollToElement"),
-        step.scrollTo,
-        tour.getOption("scrollPadding"),
-        step.element as HTMLElement,
-        oldTooltipLayer
-      );
-    }, 350);
-
-    // end of old element if-else condition
-  } else {
+  // TODO: replace with hasStarted()
+  if (oldHelperLayer === null) {
     const helperLayer = HelperLayer({
       currentStep: tour.currentStepSignal,
       steps: tour.getSteps(),
@@ -158,110 +87,13 @@ export default async function _showElement(tour: Tour, step: TourStep) {
       helperLayerPadding: tour.getOption("helperElementPadding"),
     });
 
-    const referenceLayer = div({
-      className: tooltipReferenceLayerClassName,
+    const referenceLayer = ReferenceLayer({
+      tour
     });
-
-    // target is within a scrollable element
-    scrollParentToElement(
-      tour.getOption("scrollToElement"),
-      step.element as HTMLElement
-    );
-
-    //set new position to helper layer
-    const helperLayerPadding = tour.getOption("helperElementPadding");
-    setPositionRelativeToStep(
-      tour.getTargetElement(),
-      referenceLayer,
-      step,
-      helperLayerPadding
-    );
 
     //add helper layer to target element
     van.add(tour.getRoot(), helperLayer);
-    tour.appendToRoot(referenceLayer);
-
-    const tooltip = TourTooltip({
-      positionPrecedence: tour.getOption("positionPrecedence"),
-      autoPosition: tour.getOption("autoPosition"),
-      showStepNumbers: tour.getOption("showStepNumbers"),
-
-      steps: tour.getSteps(),
-      currentStep: tour.currentStepSignal,
-
-      onBulletClick: (stepNumber: number) => {
-        tour.goToStep(stepNumber);
-      },
-
-      bullets: tour.getOption("showBullets"),
-
-      buttons: tour.getOption("showButtons"),
-      nextLabel: "Next",
-      onNextClick: async (e: any) => {
-        if (!tour.isLastStep()) {
-          await nextStep(tour);
-        } else if (
-          new RegExp(doneButtonClassName, "gi").test(
-            (e.target as HTMLElement).className
-          )
-        ) {
-          await tour
-            .callback("complete")
-            ?.call(tour, tour.getCurrentStep(), "done");
-
-          await tour.exit();
-        }
-      },
-      prevLabel: tour.getOption("prevLabel"),
-      onPrevClick: async () => {
-        if (tour.getCurrentStep() > 0) {
-          await previousStep(tour);
-        }
-      },
-      skipLabel: tour.getOption("skipLabel"),
-      onSkipClick: async () => {
-        if (tour.isLastStep()) {
-          await tour
-            .callback("complete")
-            ?.call(tour, tour.getCurrentStep(), "skip");
-        }
-
-        await tour.callback("skip")?.call(tour, tour.getCurrentStep());
-
-        await tour.exit();
-      },
-      buttonClass: tour.getOption("buttonClass"),
-      nextToDone: tour.getOption("nextToDone"),
-      doneLabel: tour.getOption("doneLabel"),
-      hideNext: tour.getOption("hideNext"),
-      hidePrev: tour.getOption("hidePrev"),
-
-      progress: tour.getOption("showProgress"),
-      progressBarAdditionalClass: tour.getOption("progressBarAdditionalClass"),
-
-      stepNumbers: tour.getOption("showStepNumbers"),
-      stepNumbersOfLabel: tour.getOption("stepNumbersOfLabel"),
-
-      dontShowAgain: tour.getOption("dontShowAgain"),
-      onDontShowAgainChange: (e: any) => {
-        tour.setDontShowAgain((<HTMLInputElement>e.target).checked);
-      },
-      dontShowAgainLabel: tour.getOption("dontShowAgainLabel"),
-    });
-
-    van.add(referenceLayer, tooltip);
-    //referenceLayer.appendChild(tooltip);
-
-    // change the scroll of the window, if needed
-    scrollTo(
-      tour.getOption("scrollToElement"),
-      step.scrollTo,
-      tour.getOption("scrollPadding"),
-      step.element as HTMLElement,
-      tooltip
-    );
-
-    //end of new element if-else condition
+    van.add(tour.getRoot(), referenceLayer);
   }
 
   // removing previous disable interaction layer

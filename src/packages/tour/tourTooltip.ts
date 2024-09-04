@@ -21,6 +21,8 @@ import {
 import { TourStep } from "./steps";
 import { dataStepNumberAttribute } from "./dataAttributes";
 import getOffset from "../../util/getOffset";
+import scrollParentToElement from "../../util/scrollParentToElement";
+import scrollTo from "../../util/scrollTo";
 
 const { h1, div, input, label, ul, li, a, p } = van.tags;
 
@@ -362,6 +364,33 @@ const Header = ({
   ]);
 };
 
+const scroll = ({
+    step,
+    tooltip,
+    scrollToElement,
+    scrollPadding,
+}: {
+    step: TourStep;
+    tooltip: HTMLElement;
+    scrollToElement: boolean;
+    scrollPadding: number;
+}) => {
+    // when target is within a scrollable element
+    scrollParentToElement(
+      scrollToElement,
+      step.element as HTMLElement
+    );
+
+    // change the scroll of the window, if needed
+    scrollTo(
+      scrollToElement,
+      step.scrollTo,
+      scrollPadding,
+      step.element as HTMLElement,
+      tooltip
+    );
+};
+
 export type TourTooltipProps = Omit<TooltipProps, "hintMode" | "position" | "targetOffset"> & {
   steps: TourStep[];
   currentStep: State<number>;
@@ -387,6 +416,9 @@ export type TourTooltipProps = Omit<TooltipProps, "hintMode" | "position" | "tar
 
   stepNumbers: boolean;
   stepNumbersOfLabel: string;
+
+  scrollToElement: boolean;
+  scrollPadding: number;
   
   dontShowAgain: boolean;
   dontShowAgainLabel: string;
@@ -419,6 +451,9 @@ export const TourTooltip = ({
 
   stepNumbers,
   stepNumbersOfLabel,
+
+  scrollToElement,
+  scrollPadding,
 
   dontShowAgain,
   onDontShowAgainChange,
@@ -488,7 +523,7 @@ export const TourTooltip = ({
       );
     }
 
-    return Tooltip(
+    const tooltip = Tooltip(
       {
         ...props,
         hintMode: false,
@@ -497,5 +532,14 @@ export const TourTooltip = ({
       },
       children
     );
+
+    scroll({
+      step: step.val!,
+      tooltip,
+      scrollToElement: scrollToElement,
+      scrollPadding: scrollPadding,
+    });
+
+    return tooltip;
   };
 };
