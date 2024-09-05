@@ -28,6 +28,9 @@ export const TourRoot = ({ tour }: TourRootProps) => {
   });
 
   const opacity = van.state(0);
+  // render the tooltip immediately when the tour starts
+  // but we reset the transition duration to 300ms when the tooltip is rendered for the first time
+  let tooltipTransitionDuration = 0;
 
   const root = div(
     {
@@ -64,6 +67,8 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         step: step.val,
         targetElement: tour.getTargetElement(),
         helperElementPadding: tour.getOption("helperElementPadding"),
+
+        transitionDuration: tooltipTransitionDuration,
 
         positionPrecedence: tour.getOption("positionPrecedence"),
         autoPosition: tour.getOption("autoPosition"),
@@ -146,6 +151,11 @@ export const TourRoot = ({ tour }: TourRootProps) => {
             helperElementPadding: tour.getOption("helperElementPadding"),
           })
         : null;
+
+      // wait for the helper layer to be rendered before showing the tooltip
+      // this is to prevent the tooltip from flickering when the helper layer is transitioning
+      // the 300ms delay is coming from the helper layer transition duration
+      tooltipTransitionDuration = 300;
 
       return div(
         overlayLayer,

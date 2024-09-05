@@ -302,6 +302,8 @@ export type TooltipProps = {
   hintMode: boolean;
   showStepNumbers: boolean;
 
+  transitionDuration?: number;
+
   // auto-alignment properties
   autoPosition: boolean;
   positionPrecedence: TooltipPosition[];
@@ -313,6 +315,8 @@ export const Tooltip = (
     targetOffset,
     hintMode = false,
     showStepNumbers = false,
+
+    transitionDuration = 0,
 
     // auto-alignment properties
     autoPosition = true,
@@ -398,12 +402,10 @@ export const Tooltip = (
     ]
   );
 
-  // wait for the helper layer to be rendered before showing the tooltip
-  // this is to prevent the tooltip from flickering when the helper layer is transitioning
-  // the 300ms delay is coming from the helper layer transition duration
+  // apply the transition effect
   setTimeout(() => {
     opacity.val = 1;
-  }, 300);
+  }, transitionDuration);
 
   return tooltip;
 };
