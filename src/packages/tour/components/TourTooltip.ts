@@ -97,7 +97,7 @@ const ProgressBar = ({
     currentStep: number;
     progressBarAdditionalClass: string;
 }) => {
-    const progress = van.derive(() => ((currentStep) / steps.length) * 100);
+    const progress = (currentStep / steps.length) * 100;
 
     return div({ className: progressClassName }, [
         div({
@@ -215,7 +215,10 @@ const NextButton = ({
       },
     });
 
-    nextButton.focus()
+    // wait for the button to be rendered
+    setTimeout(() => {
+      nextButton.focus()
+    }, 1);
 
     return nextButton;
 }
