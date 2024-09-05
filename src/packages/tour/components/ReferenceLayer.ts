@@ -1,19 +1,16 @@
 import van from "../../dom/van";
 import { tooltipReferenceLayerClassName } from "../classNames";
 import { setPositionRelativeToStep } from "../position";
-import { TourStep } from "../steps";
 import { TourTooltip, TourTooltipProps } from "./TourTooltip";
 
 const { div } = van.tags;
 
 export type ReferenceLayerProps = TourTooltipProps & {
-  step: TourStep;
   targetElement: HTMLElement;
   helperElementPadding: number;
 };
 
 export const ReferenceLayer = ({
-  step,
   targetElement,
   helperElementPadding,
   ...props
@@ -28,7 +25,7 @@ export const ReferenceLayer = ({
   setPositionRelativeToStep(
     targetElement,
     referenceLayer,
-    step,
+    props.step,
     helperElementPadding
   );
 

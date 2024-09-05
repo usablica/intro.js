@@ -185,6 +185,10 @@ export class Tour implements Package<TourOptions> {
     return this._currentStep.val;
   }
 
+  resetCurrentStep() {
+    this._currentStep.val = undefined;
+  }
+
   /**
    * Set the current step of the tour and the direction of the tour
    * @param step

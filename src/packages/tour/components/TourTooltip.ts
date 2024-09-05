@@ -47,16 +47,14 @@ const DontShowAgain = ({
 };
 
 const Bullets = ({
+  step,
   steps,
-  currentStep,
   onBulletClick,
 }: {
+  step: TourStep,
   steps: TourStep[];
-  currentStep: State<number | undefined>;
   onBulletClick: (stepNumber: number) => void;
 }): HTMLElement => {
-
-  const step = van.derive(() => steps[currentStep.val!]);
 
   return div({ className: bulletsClassName }, [
     ul({ role: "tablist" }, [
@@ -69,7 +67,7 @@ const Bullets = ({
             a({
               role: "tab",
                 className: () =>
-                `${step.val!.step === stepNumber ? activeClassName : ""}`,
+                `${step.step === stepNumber ? activeClassName : ""}`,
               onclick: (e: any) => {
                 const stepNumberAttribute = (
                   e.target as HTMLElement
@@ -96,10 +94,10 @@ const ProgressBar = ({
     progressBarAdditionalClass
 }: {
     steps: TourStep[];
-    currentStep: State<number | undefined>;
+    currentStep: number;
     progressBarAdditionalClass: string;
 }) => {
-    const progress = van.derive(() => ((currentStep.val!) / steps.length) * 100);
+    const progress = van.derive(() => ((currentStep) / steps.length) * 100);
 
     return div({ className: progressClassName }, [
         div({
@@ -164,7 +162,7 @@ const NextButton = ({
   buttonClass
 }: {
   steps: TourStep[];
-  currentStep: State<number | undefined>;
+  currentStep: number;
 
   nextLabel: string;
   doneLabel: string;
@@ -175,18 +173,13 @@ const NextButton = ({
   onClick: (e: any) => void;
   buttonClass: string;
 }) => {
-    const isFullButton = van.derive(
-      () => currentStep.val === 0 && steps.length > 1 && hidePrev
-    );
-
-    const isLastStep = van.derive(
-      () => currentStep.val === steps.length - 1 || steps.length === 1
-    );
+    const isFullButton = currentStep === 0 && steps.length > 1 && hidePrev;
+    const isLastStep = currentStep === steps.length - 1 || steps.length === 1;
 
     const isDisabled = van.derive(() => {
       // when the current step is the last one or there is only one step to show
       return (
-        isLastStep.val &&
+        isLastStep &&
         !hideNext &&
         !nextToDone
       );
@@ -194,7 +187,7 @@ const NextButton = ({
 
     const isDoneButton = van.derive(() => {
       return (
-        isLastStep.val &&
+        isLastStep &&
         !hideNext &&
         nextToDone
       );
@@ -214,7 +207,7 @@ const NextButton = ({
           classNames.push(disabledButtonClassName);
         }
 
-        if (isFullButton.val) {
+        if (isFullButton) {
           classNames.push(fullButtonClassName);
         }
 
@@ -238,35 +231,29 @@ const PrevButton = ({
 }: {
   label: string;
   steps: TourStep[];
-  currentStep: State<number | undefined>;
+  currentStep: number;
   hidePrev: boolean;
   hideNext: boolean;
   onClick: (e: any) => void;
   buttonClass: string;
 }) => {
-  const isDisabled = van.derive(() => {
-    // when the current step is the first one and there are more steps to show
-    return currentStep.val === 0 && steps.length > 1 && !hidePrev;
-  });
-
-  const isFullButton = van.derive(() => {
-    // when the current step is the last one or there is only one step to show
-    return (
-      (currentStep.val === steps.length - 1 || steps.length === 1) && hideNext
-    );
-  });
+  // when the current step is the first one and there are more steps to show
+  const disabled = currentStep === 0 && steps.length > 1 && !hidePrev;
+  // when the current step is the last one or there is only one step to show
+  const isFullButton =
+    (currentStep === steps.length - 1 || steps.length === 1) && hideNext;
 
   return Button({
     label,
     onClick,
-    disabled: () => isDisabled.val,
+    disabled,
     className: () => {
       const classNames = [buttonClass, previousButtonClassName];
       if (isFullButton) {
         classNames.push(fullButtonClassName);
       }
 
-      if (isDisabled.val) {
+      if (disabled) {
         classNames.push(disabledButtonClassName);
       }
 
@@ -293,7 +280,7 @@ const Buttons = ({
   onPrevClick,
 }: {
   steps: TourStep[];
-  currentStep: State<number | undefined>;
+  currentStep: number;
 
   buttonClass: string;
 
@@ -308,18 +295,13 @@ const Buttons = ({
   prevLabel: string;
   onPrevClick: (e: any) => void;
 }) => {
-  const isLastStep = van.derive(
-    () => currentStep.val === steps.length - 1 || steps.length === 1
-  );
-
-  const isFirstStep = van.derive(
-    () => currentStep.val === 0 && steps.length > 1
-  );
+  const isLastStep = currentStep === steps.length - 1 || steps.length === 1
+  const isFirstStep = currentStep === 0 && steps.length > 1
 
   return div(
     { className: tooltipButtonsClassName },
     () =>
-      isFirstStep.val && hidePrev
+      isFirstStep && hidePrev
         ? null
         : PrevButton({
             label: prevLabel,
@@ -331,7 +313,7 @@ const Buttons = ({
             buttonClass,
           }),
     () =>
-      isLastStep.val && hideNext
+      isLastStep && hideNext
         ? null
         : NextButton({
             currentStep,
@@ -392,8 +374,9 @@ const scroll = ({
 };
 
 export type TourTooltipProps = Omit<TooltipProps, "hintMode" | "position" | "targetOffset"> & {
+  step: TourStep;
   steps: TourStep[];
-  currentStep: State<number | undefined>;
+  currentStep: number;
 
   bullets: boolean;
   onBulletClick: (stepNumber: number) => void;
@@ -426,8 +409,9 @@ export type TourTooltipProps = Omit<TooltipProps, "hintMode" | "position" | "tar
 };
 
 export const TourTooltip = ({
-  steps,
+  step,
   currentStep,
+  steps,
 
   onBulletClick,
 
@@ -460,25 +444,13 @@ export const TourTooltip = ({
   dontShowAgainLabel,
   ...props
 }: TourTooltipProps) => {
-  const step = van.derive(() =>
-    currentStep.val !== undefined ? steps[currentStep.val] : null
-  );
-
-  return () => {
-    // there is nothing to be shown if the step is not defined
-    if (!step.val) {
-      return null;
-    }
-
     const children = [];
-    const title = van.derive(() => step.val!.title);
-    const text = van.derive(() => step.val!.intro);
-    const position = van.derive(() => step.val!.position);
-    const targetOffset = van.derive(() =>
-      getOffset(step.val!.element as HTMLElement)
-    );
+    const title = step.title;
+    const text = step.intro;
+    const position = step.position;
+    const targetOffset = getOffset(step.element as HTMLElement);
 
-    children.push(Header({ title: title.val!, skipLabel, onSkipClick }));
+    children.push(Header({ title, skipLabel, onSkipClick }));
 
     children.push(div({ className: tooltipTextClassName }, p(text)));
 
@@ -489,7 +461,7 @@ export const TourTooltip = ({
     }
 
     if (bullets) {
-      children.push(Bullets({ steps, currentStep, onBulletClick }));
+      children.push(Bullets({ step, steps, onBulletClick }));
     }
 
     if (progress) {
@@ -499,7 +471,7 @@ export const TourTooltip = ({
     }
 
     if (stepNumbers) {
-      children.push(StepNumber({ step: step.val!, steps, stepNumbersOfLabel }));
+      children.push(StepNumber({ step, steps, stepNumbersOfLabel }));
     }
 
     if (buttons) {
@@ -534,12 +506,11 @@ export const TourTooltip = ({
     );
 
     scroll({
-      step: step.val!,
+      step,
       tooltip,
       scrollToElement: scrollToElement,
       scrollPadding: scrollPadding,
     });
 
     return tooltip;
-  };
 };

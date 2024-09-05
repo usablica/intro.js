@@ -6,6 +6,7 @@ import { DisableInteraction } from "./DisableInteraction";
 import { OverlayLayer } from "./OverlayLayer";
 import { nextStep, previousStep } from "../steps";
 import { doneButtonClassName } from "../classNames";
+import { style } from "../../../util/style";
 
 const { div } = van.tags;
 
@@ -26,8 +27,14 @@ export const TourRoot = ({ tour }: TourRootProps) => {
     helperLayerPadding: tour.getOption("helperElementPadding"),
   });
 
+  const opacity = van.state(0);
+
   const root = div(
-    { className: "introjs-tour" },
+    {
+      className: "introjs-tour",
+      style: () =>
+        style({ transition: "all 250ms ease-out", opacity: `${opacity.val}` }),
+    },
     // helperLayer should not be re-rendered when the state changes for the transition to work
     helperLayer,
     () => {
@@ -63,7 +70,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         showStepNumbers: tour.getOption("showStepNumbers"),
 
         steps: tour.getSteps(),
-        currentStep,
+        currentStep: currentStep.val,
 
         onBulletClick: (stepNumber: number) => {
           tour.goToStep(stepNumber);
@@ -147,9 +154,18 @@ export const TourRoot = ({ tour }: TourRootProps) => {
   van.derive(() => {
     // to clean up the root element when the tour is done
     if (currentStep.val === undefined) {
-      root.remove();
+      opacity.val = 0;
+
+      setTimeout(() => {
+        root.remove();
+      }, 250);
     }
+
   });
+
+  setTimeout(() => {
+    opacity.val = 1;
+  }, 1);
 
   return root;
 };

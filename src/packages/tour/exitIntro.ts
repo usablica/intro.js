@@ -2,11 +2,7 @@ import removeShowElement from "./removeShowElement";
 import { removeChild, removeAnimatedChild } from "../../util/removeChild";
 import { Tour } from "./tour";
 import {
-  disableInteractionClassName,
   floatingElementClassName,
-  helperLayerClassName,
-  overlayClassName,
-  tooltipReferenceLayerClassName,
 } from "./classNames";
 import {
   queryElementByClassName,
@@ -79,7 +75,7 @@ export default async function exitIntro(
   await tour.callback("exit")?.call(tour);
 
   // set the step to default
-  tour.setCurrentStep(-1);
+  tour.resetCurrentStep();
 
   return true;
 }
