@@ -326,6 +326,7 @@ export const Tooltip = (
   const left = van.state<string>("auto");
   const marginLeft = van.state<string>("auto");
   const marginTop = van.state<string>("auto");
+  const opacity = van.state<number>(0);
   // setting a default height for the tooltip instead of 0 to avoid flickering
   const tooltipHeight = van.state<number>(150);
   // max width of the tooltip according to its CSS class
@@ -384,7 +385,7 @@ export const Tooltip = (
   const tooltip = div(
     {
       style: () =>
-        `top: ${top.val}; right: ${right.val}; bottom: ${bottom.val}; left: ${left.val}; margin-left: ${marginLeft.val}; margin-top: ${marginTop.val};`,
+        `top: ${top.val}; right: ${right.val}; bottom: ${bottom.val}; left: ${left.val}; margin-left: ${marginLeft.val}; margin-top: ${marginTop.val};opacity: ${opacity.val}`,
       className: () => `${tooltipClassName} introjs-${position.val}`,
       role: "dialog",
     },
@@ -396,6 +397,13 @@ export const Tooltip = (
       [children],
     ]
   );
+
+  // wait for the helper layer to be rendered before showing the tooltip
+  // this is to prevent the tooltip from flickering when the helper layer is transitioning
+  // the 300ms delay is coming from the helper layer transition duration
+  setTimeout(() => {
+    opacity.val = 1;
+  }, 300);
 
   return tooltip;
 };

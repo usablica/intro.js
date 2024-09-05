@@ -13,6 +13,10 @@ $font_family: "Helvetica Neue", Inter, ui-sans-serif, "Apple Color Emoji",
 $background_color_9: #08c;
 $background_color_10: rgba(136, 136, 136, 0.24);
 
+.introjs-tour {
+  transition: all 0.3s ease-out;
+}
+
 .introjs-overlay {
   position: absolute;
   box-sizing: content-box;

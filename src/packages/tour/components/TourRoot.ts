@@ -33,7 +33,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
     {
       className: "introjs-tour",
       style: () =>
-        style({ transition: "all 250ms ease-out", opacity: `${opacity.val}` }),
+        style({ opacity: `${opacity.val}` }),
     },
     // helperLayer should not be re-rendered when the state changes for the transition to work
     helperLayer,
@@ -147,7 +147,11 @@ export const TourRoot = ({ tour }: TourRootProps) => {
           })
         : null;
 
-      return div(overlayLayer, referenceLayer, disableInteraction);
+      return div(
+        overlayLayer,
+        referenceLayer,
+        disableInteraction
+      );
     }
   );
 

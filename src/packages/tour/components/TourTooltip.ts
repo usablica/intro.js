@@ -1,5 +1,5 @@
 import { Tooltip, type TooltipProps } from "../../tooltip/tooltip";
-import van, { PropValueOrDerived, State } from "../../dom/van";
+import van, { PropValueOrDerived } from "../../dom/van";
 import {
   activeClassName,
   bulletsClassName,
