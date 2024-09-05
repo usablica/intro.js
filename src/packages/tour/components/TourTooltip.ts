@@ -1,5 +1,5 @@
-import { Tooltip, type TooltipProps } from "../tooltip/tooltip";
-import van, { PropValueOrDerived, State } from "../dom/van";
+import { Tooltip, type TooltipProps } from "../../tooltip/tooltip";
+import van, { PropValueOrDerived, State } from "../../dom/van";
 import {
   activeClassName,
   bulletsClassName,
@@ -17,12 +17,12 @@ import {
   tooltipHeaderClassName,
   tooltipTextClassName,
   tooltipTitleClassName,
-} from "./classNames";
-import { TourStep } from "./steps";
-import { dataStepNumberAttribute } from "./dataAttributes";
-import getOffset from "../../util/getOffset";
-import scrollParentToElement from "../../util/scrollParentToElement";
-import scrollTo from "../../util/scrollTo";
+} from "../classNames";
+import { TourStep } from "../steps";
+import { dataStepNumberAttribute } from "../dataAttributes";
+import getOffset from "../../../util/getOffset";
+import scrollParentToElement from "../../../util/scrollParentToElement";
+import scrollTo from "../../../util/scrollTo";
 
 const { h1, div, input, label, ul, li, a, p } = van.tags;
 
@@ -52,7 +52,7 @@ const Bullets = ({
   onBulletClick,
 }: {
   steps: TourStep[];
-  currentStep: State<number>;
+  currentStep: State<number | undefined>;
   onBulletClick: (stepNumber: number) => void;
 }): HTMLElement => {
 
@@ -96,7 +96,7 @@ const ProgressBar = ({
     progressBarAdditionalClass
 }: {
     steps: TourStep[];
-    currentStep: State<number>;
+    currentStep: State<number | undefined>;
     progressBarAdditionalClass: string;
 }) => {
     const progress = van.derive(() => ((currentStep.val!) / steps.length) * 100);
@@ -164,7 +164,7 @@ const NextButton = ({
   buttonClass
 }: {
   steps: TourStep[];
-  currentStep: State<number>;
+  currentStep: State<number | undefined>;
 
   nextLabel: string;
   doneLabel: string;
@@ -238,7 +238,7 @@ const PrevButton = ({
 }: {
   label: string;
   steps: TourStep[];
-  currentStep: State<number>;
+  currentStep: State<number | undefined>;
   hidePrev: boolean;
   hideNext: boolean;
   onClick: (e: any) => void;
@@ -293,7 +293,7 @@ const Buttons = ({
   onPrevClick,
 }: {
   steps: TourStep[];
-  currentStep: State<number>;
+  currentStep: State<number | undefined>;
 
   buttonClass: string;
 
@@ -393,7 +393,7 @@ const scroll = ({
 
 export type TourTooltipProps = Omit<TooltipProps, "hintMode" | "position" | "targetOffset"> & {
   steps: TourStep[];
-  currentStep: State<number>;
+  currentStep: State<number | undefined>;
 
   bullets: boolean;
   onBulletClick: (stepNumber: number) => void;

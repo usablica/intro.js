@@ -1,11 +1,11 @@
-import van from "../dom/van";
-import { ReferenceLayer } from "./referenceLayer";
-import { HelperLayer } from "./helperLayer";
-import { Tour } from "./tour";
-import { DisableInteraction } from "./disableInteraction";
-import { OverlayLayer } from "./overlayLayer";
-import { nextStep, previousStep } from "./steps";
-import { doneButtonClassName } from "./classNames";
+import van from "../../dom/van";
+import { ReferenceLayer } from "./ReferenceLayer";
+import { HelperLayer } from "./HelperLayer";
+import { Tour } from "../tour";
+import { DisableInteraction } from "./DisableInteraction";
+import { OverlayLayer } from "./OverlayLayer";
+import { nextStep, previousStep } from "../steps";
+import { doneButtonClassName } from "../classNames";
 
 const { div } = van.tags;
 
@@ -14,7 +14,7 @@ export type TourRootProps = {
 };
 
 export const TourRoot = ({ tour }: TourRootProps) => {
-  const currentStep = tour.currentStepSignal;
+  const currentStep = tour.getCurrentStepSignal();
   const steps = tour.getSteps();
 
   const helperLayer = HelperLayer({
@@ -63,7 +63,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         showStepNumbers: tour.getOption("showStepNumbers"),
 
         steps: tour.getSteps(),
-        currentStep: tour.currentStepSignal,
+        currentStep,
 
         onBulletClick: (stepNumber: number) => {
           tour.goToStep(stepNumber);
@@ -90,7 +90,8 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         },
         prevLabel: tour.getOption("prevLabel"),
         onPrevClick: async () => {
-          if (tour.getCurrentStep() > 0) {
+          const currentStep = tour.getCurrentStep();
+          if (currentStep !== undefined && currentStep > 0) {
             await previousStep(tour);
           }
         },
@@ -132,7 +133,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
 
       const disableInteraction = step.val.disableInteraction
         ? DisableInteraction({
-            currentStep: tour.currentStepSignal,
+            currentStep,
             steps: tour.getSteps(),
             targetElement: tour.getTargetElement(),
             helperElementPadding: tour.getOption("helperElementPadding"),
@@ -145,7 +146,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
 
   van.derive(() => {
     // to clean up the root element when the tour is done
-    if (currentStep.val === undefined || currentStep.val < 0) {
+    if (currentStep.val === undefined) {
       root.remove();
     }
   });

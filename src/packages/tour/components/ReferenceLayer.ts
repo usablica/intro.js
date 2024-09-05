@@ -1,8 +1,8 @@
-import van from "../dom/van";
-import { tooltipReferenceLayerClassName } from "./classNames";
-import { setPositionRelativeToStep } from "./position";
-import { TourStep } from "./steps";
-import { TourTooltip, TourTooltipProps } from "./tourTooltip";
+import van from "../../dom/van";
+import { tooltipReferenceLayerClassName } from "../classNames";
+import { setPositionRelativeToStep } from "../position";
+import { TourStep } from "../steps";
+import { TourTooltip, TourTooltipProps } from "./TourTooltip";
 
 const { div } = van.tags;
 

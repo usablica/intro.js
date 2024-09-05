@@ -1,7 +1,7 @@
-import { style } from "../../util/style";
-import { overlayClassName } from "./classNames";
-import van from "../dom/van";
-import { Tour } from "./tour";
+import { style } from "../../../util/style";
+import { overlayClassName } from "../classNames";
+import van from "../../dom/van";
+import { Tour } from "../tour";
 
 const { div } = van.tags;
 

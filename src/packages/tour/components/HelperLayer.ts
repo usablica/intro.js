@@ -1,8 +1,8 @@
-import { style } from "../../util/style";
-import van, { State } from "../dom/van";
-import { helperLayerClassName } from "./classNames";
-import { setPositionRelativeToStep } from "./position";
-import { TourStep } from "./steps";
+import { style } from "../../../util/style";
+import van, { State } from "../../dom/van";
+import { helperLayerClassName } from "../classNames";
+import { setPositionRelativeToStep } from "../position";
+import { TourStep } from "../steps";
 
 const { div } = van.tags;
 
@@ -29,7 +29,7 @@ const getClassName = ({
 };
 
 export type HelperLayerProps = {
-  currentStep: State<number>;
+  currentStep: State<number | undefined>;
   steps: TourStep[];
   targetElement: HTMLElement;
   tourHighlightClass: string;

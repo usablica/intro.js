@@ -22,15 +22,14 @@ import DOMEvent from "../../util/DOMEvent";
 import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import van from "../dom/van";
-import { TourRoot } from "./tourRoot";
+import { TourRoot } from "./components/TourRoot";
 
 /**
  * Intro.js Tour class
  */
 export class Tour implements Package<TourOptions> {
   private _steps: TourStep[] = [];
-  private _currentStep: number = -1;
-  public currentStepSignal = van.state<number>(-1);
+  private _currentStep = van.state<number | undefined>(undefined);
   private _direction: "forward" | "backward";
   private readonly _targetElement: HTMLElement;
   private _options: TourOptions;
@@ -165,17 +164,25 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
+   * Returns the underlying state of the current step
+   * This is an internal method and should not be used outside of the package.
+   */
+  getCurrentStepSignal() {
+    return this._currentStep;
+  }
+
+  /**
    * Get the current step of the tour
    */
-  getCurrentStep(): number {
-    return this._currentStep;
+  getCurrentStep(): number | undefined {
+    return this._currentStep.val;
   }
 
   /**
    * @deprecated `currentStep()` is deprecated, please use `getCurrentStep()` instead.
    */
-  currentStep(): number {
-    return this._currentStep;
+  currentStep(): number | undefined {
+    return this._currentStep.val;
   }
 
   /**
@@ -183,14 +190,13 @@ export class Tour implements Package<TourOptions> {
    * @param step
    */
   setCurrentStep(step: number): this {
-    if (step >= this._currentStep) {
+    if (this._currentStep.val === undefined || step >= this._currentStep.val) {
       this._direction = "forward";
     } else {
       this._direction = "backward";
     }
 
-    this.currentStepSignal.val = step;
-    this._currentStep = step;
+    this._currentStep.val = step;
     return this;
   }
 
@@ -198,10 +204,11 @@ export class Tour implements Package<TourOptions> {
    * Increment the current step of the tour (does not start the tour step, must be called in conjunction with `nextStep`)
    */
   incrementCurrentStep(): this {
-    if (this.getCurrentStep() === -1) {
+    const currentStep = this.getCurrentStep();
+    if (currentStep === undefined) {
       this.setCurrentStep(0);
     } else {
-      this.setCurrentStep(this.getCurrentStep() + 1);
+      this.setCurrentStep(currentStep + 1);
     }
 
     return this;
@@ -211,8 +218,9 @@ export class Tour implements Package<TourOptions> {
    * Decrement the current step of the tour (does not start the tour step, must be in conjunction with `previousStep`)
    */
   decrementCurrentStep(): this {
-    if (this.getCurrentStep() > 0) {
-      this.setCurrentStep(this._currentStep - 1);
+    const currentStep = this.getCurrentStep();
+    if (currentStep !== undefined && currentStep > 0) {
+      this.setCurrentStep(currentStep - 1);
     }
 
     return this;
@@ -229,7 +237,6 @@ export class Tour implements Package<TourOptions> {
    * Go to the next step of the tour
    */
   async nextStep() {
-    this.currentStepSignal.val! += 1;
     await nextStep(this);
     return this;
   }
@@ -246,7 +253,8 @@ export class Tour implements Package<TourOptions> {
    * Check if the current step is the last step
    */
   isEnd(): boolean {
-    return this.getCurrentStep() >= this._steps.length;
+    const currentStep = this.getCurrentStep();
+    return currentStep !== undefined && currentStep >= this._steps.length;
   }
 
   /**
@@ -315,7 +323,7 @@ export class Tour implements Package<TourOptions> {
    * Returns true if the tour has started
    */
   hasStarted(): boolean {
-    return this.getCurrentStep() > -1;
+    return this.getCurrentStep() !== undefined;
   }
 
   /**
