@@ -1,5 +1,5 @@
 import { style } from "../../util/style";
-import van from "../dom/van";
+import van, { State } from "../dom/van";
 import { helperLayerClassName } from "./classNames";
 import { setPositionRelativeToStep } from "./position";
 import { TourStep } from "./steps";
@@ -10,14 +10,14 @@ const getClassName = ({
   step,
   tourHighlightClass,
 }: {
-  step: TourStep;
+  step: State<TourStep | null>;
   tourHighlightClass: string;
 }) => {
   let highlightClass = helperLayerClassName;
 
   // check for a current step highlight class
-  if (typeof step.highlightClass === "string") {
-    highlightClass += ` ${step.highlightClass}`;
+  if (step.val && typeof step.val.highlightClass === "string") {
+    highlightClass += ` ${step.val.highlightClass}`;
   }
 
   // check for options highlight class
@@ -29,7 +29,8 @@ const getClassName = ({
 };
 
 export type HelperLayerProps = {
-  step: TourStep;
+  currentStep: State<number>;
+  steps: TourStep[];
   targetElement: HTMLElement;
   tourHighlightClass: string;
   overlayOpacity: number;
@@ -37,20 +38,19 @@ export type HelperLayerProps = {
 };
 
 export const HelperLayer = ({
-  step,
+  currentStep,
+  steps,
   targetElement,
   tourHighlightClass,
   overlayOpacity,
   helperLayerPadding,
 }: HelperLayerProps) => {
-  if (!step) {
-    return null;
-  }
-
-  const className = getClassName({ step: step, tourHighlightClass });
+  const step = van.derive(() =>
+    currentStep.val !== undefined ? steps[currentStep.val] : null
+  );
 
   const helperLayer = div({
-    className,
+    className: () => getClassName({ step, tourHighlightClass }),
     style: style({
       // the inner box shadow is the border for the highlighted element
       // the outer box shadow is the overlay effect
@@ -58,12 +58,16 @@ export const HelperLayer = ({
     }),
   });
 
-  setPositionRelativeToStep(
-    targetElement,
-    helperLayer,
-    step,
-    helperLayerPadding
-  );
+  van.derive(() => {
+    if (!step.val) return;
+
+    setPositionRelativeToStep(
+      targetElement,
+      helperLayer,
+      step.val,
+      helperLayerPadding
+    );
+  });
 
   return helperLayer;
 };

@@ -16,121 +16,139 @@ export type TourRootProps = {
 export const TourRoot = ({ tour }: TourRootProps) => {
   const currentStep = tour.currentStepSignal;
   const steps = tour.getSteps();
-  const step = van.derive(() =>
-    currentStep.val !== undefined ? steps[currentStep.val] : null
-  );
 
-  return () => {
-    if (!step.val) {
-      return null;
-    }
+  const helperLayer = HelperLayer({
+    currentStep,
+    steps,
+    targetElement: tour.getTargetElement(),
+    tourHighlightClass: tour.getOption("highlightClass"),
+    overlayOpacity: tour.getOption("overlayOpacity"),
+    helperLayerPadding: tour.getOption("helperElementPadding"),
+  });
 
-    const exitOnOverlayClick = tour.getOption("exitOnOverlayClick") === true;
-    const overlayLayer = OverlayLayer({
-      exitOnOverlayClick,
-      onExitTour: async () => {
-        return tour.exit();
-      },
-    });
+  const root = div(
+    { className: "introjs-tour" },
+    // helperLayer should not be re-rendered when the state changes for the transition to work
+    helperLayer,
+    () => {
+      // do not remove this check, it is necessary for this state-binding to work
+      // and render the entire section every time the state changes
+      if (currentStep.val === undefined) {
+        return null;
+      }
 
-    const helperLayer = HelperLayer({
-      step: step.val,
-      targetElement: tour.getTargetElement(),
-      tourHighlightClass: tour.getOption("highlightClass"),
-      overlayOpacity: tour.getOption("overlayOpacity"),
-      helperLayerPadding: tour.getOption("helperElementPadding"),
-    });
+      const step = van.derive(() =>
+        currentStep.val !== undefined ? steps[currentStep.val] : null
+      );
 
-    const referenceLayer = ReferenceLayer({
-      step: step.val,
-      targetElement: tour.getTargetElement(),
-      helperElementPadding: tour.getOption("helperElementPadding"),
+      if (!step.val) {
+        return null;
+      }
 
-      positionPrecedence: tour.getOption("positionPrecedence"),
-      autoPosition: tour.getOption("autoPosition"),
-      showStepNumbers: tour.getOption("showStepNumbers"),
+      const exitOnOverlayClick = tour.getOption("exitOnOverlayClick") === true;
+      const overlayLayer = OverlayLayer({
+        exitOnOverlayClick,
+        onExitTour: async () => {
+          return tour.exit();
+        },
+      });
 
-      steps: tour.getSteps(),
-      currentStep: tour.currentStepSignal,
+      const referenceLayer = ReferenceLayer({
+        step: step.val,
+        targetElement: tour.getTargetElement(),
+        helperElementPadding: tour.getOption("helperElementPadding"),
 
-      onBulletClick: (stepNumber: number) => {
-        tour.goToStep(stepNumber);
-      },
+        positionPrecedence: tour.getOption("positionPrecedence"),
+        autoPosition: tour.getOption("autoPosition"),
+        showStepNumbers: tour.getOption("showStepNumbers"),
 
-      bullets: tour.getOption("showBullets"),
+        steps: tour.getSteps(),
+        currentStep: tour.currentStepSignal,
 
-      buttons: tour.getOption("showButtons"),
-      nextLabel: "Next",
-      onNextClick: async (e: any) => {
-        if (!tour.isLastStep()) {
-          await nextStep(tour);
-        } else if (
-          new RegExp(doneButtonClassName, "gi").test(
-            (e.target as HTMLElement).className
-          )
-        ) {
-          await tour
-            .callback("complete")
-            ?.call(tour, tour.getCurrentStep(), "done");
+        onBulletClick: (stepNumber: number) => {
+          tour.goToStep(stepNumber);
+        },
+
+        bullets: tour.getOption("showBullets"),
+
+        buttons: tour.getOption("showButtons"),
+        nextLabel: "Next",
+        onNextClick: async (e: any) => {
+          if (!tour.isLastStep()) {
+            await nextStep(tour);
+          } else if (
+            new RegExp(doneButtonClassName, "gi").test(
+              (e.target as HTMLElement).className
+            )
+          ) {
+            await tour
+              .callback("complete")
+              ?.call(tour, tour.getCurrentStep(), "done");
+
+            await tour.exit();
+          }
+        },
+        prevLabel: tour.getOption("prevLabel"),
+        onPrevClick: async () => {
+          if (tour.getCurrentStep() > 0) {
+            await previousStep(tour);
+          }
+        },
+        skipLabel: tour.getOption("skipLabel"),
+        onSkipClick: async () => {
+          if (tour.isLastStep()) {
+            await tour
+              .callback("complete")
+              ?.call(tour, tour.getCurrentStep(), "skip");
+          }
+
+          await tour.callback("skip")?.call(tour, tour.getCurrentStep());
 
           await tour.exit();
-        }
-      },
-      prevLabel: tour.getOption("prevLabel"),
-      onPrevClick: async () => {
-        if (tour.getCurrentStep() > 0) {
-          await previousStep(tour);
-        }
-      },
-      skipLabel: tour.getOption("skipLabel"),
-      onSkipClick: async () => {
-        if (tour.isLastStep()) {
-          await tour
-            .callback("complete")
-            ?.call(tour, tour.getCurrentStep(), "skip");
-        }
+        },
+        buttonClass: tour.getOption("buttonClass"),
+        nextToDone: tour.getOption("nextToDone"),
+        doneLabel: tour.getOption("doneLabel"),
+        hideNext: tour.getOption("hideNext"),
+        hidePrev: tour.getOption("hidePrev"),
 
-        await tour.callback("skip")?.call(tour, tour.getCurrentStep());
+        progress: tour.getOption("showProgress"),
+        progressBarAdditionalClass: tour.getOption(
+          "progressBarAdditionalClass"
+        ),
 
-        await tour.exit();
-      },
-      buttonClass: tour.getOption("buttonClass"),
-      nextToDone: tour.getOption("nextToDone"),
-      doneLabel: tour.getOption("doneLabel"),
-      hideNext: tour.getOption("hideNext"),
-      hidePrev: tour.getOption("hidePrev"),
+        stepNumbers: tour.getOption("showStepNumbers"),
+        stepNumbersOfLabel: tour.getOption("stepNumbersOfLabel"),
 
-      progress: tour.getOption("showProgress"),
-      progressBarAdditionalClass: tour.getOption("progressBarAdditionalClass"),
+        scrollToElement: tour.getOption("scrollToElement"),
+        scrollPadding: tour.getOption("scrollPadding"),
 
-      stepNumbers: tour.getOption("showStepNumbers"),
-      stepNumbersOfLabel: tour.getOption("stepNumbersOfLabel"),
+        dontShowAgain: tour.getOption("dontShowAgain"),
+        onDontShowAgainChange: (e: any) => {
+          tour.setDontShowAgain((<HTMLInputElement>e.target).checked);
+        },
+        dontShowAgainLabel: tour.getOption("dontShowAgainLabel"),
+      });
 
-      scrollToElement: tour.getOption("scrollToElement"),
-      scrollPadding: tour.getOption("scrollPadding"),
+      const disableInteraction = step.val.disableInteraction
+        ? DisableInteraction({
+            currentStep: tour.currentStepSignal,
+            steps: tour.getSteps(),
+            targetElement: tour.getTargetElement(),
+            helperElementPadding: tour.getOption("helperElementPadding"),
+          })
+        : null;
 
-      dontShowAgain: tour.getOption("dontShowAgain"),
-      onDontShowAgainChange: (e: any) => {
-        tour.setDontShowAgain((<HTMLInputElement>e.target).checked);
-      },
-      dontShowAgainLabel: tour.getOption("dontShowAgainLabel"),
-    });
+      return div(overlayLayer, referenceLayer, disableInteraction);
+    }
+  );
 
-    const disableInteraction = step.val.disableInteraction
-      ? DisableInteraction({
-          currentStep: tour.currentStepSignal,
-          steps: tour.getSteps(),
-          targetElement: tour.getTargetElement(),
-          helperElementPadding: tour.getOption("helperElementPadding"),
-        })
-      : null;
+  van.derive(() => {
+    // to clean up the root element when the tour is done
+    if (currentStep.val === undefined || currentStep.val < 0) {
+      root.remove();
+    }
+  });
 
-    return div(
-      { className: "introjs-tour" },
-      overlayLayer,
-      helperLayer,
-      referenceLayer,
-      disableInteraction
-    );
-  };
+  return root;
 };
