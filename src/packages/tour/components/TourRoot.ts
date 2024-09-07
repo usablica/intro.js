@@ -35,8 +35,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
   const root = div(
     {
       className: "introjs-tour",
-      style: () =>
-        style({ opacity: `${opacity.val}` }),
+      style: () => style({ opacity: `${opacity.val}` }),
     },
     // helperLayer should not be re-rendered when the state changes for the transition to work
     helperLayer,
@@ -157,11 +156,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
       // the 300ms delay is coming from the helper layer transition duration
       tooltipTransitionDuration = 300;
 
-      return div(
-        overlayLayer,
-        referenceLayer,
-        disableInteraction
-      );
+      return div(overlayLayer, referenceLayer, disableInteraction);
     }
   );
 
@@ -174,7 +169,6 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         root.remove();
       }, 250);
     }
-
   });
 
   setTimeout(() => {

@@ -51,22 +51,21 @@ const Bullets = ({
   steps,
   onBulletClick,
 }: {
-  step: TourStep,
+  step: TourStep;
   steps: TourStep[];
   onBulletClick: (stepNumber: number) => void;
 }): HTMLElement => {
-
   return div({ className: bulletsClassName }, [
     ul({ role: "tablist" }, [
       ...steps.map(({ step: stepNumber }) => {
         const innerLi = li(
           {
-            role: "presentation"
+            role: "presentation",
           },
           [
             a({
               role: "tab",
-                className: () =>
+              className: () =>
                 `${step.step === stepNumber ? activeClassName : ""}`,
               onclick: (e: any) => {
                 const stepNumberAttribute = (
@@ -89,27 +88,29 @@ const Bullets = ({
 };
 
 const ProgressBar = ({
-    steps,
-    currentStep,
-    progressBarAdditionalClass
+  steps,
+  currentStep,
+  progressBarAdditionalClass,
 }: {
-    steps: TourStep[];
-    currentStep: number;
-    progressBarAdditionalClass: string;
+  steps: TourStep[];
+  currentStep: number;
+  progressBarAdditionalClass: string;
 }) => {
-    const progress = (currentStep / steps.length) * 100;
+  const progress = (currentStep / steps.length) * 100;
 
-    return div({ className: progressClassName }, [
-        div({
-            className: `${progressBarClassName} ${progressBarAdditionalClass ? progressBarAdditionalClass : ""}`,
-            "role": "progress",
-            "aria-valuemin": "0",
-            "aria-valuemax": "100",
-            "aria-valuenow": () => progress.toString(),
-            style: `width:${progress}%;`,
-        }),
-    ]);
-}
+  return div({ className: progressClassName }, [
+    div({
+      className: `${progressBarClassName} ${
+        progressBarAdditionalClass ? progressBarAdditionalClass : ""
+      }`,
+      role: "progress",
+      "aria-valuemin": "0",
+      "aria-valuemax": "100",
+      "aria-valuenow": () => progress.toString(),
+      style: `width:${progress}%;`,
+    }),
+  ]);
+};
 
 const StepNumber = ({
   step,
@@ -129,12 +130,12 @@ const Button = ({
   label,
   onClick,
   disabled,
-  className
+  className,
 }: {
   label: string;
   onClick: (e: any) => void;
-  disabled?: PropValueOrDerived
-  className?: PropValueOrDerived
+  disabled?: PropValueOrDerived;
+  className?: PropValueOrDerived;
 }) => {
   return a(
     {
@@ -159,7 +160,7 @@ const NextButton = ({
   hidePrev,
   nextToDone,
   onClick,
-  buttonClass
+  buttonClass,
 }: {
   steps: TourStep[];
   currentStep: number;
@@ -173,55 +174,47 @@ const NextButton = ({
   onClick: (e: any) => void;
   buttonClass: string;
 }) => {
-    const isFullButton = currentStep === 0 && steps.length > 1 && hidePrev;
-    const isLastStep = currentStep === steps.length - 1 || steps.length === 1;
+  const isFullButton = currentStep === 0 && steps.length > 1 && hidePrev;
+  const isLastStep = currentStep === steps.length - 1 || steps.length === 1;
 
-    const isDisabled = van.derive(() => {
-      // when the current step is the last one or there is only one step to show
-      return (
-        isLastStep &&
-        !hideNext &&
-        !nextToDone
-      );
-    });
+  const isDisabled = van.derive(() => {
+    // when the current step is the last one or there is only one step to show
+    return isLastStep && !hideNext && !nextToDone;
+  });
 
-    const isDoneButton = van.derive(() => {
-      return (
-        isLastStep &&
-        !hideNext &&
-        nextToDone
-      );
-    });
+  const isDoneButton = van.derive(() => {
+    return isLastStep && !hideNext && nextToDone;
+  });
 
-    const nextButton = Button({
-      label: isDoneButton.val ? doneLabel : nextLabel,
-      onClick,
-      className: () => {
-        const classNames = [buttonClass, nextButtonClassName];
+  const nextButton = Button({
+    label: isDoneButton.val ? doneLabel : nextLabel,
+    onClick,
+    className: () => {
+      const classNames = [buttonClass, nextButtonClassName];
 
-        if (isDoneButton.val) {
-          classNames.push(doneButtonClassName);
-        }
+      if (isDoneButton.val) {
+        classNames.push(doneButtonClassName);
+      }
 
-        if (isDisabled.val) {
-          classNames.push(disabledButtonClassName);
-        }
+      if (isDisabled.val) {
+        classNames.push(disabledButtonClassName);
+      }
 
-        if (isFullButton) {
-          classNames.push(fullButtonClassName);
-        }
+      if (isFullButton) {
+        classNames.push(fullButtonClassName);
+      }
 
-        return classNames.filter(Boolean).join(" ");
-      },
-    });
+      return classNames.filter(Boolean).join(" ");
+    },
+  });
 
-    // wait for the button to be rendered
-    setTimeout(() => {
-      nextButton.focus()
-    }, 1);
+  // wait for the button to be rendered
+  setTimeout(() => {
+    nextButton.focus();
+  }, 1);
 
-    return nextButton;
-}
+  return nextButton;
+};
 
 const PrevButton = ({
   label,
@@ -298,8 +291,8 @@ const Buttons = ({
   prevLabel: string;
   onPrevClick: (e: any) => void;
 }) => {
-  const isLastStep = currentStep === steps.length - 1 || steps.length === 1
-  const isFirstStep = currentStep === 0 && steps.length > 1
+  const isLastStep = currentStep === steps.length - 1 || steps.length === 1;
+  const isFirstStep = currentStep === 0 && steps.length > 1;
 
   return div(
     { className: tooltipButtonsClassName },
@@ -345,38 +338,42 @@ const Header = ({
 }) => {
   return div({ className: tooltipHeaderClassName }, [
     h1({ className: tooltipTitleClassName }, title),
-    Button({ className: skipButtonClassName, label: skipLabel, onClick: onSkipClick }),
+    Button({
+      className: skipButtonClassName,
+      label: skipLabel,
+      onClick: onSkipClick,
+    }),
   ]);
 };
 
 const scroll = ({
-    step,
-    tooltip,
-    scrollToElement,
-    scrollPadding,
+  step,
+  tooltip,
+  scrollToElement,
+  scrollPadding,
 }: {
-    step: TourStep;
-    tooltip: HTMLElement;
-    scrollToElement: boolean;
-    scrollPadding: number;
+  step: TourStep;
+  tooltip: HTMLElement;
+  scrollToElement: boolean;
+  scrollPadding: number;
 }) => {
-    // when target is within a scrollable element
-    scrollParentToElement(
-      scrollToElement,
-      step.element as HTMLElement
-    );
+  // when target is within a scrollable element
+  scrollParentToElement(scrollToElement, step.element as HTMLElement);
 
-    // change the scroll of the window, if needed
-    scrollTo(
-      scrollToElement,
-      step.scrollTo,
-      scrollPadding,
-      step.element as HTMLElement,
-      tooltip
-    );
+  // change the scroll of the window, if needed
+  scrollTo(
+    scrollToElement,
+    step.scrollTo,
+    scrollPadding,
+    step.element as HTMLElement,
+    tooltip
+  );
 };
 
-export type TourTooltipProps = Omit<TooltipProps, "hintMode" | "position" | "targetOffset"> & {
+export type TourTooltipProps = Omit<
+  TooltipProps,
+  "hintMode" | "position" | "targetOffset"
+> & {
   step: TourStep;
   steps: TourStep[];
   currentStep: number;
@@ -389,7 +386,7 @@ export type TourTooltipProps = Omit<TooltipProps, "hintMode" | "position" | "tar
   onNextClick: (e: any) => void;
   prevLabel: string;
   onPrevClick: (e: any) => void;
-  skipLabel: string,
+  skipLabel: string;
   onSkipClick: (e: any) => void;
   buttonClass: string;
   nextToDone: boolean;
@@ -405,7 +402,7 @@ export type TourTooltipProps = Omit<TooltipProps, "hintMode" | "position" | "tar
 
   scrollToElement: boolean;
   scrollPadding: number;
-  
+
   dontShowAgain: boolean;
   dontShowAgainLabel: string;
   onDontShowAgainChange: (checked: boolean) => void;
@@ -447,73 +444,71 @@ export const TourTooltip = ({
   dontShowAgainLabel,
   ...props
 }: TourTooltipProps) => {
-    const children = [];
-    const title = step.title;
-    const text = step.intro;
-    const position = step.position;
-    const targetOffset = getOffset(step.element as HTMLElement);
+  const children = [];
+  const title = step.title;
+  const text = step.intro;
+  const position = step.position;
+  const targetOffset = getOffset(step.element as HTMLElement);
 
-    children.push(Header({ title, skipLabel, onSkipClick }));
+  children.push(Header({ title, skipLabel, onSkipClick }));
 
-    children.push(div({ className: tooltipTextClassName }, p(text)));
+  children.push(div({ className: tooltipTextClassName }, p(text)));
 
-    if (dontShowAgain) {
-      children.push(
-        DontShowAgain({ dontShowAgainLabel, onDontShowAgainChange })
-      );
-    }
+  if (dontShowAgain) {
+    children.push(DontShowAgain({ dontShowAgainLabel, onDontShowAgainChange }));
+  }
 
-    if (bullets) {
-      children.push(Bullets({ step, steps, onBulletClick }));
-    }
+  if (bullets) {
+    children.push(Bullets({ step, steps, onBulletClick }));
+  }
 
-    if (progress) {
-      children.push(
-        ProgressBar({ steps, currentStep, progressBarAdditionalClass })
-      );
-    }
-
-    if (stepNumbers) {
-      children.push(StepNumber({ step, steps, stepNumbersOfLabel }));
-    }
-
-    if (buttons) {
-      children.push(
-        Buttons({
-          steps,
-          currentStep,
-
-          nextLabel: nextLabel,
-          onNextClick: onNextClick,
-
-          prevLabel: prevLabel,
-          onPrevClick: onPrevClick,
-
-          buttonClass,
-          nextToDone,
-          doneLabel,
-          hideNext,
-          hidePrev,
-        })
-      );
-    }
-
-    const tooltip = Tooltip(
-      {
-        ...props,
-        hintMode: false,
-        position,
-        targetOffset,
-      },
-      children
+  if (progress) {
+    children.push(
+      ProgressBar({ steps, currentStep, progressBarAdditionalClass })
     );
+  }
 
-    scroll({
-      step,
-      tooltip,
-      scrollToElement: scrollToElement,
-      scrollPadding: scrollPadding,
-    });
+  if (stepNumbers) {
+    children.push(StepNumber({ step, steps, stepNumbersOfLabel }));
+  }
 
-    return tooltip;
+  if (buttons) {
+    children.push(
+      Buttons({
+        steps,
+        currentStep,
+
+        nextLabel: nextLabel,
+        onNextClick: onNextClick,
+
+        prevLabel: prevLabel,
+        onPrevClick: onPrevClick,
+
+        buttonClass,
+        nextToDone,
+        doneLabel,
+        hideNext,
+        hidePrev,
+      })
+    );
+  }
+
+  const tooltip = Tooltip(
+    {
+      ...props,
+      hintMode: false,
+      position,
+      targetOffset,
+    },
+    children
+  );
+
+  scroll({
+    step,
+    tooltip,
+    scrollToElement: scrollToElement,
+    scrollPadding: scrollPadding,
+  });
+
+  return tooltip;
 };

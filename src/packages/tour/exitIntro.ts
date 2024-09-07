@@ -1,13 +1,8 @@
 import removeShowElement from "./removeShowElement";
-import { removeChild, removeAnimatedChild } from "../../util/removeChild";
+import { removeChild } from "../../util/removeChild";
 import { Tour } from "./tour";
-import {
-  floatingElementClassName,
-} from "./classNames";
-import {
-  queryElementByClassName,
-  queryElementsByClassName,
-} from "../../util/queryElement";
+import { floatingElementClassName } from "./classNames";
+import { queryElementByClassName } from "../../util/queryElement";
 
 /**
  * Exit from intro
@@ -22,38 +17,13 @@ export default async function exitIntro(
   const targetElement = tour.getTargetElement();
   let continueExit: boolean | undefined = true;
 
-  // calling onbeforeexit callback
-  //
+  // calling the onBeforeExit callback if it is defined
   // If this callback return `false`, it would halt the process
   continueExit = await tour.callback("beforeExit")?.call(tour, targetElement);
 
   // skip this check if `force` parameter is `true`
-  // otherwise, if `onbeforeexit` returned `false`, don't exit the intro
+  // otherwise, if `onBeforEexit` returned `false`, don't exit the intro
   if (!force && continueExit === false) return false;
-
-  // remove overlay layers from the page
-  // const overlayLayers = Array.from(
-  //   queryElementsByClassName(overlayClassName, targetElement)
-  // );
-
-  // if (overlayLayers && overlayLayers.length) {
-  //   for (const overlayLayer of overlayLayers) {
-  //     removeChild(overlayLayer);
-  //   }
-  // }
-
-  //const referenceLayer = queryElementByClassName(
-  //  tooltipReferenceLayerClassName,
-  //  targetElement
-  //);
-  //removeChild(referenceLayer);
-
-  //remove disableInteractionLayer
-  // const disableInteractionLayer = queryElementByClassName(
-  //   disableInteractionClassName,
-  //   targetElement
-  // );
-  // removeChild(disableInteractionLayer);
 
   //remove intro floating element
   const floatingElement = queryElementByClassName(
@@ -63,13 +33,6 @@ export default async function exitIntro(
   removeChild(floatingElement);
 
   removeShowElement();
-
-  //remove all helper layers
-  // const helperLayer = queryElementByClassName(
-  //   helperLayerClassName,
-  //   targetElement
-  // );
-  // await removeAnimatedChild(helperLayer);
 
   //check if any callback is defined
   await tour.callback("exit")?.call(tour);
