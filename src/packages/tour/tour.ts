@@ -23,6 +23,7 @@ import onKeyDown from "./onKeyDown";
 import onResize from "./onResize";
 import van from "../dom/van";
 import { TourRoot } from "./components/TourRoot";
+import { FloatingElement } from "./components/FloatingElement";
 
 /**
  * Intro.js Tour class
@@ -33,6 +34,7 @@ export class Tour implements Package<TourOptions> {
   private _direction: "forward" | "backward";
   private readonly _targetElement: HTMLElement;
   private _options: TourOptions;
+  private _floatingElement: Element | undefined;
 
   private readonly callbacks: {
     beforeChange?: introBeforeChangeCallback;
@@ -388,6 +390,27 @@ export class Tour implements Package<TourOptions> {
     }
   }
 
+  /**
+   * Append the floating element to the target element.
+   * Floating element is a helper element that is used when the step does not have a target element.
+   * For internal use only.
+   */
+  appendFloatingElement() {
+    if (!this._floatingElement) {
+      this._floatingElement = FloatingElement({
+        currentStep: this.getCurrentStepSignal(),
+      });
+
+      // only add the floating element once per tour instance
+      van.add(this.getTargetElement(), this._floatingElement);
+    }
+
+    return this._floatingElement;
+  }
+
+  /**
+   * Create the root element for the tour
+   */
   private createRoot() {
     van.add(this.getTargetElement(), TourRoot({ tour: this }));
   }

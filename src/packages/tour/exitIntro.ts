@@ -1,8 +1,5 @@
 import removeShowElement from "./removeShowElement";
-import { removeChild } from "../../util/removeChild";
 import { Tour } from "./tour";
-import { floatingElementClassName } from "./classNames";
-import { queryElementByClassName } from "../../util/queryElement";
 
 /**
  * Exit from intro
@@ -24,13 +21,6 @@ export default async function exitIntro(
   // skip this check if `force` parameter is `true`
   // otherwise, if `onBeforEexit` returned `false`, don't exit the intro
   if (!force && continueExit === false) return false;
-
-  //remove intro floating element
-  const floatingElement = queryElementByClassName(
-    floatingElementClassName,
-    targetElement
-  );
-  removeChild(floatingElement);
 
   removeShowElement();
 

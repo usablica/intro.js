@@ -1,14 +1,8 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import showElement from "./showElement";
-import {
-  queryElement,
-  queryElementByClassName,
-  queryElements,
-} from "../../util/queryElement";
+import { queryElement, queryElements } from "../../util/queryElement";
 import cloneObject from "../../util/cloneObject";
-import createElement from "../../util/createElement";
 import { Tour } from "./tour";
-import { floatingElementClassName } from "./classNames";
 import {
   dataDisableInteraction,
   dataHighlightClass,
@@ -143,19 +137,7 @@ export const fetchSteps = (tour: Tour) => {
 
       // tour without element
       if (!step.element) {
-        let floatingElementQuery = queryElementByClassName(
-          floatingElementClassName
-        );
-
-        if (!floatingElementQuery) {
-          floatingElementQuery = createElement("div", {
-            className: floatingElementClassName,
-          });
-
-          document.body.appendChild(floatingElementQuery);
-        }
-
-        step.element = floatingElementQuery;
+        step.element = tour.appendFloatingElement();
         step.position = "floating";
       }
 
