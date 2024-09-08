@@ -12,6 +12,8 @@ import { hideHint, hideHints } from "./hide";
 import { showHint, showHints } from "./show";
 import { removeHint, removeHints } from "./remove";
 import { showHintDialog } from "./tooltip";
+import van from "../dom/van";
+import { HintsRoot } from "./components/HintsRoot";
 
 type hintsAddedCallback = (this: Hint) => void | Promise<void>;
 type hintClickCallback = (
@@ -26,6 +28,8 @@ export class Hint implements Package<HintOptions> {
   private _hints: HintItem[] = [];
   private readonly _targetElement: HTMLElement;
   private _options: HintOptions;
+  public _activeHintSignal = van.state<number | undefined>(undefined);
+  public _refreshes = van.state(0);
 
   private readonly callbacks: {
     hintsAdded?: hintsAddedCallback;
@@ -105,6 +109,10 @@ export class Hint implements Package<HintOptions> {
     return this;
   }
 
+  private createRoot() {
+    van.add(this._targetElement, HintsRoot({ hint: this }));
+  }
+
   /**
    * Render hints on the page
    */
@@ -115,6 +123,7 @@ export class Hint implements Package<HintOptions> {
 
     fetchHintItems(this);
     await renderHints(this);
+    this.createRoot();
     return this;
   }
 
@@ -193,6 +202,7 @@ export class Hint implements Package<HintOptions> {
    * @param stepId The hint step ID
    */
   async showHintDialog(stepId: number) {
+    this._activeHintSignal.val = stepId;
     await showHintDialog(this, stepId);
     return this;
   }

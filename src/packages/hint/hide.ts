@@ -13,7 +13,7 @@ import { hintElement, hintElements } from "./selector";
 export async function hideHint(hint: Hint, stepId: number) {
   const element = hintElement(stepId);
 
-  removeHintTooltip();
+  //removeHintTooltip();
 
   if (element) {
     addClass(element, hideHintClassName);

@@ -12,7 +12,7 @@ import { hideHint } from "./hide";
 import { setPositionRelativeTo } from "../../util/positionRelativeTo";
 import DOMEvent from "../../util/DOMEvent";
 import getOffset from "../../util/getOffset";
-import { HintTooltip } from "./hintTooltip";
+import { HintTooltip } from "./components/HintTooltip";
 import van from "../dom/van";
 
 // The hint close function used when the user clicks outside the hint
@@ -52,6 +52,8 @@ export async function showHintDialog(hint: Hint, stepId: number) {
 
   if (!hintElement || !item) return;
 
+  hint._activeHintSignal.val = stepId;
+
   // call the callback function (if any)
   await hint.callback("hintClick")?.call(hint, hintElement, item, stepId);
 
@@ -83,62 +85,62 @@ export async function showHintDialog(hint: Hint, stepId: number) {
 
   //tooltipLayer.appendChild(tooltipTextLayer);
 
-  const step = hintElement.getAttribute(dataStepAttribute) || "";
+  //const step = hintElement.getAttribute(dataStepAttribute) || "";
 
-  // set current step for _placeTooltip function
-  const hintItem = hint.getHint(parseInt(step, 10));
+  //// set current step for _placeTooltip function
+  //const hintItem = hint.getHint(parseInt(step, 10));
 
-  if (!hintItem) return;
+  //if (!hintItem) return;
 
-  const tooltipLayer = HintTooltip({
-    position: van.state(hintItem.position),
-    text: item.hint || "",
-    targetOffset: van.state(getOffset(hintItem.element as HTMLElement)),
-    // hints don't have step numbers
-    showStepNumbers: false,
+  //const tooltipLayer = HintTooltip({
+  //  position: van.state(hintItem.position),
+  //  text: item.hint || "",
+  //  targetOffset: van.state(getOffset(hintItem.element as HTMLElement)),
+  //  // hints don't have step numbers
+  //  showStepNumbers: false,
 
-    autoPosition: hint.getOption("autoPosition"),
-    positionPrecedence: hint.getOption("positionPrecedence"),
+  //  autoPosition: hint.getOption("autoPosition"),
+  //  positionPrecedence: hint.getOption("positionPrecedence"),
 
-    closeButtonEnabled: hint.getOption("hintShowButton"),
-    closeButtonLabel: hint.getOption("hintButtonLabel"),
-    closeButtonClassName: hint.getOption("buttonClass"),
-    closeButtonOnClick: () => hideHint(hint, stepId),
-  });
+  //  closeButtonEnabled: hint.getOption("hintShowButton"),
+  //  closeButtonLabel: hint.getOption("hintButtonLabel"),
+  //  closeButtonClassName: hint.getOption("buttonClass"),
+  //  closeButtonOnClick: () => hideHint(hint, stepId),
+  //});
 
-  //const tooltipTextLayer = createElement("div");
-  //const arrowLayer = createElement("div");
-  const referenceLayer = createElement("div");
+  ////const tooltipTextLayer = createElement("div");
+  ////const arrowLayer = createElement("div");
+  //const referenceLayer = createElement("div");
 
-  tooltipLayer.onclick = (e: Event) => {
-    //IE9 & Other Browsers
-    if (e.stopPropagation) {
-      e.stopPropagation();
-    }
-    //IE8 and Lower
-    else {
-      e.cancelBubble = true;
-    }
-  };
+  //tooltipLayer.onclick = (e: Event) => {
+  //  //IE9 & Other Browsers
+  //  if (e.stopPropagation) {
+  //    e.stopPropagation();
+  //  }
+  //  //IE8 and Lower
+  //  else {
+  //    e.cancelBubble = true;
+  //  }
+  //};
 
-  // align reference layer position
-  setClass(
-    referenceLayer,
-    tooltipReferenceLayerClassName,
-    hintReferenceClassName
-  );
-  referenceLayer.setAttribute(dataStepAttribute, step);
+  //// align reference layer position
+  //setClass(
+  //  referenceLayer,
+  //  tooltipReferenceLayerClassName,
+  //  hintReferenceClassName
+  //);
+  //referenceLayer.setAttribute(dataStepAttribute, step);
 
-  const helperLayerPadding = hint.getOption("helperElementPadding");
-  setPositionRelativeTo(
-    hint.getTargetElement(),
-    referenceLayer,
-    hintItem.element as HTMLElement,
-    helperLayerPadding
-  );
+  //const helperLayerPadding = hint.getOption("helperElementPadding");
+  //setPositionRelativeTo(
+  //  hint.getTargetElement(),
+  //  referenceLayer,
+  //  hintItem.element as HTMLElement,
+  //  helperLayerPadding
+  //);
 
-  referenceLayer.appendChild(tooltipLayer);
-  document.body.appendChild(referenceLayer);
+  //referenceLayer.appendChild(tooltipLayer);
+  //document.body.appendChild(referenceLayer);
 
   // set proper position
   //placeTooltip(
@@ -154,7 +156,8 @@ export async function showHintDialog(hint: Hint, stepId: number) {
   //);
 
   _hintCloseFunction = () => {
-    removeHintTooltip();
+    //removeHintTooltip();
+    hint._activeHintSignal.val = undefined;
     DOMEvent.off(document, "click", _hintCloseFunction, false);
   };
 

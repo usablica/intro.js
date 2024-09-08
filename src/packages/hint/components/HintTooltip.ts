@@ -1,6 +1,7 @@
-import { Tooltip, TooltipProps } from "../tooltip/tooltip";
-import van from "../dom/van";
-import { tooltipTextClassName } from "./className";
+import { Tooltip, TooltipProps } from "../../tooltip/tooltip";
+import van from "../../dom/van";
+import { tooltipTextClassName } from "../className";
+import { HintItem } from "../hintItem";
 
 const { a, p, div } = van.tags;
 
