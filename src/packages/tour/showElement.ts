@@ -1,8 +1,11 @@
 import { addClass } from "../../util/className";
 import { TourStep } from "./steps";
-import removeShowElement from "./removeShowElement";
 import { Tour } from "./tour";
 import getPropValue from "../../util/getPropValue";
+import { queryElementsByClassName } from "../../util/queryElement";
+import { removeClass } from "../../util/className";
+import { showElementClassName } from "./classNames";
+
 /**
  * To set the show element
  * This function set a relative (in most cases) position and changes the z-index
@@ -29,7 +32,7 @@ function setShowElement(targetElement: HTMLElement) {
  *
  * @api private
  */
-export default async function _showElement(tour: Tour, step: TourStep) {
+export async function showElement(tour: Tour, step: TourStep) {
   tour.callback("change")?.call(tour, step.element);
 
   //remove old classes if the element still exist
@@ -38,4 +41,17 @@ export default async function _showElement(tour: Tour, step: TourStep) {
   setShowElement(step.element as HTMLElement);
 
   await tour.callback("afterChange")?.call(tour, step.element);
+}
+
+/**
+ * To remove all show element(s)
+ *
+ * @api private
+ */
+export function removeShowElement() {
+  const elms = Array.from(queryElementsByClassName(showElementClassName));
+
+  for (const elm of elms) {
+    removeClass(elm, /introjs-[a-zA-Z]+/g);
+  }
 }

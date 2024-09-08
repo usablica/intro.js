@@ -1,4 +1,4 @@
-import removeShowElement from "./removeShowElement";
+import { removeShowElement } from "./showElement";
 import { Tour } from "./tour";
 
 /**
@@ -28,6 +28,8 @@ export default async function exitIntro(
   await tour.callback("exit")?.call(tour);
 
   // set the step to default
+  // this would update the signal to the tour that the tour has ended
+  // and the corresponding components would be updated
   tour.resetCurrentStep();
 
   return true;

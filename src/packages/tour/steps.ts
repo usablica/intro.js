@@ -1,5 +1,4 @@
 import { TooltipPosition } from "../../packages/tooltip";
-import showElement from "./showElement";
 import { queryElement, queryElements } from "../../util/queryElement";
 import cloneObject from "../../util/cloneObject";
 import { Tour } from "./tour";
@@ -14,6 +13,7 @@ import {
   dataTitleAttribute,
   dataTooltipClass,
 } from "./dataAttributes";
+import { showElement } from "./showElement";
 
 export type ScrollTo = "off" | "element" | "tooltip";
 
@@ -80,13 +80,19 @@ export async function nextStep(tour: Tour) {
  * @api private
  */
 export async function previousStep(tour: Tour) {
-  const currentStep = tour.getCurrentStep();
+  let currentStep = tour.getCurrentStep();
 
   if (currentStep === undefined || currentStep <= 0) {
     return false;
   }
 
   tour.decrementCurrentStep();
+  // update the current step after decrementing
+  currentStep = tour.getCurrentStep();
+
+  if (currentStep === undefined) {
+    return false;
+  }
 
   const nextStep = tour.getStep(currentStep);
   let continueStep: boolean | undefined = true;
