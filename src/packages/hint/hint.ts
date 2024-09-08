@@ -16,15 +16,11 @@ import van from "../dom/van";
 import { HintsRoot } from "./components/HintsRoot";
 
 type hintsAddedCallback = (this: Hint) => void | Promise<void>;
-type hintClickCallback = (
-  this: Hint,
-  hintElement: HTMLElement,
-  item: HintItem,
-  stepId: number
-) => void | Promise<void>;
-type hintCloseCallback = (this: Hint, stepId: number) => void | Promise<void>;
+type hintClickCallback = (this: Hint, item: HintItem) => void | Promise<void>;
+type hintCloseCallback = (this: Hint, item: HintItem) => void | Promise<void>;
 
 export class Hint implements Package<HintOptions> {
+  private _root: HTMLElement | undefined;
   private _hints: HintItem[] = [];
   private readonly _targetElement: HTMLElement;
   private _options: HintOptions;
@@ -105,12 +101,19 @@ export class Hint implements Package<HintOptions> {
    * @param hint The Hint item
    */
   addHint(hint: HintItem): this {
+    // always set isActive to true
+    hint.isActive = van.state(true);
     this._hints.push(hint);
     return this;
   }
 
+  public isRendered() {
+    return this._root !== undefined;
+  }
+
   private createRoot() {
-    van.add(this._targetElement, HintsRoot({ hint: this }));
+    this._root = HintsRoot({ hint: this });
+    van.add(this._targetElement, this._root);
   }
 
   /**
@@ -139,7 +142,12 @@ export class Hint implements Package<HintOptions> {
    * @param stepId The hint step ID
    */
   async hideHint(stepId: number) {
-    await hideHint(this, stepId);
+    const hintItem = this.getHint(stepId);
+
+    if (hintItem) {
+      await hideHint(this, hintItem);
+    }
+
     return this;
   }
 
@@ -156,7 +164,12 @@ export class Hint implements Package<HintOptions> {
    * @param stepId The hint step ID
    */
   showHint(stepId: number) {
-    showHint(stepId);
+    const hintItem = this.getHint(stepId);
+
+    if (hintItem) {
+      showHint(hintItem);
+    }
+
     return this;
   }
 
@@ -173,6 +186,10 @@ export class Hint implements Package<HintOptions> {
    * Useful when you want to destroy the elements and add them again (e.g. a modal or popup)
    */
   destroy() {
+    if (this._root) {
+      this._root.remove();
+      this._root = undefined;
+    }
     removeHints(this);
     return this;
   }

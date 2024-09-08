@@ -15,25 +15,7 @@ import setAnchorAsButton from "../../util/setAnchorAsButton";
 import { addClass } from "../../util/className";
 import isFixed from "../../util/isFixed";
 import { alignHintPosition } from "./position";
-import { showHintDialog } from "./tooltip";
 import { HintsRoot } from "./components/HintsRoot";
-
-/**
- * Returns an event handler unique to the hint iteration
- */
-const getHintClick = (hint: Hint, i: number) => (e: Event) => {
-  const evt = e ? e : window.event;
-
-  if (evt && evt.stopPropagation) {
-    evt.stopPropagation();
-  }
-
-  if (evt && evt.cancelBubble !== null) {
-    evt.cancelBubble = true;
-  }
-
-  showHintDialog(hint, i);
-};
 
 /**
  * Add all available hints to the page

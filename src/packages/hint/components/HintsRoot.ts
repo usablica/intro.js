@@ -2,6 +2,7 @@ import van from "../../dom/van";
 import { hintsClassName } from "../className";
 import { hideHint } from "../hide";
 import { Hint } from "../hint";
+import { HintItem } from "../hintItem";
 import { showHintDialog } from "../tooltip";
 import { HintIcon } from "./HintIcon";
 import { ReferenceLayer } from "./ReferenceLayer";
@@ -33,13 +34,17 @@ export const HintsRoot = ({ hint }: HintsRootProps) => {
   const hintElements = [];
 
   for (const [i, hintItem] of hint.getHints().entries()) {
-    hintElements.push(
-      HintIcon({
-        index: i,
-        hintItem,
-        onClick: getHintClick(hint, i),
-      })
-    );
+    const hintTooltipElement = HintIcon({
+      index: i,
+      hintItem,
+      onClick: getHintClick(hint, i),
+    });
+
+    // store the hint tooltip element in the hint item
+    // because we need to position the reference layer relative to the HintIcon
+    hintItem.hintTooltipElement = hintTooltipElement;
+
+    hintElements.push(hintTooltipElement);
   }
 
   const root = div(
@@ -58,9 +63,7 @@ export const HintsRoot = ({ hint }: HintsRootProps) => {
 
     const referenceLayer = ReferenceLayer({
       activeHintSignal: hint._activeHintSignal,
-      text: hintItem.hint || "",
-      element: hintItem.element as HTMLElement,
-      position: hintItem.position,
+      hintItem,
 
       helperElementPadding: hint.getOption("helperElementPadding"),
       targetElement: hint.getTargetElement(),
@@ -76,7 +79,7 @@ export const HintsRoot = ({ hint }: HintsRootProps) => {
       closeButtonEnabled: hint.getOption("hintShowButton"),
       closeButtonLabel: hint.getOption("hintButtonLabel"),
       closeButtonClassName: hint.getOption("buttonClass"),
-      closeButtonOnClick: () => hideHint(hint, stepId),
+      closeButtonOnClick: (hintItem: HintItem) => hideHint(hint, hintItem),
     });
 
     van.add(root, referenceLayer);

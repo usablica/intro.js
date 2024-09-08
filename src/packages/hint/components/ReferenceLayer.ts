@@ -21,10 +21,16 @@ export const ReferenceLayer = ({
   helperElementPadding,
   ...props
 }: ReferenceLayerProps) => {
+  const initialActiveHintSignal = activeHintSignal.val;
+
   return () => {
     // remove the reference layer if the active hint signal is set to undefined
     // e.g. when the user clicks outside the hint
     if (activeHintSignal.val == undefined) return null;
+
+    // remove the reference layer if the active hint signal changes
+    // and the initial active hint signal is not same as the current active hint signal (e.g. when the user clicks on another hint)
+    if (initialActiveHintSignal !== activeHintSignal.val) return null;
 
     const referenceLayer = div(
       {
@@ -38,7 +44,7 @@ export const ReferenceLayer = ({
       setPositionRelativeTo(
         targetElement,
         referenceLayer,
-        props.element as HTMLElement,
+        props.hintItem.hintTooltipElement as HTMLElement,
         helperElementPadding
       );
     }, 1);

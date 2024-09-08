@@ -81,7 +81,7 @@ export const alignHintPosition = (
  * @api private
  */
 export function reAlignHints(hint: Hint) {
-  for (const { hintTargetElement, hintPosition, element } of hint.getHints()) {
-    alignHintPosition(hintPosition, element as HTMLElement, hintTargetElement);
+  for (const { hintTooltipElement, hintPosition, element } of hint.getHints()) {
+    alignHintPosition(hintPosition, element as HTMLElement, hintTooltipElement);
   }
 }

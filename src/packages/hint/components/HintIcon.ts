@@ -2,6 +2,7 @@ import isFixed from "../../../util/isFixed";
 import van from "../../dom/van";
 import {
   fixedHintClassName,
+  hideHintClassName,
   hintClassName,
   hintDotClassName,
   hintNoAnimationClassName,
@@ -30,6 +31,10 @@ const className = (hintItem: HintItem) => {
     classNames.push(fixedHintClassName);
   }
 
+  if (!hintItem.isActive?.val) {
+    classNames.push(hideHintClassName);
+  }
+
   return classNames.join(" ");
 };
 
@@ -40,7 +45,7 @@ export const HintIcon = ({ index, hintItem, onClick }: HintProps) => {
   const hintElement = a(
     {
       [dataStepAttribute]: index.toString(),
-      className: className(hintItem),
+      className: () => className(hintItem),
       role: "button",
       tabindex: 0,
       onclick: onClick,

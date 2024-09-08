@@ -44,26 +44,22 @@ export function removeHintTooltip(): string | undefined {
  * @api private
  */
 export async function showHintDialog(hint: Hint, stepId: number) {
-  const hintElement = queryElement(
-    `.${hintClassName}[${dataStepAttribute}="${stepId}"]`
-  );
-
   const item = hint.getHint(stepId);
 
-  if (!hintElement || !item) return;
+  if (!item) return;
 
   hint._activeHintSignal.val = stepId;
 
   // call the callback function (if any)
-  await hint.callback("hintClick")?.call(hint, hintElement, item, stepId);
+  await hint.callback("hintClick")?.call(hint, item);
 
   // remove all open tooltips
-  const removedStep = removeHintTooltip();
+  // const removedStep = removeHintTooltip();
 
   // to toggle the tooltip
-  if (removedStep !== undefined && parseInt(removedStep, 10) === stepId) {
-    return;
-  }
+  //if (removedStep !== undefined && parseInt(removedStep, 10) === stepId) {
+  //  return;
+  //}
 
   //setClass(tooltipTextLayer, tooltipTextClassName);
 

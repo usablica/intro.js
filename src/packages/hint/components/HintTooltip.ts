@@ -5,16 +5,19 @@ import { HintItem } from "../hintItem";
 
 const { a, p, div } = van.tags;
 
-export type HintTooltipProps = Omit<TooltipProps, "hintMode"> & {
-  text: string;
+export type HintTooltipProps = Omit<
+  TooltipProps,
+  "hintMode" | "element" | "position"
+> & {
+  hintItem: HintItem;
   closeButtonEnabled: boolean;
-  closeButtonOnClick: () => void;
+  closeButtonOnClick: (hintItem: HintItem) => void;
   closeButtonLabel: string;
   closeButtonClassName: string;
 };
 
 export const HintTooltip = ({
-  text,
+  hintItem,
   closeButtonEnabled,
   closeButtonOnClick,
   closeButtonLabel,
@@ -24,18 +27,20 @@ export const HintTooltip = ({
   return Tooltip(
     {
       ...props,
+      element: hintItem.hintTooltipElement as HTMLElement,
+      position: hintItem.position,
       hintMode: true,
     },
     [
       div(
         { className: tooltipTextClassName },
-        p(text),
+        p(hintItem.hint || ""),
         closeButtonEnabled
           ? a(
               {
                 className: closeButtonClassName,
                 role: "button",
-                onclick: closeButtonOnClick,
+                onclick: () => closeButtonOnClick(hintItem),
               },
               closeButtonLabel
             )

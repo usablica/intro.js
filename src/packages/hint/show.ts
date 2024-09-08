@@ -1,8 +1,5 @@
 import { Hint } from "./hint";
-import { hideHintClassName } from "./className";
-import { dataStepAttribute } from "./dataAttributes";
-import { removeClass } from "../../util/className";
-import { hintElement, hintElements } from "./selector";
+import { HintItem } from "./hintItem";
 
 /**
  * Show all hints
@@ -10,15 +7,9 @@ import { hintElement, hintElements } from "./selector";
  * @api private
  */
 export async function showHints(hint: Hint) {
-  const elements = hintElements();
-
-  if (elements?.length) {
-    for (const hintElement of Array.from(elements)) {
-      const step = hintElement.getAttribute(dataStepAttribute);
-
-      if (!step) continue;
-
-      showHint(parseInt(step, 10));
+  if (hint.isRendered()) {
+    for (const hintItem of hint.getHints()) {
+      showHint(hintItem);
     }
   } else {
     // or render hints if there are none
@@ -31,10 +22,10 @@ export async function showHints(hint: Hint) {
  *
  * @api private
  */
-export function showHint(stepId: number) {
-  const element = hintElement(stepId);
+export function showHint(hintItem: HintItem) {
+  const activeSignal = hintItem.isActive;
 
-  if (element) {
-    removeClass(element, new RegExp(hideHintClassName, "g"));
+  if (activeSignal) {
+    activeSignal.val = true;
   }
 }
