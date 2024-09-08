@@ -21,7 +21,7 @@ export class Hint implements Package<HintOptions> {
   private readonly _targetElement: HTMLElement;
   private _options: HintOptions;
   private _activeHintSignal = van.state<number | undefined>(undefined);
-  private _refreshes = van.state(0);
+  private _refreshesSignal = van.state(0);
 
   private readonly callbacks: {
     hintsAdded?: hintsAddedCallback;
@@ -118,7 +118,7 @@ export class Hint implements Package<HintOptions> {
    * This is an internal method and should not be used outside of the package.
    */
   getRefreshesSignal() {
-    return this._refreshes;
+    return this._refreshesSignal;
   }
 
   /**
@@ -305,8 +305,8 @@ export class Hint implements Package<HintOptions> {
       return this;
     }
 
-    if (this._refreshes.val !== undefined) {
-      this._refreshes.val += 1;
+    if (this._refreshesSignal.val !== undefined) {
+      this._refreshesSignal.val += 1;
     }
 
     return this;

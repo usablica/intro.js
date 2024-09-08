@@ -28,8 +28,8 @@ import { FloatingElement } from "./components/FloatingElement";
  */
 export class Tour implements Package<TourOptions> {
   private _steps: TourStep[] = [];
-  private _currentStep = van.state<number | undefined>(undefined);
-  private _refreshes = van.state(0);
+  private _currentStepSignal = van.state<number | undefined>(undefined);
+  private _refreshesSignal = van.state(0);
   private _root: Element | undefined;
   private _direction: "forward" | "backward";
   private readonly _targetElement: HTMLElement;
@@ -170,7 +170,7 @@ export class Tour implements Package<TourOptions> {
    * This is an internal method and should not be used outside of the package.
    */
   getCurrentStepSignal() {
-    return this._currentStep;
+    return this._currentStepSignal;
   }
 
   /**
@@ -178,25 +178,25 @@ export class Tour implements Package<TourOptions> {
    * This is an internal method and should not be used outside of the package.
    */
   getRefreshesSignal() {
-    return this._refreshes;
+    return this._refreshesSignal;
   }
 
   /**
    * Get the current step of the tour
    */
   getCurrentStep(): number | undefined {
-    return this._currentStep.val;
+    return this._currentStepSignal.val;
   }
 
   /**
    * @deprecated `currentStep()` is deprecated, please use `getCurrentStep()` instead.
    */
   currentStep(): number | undefined {
-    return this._currentStep.val;
+    return this._currentStepSignal.val;
   }
 
   resetCurrentStep() {
-    this._currentStep.val = undefined;
+    this._currentStepSignal.val = undefined;
   }
 
   /**
@@ -204,13 +204,16 @@ export class Tour implements Package<TourOptions> {
    * @param step
    */
   setCurrentStep(step: number): this {
-    if (this._currentStep.val === undefined || step >= this._currentStep.val) {
+    if (
+      this._currentStepSignal.val === undefined ||
+      step >= this._currentStepSignal.val
+    ) {
       this._direction = "forward";
     } else {
       this._direction = "backward";
     }
 
-    this._currentStep.val = step;
+    this._currentStepSignal.val = step;
     return this;
   }
 
@@ -471,8 +474,8 @@ export class Tour implements Package<TourOptions> {
       return this;
     }
 
-    if (this._refreshes.val !== undefined) {
-      this._refreshes.val += 1;
+    if (this._refreshesSignal.val !== undefined) {
+      this._refreshesSignal.val += 1;
     }
 
     // fetch new steps and recreate the root element
