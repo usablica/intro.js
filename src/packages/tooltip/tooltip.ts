@@ -314,6 +314,8 @@ export type TooltipProps = {
   // auto-alignment properties
   autoPosition: boolean;
   positionPrecedence: TooltipPosition[];
+
+  onClick?: (e: any) => void;
 };
 
 export const Tooltip = (
@@ -329,6 +331,8 @@ export const Tooltip = (
     // auto-alignment properties
     autoPosition = true,
     positionPrecedence = [],
+
+    onClick,
   }: TooltipProps,
   children?: ChildDom[]
 ) => {
@@ -418,6 +422,7 @@ export const Tooltip = (
         `top: ${top.val}; right: ${right.val}; bottom: ${bottom.val}; left: ${left.val}; margin-left: ${marginLeft.val}; margin-top: ${marginTop.val};opacity: ${opacity.val}`,
       className: () => `${tooltipClassName} introjs-${position.val}`,
       role: "dialog",
+      onclick: onClick ?? null,
     },
     [
       TooltipArrow({

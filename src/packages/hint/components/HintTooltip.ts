@@ -30,6 +30,16 @@ export const HintTooltip = ({
       element: hintItem.hintTooltipElement as HTMLElement,
       position: hintItem.position,
       hintMode: true,
+      onClick: (e: Event) => {
+        //IE9 & Other Browsers
+        if (e.stopPropagation) {
+          e.stopPropagation();
+        }
+        //IE8 and Lower
+        else {
+          e.cancelBubble = true;
+        }
+      },
     },
     [
       div(

@@ -1,9 +1,4 @@
 import { Hint } from "./hint";
-import { hideHintClassName } from "./className";
-import { addClass } from "../../util/className";
-import { removeHintTooltip } from "./tooltip";
-import { dataStepAttribute } from "./dataAttributes";
-import { hintElement, hintElements } from "./selector";
 import { HintItem } from "./hintItem";
 
 /**

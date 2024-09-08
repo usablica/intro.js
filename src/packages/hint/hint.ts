@@ -27,6 +27,9 @@ export class Hint implements Package<HintOptions> {
   public _activeHintSignal = van.state<number | undefined>(undefined);
   public _refreshes = van.state(0);
 
+  // The hint close function used when the user clicks outside the hint
+  private _windowClickHandler?: () => void;
+
   private readonly callbacks: {
     hintsAdded?: hintsAddedCallback;
     hintClick?: hintClickCallback;
@@ -124,9 +127,20 @@ export class Hint implements Package<HintOptions> {
       return this;
     }
 
+    if (this.isRendered()) {
+      return this;
+    }
+
     fetchHintItems(this);
     await renderHints(this);
     this.createRoot();
+
+    this._windowClickHandler = () => {
+      this._activeHintSignal.val = undefined;
+    };
+
+    DOMEvent.on(document, "click", this._windowClickHandler, false);
+
     return this;
   }
 
@@ -190,6 +204,11 @@ export class Hint implements Package<HintOptions> {
       this._root.remove();
       this._root = undefined;
     }
+
+    if (this._windowClickHandler) {
+      DOMEvent.off(document, "click", this._windowClickHandler, false);
+    }
+
     removeHints(this);
     return this;
   }
