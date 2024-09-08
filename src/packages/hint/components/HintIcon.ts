@@ -1,5 +1,5 @@
 import isFixed from "../../../util/isFixed";
-import van from "../../dom/van";
+import van, { State } from "../../dom/van";
 import {
   fixedHintClassName,
   hideHintClassName,
@@ -17,6 +17,7 @@ const { a, div } = van.tags;
 export type HintProps = {
   index: number;
   hintItem: HintItem;
+  refreshesSignal: State<number>;
   onClick: (e: any) => void;
 };
 
@@ -41,7 +42,12 @@ const className = (hintItem: HintItem) => {
 const HintDot = () => div({ className: hintDotClassName });
 const HintPulse = () => div({ className: hintPulseClassName });
 
-export const HintIcon = ({ index, hintItem, onClick }: HintProps) => {
+export const HintIcon = ({
+  index,
+  hintItem,
+  onClick,
+  refreshesSignal,
+}: HintProps) => {
   const hintElement = a(
     {
       [dataStepAttribute]: index.toString(),
@@ -54,11 +60,15 @@ export const HintIcon = ({ index, hintItem, onClick }: HintProps) => {
     HintPulse()
   );
 
-  alignHintPosition(
-    hintItem.hintPosition as HintPosition,
-    hintElement,
-    hintItem.element as HTMLElement
-  );
+  van.derive(() => {
+    if (refreshesSignal.val === undefined) return;
+
+    alignHintPosition(
+      hintItem.hintPosition as HintPosition,
+      hintElement,
+      hintItem.element as HTMLElement
+    );
+  });
 
   return hintElement;
 };

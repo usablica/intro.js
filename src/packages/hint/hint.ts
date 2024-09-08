@@ -4,14 +4,10 @@ import { fetchHintItems, HintItem } from "./hintItem";
 import { setOption, setOptions } from "../../option";
 import isFunction from "../../util/isFunction";
 import debounce from "../../util/debounce";
-import { reAlignHints } from "./position";
 import DOMEvent from "../../util/DOMEvent";
 import { getContainerElement } from "../../util/containerElement";
-import { renderHints } from "./render";
 import { hideHint, hideHints } from "./hide";
 import { showHint, showHints } from "./show";
-import { removeHint, removeHints } from "./remove";
-import { showHintDialog } from "./tooltip";
 import van from "../dom/van";
 import { HintsRoot } from "./components/HintsRoot";
 
@@ -24,11 +20,8 @@ export class Hint implements Package<HintOptions> {
   private _hints: HintItem[] = [];
   private readonly _targetElement: HTMLElement;
   private _options: HintOptions;
-  public _activeHintSignal = van.state<number | undefined>(undefined);
-  public _refreshes = van.state(0);
-
-  // The hint close function used when the user clicks outside the hint
-  private _windowClickHandler?: () => void;
+  private _activeHintSignal = van.state<number | undefined>(undefined);
+  private _refreshes = van.state(0);
 
   private readonly callbacks: {
     hintsAdded?: hintsAddedCallback;
@@ -38,6 +31,8 @@ export class Hint implements Package<HintOptions> {
 
   // Event handlers
   private _hintsAutoRefreshFunction?: () => void;
+  // The hint close function used when the user clicks outside the hint
+  private _windowClickFunction?: () => void;
 
   /**
    * Create a new Hint instance
@@ -110,13 +105,39 @@ export class Hint implements Package<HintOptions> {
     return this;
   }
 
-  public isRendered() {
+  /**
+   * Get the active hint signal
+   * This is meant to be used internally by the Hint package
+   */
+  getActiveHintSignal() {
+    return this._activeHintSignal;
+  }
+
+  /**
+   * Returns the underlying state of the refreshes
+   * This is an internal method and should not be used outside of the package.
+   */
+  getRefreshesSignal() {
+    return this._refreshes;
+  }
+
+  /**
+   * Returns true if the hints are rendered
+   */
+  isRendered() {
     return this._root !== undefined;
   }
 
   private createRoot() {
     this._root = HintsRoot({ hint: this });
     van.add(this._targetElement, this._root);
+  }
+
+  private recreateRoot() {
+    if (this._root) {
+      this._root.remove();
+      this.createRoot();
+    }
   }
 
   /**
@@ -132,16 +153,34 @@ export class Hint implements Package<HintOptions> {
     }
 
     fetchHintItems(this);
-    await renderHints(this);
     this.createRoot();
 
-    this._windowClickHandler = () => {
+    this.callback("hintsAdded")?.call(this);
+
+    this.enableHintAutoRefresh();
+    this.enableCloseDialogOnWindowClick();
+
+    return this;
+  }
+
+  /**
+   * Enable closing the dialog when the user clicks outside the hint
+   */
+  enableCloseDialogOnWindowClick() {
+    this._windowClickFunction = () => {
       this._activeHintSignal.val = undefined;
     };
 
-    DOMEvent.on(document, "click", this._windowClickHandler, false);
+    DOMEvent.on(document, "click", this._windowClickFunction, false);
+  }
 
-    return this;
+  /**
+   * Disable closing the dialog when the user clicks outside the hint
+   */
+  disableCloseDialogOnWindowClick() {
+    if (this._windowClickFunction) {
+      DOMEvent.off(document, "click", this._windowClickFunction, false);
+    }
   }
 
   /**
@@ -205,11 +244,9 @@ export class Hint implements Package<HintOptions> {
       this._root = undefined;
     }
 
-    if (this._windowClickHandler) {
-      DOMEvent.off(document, "click", this._windowClickHandler, false);
-    }
+    this.disableHintAutoRefresh();
+    this.disableCloseDialogOnWindowClick();
 
-    removeHints(this);
     return this;
   }
 
@@ -229,7 +266,9 @@ export class Hint implements Package<HintOptions> {
    * @param stepId The hint step ID
    */
   removeHint(stepId: number) {
-    removeHint(stepId);
+    this._hints = this._hints.filter((_, i) => i !== stepId);
+    this.recreateRoot();
+
     return this;
   }
 
@@ -238,8 +277,38 @@ export class Hint implements Package<HintOptions> {
    * @param stepId The hint step ID
    */
   async showHintDialog(stepId: number) {
+    const item = this.getHint(stepId);
+
+    if (!item) return;
+
     this._activeHintSignal.val = stepId;
-    await showHintDialog(this, stepId);
+
+    // call the callback function (if any)
+    await this.callback("hintClick")?.call(this, item);
+
+    return this;
+  }
+
+  /**
+   * Hide hint dialog from the page
+   */
+  hideHintDialog() {
+    this._activeHintSignal.val = undefined;
+    return this;
+  }
+
+  /**
+   * Refresh the hints on the page
+   */
+  public refresh() {
+    if (!this.isRendered()) {
+      return this;
+    }
+
+    if (this._refreshes.val !== undefined) {
+      this._refreshes.val += 1;
+    }
+
     return this;
   }
 
@@ -250,7 +319,7 @@ export class Hint implements Package<HintOptions> {
     const hintAutoRefreshInterval = this.getOption("hintAutoRefreshInterval");
     if (hintAutoRefreshInterval >= 0) {
       this._hintsAutoRefreshFunction = debounce(
-        () => reAlignHints(this),
+        () => this.refresh(),
         hintAutoRefreshInterval
       );
 

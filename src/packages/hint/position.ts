@@ -1,6 +1,5 @@
 import getOffset from "../../util/getOffset";
 import { HintPosition } from "./hintItem";
-import { Hint } from "./hint";
 
 /**
  * Aligns hint position
@@ -74,14 +73,3 @@ export const alignHintPosition = (
       break;
   }
 };
-
-/**
- * Re-aligns all hint elements
- *
- * @api private
- */
-export function reAlignHints(hint: Hint) {
-  for (const { hintTooltipElement, hintPosition, element } of hint.getHints()) {
-    alignHintPosition(hintPosition, element as HTMLElement, hintTooltipElement);
-  }
-}

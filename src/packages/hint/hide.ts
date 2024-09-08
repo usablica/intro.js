@@ -12,6 +12,9 @@ export async function hideHint(hint: Hint, hintItem: HintItem) {
   if (isActiveSignal) {
     isActiveSignal.val = false;
   }
+
+  hint.hideHintDialog();
+
   // call the callback function (if any)
   hint.callback("hintClose")?.call(hint, hintItem);
 }

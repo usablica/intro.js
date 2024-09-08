@@ -3,7 +3,6 @@ import { hintsClassName } from "../className";
 import { hideHint } from "../hide";
 import { Hint } from "../hint";
 import { HintItem } from "../hintItem";
-import { showHintDialog } from "../tooltip";
 import { HintIcon } from "./HintIcon";
 import { ReferenceLayer } from "./ReferenceLayer";
 
@@ -27,7 +26,7 @@ const getHintClick = (hint: Hint, i: number) => (e: Event) => {
     evt.cancelBubble = true;
   }
 
-  showHintDialog(hint, i);
+  hint.showHintDialog(i);
 };
 
 export const HintsRoot = ({ hint }: HintsRootProps) => {
@@ -38,6 +37,7 @@ export const HintsRoot = ({ hint }: HintsRootProps) => {
       index: i,
       hintItem,
       onClick: getHintClick(hint, i),
+      refreshesSignal: hint.getRefreshesSignal(),
     });
 
     // store the hint tooltip element in the hint item
@@ -55,20 +55,23 @@ export const HintsRoot = ({ hint }: HintsRootProps) => {
   );
 
   van.derive(() => {
-    if (hint._activeHintSignal.val === undefined) return;
+    const activeHintSignal = hint.getActiveHintSignal();
+    if (activeHintSignal.val === undefined) return;
 
-    const stepId = hint._activeHintSignal.val;
+    const stepId = activeHintSignal.val;
     const hints = hint.getHints();
     const hintItem = hints[stepId];
 
+    if (!hintItem) return;
+
     const referenceLayer = ReferenceLayer({
-      activeHintSignal: hint._activeHintSignal,
+      activeHintSignal,
       hintItem,
 
       helperElementPadding: hint.getOption("helperElementPadding"),
       targetElement: hint.getTargetElement(),
 
-      refreshes: hint._refreshes,
+      refreshes: hint.getRefreshesSignal(),
 
       // hints don't have step numbers
       showStepNumbers: false,
