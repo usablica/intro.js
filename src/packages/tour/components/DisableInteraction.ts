@@ -8,6 +8,7 @@ const { div } = van.tags;
 export type HelperLayerProps = {
   currentStep: State<number | undefined>;
   steps: TourStep[];
+  refreshes: State<number>;
   targetElement: HTMLElement;
   helperElementPadding: number;
 };
@@ -15,6 +16,7 @@ export type HelperLayerProps = {
 export const DisableInteraction = ({
   currentStep,
   steps,
+  refreshes,
   targetElement,
   helperElementPadding,
 }: HelperLayerProps) => {
@@ -31,12 +33,17 @@ export const DisableInteraction = ({
       className: disableInteractionClassName,
     });
 
-    setPositionRelativeToStep(
-      targetElement,
-      disableInteraction,
-      step.val,
-      helperElementPadding
-    );
+    van.derive(() => {
+      // set the position of the reference layer if the refreshes signal changes
+      if (!step.val || refreshes.val == undefined) return;
+
+      setPositionRelativeToStep(
+        targetElement,
+        disableInteraction,
+        step.val,
+        helperElementPadding
+      );
+    });
 
     return disableInteraction;
   };

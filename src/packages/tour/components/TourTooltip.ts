@@ -1,5 +1,5 @@
 import { Tooltip, type TooltipProps } from "../../tooltip/tooltip";
-import van, { PropValueOrDerived } from "../../dom/van";
+import van, { PropValueOrDerived, State } from "../../dom/van";
 import {
   activeClassName,
   bulletsClassName,
@@ -372,7 +372,7 @@ const scroll = ({
 
 export type TourTooltipProps = Omit<
   TooltipProps,
-  "hintMode" | "position" | "targetOffset"
+  "hintMode" | "position" | "element"
 > & {
   step: TourStep;
   steps: TourStep[];
@@ -448,7 +448,6 @@ export const TourTooltip = ({
   const title = step.title;
   const text = step.intro;
   const position = step.position;
-  const targetOffset = getOffset(step.element as HTMLElement);
 
   children.push(Header({ title, skipLabel, onSkipClick }));
 
@@ -496,9 +495,9 @@ export const TourTooltip = ({
   const tooltip = Tooltip(
     {
       ...props,
+      element: step.element as HTMLElement,
       hintMode: false,
       position,
-      targetOffset,
     },
     children
   );

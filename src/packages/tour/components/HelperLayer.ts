@@ -31,6 +31,7 @@ const getClassName = ({
 export type HelperLayerProps = {
   currentStep: State<number | undefined>;
   steps: TourStep[];
+  refreshes: State<number>;
   targetElement: HTMLElement;
   tourHighlightClass: string;
   overlayOpacity: number;
@@ -40,6 +41,7 @@ export type HelperLayerProps = {
 export const HelperLayer = ({
   currentStep,
   steps,
+  refreshes,
   targetElement,
   tourHighlightClass,
   overlayOpacity,
@@ -59,7 +61,8 @@ export const HelperLayer = ({
   });
 
   van.derive(() => {
-    if (!step.val) return;
+    // set the new position if the step or refreshes change
+    if (!step.val || refreshes.val === undefined) return;
 
     setPositionRelativeToStep(
       targetElement,

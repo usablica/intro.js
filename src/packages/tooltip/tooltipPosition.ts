@@ -1,4 +1,3 @@
-import getWindowSize from "../../util/getWindowSize";
 import removeEntry from "../../util/removeEntry";
 import { Offset } from "../../util/getOffset";
 
@@ -67,12 +66,11 @@ export function determineAutoPosition(
   targetOffset: Offset,
   tooltipWidth: number,
   tooltipHeight: number,
-  desiredTooltipPosition: TooltipPosition
+  desiredTooltipPosition: TooltipPosition,
+  windowSize: { width: number; height: number }
 ): TooltipPosition {
   // Take a clone of position precedence. These will be the available
   const possiblePositions = positionPrecedence.slice();
-
-  const windowSize = getWindowSize();
 
   // Add some padding to the tooltip height and width for better positioning
   tooltipHeight = tooltipHeight + 10;

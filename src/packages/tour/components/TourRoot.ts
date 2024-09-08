@@ -15,12 +15,14 @@ export type TourRootProps = {
 };
 
 export const TourRoot = ({ tour }: TourRootProps) => {
-  const currentStep = tour.getCurrentStepSignal();
+  const currentStepSignal = tour.getCurrentStepSignal();
+  const refreshesSignal = tour.getRefreshesSignal();
   const steps = tour.getSteps();
 
   const helperLayer = HelperLayer({
-    currentStep,
+    currentStep: currentStepSignal,
     steps,
+    refreshes: refreshesSignal,
     targetElement: tour.getTargetElement(),
     tourHighlightClass: tour.getOption("highlightClass"),
     overlayOpacity: tour.getOption("overlayOpacity"),
@@ -42,12 +44,14 @@ export const TourRoot = ({ tour }: TourRootProps) => {
     () => {
       // do not remove this check, it is necessary for this state-binding to work
       // and render the entire section every time the state changes
-      if (currentStep.val === undefined) {
+      if (currentStepSignal.val === undefined) {
         return null;
       }
 
       const step = van.derive(() =>
-        currentStep.val !== undefined ? steps[currentStep.val] : null
+        currentStepSignal.val !== undefined
+          ? steps[currentStepSignal.val]
+          : null
       );
 
       if (!step.val) {
@@ -65,6 +69,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
       const referenceLayer = ReferenceLayer({
         step: step.val,
         targetElement: tour.getTargetElement(),
+        refreshes: refreshesSignal,
         helperElementPadding: tour.getOption("helperElementPadding"),
 
         transitionDuration: tooltipTransitionDuration,
@@ -74,7 +79,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         showStepNumbers: tour.getOption("showStepNumbers"),
 
         steps: tour.getSteps(),
-        currentStep: currentStep.val,
+        currentStep: currentStepSignal.val,
 
         onBulletClick: (stepNumber: number) => {
           tour.goToStep(stepNumber);
@@ -144,8 +149,9 @@ export const TourRoot = ({ tour }: TourRootProps) => {
 
       const disableInteraction = step.val.disableInteraction
         ? DisableInteraction({
-            currentStep,
+            currentStep: currentStepSignal,
             steps: tour.getSteps(),
+            refreshes: refreshesSignal,
             targetElement: tour.getTargetElement(),
             helperElementPadding: tour.getOption("helperElementPadding"),
           })
@@ -162,7 +168,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
 
   van.derive(() => {
     // to clean up the root element when the tour is done
-    if (currentStep.val === undefined) {
+    if (currentStepSignal.val === undefined) {
       opacity.val = 0;
 
       setTimeout(() => {
@@ -172,6 +178,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
   });
 
   setTimeout(() => {
+    // fade in the root element
     opacity.val = 1;
   }, 1);
 

@@ -1,4 +1,4 @@
-import { nextStep, previousStep, TourStep } from "./steps";
+import { fetchSteps, nextStep, previousStep, TourStep } from "./steps";
 import { Package } from "../package";
 import {
   introAfterChangeCallback,
@@ -16,11 +16,9 @@ import { start } from "./start";
 import exitIntro from "./exitIntro";
 import isFunction from "../../util/isFunction";
 import { getDontShowAgain, setDontShowAgain } from "./dontShowAgain";
-import refresh from "./refresh";
 import { getContainerElement } from "../../util/containerElement";
 import DOMEvent from "../../util/DOMEvent";
 import onKeyDown from "./onKeyDown";
-import onResize from "./onResize";
 import van from "../dom/van";
 import { TourRoot } from "./components/TourRoot";
 import { FloatingElement } from "./components/FloatingElement";
@@ -31,6 +29,8 @@ import { FloatingElement } from "./components/FloatingElement";
 export class Tour implements Package<TourOptions> {
   private _steps: TourStep[] = [];
   private _currentStep = van.state<number | undefined>(undefined);
+  private _refreshes = van.state(0);
+  private _root: Element | undefined;
   private _direction: "forward" | "backward";
   private readonly _targetElement: HTMLElement;
   private _options: TourOptions;
@@ -171,6 +171,14 @@ export class Tour implements Package<TourOptions> {
    */
   getCurrentStepSignal() {
     return this._currentStep;
+  }
+
+  /**
+   * Returns the underlying state of the refreshes
+   * This is an internal method and should not be used outside of the package.
+   */
+  getRefreshesSignal() {
+    return this._refreshes;
   }
 
   /**
@@ -376,7 +384,7 @@ export class Tour implements Package<TourOptions> {
    * Enable refresh on window resize for the tour
    */
   enableRefreshOnResize() {
-    this._refreshOnResizeHandler = (_: Event) => onResize(this);
+    this._refreshOnResizeHandler = (_: Event) => this.refresh();
     DOMEvent.on(window, "resize", this._refreshOnResizeHandler, true);
   }
 
@@ -412,7 +420,18 @@ export class Tour implements Package<TourOptions> {
    * Create the root element for the tour
    */
   private createRoot() {
-    van.add(this.getTargetElement(), TourRoot({ tour: this }));
+    this._root = TourRoot({ tour: this });
+    van.add(this.getTargetElement(), this._root);
+  }
+
+  /**
+   * Deletes the root element and recreates it
+   */
+  private recreateRoot() {
+    if (this._root) {
+      this._root.remove();
+      this.createRoot();
+    }
   }
 
   /**
@@ -446,7 +465,22 @@ export class Tour implements Package<TourOptions> {
    * @param {boolean} refreshSteps whether to refresh the tour steps
    */
   refresh(refreshSteps?: boolean) {
-    refresh(this, refreshSteps);
+    const currentStep = this.getCurrentStep();
+
+    if (currentStep === undefined) {
+      return this;
+    }
+
+    if (this._refreshes.val !== undefined) {
+      this._refreshes.val += 1;
+    }
+
+    // fetch new steps and recreate the root element
+    if (refreshSteps) {
+      this.setSteps(fetchSteps(this));
+      this.recreateRoot();
+    }
+
     return this;
   }
 

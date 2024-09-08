@@ -1,4 +1,4 @@
-import { Offset } from "../../util/getOffset";
+import getOffset, { Offset } from "../../util/getOffset";
 import getWindowSize from "../../util/getWindowSize";
 import van, { ChildDom, State } from "../dom/van";
 import { arrowClassName, tooltipClassName } from "../tour/classNames";
@@ -121,12 +121,14 @@ function checkRight(
     width: number;
     height: number;
   },
+  windowSize: {
+    width: number;
+    height: number;
+  },
   tooltipLayerStyleLeft: number,
   tooltipWidth: number,
   tooltipLeft: State<string>
 ): boolean {
-  const windowSize = getWindowSize();
-
   if (
     targetOffset.left + tooltipLayerStyleLeft + tooltipWidth >
     windowSize.width
@@ -145,6 +147,7 @@ function checkRight(
 const alignTooltip = (
   position: TooltipPosition,
   targetOffset: { width: number; height: number; left: number; top: number },
+  windowSize: { width: number; height: number },
   tooltipWidth: number,
   tooltipHeight: number,
   tooltipTop: State<string>,
@@ -197,6 +200,7 @@ const alignTooltip = (
         tooltipRight.val = undefined;
         checkRight(
           targetOffset,
+          windowSize,
           tooltipLayerStyleLeftRight,
           tooltipWidth,
           tooltipLeft
@@ -212,6 +216,7 @@ const alignTooltip = (
 
       checkRight(
         targetOffset,
+        windowSize,
         tooltipLayerStyleLeft,
         tooltipWidth,
         tooltipLeft
@@ -278,6 +283,7 @@ const alignTooltip = (
         tooltipRight.val = "";
         checkRight(
           targetOffset,
+          windowSize,
           tooltipLayerStyleLeftRight,
           tooltipWidth,
           tooltipLeft
@@ -291,14 +297,15 @@ const alignTooltip = (
     // case 'bottom':
     // Bottom going to follow the default behavior
     default:
-      checkRight(targetOffset, 0, tooltipWidth, tooltipLeft);
+      checkRight(targetOffset, windowSize, 0, tooltipWidth, tooltipLeft);
       tooltipTop.val = `${targetOffset.height + 20}px`;
   }
 };
 
 export type TooltipProps = {
   position: TooltipPosition;
-  targetOffset: Offset;
+  element: HTMLElement;
+  refreshes: State<number>;
   hintMode: boolean;
   showStepNumbers: boolean;
 
@@ -312,7 +319,8 @@ export type TooltipProps = {
 export const Tooltip = (
   {
     position: initialPosition,
-    targetOffset,
+    element,
+    refreshes,
     hintMode = false,
     showStepNumbers = false,
 
@@ -332,30 +340,45 @@ export const Tooltip = (
   const marginTop = van.state<string>("auto");
   const opacity = van.state<number>(0);
   // setting a default height for the tooltip instead of 0 to avoid flickering
-  const tooltipHeight = van.state<number>(150);
+  // this default is coming from the CSS class and is overridden after the tooltip is rendered
+  const tooltipHeight = van.state<number>(250);
   // max width of the tooltip according to its CSS class
+  // this default is coming from the CSS class and is overridden after the tooltip is rendered
   const tooltipWidth = van.state<number>(300);
   const position = van.state<TooltipPosition>(initialPosition);
-  const windowSize = getWindowSize();
+  // windowSize can change if the window is resized
+  const windowSize = van.state(getWindowSize());
+  const targetOffset = van.state<Offset>(getOffset(element));
   const tooltipBottomOverflow = van.derive(
-    () => targetOffset.top + tooltipHeight.val! > windowSize.height
+    () => targetOffset.val!.top + tooltipHeight.val! > windowSize.val!.height
   );
+
+  van.derive(() => {
+    // set the new windowSize and targetOffset if the refreshes signal changes
+    if (refreshes.val !== undefined) {
+      windowSize.val = getWindowSize();
+      targetOffset.val = getOffset(element);
+    }
+  });
 
   // auto-align tooltip based on position precedence and target offset
   van.derive(() => {
     if (
       position.val !== undefined &&
-      position.val !== "floating" &&
+      initialPosition !== "floating" &&
       autoPosition &&
       tooltipWidth.val &&
-      tooltipHeight.val
+      tooltipHeight.val &&
+      targetOffset.val &&
+      windowSize.val
     ) {
       position.val = determineAutoPosition(
         positionPrecedence,
-        targetOffset,
+        targetOffset.val,
         tooltipWidth.val,
         tooltipHeight.val,
-        position.val
+        initialPosition,
+        windowSize.val
       );
     }
   });
@@ -366,11 +389,14 @@ export const Tooltip = (
       tooltipWidth.val !== undefined &&
       tooltipHeight.val !== undefined &&
       tooltipBottomOverflow.val !== undefined &&
-      position.val !== undefined
+      position.val !== undefined &&
+      targetOffset.val !== undefined &&
+      windowSize.val !== undefined
     ) {
       alignTooltip(
         position.val,
-        targetOffset,
+        targetOffset.val,
+        windowSize.val,
         tooltipWidth.val,
         tooltipHeight.val,
         top,
@@ -406,6 +432,12 @@ export const Tooltip = (
   setTimeout(() => {
     opacity.val = 1;
   }, transitionDuration);
+
+  setTimeout(() => {
+    // set the correct height and width of the tooltip after it has been rendered
+    tooltipHeight.val = tooltip.offsetHeight;
+    tooltipWidth.val = tooltip.offsetWidth;
+  }, 1);
 
   return tooltip;
 };

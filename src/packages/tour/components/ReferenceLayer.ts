@@ -22,12 +22,17 @@ export const ReferenceLayer = ({
     TourTooltip(props)
   );
 
-  setPositionRelativeToStep(
-    targetElement,
-    referenceLayer,
-    props.step,
-    helperElementPadding
-  );
+  van.derive(() => {
+    // set the position of the reference layer if the refreshes signal changes
+    if (props.refreshes.val == undefined) return;
+
+    setPositionRelativeToStep(
+      targetElement,
+      referenceLayer,
+      props.step,
+      helperElementPadding
+    );
+  });
 
   return referenceLayer;
 };
