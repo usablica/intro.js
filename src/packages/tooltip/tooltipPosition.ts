@@ -17,7 +17,7 @@ export type TooltipPosition =
 /**
  * auto-determine alignment
  */
-export function determineAutoAlignment(
+function determineAutoAlignment(
   offsetLeft: number,
   tooltipWidth: number,
   windowWidth: number,
