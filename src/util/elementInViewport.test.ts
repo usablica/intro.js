@@ -1,7 +1,7 @@
-import van from "../packages/dom/van";
+import dom from "../packages/dom";
 import elementInViewport from "./elementInViewport";
 
-const { div } = van.tags;
+const { div } = dom.tags;
 
 describe("elementInViewport", () => {
   test("should return true when element is in viewport", () => {

@@ -1,5 +1,5 @@
 import isFixed from "../../../util/isFixed";
-import van, { State } from "../../dom/van";
+import dom, { State } from "../../dom";
 import {
   fixedHintClassName,
   hideHintClassName,
@@ -12,7 +12,7 @@ import { HintItem, HintPosition } from "../hintItem";
 import { dataStepAttribute } from "../dataAttributes";
 import { alignHintPosition } from "../position";
 
-const { a, div } = van.tags;
+const { a, div } = dom.tags;
 
 export type HintProps = {
   index: number;
@@ -60,7 +60,7 @@ export const HintIcon = ({
     HintPulse()
   );
 
-  van.derive(() => {
+  dom.derive(() => {
     if (refreshesSignal.val === undefined) return;
 
     alignHintPosition(

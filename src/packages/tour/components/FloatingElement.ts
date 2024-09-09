@@ -1,7 +1,7 @@
-import van, { State } from "../../dom/van";
+import dom, { State } from "../../dom";
 import { floatingElementClassName } from "../classNames";
 
-const { div } = van.tags;
+const { div } = dom.tags;
 
 export type FloatingElementProps = {
   currentStep: State<number | undefined>;
@@ -12,7 +12,7 @@ export const FloatingElement = ({ currentStep }: FloatingElementProps) => {
     className: floatingElementClassName,
   });
 
-  van.derive(() => {
+  dom.derive(() => {
     // meaning the tour has ended so we should remove the floating element
     if (currentStep.val === undefined) {
       floatingElement.remove();

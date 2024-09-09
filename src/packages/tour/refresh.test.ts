@@ -1,13 +1,13 @@
 import { getMockTour } from "./mock";
 import { Tour } from "./tour";
-import van from "../dom/van";
+import dom from "../dom";
 import {
   sleep,
   waitMsForDerivations,
   waitMsForExitTransition,
 } from "../../util/sleep";
 
-const { div } = van.tags;
+const { div } = dom.tags;
 
 describe("refresh", () => {
   let mockTour: Tour;
@@ -16,7 +16,7 @@ describe("refresh", () => {
   beforeEach(() => {
     mockTour = getMockTour();
     targetElement = div();
-    van.add(document.body, targetElement);
+    dom.add(document.body, targetElement);
   });
 
   afterEach(async () => {

@@ -8,7 +8,7 @@ import DOMEvent from "../../util/DOMEvent";
 import { getContainerElement } from "../../util/containerElement";
 import { hideHint, hideHints } from "./hide";
 import { showHint, showHints } from "./show";
-import van from "../dom/van";
+import dom from "../dom";
 import { HintsRoot } from "./components/HintsRoot";
 
 type hintsAddedCallback = (this: Hint) => void | Promise<void>;
@@ -20,8 +20,8 @@ export class Hint implements Package<HintOptions> {
   private _hints: HintItem[] = [];
   private readonly _targetElement: HTMLElement;
   private _options: HintOptions;
-  private _activeHintSignal = van.state<number | undefined>(undefined);
-  private _refreshesSignal = van.state(0);
+  private _activeHintSignal = dom.state<number | undefined>(undefined);
+  private _refreshesSignal = dom.state(0);
 
   private readonly callbacks: {
     hintsAdded?: hintsAddedCallback;
@@ -100,7 +100,7 @@ export class Hint implements Package<HintOptions> {
    */
   addHint(hint: HintItem): this {
     // always set isActive to true
-    hint.isActive = van.state(true);
+    hint.isActive = dom.state(true);
     this._hints.push(hint);
     return this;
   }
@@ -130,7 +130,7 @@ export class Hint implements Package<HintOptions> {
 
   private createRoot() {
     this._root = HintsRoot({ hint: this });
-    van.add(this._targetElement, this._root);
+    dom.add(this._targetElement, this._root);
   }
 
   private recreateRoot() {

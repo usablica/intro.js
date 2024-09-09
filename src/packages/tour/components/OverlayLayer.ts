@@ -1,9 +1,9 @@
 import { style } from "../../../util/style";
 import { overlayClassName } from "../classNames";
-import van from "../../dom/van";
+import dom from "../../dom";
 import { Tour } from "../tour";
 
-const { div } = van.tags;
+const { div } = dom.tags;
 
 export type OverlayLayerProps = {
   exitOnOverlayClick: boolean;

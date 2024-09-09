@@ -1,9 +1,9 @@
-import van, { State } from "../../dom/van";
+import dom, { State } from "../../dom";
 import { disableInteractionClassName } from "../classNames";
 import { setPositionRelativeToStep } from "../position";
 import { TourStep } from "../steps";
 
-const { div } = van.tags;
+const { div } = dom.tags;
 
 export type HelperLayerProps = {
   currentStep: State<number | undefined>;
@@ -20,7 +20,7 @@ export const DisableInteraction = ({
   targetElement,
   helperElementPadding,
 }: HelperLayerProps) => {
-  const step = van.derive(() =>
+  const step = dom.derive(() =>
     currentStep.val !== undefined ? steps[currentStep.val] : null
   );
 
@@ -33,7 +33,7 @@ export const DisableInteraction = ({
       className: disableInteractionClassName,
     });
 
-    van.derive(() => {
+    dom.derive(() => {
       // set the position of the reference layer if the refreshes signal changes
       if (!step.val || refreshes.val == undefined) return;
 

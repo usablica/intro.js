@@ -1,10 +1,10 @@
 import { style } from "../../../util/style";
-import van, { State } from "../../dom/van";
+import dom, { State } from "../../dom";
 import { helperLayerClassName } from "../classNames";
 import { setPositionRelativeToStep } from "../position";
 import { TourStep } from "../steps";
 
-const { div } = van.tags;
+const { div } = dom.tags;
 
 const getClassName = ({
   step,
@@ -47,7 +47,7 @@ export const HelperLayer = ({
   overlayOpacity,
   helperLayerPadding,
 }: HelperLayerProps) => {
-  const step = van.derive(() =>
+  const step = dom.derive(() =>
     currentStep.val !== undefined ? steps[currentStep.val] : null
   );
 
@@ -60,7 +60,7 @@ export const HelperLayer = ({
     }),
   });
 
-  van.derive(() => {
+  dom.derive(() => {
     // set the new position if the step or refreshes change
     if (!step.val || refreshes.val === undefined) return;
 

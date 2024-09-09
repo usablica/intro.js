@@ -1,4 +1,4 @@
-import van, { State } from "./van";
+import van, { State } from ".";
 
 const {
   a,

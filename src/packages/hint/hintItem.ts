@@ -7,7 +7,7 @@ import {
   dataHintPositionAttribute,
   dataTooltipClassAttribute,
 } from "./dataAttributes";
-import { State } from "../dom/van";
+import { State } from "../dom";
 
 export type HintPosition =
   | "top-left"

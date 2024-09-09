@@ -1,9 +1,9 @@
 import { Tooltip, TooltipProps } from "../../tooltip/tooltip";
-import van from "../../dom/van";
+import dom from "../../dom";
 import { tooltipTextClassName } from "../className";
 import { HintItem } from "../hintItem";
 
-const { a, p, div } = van.tags;
+const { a, p, div } = dom.tags;
 
 export type HintTooltipProps = Omit<
   TooltipProps,

@@ -1,5 +1,5 @@
 import { setPositionRelativeTo } from "../../../util/positionRelativeTo";
-import van, { State } from "../../dom/van";
+import dom, { State } from "../../dom";
 import {
   hintReferenceClassName,
   tooltipReferenceLayerClassName,
@@ -7,7 +7,7 @@ import {
 import { dataStepAttribute } from "../dataAttributes";
 import { HintTooltip, HintTooltipProps } from "./HintTooltip";
 
-const { div } = van.tags;
+const { div } = dom.tags;
 
 export type ReferenceLayerProps = HintTooltipProps & {
   activeHintSignal: State<number | undefined>;

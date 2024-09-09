@@ -1,16 +1,16 @@
 import getOffset, { Offset } from "../../util/getOffset";
 import getWindowSize from "../../util/getWindowSize";
-import van, { ChildDom, State } from "../dom/van";
+import dom, { ChildDom, State } from "../dom";
 import { arrowClassName, tooltipClassName } from "../tour/classNames";
 import { determineAutoPosition, TooltipPosition } from "./tooltipPosition";
 
-const { div } = van.tags;
+const { div } = dom.tags;
 
 export const TooltipArrow = (props: {
   tooltipPosition: State<TooltipPosition>;
   tooltipBottomOverflow: State<boolean>;
 }) => {
-  const classNames = van.derive(() => {
+  const classNames = dom.derive(() => {
     const classNames = [arrowClassName];
 
     switch (props.tooltipPosition.val) {
@@ -336,28 +336,28 @@ export const Tooltip = (
   }: TooltipProps,
   children?: ChildDom[]
 ) => {
-  const top = van.state<string>("auto");
-  const right = van.state<string>("auto");
-  const bottom = van.state<string>("auto");
-  const left = van.state<string>("auto");
-  const marginLeft = van.state<string>("auto");
-  const marginTop = van.state<string>("auto");
-  const opacity = van.state<number>(0);
+  const top = dom.state<string>("auto");
+  const right = dom.state<string>("auto");
+  const bottom = dom.state<string>("auto");
+  const left = dom.state<string>("auto");
+  const marginLeft = dom.state<string>("auto");
+  const marginTop = dom.state<string>("auto");
+  const opacity = dom.state<number>(0);
   // setting a default height for the tooltip instead of 0 to avoid flickering
   // this default is coming from the CSS class and is overridden after the tooltip is rendered
-  const tooltipHeight = van.state<number>(250);
+  const tooltipHeight = dom.state<number>(250);
   // max width of the tooltip according to its CSS class
   // this default is coming from the CSS class and is overridden after the tooltip is rendered
-  const tooltipWidth = van.state<number>(300);
-  const position = van.state<TooltipPosition>(initialPosition);
+  const tooltipWidth = dom.state<number>(300);
+  const position = dom.state<TooltipPosition>(initialPosition);
   // windowSize can change if the window is resized
-  const windowSize = van.state(getWindowSize());
-  const targetOffset = van.state<Offset>(getOffset(element));
-  const tooltipBottomOverflow = van.derive(
+  const windowSize = dom.state(getWindowSize());
+  const targetOffset = dom.state<Offset>(getOffset(element));
+  const tooltipBottomOverflow = dom.derive(
     () => targetOffset.val!.top + tooltipHeight.val! > windowSize.val!.height
   );
 
-  van.derive(() => {
+  dom.derive(() => {
     // set the new windowSize and targetOffset if the refreshes signal changes
     if (refreshes.val !== undefined) {
       windowSize.val = getWindowSize();
@@ -366,7 +366,7 @@ export const Tooltip = (
   });
 
   // auto-align tooltip based on position precedence and target offset
-  van.derive(() => {
+  dom.derive(() => {
     if (
       position.val !== undefined &&
       initialPosition !== "floating" &&
@@ -388,7 +388,7 @@ export const Tooltip = (
   });
 
   // align tooltip based on position and target offset
-  van.derive(() => {
+  dom.derive(() => {
     if (
       tooltipWidth.val !== undefined &&
       tooltipHeight.val !== undefined &&

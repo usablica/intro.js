@@ -1,4 +1,4 @@
-import van from "../../dom/van";
+import dom from "../../dom";
 import { ReferenceLayer } from "./ReferenceLayer";
 import { HelperLayer } from "./HelperLayer";
 import { Tour } from "../tour";
@@ -8,7 +8,7 @@ import { nextStep, previousStep } from "../steps";
 import { doneButtonClassName } from "../classNames";
 import { style } from "../../../util/style";
 
-const { div } = van.tags;
+const { div } = dom.tags;
 
 export type TourRootProps = {
   tour: Tour;
@@ -29,7 +29,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
     helperLayerPadding: tour.getOption("helperElementPadding"),
   });
 
-  const opacity = van.state(0);
+  const opacity = dom.state(0);
   // render the tooltip immediately when the tour starts
   // but we reset the transition duration to 300ms when the tooltip is rendered for the first time
   let tooltipTransitionDuration = 0;
@@ -48,7 +48,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         return null;
       }
 
-      const step = van.derive(() =>
+      const step = dom.derive(() =>
         currentStepSignal.val !== undefined
           ? steps[currentStepSignal.val]
           : null
@@ -166,7 +166,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
     }
   );
 
-  van.derive(() => {
+  dom.derive(() => {
     // to clean up the root element when the tour is done
     if (currentStepSignal.val === undefined) {
       opacity.val = 0;

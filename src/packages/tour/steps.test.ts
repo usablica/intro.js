@@ -1,4 +1,4 @@
-import van from "../dom/van";
+import dom from "../dom";
 import { fetchSteps, nextStep, previousStep } from "./steps";
 import {
   appendMockSteps,
@@ -8,7 +8,7 @@ import {
 } from "./mock";
 import { showElement } from "./showElement";
 
-const { div, h1 } = van.tags;
+const { div, h1 } = dom.tags;
 
 jest.mock("./showElement");
 jest.mock("./exitIntro");

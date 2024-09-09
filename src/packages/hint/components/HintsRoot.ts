@@ -1,4 +1,4 @@
-import van from "../../dom/van";
+import dom from "../../dom";
 import { hintsClassName } from "../className";
 import { hideHint } from "../hide";
 import { Hint } from "../hint";
@@ -6,7 +6,7 @@ import { HintItem } from "../hintItem";
 import { HintIcon } from "./HintIcon";
 import { ReferenceLayer } from "./ReferenceLayer";
 
-const { div } = van.tags;
+const { div } = dom.tags;
 
 export type HintsRootProps = {
   hint: Hint;
@@ -54,7 +54,7 @@ export const HintsRoot = ({ hint }: HintsRootProps) => {
     ...hintElements
   );
 
-  van.derive(() => {
+  dom.derive(() => {
     const activeHintSignal = hint.getActiveHintSignal();
     if (activeHintSignal.val === undefined) return;
 
@@ -85,7 +85,7 @@ export const HintsRoot = ({ hint }: HintsRootProps) => {
       closeButtonOnClick: (hintItem: HintItem) => hideHint(hint, hintItem),
     });
 
-    van.add(root, referenceLayer);
+    dom.add(root, referenceLayer);
   });
 
   return root;

@@ -1,9 +1,9 @@
-import van from "../../dom/van";
+import dom from "../../dom";
 import { tooltipReferenceLayerClassName } from "../classNames";
 import { setPositionRelativeToStep } from "../position";
 import { TourTooltip, TourTooltipProps } from "./TourTooltip";
 
-const { div } = van.tags;
+const { div } = dom.tags;
 
 export type ReferenceLayerProps = TourTooltipProps & {
   targetElement: HTMLElement;
@@ -22,7 +22,7 @@ export const ReferenceLayer = ({
     TourTooltip(props)
   );
 
-  van.derive(() => {
+  dom.derive(() => {
     // set the position of the reference layer if the refreshes signal changes
     if (props.refreshes.val == undefined) return;
 

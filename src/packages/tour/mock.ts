@@ -1,4 +1,4 @@
-import van from "../dom/van";
+import dom from "../dom";
 import { TourStep } from "./steps";
 import { Tour } from "./tour";
 import {
@@ -7,7 +7,7 @@ import {
   dataStepAttribute,
 } from "./dataAttributes";
 
-const { div, b, a, h1 } = van.tags;
+const { div, b, a, h1 } = dom.tags;
 
 export const appendMockSteps = (targetElement: HTMLElement = document.body) => {
   const mockElementOne = div();

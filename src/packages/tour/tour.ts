@@ -19,7 +19,7 @@ import { getDontShowAgain, setDontShowAgain } from "./dontShowAgain";
 import { getContainerElement } from "../../util/containerElement";
 import DOMEvent from "../../util/DOMEvent";
 import onKeyDown from "./onKeyDown";
-import van from "../dom/van";
+import dom from "../dom";
 import { TourRoot } from "./components/TourRoot";
 import { FloatingElement } from "./components/FloatingElement";
 
@@ -28,8 +28,8 @@ import { FloatingElement } from "./components/FloatingElement";
  */
 export class Tour implements Package<TourOptions> {
   private _steps: TourStep[] = [];
-  private _currentStepSignal = van.state<number | undefined>(undefined);
-  private _refreshesSignal = van.state(0);
+  private _currentStepSignal = dom.state<number | undefined>(undefined);
+  private _refreshesSignal = dom.state(0);
   private _root: Element | undefined;
   private _direction: "forward" | "backward";
   private readonly _targetElement: HTMLElement;
@@ -413,7 +413,7 @@ export class Tour implements Package<TourOptions> {
       });
 
       // only add the floating element once per tour instance
-      van.add(this.getTargetElement(), this._floatingElement);
+      dom.add(this.getTargetElement(), this._floatingElement);
     }
 
     return this._floatingElement;
@@ -424,7 +424,7 @@ export class Tour implements Package<TourOptions> {
    */
   private createRoot() {
     this._root = TourRoot({ tour: this });
-    van.add(this.getTargetElement(), this._root);
+    dom.add(this.getTargetElement(), this._root);
   }
 
   /**

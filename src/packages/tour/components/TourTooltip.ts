@@ -1,5 +1,5 @@
 import { Tooltip, type TooltipProps } from "../../tooltip/tooltip";
-import van, { PropValueOrDerived } from "../../dom/van";
+import dom, { PropValueOrDerived } from "../../dom";
 import {
   activeClassName,
   bulletsClassName,
@@ -24,7 +24,7 @@ import { dataStepNumberAttribute } from "../dataAttributes";
 import scrollParentToElement from "../../../util/scrollParentToElement";
 import scrollTo from "../../../util/scrollTo";
 
-const { h1, div, input, label, ul, li, a } = van.tags;
+const { h1, div, input, label, ul, li, a } = dom.tags;
 
 const DontShowAgain = ({
   dontShowAgainLabel,
@@ -177,12 +177,12 @@ const NextButton = ({
   const isFullButton = currentStep === 0 && steps.length > 1 && hidePrev;
   const isLastStep = currentStep === steps.length - 1 || steps.length === 1;
 
-  const isDisabled = van.derive(() => {
+  const isDisabled = dom.derive(() => {
     // when the current step is the last one or there is only one step to show
     return isLastStep && !hideNext && !nextToDone;
   });
 
-  const isDoneButton = van.derive(() => {
+  const isDoneButton = dom.derive(() => {
     return isLastStep && !hideNext && nextToDone;
   });
 
