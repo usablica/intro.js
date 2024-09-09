@@ -1,8 +1,8 @@
 import { setPositionRelativeTo } from "./positionRelativeTo";
 import { getBoundingClientRectSpy } from "../../tests/jest/helper";
-import van from "../packages/dom/van"
+import van from "../packages/dom/van";
 
-const {div} = van.tags;
+const { div } = van.tags;
 
 describe("setPositionRelativeTo", () => {
   it("should return if helperLayer or currentStep is null", () => {

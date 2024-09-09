@@ -1,4 +1,4 @@
-import van from "../dom/van"
+import van from "../dom/van";
 import { TourStep } from "./steps";
 import { Tour } from "./tour";
 import {

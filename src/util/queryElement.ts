@@ -19,7 +19,6 @@ export const queryElementsByClassName = (
   return queryElements(`.${className}`, container);
 };
 
-
 export const getElement = (
   selector: string,
   container?: HTMLElement | null

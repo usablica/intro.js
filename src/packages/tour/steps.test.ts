@@ -1,12 +1,14 @@
+import van from "../dom/van";
 import { fetchSteps, nextStep, previousStep } from "./steps";
-import _showElement from "./showElement";
 import {
   appendMockSteps,
   getMockPartialSteps,
   getMockSteps,
   getMockTour,
 } from "./mock";
-import createElement from "../../util/createElement";
+import { showElement } from "./showElement";
+
+const { div, h1 } = van.tags;
 
 jest.mock("./showElement");
 jest.mock("./exitIntro");
@@ -54,7 +56,7 @@ describe("steps", () => {
     test("should call ShowElement", async () => {
       // Arrange
       const showElementMock = jest.fn();
-      (_showElement as jest.Mock).mockImplementation(showElementMock);
+      (showElement as jest.Mock).mockImplementation(showElementMock);
       const mockTour = getMockTour();
       mockTour.setSteps(getMockSteps());
 
@@ -88,7 +90,7 @@ describe("steps", () => {
       // Arrange
       const mockTour = getMockTour();
       const showElementMock = jest.fn();
-      (_showElement as jest.Mock).mockImplementation(showElementMock);
+      (showElement as jest.Mock).mockImplementation(showElementMock);
       const fnBeforeChangeCallback = jest.fn();
       fnBeforeChangeCallback.mockReturnValue(false);
 
@@ -107,7 +109,7 @@ describe("steps", () => {
       const mockTour = getMockTour();
       mockTour.setSteps(getMockSteps());
       const showElementMock = jest.fn();
-      (_showElement as jest.Mock).mockImplementation(showElementMock);
+      (showElement as jest.Mock).mockImplementation(showElementMock);
 
       const onBeforeChangeMock = jest.fn();
       const sideEffect: number[] = [];
@@ -153,7 +155,7 @@ describe("steps", () => {
       // Arrange
       const mockTour = getMockTour();
       mockTour.addStep({
-        element: createElement("div"),
+        element: div(),
         intro: "test step",
       });
 
@@ -174,7 +176,7 @@ describe("steps", () => {
           intro: "first step",
         },
         {
-          element: createElement("div"),
+          element: div(),
           intro: "second step",
         },
       ]);
@@ -214,7 +216,7 @@ describe("steps", () => {
 
     test("should find and add elements from options.steps to the list", () => {
       // Arrange
-      document.body.appendChild(createElement("h1"));
+      document.body.appendChild(h1());
 
       const mockTour = getMockTour();
       mockTour.addSteps(getMockPartialSteps());
@@ -252,7 +254,7 @@ describe("steps", () => {
 
     test("should find the data-* elements from the DOM with the correct order", () => {
       // Arrange
-      const targetElement = createElement("div");
+      const targetElement = div();
       const [
         mockElementOne,
         mockElementTwo,
