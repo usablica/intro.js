@@ -1,5 +1,5 @@
 import { Tooltip, type TooltipProps } from "../../tooltip/tooltip";
-import van, { PropValueOrDerived, State } from "../../dom/van";
+import van, { PropValueOrDerived } from "../../dom/van";
 import {
   activeClassName,
   bulletsClassName,
@@ -20,7 +20,6 @@ import {
 } from "../classNames";
 import { TourStep } from "../steps";
 import { dataStepNumberAttribute } from "../dataAttributes";
-import getOffset from "../../../util/getOffset";
 import scrollParentToElement from "../../../util/scrollParentToElement";
 import scrollTo from "../../../util/scrollTo";
 
