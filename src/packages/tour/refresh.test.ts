@@ -60,6 +60,7 @@ describe("refresh", () => {
     });
 
     await mockTour.start();
+    await sleep(waitMsForDerivations);
 
     // Act
     mockTour.setOptions({
