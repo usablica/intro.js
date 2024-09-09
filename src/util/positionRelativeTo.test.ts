@@ -1,6 +1,8 @@
 import { setPositionRelativeTo } from "./positionRelativeTo";
-import createElement from "./createElement";
 import { getBoundingClientRectSpy } from "../../tests/jest/helper";
+import van from "../packages/dom/van"
+
+const {div} = van.tags;
 
 describe("setPositionRelativeTo", () => {
   it("should return if helperLayer or currentStep is null", () => {
@@ -18,7 +20,7 @@ describe("setPositionRelativeTo", () => {
 
   it("should set the correct width, height, top, left", () => {
     // Arrange
-    const stepElement = createElement("div");
+    const stepElement = div();
     stepElement.getBoundingClientRect = getBoundingClientRectSpy(
       200,
       100,
@@ -28,7 +30,7 @@ describe("setPositionRelativeTo", () => {
       100
     );
 
-    const helperLayer = createElement("div");
+    const helperLayer = div();
     helperLayer.getBoundingClientRect = getBoundingClientRectSpy(
       500,
       500,
@@ -50,12 +52,12 @@ describe("setPositionRelativeTo", () => {
 
   it("should add fixedTooltip if element is fixed", () => {
     // Arrange
-    const stepElementParent = createElement("div");
-    const stepElement = createElement("div");
+    const stepElementParent = div();
+    const stepElement = div();
     stepElement.style.position = "fixed";
     stepElementParent.appendChild(stepElement);
 
-    const helperLayer = createElement("div");
+    const helperLayer = div();
 
     // Act
     setPositionRelativeTo(stepElementParent, helperLayer, stepElement, 10);
@@ -66,10 +68,10 @@ describe("setPositionRelativeTo", () => {
 
   it("should remove the fixedTooltip className if element is not fixed", () => {
     // Arrange
-    const stepElement = createElement("div");
+    const stepElement = div();
     stepElement.style.position = "absolute";
 
-    const helperLayer = createElement("div");
+    const helperLayer = div();
     helperLayer.className = "introjs-fixedTooltip";
 
     // Act
