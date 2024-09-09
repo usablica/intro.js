@@ -141,8 +141,8 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         scrollPadding: tour.getOption("scrollPadding"),
 
         dontShowAgain: tour.getOption("dontShowAgain"),
-        onDontShowAgainChange: (e: any) => {
-          tour.setDontShowAgain((<HTMLInputElement>e.target).checked);
+        onDontShowAgainChange: (checked: boolean) => {
+          tour.setDontShowAgain(checked);
         },
         dontShowAgainLabel: tour.getOption("dontShowAgainLabel"),
       });

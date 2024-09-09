@@ -8,6 +8,7 @@ import {
   dontShowAgainClassName,
   fullButtonClassName,
   helperNumberLayerClassName,
+  hiddenButtonClassName,
   nextButtonClassName,
   previousButtonClassName,
   progressBarClassName,
@@ -23,7 +24,7 @@ import { dataStepNumberAttribute } from "../dataAttributes";
 import scrollParentToElement from "../../../util/scrollParentToElement";
 import scrollTo from "../../../util/scrollTo";
 
-const { h1, div, input, label, ul, li, a, p } = van.tags;
+const { h1, div, input, label, ul, li, a } = van.tags;
 
 const DontShowAgain = ({
   dontShowAgainLabel,
@@ -232,8 +233,10 @@ const PrevButton = ({
   onClick: (e: any) => void;
   buttonClass: string;
 }) => {
+  const isFirstStep = currentStep === 0 && steps.length > 1;
   // when the current step is the first one and there are more steps to show
-  const disabled = currentStep === 0 && steps.length > 1 && !hidePrev;
+  const isDisabled = isFirstStep && !hidePrev;
+  const isHidden = isFirstStep && hidePrev;
   // when the current step is the last one or there is only one step to show
   const isFullButton =
     (currentStep === steps.length - 1 || steps.length === 1) && hideNext;
@@ -241,15 +244,20 @@ const PrevButton = ({
   return Button({
     label,
     onClick,
-    disabled,
+    disabled: isDisabled,
     className: () => {
       const classNames = [buttonClass, previousButtonClassName];
+
       if (isFullButton) {
         classNames.push(fullButtonClassName);
       }
 
-      if (disabled) {
+      if (isDisabled) {
         classNames.push(disabledButtonClassName);
+      }
+
+      if (isHidden) {
+        classNames.push(hiddenButtonClassName);
       }
 
       return classNames.filter(Boolean).join(" ");
@@ -290,37 +298,30 @@ const Buttons = ({
   prevLabel: string;
   onPrevClick: (e: any) => void;
 }) => {
-  const isLastStep = currentStep === steps.length - 1 || steps.length === 1;
-  const isFirstStep = currentStep === 0 && steps.length > 1;
-
   return div(
     { className: tooltipButtonsClassName },
-    () =>
-      isFirstStep && hidePrev
-        ? null
-        : PrevButton({
-            label: prevLabel,
-            steps,
-            currentStep,
-            hidePrev,
-            hideNext,
-            onClick: onPrevClick,
-            buttonClass,
-          }),
-    () =>
-      isLastStep && hideNext
-        ? null
-        : NextButton({
-            currentStep,
-            steps,
-            doneLabel,
-            nextLabel,
-            onClick: onNextClick,
-            hideNext,
-            hidePrev,
-            nextToDone,
-            buttonClass,
-          })
+    steps.length > 1
+      ? PrevButton({
+          label: prevLabel,
+          steps,
+          currentStep,
+          hidePrev,
+          hideNext,
+          onClick: onPrevClick,
+          buttonClass,
+        })
+      : null,
+    NextButton({
+      currentStep,
+      steps,
+      doneLabel,
+      nextLabel,
+      onClick: onNextClick,
+      hideNext,
+      hidePrev,
+      nextToDone,
+      buttonClass,
+    })
   );
 };
 
@@ -450,7 +451,7 @@ export const TourTooltip = ({
 
   children.push(Header({ title, skipLabel, onSkipClick }));
 
-  children.push(div({ className: tooltipTextClassName }, p(text)));
+  children.push(div({ className: tooltipTextClassName }, text));
 
   if (dontShowAgain) {
     children.push(DontShowAgain({ dontShowAgainLabel, onDontShowAgainChange }));
