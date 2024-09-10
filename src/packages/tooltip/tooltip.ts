@@ -340,8 +340,8 @@ export const Tooltip = (
   const right = dom.state<string>("auto");
   const bottom = dom.state<string>("auto");
   const left = dom.state<string>("auto");
-  const marginLeft = dom.state<string>("auto");
-  const marginTop = dom.state<string>("auto");
+  const marginLeft = dom.state<string>("0");
+  const marginTop = dom.state<string>("0");
   const opacity = dom.state<number>(0);
   // setting a default height for the tooltip instead of 0 to avoid flickering
   // this default is coming from the CSS class and is overridden after the tooltip is rendered
