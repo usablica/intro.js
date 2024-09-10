@@ -281,10 +281,15 @@ export class Hint implements Package<HintOptions> {
 
     if (!item) return;
 
-    this._activeHintSignal.val = stepId;
+    if (this._activeHintSignal.val !== stepId) {
+      this._activeHintSignal.val = stepId;
 
-    // call the callback function (if any)
-    await this.callback("hintClick")?.call(this, item);
+      // call the callback function (if any)
+      await this.callback("hintClick")?.call(this, item);
+    } else {
+      // to toggle the hint dialog if the same hint is clicked again
+      this._activeHintSignal.val = undefined;
+    }
 
     return this;
   }
