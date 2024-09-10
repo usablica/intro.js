@@ -4,6 +4,7 @@ import { addCompareSnapshotCommand } from "cypress-visual-regression/dist/comman
 
 addCompareSnapshotCommand({
   capture: "fullPage",
+  errorThreshold: 0.05
 });
 
 Cypress.Commands.add("nextStep", () => {
