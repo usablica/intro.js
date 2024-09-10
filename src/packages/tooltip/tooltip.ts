@@ -160,12 +160,12 @@ const alignTooltip = (
   showStepNumbers: boolean,
   hintMode: boolean
 ) => {
-  tooltipTop.val = "initial";
-  tooltipBottom.val = "initial";
-  tooltipLeft.val = "initial";
-  tooltipRight.val = "initial";
-  tooltipMarginLeft.val = "initial";
-  tooltipMarginTop.val = "initial";
+  tooltipTop.val = "auto";
+  tooltipBottom.val = "auto";
+  tooltipLeft.val = "auto";
+  tooltipRight.val = "auto";
+  tooltipMarginLeft.val = "0";
+  tooltipMarginTop.val = "0";
 
   let tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipWidth / 2;
 
