@@ -52,6 +52,7 @@ context("Highlight", () => {
       let sp = cy.spy(window, "click");
 
       cy.nextStep();
+      cy.wait(500);
       cy.get(".introjs-tooltiptext").contains("step two");
 
       cy.get(".introjs-helperLayer").realHover();
@@ -78,6 +79,7 @@ context("Highlight", () => {
         })
         .start();
 
+      cy.wait(500);
       let sp = cy.spy(window, "click");
 
       cy.get(".introjs-helperLayer").realHover();
@@ -133,7 +135,9 @@ context("Highlight", () => {
             },
           ],
         })
-        .start();
+        .start(); 
+
+      cy.wait(500);
 
       let sp = cy.spy(window, "clickRelative");
 
@@ -191,6 +195,8 @@ context("Highlight", () => {
           ],
         })
         .start();
+
+      cy.wait(500);
 
       let sp = cy.spy(window, "clickAbsolute");
 
