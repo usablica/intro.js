@@ -26,7 +26,7 @@
     "test:prettier": "prettier --check '(src|tests)/**/*.(js|ts|json|html)' '!tests/cypress/setup/dist'",
     "test:watch": "jest --watch",
     "test:jest": "jest --coverage --silent --ci --coverage --coverageReporters=\"text\" --coverageReporters=\"text-summary\"",
-    "test:cypress": "start-server-and-test dev http://localhost:10001/dist/intro.js 'docker run -it -v $PWD:/e2e -w /e2e --entrypoint=cypress cypress/included run --env type=regression || cypress run --env type=regression'",
+    "test:cypress": "start-server-and-test dev http://localhost:10001/dist/intro.js 'docker run -it -v $PWD:/e2e -w /e2e --entrypoint=cypress cypress/included run --env visualRegressionType=regression || cypress run --env visualRegressionType=regression'",
     "release": "./bin/release.sh || true",
     "prebuild": "rimraf ./dist",
     "build": "rollup -c",
