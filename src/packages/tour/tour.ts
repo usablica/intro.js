@@ -423,8 +423,10 @@ export class Tour implements Package<TourOptions> {
    * Create the root element for the tour
    */
   private createRoot() {
-    this._root = TourRoot({ tour: this });
-    dom.add(this.getTargetElement(), this._root);
+    if (!this._root) {
+      this._root = TourRoot({ tour: this });
+      dom.add(this.getTargetElement(), this._root);
+    }
   }
 
   /**
@@ -433,6 +435,7 @@ export class Tour implements Package<TourOptions> {
   private recreateRoot() {
     if (this._root) {
       this._root.remove();
+      this._root = undefined;
       this.createRoot();
     }
   }
