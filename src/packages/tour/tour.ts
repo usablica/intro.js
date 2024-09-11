@@ -1,4 +1,4 @@
-import { nextStep, previousStep, TourStep } from "./steps";
+import { fetchSteps, nextStep, previousStep, TourStep } from "./steps";
 import { Package } from "../package";
 import {
   introAfterChangeCallback,
@@ -16,21 +16,25 @@ import { start } from "./start";
 import exitIntro from "./exitIntro";
 import isFunction from "../../util/isFunction";
 import { getDontShowAgain, setDontShowAgain } from "./dontShowAgain";
-import refresh from "./refresh";
 import { getContainerElement } from "../../util/containerElement";
 import DOMEvent from "../../util/DOMEvent";
 import onKeyDown from "./onKeyDown";
-import onResize from "./onResize";
+import dom from "../dom";
+import { TourRoot } from "./components/TourRoot";
+import { FloatingElement } from "./components/FloatingElement";
 
 /**
  * Intro.js Tour class
  */
 export class Tour implements Package<TourOptions> {
   private _steps: TourStep[] = [];
-  private _currentStep: number = -1;
+  private _currentStepSignal = dom.state<number | undefined>(undefined);
+  private _refreshesSignal = dom.state(0);
+  private _root: Element | undefined;
   private _direction: "forward" | "backward";
   private readonly _targetElement: HTMLElement;
   private _options: TourOptions;
+  private _floatingElement: Element | undefined;
 
   private readonly callbacks: {
     beforeChange?: introBeforeChangeCallback;
@@ -162,17 +166,37 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
+   * Returns the underlying state of the current step
+   * This is an internal method and should not be used outside of the package.
+   */
+  getCurrentStepSignal() {
+    return this._currentStepSignal;
+  }
+
+  /**
+   * Returns the underlying state of the refreshes
+   * This is an internal method and should not be used outside of the package.
+   */
+  getRefreshesSignal() {
+    return this._refreshesSignal;
+  }
+
+  /**
    * Get the current step of the tour
    */
-  getCurrentStep(): number {
-    return this._currentStep;
+  getCurrentStep(): number | undefined {
+    return this._currentStepSignal.val;
   }
 
   /**
    * @deprecated `currentStep()` is deprecated, please use `getCurrentStep()` instead.
    */
-  currentStep(): number {
-    return this._currentStep;
+  currentStep(): number | undefined {
+    return this._currentStepSignal.val;
+  }
+
+  resetCurrentStep() {
+    this._currentStepSignal.val = undefined;
   }
 
   /**
@@ -180,13 +204,16 @@ export class Tour implements Package<TourOptions> {
    * @param step
    */
   setCurrentStep(step: number): this {
-    if (step >= this._currentStep) {
+    if (
+      this._currentStepSignal.val === undefined ||
+      step >= this._currentStepSignal.val
+    ) {
       this._direction = "forward";
     } else {
       this._direction = "backward";
     }
 
-    this._currentStep = step;
+    this._currentStepSignal.val = step;
     return this;
   }
 
@@ -194,10 +221,11 @@ export class Tour implements Package<TourOptions> {
    * Increment the current step of the tour (does not start the tour step, must be called in conjunction with `nextStep`)
    */
   incrementCurrentStep(): this {
-    if (this.getCurrentStep() === -1) {
+    const currentStep = this.getCurrentStep();
+    if (currentStep === undefined) {
       this.setCurrentStep(0);
     } else {
-      this.setCurrentStep(this.getCurrentStep() + 1);
+      this.setCurrentStep(currentStep + 1);
     }
 
     return this;
@@ -207,8 +235,9 @@ export class Tour implements Package<TourOptions> {
    * Decrement the current step of the tour (does not start the tour step, must be in conjunction with `previousStep`)
    */
   decrementCurrentStep(): this {
-    if (this.getCurrentStep() > 0) {
-      this.setCurrentStep(this._currentStep - 1);
+    const currentStep = this.getCurrentStep();
+    if (currentStep !== undefined && currentStep > 0) {
+      this.setCurrentStep(currentStep - 1);
     }
 
     return this;
@@ -241,7 +270,8 @@ export class Tour implements Package<TourOptions> {
    * Check if the current step is the last step
    */
   isEnd(): boolean {
-    return this.getCurrentStep() >= this._steps.length;
+    const currentStep = this.getCurrentStep();
+    return currentStep !== undefined && currentStep >= this._steps.length;
   }
 
   /**
@@ -310,7 +340,7 @@ export class Tour implements Package<TourOptions> {
    * Returns true if the tour has started
    */
   hasStarted(): boolean {
-    return this.getCurrentStep() > -1;
+    return this.getCurrentStep() !== undefined;
   }
 
   /**
@@ -357,7 +387,7 @@ export class Tour implements Package<TourOptions> {
    * Enable refresh on window resize for the tour
    */
   enableRefreshOnResize() {
-    this._refreshOnResizeHandler = (_: Event) => onResize(this);
+    this._refreshOnResizeHandler = (_: Event) => this.refresh();
     DOMEvent.on(window, "resize", this._refreshOnResizeHandler, true);
   }
 
@@ -372,10 +402,50 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
+   * Append the floating element to the target element.
+   * Floating element is a helper element that is used when the step does not have a target element.
+   * For internal use only.
+   */
+  appendFloatingElement() {
+    if (!this._floatingElement) {
+      this._floatingElement = FloatingElement({
+        currentStep: this.getCurrentStepSignal(),
+      });
+
+      // only add the floating element once per tour instance
+      dom.add(this.getTargetElement(), this._floatingElement);
+    }
+
+    return this._floatingElement;
+  }
+
+  /**
+   * Create the root element for the tour
+   */
+  private createRoot() {
+    if (!this._root) {
+      this._root = TourRoot({ tour: this });
+      dom.add(this.getTargetElement(), this._root);
+    }
+  }
+
+  /**
+   * Deletes the root element and recreates it
+   */
+  private recreateRoot() {
+    if (this._root) {
+      this._root.remove();
+      this._root = undefined;
+      this.createRoot();
+    }
+  }
+
+  /**
    * Starts the tour and shows the first step
    */
   async start() {
     if (await start(this)) {
+      this.createRoot();
       this.enableKeyboardNavigation();
       this.enableRefreshOnResize();
     }
@@ -401,7 +471,22 @@ export class Tour implements Package<TourOptions> {
    * @param {boolean} refreshSteps whether to refresh the tour steps
    */
   refresh(refreshSteps?: boolean) {
-    refresh(this, refreshSteps);
+    const currentStep = this.getCurrentStep();
+
+    if (currentStep === undefined) {
+      return this;
+    }
+
+    if (this._refreshesSignal.val !== undefined) {
+      this._refreshesSignal.val += 1;
+    }
+
+    // fetch new steps and recreate the root element
+    if (refreshSteps) {
+      this.setSteps(fetchSteps(this));
+      this.recreateRoot();
+    }
+
     return this;
   }
 

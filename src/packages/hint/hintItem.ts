@@ -7,6 +7,7 @@ import {
   dataHintPositionAttribute,
   dataTooltipClassAttribute,
 } from "./dataAttributes";
+import { State } from "../dom";
 
 export type HintPosition =
   | "top-left"
@@ -24,9 +25,12 @@ export type HintItem = {
   tooltipClass?: string;
   position: TooltipPosition;
   hint?: string;
-  hintTargetElement?: HTMLElement;
+  // this is the HintIcon element for this particular hint
+  // used for positioning the HintTooltip
+  hintTooltipElement?: HTMLElement;
   hintAnimation?: boolean;
   hintPosition: HintPosition;
+  isActive?: State<boolean>;
 };
 
 export const fetchHintItems = (hint: Hint) => {

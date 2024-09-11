@@ -24,13 +24,13 @@ context("Don't show again checkbox", () => {
 
       cy.wait(500);
 
-      cy.compareSnapshot("dont-show-again-checkbox-first-step", 0.05);
+      cy.compareSnapshot("dont-show-again-checkbox-first-step");
 
       cy.nextStep();
 
       cy.wait(800);
 
-      cy.compareSnapshot("dont-show-again-checkbox-second-step", 0.05);
+      cy.compareSnapshot("dont-show-again-checkbox-second-step");
     });
   });
 
@@ -53,7 +53,7 @@ context("Don't show again checkbox", () => {
 
       cy.wait(500);
 
-      cy.compareSnapshot("dont-show-again-clicked-first-step", 0.05);
+      cy.compareSnapshot("dont-show-again-clicked-first-step");
 
       cy.get(".introjs-dontShowAgain input").click();
 
@@ -61,13 +61,13 @@ context("Don't show again checkbox", () => {
 
       cy.wait(800);
 
-      cy.compareSnapshot("dont-show-again-clicked-after-exit", 0.05);
+      cy.compareSnapshot("dont-show-again-clicked-after-exit");
 
       instance.start();
 
       cy.wait(500);
 
-      cy.compareSnapshot("dont-show-again-clicked-after-second-start", 0.05);
+      cy.compareSnapshot("dont-show-again-clicked-after-second-start");
     });
   });
 });

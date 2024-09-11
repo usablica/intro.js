@@ -1,4 +1,3 @@
-import { queryElementByClassName } from "../../util/queryElement";
 import {
   className,
   content,
@@ -14,6 +13,11 @@ import * as dontShowAgain from "./dontShowAgain";
 import { getMockPartialSteps, getMockTour } from "./mock";
 import { Tour } from "./tour";
 import { helperLayerClassName, overlayClassName } from "./classNames";
+import {
+  sleep,
+  waitMsForDerivations,
+  waitMsForExitTransition,
+} from "../../util/sleep";
 
 describe("Tour", () => {
   beforeEach(() => {
@@ -166,12 +170,14 @@ describe("Tour", () => {
 
       // Act
       await mockTour.start();
+      await sleep(waitMsForDerivations);
       await mockTour.exit();
+      await sleep(waitMsForExitTransition);
 
       // Assert
       expect(mockElement?.className).not.toContain("introjs-showElement");
-      expect(queryElementByClassName(helperLayerClassName)).toBeNull();
-      expect(queryElementByClassName(overlayClassName)).toBeNull();
+      expect(document.querySelector(`.${helperLayerClassName}`)).toBeNull();
+      expect(document.querySelector(`.${overlayClassName}`)).toBeNull();
     });
 
     test("should not highlight the target element if queryString is incorrect", async () => {
@@ -392,6 +398,7 @@ describe("Tour", () => {
 
       // Act
       await mockTour.start();
+      await sleep(waitMsForDerivations);
       const checkbox = find(".introjs-dontShowAgain input");
       checkbox.click();
 

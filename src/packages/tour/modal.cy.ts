@@ -21,17 +21,17 @@ context("Modal", () => {
 
       cy.wait(500);
 
-      cy.compareSnapshot("first-step", 0.05);
+      cy.compareSnapshot("first-step");
 
       cy.nextStep();
       cy.wait(800);
 
-      cy.compareSnapshot("second-step", 0.05);
+      cy.compareSnapshot("second-step");
 
       cy.nextStep();
       cy.wait(800);
 
-      cy.compareSnapshot("exit", 0.05);
+      cy.compareSnapshot("exit");
     });
   });
 
@@ -63,15 +63,15 @@ context("Modal", () => {
         .start();
 
       cy.wait(800);
-      cy.compareSnapshot("position-bottom", 0.05);
+      cy.compareSnapshot("position-bottom");
 
       cy.nextStep();
       cy.wait(500);
-      cy.compareSnapshot("position-right", 0.05);
+      cy.compareSnapshot("position-right");
 
       cy.nextStep();
       cy.wait(500);
-      cy.compareSnapshot("position-left", 0.05);
+      cy.compareSnapshot("position-left");
     });
   });
 
@@ -95,11 +95,11 @@ context("Modal", () => {
       instance.start();
 
       cy.wait(800).then(() => {
-        cy.compareSnapshot("refresh-first-step", 0.05);
+        cy.compareSnapshot("refresh-first-step");
         cy.nextStep();
 
         cy.wait(500).then(() => {
-          cy.compareSnapshot("refresh-second-step", 0.05);
+          cy.compareSnapshot("refresh-second-step");
 
           cy.wait(500).then(() => {
             instance
@@ -123,7 +123,7 @@ context("Modal", () => {
 
             cy.nextStep();
             cy.wait(500);
-            cy.compareSnapshot("refresh-third-step", 0.05);
+            cy.compareSnapshot("refresh-third-step");
           });
         });
       });

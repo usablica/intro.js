@@ -22,17 +22,17 @@ context("ProgressBar", () => {
 
       cy.wait(500);
 
-      cy.compareSnapshot("first-step", 0.05);
+      cy.compareSnapshot("first-step");
 
       cy.nextStep();
       cy.wait(800);
 
-      cy.compareSnapshot("second-step", 0.05);
+      cy.compareSnapshot("second-step");
 
       cy.nextStep();
       cy.wait(800);
 
-      cy.compareSnapshot("exit", 0.05);
+      cy.compareSnapshot("exit");
     });
   });
 });

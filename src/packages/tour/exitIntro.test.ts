@@ -8,7 +8,7 @@ describe("exitIntro", () => {
 
     await mockTour.exit(false);
 
-    expect(mockTour.getCurrentStep()).toBe(-1);
+    expect(mockTour.getCurrentStep()).toBeUndefined();
   });
 
   test("should call the onexit and onbeforeexit callbacks", async () => {

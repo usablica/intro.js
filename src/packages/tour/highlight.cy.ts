@@ -22,13 +22,13 @@ context("Highlight", () => {
 
       cy.wait(500);
 
-      cy.compareSnapshot("highlight-element-first-step", 0.05);
+      cy.compareSnapshot("highlight-element-first-step");
 
       cy.nextStep();
 
       cy.wait(800);
 
-      cy.compareSnapshot("highlight-element-second-step", 0.05);
+      cy.compareSnapshot("highlight-element-second-step");
     });
   });
 
@@ -52,6 +52,7 @@ context("Highlight", () => {
       let sp = cy.spy(window, "click");
 
       cy.nextStep();
+      cy.wait(500);
       cy.get(".introjs-tooltiptext").contains("step two");
 
       cy.get(".introjs-helperLayer").realHover();
@@ -78,6 +79,7 @@ context("Highlight", () => {
         })
         .start();
 
+      cy.wait(500);
       let sp = cy.spy(window, "click");
 
       cy.get(".introjs-helperLayer").realHover();
@@ -134,6 +136,8 @@ context("Highlight", () => {
           ],
         })
         .start();
+
+      cy.wait(500);
 
       let sp = cy.spy(window, "clickRelative");
 
@@ -192,6 +196,8 @@ context("Highlight", () => {
         })
         .start();
 
+      cy.wait(500);
+
       let sp = cy.spy(window, "clickAbsolute");
 
       cy.get(".introjs-helperLayer").realHover();
@@ -223,7 +229,6 @@ context("Highlight", () => {
 
       cy.compareSnapshot("highlight-fixed-element", {
         capture: "viewport",
-        errorThreshold: 0.05,
       });
     });
   });
@@ -252,7 +257,6 @@ context("Highlight", () => {
 
       cy.compareSnapshot("highlight-fixed-element-scroll", {
         capture: "viewport",
-        errorThreshold: 0.05,
       });
     });
   });
@@ -281,7 +285,6 @@ context("Highlight", () => {
 
       cy.compareSnapshot("highlight-fixed-parent-element-scroll", {
         capture: "viewport",
-        errorThreshold: 0.05,
       });
     });
   });

@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "resolveJsonModule": true,
+    "moduleResolution": "Bundler",
     "importHelpers": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
     "alwaysStrict": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,

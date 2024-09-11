@@ -1,5 +1,7 @@
-import _createElement from "./createElement";
+import dom from "../packages/dom";
 import elementInViewport from "./elementInViewport";
+
+const { div } = dom.tags;
 
 describe("elementInViewport", () => {
   test("should return true when element is in viewport", () => {
@@ -13,7 +15,7 @@ describe("elementInViewport", () => {
           right: 50,
         } as DOMRect)
     );
-    const elm = _createElement("div");
+    const elm = div();
     elm.getBoundingClientRect = getBoundingClientRectSpy;
 
     // Act
@@ -34,7 +36,7 @@ describe("elementInViewport", () => {
           right: 50,
         } as DOMRect)
     );
-    const elm = _createElement("div");
+    const elm = div();
     elm.getBoundingClientRect = getBoundingClientRectSpy;
 
     // Act
@@ -55,7 +57,7 @@ describe("elementInViewport", () => {
           right: window.innerWidth + 50,
         } as DOMRect)
     );
-    const elm = _createElement("div");
+    const elm = div();
     elm.getBoundingClientRect = getBoundingClientRectSpy;
 
     // Act
@@ -76,7 +78,7 @@ describe("elementInViewport", () => {
           right: 50,
         } as DOMRect)
     );
-    const elm = _createElement("div");
+    const elm = div();
     elm.getBoundingClientRect = getBoundingClientRectSpy;
 
     // Act
@@ -97,7 +99,7 @@ describe("elementInViewport", () => {
           right: 50,
         } as DOMRect)
     );
-    const elm = _createElement("div");
+    const elm = div();
     elm.getBoundingClientRect = getBoundingClientRectSpy;
 
     // Act
