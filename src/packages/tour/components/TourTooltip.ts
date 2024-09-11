@@ -96,7 +96,7 @@ const ProgressBar = ({
   currentStep: number;
   progressBarAdditionalClass: string;
 }) => {
-  const progress = ((currentStep + 1) / (steps.length)) * 100;
+  const progress = ((currentStep + 1) / steps.length) * 100;
 
   return div({ className: progressClassName }, [
     div({

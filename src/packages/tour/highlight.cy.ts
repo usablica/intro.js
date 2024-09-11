@@ -135,7 +135,7 @@ context("Highlight", () => {
             },
           ],
         })
-        .start(); 
+        .start();
 
       cy.wait(500);
 
@@ -228,7 +228,7 @@ context("Highlight", () => {
       cy.wait(500);
 
       cy.compareSnapshot("highlight-fixed-element", {
-        capture: "viewport"
+        capture: "viewport",
       });
     });
   });
@@ -256,7 +256,7 @@ context("Highlight", () => {
       cy.wait(500);
 
       cy.compareSnapshot("highlight-fixed-element-scroll", {
-        capture: "viewport"
+        capture: "viewport",
       });
     });
   });
@@ -284,7 +284,7 @@ context("Highlight", () => {
       cy.wait(500);
 
       cy.compareSnapshot("highlight-fixed-parent-element-scroll", {
-        capture: "viewport"
+        capture: "viewport",
       });
     });
   });
