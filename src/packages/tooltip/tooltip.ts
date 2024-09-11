@@ -28,7 +28,7 @@ export const TooltipArrow = (props: {
         classNames.push("bottom");
         break;
       case "right":
-        if (props.tooltipBottomOverflow) {
+        if (props.tooltipBottomOverflow.val) {
           // In this case, right would have fallen below the bottom of the screen.
           // Modify so that the bottom of the tooltip connects with the target
           classNames.push("left-bottom");
@@ -37,7 +37,7 @@ export const TooltipArrow = (props: {
         }
         break;
       case "left":
-        if (props.tooltipBottomOverflow) {
+        if (props.tooltipBottomOverflow.val) {
           // In this case, left would have fallen below the bottom of the screen.
           // Modify so that the bottom of the tooltip connects with the target
           classNames.push("right-bottom");
@@ -226,7 +226,7 @@ const alignTooltip = (
     case "right":
       tooltipLeft.val = `${targetOffset.width + 20}px`;
 
-      if (tooltipBottomOverflow) {
+      if (tooltipBottomOverflow.val) {
         // In this case, right would have fallen below the bottom of the screen.
         // Modify so that the bottom of the tooltip connects with the target
         tooltipTop.val = `-${tooltipHeight - targetOffset.height - 20}px`;
@@ -237,7 +237,7 @@ const alignTooltip = (
         tooltipTop.val = "15px";
       }
 
-      if (tooltipBottomOverflow) {
+      if (tooltipBottomOverflow.val) {
         // In this case, left would have fallen below the bottom of the screen.
         // Modify so that the bottom of the tooltip connects with the target
         tooltipTop.val = `-${tooltipHeight - targetOffset.height - 20}px`;
@@ -353,7 +353,7 @@ export const Tooltip = (
   // windowSize can change if the window is resized
   const windowSize = dom.state(getWindowSize());
   const targetOffset = dom.state<Offset>(getOffset(element));
-  const tooltipBottomOverflow = dom.derive(
+  const tooltipBottomOverflow = dom.derive<boolean>(
     () => targetOffset.val!.top + tooltipHeight.val! > windowSize.val!.height
   );
 
