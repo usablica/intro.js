@@ -1,4 +1,9 @@
-export const style = (style: { [key: string]: string | number }) => {
+/**
+ * Converts a style object to a css text
+ * @param style style object
+ * @returns css text
+ */
+export const style = (style: { [key: string]: string | number }): string => {
   let cssText = "";
 
   for (const rule in style) {
