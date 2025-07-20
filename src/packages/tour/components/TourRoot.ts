@@ -123,6 +123,12 @@ export const TourRoot = ({ tour }: TourRootProps) => {
 
           await tour.exit();
         },
+        
+       exitLabel: tour.getOption("exitLabel"),
+       onExitClick: () => {
+         tour.callback("complete")?.call(tour, tour.getCurrentStep(), "exit");
+         tour.exit();
+       },
         buttonClass: tour.getOption("buttonClass"),
         nextToDone: tour.getOption("nextToDone"),
         doneLabel: tour.getOption("doneLabel"),

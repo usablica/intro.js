@@ -225,7 +225,7 @@ tr.introjs-showElement {
 .introjs-tooltipbuttons {
   border-top: 1px solid $black300;
   padding: 10px;
-  text-align: right;
+  text-align: center;
   white-space: nowrap;
 
   &:after {
@@ -313,12 +313,12 @@ tr.introjs-showElement {
   }
 }
 
-.introjs-prevbutton {
-  float: left;
-}
-
-.introjs-nextbutton {
-  float: right;
+.introjs-prevbutton,
+.introjs-nextbutton,
+.introjs-exitButton {
+  float: none;            
+  display: inline-block;   
+  margin: 0 10px;          
 }
 
 .introjs-disabled {

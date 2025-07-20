@@ -37,6 +37,9 @@ export function skipButton() {
 export function nextButton() {
   return find(".introjs-nextbutton");
 }
+export function exitButton() {
+  return find(".introjs-exitButton");
+}
 
 export function prevButton() {
   return find(".introjs-prevbutton");
