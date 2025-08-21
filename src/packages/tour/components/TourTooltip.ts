@@ -10,6 +10,7 @@ import {
   helperNumberLayerClassName,
   hiddenButtonClassName,
   nextButtonClassName,
+  exitButtonClassName,
   previousButtonClassName,
   progressBarClassName,
   progressClassName,
@@ -221,6 +222,25 @@ const NextButton = ({
   return nextButton;
 };
 
+const ExitButton = ({
+  label,
+  onClick,
+  buttonClass,
+}: {
+  label: string;
+  onClick: (e: any) => void;
+  buttonClass: string;
+}) => {
+  return Button({
+    label,
+    onClick,
+    className: () => {
+      return [buttonClass, exitButtonClassName].filter(Boolean).join(" ");
+    },
+  });
+};
+
+
 const PrevButton = ({
   label,
   steps,
@@ -283,6 +303,9 @@ const Buttons = ({
   nextLabel,
   onNextClick,
 
+  exitLabel,
+  onExitClick,
+
   hidePrev,
   prevLabel,
   onPrevClick,
@@ -299,12 +322,21 @@ const Buttons = ({
   nextLabel: string;
   onNextClick: (e: any) => void;
 
+  exitLabel: string;
+  onExitClick: (e: any) => void;
+  
+
   hidePrev: boolean;
   prevLabel: string;
   onPrevClick: (e: any) => void;
 }) => {
   return div(
-    { className: tooltipButtonsClassName },
+    { className: tooltipButtonsClassName },[
+       ExitButton({
+    label: exitLabel,
+    onClick: onExitClick, 
+    buttonClass,
+  }),
     steps.length > 1
       ? PrevButton({
           label: prevLabel,
@@ -327,7 +359,7 @@ const Buttons = ({
       nextToDone,
       buttonClass,
     })
-  );
+  ]);
 };
 
 export const Header = ({
@@ -396,6 +428,8 @@ export type TourTooltipProps = Omit<
   onNextClick: (e: any) => void;
   prevLabel: string;
   onPrevClick: (e: any) => void;
+  exitLabel: string;
+  onExitClick: (e: any) => void;
   skipLabel: string;
   onSkipClick: (e: any) => void;
   buttonClass: string;
@@ -440,6 +474,8 @@ export const TourTooltip = ({
   doneLabel,
   hideNext,
   hidePrev,
+  exitLabel,
+  onExitClick,
 
   progress,
   progressBarAdditionalClass,
@@ -497,6 +533,9 @@ export const TourTooltip = ({
 
         nextLabel: nextLabel,
         onNextClick: onNextClick,
+
+        exitLabel: exitLabel,
+        onExitClick: onExitClick,
 
         prevLabel: prevLabel,
         onPrevClick: onPrevClick,

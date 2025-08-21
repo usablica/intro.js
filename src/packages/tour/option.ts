@@ -11,6 +11,8 @@ export interface TourOptions {
   prevLabel: string;
   /* Skip button label in tooltip box */
   skipLabel: string;
+  /* Exit button label in tooltip box */
+  exitLabel: string;
   /* Done button label in tooltip box */
   doneLabel: string;
   /* Hide previous button in the first step? Otherwise, it will be disabled button. */
@@ -83,6 +85,7 @@ export function getDefaultTourOptions(): TourOptions {
     nextLabel: "Next",
     prevLabel: "Back",
     skipLabel: "×",
+    exitLabel: "Exit",
     doneLabel: "Done",
     hidePrev: false,
     hideNext: false,

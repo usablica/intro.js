@@ -24,3 +24,4 @@ export const activeClassName = "active";
 export const fixedTooltipClassName = "introjs-fixedTooltip";
 export const floatingElementClassName = "introjsFloatingElement";
 export const showElementClassName = "introjs-showElement";
+export const exitButtonClassName = "introjs-exitButton";

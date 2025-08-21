@@ -50,6 +50,11 @@
   border-radius: 0 .2em .2em 0;
 }
 
+.introjs-exitButton {
+  border-radius: 0 .2em .2em 0;
+}
+
+
 .introjs-button:hover, .introjs-button:focus {
   background: #2c3e50;
   color: #fff;
