@@ -1,6 +1,7 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import { TourStep, ScrollTo } from "./steps";
 import { Translator, LanguageCode } from "../../i18n/language";
+import { ThemeType } from "./theme";
 
 export interface TourOptions {
   steps: Partial<TourStep>[];
@@ -80,6 +81,8 @@ export interface TourOptions {
    Built-in language codes: "en_US", "es_ES", "fr_FR", "de_DE", "fa_IR"
    Defaults to the user's browser language if not provided. */
   language?: LanguageCode;
+  /* Theme for the tour - light, dark, auto */
+  theme?: ThemeType;
 }
 
 export function getDefaultTourOptions(translator?: Translator): TourOptions {
@@ -129,5 +132,6 @@ export function getDefaultTourOptions(translator?: Translator): TourOptions {
     progressBarAdditionalClass: "",
     tooltipRenderAsHtml: true,
     language: activeTranslator.getLanguage(),
+    theme: "auto",
   };
 }

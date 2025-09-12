@@ -22,6 +22,7 @@ import onKeyDown from "./onKeyDown";
 import dom from "../dom";
 import { TourRoot } from "./components/TourRoot";
 import { FloatingElement } from "./components/FloatingElement";
+import { applyTheme } from "./theme";
 
 /**
  * Intro.js Tour class
@@ -460,11 +461,18 @@ export class Tour implements Package<TourOptions> {
   async start() {
     if (await start(this)) {
       this.createRoot();
+      this.initTheme();
       this.enableKeyboardNavigation();
       this.enableRefreshOnResize();
     }
 
     return this;
+  }
+
+  private initTheme() {
+    if (!this._root || !(this._root instanceof HTMLElement)) return;
+
+    applyTheme({ root: this._root, theme: this._options.theme });
   }
 
   /**
