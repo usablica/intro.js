@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Intro.js Language Import Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Example showing how to import language files directly from intro.js">
+
+    <!-- Add IntroJs styles -->
+    <link href="../../dist/introjs.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .step-element {
+            background: #f0f0f0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+        
+        .buttons {
+            margin: 30px 0;
+        }
+        
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+        }
+        
+        .btn-spanish { background: #dc3545; }
+        .btn-spanish:hover { background: #c82333; }
+        
+        .btn-french { background: #28a745; }
+        .btn-french:hover { background: #218838; }
+        
+        .btn-german { background: #ffc107; color: #212529; }
+        .btn-german:hover { background: #e0a800; }
+        
+        .btn-persian { background: #6f42c1; }
+        .btn-persian:hover { background: #5a32a3; }
+        
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        
+        h1 { color: #333; }
+        h2 { color: #666; margin-top: 30px; }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 id="step1" data-intro="Welcome to the language import example!" data-step="1">
+            Intro.js Language Import Example
+        </h1>
+        
+        <p>This example demonstrates how to import language files directly from intro.js and use them in your tours.</p>
+        
+        <div class="buttons">
+            <button class="btn" onclick="startEnglishTour()">English Tour</button>
+            <button class="btn btn-spanish" onclick="startSpanishTour()">Spanish Tour (Español)</button>
+            <button class="btn btn-french" onclick="startFrenchTour()">French Tour (Français)</button>
+            <button class="btn btn-german" onclick="startGermanTour()">German Tour (Deutsch)</button>
+            <button class="btn btn-persian" onclick="startPersianTour()">Persian Tour (فارسی)</button>
+        </div>
+        
+        <div class="step-element" id="step2" data-intro="This is the second step of our tour" data-step="2">
+            <h2>Step 2: Content Area</h2>
+            <p>This area contains some sample content for the tour demonstration.</p>
+        </div>
+        
+        <div class="step-element" id="step3" data-intro="Here you can see more features" data-step="3">
+            <h2>Step 3: Features Section</h2>
+            <p>This section showcases different features and capabilities.</p>
+        </div>
+        
+        <div class="step-element" id="step4" data-intro="This is the final step" data-step="4">
+            <h2>Step 4: Final Section</h2>
+            <p>This is the last step of our tour. Thank you for following along!</p>
+        </div>
+        
+        <h2>Code Examples</h2>
+        
+        <h3>Method 1: ES6 Module Import (Recommended)</h3>
+        <div class="code-example">
+// Import specific language files
+import introJs, { es_ES, fr_FR, de_DE, fa_IR } from 'intro.js';
+
+// Use imported language
+function startSpanishTour() {
+    introJs.tour().setOptions({
+        language: es_ES,
+        showStepNumbers: true,
+        steps: [
+            { element: '#step1', intro: 'Bienvenido al ejemplo' },
+            { element: '#step2', intro: 'Este es el segundo paso' },
+            { element: '#step3', intro: 'Aquí puedes ver más características' },
+            { element: '#step4', intro: 'Este es el paso final' }
+        ]
+    }).start();
+}
+        </div>
+        
+        <h3>Method 2: Dynamic Import (For Lazy Loading)</h3>
+        <div class="code-example">
+// Dynamic import for lazy loading
+async function startSpanishTour() {
+    const { es_ES } = await import('intro.js');
+    
+    introJs.tour().setOptions({
+        language: es_ES,
+        steps: [/* your steps */]
+    }).start();
+}
+        </div>
+        
+        <h3>Method 3: CommonJS Require (Node.js)</h3>
+        <div class="code-example">
+// CommonJS import
+const introJs = require('intro.js');
+const { es_ES, fr_FR } = require('intro.js');
+
+// Use the imported language
+introJs.tour().setOptions({
+    language: es_ES
+}).start();
+        </div>
+    </div>
+
+    <!-- Add IntroJs script -->
+    <script type="module">
+        // Import intro.js and language files
+        import introJs, { en_US, es_ES, fr_FR, de_DE, fa_IR } from '../../dist/intro.module.js';
+        
+        // Make functions available globally for button onclick handlers
+        window.startEnglishTour = function() {
+            introJs.tour().setOptions({
+                language: en_US,
+                showStepNumbers: true,
+                dontShowAgain: true,
+                steps: [
+                    {
+                        element: '#step1',
+                        intro: 'Welcome to the Intro.js language import example! This demonstrates how to use imported language files.'
+                    },
+                    {
+                        element: '#step2', 
+                        intro: 'This is the second step. Notice how all the button labels are in English.'
+                    },
+                    {
+                        element: '#step3',
+                        intro: 'Here you can see more features and how the step numbers work.'
+                    },
+                    {
+                        element: '#step4',
+                        intro: 'This is the final step. You can also see the "Don\'t show again" option.'
+                    }
+                ]
+            }).start();
+        };
+        
+        window.startSpanishTour = function() {
+            introJs.tour().setOptions({
+                language: es_ES,
+                showStepNumbers: true,
+                dontShowAgain: true,
+                steps: [
+                    {
+                        element: '#step1',
+                        intro: '¡Bienvenido al ejemplo de importación de idiomas de Intro.js! Esto demuestra cómo usar archivos de idioma importados.'
+                    },
+                    {
+                        element: '#step2',
+                        intro: 'Este es el segundo paso. Observa cómo todas las etiquetas de los botones están en español.'
+                    },
+                    {
+                        element: '#step3', 
+                        intro: 'Aquí puedes ver más características y cómo funcionan los números de paso.'
+                    },
+                    {
+                        element: '#step4',
+                        intro: 'Este es el paso final. También puedes ver la opción "No mostrar esto de nuevo".'
+                    }
+                ]
+            }).start();
+        };
+        
+        window.startFrenchTour = function() {
+            introJs.tour().setOptions({
+                language: fr_FR,
+                showStepNumbers: true,
+                dontShowAgain: true,
+                steps: [
+                    {
+                        element: '#step1',
+                        intro: 'Bienvenue dans l\'exemple d\'importation de langues Intro.js ! Ceci démontre comment utiliser les fichiers de langue importés.'
+                    },
+                    {
+                        element: '#step2',
+                        intro: 'Ceci est la deuxième étape. Remarquez comment toutes les étiquettes de boutons sont en français.'
+                    },
+                    {
+                        element: '#step3',
+                        intro: 'Ici vous pouvez voir plus de fonctionnalités et comment les numéros d\'étapes fonctionnent.'
+                    },
+                    {
+                        element: '#step4',
+                        intro: 'Ceci est l\'étape finale. Vous pouvez aussi voir l\'option "Ne plus afficher ceci".'
+                    }
+                ]
+            }).start();
+        };
+        
+        window.startGermanTour = function() {
+            introJs.tour().setOptions({
+                language: de_DE,
+                showStepNumbers: true,
+                dontShowAgain: true,
+                steps: [
+                    {
+                        element: '#step1',
+                        intro: 'Willkommen zum Intro.js Sprach-Import-Beispiel! Dies zeigt, wie man importierte Sprachdateien verwendet.'
+                    },
+                    {
+                        element: '#step2',
+                        intro: 'Dies ist der zweite Schritt. Beachten Sie, wie alle Button-Labels auf Deutsch sind.'
+                    },
+                    {
+                        element: '#step3',
+                        intro: 'Hier können Sie weitere Funktionen sehen und wie die Schrittnummern funktionieren.'
+                    },
+                    {
+                        element: '#step4',
+                        intro: 'Dies ist der letzte Schritt. Sie können auch die Option "Nicht wieder anzeigen" sehen.'
+                    }
+                ]
+            }).start();
+        };
+        
+        window.startPersianTour = function() {
+            introJs.tour().setOptions({
+                language: fa_IR,
+                showStepNumbers: true,
+                dontShowAgain: true,
+                steps: [
+                    {
+                        element: '#step1',
+                        intro: 'به مثال وارد کردن زبان Intro.js خوش آمدید! این نشان می‌دهد که چگونه از فایل‌های زبان وارد شده استفاده کنید.'
+                    },
+                    {
+                        element: '#step2',
+                        intro: 'این مرحله دوم است. توجه کنید که همه برچسب‌های دکمه به فارسی هستند.'
+                    },
+                    {
+                        element: '#step3',
+                        intro: 'اینجا می‌توانید ویژگی‌های بیشتری ببینید و نحوه کارکرد شماره مراحل را مشاهده کنید.'
+                    },
+                    {
+                        element: '#step4',
+                        intro: 'این مرحله نهایی است. همچنین می‌توانید گزینه "دیگر این را نشان نده" را ببینید.'
+                    }
+                ]
+            }).start();
+        };
+    </script>
+</body>
+</html>

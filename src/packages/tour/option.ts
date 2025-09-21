@@ -125,3 +125,52 @@ export function getDefaultTourOptions(language: Language = enUS): TourOptions {
     language,
   };
 }
+
+/**
+ * Update tour options with language-aware handling
+ * When language is changed, automatically update button labels and messages
+ */
+export function setTourOptions(
+  options: TourOptions,
+  partialOptions: Partial<TourOptions>
+): TourOptions {
+  // If language is being set, update the translated labels automatically
+  if (partialOptions.language) {
+    const translator = new Translator(partialOptions.language);
+
+    // Only update labels if they weren't explicitly provided in partialOptions
+    const updatedOptions: Partial<TourOptions> = {
+      ...partialOptions,
+    };
+
+    // Update button labels if not explicitly provided
+    if (!partialOptions.nextLabel) {
+      updatedOptions.nextLabel = translator.translate("buttons.next");
+    }
+    if (!partialOptions.prevLabel) {
+      updatedOptions.prevLabel = translator.translate("buttons.prev");
+    }
+    if (!partialOptions.doneLabel) {
+      updatedOptions.doneLabel = translator.translate("buttons.done");
+    }
+    if (!partialOptions.stepNumbersOfLabel) {
+      updatedOptions.stepNumbersOfLabel = translator.translate(
+        "messages.stepNumbersOfLabel"
+      );
+    }
+    if (!partialOptions.dontShowAgainLabel) {
+      updatedOptions.dontShowAgainLabel = translator.translate(
+        "messages.dontShowAgainLabel"
+      );
+    }
+
+    partialOptions = updatedOptions;
+  }
+
+  // Apply all options
+  for (const [key, value] of Object.entries(partialOptions)) {
+    (options as any)[key] = value;
+  }
+
+  return options;
+}

@@ -2,6 +2,14 @@ import { version } from "../package.json";
 import { Hint } from "./packages/hint";
 import { Tour } from "./packages/tour";
 
+// Export language files for direct import
+export { default as en_US } from "./i18n/en_US";
+export { default as es_ES } from "./i18n/es_ES";
+export { default as fr_FR } from "./i18n/fr_FR";
+export { default as de_DE } from "./i18n/de_DE";
+export { default as fa_IR } from "./i18n/fa_IR";
+export { Translator, type Language } from "./i18n/language";
+
 class LegacyIntroJs extends Tour {
   /**
    * @deprecated introJs().addHints() is deprecated, please use introJs.hint().addHints() instead

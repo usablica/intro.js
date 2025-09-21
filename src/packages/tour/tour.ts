@@ -10,8 +10,8 @@ import {
   introSkipCallback,
   introStartCallback,
 } from "./callback";
-import { getDefaultTourOptions, TourOptions } from "./option";
-import { setOptions, setOption } from "../../option";
+import { getDefaultTourOptions, TourOptions, setTourOptions } from "./option";
+import { setOption } from "../../option";
 import { start } from "./start";
 import exitIntro from "./exitIntro";
 import isFunction from "../../util/isFunction";
@@ -62,7 +62,7 @@ export class Tour implements Package<TourOptions> {
   ) {
     this._targetElement = getContainerElement(elementOrSelector);
     this._options = options
-      ? setOptions(this._options, options)
+      ? setTourOptions(getDefaultTourOptions(), options)
       : getDefaultTourOptions();
   }
 
@@ -293,7 +293,7 @@ export class Tour implements Package<TourOptions> {
    * @param partialOptions key/value pair of options
    */
   setOptions(partialOptions: Partial<TourOptions>): this {
-    this._options = setOptions(this._options, partialOptions);
+    this._options = setTourOptions(this._options, partialOptions);
     return this;
   }
 
