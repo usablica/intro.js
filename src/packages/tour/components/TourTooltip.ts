@@ -331,13 +331,11 @@ const Buttons = ({
 };
 
 export const Header = ({
-  text,
   title,
   skipLabel,
   renderAsHtml,
   onSkipClick,
 }: {
-  text: string;
   title: string;
   skipLabel: string;
   renderAsHtml?: boolean;
@@ -468,7 +466,7 @@ export const TourTooltip = ({
   const text = step.intro;
   const position = step.position;
 
-  children.push(Header({ text, title, skipLabel, renderAsHtml, onSkipClick }));
+  children.push(Header({ title, skipLabel, renderAsHtml, onSkipClick }));
 
   children.push(
     TooltipContent({

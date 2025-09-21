@@ -6,6 +6,7 @@ import {
   dataPosition,
   dataStepAttribute,
 } from "./dataAttributes";
+import { title } from "process";
 
 const { div, b, a, h1 } = dom.tags;
 
@@ -23,7 +24,7 @@ export const appendMockSteps = (targetElement: HTMLElement = document.body) => {
     "Mock element second to last"
   );
   mockElementThree.setAttribute(dataStepAttribute, "10");
-
+  mockElementThree.setAttribute(title, "this is title");
   const mockElementFour = a();
   mockElementFour.setAttribute(dataIntroAttribute, "Mock element last");
   mockElementFour.setAttribute(dataStepAttribute, "20");
@@ -54,12 +55,14 @@ export const getMockPartialSteps = (): Partial<TourStep>[] => {
       element: "h1",
     },
     {
+      title: "second title",
       intro: "Step Four of the tour",
       position: "right",
       scrollTo: "off",
       element: document.createElement("div"),
     },
     {
+      title: "third title",
       element: ".not-found",
       intro: "Element not found",
     },
