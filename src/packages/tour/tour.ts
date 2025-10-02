@@ -472,7 +472,11 @@ export class Tour implements Package<TourOptions> {
   private initTheme() {
     if (!this._root || !(this._root instanceof HTMLElement)) return;
 
-    applyTheme({ root: this._root, theme: this._options.theme });
+    applyTheme({
+      root: this._root, 
+      theme: this._options.theme,
+      themePath: this._options.themePath
+    });
   }
 
   /**

@@ -81,8 +81,10 @@ export interface TourOptions {
    Built-in language codes: "en_US", "es_ES", "fr_FR", "de_DE", "fa_IR"
    Defaults to the user's browser language if not provided. */
   language?: LanguageCode;
-  /* Theme for the tour - light, dark, auto */
+  /* Theme for the tour - light, dark, auto, or custom theme name */
   theme?: ThemeType;
+  /* Path to custom CSS file for theme (optional) */
+  themePath?: string;
 }
 
 export function getDefaultTourOptions(translator?: Translator): TourOptions {
