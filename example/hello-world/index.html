@@ -35,7 +35,20 @@
       <div class="jumbotron">
         <h1 data-step="1" data-intro="This is a tooltip!" data-title="A short title">Basic Usage</h1>
         <p class="lead" data-step="4" data-intro="Another step." data-title="foo">This is the basic usage of IntroJs, with <code>data-step</code> and <code>data-intro</code> attributes.</p>
-        <a class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:introJs.tour().start();">Show me how</a>
+        <div style="margin-bottom: 10px;">
+      <label for="theme-select" style="margin-right: 8px;">Theme:</label>
+      <select id="theme-select" onchange="changeTheme(this.value)" style="padding: 4px 8px;">
+        <option value="auto">Auto (system)</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="modern">Modern</option>
+        <option value="flattener">Flattener</option>
+        <option value="nassim">Nassim</option>
+        <option value="nazanin">Nazanin</option>
+        <option value="royal">Royal</option>
+      </select>
+    </div>
+    <a class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:startTour();">Show me how</a>
       </div>
 
       <hr>
@@ -68,5 +81,28 @@
       <hr>
     </div>
     <script type="text/javascript" src="../../dist/intro.js"></script>
+    <script>
+      var selectedTheme = "auto";
+
+      var externalThemes = {
+        modern: "../../themes/introjs-modern.css",
+        flattener: "../../themes/introjs-flattener.css",
+        nassim: "../../themes/introjs-nassim.css",
+        nazanin: "../../themes/introjs-nazanin.css",
+        royal: "../../themes/introjs-royal.css",
+      };
+
+      function changeTheme(theme) {
+        selectedTheme = theme;
+      }
+
+      function startTour() {
+        var tour = introJs.tour().setOption("theme", selectedTheme);
+        if (externalThemes[selectedTheme]) {
+          tour.setOption("themePath", externalThemes[selectedTheme]);
+        }
+        tour.start();
+      }
+    </script>
   </body>
 </html>
