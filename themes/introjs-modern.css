@@ -1,5 +1,10 @@
 .introjs-tooltip {
-  background-color: rgba(000, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.85);
+  color: #fff;
+}
+
+.introjs-tooltiptext,
+.introjs-tooltip-title {
   color: #fff;
 }
 
@@ -26,7 +31,7 @@
 }
 
 .introjs-arrow {
-  border: 10px solid #fff;
+  border: 10px solid transparent;
 }
 .introjs-arrow.top, .introjs-arrow.top-middle, .introjs-arrow.top-right {
   border-color: transparent transparent rgba(000, 0, 0, 0.5);

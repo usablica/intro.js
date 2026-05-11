@@ -74,7 +74,7 @@
 }
 
 .introjs-arrow {
-  border: 5px solid white;
+  border: 5px solid transparent;
   content:'';
   position: absolute;
 }
@@ -127,14 +127,8 @@
 }
 
 .introjs-tooltiptext {
-    margin-left: -10px;
-
-    margin-right: -10px;
-    /* border-top: 1px solid #FFFFFF; */
-    /* background: #FAFAFA; */
-    color: #2c3e50;
-    padding: 25px 30px 15px;
-    /* border-bottom: 1px solid #FFFFFF; */
+  color: #2c3e50;
+  padding: 20px;
 }
 
 .introjs-tooltipbuttons {
@@ -156,46 +150,33 @@
   /* box-shadow: 0 2px 0px -0px #306588; */
   margin: 0;
   outline: none;
-  border: 2px solid;
+  border: 2px solid #2980b9;
   background: transparent;
   text-decoration: none;
   font: 11px/normal sans-serif;
-  color: #2980b9 !important;
+  color: #2980b9;
+  text-shadow: none;
   white-space: nowrap;
   cursor: pointer;
-  outline: none !important;
-  -webkit-background-clip: padding;
-  -moz-background-clip: padding;
-  -o-background-clip: padding-box;
-  /*background-clip: padding-box;*/ /* commented out due to Opera 11.10 bug */
-  -webkit-border-radius: 0.2em;
-  -moz-border-radius: 0.2em;
   border-radius: 0.2em;
-  /* IE hacks */
-  zoom: 1;
-  *display: inline;
   margin-top: 10px;
-  transition:all 0.25s ease;
-  -webkit-transition:all 0.25s ease;
-  -moz-transition:all 0.25s ease;
-  -ms-transition:all 0.25s ease;
-  -o-transition:all 0.25s ease;
+  transition: all 0.25s ease;
 }
 
 .introjs-button:hover {
   color: #fff;
   background: #2671A2;
-  text-decoration: none;
   border-color: #235677;
+  text-decoration: none;
 }
 
 .introjs-button:focus,
 .introjs-button:active {
-    background: #23587A;  text-decoration: none;
-    color: #fff;
-    /* bottom: -1px; */
-    box-shadow: none;
-    border-color: #173B53;
+  background: #23587A;
+  color: #fff;
+  border-color: #173B53;
+  box-shadow: none;
+  text-decoration: none;
 }
 
 /* overrides extra padding on button elements in Firefox */
@@ -205,9 +186,9 @@
 }
 
 .introjs-skipbutton {
-  margin-right: 5px;
   color: #c00;
   background: transparent;
+  border: none;
 }
 
 .introjs-skipbutton:hover {
@@ -222,17 +203,19 @@
 
 }
 
-.introjs-prevbutton {
-  -webkit-border-radius: 0.2em 0 0 0.2em;
-  -moz-border-radius: 0.2em 0 0 0.2em;
-  border-radius: 0.2em 0 0 0.2em;
-  border-right: none;
+.introjs-tooltipbuttons .introjs-prevbutton {
+  border-radius: 0.2em;
+  color: #2980b9;
 }
 
-.introjs-nextbutton {
-  -webkit-border-radius: 0 0.2em 0.2em 0;
-  -moz-border-radius: 0 0.2em 0.2em 0;
-  border-radius: 0 0.2em 0.2em 0;
+.introjs-tooltipbuttons .introjs-nextbutton {
+  border-radius: 0.2em;
+  color: #2980b9;
+}
+
+.introjs-tooltipbuttons .introjs-nextbutton:hover,
+.introjs-tooltipbuttons .introjs-prevbutton:hover {
+  color: #fff;
 }
 
 .introjs-disabled, .introjs-disabled:hover, .introjs-disabled:focus {
@@ -247,10 +230,6 @@
 
 .introjs-bullets {
   text-align: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: -5px;
 }
 .introjs-bullets ul {
   clear: both;
