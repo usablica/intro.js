@@ -1,8 +1,15 @@
-import getOffset from "../../util/getOffset";
+import { computePosition, offset, shift, Placement } from "../positioning";
+import isFixed from "../../util/isFixed";
 import { HintPosition } from "./hintItem";
 
 /**
- * Aligns hint position
+ * Positions a hint icon element over its target element according to the
+ * requested HintPosition.
+ *
+ * Hint icons sit ON the target's edge/corner rather than beside it, so the
+ * mainAxis offset pulls each icon back by its own dimension so it overlaps the
+ * target boundary. crossAxis is always 0 because computeCoords already centres
+ * the icon on the cross axis for "top", "bottom", "left", and "right" placements.
  *
  * @api private
  */
@@ -15,61 +22,57 @@ export const alignHintPosition = (
     return;
   }
 
-  // get/calculate offset of target element
-  const offset = getOffset(targetElement);
-  const iconWidth = 20;
-  const iconHeight = 20;
+  const targetRect = targetElement.getBoundingClientRect();
+  const hintRect = hintElement.getBoundingClientRect();
 
-  // align the hint element
-  switch (position) {
-    default:
-    case "top-left":
-      hintElement.style.left = `${offset.left}px`;
-      hintElement.style.top = `${offset.top}px`;
-      break;
-    case "top-right":
-      hintElement.style.left = `${offset.left + offset.width - iconWidth}px`;
-      hintElement.style.top = `${offset.top}px`;
-      break;
-    case "bottom-left":
-      hintElement.style.left = `${offset.left}px`;
-      hintElement.style.top = `${offset.top + offset.height - iconHeight}px`;
-      break;
-    case "bottom-right":
-      hintElement.style.left = `${offset.left + offset.width - iconWidth}px`;
-      hintElement.style.top = `${offset.top + offset.height - iconHeight}px`;
-      break;
-    case "middle-left":
-      hintElement.style.left = `${offset.left}px`;
-      hintElement.style.top = `${
-        offset.top + (offset.height - iconHeight) / 2
-      }px`;
-      break;
-    case "middle-right":
-      hintElement.style.left = `${offset.left + offset.width - iconWidth}px`;
-      hintElement.style.top = `${
-        offset.top + (offset.height - iconHeight) / 2
-      }px`;
-      break;
-    case "middle-middle":
-      hintElement.style.left = `${
-        offset.left + (offset.width - iconWidth) / 2
-      }px`;
-      hintElement.style.top = `${
-        offset.top + (offset.height - iconHeight) / 2
-      }px`;
-      break;
-    case "bottom-middle":
-      hintElement.style.left = `${
-        offset.left + (offset.width - iconWidth) / 2
-      }px`;
-      hintElement.style.top = `${offset.top + offset.height - iconHeight}px`;
-      break;
-    case "top-middle":
-      hintElement.style.left = `${
-        offset.left + (offset.width - iconWidth) / 2
-      }px`;
-      hintElement.style.top = `${offset.top}px`;
-      break;
-  }
+  const placementMap: Record<HintPosition, Placement> = {
+    "top-left": "top-start",
+    "top-right": "top-end",
+    "top-middle": "top",
+    "bottom-left": "bottom-start",
+    "bottom-right": "bottom-end",
+    "bottom-middle": "bottom",
+    "middle-left": "left",
+    "middle-right": "right",
+    // "top" centres horizontally; mainAxis pushes the icon to the vertical centre.
+    "middle-middle": "top",
+  };
+
+  // Pull the icon back so it sits on the target's edge instead of outside it.
+  // For top/bottom edges: retract by full icon height.
+  // For left/right edges: retract by full icon width.
+  // For centre: retract by half the combined height to centre vertically.
+  const mainAxis = (): number => {
+    switch (position) {
+      case "top-left":
+      case "top-right":
+      case "top-middle":
+      case "bottom-left":
+      case "bottom-right":
+      case "bottom-middle":
+        return -hintRect.height;
+      case "middle-left":
+      case "middle-right":
+        return -hintRect.width;
+      case "middle-middle":
+        return -(targetRect.height + hintRect.height) / 2;
+      default:
+        return 0;
+    }
+  };
+
+  const strategy = isFixed(targetElement) ? "fixed" : "absolute";
+  const result = computePosition({
+    reference: targetElement,
+    floating: hintElement,
+    placement: placementMap[position],
+    strategy,
+    middleware: [
+      offset({ mainAxis: mainAxis(), crossAxis: 0 }),
+      shift({ padding: 8 }),
+    ],
+  });
+
+  hintElement.style.left = `${result.x}px`;
+  hintElement.style.top = `${result.y}px`;
 };

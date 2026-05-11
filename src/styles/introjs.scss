@@ -14,7 +14,10 @@ $background_color_9: #08c;
 $background_color_10: rgba(136, 136, 136, 0.24);
 
 .introjs-tour {
-  transition: all 0.3s ease-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.3s ease-out;
 }
 
 .introjs-overlay {
@@ -58,7 +61,7 @@ tr.introjs-showElement {
   position: absolute;
   z-index: 9999998;
   border-radius: 4px;
-  transition: all 0.3s ease-out;
+  transition: top 0.3s ease-out, left 0.3s ease-out, width 0.3s ease-out, height 0.3s ease-out;
 
   * {
     box-sizing: content-box;
@@ -80,7 +83,7 @@ tr.introjs-showElement {
   visibility: hidden;
   z-index: 100000000;
   background-color: transparent;
-  transition: all 0.3s ease-out;
+  transition: top 0.3s ease-out, left 0.3s ease-out, width 0.3s ease-out, height 0.3s ease-out;
 
   * {
     font-family: $font_family;
@@ -169,7 +172,7 @@ tr.introjs-showElement {
   visibility: visible;
   background-color: $white;
   min-width: 250px;
-  max-width: 300px;
+  max-width: min(300px, calc(100vw - 32px));
   border-radius: 5px;
   box-shadow: 0 3px 30px rgba($black900, 0.3);
   transition: opacity 0.1s ease-out;

@@ -80,6 +80,7 @@ export const HintsRoot = ({ hint }: HintsRootProps) => {
 
       autoPosition: hint.getOption("autoPosition"),
       positionPrecedence: hint.getOption("positionPrecedence"),
+      autoUpdateOnScroll: hint.getOption("tooltipAutoUpdate"),
 
       closeButtonEnabled: hint.getOption("hintShowButton"),
       closeButtonLabel: hint.getOption("hintButtonLabel"),

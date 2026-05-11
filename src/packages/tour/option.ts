@@ -75,6 +75,8 @@ export interface TourOptions {
   progressBarAdditionalClass: string;
   /* Optional property to determine if content should be rendered as HTML */
   tooltipRenderAsHtml?: boolean;
+  /* Auto-update tooltip position on scroll/resize */
+  tooltipAutoUpdate: boolean;
   /* Optional property to set the language of the tour.
    Can be a Language object for custom languages or a language code string for built-in languages.
    Built-in language codes: "en_US", "es_ES", "fr_FR", "de_DE", "fa_IR"
@@ -128,6 +130,7 @@ export function getDefaultTourOptions(translator?: Translator): TourOptions {
     buttonClass: "introjs-button",
     progressBarAdditionalClass: "",
     tooltipRenderAsHtml: true,
+    tooltipAutoUpdate: true,
     language: activeTranslator.getLanguage(),
   };
 }

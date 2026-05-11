@@ -50,6 +50,7 @@ export class Tour implements Package<TourOptions> {
   // Event handlers
   private _keyboardNavigationHandler?: (e: KeyboardEvent) => Promise<void>;
   private _refreshOnResizeHandler?: (e: Event) => void;
+  private _refreshOnScrollHandler?: (e: Event) => void;
 
   /**
    * Create a new Tour instance
@@ -416,6 +417,24 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
+   * Enable refresh on window scroll for the tour
+   */
+  enableRefreshOnScroll() {
+    this._refreshOnScrollHandler = (_: Event) => this.refresh();
+    DOMEvent.on(window, "scroll", this._refreshOnScrollHandler, true);
+  }
+
+  /**
+   * Disable refresh on window scroll for the tour
+   */
+  disableRefreshOnScroll() {
+    if (this._refreshOnScrollHandler) {
+      DOMEvent.off(window, "scroll", this._refreshOnScrollHandler, true);
+      this._refreshOnScrollHandler = undefined;
+    }
+  }
+
+  /**
    * Append the floating element to the target element.
    * Floating element is a helper element that is used when the step does not have a target element.
    * For internal use only.
@@ -462,6 +481,13 @@ export class Tour implements Package<TourOptions> {
       this.createRoot();
       this.enableKeyboardNavigation();
       this.enableRefreshOnResize();
+      if (this.getOption("tooltipAutoUpdate")) {
+        this.enableRefreshOnScroll();
+      }
+      // Recompute positions after the initial scroll (from TourTooltip scrollTo)
+      // has settled. Without this, computePosition may shift the tooltip into the
+      // pre-scroll viewport when the reference element is off-screen.
+      requestAnimationFrame(() => this.refresh());
     }
 
     return this;
@@ -475,6 +501,7 @@ export class Tour implements Package<TourOptions> {
     if (await exitIntro(this, force ?? false)) {
       this.disableKeyboardNavigation();
       this.disableRefreshOnResize();
+      this.disableRefreshOnScroll();
     }
 
     return this;

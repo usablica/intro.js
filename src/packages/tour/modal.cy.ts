@@ -44,7 +44,7 @@ context("Modal", () => {
         .setOptions({
           steps: [
             {
-              element: "#main-section",
+              element: "#main-card",
               intro: "position bottom",
               position: "bottom",
             },
@@ -76,13 +76,14 @@ context("Modal", () => {
   });
 
   it("should update the modal after refresh(true)", () => {
+    cy.viewport("macbook-13");
     cy.window().then((win) => {
       const instance = win.introJs.tour().setOptions({
         showProgress: true,
         showBullets: true,
         steps: [
           {
-            element: "#main-section",
+            element: "#main-card",
             intro: "step one",
           },
           {
@@ -106,7 +107,7 @@ context("Modal", () => {
               .setOptions({
                 steps: [
                   {
-                    element: "#main-section",
+                    element: "#main-card",
                     intro: "step one",
                   },
                   {
@@ -138,7 +139,7 @@ context("Modal", () => {
         tooltipClass: "tour-tooltip",
         steps: [
           {
-            element: "#main-section",
+            element: "#main-card",
             intro: "step tooltip class",
             tooltipClass: "step-tooltip",
           },

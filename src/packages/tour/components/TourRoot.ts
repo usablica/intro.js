@@ -76,6 +76,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
 
         positionPrecedence: tour.getOption("positionPrecedence"),
         autoPosition: tour.getOption("autoPosition"),
+        autoUpdateOnScroll: tour.getOption("tooltipAutoUpdate"),
         showStepNumbers: tour.getOption("showStepNumbers"),
 
         steps: tour.getSteps(),

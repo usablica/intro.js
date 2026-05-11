@@ -31,6 +31,8 @@ export interface HintOptions {
   positionPrecedence: TooltipPosition[];
   /* Optional property to determine if content should be rendered as HTML */
   tooltipRenderAsHtml?: boolean;
+  /* Auto-update tooltip position on scroll/resize */
+  tooltipAutoUpdate: boolean;
   /* Optional property to set the language of the hint.
    Can be a Language object for custom languages or a language code string for built-in languages.
    Built-in language codes: "en_US", "es_ES", "fr_FR", "de_DE", "fa_IR"
@@ -56,6 +58,7 @@ export function getDefaultHintOptions(translator?: Translator): HintOptions {
     autoPosition: true,
     positionPrecedence: ["bottom", "top", "right", "left"],
     tooltipRenderAsHtml: true,
+    tooltipAutoUpdate: true,
     language: activeTranslator.getLanguage(),
   };
 }

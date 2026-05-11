@@ -5,4 +5,4 @@ export const sleep = (ms: number) =>
 export const waitMsForDerivations = 5;
 
 // time to wait for the exit transition to complete
-export const waitMsForExitTransition = 260;
+export const waitMsForExitTransition = 500;

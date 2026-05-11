@@ -443,9 +443,10 @@ describe("Tour", () => {
       await tour.start();
       await tour.exit();
 
-      // Assert
-      expect(addEventListenerSpy).toBeCalledTimes(2);
-      expect(removeEventListenerSpy).toBeCalledTimes(2);
+      // Assert: keyboard + resize + scroll (tour) + resize (autoUpdate in Tooltip)
+      expect(addEventListenerSpy).toBeCalledTimes(4);
+      // autoUpdate cleanup is async (setInterval), so only tour's 3 are removed synchronously
+      expect(removeEventListenerSpy).toBeCalledTimes(3);
     });
 
     it("should not enable keyboard navigation and resize when start is false", async () => {

@@ -11,12 +11,10 @@ export const setPositionRelativeToStep = (
   step: TourStep,
   padding: number
 ) => {
-  setTimeout(() => {
-    setPositionRelativeTo(
-      relativeElement,
-      element,
-      step.element as HTMLElement,
-      step.position === "floating" ? 0 : padding
-    );
-  }, 0);
+  setPositionRelativeTo(
+    relativeElement,
+    element,
+    step.element as HTMLElement,
+    step.position === "floating" ? 0 : padding
+  );
 };
