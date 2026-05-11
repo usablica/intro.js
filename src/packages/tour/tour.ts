@@ -22,7 +22,7 @@ import onKeyDown from "./onKeyDown";
 import dom from "../dom";
 import { TourRoot } from "./components/TourRoot";
 import { FloatingElement } from "./components/FloatingElement";
-import { applyTheme } from "./theme";
+import { Theme } from "./theme";
 
 /**
  * Intro.js Tour class
@@ -36,6 +36,7 @@ export class Tour implements Package<TourOptions> {
   private readonly _targetElement: HTMLElement;
   private _options: TourOptions;
   private _floatingElement: Element | undefined;
+  private _theme: Theme | undefined;
 
   private readonly callbacks: {
     beforeChange?: introBeforeChangeCallback;
@@ -471,11 +472,11 @@ export class Tour implements Package<TourOptions> {
 
   private initTheme() {
     if (!this._root || !(this._root instanceof HTMLElement)) return;
-
-    applyTheme({
-      root: this._root, 
+    this._theme?.destroy();
+    this._theme = new Theme({
+      root: this._root,
       theme: this._options.theme,
-      themePath: this._options.themePath
+      themePath: this._options.themePath,
     });
   }
 
@@ -487,6 +488,8 @@ export class Tour implements Package<TourOptions> {
     if (await exitIntro(this, force ?? false)) {
       this.disableKeyboardNavigation();
       this.disableRefreshOnResize();
+      this._theme?.destroy();
+      this._theme = undefined;
     }
 
     return this;
