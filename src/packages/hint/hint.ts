@@ -341,7 +341,7 @@ export class Hint implements Package<HintOptions> {
   disableHintAutoRefresh(): this {
     if (this._hintsAutoRefreshFunction) {
       DOMEvent.off(window, "scroll", this._hintsAutoRefreshFunction, true);
-      DOMEvent.on(window, "resize", this._hintsAutoRefreshFunction, true);
+      DOMEvent.off(window, "resize", this._hintsAutoRefreshFunction, true);
 
       this._hintsAutoRefreshFunction = undefined;
     }
