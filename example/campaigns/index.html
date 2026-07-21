@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intro.js — Campaign Triggers Demo</title>
+  <link rel="stylesheet" href="../../dist/introjs.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f6fa;
+      color: #2d3436;
+    }
+
+    /* ── Header ── */
+    #header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #2d3436;
+      color: #fff;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    #header h1 { font-size: 17px; font-weight: 600; letter-spacing: .3px; }
+    #header span { font-size: 12px; opacity: .6; margin-left: 10px; }
+
+    .header-actions { display: flex; gap: 10px; }
+
+    .btn {
+      padding: 7px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
+    .btn:hover { opacity: .85; }
+    .btn-reset  { background: #e17055; color: #fff; }
+    .btn-action { background: #0984e3; color: #fff; }
+    .btn-small  { background: #636e72; color: #fff; padding: 5px 10px; font-size: 12px; }
+
+    /* ── Layout ── */
+    #layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 0;
+      min-height: calc(100vh - 52px);
+    }
+
+    /* ── Main content ── */
+    #main { padding: 24px; overflow-y: auto; }
+
+    .section {
+      background: #fff;
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.07);
+    }
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: #636e72;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    /* ── Auto trigger cards ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .trigger-card {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .trigger-card code {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #6c5ce7;
+      margin-bottom: 6px;
+    }
+    .trigger-card p { font-size: 12px; color: #636e72; line-height: 1.5; }
+
+    /* ── Interaction demos ── */
+    #click-target {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .1s, box-shadow .15s;
+      box-shadow: 0 4px 12px rgba(108,92,231,.3);
+    }
+    #click-target:active { transform: scale(.97); }
+
+    #hover-target {
+      display: inline-block;
+      padding: 20px 32px;
+      background: linear-gradient(135deg, #00b894, #55efc4);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: default;
+      box-shadow: 0 4px 12px rgba(0,184,148,.25);
+    }
+
+    form#contact-form { display: flex; flex-direction: column; gap: 10px; max-width: 400px; }
+    form#contact-form input,
+    form#contact-form textarea {
+      padding: 10px 14px;
+      border: 1px solid #dfe6e9;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    form#contact-form input:focus,
+    form#contact-form textarea:focus { border-color: #0984e3; }
+    form#contact-form textarea { height: 80px; resize: vertical; }
+
+    /* ── Scroll sections ── */
+    .spacer { height: 320px; display: flex; align-items: center; justify-content: center; }
+    .spacer p { color: #b2bec3; font-size: 14px; }
+
+    .scroll-card {
+      border: 2px dashed #b2bec3;
+      border-radius: 10px;
+      padding: 32px;
+      text-align: center;
+      background: #fff;
+    }
+    .scroll-card code { font-size: 13px; color: #6c5ce7; font-weight: 700; }
+    .scroll-card p { font-size: 13px; color: #636e72; margin-top: 6px; }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      background: #fff;
+      border-left: 1px solid #e9ecef;
+      position: sticky;
+      top: 52px;
+      height: calc(100vh - 52px);
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .sidebar-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: #b2bec3;
+      margin-bottom: 12px;
+    }
+
+    .trigger-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      margin-bottom: 2px;
+      transition: background .15s;
+    }
+    .trigger-row:hover { background: #f8f9fa; }
+    .trigger-row.fired { background: #d4f8d4; }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: #dfe6e9;
+    }
+    .dot.waiting  { background: #dfe6e9; }
+    .dot.active   { background: #0984e3; animation: pulse 1.2s infinite; }
+    .dot.fired    { background: #00b894; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
+
+    .trigger-label { font-size: 12px; font-weight: 500; flex: 1; }
+    .trigger-type  { font-size: 10px; color: #b2bec3; }
+
+    .sidebar-divider {
+      border: none;
+      border-top: 1px solid #f0f0f0;
+      margin: 12px 0;
+    }
+
+    .info-box {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #636e72;
+      line-height: 1.6;
+    }
+    .info-box strong { color: #2d3436; }
+
+    .manual-group { margin-bottom: 12px; }
+    .manual-group .sidebar-title { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header id="header">
+  <div>
+    <h1>Campaign Triggers Demo<span>intro.js</span></h1>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-reset" onclick="resetAll()">Reset &amp; Reload</button>
+  </div>
+</header>
+
+<div id="layout">
+
+  <!-- ══════════════ MAIN CONTENT ══════════════ -->
+  <main id="main">
+
+    <!-- HERO -->
+    <div id="hero" class="section">
+      <div class="section-title">Campaign System</div>
+      <p style="font-size:14px;color:#636e72;line-height:1.7">
+        This page demonstrates all <strong>16 trigger types</strong> in the Intro.js Campaign System.
+        Campaigns are loaded from <code>campaigns.json</code> and fire automatically or on user interaction.
+        Watch the sidebar to see triggers activate in real time.
+        Use <strong>Reset &amp; Reload</strong> to clear all session data and start fresh.
+      </p>
+    </div>
+
+    <!-- AUTO TRIGGERS -->
+    <div id="auto-section" class="section">
+      <div class="section-title">Automatic Triggers</div>
+      <div class="card-grid">
+        <div class="trigger-card" id="idle-card">
+          <code>idle_user</code>
+          <p>Stop all activity for <strong>10 seconds</strong> to trigger.</p>
+        </div>
+        <div class="trigger-card" id="time-card">
+          <code>time_on_page</code>
+          <p>Stay on the page for <strong>25 seconds</strong>.</p>
+        </div>
+        <div class="trigger-card" id="exit-card">
+          <code>exit_intent</code>
+          <p>Move your mouse to the <strong>top edge</strong> of the browser.</p>
+        </div>
+        <div class="trigger-card" id="url-card">
+          <code>url_match</code>
+          <p>URL contains <strong>"campaigns"</strong>. Fires after 7 seconds.</p>
+        </div>
+        <div class="trigger-card" id="device-card">
+          <code>device_type</code>
+          <p>Detected on page load. One campaign per device type.</p>
+        </div>
+        <div class="trigger-card" id="returning-card">
+          <code>returning_user</code>
+          <p>Fires on your <strong>second or later visit</strong>. Reset to test.</p>
+        </div>
+        <div class="trigger-card" id="session-card">
+          <code>session_count</code>
+          <p>Fires when session count <strong>&gt; 1</strong>. Each page load = 1 session.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERACTION TRIGGERS -->
+    <div class="section">
+      <div class="section-title">Interaction Triggers</div>
+
+      <!-- Element Click -->
+      <div id="click-section" style="margin-bottom:28px">
+        <p style="font-size:13px;color:#636e72;margin-bottom:12px">
+          <code>element_click</code> — Click the button below:
+        </p>
+        <button id="click-target">
+          Click Me
+        </button>
+      </div>
+
+      <!-- Element Hover -->
+      <div id="hover-section" style="margin-bottom:28px">
+        <p style="font-size:13px;color:#636e72;margin-bottom:12px">
+          <code>element_hover</code> — Hover over the card for <strong>800ms</strong>:
+        </p>
+        <div id="hover-target">Hover Me (hold for 800ms)</div>
+      </div>
+
+      <!-- Form Interaction -->
+      <div id="form-section" style="margin-bottom:28px">
+        <p style="font-size:13px;color:#636e72;margin-bottom:12px">
+          <code>form_interaction</code> — Click any field in the form:
+        </p>
+        <form id="contact-form" onsubmit="return false">
+          <input type="text" placeholder="Your name" />
+          <input type="email" placeholder="Email address" />
+          <textarea placeholder="Your message"></textarea>
+        </form>
+      </div>
+
+      <!-- Custom Event -->
+      <div id="custom-section">
+        <p style="font-size:13px;color:#636e72;margin-bottom:12px">
+          <code>custom_event</code> — Dispatches <code>demo_campaign_event</code> on the document:
+        </p>
+        <button class="btn btn-action" onclick="fireCustomEvent()">
+          Dispatch Custom Event
+        </button>
+      </div>
+    </div>
+
+    <!-- SCROLL TRIGGERS -->
+    <div class="section">
+      <div class="section-title">Scroll Triggers</div>
+      <p style="font-size:13px;color:#636e72;margin-bottom:16px">
+        Scroll down to trigger <code>scroll_depth</code>, <code>scroll_to_element</code>, and <code>element_visible</code>.
+      </p>
+    </div>
+
+    <div class="spacer"><p>↓ Keep scrolling ↓</p></div>
+
+    <div id="visible-element" class="scroll-card" style="margin-bottom:20px">
+      <code>element_visible</code>
+      <p>Fires when this element reaches <strong>70% visibility</strong> in the viewport.</p>
+    </div>
+
+    <div class="spacer"><p>↓ Almost there ↓</p></div>
+
+    <div id="scroll-element" class="scroll-card" style="margin-bottom:20px">
+      <code>scroll_to_element</code>
+      <p>Fires when this element is <strong>50% visible</strong> after a scroll event.</p>
+    </div>
+
+    <div class="spacer"><p>↓ One more ↓</p></div>
+
+    <div id="deep-section" class="scroll-card" style="margin-bottom:20px">
+      <code>scroll_depth</code>
+      <p>You have scrolled past <strong>60%</strong> of the page. This section is near the bottom.</p>
+    </div>
+
+    <div style="height:80px"></div>
+
+  </main>
+
+  <!-- ══════════════ SIDEBAR ══════════════ -->
+  <aside id="sidebar">
+
+    <div class="sidebar-title">Trigger Status</div>
+
+    <div id="trigger-list"></div>
+
+    <hr class="sidebar-divider" />
+
+    <div class="manual-group">
+      <div class="sidebar-title">Manual Fire</div>
+      <div class="info-box" style="margin-bottom:10px">
+        Bypass frequency limits and fire any campaign directly.
+      </div>
+      <div id="manual-buttons"></div>
+    </div>
+
+    <hr class="sidebar-divider" />
+
+    <div class="info-box" id="session-info">
+      Loading...
+    </div>
+
+  </aside>
+</div>
+
+<script src="../../dist/intro.js"></script>
+<script>
+  // ── Trigger metadata for sidebar ──
+  const TRIGGERS = [
+    { id: "demo-first-visit",      label: "First Visit",        type: "first_visit",      auto: true  },
+    { id: "demo-page-load",        label: "Page Load",          type: "page_load",         auto: true  },
+    { id: "demo-idle-user",        label: "Idle User",          type: "idle_user",         auto: true  },
+    { id: "demo-time-on-page",     label: "Time on Page",       type: "time_on_page",      auto: true  },
+    { id: "demo-exit-intent",      label: "Exit Intent",        type: "exit_intent",       auto: true  },
+    { id: "demo-url-match",        label: "URL Match",          type: "url_match",         auto: true  },
+    { id: "demo-device-desktop",   label: "Device (desktop)",   type: "device_type",       auto: true  },
+    { id: "demo-device-tablet",    label: "Device (tablet)",    type: "device_type",       auto: true  },
+    { id: "demo-device-mobile",    label: "Device (mobile)",    type: "device_type",       auto: true  },
+    { id: "demo-returning-user",   label: "Returning User",     type: "returning_user",    auto: true  },
+    { id: "demo-session-count",    label: "Session Count",      type: "session_count",     auto: true  },
+    { id: "demo-element-click",    label: "Element Click",      type: "element_click",     auto: false },
+    { id: "demo-element-hover",    label: "Element Hover",      type: "element_hover",     auto: false },
+    { id: "demo-form-interaction", label: "Form Interaction",   type: "form_interaction",  auto: false },
+    { id: "demo-custom-event",     label: "Custom Event",       type: "custom_event",      auto: false },
+    { id: "demo-scroll-depth",     label: "Scroll Depth",       type: "scroll_depth",      auto: false },
+    { id: "demo-scroll-to-element","label": "Scroll to Element","type": "scroll_to_element",auto: false},
+    { id: "demo-element-visible",  label: "Element Visible",    type: "element_visible",   auto: false },
+  ];
+
+  const firedSet = new Set();
+
+  // ── Build sidebar trigger list ──
+  function buildSidebar() {
+    const list = document.getElementById("trigger-list");
+    const manual = document.getElementById("manual-buttons");
+    list.innerHTML = "";
+    manual.innerHTML = "";
+
+    TRIGGERS.forEach(t => {
+      // Status row
+      const row = document.createElement("div");
+      row.className = "trigger-row";
+      row.id = "row-" + t.id;
+      row.innerHTML = `
+        <div class="dot waiting" id="dot-${t.id}"></div>
+        <div>
+          <div class="trigger-label">${t.label}</div>
+          <div class="trigger-type">${t.type}</div>
+        </div>`;
+      list.appendChild(row);
+
+      // Manual fire button
+      const btn = document.createElement("button");
+      btn.className = "btn btn-small";
+      btn.style.cssText = "display:block;width:100%;margin-bottom:4px;text-align:left";
+      btn.textContent = "▶ " + t.label;
+      btn.onclick = () => manualFire(t.id);
+      manual.appendChild(btn);
+    });
+  }
+
+  // ── Mark a trigger as fired in the sidebar ──
+  function markFired(campaignId) {
+    firedSet.add(campaignId);
+    const dot = document.getElementById("dot-" + campaignId);
+    const row = document.getElementById("row-" + campaignId);
+    if (dot) { dot.className = "dot fired"; }
+    if (row) { row.className = "trigger-row fired"; }
+  }
+
+  // ── Show a trigger as active (in-progress) ──
+  function markActive(campaignId) {
+    const dot = document.getElementById("dot-" + campaignId);
+    if (dot && !firedSet.has(campaignId)) {
+      dot.className = "dot active";
+    }
+  }
+
+  // ── Update session info box ──
+  function updateSessionInfo() {
+    const sessionCount = parseInt(localStorage.getItem("introjs-campaign-session-count") || "0", 10);
+    const hasReturned = !!localStorage.getItem("introjs-returning-user");
+    const firstVisitKey = Object.keys(localStorage).find(k => k.startsWith("introjs-first-visit-"));
+    document.getElementById("session-info").innerHTML =
+      `<strong>Session count:</strong> ${sessionCount}<br>` +
+      `<strong>Returning visitor:</strong> ${hasReturned ? "yes" : "no"}<br>` +
+      `<strong>First visit key set:</strong> ${firstVisitKey ? "yes" : "no"}`;
+  }
+
+  // ── Fire a campaign manually ──
+  function manualFire(id) {
+    if (typeof introJs !== "undefined" && introJs.triggerCampaign) {
+      introJs.triggerCampaign(id);
+    }
+  }
+
+  // ── Fire custom event ──
+  function fireCustomEvent() {
+    document.dispatchEvent(new CustomEvent("demo_campaign_event"));
+  }
+
+  // ── Reset everything ──
+  function resetAll() {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith("introjs-")) keys.push(k);
+    }
+    keys.forEach(k => localStorage.removeItem(k));
+    sessionStorage.clear();
+    location.reload();
+  }
+
+  // ── Init ──
+  buildSidebar();
+  updateSessionInfo();
+
+  window.addEventListener("DOMContentLoaded", async () => {
+    try {
+      const manager = await introJs.initializeCampaigns("./campaigns.json");
+
+      // Wrap executeCampaign to intercept all trigger fires
+      const orig = manager.executeCampaign.bind(manager);
+      manager.executeCampaign = async function(campaignId, trigger) {
+        markActive(campaignId);
+        const result = await orig(campaignId, trigger);
+        if (result) markFired(campaignId);
+        return result;
+      };
+
+    } catch (err) {
+      console.error("Failed to load campaigns:", err);
+    }
+  });
+</script>
+</body>
+</html>

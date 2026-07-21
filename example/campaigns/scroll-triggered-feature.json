@@ -1,0 +1,47 @@
+{
+  "version": "1.0.0",
+  "campaigns": [
+    {
+      "id": "pricing-tour",
+      "name": "Pricing Section Tour",
+      "description": "Tour that triggers when user scrolls to pricing section",
+      "active": true,
+      "mode": "tour",
+      "triggers": [
+        {
+          "type": "scroll_to_element",
+          "selector": "#pricing-section",
+          "threshold": 0.6
+        }
+      ],
+      "frequency": {
+        "type": "session"
+      },
+      "options": {
+        "steps": [
+          {
+            "element": ".pricing-card-basic",
+            "intro": "Our Basic plan is perfect for individuals just getting started.",
+            "position": "top"
+          },
+          {
+            "element": ".pricing-card-pro",
+            "intro": "The Pro plan includes all features plus priority support.",
+            "position": "top"
+          },
+          {
+            "element": ".pricing-card-enterprise",
+            "intro": "Enterprise plan offers custom solutions for large teams.",
+            "position": "top"
+          },
+          {
+            "element": ".pricing-comparison",
+            "intro": "Compare all plans side-by-side to find the perfect fit.",
+            "position": "bottom"
+          }
+        ],
+        "showBullets": true
+      }
+    }
+  ]
+}

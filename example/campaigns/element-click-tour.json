@@ -1,0 +1,43 @@
+{
+  "version": "1.0.0",
+  "campaigns": [
+    {
+      "id": "feature-discovery",
+      "name": "Feature Discovery Tour",
+      "description": "Tour that starts when user clicks on a specific element",
+      "active": true,
+      "mode": "tour",
+      "triggers": [
+        {
+          "type": "element_click",
+          "selector": ".help-button",
+          "delay": 500
+        }
+      ],
+      "frequency": {
+        "type": "session"
+      },
+      "options": {
+        "steps": [
+          {
+            "element": ".feature-panel",
+            "intro": "This is our main feature panel where you can access advanced tools.",
+            "position": "left"
+          },
+          {
+            "element": ".settings-icon",
+            "intro": "Click here to customize your preferences.",
+            "position": "bottom"
+          },
+          {
+            "element": ".export-button",
+            "intro": "Use this button to export your data in various formats.",
+            "position": "top"
+          }
+        ],
+        "showProgress": true,
+        "showBullets": false
+      }
+    }
+  ]
+}

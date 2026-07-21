@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "campaigns": [
+    {
+      "id": "exit-intent-promotion",
+      "name": "Exit Intent - Special Offer",
+      "description": "Show special offer when user tries to leave the page",
+      "active": true,
+      "mode": "tour",
+      "triggers": [
+        {
+          "type": "exit_intent",
+          "sensitivity": 10
+        }
+      ],
+      "frequency": {
+        "type": "once"
+      },
+      "options": {
+        "steps": [
+          {
+            "intro": "<h3>Wait! Don't leave yet!</h3><p>We have a special offer just for you. Get 20% off your first purchase!</p>",
+            "position": "floating"
+          },
+          {
+            "element": ".promo-code",
+            "intro": "Use code <strong>WELCOME20</strong> at checkout to get your discount.",
+            "position": "bottom"
+          }
+        ],
+        "exitOnEsc": true,
+        "exitOnOverlayClick": true
+      },
+      "analytics": {
+        "trackViews": true,
+        "trackCompletions": true
+      }
+    }
+  ]
+}

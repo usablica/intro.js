@@ -1,0 +1,43 @@
+{
+  "version": "1.0.0",
+  "campaigns": [
+    {
+      "id": "form-help-tour",
+      "name": "Form Assistance Tour",
+      "description": "Provide help when user starts filling out a form",
+      "active": true,
+      "mode": "tour",
+      "triggers": [
+        {
+          "type": "form_interaction",
+          "selector": "#signup-form input",
+          "interactionType": "focus"
+        }
+      ],
+      "frequency": {
+        "type": "once"
+      },
+      "options": {
+        "steps": [
+          {
+            "element": "#email-field",
+            "intro": "Enter your email address. We'll never share it with anyone.",
+            "position": "right"
+          },
+          {
+            "element": "#password-field",
+            "intro": "Choose a strong password with at least 8 characters, including numbers and symbols.",
+            "position": "right"
+          },
+          {
+            "element": "#terms-checkbox",
+            "intro": "Please review and accept our terms of service and privacy policy.",
+            "position": "top"
+          }
+        ],
+        "exitOnEsc": true,
+        "showBullets": false
+      }
+    }
+  ]
+}

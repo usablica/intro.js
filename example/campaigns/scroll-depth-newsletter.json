@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "campaigns": [
+    {
+      "id": "newsletter-signup-50",
+      "name": "Newsletter Signup at 50% Scroll",
+      "description": "Prompt newsletter signup when user scrolls 50% down the page",
+      "active": true,
+      "mode": "tour",
+      "triggers": [
+        {
+          "type": "scroll_depth",
+          "percentage": 50
+        }
+      ],
+      "frequency": {
+        "type": "once"
+      },
+      "options": {
+        "steps": [
+          {
+            "intro": "<h3>Enjoying our content?</h3><p>Subscribe to our newsletter for weekly updates and exclusive content!</p>",
+            "position": "floating"
+          },
+          {
+            "element": "#newsletter-form",
+            "intro": "Enter your email here to stay updated with our latest articles and news.",
+            "position": "top"
+          }
+        ],
+        "exitOnEsc": true,
+        "exitOnOverlayClick": true
+      },
+      "analytics": {
+        "trackViews": true,
+        "trackCompletions": true
+      }
+    }
+  ]
+}

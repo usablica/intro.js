@@ -1,6 +1,7 @@
 import { version } from "../package.json";
 import { Hint } from "./packages/hint";
 import { Tour } from "./packages/tour";
+import { CampaignManager, initializeCampaigns, getCampaignManager } from "./packages/campaign";
 
 class LegacyIntroJs extends Tour {
   /**
@@ -57,6 +58,41 @@ introJs.tour = (elementOrSelector?: string | HTMLElement) =>
  */
 introJs.hint = (elementOrSelector?: string | HTMLElement) =>
   new Hint(elementOrSelector);
+
+/**
+ * Create a new Intro.js campaign manager instance
+ */
+introJs.campaign = () => new CampaignManager();
+
+/**
+ * Initialize campaigns from configuration
+ * @param config Campaign configuration (JSON object, array, or URL to JSON file)
+ */
+introJs.initializeCampaigns = initializeCampaigns;
+
+/**
+ * Get the global campaign manager instance
+ */
+introJs.getCampaignManager = getCampaignManager;
+
+/**
+ * Manually trigger a campaign by ID
+ * @param campaignId The ID of the campaign to trigger
+ */
+introJs.triggerCampaign = async (campaignId: string): Promise<boolean> => {
+  const manager = getCampaignManager();
+  const campaign = manager.getCampaign(campaignId);
+  
+  if (!campaign) {
+    console.error(`Campaign "${campaignId}" not found`);
+    return false;
+  }
+  
+  return await manager.executeCampaign(campaignId, {
+    type: 'custom_event',
+    eventName: 'manual_trigger'
+  });
+};
 
 /**
  * Current Intro.js version

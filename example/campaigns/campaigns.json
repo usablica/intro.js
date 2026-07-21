@@ -1,0 +1,343 @@
+{
+  "version": "1.0.0",
+  "campaigns": [
+    {
+      "id": "demo-first-visit",
+      "name": "First Visit",
+      "description": "Fires once — the very first time a user opens this page.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "first_visit", "delay": 800 }],
+      "frequency": { "type": "once" },
+      "options": {
+        "steps": [
+          {
+            "element": "#hero",
+            "title": "first_visit",
+            "intro": "This tour appeared because this is your <strong>first visit</strong>.<br><br>Trigger: <code>first_visit</code><br>Frequency: <code>once</code> — you will not see this again.",
+            "position": "bottom"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-page-load",
+      "name": "Page Load",
+      "description": "Fires 5 seconds after the page finishes loading.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "page_load", "delay": 5000 }],
+      "frequency": { "type": "session" },
+      "options": {
+        "steps": [
+          {
+            "element": "#auto-section",
+            "title": "page_load",
+            "intro": "Trigger: <code>page_load</code><br>Fires after the page finishes loading, with a <strong>5 second delay</strong>.<br><br>Frequency: <code>session</code> — resets on each new browser session.",
+            "position": "bottom"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-idle-user",
+      "name": "Idle User",
+      "description": "Fires when the user is idle for 10 seconds.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "idle_user", "idleTime": 10000 }],
+      "frequency": { "type": "session" },
+      "options": {
+        "steps": [
+          {
+            "element": "#idle-card",
+            "title": "idle_user",
+            "intro": "Trigger: <code>idle_user</code><br>You stopped all activity (mouse, keyboard, touch, scroll) for <strong>10 seconds</strong>.<br><br>The timer pauses when the tab is hidden and resumes when you return.",
+            "position": "right"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-time-on-page",
+      "name": "Time on Page",
+      "description": "Fires after 25 seconds on the page.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "time_on_page", "duration": 25000 }],
+      "frequency": { "type": "session" },
+      "options": {
+        "steps": [
+          {
+            "element": "#time-card",
+            "title": "time_on_page",
+            "intro": "Trigger: <code>time_on_page</code><br>You have been on this page for <strong>25 seconds</strong>.<br><br>Unlike idle_user, this timer is not reset by activity.",
+            "position": "right"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-exit-intent",
+      "name": "Exit Intent",
+      "description": "Fires when the mouse moves toward the top of the browser.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "exit_intent", "sensitivity": 15 }],
+      "frequency": { "type": "session" },
+      "options": {
+        "steps": [
+          {
+            "element": "#exit-card",
+            "title": "exit_intent",
+            "intro": "Trigger: <code>exit_intent</code><br>Detected when the mouse left the document from the <strong>top edge</strong> (sensitivity: 15px).<br><br>Classic use case: show a discount before the user leaves.",
+            "position": "bottom"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-url-match",
+      "name": "URL Match",
+      "description": "Fires when the URL contains 'campaigns'.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "url_match", "pattern": "campaigns", "matchType": "contains", "delay": 7000 }],
+      "frequency": { "type": "session" },
+      "options": {
+        "steps": [
+          {
+            "element": "#url-card",
+            "title": "url_match",
+            "intro": "Trigger: <code>url_match</code><br>The current URL contains <strong>\"campaigns\"</strong>.<br><br>matchType options: <code>exact</code>, <code>contains</code>, <code>regex</code>.<br>Fired after a 7 second delay.",
+            "position": "right"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-device-desktop",
+      "name": "Device Type — Desktop",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "device_type", "device": "desktop", "delay": 200 }],
+      "frequency": { "type": "once" },
+      "options": {
+        "steps": [
+          {
+            "element": "#device-card",
+            "title": "device_type — desktop",
+            "intro": "Trigger: <code>device_type</code><br>Detected device: <strong>desktop</strong> (width > 1024px, no mobile UA).<br><br>You can create separate campaigns for mobile, tablet, and desktop.",
+            "position": "right"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-device-tablet",
+      "name": "Device Type — Tablet",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "device_type", "device": "tablet", "delay": 200 }],
+      "frequency": { "type": "once" },
+      "options": {
+        "steps": [
+          {
+            "element": "#device-card",
+            "title": "device_type — tablet",
+            "intro": "Trigger: <code>device_type</code><br>Detected device: <strong>tablet</strong> (width 769–1024px).<br><br>Each device type runs its own campaign independently.",
+            "position": "bottom"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-device-mobile",
+      "name": "Device Type — Mobile",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "device_type", "device": "mobile", "delay": 200 }],
+      "frequency": { "type": "once" },
+      "options": {
+        "steps": [
+          {
+            "element": "#device-card",
+            "title": "device_type — mobile",
+            "intro": "Trigger: <code>device_type</code><br>Detected device: <strong>mobile</strong> (width ≤ 768px or mobile UA).<br><br>Useful for showing mobile-only onboarding.",
+            "position": "bottom"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-returning-user",
+      "name": "Returning User",
+      "description": "Fires when the user has visited before.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "returning_user", "minVisits": 1, "delay": 200 }],
+      "frequency": { "type": "once" },
+      "options": {
+        "steps": [
+          {
+            "element": "#returning-card",
+            "title": "returning_user",
+            "intro": "Trigger: <code>returning_user</code><br>Welcome back! You have visited this page before.<br><br><code>minVisits: 1</code> means at least 1 previous visit is required. Frequency: <code>once</code> — fires only the first time you return.",
+            "position": "right"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-session-count",
+      "name": "Session Count",
+      "description": "Fires when the session count exceeds 1.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "session_count", "count": 1, "operator": "greater", "delay": 200 }],
+      "frequency": { "type": "once" },
+      "options": {
+        "steps": [
+          {
+            "element": "#session-card",
+            "title": "session_count",
+            "intro": "Trigger: <code>session_count</code><br>You have opened this page more than <strong>1 time</strong>.<br><br>operator options: <code>equal</code>, <code>greater</code>, <code>less</code>.<br>Each page load = one session.",
+            "position": "right"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-element-click",
+      "name": "Element Click",
+      "description": "Fires when the user clicks #click-target.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "element_click", "selector": "#click-target" }],
+      "frequency": { "type": "always" },
+      "options": {
+        "steps": [
+          {
+            "element": "#click-section",
+            "title": "element_click",
+            "intro": "Trigger: <code>element_click</code><br>You clicked on <code>#click-target</code>.<br><br>Uses <code>closest()</code> internally, so clicking on any child element of the target also fires the trigger.",
+            "position": "bottom"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-element-hover",
+      "name": "Element Hover",
+      "description": "Fires when the user hovers over #hover-target for 800ms.",
+      "active": true,
+      "mode": "hint",
+      "triggers": [{ "type": "element_hover", "selector": "#hover-target", "hoverDuration": 800 }],
+      "frequency": { "type": "always" },
+      "options": {
+        "hints": [
+          {
+            "element": "#hover-target",
+            "hint": "element_hover fired! You hovered for 800ms.",
+            "hintPosition": "top-middle"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-form-interaction",
+      "name": "Form Interaction",
+      "description": "Fires when the user focuses on a field inside #contact-form.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "form_interaction", "selector": "#contact-form", "interactionType": "focus" }],
+      "frequency": { "type": "session" },
+      "options": {
+        "steps": [
+          {
+            "element": "#form-section",
+            "title": "form_interaction",
+            "intro": "Trigger: <code>form_interaction</code><br>You focused on a field inside <code>#contact-form</code>.<br><br>interactionType options: <code>focus</code>, <code>input</code>, <code>change</code>.",
+            "position": "top"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-custom-event",
+      "name": "Custom Event",
+      "description": "Fires when a 'demo_campaign_event' CustomEvent is dispatched.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "custom_event", "eventName": "demo_campaign_event" }],
+      "frequency": { "type": "always" },
+      "options": {
+        "steps": [
+          {
+            "element": "#custom-section",
+            "title": "custom_event",
+            "intro": "Trigger: <code>custom_event</code><br>Fired by dispatching a DOM event named <strong>demo_campaign_event</strong>.<br><br>Use <code>document.dispatchEvent(new CustomEvent('demo_campaign_event'))</code> from anywhere in your app.",
+            "position": "bottom"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-scroll-depth",
+      "name": "Scroll Depth",
+      "description": "Fires when the user scrolls past 60% of the page.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "scroll_depth", "percentage": 60 }],
+      "frequency": { "type": "session" },
+      "options": {
+        "steps": [
+          {
+            "element": "#deep-section",
+            "title": "scroll_depth",
+            "intro": "Trigger: <code>scroll_depth</code><br>You scrolled past <strong>60%</strong> of the page.<br><br>Fires once per session. Common use case: newsletter signup after user shows intent by reading.",
+            "position": "top"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-scroll-to-element",
+      "name": "Scroll to Element",
+      "description": "Fires when #scroll-element is 50% visible.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "scroll_to_element", "selector": "#scroll-element", "threshold": 0.5 }],
+      "frequency": { "type": "session" },
+      "options": {
+        "steps": [
+          {
+            "element": "#scroll-element",
+            "title": "scroll_to_element",
+            "intro": "Trigger: <code>scroll_to_element</code><br>This element is now <strong>50% visible</strong> in the viewport (threshold: 0.5).<br><br>Unlike element_visible, this does not fire on the initial check — only on scroll.",
+            "position": "top"
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo-element-visible",
+      "name": "Element Visible",
+      "description": "Fires when #visible-element reaches 70% visibility.",
+      "active": true,
+      "mode": "tour",
+      "triggers": [{ "type": "element_visible", "selector": "#visible-element", "threshold": 0.7 }],
+      "frequency": { "type": "session" },
+      "options": {
+        "steps": [
+          {
+            "element": "#visible-element",
+            "title": "element_visible",
+            "intro": "Trigger: <code>element_visible</code><br>This element reached <strong>70% visibility</strong> (threshold: 0.7).<br><br>Checks on both initial page load and every scroll/resize event.",
+            "position": "top"
+          }
+        ]
+      }
+    }
+  ]
+}

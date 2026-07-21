@@ -1,0 +1,50 @@
+{
+  "version": "1.0.0",
+  "campaigns": [
+    {
+      "id": "returning-user-advanced",
+      "name": "Advanced Features for Returning Users",
+      "description": "Show advanced features to users who have visited before",
+      "active": true,
+      "mode": "tour",
+      "triggers": [
+        {
+          "type": "returning_user",
+          "minVisits": 2,
+          "delay": 2000
+        }
+      ],
+      "frequency": {
+        "type": "once"
+      },
+      "options": {
+        "steps": [
+          {
+            "intro": "Welcome back! We noticed you've been here before. Let us show you some advanced features!",
+            "position": "floating"
+          },
+          {
+            "element": ".keyboard-shortcuts",
+            "intro": "Press 'Ctrl+K' to access the command palette for quick navigation.",
+            "position": "bottom"
+          },
+          {
+            "element": ".advanced-filters",
+            "intro": "Use advanced filters to find exactly what you need quickly.",
+            "position": "left"
+          },
+          {
+            "element": ".bulk-actions",
+            "intro": "Select multiple items and perform bulk actions to save time.",
+            "position": "top"
+          }
+        ],
+        "showProgress": true
+      },
+      "analytics": {
+        "trackViews": true,
+        "trackCompletions": true
+      }
+    }
+  ]
+}

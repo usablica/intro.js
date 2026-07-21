@@ -1,0 +1,52 @@
+{
+  "version": "1.0.0",
+  "campaigns": [
+    {
+      "id": "welcome-tour",
+      "name": "Welcome Tour - First Visit",
+      "description": "A welcome tour that appears when a user visits the site for the first time",
+      "active": true,
+      "mode": "tour",
+      "triggers": [
+        {
+          "type": "first_visit",
+          "delay": 1000
+        }
+      ],
+      "frequency": {
+        "type": "once"
+      },
+      "options": {
+        "steps": [
+          {
+            "element": "#step1",
+            "intro": "Welcome to the Intro.js Campaign System! Let's take a quick tour.",
+            "title": "Welcome",
+            "position": "bottom"
+          },
+          {
+            "element": "#step2",
+            "intro": "This campaign was loaded from a JSON file and triggered automatically on your first visit.",
+            "title": "Automatic Triggers",
+            "position": "bottom"
+          },
+          {
+            "element": "#step3",
+            "intro": "You can configure campaigns with various triggers, targeting rules, and frequencies.",
+            "title": "Features",
+            "position": "top"
+          },
+          {
+            "element": ".demo-buttons",
+            "intro": "Use these buttons to explore different campaign features. That's it! Enjoy the campaign system.",
+            "title": "Try It Out",
+            "position": "top"
+          }
+        ],
+        "showProgress": true,
+        "showBullets": true,
+        "exitOnOverlayClick": false
+      }
+    }
+  ]
+}

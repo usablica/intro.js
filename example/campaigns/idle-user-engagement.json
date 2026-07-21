@@ -1,0 +1,49 @@
+{
+  "version": "1.0.0",
+  "campaigns": [
+    {
+      "id": "idle-engagement",
+      "name": "Idle User Engagement",
+      "description": "Re-engage users who have been idle for a certain period",
+      "active": true,
+      "mode": "tour",
+      "triggers": [
+        {
+          "type": "idle_user",
+          "idleTime": 30000
+        }
+      ],
+      "options": {
+        "steps": [
+          {
+            "intro": "👋 Still here? Let us show you some features you might have missed!",
+            "title": "Welcome Back!",
+            "position": "floating"
+          },
+          {
+            "element": "#step1",
+            "intro": "This is the main content area where you can find important information.",
+            "title": "Main Content",
+            "position": "bottom"
+          },
+          {
+            "element": "#step2",
+            "intro": "Here you'll find additional details and features.",
+            "title": "More Information",
+            "position": "bottom"
+          },
+          {
+            "element": ".demo-buttons",
+            "intro": "Use these buttons to interact with different campaign features and test various triggers.",
+            "title": "Action Buttons",
+            "position": "top"
+          }
+        ],
+        "showProgress": true,
+        "showBullets": true,
+        "exitOnEsc": true,
+        "exitOnOverlayClick": true
+      }
+    }
+  ]
+}
