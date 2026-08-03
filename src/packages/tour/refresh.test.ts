@@ -81,4 +81,41 @@ describe("refresh", () => {
     expect(mockTour.getStep(1).intro).toBe("second");
     expect(document.querySelectorAll(".introjs-bullets ul li").length).toBe(2);
   });
+
+  test("keeps the theme class on the recreated root when refreshStep is true", async () => {
+    // Arrange
+    mockTour.setOptions({ theme: "dark" });
+    mockTour.addStep({
+      intro: "first",
+    });
+
+    await mockTour.start();
+    await sleep(waitMsForDerivations);
+
+    expect(
+      document
+        .querySelector(".introjs-tour")
+        ?.classList.contains("introjs-dark")
+    ).toBe(true);
+
+    // Act - refreshing with refreshSteps recreates the root element
+    mockTour.setOptions({
+      steps: [
+        {
+          intro: "first",
+        },
+        {
+          intro: "second",
+        },
+      ],
+    });
+
+    mockTour.refresh(true);
+    await sleep(waitMsForDerivations);
+
+    // Assert - the newly created root should still carry the theme class
+    const newRoot = document.querySelector(".introjs-tour");
+    expect(newRoot).not.toBeNull();
+    expect(newRoot?.classList.contains("introjs-dark")).toBe(true);
+  });
 });

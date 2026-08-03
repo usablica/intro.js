@@ -22,7 +22,7 @@ import onKeyDown from "./onKeyDown";
 import dom from "../dom";
 import { TourRoot } from "./components/TourRoot";
 import { FloatingElement } from "./components/FloatingElement";
-import { Theme } from "./theme";
+import { Theme, ThemeType } from "./theme";
 
 /**
  * Intro.js Tour class
@@ -453,6 +453,11 @@ export class Tour implements Package<TourOptions> {
       this._root.remove();
       this._root = undefined;
       this.createRoot();
+
+      const root = this._root as Element | undefined;
+      if (root instanceof HTMLElement) {
+        this._theme?.setRoot(root);
+      }
     }
   }
 
@@ -478,6 +483,32 @@ export class Tour implements Package<TourOptions> {
       theme: this._options.theme,
       themePath: this._options.themePath,
     });
+  }
+
+  /**
+   * Changes the tour's theme. If the tour is already running, the change is
+   * applied immediately; otherwise it's stored and used the next time the
+   * tour starts.
+   * @param {ThemeType} theme "light", "dark", "auto", or a registered/custom theme name
+   * @param {string} themePath Optional path to a custom CSS file for the theme
+   */
+  async setTheme(theme: ThemeType, themePath?: string): Promise<this> {
+    this._options.theme = theme;
+    this._options.themePath = themePath;
+
+    if (this._theme) {
+      await this._theme.setTheme(theme, themePath);
+    }
+
+    return this;
+  }
+
+  /**
+   * Returns the currently resolved theme ("light" or "dark"), or undefined
+   * if the tour hasn't started yet.
+   */
+  getTheme(): "light" | "dark" | undefined {
+    return this._theme?.value;
   }
 
   /**

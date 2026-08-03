@@ -61,9 +61,7 @@ function loadCssFile(cssPath: string, themeId: string): Promise<void> {
 }
 
 function unloadCssFile(themeId: string): void {
-  const link = document.querySelector(
-    `link[data-introjs-theme="${themeId}"]`
-  );
+  const link = document.querySelector(`link[data-introjs-theme="${themeId}"]`);
   if (link) {
     const cssPath = link.getAttribute("href");
     link.remove();
@@ -95,7 +93,10 @@ export class Theme {
   private _theme: "light" | "dark";
   private _root: HTMLElement;
   private _currentThemeName: string;
-  private _currentCssPath: string | null = null;
+  // id of the external CSS file currently loaded (if any), used to unload it later.
+  // Kept separate from _currentThemeName because that field is updated to the *new*
+  // theme before the *old* theme's CSS needs to be unloaded.
+  private _loadedThemeId: string | null = null;
   private mqlDark: MediaQueryList | null = null;
   private boundHandleSystemThemeChange: () => void;
   private themeType: ThemeType;
@@ -115,7 +116,13 @@ export class Theme {
 
     this.applyToRoot();
 
-    if (this.themeType === "auto") {
+    this.syncAutoListener();
+  }
+
+  private syncAutoListener() {
+    const shouldListen = this.themeType === "auto";
+
+    if (shouldListen && !this.mqlDark) {
       this.mqlDark = window.matchMedia("(prefers-color-scheme: dark)");
       if ("addEventListener" in this.mqlDark) {
         this.mqlDark.addEventListener(
@@ -125,7 +132,23 @@ export class Theme {
       } else {
         (this.mqlDark as any).addListener(this.boundHandleSystemThemeChange);
       }
+    } else if (!shouldListen && this.mqlDark) {
+      this.removeAutoListener();
     }
+  }
+
+  private removeAutoListener() {
+    if (!this.mqlDark) return;
+
+    if ("removeEventListener" in this.mqlDark) {
+      this.mqlDark.removeEventListener(
+        "change",
+        this.boundHandleSystemThemeChange
+      );
+    } else {
+      (this.mqlDark as any).removeListener(this.boundHandleSystemThemeChange);
+    }
+    this.mqlDark = null;
   }
 
   private resolveTheme(theme: ThemeType): "light" | "dark" {
@@ -144,8 +167,9 @@ export class Theme {
     themeName: string,
     customPath?: string
   ): Promise<void> {
-    if (this._currentCssPath) {
-      unloadCssFile(this._currentThemeName);
+    if (this._loadedThemeId) {
+      unloadCssFile(this._loadedThemeId);
+      this._loadedThemeId = null;
     }
 
     // Built-in themes (light, dark, auto) use CSS classes — no external file needed.
@@ -155,14 +179,26 @@ export class Theme {
 
     if (customPath) {
       await loadCssFile(customPath, themeName);
-      this._currentCssPath = customPath;
+      this.onCssLoaded(themeName);
       return;
     }
 
     const registeredPath = getThemePath(themeName);
     if (registeredPath) {
       await loadCssFile(registeredPath, themeName);
-      this._currentCssPath = registeredPath;
+      this.onCssLoaded(themeName);
+    }
+  }
+
+  // Called once a theme's CSS has finished loading. If setTheme() was called
+  // again in the meantime, this load has already been superseded — unload it
+  // immediately instead of tracking it, so it doesn't leak or get mistaken
+  // for the currently active theme.
+  private onCssLoaded(themeName: string): void {
+    if (this._currentThemeName === themeName) {
+      this._loadedThemeId = themeName;
+    } else {
+      unloadCssFile(themeName);
     }
   }
 
@@ -186,6 +222,7 @@ export class Theme {
     this._currentThemeName = themeType;
     this._theme = this.resolveTheme(themeType);
 
+    this.syncAutoListener();
     await this.loadThemeCss(themeType, themePath);
     this.applyToRoot();
   }
@@ -198,21 +235,11 @@ export class Theme {
   }
 
   public destroy() {
-    if (this.mqlDark) {
-      if ("removeEventListener" in this.mqlDark) {
-        this.mqlDark.removeEventListener(
-          "change",
-          this.boundHandleSystemThemeChange
-        );
-      } else {
-        (this.mqlDark as any).removeListener(this.boundHandleSystemThemeChange);
-      }
-      this.mqlDark = null;
-    }
+    this.removeAutoListener();
 
-    if (this._currentCssPath) {
-      unloadCssFile(this._currentThemeName);
-      this._currentCssPath = null;
+    if (this._loadedThemeId) {
+      unloadCssFile(this._loadedThemeId);
+      this._loadedThemeId = null;
     }
   }
 

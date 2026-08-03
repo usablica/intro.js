@@ -34,12 +34,12 @@
   border: 10px solid transparent;
 }
 .introjs-arrow.top, .introjs-arrow.top-middle, .introjs-arrow.top-right {
-  border-color: transparent transparent rgba(000, 0, 0, 0.5);
+  border-color: transparent transparent rgba(0, 0, 0, 0.85);
   top: -20px;
   left: 20px;
 }
 .introjs-arrow.bottom, .introjs-arrow.bottom-middle, .introjs-arrow.bottom-right {
-  border-color: rgba(000, 0, 0, 0.5) transparent transparent;
+  border-color: rgba(0, 0, 0, 0.85) transparent transparent;
   bottom: -20px;
   left: 20px;
 }
@@ -52,9 +52,9 @@
 
 .introjs-arrow.left, .introjs-arrow.left-bottom {
   left: -20px;
-  border-color: transparent rgba(000, 0, 0, 0.5) transparent transparent;
+  border-color: transparent rgba(0, 0, 0, 0.85) transparent transparent;
 }
 .introjs-arrow.right, .introjs-arrow.right-bottom {
   right: -20px;
-  border-color: transparent transparent transparent rgba(000, 0, 0, 0.5);
+  border-color: transparent transparent transparent rgba(0, 0, 0, 0.85);
 }

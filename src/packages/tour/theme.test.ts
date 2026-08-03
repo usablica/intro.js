@@ -163,6 +163,92 @@ describe("Theme", () => {
       expect(root.classList.contains("introjs-dark")).toBe(false);
       theme.destroy();
     });
+
+    test("removes the previous custom theme's <link> when switching to a new custom theme", async () => {
+      mockMatchMedia(false);
+      const theme = new Theme({
+        root,
+        theme: "themeA",
+        themePath: "/themes/a.css",
+      });
+
+      const linkA = document.querySelector('link[data-introjs-theme="themeA"]');
+      expect(linkA).not.toBeNull();
+      linkA?.dispatchEvent(new Event("load"));
+      // let the pending loadCssFile promise resolve so _loadedThemeId is recorded
+      await Promise.resolve();
+
+      // start switching to another custom theme; the old link is removed
+      // synchronously before the new one finishes loading.
+      theme.setTheme("themeB", "/themes/b.css");
+
+      expect(
+        document.querySelector('link[data-introjs-theme="themeA"]')
+      ).toBeNull();
+      expect(document.querySelectorAll("link[data-introjs-theme]").length).toBe(
+        1
+      );
+
+      document
+        .querySelector('link[data-introjs-theme="themeB"]')
+        ?.dispatchEvent(new Event("load"));
+      theme.destroy();
+    });
+
+    test("cleans up the superseded theme's <link> when setTheme is called again before the previous load finishes", async () => {
+      mockMatchMedia(false);
+      const theme = new Theme({ root, theme: "light" });
+
+      const firstCall = theme.setTheme("themeA", "/themes/a.css");
+      const secondCall = theme.setTheme("themeB", "/themes/b.css");
+
+      const linkA = document.querySelector('link[data-introjs-theme="themeA"]');
+      const linkB = document.querySelector('link[data-introjs-theme="themeB"]');
+      expect(linkA).not.toBeNull();
+      expect(linkB).not.toBeNull();
+
+      // resolve out of order: the newer theme (B) finishes loading first,
+      // then the superseded one (A) finishes after.
+      linkB?.dispatchEvent(new Event("load"));
+      linkA?.dispatchEvent(new Event("load"));
+
+      await Promise.all([firstCall, secondCall]);
+
+      expect(
+        document.querySelector('link[data-introjs-theme="themeA"]')
+      ).toBeNull();
+      expect(
+        document.querySelector('link[data-introjs-theme="themeB"]')
+      ).not.toBeNull();
+      expect(document.querySelectorAll("link[data-introjs-theme]").length).toBe(
+        1
+      );
+
+      theme.destroy();
+    });
+
+    test("starts reacting to system theme changes after switching to auto", async () => {
+      const mql = mockMatchMedia(false);
+      const theme = new Theme({ root, theme: "light" });
+
+      await theme.setTheme("auto");
+      mql.dispatchChange();
+
+      expect(root.classList.contains("introjs-dark")).toBe(true);
+      theme.destroy();
+    });
+
+    test("stops reacting to system theme changes after switching away from auto", async () => {
+      const mql = mockMatchMedia(false);
+      const theme = new Theme({ root, theme: "auto" });
+
+      await theme.setTheme("light");
+      root.classList.remove("introjs-light", "introjs-dark");
+      mql.dispatchChange();
+
+      expect(root.classList.contains("introjs-dark")).toBe(false);
+      theme.destroy();
+    });
   });
 
   describe("setRoot", () => {

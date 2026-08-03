@@ -784,4 +784,64 @@ describe("Tour", () => {
       expect(mockTour.getCurrentStep()).toBe(undefined);
     });
   });
+
+  describe("setTheme / getTheme", () => {
+    beforeEach(() => {
+      // other tests in this file may leave a stray .introjs-tour element
+      // behind; start from a clean slate so querySelector below is unambiguous.
+      document.querySelectorAll(".introjs-tour").forEach((el) => el.remove());
+    });
+
+    afterEach(async () => {
+      document
+        .querySelectorAll("[data-introjs-theme]")
+        .forEach((link) => link.remove());
+    });
+
+    test("getTheme returns undefined before the tour starts", () => {
+      const mockTour = getMockTour();
+      expect(mockTour.getTheme()).toBeUndefined();
+    });
+
+    test("applies the theme option once the tour starts", async () => {
+      const mockTour = getMockTour();
+      mockTour.setOptions({ theme: "dark" });
+      mockTour.addStep({ intro: "first" });
+
+      await mockTour.start();
+      await sleep(waitMsForDerivations);
+
+      expect(mockTour.getTheme()).toBe("dark");
+      expect(
+        document
+          .querySelector(".introjs-tour")
+          ?.classList.contains("introjs-dark")
+      ).toBe(true);
+
+      await mockTour.exit();
+      await sleep(waitMsForExitTransition);
+    });
+
+    test("switches the theme on a running tour", async () => {
+      const mockTour = getMockTour();
+      mockTour.setOptions({ theme: "light" });
+      mockTour.addStep({ intro: "first" });
+
+      await mockTour.start();
+      await sleep(waitMsForDerivations);
+
+      await mockTour.setTheme("dark");
+
+      expect(mockTour.getTheme()).toBe("dark");
+      expect(
+        document
+          .querySelector(".introjs-tour")
+          ?.classList.contains("introjs-dark")
+      ).toBe(true);
+      expect(mockTour.getOption("theme")).toBe("dark");
+
+      await mockTour.exit();
+      await sleep(waitMsForExitTransition);
+    });
+  });
 });
