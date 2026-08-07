@@ -8,10 +8,48 @@ $black200: #eeeeee;
 $black100: #f4f4f4;
 $white: #ffffff;
 
-$font_family: "Helvetica Neue", Inter, ui-sans-serif, "Apple Color Emoji",
-  Helvetica, Arial, sans-serif;
+$font_family: "Helvetica Neue", Inter, ui-sans-serif, "Apple Color Emoji", Helvetica, Arial, sans-serif;
 $background_color_9: #08c;
 $background_color_10: rgba(136, 136, 136, 0.24);
+
+/* =================== THEME CLASSES =================== */
+.introjs-light {
+  --introjs-btn-bg: #{$black100};
+  --introjs-btn-color: #{$black800};
+  --introjs-btn-border: #{$black400};
+  --introjs-btn-hover-bg: #{$black300};
+  --introjs-btn-hover-color: #{$black900};
+  --introjs-btn-focus-bg: #{$black200};
+  --introjs-btn-focus-color: #{$black800};
+  --introjs-btn-active-bg: #{$black300};
+  --introjs-btn-active-color: #{$black900};
+  --introjs-btn-active-border: #{$black500};
+  --introjs-btn-textShadow: #{$white};
+
+  --introjs-arrow-color: #{$white};
+  --introjs-overlay-bg: #{$black100};
+  --introjs-bg: #{$white};
+  --introjs-color: #{$black900};
+}
+
+.introjs-dark {
+  --introjs-btn-bg: #{$black600};
+  --introjs-btn-color: #{$white};
+  --introjs-btn-border: #{$white};
+  --introjs-btn-hover-bg: #{$white};
+  --introjs-btn-hover-color: #{$black800};
+  --introjs-btn-focus-bg: #{$black500};
+  --introjs-btn-focus-color: #{$white};
+  --introjs-btn-active-bg: #{$black600};
+  --introjs-btn-active-color: #{$white};
+  --introjs-btn-active-border: #{$black400};
+  --introjs-btn-textShadow: #{$black800};
+
+  --introjs-arrow-color: #{$black800};
+  --introjs-overlay-bg: #{$black800};
+  --introjs-bg: #{$black800};
+  --introjs-color: #{$white};
+}
 
 .introjs-tour {
   transition: all 0.3s ease-out;
@@ -104,70 +142,70 @@ tr.introjs-showElement {
 .introjs-arrow.top {
   top: -10px;
   left: 10px;
-  border-bottom-color: $white;
+  border-bottom-color: var(--introjs-arrow-color);
 }
 
 .introjs-arrow.top-right {
   top: -10px;
   right: 10px;
-  border-bottom-color: $white;
+  border-bottom-color: var(--introjs-arrow-color);
 }
 
 .introjs-arrow.top-middle {
   top: -10px;
   left: 50%;
   margin-left: -5px;
-  border-bottom-color: $white;
+  border-bottom-color: var(--introjs-arrow-color);
 }
 
 .introjs-arrow.right {
   right: -10px;
   top: 10px;
-  border-left-color: $white;
+  border-left-color: var(--introjs-arrow-color);
 }
 
 .introjs-arrow.right-bottom {
   bottom: 10px;
   right: -10px;
-  border-left-color: $white;
+  border-left-color: var(--introjs-arrow-color);
 }
 
 .introjs-arrow.bottom {
   bottom: -10px;
   left: 10px;
-  border-top-color: $white;
+  border-top-color: var(--introjs-arrow-color);
 }
 
 .introjs-arrow.bottom-right {
   bottom: -10px;
   right: 10px;
-  border-top-color: $white;
+  border-top-color: var(--introjs-arrow-color);
 }
 
 .introjs-arrow.bottom-middle {
   bottom: -10px;
   left: 50%;
   margin-left: -5px;
-  border-top-color: $white;
+  border-top-color: var(--introjs-arrow-color);
 }
 
 .introjs-arrow.left {
   left: -10px;
   top: 10px;
-  border-right-color: $white;
+  border-right-color: var(--introjs-arrow-color);
 }
 
 .introjs-arrow.left-bottom {
   left: -10px;
   bottom: 10px;
-  border-right-color: $white;
+  border-right-color: var(--introjs-arrow-color);
 }
 
 .introjs-tooltip {
   box-sizing: content-box;
   position: absolute;
   visibility: visible;
-  background-color: $white;
+  background-color: var(--introjs-bg);
   min-width: 250px;
   max-width: 300px;
   border-radius: 5px;
@@ -177,6 +215,7 @@ tr.introjs-showElement {
 
 .introjs-tooltiptext {
   padding: 20px;
+  color: var(--introjs-color);
 }
 
 .introjs-dontShowAgain {
@@ -199,7 +238,7 @@ tr.introjs-showElement {
   font-weight: normal;
   margin: 0 0 0 5px;
   padding: 0;
-  background-color: $white;
+  background-color: var(--introjs-bg);
   color: $black600;
   user-select: none;
 }
@@ -212,6 +251,7 @@ tr.introjs-showElement {
   padding: 0;
   font-weight: 700;
   line-height: 1.5;
+  color: var(--introjs-color);
 }
 
 .introjs-tooltip-header {
@@ -220,6 +260,7 @@ tr.introjs-showElement {
   padding-right: 20px;
   padding-top: 10px;
   min-height: 1.5em;
+  color: var(--introjs-color);
 }
 
 .introjs-tooltipbuttons {
@@ -246,13 +287,13 @@ tr.introjs-showElement {
 
   border: 1px solid $black400;
   text-decoration: none;
-  text-shadow: 1px 1px 0 $white;
+  text-shadow: 1px 1px 0 var(--introjs-btn-textShadow);
   font-size: 14px;
-  color: $black800;
+  color: var(--introjs-btn-color);
   white-space: nowrap;
   cursor: pointer;
   outline: none;
-  background-color: $black100;
+  background-color: var(--introjs-btn-bg);
   border-radius: 0.2em;
   zoom: 1;
   display: inline;
@@ -260,26 +301,26 @@ tr.introjs-showElement {
   &:hover {
     outline: none;
     text-decoration: none;
-    border-color: $black500;
-    background-color: $black300;
-    color: $black900;
+    border-color: var(--introjs-btn-border);
+    background-color: var(--introjs-btn-hover-bg);
+    color: var(--introjs-btn-hover-color);;
   }
 
   &:focus {
     outline: none;
     text-decoration: none;
-    background-color: $black200;
+    background-color: var(--introjs-btn-focus-bg);
     box-shadow: 0 0 0 0.2rem rgba($black500, 0.5);
-    border: 1px solid $black600;
-    color: $black900;
+    border: 1px solid var(--introjs-btn-border);
+    color: var(--introjs-btn-focus-color);
   }
 
   &:active {
     outline: none;
     text-decoration: none;
-    background-color: $black300;
-    border-color: $black500;
-    color: $black900;
+    background-color: var(--introjs-btn-active-bg);
+    border-color: var(--introjs-btn-active-border);
+    color: var(--introjs-btn-active-color);
   }
 
   &::-moz-focus-inner {
@@ -298,7 +339,7 @@ tr.introjs-showElement {
   height: 45px;
   line-height: 45px;
 
-  color: $black600;
+  color: var(--introjs-btn-color);
   font-size: 22px;
   cursor: pointer;
   font-weight: bold;
@@ -307,7 +348,7 @@ tr.introjs-showElement {
 
   &:hover,
   &:focus {
-    color: $black900;
+    color: var(--introjs-btn-focus-color);
     outline: none;
     text-decoration: none;
   }
@@ -315,28 +356,30 @@ tr.introjs-showElement {
 
 .introjs-prevbutton {
   float: left;
+  color: var(--introjs-btn-color);
 }
 
 .introjs-nextbutton {
   float: right;
+  color: var(--introjs-btn-color);
 }
 
 .introjs-disabled {
-  color: $black500;
-  border-color: $black400;
+  color: var(--introjs-btn-color);
+  border-color: var(--introjs-btn-border);
   box-shadow: none;
   cursor: default;
-  background-color: $black100;
+  background-color: var(--introjs-btn-bg);
   background-image: none;
   text-decoration: none;
 
   &:hover,
   &:focus {
-    color: $black500;
-    border-color: $black400;
+    color: var(--introjs-btn-focus-color);
+    border-color: var(--introjs-btn-border);
     box-shadow: none;
     cursor: default;
-    background-color: $black100;
+    background-color: var(--introjs-btn-focus-bg);
     background-image: none;
     text-decoration: none;
   }

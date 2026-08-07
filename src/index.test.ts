@@ -26,4 +26,15 @@ describe("index", () => {
     // Assert
     expect(hintInstance).toBeInstanceOf(Hint);
   });
+
+  it("should expose theme registration and lookup helpers", () => {
+    introJs.registerTheme("sunset", "/themes/sunset.css");
+    introJs.registerThemes([{ name: "forest", cssPath: "/themes/forest.css" }]);
+
+    expect(introJs.getThemePath("sunset")).toBe("/themes/sunset.css");
+    expect(introJs.getThemePath("forest")).toBe("/themes/forest.css");
+    expect(introJs.getRegisteredThemes()).toEqual(
+      expect.arrayContaining(["sunset", "forest"])
+    );
+  });
 });

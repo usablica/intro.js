@@ -1,6 +1,13 @@
 import { version } from "../package.json";
 import { Hint } from "./packages/hint";
 import { Tour } from "./packages/tour";
+import {
+  registerTheme,
+  registerThemes,
+  getThemePath,
+  getRegisteredThemes,
+} from "./packages/tour/theme";
+export type { ThemeType, ThemeRegistration } from "./packages/tour/theme";
 
 class LegacyIntroJs extends Tour {
   /**
@@ -62,5 +69,25 @@ introJs.hint = (elementOrSelector?: string | HTMLElement) =>
  * Current Intro.js version
  */
 introJs.version = version;
+
+/**
+ * Register a custom theme so it can be referenced by name in the `theme` tour option
+ */
+introJs.registerTheme = registerTheme;
+
+/**
+ * Register multiple custom themes at once
+ */
+introJs.registerThemes = registerThemes;
+
+/**
+ * Get the CSS path registered for a given theme name, if any
+ */
+introJs.getThemePath = getThemePath;
+
+/**
+ * List the names of all currently registered themes
+ */
+introJs.getRegisteredThemes = getRegisteredThemes;
 
 export default introJs;
