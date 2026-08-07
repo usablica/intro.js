@@ -4,6 +4,13 @@ import deDE from "./de_DE";
 import esES from "./es_ES";
 import frFR from "./fr_FR";
 import ar_SA from "./ar_SA";
+import ru_RU from "./ru_RU";
+import zh_CN from "./zh_CN";
+import pt_BR from "./pt_BR";
+import it_IT from "./it_IT";
+import ja_JP from "./ja_JP";
+import tr_TR from "./tr_TR";
+import ko_KR from "./ko_KR";
 
 const languages = {
   en_US: enUS,
@@ -12,6 +19,13 @@ const languages = {
   es_ES: esES,
   fr_FR: frFR,
   ar_SA: ar_SA,
+  ru_RU: ru_RU,
+  zh_CN: zh_CN,
+  pt_BR: pt_BR,
+  it_IT: it_IT,
+  ja_JP: ja_JP,
+  tr_TR: tr_TR,
+  ko_KR: ko_KR,
 } as const;
 
 export type LanguageCode = keyof typeof languages;
