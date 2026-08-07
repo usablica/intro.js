@@ -97,7 +97,10 @@
       }
 
       function startTour() {
-        var tour = introJs.tour().setOption("theme", selectedTheme);
+        var tour = introJs
+          .tour()
+          .setOption("theme", selectedTheme)
+          .setOption("dontShowAgain", true);
         if (externalThemes[selectedTheme]) {
           tour.setOption("themePath", externalThemes[selectedTheme]);
         }

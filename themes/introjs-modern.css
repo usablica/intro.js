@@ -1,6 +1,7 @@
 .introjs-tooltip {
   background-color: rgba(0, 0, 0, 0.85);
   color: #fff;
+  backdrop-filter: blur(10px);
 }
 
 .introjs-tooltiptext,
@@ -57,4 +58,11 @@
 .introjs-arrow.right, .introjs-arrow.right-bottom {
   right: -20px;
   border-color: transparent transparent transparent rgba(0, 0, 0, 0.85);
+}
+
+.introjs-tooltip .introjs-dontShowAgain label {
+  background-color: #0202022e;
+  padding: 4px 6px;
+  color: #d66363;
+  border-radius: 4px;
 }
