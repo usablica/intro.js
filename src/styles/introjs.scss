@@ -13,34 +13,24 @@ $font_family: "Helvetica Neue", Inter, ui-sans-serif, "Apple Color Emoji",
 $background_color_9: #08c;
 $background_color_10: rgba(136, 136, 136, 0.24);
 
-.introjs-tour {
-  // `.introjs-tour` wraps the overlay/helper/tooltip layers, all of which
-  // rely on huge z-index values (see below) to stay above the page. Since
-  // this element itself was never `position`ed, its z-index never took
-  // effect, so it always painted in the browser's "non-positioned" stacking
-  // layer - fine most of the time, since child z-index is then compared
-  // directly against the page's own stacking contexts. But because opacity
-  // below 1 also creates a stacking context, the transition below made
-  // `.introjs-tour` (and therefore all of its children) briefly form its
-  // *own* stacking context while fading in/out - one that, being
-  // unpositioned, still loses to any page element with `position` and a
-  // positive `z-index`. That let such elements (e.g. a sticky header)
-  // render on top of the overlay for the length of the transition.
-  // Explicitly positioning `.introjs-tour` with a z-index higher than any
-  // reasonable page content fixes this for good. `top`/`left` are set to 0
-  // and no width/height are given so this remains a zero-size box in the
-  // same place a non-positioned element would sit, and doesn't shift the
-  // coordinates its (pixel-positioned) absolute children are computed
-  // against.
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  z-index: 2147483647;
-  transition: all 0.3s ease-out;
-}
-
+// `.introjs-tour` wraps the overlay/helper/tooltip layers, all of which rely
+// on huge z-index values (see below) to stay above the page - and stay
+// correctly ordered *against each other*: the real target element gets a
+// z-index of its own (`.introjs-showElement`, 9999999) specifically so it
+// renders above the overlay/helper layers and stays clickable, while
+// `.introjs-disableInteraction` (99999999) renders above *that* to block
+// clicks when asked to. This only works as long as every one of these
+// elements is compared directly against the page (and each other) at the
+// same level - so `.introjs-tour` itself must never become a stacking
+// context of its own, or it would flatten all of its children into a single
+// rank, breaking that ordering (e.g. the real target could no longer poke
+// above the helper layer). That means `.introjs-tour` can't carry the
+// fade-in/out transition directly, since a `position` or `opacity` below 1
+// would do exactly that (this was tried, and did - see #2134/#2251).
+// Instead, the fade is driven by a CSS variable (set on `.introjs-tour` by
+// TourRoot.ts) that only the layers which are ever actually visible - the
+// helper layer and the tooltip - read into their own `opacity`, so each
+// keeps comparing its own z-index directly against the page throughout.
 .introjs-overlay {
   position: absolute;
   box-sizing: content-box;
@@ -82,6 +72,9 @@ tr.introjs-showElement {
   position: absolute;
   z-index: 9999998;
   border-radius: 4px;
+  // fades in/out with the rest of the tour - see the comment above
+  // `.introjs-overlay` for why this isn't done via `.introjs-tour` instead.
+  opacity: var(--introjs-fade-opacity, 1);
   transition: all 0.3s ease-out;
 
   * {
@@ -104,6 +97,9 @@ tr.introjs-showElement {
   visibility: hidden;
   z-index: 100000000;
   background-color: transparent;
+  // fades in/out with the rest of the tour - see the comment above
+  // `.introjs-overlay` for why this isn't done via `.introjs-tour` instead.
+  opacity: var(--introjs-fade-opacity, 1);
   transition: all 0.3s ease-out;
 
   * {
