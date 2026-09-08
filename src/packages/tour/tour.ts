@@ -285,7 +285,7 @@ export class Tour implements Package<TourOptions> {
    */
   isEnd(): boolean {
     const currentStep = this.getCurrentStep();
-    return currentStep !== undefined && currentStep >= this._steps.length;
+    return currentStep !== undefined && currentStep >= this._steps.length - 1;
   }
 
   /**

@@ -634,6 +634,38 @@ describe("Tour", () => {
     });
   });
 
+  describe("isEnd", () => {
+    test("should be false before the tour has started", () => {
+      // Arrange
+      const mockTour = getMockTour();
+      mockTour.setSteps(getMockSteps());
+
+      // Assert
+      expect(mockTour.isEnd()).toBeFalsy();
+    });
+
+    test("should be false when not on the last step", async () => {
+      // Arrange
+      const mockTour = getMockTour();
+      mockTour.setSteps(getMockSteps());
+      await mockTour.setCurrentStep(0);
+
+      // Assert
+      expect(mockTour.isEnd()).toBeFalsy();
+    });
+
+    test("should be true when on the last step", async () => {
+      // Arrange
+      const steps = getMockSteps();
+      const mockTour = getMockTour();
+      mockTour.setSteps(steps);
+      await mockTour.setCurrentStep(steps.length - 1);
+
+      // Assert
+      expect(mockTour.isEnd()).toBeTruthy();
+    });
+  });
+
   describe("tooltipRenderAsHtml", () => {
     beforeEach(() => {
       document.body.innerHTML = ""; // Clear previous test DOM

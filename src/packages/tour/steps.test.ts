@@ -92,6 +92,32 @@ describe("steps", () => {
       expect(fnCompleteCallback).toHaveBeenCalledWith(1, "end");
     });
 
+    test("should call the complete callback when called on the actual last step, without mocking isEnd", async () => {
+      // Regression test for https://github.com/usablica/intro.js/issues/951 -
+      // calling nextStep() while already on the last step (e.g. via the
+      // right arrow key) must complete the tour instead of silently doing
+      // nothing (or throwing, in the original bug report).
+
+      // Arrange
+      const steps = getMockSteps();
+      const mockTour = getMockTour();
+      mockTour.setSteps(steps);
+      await mockTour.setCurrentStep(steps.length - 1);
+
+      const fnCompleteCallback = jest.fn();
+      mockTour.onComplete(fnCompleteCallback);
+
+      // Act
+      const result = await nextStep(mockTour);
+
+      // Assert
+      expect(fnCompleteCallback).toHaveBeenCalledTimes(1);
+      expect(fnCompleteCallback).toHaveBeenCalledWith(steps.length - 1, "end");
+      expect(result).toBe(false);
+      // the step should not have gone out of bounds
+      expect(mockTour.getCurrentStep()).toBe(steps.length - 1);
+    });
+
     test("should be able to add steps using addStep()", async () => {
       // Arrange
       const mockTour = getMockTour();
