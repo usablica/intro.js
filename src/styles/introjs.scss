@@ -14,6 +14,30 @@ $background_color_9: #08c;
 $background_color_10: rgba(136, 136, 136, 0.24);
 
 .introjs-tour {
+  // `.introjs-tour` wraps the overlay/helper/tooltip layers, all of which
+  // rely on huge z-index values (see below) to stay above the page. Since
+  // this element itself was never `position`ed, its z-index never took
+  // effect, so it always painted in the browser's "non-positioned" stacking
+  // layer - fine most of the time, since child z-index is then compared
+  // directly against the page's own stacking contexts. But because opacity
+  // below 1 also creates a stacking context, the transition below made
+  // `.introjs-tour` (and therefore all of its children) briefly form its
+  // *own* stacking context while fading in/out - one that, being
+  // unpositioned, still loses to any page element with `position` and a
+  // positive `z-index`. That let such elements (e.g. a sticky header)
+  // render on top of the overlay for the length of the transition.
+  // Explicitly positioning `.introjs-tour` with a z-index higher than any
+  // reasonable page content fixes this for good. `top`/`left` are set to 0
+  // and no width/height are given so this remains a zero-size box in the
+  // same place a non-positioned element would sit, and doesn't shift the
+  // coordinates its (pixel-positioned) absolute children are computed
+  // against.
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  z-index: 2147483647;
   transition: all 0.3s ease-out;
 }
 
