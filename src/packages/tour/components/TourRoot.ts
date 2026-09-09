@@ -113,13 +113,21 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         },
         skipLabel: tour.getOption("skipLabel"),
         onSkipClick: async () => {
+          const continueSkip = await tour
+            .callback("skip")
+            ?.call(tour, tour.getCurrentStep());
+
+          // returning `false` from the `skip` callback cancels the skip,
+          // the same way `beforeExit` can cancel exiting the tour
+          if (continueSkip === false) {
+            return;
+          }
+
           if (tour.isLastStep()) {
             await tour
               .callback("complete")
               ?.call(tour, tour.getCurrentStep(), "skip");
           }
-
-          await tour.callback("skip")?.call(tour, tour.getCurrentStep());
 
           await tour.exit();
         },

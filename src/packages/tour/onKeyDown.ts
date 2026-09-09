@@ -47,13 +47,21 @@ export default async function onKeyDown(tour: Tour, e: KeyboardEvent) {
       await previousStep(tour);
     } else if (target && target.className.match(skipButtonClassName)) {
       // user hit enter while focusing on skip button
-      if (tour.isEnd()) {
-        await tour
-          .callback("complete")
-          ?.call(tour, tour.getCurrentStep(), "skip");
-      }
+      const continueSkip = await tour
+        .callback("skip")
+        ?.call(tour, tour.getCurrentStep());
 
-      await tour.exit();
+      // returning `false` from the `skip` callback cancels the skip, the
+      // same way `beforeExit` can cancel exiting the tour
+      if (continueSkip !== false) {
+        if (tour.isEnd()) {
+          await tour
+            .callback("complete")
+            ?.call(tour, tour.getCurrentStep(), "skip");
+        }
+
+        await tour.exit();
+      }
     } else if (target && target.getAttribute(dataStepNumberAttribute)) {
       // user hit enter while focusing on step bullet
       target.click();
