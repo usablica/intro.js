@@ -76,6 +76,26 @@ describe("onKeyDown", () => {
       // Assert
       expect(mockTour.getCurrentStep()).toBe(0);
     });
+
+    test("ArrowLeft on the last step should complete the tour (RTL + isEnd interaction)", async () => {
+      // Arrange - RTL reverses ArrowLeft to call nextStep(), which must
+      // still correctly detect "last step" and complete rather than
+      // crash trying to render a step past the end.
+      const steps = getMockSteps();
+      const mockTour = getMockTour(targetElement);
+      mockTour.setSteps(steps);
+      await mockTour.setCurrentStep(steps.length - 1);
+
+      const fnCompleteCallback = jest.fn();
+      mockTour.onComplete(fnCompleteCallback);
+
+      // Act
+      await onKeyDown(mockTour, createKeyDownEvent("ArrowLeft"));
+
+      // Assert
+      expect(fnCompleteCallback).toHaveBeenCalledTimes(1);
+      expect(mockTour.getCurrentStep()).toBe(steps.length - 1);
+    });
   });
 
   describe("when only the tooltip element is RTL (e.g. introjs-rtl.css)", () => {
