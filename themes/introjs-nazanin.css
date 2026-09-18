@@ -60,7 +60,7 @@
 }
 
 .introjs-arrow {
-  border: 5px solid white;
+  border: 5px solid transparent;
   content:'';
   position: absolute;
 }
@@ -111,14 +111,8 @@
 }
 
 .introjs-tooltiptext {
-    margin-left: -10px;
-
-    margin-right: -10px;
-    border-top: 1px solid #FFFFFF;
-    background: #FAFAFA;
-    color: #2c3e50;
-    padding: 5px 10px;
-    border-bottom: 1px solid #FFFFFF;
+  color: #2c3e50;
+  padding: 20px;
 }
 
 .introjs-tooltipbuttons {
@@ -130,30 +124,12 @@
  Changed by Afshin Mehrabani
 */
 .introjs-button {
-  position: relative;
-  overflow: visible;
-  display: inline-block;
-  padding: 0.5em 0.8em;
-  box-shadow: 0 2px 0px -0px #306588;
-  margin: 0;
-  outline: none;
   background: #2980b9;
-  text-decoration: none;
-  font: 11px/normal sans-serif;
-  color: #fff !important;
-  white-space: nowrap;
-  cursor: pointer;
-  outline: none !important;
-  -webkit-background-clip: padding;
-  -moz-background-clip: padding;
-  -o-background-clip: padding-box;
-  /*background-clip: padding-box;*/ /* commented out due to Opera 11.10 bug */
-  -webkit-border-radius: 0.2em;
-  -moz-border-radius: 0.2em;
+  color: #fff;
+  text-shadow: none;
+  border: none;
   border-radius: 0.2em;
-  /* IE hacks */
-  zoom: 1;
-  *display: inline;
+  box-shadow: 0 2px 0 #306588;
   margin-top: 10px;
 }
 
@@ -178,21 +154,17 @@
 }
 
 .introjs-skipbutton {
-  margin-right: 5px;
-  color: #fff;
-  background: #e74c3c;
-  box-shadow: 0 2px 0px -0px #B91D0D;
+  color: #e74c3c;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
-.introjs-skipbutton:hover {
-    background: #EB1540;  box-shadow: 0 2px 0px -0px #B91D0D;
-
-}
-
-.introjs-skipbutton:active, .introjs-skipbutton:focus {
-    background: #C02312;
-    box-shadow: 0 1px 0px -0px #6F1309;
-
+.introjs-skipbutton:hover,
+.introjs-skipbutton:focus {
+  color: #c0392b;
+  background: transparent;
+  box-shadow: none;
 }
 
 .introjs-prevbutton {
