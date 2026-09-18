@@ -314,6 +314,79 @@ describe("Tour", () => {
       expect(oncompleteMock).toBeCalledTimes(1);
     });
 
+    test("should call onexit and oncomplete when pressing the right arrow key on a one-step tour", async () => {
+      // Arrange - end-to-end: real keydown event through the wired-up
+      // window listener (enableKeyboardNavigation), not calling onKeyDown()
+      // directly. Regression test for https://github.com/usablica/intro.js/issues/951
+      const onexitMock = jest.fn();
+      const oncompleteMock = jest.fn();
+
+      mockTour
+        .setOptions({
+          steps: [
+            {
+              intro: "hello world",
+            },
+          ],
+        })
+        .onExit(onexitMock)
+        .onComplete(oncompleteMock);
+
+      // Act
+      await mockTour.start();
+      window.dispatchEvent(
+        new KeyboardEvent("keydown", { code: "ArrowRight" })
+      );
+      await waitFor(1000);
+
+      // Assert
+      expect(onexitMock).toBeCalledTimes(1);
+      expect(oncompleteMock).toBeCalledTimes(1);
+    });
+
+    test("should complete a multi-step tour when pressing the right arrow key on the last step", async () => {
+      // Arrange
+      const onexitMock = jest.fn();
+      const oncompleteMock = jest.fn();
+
+      mockTour
+        .setOptions({
+          steps: [
+            { intro: "step 1" },
+            { intro: "step 2" },
+            { intro: "step 3" },
+          ],
+        })
+        .onExit(onexitMock)
+        .onComplete(oncompleteMock);
+
+      // Act - advance to the last step first, via the same keyboard path
+      await mockTour.start();
+      window.dispatchEvent(
+        new KeyboardEvent("keydown", { code: "ArrowRight" })
+      );
+      await waitFor(500);
+      window.dispatchEvent(
+        new KeyboardEvent("keydown", { code: "ArrowRight" })
+      );
+      await waitFor(500);
+
+      // Assert - still on the last step, tour hasn't completed yet
+      expect(mockTour.getCurrentStep()).toBe(2);
+      expect(oncompleteMock).not.toBeCalled();
+
+      // Act - one more right-arrow press on the actual last step must
+      // complete the tour instead of crashing / doing nothing
+      window.dispatchEvent(
+        new KeyboardEvent("keydown", { code: "ArrowRight" })
+      );
+      await waitFor(1000);
+
+      // Assert
+      expect(onexitMock).toBeCalledTimes(1);
+      expect(oncompleteMock).toBeCalledTimes(1);
+    });
+
     test("should call onexit when skip is clicked", async () => {
       // Arrange
       const onexitMock = jest.fn();
