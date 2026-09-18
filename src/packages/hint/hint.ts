@@ -287,10 +287,20 @@ export class Hint implements Package<HintOptions> {
     if (!item) return;
 
     if (this._activeHintSignal.val !== stepId) {
-      this._activeHintSignal.val = stepId;
+      // close the previously open dialog (if any) first, so its
+      // onHintDialogClose callback fires before this one opens
+      if (this._activeHintSignal.val !== undefined) {
+        this.hideHintDialog();
+      }
 
-      // call the callback function (if any)
-      await this.callback("hintClick")?.call(this, item);
+      // hideHintDialog()'s callback may have reentrantly opened a
+      // different hint already - don't clobber that.
+      if (this._activeHintSignal.val === undefined) {
+        this._activeHintSignal.val = stepId;
+
+        // call the callback function (if any)
+        await this.callback("hintClick")?.call(this, item);
+      }
     } else {
       // to toggle the hint dialog if the same hint is clicked again
       this.hideHintDialog();
@@ -304,9 +314,9 @@ export class Hint implements Package<HintOptions> {
    *
    * Calls the `hintDialogClose` callback (if any) with the hint item whose
    * dialog was open, regardless of why it's closing - clicking outside it,
-   * toggling the same hint again, or calling this directly. `hideHint()`
-   * also goes through here, so it fires this too, in addition to its own
-   * `hintClose` callback.
+   * toggling the same hint again, opening a different hint's dialog, or
+   * calling this directly. `hideHint()` also goes through here, so it fires
+   * this too, in addition to its own `hintClose` callback.
    */
   hideHintDialog() {
     const activeStepId = this._activeHintSignal.val;
@@ -471,9 +481,9 @@ export class Hint implements Package<HintOptions> {
 
   /**
    * Callback for when a hint's dialog is closed, whether by clicking
-   * outside it, toggling the same hint again, calling `hideHintDialog()`
-   * directly, or via `hideHint()`/the dialog's own close button (which
-   * also fires `hintClose`)
+   * outside it, toggling the same hint again, opening a different hint's
+   * dialog, calling `hideHintDialog()` directly, or via `hideHint()`/the
+   * dialog's own close button (which also fires `hintClose`)
    * @param providedCallback callback function
    */
   onHintDialogClose(providedCallback: hintDialogCloseCallback) {
