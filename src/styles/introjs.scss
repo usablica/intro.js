@@ -51,10 +51,24 @@ $background_color_10: rgba(136, 136, 136, 0.24);
   --introjs-color: #{$white};
 }
 
-.introjs-tour {
-  transition: all 0.3s ease-out;
-}
-
+// `.introjs-tour` wraps the overlay/helper/tooltip layers, all of which rely
+// on huge z-index values (see below) to stay above the page - and stay
+// correctly ordered *against each other*: the real target element gets a
+// z-index of its own (`.introjs-showElement`, 9999999) specifically so it
+// renders above the overlay/helper layers and stays clickable, while
+// `.introjs-disableInteraction` (99999999) renders above *that* to block
+// clicks when asked to. This only works as long as every one of these
+// elements is compared directly against the page (and each other) at the
+// same level - so `.introjs-tour` itself must never become a stacking
+// context of its own, or it would flatten all of its children into a single
+// rank, breaking that ordering (e.g. the real target could no longer poke
+// above the helper layer). That means `.introjs-tour` can't carry the
+// fade-in/out transition directly, since a `position` or `opacity` below 1
+// would do exactly that (this was tried, and did - see #2134/#2251).
+// Instead, the fade is driven by a CSS variable (set on `.introjs-tour` by
+// TourRoot.ts) that only the layers which are ever actually visible - the
+// helper layer and the tooltip - read into their own `opacity`, so each
+// keeps comparing its own z-index directly against the page throughout.
 .introjs-overlay {
   position: absolute;
   box-sizing: content-box;
@@ -96,6 +110,9 @@ tr.introjs-showElement {
   position: absolute;
   z-index: 9999998;
   border-radius: 4px;
+  // fades in/out with the rest of the tour - see the comment above
+  // `.introjs-overlay` for why this isn't done via `.introjs-tour` instead.
+  opacity: var(--introjs-fade-opacity, 1);
   transition: all 0.3s ease-out;
 
   * {
@@ -118,6 +135,9 @@ tr.introjs-showElement {
   visibility: hidden;
   z-index: 100000000;
   background-color: transparent;
+  // fades in/out with the rest of the tour - see the comment above
+  // `.introjs-overlay` for why this isn't done via `.introjs-tour` instead.
+  opacity: var(--introjs-fade-opacity, 1);
   transition: all 0.3s ease-out;
 
   * {

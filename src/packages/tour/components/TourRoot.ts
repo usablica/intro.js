@@ -37,7 +37,11 @@ export const TourRoot = ({ tour }: TourRootProps) => {
   const root = div(
     {
       className: "introjs-tour",
-      style: () => style({ opacity: `${opacity.val}` }),
+      // `.introjs-tour` itself must never be `opacity`d (or `position`ed) -
+      // see the comment above `.introjs-overlay` in introjs.scss. The
+      // helper layer and tooltip read this custom property into their own
+      // `opacity` instead, so the fade still applies to the whole tour.
+      style: () => style({ "--introjs-fade-opacity": `${opacity.val}` }),
     },
     // helperLayer should not be re-rendered when the state changes for the transition to work
     helperLayer,
