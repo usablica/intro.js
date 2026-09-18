@@ -227,6 +227,37 @@ describe("Theme", () => {
       theme.destroy();
     });
 
+    test("removes the <link> when the theme CSS fails to load", async () => {
+      mockMatchMedia(false);
+      const theme = new Theme({ root, theme: "light" });
+
+      const setThemeCall = theme.setTheme("broken", "/themes/broken.css");
+      const link = document.querySelector('link[data-introjs-theme="broken"]');
+      expect(link).not.toBeNull();
+
+      link?.dispatchEvent(new Event("error"));
+      await setThemeCall;
+
+      expect(
+        document.querySelector('link[data-introjs-theme="broken"]')
+      ).toBeNull();
+      theme.destroy();
+    });
+
+    test("still applies the base theme class when the theme CSS fails to load", async () => {
+      mockMatchMedia(false);
+      const theme = new Theme({ root, theme: "light" });
+
+      const setThemeCall = theme.setTheme("broken", "/themes/broken.css");
+      document
+        .querySelector('link[data-introjs-theme="broken"]')
+        ?.dispatchEvent(new Event("error"));
+
+      await expect(setThemeCall).resolves.toBeUndefined();
+      expect(root.classList.contains("introjs-light")).toBe(true);
+      theme.destroy();
+    });
+
     test("starts reacting to system theme changes after switching to auto", async () => {
       const mql = mockMatchMedia(false);
       const theme = new Theme({ root, theme: "light" });

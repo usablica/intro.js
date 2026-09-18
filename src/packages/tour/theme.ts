@@ -53,6 +53,7 @@ function loadCssFile(cssPath: string, themeId: string): Promise<void> {
     };
 
     link.onerror = () => {
+      link.remove();
       reject(new Error(`Failed to load theme CSS: ${cssPath}`));
     };
 
@@ -223,7 +224,11 @@ export class Theme {
     this._theme = this.resolveTheme(themeType);
 
     this.syncAutoListener();
-    await this.loadThemeCss(themeType, themePath);
+    try {
+      await this.loadThemeCss(themeType, themePath);
+    } catch (error) {
+      console.error("Failed to load theme:", error);
+    }
     this.applyToRoot();
   }
 
