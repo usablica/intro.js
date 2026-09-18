@@ -1,7 +1,30 @@
 import { nextStep, previousStep } from "./steps";
 import { Tour } from "./tour";
-import { previousButtonClassName, skipButtonClassName } from "./classNames";
+import {
+  previousButtonClassName,
+  skipButtonClassName,
+  tooltipClassName,
+} from "./classNames";
 import { dataStepNumberAttribute } from "./dataAttributes";
+import getPropValue from "../../util/getPropValue";
+
+/**
+ * Determine whether the tour is currently displayed right-to-left.
+ * The tooltip itself is checked first, since RTL support (e.g. the
+ * bundled introjs-rtl.css) may only set `direction: rtl` on the
+ * tooltip rather than on the page or the target element. If the
+ * tooltip isn't found (or has no explicit direction), fall back to
+ * the tour's target element, which picks up a `dir="rtl"` set on the
+ * page itself.
+ */
+function isTourRTL(tour: Tour): boolean {
+  const tooltip = document.querySelector<HTMLElement>(`.${tooltipClassName}`);
+  if (tooltip) {
+    return getPropValue(tooltip, "direction") === "rtl";
+  }
+
+  return getPropValue(tour.getTargetElement(), "direction") === "rtl";
+}
 
 /**
  * on keyCode:
@@ -26,6 +49,10 @@ export default async function onKeyDown(tour: Tour, e: KeyboardEvent) {
     code = e.charCode === null ? e.keyCode : e.charCode;
   }
 
+  // in RTL, arrow directions are reversed: left arrow moves forward
+  // and right arrow moves backward
+  const isRTL = isTourRTL(tour);
+
   if (
     (code === "Escape" || code === 27) &&
     tour.getOption("exitOnEsc") === true
@@ -35,10 +62,10 @@ export default async function onKeyDown(tour: Tour, e: KeyboardEvent) {
     await tour.exit();
   } else if (code === "ArrowLeft" || code === 37) {
     //left arrow
-    await previousStep(tour);
+    await (isRTL ? nextStep(tour) : previousStep(tour));
   } else if (code === "ArrowRight" || code === 39) {
     //right arrow
-    await nextStep(tour);
+    await (isRTL ? previousStep(tour) : nextStep(tour));
   } else if (code === "Enter" || code === "NumpadEnter" || code === 13) {
     //srcElement === ie
     const target = (e.target || e.srcElement) as HTMLElement;
