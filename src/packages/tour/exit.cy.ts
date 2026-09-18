@@ -55,6 +55,64 @@ context("Exit", () => {
     });
   });
 
+  // https://github.com/usablica/intro.js/issues/2070
+  it("should not exit the tour when the onSkip callback returns false", () => {
+    cy.window().then((window) => {
+      const instance = window.introJs.tour().setOptions({
+        steps: [
+          {
+            intro: "step one",
+          },
+          {
+            intro: "step two",
+          },
+        ],
+      });
+
+      instance.onSkip(() => false);
+      instance.start();
+
+      cy.wait(500);
+
+      cy.get(".introjs-skipbutton").click();
+
+      cy.wait(500);
+
+      cy.get(".introjs-overlay").should("have.length", 1);
+    });
+  });
+
+  it("should exit the tour when the onSkip callback does not return false", () => {
+    cy.window().then((window) => {
+      const instance = window.introJs.tour().setOptions({
+        steps: [
+          {
+            intro: "step one",
+          },
+          {
+            intro: "step two",
+          },
+        ],
+      });
+
+      const onSkip = cy.stub();
+      instance.onSkip(onSkip);
+      instance.start();
+
+      cy.wait(500);
+
+      cy.get(".introjs-skipbutton")
+        .click()
+        .then(() => {
+          expect(onSkip).to.have.been.calledOnce;
+        });
+
+      cy.wait(500);
+
+      cy.get(".introjs-overlay").should("have.length", 0);
+    });
+  });
+
   it("should exit the tour after clicking on the overlay layer", () => {
     cy.window().then((window) => {
       const instance = window.introJs.tour().setOptions({

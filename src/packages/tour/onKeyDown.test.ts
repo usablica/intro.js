@@ -142,6 +142,21 @@ describe("onKeyDown", () => {
   });
 
   describe("Enter key on the skip button", () => {
+    const pressEnterOnSkipButton = async (
+      tour: ReturnType<typeof getMockTour>
+    ) => {
+      const skipButton = document.createElement("a");
+      skipButton.className = skipButtonClassName;
+      document.body.appendChild(skipButton);
+
+      const event = new KeyboardEvent("keydown", { code: "Enter" });
+      Object.defineProperty(event, "target", { value: skipButton });
+
+      await onKeyDown(tour, event);
+
+      skipButton.remove();
+    };
+
     // Regression test for https://github.com/usablica/intro.js/issues/951 -
     // `isEnd()` used to be dead code (it checked for an out-of-bounds step
     // that could never actually occur), so hitting Enter on the skip
@@ -157,21 +172,12 @@ describe("onKeyDown", () => {
       const fnCompleteCallback = jest.fn();
       mockTour.onComplete(fnCompleteCallback);
 
-      const skipButton = document.createElement("a");
-      skipButton.className = skipButtonClassName;
-      document.body.appendChild(skipButton);
-
-      const event = new KeyboardEvent("keydown", { code: "Enter" });
-      Object.defineProperty(event, "target", { value: skipButton });
-
       // Act
-      await onKeyDown(mockTour, event);
+      await pressEnterOnSkipButton(mockTour);
 
       // Assert
       expect(fnCompleteCallback).toHaveBeenCalledTimes(1);
       expect(fnCompleteCallback).toHaveBeenCalledWith(steps.length - 1, "skip");
-
-      skipButton.remove();
     });
 
     test("should not call the complete callback when not on the last step", async () => {
@@ -184,20 +190,46 @@ describe("onKeyDown", () => {
       const fnCompleteCallback = jest.fn();
       mockTour.onComplete(fnCompleteCallback);
 
-      const skipButton = document.createElement("a");
-      skipButton.className = skipButtonClassName;
-      document.body.appendChild(skipButton);
-
-      const event = new KeyboardEvent("keydown", { code: "Enter" });
-      Object.defineProperty(event, "target", { value: skipButton });
-
       // Act
-      await onKeyDown(mockTour, event);
+      await pressEnterOnSkipButton(mockTour);
 
       // Assert
       expect(fnCompleteCallback).not.toHaveBeenCalled();
+    });
 
-      skipButton.remove();
+    // Regression tests for https://github.com/usablica/intro.js/issues/2070 -
+    // onSkip returning `false` should cancel the skip, like onBeforeExit
+    // does for exiting the tour.
+    test("should exit the tour when onSkip does not return false", async () => {
+      // Arrange
+      const mockTour = getMockTour();
+      mockTour.setSteps(getMockSteps());
+      await mockTour.setCurrentStep(0);
+
+      const exitSpy = jest.spyOn(mockTour, "exit");
+      mockTour.onSkip(() => {});
+
+      // Act
+      await pressEnterOnSkipButton(mockTour);
+
+      // Assert
+      expect(exitSpy).toHaveBeenCalledTimes(1);
+    });
+
+    test("should not exit the tour when onSkip returns false", async () => {
+      // Arrange
+      const mockTour = getMockTour();
+      mockTour.setSteps(getMockSteps());
+      await mockTour.setCurrentStep(0);
+
+      const exitSpy = jest.spyOn(mockTour, "exit");
+      mockTour.onSkip(() => false);
+
+      // Act
+      await pressEnterOnSkipButton(mockTour);
+
+      // Assert
+      expect(exitSpy).not.toHaveBeenCalled();
     });
   });
 });
