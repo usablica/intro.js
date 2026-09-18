@@ -33,7 +33,8 @@ export interface HintOptions {
   tooltipRenderAsHtml?: boolean;
   /* Optional property to set the language of the hint.
    Can be a Language object for custom languages or a language code string for built-in languages.
-   Built-in language codes: "en_US", "es_ES", "fr_FR", "de_DE", "fa_IR"
+   Built-in language codes: "en_US", "es_ES", "fr_FR", "de_DE", "fa_IR",
+   "ar_SA", "ru_RU", "zh_CN", "pt_BR", "it_IT", "ja_JP", "tr_TR", "ko_KR"
    Defaults to the user's browser language if not provided. */
   language?: LanguageCode;
 }
