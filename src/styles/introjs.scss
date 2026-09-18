@@ -224,7 +224,23 @@ tr.introjs-showElement {
 .introjs-tooltip {
   box-sizing: content-box;
   position: absolute;
-  visibility: visible;
+  // `.introjs-tooltipReferenceLayer` (its parent) is `visibility: hidden` so
+  // that only the tooltip itself - not the whole huge, z-index:100000000
+  // reference layer - is ever interactive/hit-testable. On some WebKit
+  // versions (widely reported on iOS 18+ and recent macOS Safari, see
+  // https://github.com/usablica/intro.js/issues/2081 and
+  // https://github.com/usablica/intro.js/issues/2080 - same root cause,
+  // filed separately) this `visibility: visible` override is inherited
+  // unreliably once past the very first step's tooltip, leaving every
+  // later tooltip invisible (issue #2080 notes it can even repaint
+  // correctly after an unrelated scroll event forces a style recalc -
+  // consistent with a stale/unrecalculated inherited value rather than a
+  // positioning bug). `!important` forces the override through regardless.
+  // Fixing this on the parent instead (as suggested in that issue) also
+  // "fixes" it, but makes the *entire* reference layer clickable, breaking
+  // interaction with anything underneath it - keep the override scoped to
+  // the tooltip itself.
+  visibility: visible !important;
   background-color: var(--introjs-bg);
   min-width: 250px;
   max-width: 300px;
