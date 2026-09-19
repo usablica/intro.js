@@ -135,6 +135,6 @@ export function getDefaultTourOptions(translator?: Translator): TourOptions {
     progressBarAdditionalClass: "",
     tooltipRenderAsHtml: true,
     language: activeTranslator.getLanguage(),
-    theme: "auto",
+    theme: "light",
   };
 }

@@ -33,7 +33,7 @@ introJs.tour().setOptions({
   theme: 'light'
 }).start();
 
-// Use system preference (default)
+// Follow the system (OS/browser) preference - opt-in, not the default
 introJs.tour().setOptions({
   theme: 'auto'
 }).start();
@@ -201,7 +201,7 @@ introJs.tour().setOptions({
       intro: 'This tour adapts to your system theme!'
     }
   ],
-  theme: 'auto' // This is the default
+  theme: 'auto' // opt-in: follow the system preference (the default is 'light')
 }).start();
 ```
 
@@ -368,7 +368,7 @@ introJs.tour().setOptions({
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `theme` | `ThemeType` | `'auto'` | Theme name ('light', 'dark', 'auto', or custom) |
+| `theme` | `ThemeType` | `'light'` | Theme name ('light', 'dark', 'auto', or custom) |
 | `themePath` | `string` | `undefined` | Path to custom CSS file |
 
 ### Tour Instance Methods

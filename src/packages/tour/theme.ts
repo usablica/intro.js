@@ -104,7 +104,7 @@ export class Theme {
 
   constructor(options: ThemeOptions = {}) {
     this._root = options.root ?? document.documentElement;
-    this.themeType = options.theme ?? "auto";
+    this.themeType = options.theme ?? "light";
     this._currentThemeName = this.themeType;
 
     this.boundHandleSystemThemeChange = this.handleSystemThemeChange.bind(this);

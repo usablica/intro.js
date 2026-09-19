@@ -80,10 +80,11 @@ describe("Theme", () => {
       theme.destroy();
     });
 
-    test("defaults to auto when no theme provided", () => {
-      mockMatchMedia(false);
+    test("defaults to light (ignoring a dark system preference) when no theme provided", () => {
+      mockMatchMedia(true);
       const theme = new Theme({ root });
       expect(root.classList.contains("introjs-light")).toBe(true);
+      expect(root.classList.contains("introjs-dark")).toBe(false);
       theme.destroy();
     });
   });
