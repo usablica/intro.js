@@ -143,6 +143,7 @@
 .introjs-button:focus,
 .introjs-button:active {
     background: #23587A;  text-decoration: none;
+    color: #fff;
     /* bottom: -1px; */
     box-shadow: 0 2px 0px 0px #173B53;
 }
