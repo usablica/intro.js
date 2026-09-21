@@ -801,7 +801,7 @@ describe("Tour", () => {
 
     const imgEl = document.createElement("img");
     imgEl.id = "sample-image";
-    imgEl.src = "https://via.placeholder.com/150";
+    imgEl.src = "https://placeholder.photo/150";
     imgEl.alt = "Sample placeholder image";
 
     const videoEl = document.createElement("video");
