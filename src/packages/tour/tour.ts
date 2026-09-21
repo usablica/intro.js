@@ -37,6 +37,7 @@ export class Tour implements Package<TourOptions> {
   private _options: TourOptions;
   private _floatingElement: Element | undefined;
   private _theme: Theme | undefined;
+  private _renderWaiters: Array<() => void> = [];
 
   private readonly callbacks: {
     beforeChange?: introBeforeChangeCallback;
@@ -199,6 +200,46 @@ export class Tour implements Package<TourOptions> {
 
   resetCurrentStep() {
     this._currentStepSignal.val = undefined;
+
+    // nothing will be rendered anymore, release anyone waiting for it
+    this.notifyRendered();
+  }
+
+  /**
+   * Whether the tour's root element has been created (it is created right
+   * after the first step is shown)
+   * This is an internal method and should not be used outside of the package.
+   */
+  isRendered(): boolean {
+    return this._root !== undefined;
+  }
+
+  /**
+   * Resolves once the tooltip of the current step has been rendered and
+   * positioned, or after a short timeout if that never happens
+   * This is an internal method and should not be used outside of the package.
+   */
+  waitForRender(timeoutMs = 100): Promise<void> {
+    if (!this.isRendered()) return Promise.resolve();
+
+    return new Promise((resolve) => {
+      const done = () => {
+        clearTimeout(timer);
+        resolve();
+      };
+      const timer = setTimeout(done, timeoutMs);
+      this._renderWaiters.push(done);
+    });
+  }
+
+  /**
+   * Called by the tooltip once it has been rendered and positioned
+   * This is an internal method and should not be used outside of the package.
+   */
+  notifyRendered() {
+    const waiters = this._renderWaiters;
+    this._renderWaiters = [];
+    waiters.forEach((done) => done());
   }
 
   /**
@@ -470,6 +511,14 @@ export class Tour implements Package<TourOptions> {
       this.initTheme();
       this.enableKeyboardNavigation();
       this.enableRefreshOnResize();
+
+      // the first step is shown before the root exists, so its afterChange
+      // callback is fired here, once its tooltip is rendered
+      await this.waitForRender();
+      await this.callback("afterChange")?.call(
+        this,
+        this.getStep(this.getCurrentStep()!).element as HTMLElement
+      );
     }
 
     return this;

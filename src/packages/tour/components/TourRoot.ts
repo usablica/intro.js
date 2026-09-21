@@ -159,6 +159,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         dontShowAgainLabel: tour.getOption("dontShowAgainLabel"),
         renderAsHtml: tour.getOption("tooltipRenderAsHtml"),
         text: step.val.title || step.val.intro,
+        onRendered: () => tour.notifyRendered(),
       });
 
       const disableInteraction = step.val.disableInteraction
