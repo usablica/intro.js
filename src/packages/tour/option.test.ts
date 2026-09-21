@@ -7,6 +7,10 @@ Object.defineProperty(global, "navigator", {
 });
 
 describe("getDefaultTourOptions", () => {
+  it("should default the theme to light, not auto", () => {
+    expect(getDefaultTourOptions().theme).toBe("light");
+  });
+
   it("should create a new Translator internally if none is injected", () => {
     const opts = getDefaultTourOptions();
     const t = new Translator();

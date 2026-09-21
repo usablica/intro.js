@@ -14,6 +14,10 @@ import { HintsRoot } from "./components/HintsRoot";
 type hintsAddedCallback = (this: Hint) => void | Promise<void>;
 type hintClickCallback = (this: Hint, item: HintItem) => void | Promise<void>;
 type hintCloseCallback = (this: Hint, item: HintItem) => void | Promise<void>;
+type hintDialogCloseCallback = (
+  this: Hint,
+  item: HintItem
+) => void | Promise<void>;
 
 export class Hint implements Package<HintOptions> {
   private _root: HTMLElement | undefined;
@@ -27,6 +31,7 @@ export class Hint implements Package<HintOptions> {
     hintsAdded?: hintsAddedCallback;
     hintClick?: hintClickCallback;
     hintClose?: hintCloseCallback;
+    hintDialogClose?: hintDialogCloseCallback;
   } = {};
 
   // Event handlers
@@ -168,7 +173,7 @@ export class Hint implements Package<HintOptions> {
    */
   enableCloseDialogOnWindowClick() {
     this._windowClickFunction = () => {
-      this._activeHintSignal.val = undefined;
+      this.hideHintDialog();
     };
 
     DOMEvent.on(document, "click", this._windowClickFunction, false);
@@ -282,13 +287,23 @@ export class Hint implements Package<HintOptions> {
     if (!item) return;
 
     if (this._activeHintSignal.val !== stepId) {
-      this._activeHintSignal.val = stepId;
+      // close the previously open dialog (if any) first, so its
+      // onHintDialogClose callback fires before this one opens
+      if (this._activeHintSignal.val !== undefined) {
+        this.hideHintDialog();
+      }
 
-      // call the callback function (if any)
-      await this.callback("hintClick")?.call(this, item);
+      // hideHintDialog()'s callback may have reentrantly opened a
+      // different hint already - don't clobber that.
+      if (this._activeHintSignal.val === undefined) {
+        this._activeHintSignal.val = stepId;
+
+        // call the callback function (if any)
+        await this.callback("hintClick")?.call(this, item);
+      }
     } else {
       // to toggle the hint dialog if the same hint is clicked again
-      this._activeHintSignal.val = undefined;
+      this.hideHintDialog();
     }
 
     return this;
@@ -296,9 +311,24 @@ export class Hint implements Package<HintOptions> {
 
   /**
    * Hide hint dialog from the page
+   *
+   * Calls the `hintDialogClose` callback (if any) with the hint item whose
+   * dialog was open, regardless of why it's closing - clicking outside it,
+   * toggling the same hint again, opening a different hint's dialog, or
+   * calling this directly. `hideHint()` also goes through here, so it fires
+   * this too, in addition to its own `hintClose` callback.
    */
   hideHintDialog() {
+    const activeStepId = this._activeHintSignal.val;
+    if (activeStepId === undefined) return this;
+
     this._activeHintSignal.val = undefined;
+
+    const item = this.getHint(activeStepId);
+    if (item) {
+      this.callback("hintDialogClose")?.call(this, item);
+    }
+
     return this;
   }
 
@@ -341,7 +371,7 @@ export class Hint implements Package<HintOptions> {
   disableHintAutoRefresh(): this {
     if (this._hintsAutoRefreshFunction) {
       DOMEvent.off(window, "scroll", this._hintsAutoRefreshFunction, true);
-      DOMEvent.on(window, "resize", this._hintsAutoRefreshFunction, true);
+      DOMEvent.off(window, "resize", this._hintsAutoRefreshFunction, true);
 
       this._hintsAutoRefreshFunction = undefined;
     }
@@ -447,5 +477,23 @@ export class Hint implements Package<HintOptions> {
    */
   onhintclose(providedCallback: hintCloseCallback) {
     this.onHintClose(providedCallback);
+  }
+
+  /**
+   * Callback for when a hint's dialog is closed, whether by clicking
+   * outside it, toggling the same hint again, opening a different hint's
+   * dialog, calling `hideHintDialog()` directly, or via `hideHint()`/the
+   * dialog's own close button (which also fires `hintClose`)
+   * @param providedCallback callback function
+   */
+  onHintDialogClose(providedCallback: hintDialogCloseCallback) {
+    if (isFunction(providedCallback)) {
+      this.callbacks.hintDialogClose = providedCallback;
+    } else {
+      throw new Error(
+        "Provided callback for onHintDialogClose was not a function."
+      );
+    }
+    return this;
   }
 }

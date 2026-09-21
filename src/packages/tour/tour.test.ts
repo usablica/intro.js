@@ -314,6 +314,79 @@ describe("Tour", () => {
       expect(oncompleteMock).toBeCalledTimes(1);
     });
 
+    test("should call onexit and oncomplete when pressing the right arrow key on a one-step tour", async () => {
+      // Arrange - end-to-end: real keydown event through the wired-up
+      // window listener (enableKeyboardNavigation), not calling onKeyDown()
+      // directly. Regression test for https://github.com/usablica/intro.js/issues/951
+      const onexitMock = jest.fn();
+      const oncompleteMock = jest.fn();
+
+      mockTour
+        .setOptions({
+          steps: [
+            {
+              intro: "hello world",
+            },
+          ],
+        })
+        .onExit(onexitMock)
+        .onComplete(oncompleteMock);
+
+      // Act
+      await mockTour.start();
+      window.dispatchEvent(
+        new KeyboardEvent("keydown", { code: "ArrowRight" })
+      );
+      await waitFor(1000);
+
+      // Assert
+      expect(onexitMock).toBeCalledTimes(1);
+      expect(oncompleteMock).toBeCalledTimes(1);
+    });
+
+    test("should complete a multi-step tour when pressing the right arrow key on the last step", async () => {
+      // Arrange
+      const onexitMock = jest.fn();
+      const oncompleteMock = jest.fn();
+
+      mockTour
+        .setOptions({
+          steps: [
+            { intro: "step 1" },
+            { intro: "step 2" },
+            { intro: "step 3" },
+          ],
+        })
+        .onExit(onexitMock)
+        .onComplete(oncompleteMock);
+
+      // Act - advance to the last step first, via the same keyboard path
+      await mockTour.start();
+      window.dispatchEvent(
+        new KeyboardEvent("keydown", { code: "ArrowRight" })
+      );
+      await waitFor(500);
+      window.dispatchEvent(
+        new KeyboardEvent("keydown", { code: "ArrowRight" })
+      );
+      await waitFor(500);
+
+      // Assert - still on the last step, tour hasn't completed yet
+      expect(mockTour.getCurrentStep()).toBe(2);
+      expect(oncompleteMock).not.toBeCalled();
+
+      // Act - one more right-arrow press on the actual last step must
+      // complete the tour instead of crashing / doing nothing
+      window.dispatchEvent(
+        new KeyboardEvent("keydown", { code: "ArrowRight" })
+      );
+      await waitFor(1000);
+
+      // Assert
+      expect(onexitMock).toBeCalledTimes(1);
+      expect(oncompleteMock).toBeCalledTimes(1);
+    });
+
     test("should call onexit when skip is clicked", async () => {
       // Arrange
       const onexitMock = jest.fn();
@@ -634,6 +707,38 @@ describe("Tour", () => {
     });
   });
 
+  describe("isEnd", () => {
+    test("should be false before the tour has started", () => {
+      // Arrange
+      const mockTour = getMockTour();
+      mockTour.setSteps(getMockSteps());
+
+      // Assert
+      expect(mockTour.isEnd()).toBeFalsy();
+    });
+
+    test("should be false when not on the last step", async () => {
+      // Arrange
+      const mockTour = getMockTour();
+      mockTour.setSteps(getMockSteps());
+      await mockTour.setCurrentStep(0);
+
+      // Assert
+      expect(mockTour.isEnd()).toBeFalsy();
+    });
+
+    test("should be true when on the last step", async () => {
+      // Arrange
+      const steps = getMockSteps();
+      const mockTour = getMockTour();
+      mockTour.setSteps(steps);
+      await mockTour.setCurrentStep(steps.length - 1);
+
+      // Assert
+      expect(mockTour.isEnd()).toBeTruthy();
+    });
+  });
+
   describe("tooltipRenderAsHtml", () => {
     beforeEach(() => {
       document.body.innerHTML = ""; // Clear previous test DOM
@@ -782,6 +887,66 @@ describe("Tour", () => {
       // Assert
       expect(result).toBe(mockTour);
       expect(mockTour.getCurrentStep()).toBe(undefined);
+    });
+  });
+
+  describe("setTheme / getTheme", () => {
+    beforeEach(() => {
+      // other tests in this file may leave a stray .introjs-tour element
+      // behind; start from a clean slate so querySelector below is unambiguous.
+      document.querySelectorAll(".introjs-tour").forEach((el) => el.remove());
+    });
+
+    afterEach(async () => {
+      document
+        .querySelectorAll("[data-introjs-theme]")
+        .forEach((link) => link.remove());
+    });
+
+    test("getTheme returns undefined before the tour starts", () => {
+      const mockTour = getMockTour();
+      expect(mockTour.getTheme()).toBeUndefined();
+    });
+
+    test("applies the theme option once the tour starts", async () => {
+      const mockTour = getMockTour();
+      mockTour.setOptions({ theme: "dark" });
+      mockTour.addStep({ intro: "first" });
+
+      await mockTour.start();
+      await sleep(waitMsForDerivations);
+
+      expect(mockTour.getTheme()).toBe("dark");
+      expect(
+        document
+          .querySelector(".introjs-tour")
+          ?.classList.contains("introjs-dark")
+      ).toBe(true);
+
+      await mockTour.exit();
+      await sleep(waitMsForExitTransition);
+    });
+
+    test("switches the theme on a running tour", async () => {
+      const mockTour = getMockTour();
+      mockTour.setOptions({ theme: "light" });
+      mockTour.addStep({ intro: "first" });
+
+      await mockTour.start();
+      await sleep(waitMsForDerivations);
+
+      await mockTour.setTheme("dark");
+
+      expect(mockTour.getTheme()).toBe("dark");
+      expect(
+        document
+          .querySelector(".introjs-tour")
+          ?.classList.contains("introjs-dark")
+      ).toBe(true);
+      expect(mockTour.getOption("theme")).toBe("dark");
+
+      await mockTour.exit();
+      await sleep(waitMsForExitTransition);
     });
   });
 });

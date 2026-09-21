@@ -46,7 +46,7 @@ describe("Translator", () => {
     });
 
     it("should fallback to en_US for unsupported languages", () => {
-      createMockNavigator("zh-CN");
+      createMockNavigator("sv-SE");
       const translator = new Translator();
       expect(translator.translate("buttons.next")).toBe("Next");
     });
@@ -74,13 +74,46 @@ describe("Translator", () => {
 
     it("should work with all supported languages", () => {
       const translator = new Translator();
-      (["en_US", "es_ES", "fr_FR", "de_DE", "fa_IR"] as LanguageCode[]).forEach(
-        (code) => {
-          translator.setLanguage(code);
-          expect(typeof translator.translate("buttons.next")).toBe("string");
-        }
-      );
+      getAvailableLanguages().forEach((code) => {
+        translator.setLanguage(code);
+        expect(typeof translator.translate("buttons.next")).toBe("string");
+      });
     });
+  });
+
+  describe("newly added languages", () => {
+    it.each([
+      ["ru_RU", "Далее"],
+      ["zh_CN", "下一步"],
+      ["pt_BR", "Próximo"],
+      ["it_IT", "Avanti"],
+      ["ja_JP", "次へ"],
+      ["tr_TR", "İleri"],
+      ["ko_KR", "다음"],
+    ])("translates buttons.next for %s", (code, expected) => {
+      const translator = new Translator(code as LanguageCode);
+      expect(translator.translate("buttons.next")).toBe(expected);
+    });
+
+    it.each(["ru_RU", "zh_CN", "pt_BR", "it_IT", "ja_JP", "tr_TR", "ko_KR"])(
+      "has non-empty translations for every key in %s",
+      (code) => {
+        const translator = new Translator(code as LanguageCode);
+        [
+          "buttons.next",
+          "buttons.prev",
+          "buttons.skip",
+          "buttons.done",
+          "buttons.gotIt",
+          "messages.dontShowAgainLabel",
+          "messages.stepNumbersOfLabel",
+        ].forEach((key) => {
+          const translated = translator.translate(key);
+          expect(translated).not.toBe(key);
+          expect(translated.length).toBeGreaterThan(0);
+        });
+      }
+    );
   });
 
   describe("translate", () => {

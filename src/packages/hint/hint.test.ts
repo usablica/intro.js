@@ -1,4 +1,5 @@
 import { axe, toHaveNoViolations } from "jest-axe";
+import { Hint } from "./hint";
 
 expect.extend(toHaveNoViolations);
 
@@ -97,4 +98,54 @@ test("should have no accessibility violations for all hints", async () => {
   // Run accessibility test
   const results = await axe(container);
   expect(results).toHaveNoViolations();
+});
+
+describe("enableHintAutoRefresh / disableHintAutoRefresh", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("disableHintAutoRefresh removes the same scroll and resize listeners that enableHintAutoRefresh added", () => {
+    const addSpy = jest.spyOn(window, "addEventListener");
+    const removeSpy = jest.spyOn(window, "removeEventListener");
+
+    const hint = new Hint();
+    hint.enableHintAutoRefresh();
+
+    const scrollHandler = addSpy.mock.calls.find(
+      ([type]) => type === "scroll"
+    )?.[1];
+    const resizeHandler = addSpy.mock.calls.find(
+      ([type]) => type === "resize"
+    )?.[1];
+
+    expect(scrollHandler).toBeDefined();
+    expect(resizeHandler).toBeDefined();
+    // enableHintAutoRefresh uses the same debounced function for both events
+    expect(scrollHandler).toBe(resizeHandler);
+
+    hint.disableHintAutoRefresh();
+
+    expect(removeSpy).toHaveBeenCalledWith("scroll", scrollHandler, true);
+    expect(removeSpy).toHaveBeenCalledWith("resize", resizeHandler, true);
+  });
+
+  test("does not leak a duplicate resize listener on disableHintAutoRefresh", () => {
+    const addSpy = jest.spyOn(window, "addEventListener");
+
+    const hint = new Hint();
+    hint.enableHintAutoRefresh();
+    const resizeAddCallsBeforeDisable = addSpy.mock.calls.filter(
+      ([type]) => type === "resize"
+    ).length;
+
+    hint.disableHintAutoRefresh();
+
+    const resizeAddCallsAfterDisable = addSpy.mock.calls.filter(
+      ([type]) => type === "resize"
+    ).length;
+
+    // disableHintAutoRefresh should only ever remove listeners, never add new ones
+    expect(resizeAddCallsAfterDisable).toBe(resizeAddCallsBeforeDisable);
+  });
 });
