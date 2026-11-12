@@ -27,13 +27,16 @@
     "test:prettier": "prettier --check '(src|tests)/**/*.(js|ts|json|html)' '!tests/cypress/setup/dist'",
     "test:watch": "jest --watch",
     "test:jest": "jest --coverage --silent --ci --coverage --coverageReporters=\"text\" --coverageReporters=\"text-summary\"",
-    "test:cypress:docker": "start-server-and-test dev http://localhost:10001/dist/intro.js 'docker run --rm -i --add-host=host.docker.internal:host-gateway -v $PWD:/e2e -w /e2e --entrypoint=cypress cypress/included:cypress-13.17.0-node-22.13.0-chrome-131.0.6778.264-1-ff-134.0-edge-131.0.2903.112-1 run --env visualRegressionType=regression'",
-    "test:cypress": "start-server-and-test dev http://localhost:10001/dist/intro.js 'docker run --rm -i --add-host=host.docker.internal:host-gateway -v $PWD:/e2e -w /e2e --entrypoint=cypress cypress/included:cypress-13.17.0-node-22.13.0-chrome-131.0.6778.264-1-ff-134.0-edge-131.0.2903.112-1 run --env visualRegressionType=regression'",
+    "test:cypress:docker": "start-server-and-test serve:dist http://localhost:10001/dist/intro.js 'docker run --rm -i --add-host=host.docker.internal:host-gateway -v $PWD:/e2e -w /e2e --entrypoint=cypress cypress/included:cypress-13.17.0-node-22.13.0-chrome-131.0.6778.264-1-ff-134.0-edge-131.0.2903.112-1 run --env visualRegressionType=regression'",
+    "test:cypress": "start-server-and-test serve:dist http://localhost:10001/dist/intro.js 'docker run --rm -i --add-host=host.docker.internal:host-gateway -v $PWD:/e2e -w /e2e --entrypoint=cypress cypress/included:cypress-13.17.0-node-22.13.0-chrome-131.0.6778.264-1-ff-134.0-edge-131.0.2903.112-1 run --env visualRegressionType=regression'",
     "release": "./bin/release.sh || true",
     "prebuild": "rimraf ./dist",
     "build": "rollup -c",
     "build:watch": "rollup -c -w",
-    "dev": "npm run build:watch -- --configPlugin serve"
+    "dev": "npm run build:watch -- --configPlugin serve",
+    "serve:dist": "node bin/serve-static.js 10001",
+    "pretest:cypress": "npm run build",
+    "pretest:cypress:docker": "npm run build"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
