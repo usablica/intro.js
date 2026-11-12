@@ -150,11 +150,11 @@
   /* box-shadow: 0 2px 0px -0px #306588; */
   margin: 0;
   outline: none;
-  border: 2px solid #2980b9;
+  border: 2px solid #216a9a;
   background: transparent;
   text-decoration: none;
   font: 11px/normal sans-serif;
-  color: #2980b9;
+  color: #216a9a;
   text-shadow: none;
   white-space: nowrap;
   cursor: pointer;
@@ -203,18 +203,31 @@
 
 }
 
+/* keep the x readable on the red hover/focus background */
+.introjs-skipbutton:hover,
+.introjs-skipbutton:active,
+.introjs-skipbutton:focus {
+  color: #fff;
+}
+
 .introjs-tooltipbuttons .introjs-prevbutton {
   border-radius: 0.2em;
-  color: #2980b9;
+  color: #216a9a;
 }
 
 .introjs-tooltipbuttons .introjs-nextbutton {
   border-radius: 0.2em;
-  color: #2980b9;
+  color: #216a9a;
 }
 
+/* white text on the dark hover/focus/active background; the Next button is
+   focused when a step opens, so blue text there was unreadable */
 .introjs-tooltipbuttons .introjs-nextbutton:hover,
-.introjs-tooltipbuttons .introjs-prevbutton:hover {
+.introjs-tooltipbuttons .introjs-nextbutton:focus,
+.introjs-tooltipbuttons .introjs-nextbutton:active,
+.introjs-tooltipbuttons .introjs-prevbutton:hover,
+.introjs-tooltipbuttons .introjs-prevbutton:focus,
+.introjs-tooltipbuttons .introjs-prevbutton:active {
   color: #fff;
 }
 
