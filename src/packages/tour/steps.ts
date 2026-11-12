@@ -37,6 +37,7 @@ export type TourStep = {
 export async function nextStep(tour: Tour) {
   if (tour.isEnd()) {
     await tour.callback("complete")?.call(tour, tour.getCurrentStep(), "end");
+    tour.emitEvent("complete", "end");
     await tour.exit();
     return false;
   }
