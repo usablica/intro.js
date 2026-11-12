@@ -9,7 +9,7 @@
 
 <p align="center">
   <a href="https://introjs.com">
-    <img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/introjs-demo.png" alt="Intro.js demo">
+    <img src="docs/img/introjs-demo.png" alt="An Intro.js tour step highlighting a chart in a dashboard" width="800">
   </a>
 </p>
 
