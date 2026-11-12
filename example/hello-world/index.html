@@ -49,6 +49,10 @@
       </select>
     </div>
     <a class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:startTour();">Show me how</a>
+    <p id="dont-show-again-notice" class="muted" style="display: none; margin-top: 10px;">
+      You ticked "Don't show again", so the tour is hidden.
+      <a href="javascript:void(0);" onclick="javascript:resetDontShowAgain();">Show it again</a>
+    </p>
       </div>
 
       <hr>
@@ -96,7 +100,7 @@
         selectedTheme = theme;
       }
 
-      function startTour() {
+      function createTour() {
         var tour = introJs
           .tour()
           .setOption("theme", selectedTheme)
@@ -104,7 +108,27 @@
         if (externalThemes[selectedTheme]) {
           tour.setOption("themePath", externalThemes[selectedTheme]);
         }
+        return tour;
+      }
+
+      function startTour() {
+        var tour = createTour();
+        var notice = document.getElementById("dont-show-again-notice");
+
+        // with dontShowAgain, the tour stays hidden once the user ticked the
+        // "Don't show again" checkbox (stored in a cookie)
+        if (!tour.isActive()) {
+          notice.style.display = "block";
+          return;
+        }
+
+        notice.style.display = "none";
         tour.start();
+      }
+
+      function resetDontShowAgain() {
+        createTour().setDontShowAgain(false);
+        startTour();
       }
     </script>
   </body>
