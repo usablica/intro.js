@@ -9,6 +9,9 @@ import {
   introExitCallback,
   introSkipCallback,
   introStartCallback,
+  introEventListener,
+  TourEvent,
+  TourEventType,
 } from "./callback";
 import { getDefaultTourOptions, TourOptions } from "./option";
 import { setOptions, setOption } from "../../option";
@@ -50,6 +53,8 @@ export class Tour implements Package<TourOptions> {
     skip?: introSkipCallback;
     beforeExit?: introBeforeExitCallback;
   } = {};
+
+  private readonly _eventListeners = new Set<introEventListener>();
 
   // Event handlers
   private _keyboardNavigationHandler?: (e: KeyboardEvent) => Promise<void>;
@@ -525,12 +530,13 @@ export class Tour implements Package<TourOptions> {
       this.enableRefreshOnResize();
 
       // the first step is shown before the root exists, so its afterChange
-      // callback is fired here, once its tooltip is rendered
+      // callback and "step" event are fired here, once its tooltip is rendered
       await this.waitForRender();
       await this.callback("afterChange")?.call(
         this,
         this.getStep(this.getCurrentStep()!).element as HTMLElement
       );
+      this.emitEvent("step");
     }
 
     return this;
@@ -771,5 +777,64 @@ export class Tour implements Package<TourOptions> {
 
     this.callbacks.beforeExit = callback;
     return this;
+  }
+
+  /**
+   * Listen to all tour lifecycle events (start, step, skip, complete, exit).
+   * Unlike the `on*` callbacks, any number of listeners can be added, so an
+   * analytics integration does not replace your own callbacks.
+   * A listener that throws does not interrupt the tour.
+   * @param listener function called with a {@link TourEvent}
+   */
+  onEvent(listener: introEventListener) {
+    if (!isFunction(listener)) {
+      throw new Error("Provided listener for onEvent was not a function.");
+    }
+
+    this._eventListeners.add(listener);
+    return this;
+  }
+
+  /**
+   * Remove a listener added with `onEvent()`
+   * @param listener the listener to remove
+   */
+  offEvent(listener: introEventListener) {
+    this._eventListeners.delete(listener);
+    return this;
+  }
+
+  /**
+   * Send an event to all `onEvent` listeners.
+   * This is an internal method and should not be used outside of the package.
+   */
+  emitEvent(type: TourEventType, reason?: TourEvent["reason"]) {
+    if (this._eventListeners.size === 0) return;
+
+    const event: TourEvent = {
+      type,
+      totalSteps: this._steps.length,
+      timestamp: Date.now(),
+    };
+
+    const tourId = this.getOption("tourId");
+    if (tourId) event.tourId = tourId;
+
+    const step = this.getCurrentStep();
+    if (type !== "start" && step !== undefined) {
+      event.step = step;
+      const title = this.getStep(step)?.title;
+      if (title) event.stepTitle = title;
+    }
+
+    if (reason) event.reason = reason;
+
+    for (const listener of Array.from(this._eventListeners)) {
+      try {
+        listener.call(this, { ...event });
+      } catch (error) {
+        console.error("Intro.js: an onEvent listener threw an error", error);
+      }
+    }
   }
 }

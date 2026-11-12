@@ -23,6 +23,7 @@ describe("TourRoot", () => {
       getRefreshesSignal: jest.fn(() => ({ val: 0 })),
       getSteps: jest.fn(() => [{ disableInteraction: false }]),
       getTargetElement: jest.fn(() => "targetElement"),
+      emitEvent: jest.fn(),
       getOption: jest.fn((option: keyof typeof Option) => {
         const options = {
           highlightClass: "highlight",
@@ -78,6 +79,7 @@ describe("TourRoot", () => {
 
       // Assert
       expect(tour.exit).toHaveBeenCalledTimes(1);
+      expect(tour.emitEvent).toHaveBeenCalledWith("skip");
     });
 
     it("should not exit the tour when the skip callback returns false", async () => {
@@ -90,6 +92,7 @@ describe("TourRoot", () => {
 
       // Assert
       expect(tour.exit).not.toHaveBeenCalled();
+      expect(tour.emitEvent).not.toHaveBeenCalled();
     });
 
     it("should call the complete callback with 'skip' when exiting on the last step", async () => {
