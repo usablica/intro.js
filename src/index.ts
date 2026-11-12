@@ -8,6 +8,7 @@ import {
   getRegisteredThemes,
 } from "./packages/tour/theme";
 export type { ThemeType, ThemeRegistration } from "./packages/tour/theme";
+export type { TourEvent, TourEventType } from "./packages/tour/callback";
 
 class LegacyIntroJs extends Tour {
   /**

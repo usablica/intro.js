@@ -40,7 +40,20 @@ export async function showElement(tour: Tour, step: TourStep) {
 
   setShowElement(step.element as HTMLElement);
 
+  // the root doesn't exist yet while the first step is being shown,
+  // Tour.start() fires afterChange for it once it has been rendered
+  if (!tour.isRendered()) return;
+
+  // afterChange means the change is done: the tooltip of this step is in the
+  // DOM and positioned
+  await tour.waitForRender();
+
+  // the tour exited while the step was rendering
+  if (tour.getCurrentStep() === undefined) return;
+
   await tour.callback("afterChange")?.call(tour, step.element);
+
+  tour.emitEvent("step");
 }
 
 /**

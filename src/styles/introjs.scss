@@ -109,6 +109,10 @@ tr.introjs-showElement {
   box-sizing: content-box;
   position: absolute;
   z-index: 9999998;
+  // the helper layer only draws the highlight; it must never take clicks
+  // from the target it sits on top of (it does when the target is inside a
+  // parent with its own stacking context, see setOverlayHole)
+  pointer-events: none;
   border-radius: 4px;
   // fades in/out with the rest of the tour - see the comment above
   // `.introjs-overlay` for why this isn't done via `.introjs-tour` instead.

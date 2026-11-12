@@ -9,6 +9,9 @@ import {
   introExitCallback,
   introSkipCallback,
   introStartCallback,
+  introEventListener,
+  TourEvent,
+  TourEventType,
 } from "./callback";
 import { getDefaultTourOptions, TourOptions } from "./option";
 import { setOptions, setOption } from "../../option";
@@ -37,6 +40,8 @@ export class Tour implements Package<TourOptions> {
   private _options: TourOptions;
   private _floatingElement: Element | undefined;
   private _theme: Theme | undefined;
+  private _renderWaiters: Array<() => void> = [];
+  private _renderedStep: number | undefined;
 
   private readonly callbacks: {
     beforeChange?: introBeforeChangeCallback;
@@ -48,6 +53,11 @@ export class Tour implements Package<TourOptions> {
     skip?: introSkipCallback;
     beforeExit?: introBeforeExitCallback;
   } = {};
+
+  private readonly _eventListeners = new Set<introEventListener>();
+  // incremented every time the tour exits, to drop step changes that were
+  // still in progress (e.g. waiting for an async onBeforeChange) at that time
+  private _exitCount = 0;
 
   // Event handlers
   private _keyboardNavigationHandler?: (e: KeyboardEvent) => Promise<void>;
@@ -198,7 +208,59 @@ export class Tour implements Package<TourOptions> {
   }
 
   resetCurrentStep() {
+    this._exitCount += 1;
     this._currentStepSignal.val = undefined;
+
+    // nothing will be rendered anymore, release anyone waiting for it
+    this._renderedStep = undefined;
+    this.releaseRenderWaiters();
+  }
+
+  /**
+   * Whether the tour's root element has been created (it is created right
+   * after the first step is shown)
+   * This is an internal method and should not be used outside of the package.
+   */
+  isRendered(): boolean {
+    return this._root !== undefined;
+  }
+
+  /**
+   * Resolves once the tooltip of the current step has been rendered and
+   * positioned. Resolves right away if that already happened (e.g. the step
+   * did not change because beforeChange returned false), and after a short
+   * timeout if the render never comes
+   * This is an internal method and should not be used outside of the package.
+   */
+  waitForRender(timeoutMs = 100): Promise<void> {
+    if (!this.isRendered() || this._renderedStep === this.getCurrentStep()) {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve) => {
+      const done = () => {
+        clearTimeout(timer);
+        this._renderWaiters = this._renderWaiters.filter((w) => w !== done);
+        resolve();
+      };
+      const timer = setTimeout(done, timeoutMs);
+      this._renderWaiters.push(done);
+    });
+  }
+
+  /**
+   * Called by the tooltip of the given step once it has been rendered and positioned
+   * This is an internal method and should not be used outside of the package.
+   */
+  notifyRendered(step?: number) {
+    this._renderedStep = step;
+    this.releaseRenderWaiters();
+  }
+
+  private releaseRenderWaiters() {
+    const waiters = this._renderWaiters;
+    this._renderWaiters = [];
+    waiters.forEach((done) => done());
   }
 
   /**
@@ -213,12 +275,16 @@ export class Tour implements Package<TourOptions> {
     const direction =
       currentStep === undefined || step >= currentStep ? "forward" : "backward";
 
+    const exitCount = this._exitCount;
     const continueStep = await this.callback("beforeChange")?.call(
       this,
       targetStep.element as HTMLElement,
       currentStep,
       direction
     );
+
+    // the tour exited while beforeChange was running: don't re-open it
+    if (this._exitCount !== exitCount) return this;
 
     if (
       direction === "forward" &&
@@ -470,6 +536,20 @@ export class Tour implements Package<TourOptions> {
       this.initTheme();
       this.enableKeyboardNavigation();
       this.enableRefreshOnResize();
+
+      // the first step is shown before the root exists, so its afterChange
+      // callback and "step" event are fired here, once its tooltip is rendered
+      await this.waitForRender();
+
+      // the tour exited while its first step was rendering
+      const currentStep = this.getCurrentStep();
+      if (currentStep === undefined) return this;
+
+      await this.callback("afterChange")?.call(
+        this,
+        this.getStep(currentStep).element as HTMLElement
+      );
+      this.emitEvent("step");
     }
 
     return this;
@@ -710,5 +790,64 @@ export class Tour implements Package<TourOptions> {
 
     this.callbacks.beforeExit = callback;
     return this;
+  }
+
+  /**
+   * Listen to all tour lifecycle events (start, step, skip, complete, exit).
+   * Unlike the `on*` callbacks, any number of listeners can be added, so an
+   * analytics integration does not replace your own callbacks.
+   * A listener that throws does not interrupt the tour.
+   * @param listener function called with a {@link TourEvent}
+   */
+  onEvent(listener: introEventListener) {
+    if (!isFunction(listener)) {
+      throw new Error("Provided listener for onEvent was not a function.");
+    }
+
+    this._eventListeners.add(listener);
+    return this;
+  }
+
+  /**
+   * Remove a listener added with `onEvent()`
+   * @param listener the listener to remove
+   */
+  offEvent(listener: introEventListener) {
+    this._eventListeners.delete(listener);
+    return this;
+  }
+
+  /**
+   * Send an event to all `onEvent` listeners.
+   * This is an internal method and should not be used outside of the package.
+   */
+  emitEvent(type: TourEventType, reason?: TourEvent["reason"]) {
+    if (this._eventListeners.size === 0) return;
+
+    const event: TourEvent = {
+      type,
+      totalSteps: this._steps.length,
+      timestamp: Date.now(),
+    };
+
+    const tourId = this.getOption("tourId");
+    if (tourId) event.tourId = tourId;
+
+    const step = this.getCurrentStep();
+    if (type !== "start" && step !== undefined) {
+      event.step = step;
+      const title = this.getStep(step)?.title;
+      if (title) event.stepTitle = title;
+    }
+
+    if (reason) event.reason = reason;
+
+    for (const listener of Array.from(this._eventListeners)) {
+      try {
+        listener.call(this, { ...event });
+      } catch (error) {
+        console.error("Intro.js: an onEvent listener threw an error", error);
+      }
+    }
   }
 }
