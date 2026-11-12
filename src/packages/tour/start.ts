@@ -28,6 +28,7 @@ export const start = async (tour: Tour): Promise<Boolean> => {
   }
 
   tour.setSteps(steps);
+  tour.emitEvent("start");
 
   //then, start the show
   await nextStep(tour);

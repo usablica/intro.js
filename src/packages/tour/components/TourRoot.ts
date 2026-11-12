@@ -104,6 +104,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
             await tour
               .callback("complete")
               ?.call(tour, tour.getCurrentStep(), "done");
+            tour.emitEvent("complete", "done");
 
             await tour.exit();
           }
@@ -127,10 +128,13 @@ export const TourRoot = ({ tour }: TourRootProps) => {
             return;
           }
 
+          tour.emitEvent("skip");
+
           if (tour.isLastStep()) {
             await tour
               .callback("complete")
               ?.call(tour, tour.getCurrentStep(), "skip");
+            tour.emitEvent("complete", "skip");
           }
 
           await tour.exit();

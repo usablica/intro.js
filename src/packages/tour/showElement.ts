@@ -41,6 +41,8 @@ export async function showElement(tour: Tour, step: TourStep) {
   setShowElement(step.element as HTMLElement);
 
   await tour.callback("afterChange")?.call(tour, step.element);
+
+  tour.emitEvent("step");
 }
 
 /**

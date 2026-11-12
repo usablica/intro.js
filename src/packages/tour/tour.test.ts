@@ -949,4 +949,200 @@ describe("Tour", () => {
       await sleep(waitMsForExitTransition);
     });
   });
+
+  describe("onEvent", () => {
+    let mockTour: Tour;
+
+    beforeEach(() => {
+      mockTour = getMockTour();
+      document.body.innerHTML = `<div><h1 id='title'>Title</h1></div>`;
+    });
+
+    afterEach(async () => {
+      await mockTour.exit();
+    });
+
+    const types = (listener: jest.Mock) =>
+      listener.mock.calls.map(([event]) => event.type);
+
+    test("should throw when the listener is not a function", () => {
+      expect(() => mockTour.onEvent("x" as any)).toThrow();
+    });
+
+    test("should emit start, step, complete and exit when the tour is finished", async () => {
+      // Arrange
+      const listener = jest.fn();
+      mockTour
+        .setOptions({
+          tourId: "onboarding",
+          steps: [{ title: "Hi", intro: "first" }, { intro: "second" }],
+        })
+        .onEvent(listener);
+
+      // Act
+      await mockTour.start();
+      nextButton().click();
+      await waitFor(500);
+      doneButton().click();
+      await waitFor(1000);
+
+      // Assert
+      expect(types(listener)).toEqual([
+        "start",
+        "step",
+        "step",
+        "complete",
+        "exit",
+      ]);
+
+      const [start, firstStep, , complete, exit] = listener.mock.calls.map(
+        ([event]) => event
+      );
+      expect(start).toEqual({
+        type: "start",
+        tourId: "onboarding",
+        totalSteps: 2,
+        timestamp: expect.any(Number),
+      });
+      expect(firstStep).toMatchObject({
+        type: "step",
+        step: 0,
+        stepTitle: "Hi",
+      });
+      expect(complete).toMatchObject({ step: 1, reason: "done" });
+      expect(exit).toMatchObject({ step: 1, totalSteps: 2 });
+    });
+
+    test("should emit skip and exit with the step the user left on", async () => {
+      // Arrange
+      const listener = jest.fn();
+      mockTour
+        .setOptions({ steps: [{ intro: "first" }, { intro: "second" }] })
+        .onEvent(listener);
+
+      // Act
+      await mockTour.start();
+      skipButton().click();
+      await waitFor(1000);
+
+      // Assert
+      expect(types(listener)).toEqual(["start", "step", "skip", "exit"]);
+      expect(listener.mock.calls[3][0]).toMatchObject({
+        type: "exit",
+        step: 0,
+      });
+      expect(listener.mock.calls[3][0].tourId).toBeUndefined();
+    });
+
+    test("should emit complete with reason skip when skipping on the last step", async () => {
+      // Arrange
+      const listener = jest.fn();
+      mockTour.setOptions({ steps: [{ intro: "only" }] }).onEvent(listener);
+
+      // Act
+      await mockTour.start();
+      skipButton().click();
+      await waitFor(1000);
+
+      // Assert
+      expect(types(listener)).toEqual([
+        "start",
+        "step",
+        "skip",
+        "complete",
+        "exit",
+      ]);
+      expect(listener.mock.calls[3][0].reason).toBe("skip");
+    });
+
+    test("should not emit skip when onSkip cancels it", async () => {
+      // Arrange
+      const listener = jest.fn();
+      mockTour
+        .setOptions({ steps: [{ intro: "first" }, { intro: "second" }] })
+        .onSkip(() => false)
+        .onEvent(listener);
+
+      // Act
+      await mockTour.start();
+      skipButton().click();
+      await waitFor(500);
+
+      // Assert
+      expect(types(listener)).toEqual(["start", "step"]);
+    });
+
+    test("should support several listeners next to the on* callbacks", async () => {
+      // Arrange
+      const first = jest.fn();
+      const second = jest.fn();
+      const onExit = jest.fn();
+      mockTour
+        .setOptions({ steps: [{ intro: "only" }] })
+        .onExit(onExit)
+        .onEvent(first)
+        .onEvent(second);
+
+      // Act
+      await mockTour.start();
+      await mockTour.exit();
+
+      // Assert
+      expect(types(first)).toEqual(["start", "step", "exit"]);
+      expect(types(second)).toEqual(["start", "step", "exit"]);
+      expect(onExit).toBeCalledTimes(1);
+    });
+
+    test("should keep running the tour when a listener throws", async () => {
+      // Arrange
+      const consoleError = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+      const listener = jest.fn();
+      mockTour
+        .setOptions({ steps: [{ intro: "first" }, { intro: "second" }] })
+        .onEvent(() => {
+          throw new Error("analytics is down");
+        })
+        .onEvent(listener);
+
+      // Act
+      await mockTour.start();
+      await mockTour.nextStep();
+
+      // Assert
+      expect(mockTour.getCurrentStep()).toBe(1);
+      expect(types(listener)).toEqual(["start", "step", "step"]);
+      expect(consoleError).toHaveBeenCalled();
+      consoleError.mockRestore();
+    });
+
+    test("should stop calling a listener removed with offEvent", async () => {
+      // Arrange
+      const listener = jest.fn();
+      mockTour
+        .setOptions({ steps: [{ intro: "first" }, { intro: "second" }] })
+        .onEvent(listener);
+
+      // Act
+      await mockTour.start();
+      mockTour.offEvent(listener);
+      await mockTour.nextStep();
+
+      // Assert
+      expect(types(listener)).toEqual(["start", "step"]);
+    });
+
+    test("should not emit exit when the tour never started", async () => {
+      // Arrange
+      const listener = jest.fn();
+      mockTour.onEvent(listener);
+
+      // Act
+      await mockTour.exit();
+
+      // Assert
+      expect(listener).not.toBeCalled();
+    });
+  });
 });
