@@ -19,6 +19,7 @@
 - **No runtime dependencies.** Plain JavaScript that works with any framework, or none.
 - **Tours and hints.** Step-by-step walkthroughs with `introJs.tour()` and contextual hints with `introJs.hint()`.
 - **Themes.** Built-in `dark`, `light`, `auto`, `modern`, `flattener`, `nassim`, `nazanin` and `royal` themes, plus your own. See the [theme guide](docs/theme-usage.md).
+- **Localization.** 13 built-in languages (English, Spanish, French, German, Persian, Arabic, Russian, Chinese, Portuguese, Italian, Japanese, Turkish and Korean). The browser's language is picked automatically, or set one with the `language` option.
 - **RTL support** and **TypeScript** source.
 
 ## Installation
