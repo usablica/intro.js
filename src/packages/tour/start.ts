@@ -31,7 +31,6 @@ export const start = async (tour: Tour): Promise<Boolean> => {
   tour.emitEvent("start");
 
   //then, start the show
-  await nextStep(tour);
-
-  return true;
+  // (false if the tour was exited before its first step could be shown)
+  return await nextStep(tour);
 };
