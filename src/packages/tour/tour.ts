@@ -40,6 +40,8 @@ export class Tour implements Package<TourOptions> {
   private _options: TourOptions;
   private _floatingElement: Element | undefined;
   private _theme: Theme | undefined;
+  private _renderWaiters: Array<() => void> = [];
+  private _renderedStep: number | undefined;
 
   private readonly callbacks: {
     beforeChange?: introBeforeChangeCallback;
@@ -204,6 +206,57 @@ export class Tour implements Package<TourOptions> {
 
   resetCurrentStep() {
     this._currentStepSignal.val = undefined;
+
+    // nothing will be rendered anymore, release anyone waiting for it
+    this._renderedStep = undefined;
+    this.releaseRenderWaiters();
+  }
+
+  /**
+   * Whether the tour's root element has been created (it is created right
+   * after the first step is shown)
+   * This is an internal method and should not be used outside of the package.
+   */
+  isRendered(): boolean {
+    return this._root !== undefined;
+  }
+
+  /**
+   * Resolves once the tooltip of the current step has been rendered and
+   * positioned. Resolves right away if that already happened (e.g. the step
+   * did not change because beforeChange returned false), and after a short
+   * timeout if the render never comes
+   * This is an internal method and should not be used outside of the package.
+   */
+  waitForRender(timeoutMs = 100): Promise<void> {
+    if (!this.isRendered() || this._renderedStep === this.getCurrentStep()) {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve) => {
+      const done = () => {
+        clearTimeout(timer);
+        this._renderWaiters = this._renderWaiters.filter((w) => w !== done);
+        resolve();
+      };
+      const timer = setTimeout(done, timeoutMs);
+      this._renderWaiters.push(done);
+    });
+  }
+
+  /**
+   * Called by the tooltip of the given step once it has been rendered and positioned
+   * This is an internal method and should not be used outside of the package.
+   */
+  notifyRendered(step?: number) {
+    this._renderedStep = step;
+    this.releaseRenderWaiters();
+  }
+
+  private releaseRenderWaiters() {
+    const waiters = this._renderWaiters;
+    this._renderWaiters = [];
+    waiters.forEach((done) => done());
   }
 
   /**
@@ -475,6 +528,15 @@ export class Tour implements Package<TourOptions> {
       this.initTheme();
       this.enableKeyboardNavigation();
       this.enableRefreshOnResize();
+
+      // the first step is shown before the root exists, so its afterChange
+      // callback and "step" event are fired here, once its tooltip is rendered
+      await this.waitForRender();
+      await this.callback("afterChange")?.call(
+        this,
+        this.getStep(this.getCurrentStep()!).element as HTMLElement
+      );
+      this.emitEvent("step");
     }
 
     return this;

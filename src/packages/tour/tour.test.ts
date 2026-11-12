@@ -950,6 +950,161 @@ describe("Tour", () => {
     });
   });
 
+  // https://github.com/usablica/intro.js/issues/1061
+  describe("afterChange", () => {
+    let mockTour: Tour;
+
+    const tooltipTextNow = () =>
+      document.querySelector(".introjs-tooltiptext")?.textContent?.trim();
+
+    beforeEach(() => {
+      document.body.innerHTML = "";
+      mockTour = getMockTour();
+      mockTour.setOptions({
+        steps: [{ intro: "step one" }, { intro: "step two" }],
+      });
+    });
+
+    afterEach(async () => {
+      await mockTour.exit();
+      await sleep(waitMsForExitTransition);
+    });
+
+    test("is called for the first step once its tooltip is rendered", async () => {
+      // Arrange
+      const seen: Array<string | undefined> = [];
+      mockTour.onAfterChange(() => {
+        seen.push(tooltipTextNow());
+      });
+
+      // Act
+      await mockTour.start();
+
+      // Assert
+      expect(seen).toEqual(["step one"]);
+    });
+
+    test("is called for later steps once the tooltip of the new step is rendered", async () => {
+      // Arrange
+      const seen: Array<string | undefined> = [];
+      mockTour.onAfterChange(() => {
+        seen.push(tooltipTextNow());
+      });
+      await mockTour.start();
+
+      // Act
+      await mockTour.nextStep();
+
+      // Assert - it used to still see the previous step's tooltip
+      expect(seen).toEqual(["step one", "step two"]);
+    });
+
+    test("is called for the previous step once its tooltip is rendered", async () => {
+      // Arrange
+      const seen: Array<string | undefined> = [];
+      await mockTour.start();
+      await mockTour.nextStep();
+      // let the DOM settle on step two, so a stale tooltip can't look correct
+      await sleep(50);
+      mockTour.onAfterChange(() => {
+        seen.push(tooltipTextNow());
+      });
+
+      // Act
+      await mockTour.previousStep();
+
+      // Assert
+      expect(seen).toEqual(["step one"]);
+    });
+
+    test("is awaited when it is async", async () => {
+      // Arrange
+      const order: string[] = [];
+      await mockTour.start();
+      mockTour.onAfterChange(async () => {
+        await sleep(20);
+        order.push("callback finished");
+      });
+
+      // Act
+      await mockTour.nextStep();
+      order.push("nextStep resolved");
+
+      // Assert
+      expect(order).toEqual(["callback finished", "nextStep resolved"]);
+    });
+
+    test("does not keep nextStep waiting for long", async () => {
+      // Arrange
+      await mockTour.start();
+
+      // Act
+      const startedAt = Date.now();
+      await mockTour.nextStep();
+
+      // Assert - well below the fallback timeout used when nothing renders
+      expect(Date.now() - startedAt).toBeLessThan(90);
+    });
+
+    test("does not wait for a render that will not happen when beforeChange blocks the step", async () => {
+      // Arrange
+      await mockTour.start();
+      mockTour.onBeforeChange(() => false);
+      const onAfterChange = jest.fn();
+      mockTour.onAfterChange(onAfterChange);
+
+      // Act
+      const startedAt = Date.now();
+      await mockTour.nextStep();
+
+      // Assert - the step didn't change, so nothing is rendered: no waiting
+      expect(mockTour.getCurrentStep()).toBe(0);
+      expect(Date.now() - startedAt).toBeLessThan(90);
+      expect(onAfterChange).toBeCalledTimes(1);
+    });
+
+    test("keeps up with several nextStep calls in a row", async () => {
+      // Arrange
+      mockTour.setOptions({
+        steps: [1, 2, 3, 4, 5].map((n) => ({ intro: `step ${n}` })),
+      });
+      const onAfterChange = jest.fn();
+      mockTour.onAfterChange(onAfterChange);
+      await mockTour.start();
+
+      // Act
+      const pending = [];
+      for (let i = 0; i < 3; i++) {
+        pending.push(mockTour.nextStep());
+        await sleep(2);
+      }
+      await Promise.all(pending);
+      await sleep(50);
+
+      // Assert
+      expect(mockTour.getCurrentStep()).toBe(3);
+      expect(tooltipTextNow()).toBe("step 4");
+      expect(onAfterChange).toBeCalledTimes(4);
+    });
+
+    test("does not hang when the tour exits while waiting for the render", async () => {
+      // Arrange
+      await mockTour.start();
+
+      // Act - let nextStep reach the point where it waits for the render
+      const pending = mockTour.nextStep();
+      await sleep(0);
+      await mockTour.exit();
+
+      // Assert
+      const outcome = await Promise.race([
+        pending.then(() => "settled"),
+        sleep(300).then(() => "hung"),
+      ]);
+      expect(outcome).toBe("settled");
+    });
+  });
+
   describe("onEvent", () => {
     let mockTour: Tour;
 

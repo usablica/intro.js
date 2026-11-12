@@ -62,6 +62,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         return null;
       }
 
+      const renderedStep = currentStepSignal.val;
       const exitOnOverlayClick = tour.getOption("exitOnOverlayClick") === true;
       const overlayLayer = OverlayLayer({
         exitOnOverlayClick,
@@ -163,6 +164,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         dontShowAgainLabel: tour.getOption("dontShowAgainLabel"),
         renderAsHtml: tour.getOption("tooltipRenderAsHtml"),
         text: step.val.title || step.val.intro,
+        onRendered: () => tour.notifyRendered(renderedStep),
       });
 
       const disableInteraction = step.val.disableInteraction
