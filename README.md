@@ -1,69 +1,95 @@
 # Intro.js
 
-[![Build Status](https://travis-ci.org/usablica/intro.js.svg?branch=master)](https://travis-ci.org/usablica/intro.js)
-[![](https://data.jsdelivr.com/v1/package/npm/intro.js/badge)](https://www.jsdelivr.com/package/npm/intro.js)
-[![npm](https://img.shields.io/npm/dm/intro.js)](https://www.jsdelivr.com/package/npm/intro.js)
+[![Node.js CI](https://github.com/usablica/intro.js/actions/workflows/nodejs.yml/badge.svg)](https://github.com/usablica/intro.js/actions/workflows/nodejs.yml)
+[![npm version](https://img.shields.io/npm/v/intro.js)](https://www.npmjs.com/package/intro.js)
+[![npm downloads](https://img.shields.io/npm/dm/intro.js)](https://www.npmjs.com/package/intro.js)
+[![jsDelivr](https://data.jsdelivr.com/v1/package/npm/intro.js/badge)](https://www.jsdelivr.com/package/npm/intro.js)
 
-> User Onboarding and Product Walkthrough Library
+> User onboarding and product walkthrough library
 
 <p align="center">
   <a href="https://introjs.com">
-    <img src="https://raw.githubusercontent.com/usablica/intro.js/gh-pages/img/introjs-demo.png">
+    <img src="https://raw.githubusercontent.com/usablica/intro.js/master/docs/img/introjs-demo.png" alt="An Intro.js tour step highlighting a chart in a dashboard" width="800">
   </a>
 </p>
 
-## Where to get
-You can obtain your local copy of Intro.js from:
+## Why Intro.js
 
-**1)** This GitHub repository, using ```git clone https://github.com/usablica/intro.js.git```
+- **Self-hosted.** Tours run entirely in your app. No third-party service, no tracking script, no user data leaves your servers.
+- **No runtime dependencies.** Plain JavaScript that works with any framework, or none.
+- **Tours and hints.** Step-by-step walkthroughs with `introJs.tour()` and contextual hints with `introJs.hint()`.
+- **Themes.** Built-in `dark`, `light`, `auto`, `modern`, `flattener`, `nassim`, `nazanin` and `royal` themes, plus your own. See the [theme guide](docs/theme-usage.md).
+- **Localization.** 13 built-in languages (English, Spanish, French, German, Persian, Arabic, Russian, Chinese, Portuguese, Italian, Japanese, Turkish and Korean). The browser's language is picked automatically, or set one with the `language` option.
+- **RTL support** and **TypeScript** source.
 
-**2)** Using yarn ```yarn add intro.js```
+## Installation
 
-**3)** Using npm ```npm install intro.js --save```
+```bash
+npm install intro.js
+# or
+yarn add intro.js
+```
 
-**4)** Download it from CDN ([1](http://www.jsdelivr.com/projects/intro.js), [2](https://cdnjs.com/libraries/intro.js))
+Or load it from a CDN: [jsDelivr](https://www.jsdelivr.com/package/npm/intro.js) or [cdnjs](https://cdnjs.com/libraries/intro.js).
 
-## How to use
-Intro.js can be added to your site in three simple steps:
+## Quick start
 
-**1)** Include `intro.js` and `introjs.css` (or the minified version for production) in your page. Use `introjs-rtl.min.css` for Right-to-Left language support.
+**1)** Include `intro.js` and `introjs.css` (or the minified versions). Add `introjs-rtl.css` for right-to-left languages.
 
-> CDN hosted files are available at [jsDelivr](http://www.jsdelivr.com/projects/intro.js) (click Show More) & [cdnjs](https://cdnjs.com/libraries/intro.js).
+```javascript
+import introJs from "intro.js";
+import "intro.js/introjs.css";
+```
 
-**2)** Add `data-intro` and `data-step` to your HTML elements. To add hints you should use `data-hint` attribute.
+**2)** Define the steps, either in JavaScript:
 
-For example:
+```javascript
+introJs
+  .tour()
+  .setOptions({
+    steps: [
+      { title: "Welcome", intro: "Let's take a quick tour." },
+      { element: "#search", intro: "Search anything from here." },
+      { element: ".settings", intro: "Your settings live here." },
+    ],
+  })
+  .start();
+```
+
+or with `data-intro` attributes in your HTML:
 
 ```html
-<a href='http://google.com/' data-intro='Hello step one!'></a>
-````
+<button data-step="1" data-intro="Start here!">New project</button>
+```
 
-See all attributes [here](https://introjs.com/docs/intro/attributes/).
-
-**3)** Call this JavaScript function:
 ```javascript
-introJs().start();
-````
+introJs.tour().start();
+```
 
-Optionally, pass one parameter to `introJs` function to limit the presentation section.
+See all [options](https://introjs.com/docs/intro/options) and [attributes](https://introjs.com/docs/intro/attributes).
 
-**For example** `introJs(".introduction-farm").start();` runs the introduction only for elements with `class='introduction-farm'`.
+**3)** Hints work the same way:
+
+```javascript
+introJs.hint().addHints();
+```
 
 ## Documentation
 
-Please visit [Documentation](http://introjs.com/docs).
-
-## Using with:
-
-Intro.js has many wrappers for different purposes. Please visit [Documentation](http://introjs.com/docs) for more info.
+- [Documentation](https://introjs.com/docs)
+- [Theme guide](docs/theme-usage.md)
+- [Examples](example/)
+- Framework wrappers (React, Vue, Angular and more): see the [documentation](https://introjs.com/docs)
 
 ## Build
 
-First you should install `nodejs` and `npm`, then first run this command: `npm install` to install all dependencies.
+Install Node.js, then run:
 
-Now you can run this command to minify all static resources:
-
-    npm run build
+```bash
+npm install
+npm run build   # build to dist/
+npm run dev     # watch mode with a local server
+```
 
 ## Contributors ✨
 
@@ -71,28 +97,37 @@ Now you can run this command to minify all static resources:
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="http://afshinm.name"><img src="https://avatars3.githubusercontent.com/u/314326?v=4" width="100px;" alt=""/><br /><sub><b>Afshin Mehrabani</b></sub></a><br /><a href="https://github.com/usablica/intro.js/commits?author=afshinm" title="Code">💻</a> <a href="https://github.com/usablica/intro.js/commits?author=afshinm" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://bozdoz.com"><img src="https://avatars0.githubusercontent.com/u/1410985?v=4" width="100px;" alt=""/><br /><sub><b>bozdoz</b></sub></a><br /><a href="https://github.com/usablica/intro.js/commits?author=bozdoz" title="Code">💻</a> <a href="https://github.com/usablica/intro.js/commits?author=bozdoz" title="Documentation">📖</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://afshinm.name"><img src="https://avatars3.githubusercontent.com/u/314326?v=4&size=100" width="100px" height="100px" alt="Afshin Mehrabani"/><br /><sub><b>Afshin Mehrabani</b></sub></a><br /><a href="https://github.com/usablica/intro.js/commits?author=afshinm" title="Code">💻</a> <a href="https://github.com/usablica/intro.js/commits?author=afshinm" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://bozdoz.com"><img src="https://avatars0.githubusercontent.com/u/1410985?v=4&size=100" width="100px" height="100px" alt="bozdoz"/><br /><sub><b>bozdoz</b></sub></a><br /><a href="https://github.com/usablica/intro.js/commits?author=bozdoz" title="Code">💻</a> <a href="https://github.com/usablica/intro.js/commits?author=bozdoz" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Parvinmh"><img src="https://avatars.githubusercontent.com/u/18435907?v=4&size=100" width="100px" height="100px" alt="Parvin Mehrabani"/><br /><sub><b>Parvin Mehrabani</b></sub></a><br /><a href="https://github.com/usablica/intro.js/commits?author=Parvinmh" title="Code">💻</a> <a href="https://github.com/usablica/intro.js/commits?author=Parvinmh" title="Documentation">📖</a></td>
+    </tr>
+  </tbody>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-## Support/Discussion
-- [Stackoverflow](http://stackoverflow.com/questions/tagged/intro.js)
+## Support and discussion
 
-## Usage Trends
-- [Usage Trends of Product Walkthrough Libraries](https://npm-compare.com/intro.js,@reactour/tour,driver.js,vue-tour)
+- [GitHub Issues](https://github.com/usablica/intro.js/issues)
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/intro.js)
+
+## Usage trends
+
+- [Usage trends of product walkthrough libraries](https://npm-compare.com/intro.js,@reactour/tour,driver.js,vue-tour)
 
 ## License
 
+Intro.js is dual-licensed.
+
 ### Commercial license
 
-If you want to use Intro.js for a commercial application, theme or plugin the commercial license is the appropriate license. With this option, your source code is kept proprietary. Purchase a commercial license at [introjs.com](http://introjs.com/#commercial)
+To use Intro.js in a commercial website, application, theme or plugin without releasing your source code, buy a commercial license at [introjs.com](https://introjs.com/#commercial).
 
 ### Open-source license
 
-GNU AGPLv3
+[GNU AGPLv3](license.md)
