@@ -38,6 +38,7 @@ export class Tour implements Package<TourOptions> {
   private _floatingElement: Element | undefined;
   private _theme: Theme | undefined;
   private _renderWaiters: Array<() => void> = [];
+  private _renderedStep: number | undefined;
 
   private readonly callbacks: {
     beforeChange?: introBeforeChangeCallback;
@@ -202,7 +203,8 @@ export class Tour implements Package<TourOptions> {
     this._currentStepSignal.val = undefined;
 
     // nothing will be rendered anymore, release anyone waiting for it
-    this.notifyRendered();
+    this._renderedStep = undefined;
+    this.releaseRenderWaiters();
   }
 
   /**
@@ -216,15 +218,20 @@ export class Tour implements Package<TourOptions> {
 
   /**
    * Resolves once the tooltip of the current step has been rendered and
-   * positioned, or after a short timeout if that never happens
+   * positioned. Resolves right away if that already happened (e.g. the step
+   * did not change because beforeChange returned false), and after a short
+   * timeout if the render never comes
    * This is an internal method and should not be used outside of the package.
    */
   waitForRender(timeoutMs = 100): Promise<void> {
-    if (!this.isRendered()) return Promise.resolve();
+    if (!this.isRendered() || this._renderedStep === this.getCurrentStep()) {
+      return Promise.resolve();
+    }
 
     return new Promise((resolve) => {
       const done = () => {
         clearTimeout(timer);
+        this._renderWaiters = this._renderWaiters.filter((w) => w !== done);
         resolve();
       };
       const timer = setTimeout(done, timeoutMs);
@@ -233,10 +240,15 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
-   * Called by the tooltip once it has been rendered and positioned
+   * Called by the tooltip of the given step once it has been rendered and positioned
    * This is an internal method and should not be used outside of the package.
    */
-  notifyRendered() {
+  notifyRendered(step?: number) {
+    this._renderedStep = step;
+    this.releaseRenderWaiters();
+  }
+
+  private releaseRenderWaiters() {
     const waiters = this._renderWaiters;
     this._renderWaiters = [];
     waiters.forEach((done) => done());

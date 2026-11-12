@@ -1046,6 +1046,47 @@ describe("Tour", () => {
       expect(Date.now() - startedAt).toBeLessThan(90);
     });
 
+    test("does not wait for a render that will not happen when beforeChange blocks the step", async () => {
+      // Arrange
+      await mockTour.start();
+      mockTour.onBeforeChange(() => false);
+      const onAfterChange = jest.fn();
+      mockTour.onAfterChange(onAfterChange);
+
+      // Act
+      const startedAt = Date.now();
+      await mockTour.nextStep();
+
+      // Assert - the step didn't change, so nothing is rendered: no waiting
+      expect(mockTour.getCurrentStep()).toBe(0);
+      expect(Date.now() - startedAt).toBeLessThan(90);
+      expect(onAfterChange).toBeCalledTimes(1);
+    });
+
+    test("keeps up with several nextStep calls in a row", async () => {
+      // Arrange
+      mockTour.setOptions({
+        steps: [1, 2, 3, 4, 5].map((n) => ({ intro: `step ${n}` })),
+      });
+      const onAfterChange = jest.fn();
+      mockTour.onAfterChange(onAfterChange);
+      await mockTour.start();
+
+      // Act
+      const pending = [];
+      for (let i = 0; i < 3; i++) {
+        pending.push(mockTour.nextStep());
+        await sleep(2);
+      }
+      await Promise.all(pending);
+      await sleep(50);
+
+      // Assert
+      expect(mockTour.getCurrentStep()).toBe(3);
+      expect(tooltipTextNow()).toBe("step 4");
+      expect(onAfterChange).toBeCalledTimes(4);
+    });
+
     test("does not hang when the tour exits while waiting for the render", async () => {
       // Arrange
       await mockTour.start();
