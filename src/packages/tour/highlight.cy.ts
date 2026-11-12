@@ -127,9 +127,11 @@ context("Highlight", () => {
     });
   });
 
-  it("should not be able to interaction with the target element the parent element has positive: relative and z-index", () => {
+  it("should interaction with the target element the parent element has positive: relative and z-index", () => {
     cy.window().then((window) => {
-      // related issue: https://github.com/usablica/intro.js/issues/1202
+      // https://github.com/usablica/intro.js/issues/1202: the parent's stacking
+      // context traps the target below the tour layers, which must still let
+      // clicks through to it
       cy.get("#relative-parent").invoke(
         "attr",
         "style",
@@ -157,7 +159,7 @@ context("Highlight", () => {
 
       cy.get(".introjs-helperLayer")
         .realClick()
-        .then(() => expect(sp).to.not.be.called);
+        .then(() => expect(sp).to.be.called);
     });
   });
 
@@ -186,9 +188,11 @@ context("Highlight", () => {
     });
   });
 
-  it("should not be able to interaction with the target element the parent element has positive: absolute and z-index", () => {
+  it("should interaction with the target element the parent element has positive: absolute and z-index", () => {
     cy.window().then((window) => {
-      // related issue: https://github.com/usablica/intro.js/issues/1202
+      // https://github.com/usablica/intro.js/issues/1202: the parent's stacking
+      // context traps the target below the tour layers, which must still let
+      // clicks through to it
       cy.get("#absolute-parent").invoke(
         "attr",
         "style",
@@ -216,7 +220,7 @@ context("Highlight", () => {
 
       cy.get(".introjs-helperLayer")
         .realClick()
-        .then(() => expect(sp).to.not.be.called);
+        .then(() => expect(sp).to.be.called);
     });
   });
 

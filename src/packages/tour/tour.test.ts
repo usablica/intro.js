@@ -515,10 +515,23 @@ describe("Tour", () => {
       // Act
       await tour.start();
       await tour.exit();
+      // the overlay's scroll/resize listeners go away with the tour root
+      await sleep(waitMsForDerivations);
 
-      // Assert
-      expect(addEventListenerSpy).toBeCalledTimes(2);
-      expect(removeEventListenerSpy).toBeCalledTimes(2);
+      // Assert - every listener this tour added to window is removed again
+      // (other tours from earlier tests may remove theirs meanwhile too)
+      const capture = (options: unknown) =>
+        typeof options === "object" && options !== null
+          ? !!(options as AddEventListenerOptions).capture
+          : !!options;
+      expect(addEventListenerSpy).toBeCalled();
+      for (const [type, listener, options] of addEventListenerSpy.mock.calls) {
+        const removed = removeEventListenerSpy.mock.calls.some(
+          ([t, l, o]) =>
+            t === type && l === listener && capture(o) === capture(options)
+        );
+        expect({ type, removed }).toEqual({ type, removed: true });
+      }
     });
 
     it("should not enable keyboard navigation and resize when start is false", async () => {
