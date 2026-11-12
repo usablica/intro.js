@@ -96,14 +96,18 @@ npm run dev     # watch mode with a local server
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="http://afshinm.name"><img src="https://avatars3.githubusercontent.com/u/314326?v=4" width="100px;" alt=""/><br /><sub><b>Afshin Mehrabani</b></sub></a><br /><a href="https://github.com/usablica/intro.js/commits?author=afshinm" title="Code">💻</a> <a href="https://github.com/usablica/intro.js/commits?author=afshinm" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://bozdoz.com"><img src="https://avatars0.githubusercontent.com/u/1410985?v=4" width="100px;" alt=""/><br /><sub><b>bozdoz</b></sub></a><br /><a href="https://github.com/usablica/intro.js/commits?author=bozdoz" title="Code">💻</a> <a href="https://github.com/usablica/intro.js/commits?author=bozdoz" title="Documentation">📖</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://afshinm.name"><img src="https://avatars3.githubusercontent.com/u/314326?v=4&size=100" width="100px" height="100px" alt="Afshin Mehrabani"/><br /><sub><b>Afshin Mehrabani</b></sub></a><br /><a href="https://github.com/usablica/intro.js/commits?author=afshinm" title="Code">💻</a> <a href="https://github.com/usablica/intro.js/commits?author=afshinm" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://bozdoz.com"><img src="https://avatars0.githubusercontent.com/u/1410985?v=4&size=100" width="100px" height="100px" alt="bozdoz"/><br /><sub><b>bozdoz</b></sub></a><br /><a href="https://github.com/usablica/intro.js/commits?author=bozdoz" title="Code">💻</a> <a href="https://github.com/usablica/intro.js/commits?author=bozdoz" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Parvinmh"><img src="https://avatars.githubusercontent.com/u/18435907?v=4&size=100" width="100px" height="100px" alt="Parvin Mehrabani"/><br /><sub><b>Parvin Mehrabani</b></sub></a><br /><a href="https://github.com/usablica/intro.js/commits?author=Parvinmh" title="Code">💻</a> <a href="https://github.com/usablica/intro.js/commits?author=Parvinmh" title="Documentation">📖</a></td>
+    </tr>
+  </tbody>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## Support and discussion
