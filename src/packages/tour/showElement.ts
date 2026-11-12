@@ -48,6 +48,9 @@ export async function showElement(tour: Tour, step: TourStep) {
   // DOM and positioned
   await tour.waitForRender();
 
+  // the tour exited while the step was rendering
+  if (tour.getCurrentStep() === undefined) return;
+
   await tour.callback("afterChange")?.call(tour, step.element);
 
   tour.emitEvent("step");

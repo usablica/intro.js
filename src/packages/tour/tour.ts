@@ -55,6 +55,9 @@ export class Tour implements Package<TourOptions> {
   } = {};
 
   private readonly _eventListeners = new Set<introEventListener>();
+  // incremented every time the tour exits, to drop step changes that were
+  // still in progress (e.g. waiting for an async onBeforeChange) at that time
+  private _exitCount = 0;
 
   // Event handlers
   private _keyboardNavigationHandler?: (e: KeyboardEvent) => Promise<void>;
@@ -205,6 +208,7 @@ export class Tour implements Package<TourOptions> {
   }
 
   resetCurrentStep() {
+    this._exitCount += 1;
     this._currentStepSignal.val = undefined;
 
     // nothing will be rendered anymore, release anyone waiting for it
@@ -271,12 +275,16 @@ export class Tour implements Package<TourOptions> {
     const direction =
       currentStep === undefined || step >= currentStep ? "forward" : "backward";
 
+    const exitCount = this._exitCount;
     const continueStep = await this.callback("beforeChange")?.call(
       this,
       targetStep.element as HTMLElement,
       currentStep,
       direction
     );
+
+    // the tour exited while beforeChange was running: don't re-open it
+    if (this._exitCount !== exitCount) return this;
 
     if (
       direction === "forward" &&
@@ -532,9 +540,14 @@ export class Tour implements Package<TourOptions> {
       // the first step is shown before the root exists, so its afterChange
       // callback and "step" event are fired here, once its tooltip is rendered
       await this.waitForRender();
+
+      // the tour exited while its first step was rendering
+      const currentStep = this.getCurrentStep();
+      if (currentStep === undefined) return this;
+
       await this.callback("afterChange")?.call(
         this,
-        this.getStep(this.getCurrentStep()!).element as HTMLElement
+        this.getStep(currentStep).element as HTMLElement
       );
       this.emitEvent("step");
     }
