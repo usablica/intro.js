@@ -3,6 +3,7 @@ import { ReferenceLayer } from "./ReferenceLayer";
 
 jest.mock("./OverlayLayer", () => ({
   OverlayLayer: jest.fn(() => "OverlayLayer"),
+  setOverlayHole: jest.fn(),
 }));
 jest.mock("./DisableInteraction", () => ({
   DisableInteraction: jest.fn(() => "DisableInteraction"),

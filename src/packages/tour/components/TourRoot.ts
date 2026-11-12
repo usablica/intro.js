@@ -3,7 +3,7 @@ import { ReferenceLayer } from "./ReferenceLayer";
 import { HelperLayer } from "./HelperLayer";
 import { Tour } from "../tour";
 import { DisableInteraction } from "./DisableInteraction";
-import { OverlayLayer } from "./OverlayLayer";
+import { OverlayLayer, setOverlayHole } from "./OverlayLayer";
 import { nextStep, previousStep } from "../steps";
 import { doneButtonClassName } from "../classNames";
 import { style } from "../../../util/style";
@@ -28,6 +28,24 @@ export const TourRoot = ({ tour }: TourRootProps) => {
     overlayOpacity: tour.getOption("overlayOpacity"),
     helperLayerPadding: tour.getOption("helperElementPadding"),
   });
+
+  // the overlay of the current step and the element it highlights, used to
+  // keep the hole in the overlay on top of the target (see setOverlayHole)
+  let currentOverlay: HTMLElement | undefined;
+  let currentTarget: Element | undefined;
+  const removeOverlayHoleListeners = () => {
+    window.removeEventListener("scroll", updateOverlayHole, true);
+    window.removeEventListener("resize", updateOverlayHole);
+  };
+  const updateOverlayHole = () => {
+    // the root can also be removed without the tour exiting (recreateRoot)
+    if (!root.isConnected) {
+      removeOverlayHoleListeners();
+      return;
+    }
+
+    if (currentOverlay) setOverlayHole(currentOverlay, currentTarget);
+  };
 
   const opacity = dom.state(0);
   // render the tooltip immediately when the tour starts
@@ -69,7 +87,24 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         onExitTour: async () => {
           return tour.exit();
         },
+        isInHighlight: (x, y) => {
+          const rect = helperLayer.getBoundingClientRect();
+          return (
+            x >= rect.left &&
+            x <= rect.right &&
+            y >= rect.top &&
+            y <= rect.bottom
+          );
+        },
       });
+
+      currentOverlay = overlayLayer;
+      // fetchSteps() has resolved string selectors to elements by now
+      currentTarget =
+        step.val.element instanceof Element ? step.val.element : undefined;
+      setOverlayHole(overlayLayer, currentTarget);
+      // once the step is rendered and scrolled into view
+      requestAnimationFrame(updateOverlayHole);
 
       const referenceLayer = ReferenceLayer({
         step: step.val,
@@ -186,10 +221,15 @@ export const TourRoot = ({ tour }: TourRootProps) => {
     }
   );
 
+  // the target moves on screen when the page (or a scrollable parent) scrolls
+  window.addEventListener("scroll", updateOverlayHole, true);
+  window.addEventListener("resize", updateOverlayHole);
+
   dom.derive(() => {
     // to clean up the root element when the tour is done
     if (currentStepSignal.val === undefined) {
       opacity.val = 0;
+      removeOverlayHoleListeners();
 
       setTimeout(() => {
         root.remove();
