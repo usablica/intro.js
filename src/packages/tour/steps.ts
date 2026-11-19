@@ -146,7 +146,10 @@ export const fetchSteps = (tour: Tour) => {
 
       let disableInteraction = tour.getOption("disableInteraction");
       if (element.hasAttribute(dataDisableInteraction)) {
-        disableInteraction = !!element.getAttribute(dataDisableInteraction);
+        const value = (
+          element.getAttribute(dataDisableInteraction) || ""
+        ).toLowerCase();
+        disableInteraction = value !== "" && value !== "false" && value !== "0";
       }
 
       const newIntroStep: TourStep = {

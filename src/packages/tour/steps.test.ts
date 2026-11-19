@@ -276,6 +276,39 @@ describe("steps", () => {
       expect(steps[3].step).toBe(20);
     });
 
+    test("should read data-disable-interaction false and 0 as false", () => {
+      const cases: [string | null, boolean][] = [
+        [null, true],
+        ["1", true],
+        ["true", true],
+        ["", false],
+        ["false", false],
+        ["False", false],
+        ["0", false],
+      ];
+
+      for (const [value, expected] of cases) {
+        // Arrange
+        const targetElement = div();
+        const el = div();
+        el.setAttribute("data-intro", "Hello");
+        if (value !== null) {
+          el.setAttribute("data-disable-interaction", value);
+        }
+        targetElement.appendChild(el);
+
+        const mockTour = getMockTour(targetElement);
+        mockTour.setOption("disableInteraction", true);
+
+        // Act
+        const steps = fetchSteps(mockTour);
+
+        // Assert
+        expect(steps.length).toBe(1);
+        expect(steps[0].disableInteraction).toBe(expected);
+      }
+    });
+
     test("should ignore DOM elements when options.steps is available", () => {
       // Arrange
       appendMockSteps();
