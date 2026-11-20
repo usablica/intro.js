@@ -1,20 +1,30 @@
+import type { TourStep } from "./steps";
 import { Tour } from "./tour";
 
+/**
+ * `step` is the step the tour is about to show, including any custom
+ * properties you added to it (e.g. an `id`).
+ */
 export type introBeforeChangeCallback = (
   this: Tour,
   targetElement: HTMLElement,
   currentStep: number,
-  direction: "backward" | "forward"
+  direction: "backward" | "forward",
+  step: TourStep
 ) => Promise<boolean> | boolean;
 
+/** `step` is the step being shown, including any custom properties. */
 export type introChangeCallback = (
   this: Tour,
-  targetElement: HTMLElement
+  targetElement: HTMLElement,
+  step: TourStep
 ) => void | Promise<void>;
 
+/** `step` is the step that was shown, including any custom properties. */
 export type introAfterChangeCallback = (
   this: Tour,
-  targetElement: HTMLElement
+  targetElement: HTMLElement,
+  step: TourStep
 ) => void | Promise<void>;
 
 export type introCompleteCallback = (

@@ -17,6 +17,7 @@ import {
   getMockSteps,
 } from "./mock";
 import { Tour } from "./tour";
+import type { TourStep } from "./steps";
 import { helperLayerClassName, overlayClassName } from "./classNames";
 import {
   sleep,
@@ -995,6 +996,50 @@ describe("Tour", () => {
 
       // Assert
       expect(seen).toEqual(["step one"]);
+    });
+
+    test("beforeChange, change and afterChange receive the step object with its custom properties (#1304)", async () => {
+      // Arrange
+      const steps = [
+        { intro: "step one", id: "welcome" },
+        { intro: "step two", id: "profile" },
+      ];
+      mockTour.setOptions({ steps });
+
+      const calls: string[] = [];
+      const idOf = (step: TourStep) => (step as TourStep & { id: string }).id;
+
+      mockTour.onBeforeChange((el, _current, direction, step) => {
+        calls.push(`before:${idOf(step)}:${direction}`);
+        expect(step.element).toBe(el);
+        return true;
+      });
+      mockTour.onChange((el, step) => {
+        calls.push(`change:${idOf(step)}`);
+        expect(step.element).toBe(el);
+      });
+      mockTour.onAfterChange((el, step) => {
+        calls.push(`after:${idOf(step)}`);
+        expect(step.element).toBe(el);
+      });
+
+      // Act
+      await mockTour.start();
+      await mockTour.nextStep();
+      await mockTour.previousStep();
+
+      // Assert
+      expect(calls).toEqual([
+        "before:welcome:forward",
+        "change:welcome",
+        "after:welcome",
+        "before:profile:forward",
+        "change:profile",
+        "after:profile",
+        "before:welcome:backward",
+        "change:welcome",
+        "after:welcome",
+      ]);
     });
 
     test("is called for later steps once the tooltip of the new step is rendered", async () => {

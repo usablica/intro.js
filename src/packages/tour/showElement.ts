@@ -33,7 +33,7 @@ function setShowElement(targetElement: HTMLElement) {
  * @api private
  */
 export async function showElement(tour: Tour, step: TourStep) {
-  tour.callback("change")?.call(tour, step.element);
+  tour.callback("change")?.call(tour, step.element as HTMLElement, step);
 
   //remove old classes if the element still exist
   removeShowElement();
@@ -51,7 +51,9 @@ export async function showElement(tour: Tour, step: TourStep) {
   // the tour exited while the step was rendering
   if (tour.getCurrentStep() === undefined) return;
 
-  await tour.callback("afterChange")?.call(tour, step.element);
+  await tour
+    .callback("afterChange")
+    ?.call(tour, step.element as HTMLElement, step);
 
   tour.emitEvent("step");
 }
