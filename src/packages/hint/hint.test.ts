@@ -71,7 +71,8 @@ test("should have no accessibility violations for all hints", async () => {
 
   const img = document.createElement("img");
   img.id = "img";
-  img.src = "https://via.placeholder.com/100";
+  img.src =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
   img.alt = "Sample image";
   container.appendChild(img);
 

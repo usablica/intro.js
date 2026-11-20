@@ -814,7 +814,8 @@ describe("Tour", () => {
 
     const imgEl = document.createElement("img");
     imgEl.id = "sample-image";
-    imgEl.src = "https://via.placeholder.com/150";
+    imgEl.src =
+      "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     imgEl.alt = "Sample placeholder image";
 
     const videoEl = document.createElement("video");
