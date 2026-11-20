@@ -1,5 +1,9 @@
 import onKeyDown from "./onKeyDown";
-import { skipButtonClassName } from "./classNames";
+import {
+  doneButtonClassName,
+  nextButtonClassName,
+  skipButtonClassName,
+} from "./classNames";
 import { getMockSteps, getMockTour } from "./mock";
 
 jest.mock("./showElement");
@@ -230,6 +234,74 @@ describe("onKeyDown", () => {
 
       // Assert
       expect(exitSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  // Regression tests for https://github.com/usablica/intro.js/issues/2073 -
+  // on the last step the focused next button turns into "Done"; pressing
+  // Enter there must finish the tour instead of trying to show a step
+  // past the end.
+  describe("Enter key on the last step", () => {
+    const pressEnter = async (
+      tour: ReturnType<typeof getMockTour>,
+      target?: HTMLElement
+    ) => {
+      const event = new KeyboardEvent("keydown", { code: "Enter" });
+      if (target) {
+        document.body.appendChild(target);
+        Object.defineProperty(event, "target", { value: target });
+      }
+
+      await onKeyDown(tour, event);
+
+      target?.remove();
+    };
+
+    const doneButton = () => {
+      const button = document.createElement("button");
+      button.className = `introjs-button ${nextButtonClassName} ${doneButtonClassName}`;
+      return button;
+    };
+
+    test("on the focused Done button should complete and exit the tour", async () => {
+      // Arrange
+      const steps = getMockSteps();
+      const mockTour = getMockTour();
+      mockTour.setSteps(steps);
+      await mockTour.setCurrentStep(steps.length - 1);
+
+      const fnCompleteCallback = jest.fn();
+      mockTour.onComplete(fnCompleteCallback);
+      const exitSpy = jest.spyOn(mockTour, "exit");
+
+      // Act
+      await pressEnter(mockTour, doneButton());
+
+      // Assert
+      expect(fnCompleteCallback).toHaveBeenCalledTimes(1);
+      expect(fnCompleteCallback).toHaveBeenCalledWith(steps.length - 1, "end");
+      expect(exitSpy).toHaveBeenCalledTimes(1);
+      expect(mockTour.getCurrentStep()).toBe(steps.length - 1);
+    });
+
+    test("without a focused button should complete and exit the tour", async () => {
+      // Arrange
+      const steps = getMockSteps();
+      const mockTour = getMockTour();
+      mockTour.setSteps(steps);
+      await mockTour.setCurrentStep(steps.length - 1);
+
+      const fnCompleteCallback = jest.fn();
+      mockTour.onComplete(fnCompleteCallback);
+      const exitSpy = jest.spyOn(mockTour, "exit");
+
+      // Act
+      await pressEnter(mockTour);
+
+      // Assert
+      expect(fnCompleteCallback).toHaveBeenCalledTimes(1);
+      expect(exitSpy).toHaveBeenCalledTimes(1);
+      expect(mockTour.getCurrentStep()).toBe(steps.length - 1);
     });
   });
 });
