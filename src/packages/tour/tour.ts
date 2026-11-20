@@ -280,7 +280,8 @@ export class Tour implements Package<TourOptions> {
       this,
       targetStep.element as HTMLElement,
       currentStep,
-      direction
+      direction,
+      targetStep
     );
 
     // the tour exited while beforeChange was running: don't re-open it
@@ -545,9 +546,11 @@ export class Tour implements Package<TourOptions> {
       const currentStep = this.getCurrentStep();
       if (currentStep === undefined) return this;
 
+      const step = this.getStep(currentStep);
       await this.callback("afterChange")?.call(
         this,
-        this.getStep(currentStep).element as HTMLElement
+        step.element as HTMLElement,
+        step
       );
       this.emitEvent("step");
     }
