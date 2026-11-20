@@ -86,6 +86,8 @@ export interface TourOptions {
   theme?: ThemeType;
   /* Path to custom CSS file for theme (optional) */
   themePath?: string;
+  /* Optional identifier of the tour, included in every event sent to `onEvent` listeners */
+  tourId?: string;
 }
 
 export function getDefaultTourOptions(translator?: Translator): TourOptions {

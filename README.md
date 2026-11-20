@@ -18,6 +18,7 @@
 - **Self-hosted.** Tours run entirely in your app. No third-party service, no tracking script, no user data leaves your servers.
 - **No runtime dependencies.** Plain JavaScript that works with any framework, or none.
 - **Tours and hints.** Step-by-step walkthroughs with `introJs.tour()` and contextual hints with `introJs.hint()`.
+- **Analytics-ready.** Send tour events (start, step, skip, complete, exit) to Google Analytics, Mixpanel or Segment with `tour.onEvent()` and see where users drop off. See the [analytics guide](docs/analytics.md).
 - **Themes.** Built-in `dark`, `light`, `auto`, `modern`, `flattener`, `nassim`, `nazanin` and `royal` themes, plus your own. See the [theme guide](docs/theme-usage.md).
 - **Localization.** 13 built-in languages (English, Spanish, French, German, Persian, Arabic, Russian, Chinese, Portuguese, Italian, Japanese, Turkish and Korean). The browser's language is picked automatically, or set one with the `language` option.
 - **RTL support** and **TypeScript** source.
@@ -78,6 +79,7 @@ introJs.hint().addHints();
 
 - [Documentation](https://introjs.com/docs)
 - [Theme guide](docs/theme-usage.md)
+- [Analytics guide](docs/analytics.md)
 - [Examples](example/)
 - Framework wrappers (React, Vue, Angular and more): see the [documentation](https://introjs.com/docs)
 

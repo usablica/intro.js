@@ -33,14 +33,29 @@ function setShowElement(targetElement: HTMLElement) {
  * @api private
  */
 export async function showElement(tour: Tour, step: TourStep) {
-  tour.callback("change")?.call(tour, step.element);
+  tour.callback("change")?.call(tour, step.element as HTMLElement, step);
 
   //remove old classes if the element still exist
   removeShowElement();
 
   setShowElement(step.element as HTMLElement);
 
-  await tour.callback("afterChange")?.call(tour, step.element);
+  // the root doesn't exist yet while the first step is being shown,
+  // Tour.start() fires afterChange for it once it has been rendered
+  if (!tour.isRendered()) return;
+
+  // afterChange means the change is done: the tooltip of this step is in the
+  // DOM and positioned
+  await tour.waitForRender();
+
+  // the tour exited while the step was rendering
+  if (tour.getCurrentStep() === undefined) return;
+
+  await tour
+    .callback("afterChange")
+    ?.call(tour, step.element as HTMLElement, step);
+
+  tour.emitEvent("step");
 }
 
 /**

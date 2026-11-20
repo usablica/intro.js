@@ -318,6 +318,9 @@ export type TooltipProps = {
   onClick?: (e: any) => void;
   className?: string;
   text: string;
+
+  // called once the tooltip has been measured and positioned
+  onRendered?: () => void;
 };
 
 export const Tooltip = (
@@ -336,6 +339,7 @@ export const Tooltip = (
     autoPosition = true,
     text,
     onClick,
+    onRendered,
   }: TooltipProps,
   children?: ChildDom[]
 ) => {
@@ -447,6 +451,10 @@ export const Tooltip = (
     // set the correct height and width of the tooltip after it has been rendered
     tooltipHeight.val = tooltip.offsetHeight;
     tooltipWidth.val = tooltip.offsetWidth;
+
+    // the new size is applied by the batched update scheduled by the two
+    // assignments above; a timeout queued after them runs after that update
+    setTimeout(() => onRendered?.(), 0);
   }, 1);
 
   return tooltip;

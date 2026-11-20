@@ -27,6 +27,10 @@ export default async function exitIntro(
   //check if any callback is defined
   await tour.callback("exit")?.call(tour);
 
+  if (tour.getCurrentStep() !== undefined) {
+    tour.emitEvent("exit");
+  }
+
   // set the step to default
   // this would update the signal to the tour that the tour has ended
   // and the corresponding components would be updated

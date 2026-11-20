@@ -60,4 +60,55 @@ context("Overlay stacking", () => {
       });
     });
   });
+
+  // https://github.com/usablica/intro.js/issues/109
+  [
+    "position: relative; z-index: 1",
+    "transform: translateZ(0)",
+    "filter: blur(0)",
+    "opacity: 0.99",
+    "isolation: isolate",
+  ].forEach((parentStyle) => {
+    it(`should keep the target clickable inside a parent with ${parentStyle}`, () => {
+      cy.document().then((doc) => {
+        const parent = doc.createElement("div");
+        parent.style.cssText = `${parentStyle}; margin: 20px;`;
+        parent.innerHTML =
+          '<button id="stacked-target" type="button">stacked target</button>';
+        doc.body.prepend(parent);
+      });
+
+      cy.window().then((window) => {
+        let clicks = 0;
+        window.document.getElementById("stacked-target")!.onclick = () => {
+          clicks++;
+        };
+
+        window.introJs
+          .tour()
+          .setOptions({
+            steps: [{ element: "#stacked-target", intro: "step" }],
+          })
+          .start();
+
+        cy.wait(500);
+
+        cy.window().then((win) => {
+          const btn = win.document.getElementById("stacked-target")!;
+          const rect = btn.getBoundingClientRect();
+          const hit = win.document.elementFromPoint(
+            rect.left + rect.width / 2,
+            rect.top + rect.height / 2
+          );
+
+          expect(hit).to.equal(btn);
+        });
+
+        cy.get("#stacked-target").click();
+        cy.then(() => expect(clicks).to.equal(1));
+        // still open: the click reached the target, not the overlay
+        cy.get(".introjs-tooltip").should("exist");
+      });
+    });
+  });
 });

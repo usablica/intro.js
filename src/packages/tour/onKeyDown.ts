@@ -81,10 +81,13 @@ export default async function onKeyDown(tour: Tour, e: KeyboardEvent) {
       // returning `false` from the `skip` callback cancels the skip, the
       // same way `beforeExit` can cancel exiting the tour
       if (continueSkip !== false) {
+        tour.emitEvent("skip");
+
         if (tour.isEnd()) {
           await tour
             .callback("complete")
             ?.call(tour, tour.getCurrentStep(), "skip");
+          tour.emitEvent("complete", "skip");
         }
 
         await tour.exit();
