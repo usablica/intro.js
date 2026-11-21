@@ -202,6 +202,32 @@ describe("Tour", () => {
       expect(document.querySelector(`.${overlayClassName}`)).toBeNull();
     });
 
+    test("should render the tour again when it is started after an exit", async () => {
+      // Arrange
+      mockTour.setOptions({
+        steps: [
+          {
+            intro: "step one",
+            element: document.querySelector("#paragraph"),
+          },
+        ],
+      });
+
+      await mockTour.start();
+      await sleep(waitMsForDerivations);
+      await mockTour.exit();
+      await sleep(waitMsForExitTransition);
+
+      // Act
+      await mockTour.start();
+      await sleep(waitMsForDerivations);
+
+      // Assert
+      expect(mockTour.hasStarted()).toBe(true);
+      expect(content(tooltipText())).toBe("step one");
+      expect(document.querySelector(`.${helperLayerClassName}`)).not.toBeNull();
+    });
+
     test("should not highlight the target element if queryString is incorrect", async () => {
       // Arrange
       const mockElement = document.querySelector("#non-existing-element");

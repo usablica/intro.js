@@ -604,6 +604,9 @@ export class Tour implements Package<TourOptions> {
       this.disableRefreshOnResize();
       this._theme?.destroy();
       this._theme = undefined;
+      // the old root removes itself after its fade-out (see TourRoot), so the
+      // next start() has to create a new one
+      this._root = undefined;
     }
 
     return this;
