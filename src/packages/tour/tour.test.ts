@@ -99,6 +99,30 @@ describe("Tour", () => {
       expect(onStartMock).toBeCalledTimes(1);
     });
 
+    test("should start the same tour again after it was exited", async () => {
+      // Arrange
+      mockTour.setOptions({
+        steps: [
+          {
+            intro: "hello world",
+          },
+        ],
+      });
+
+      // Act
+      await mockTour.start();
+      await sleep(waitMsForDerivations);
+      await mockTour.exit();
+      await sleep(waitMsForExitTransition);
+      await mockTour.start();
+      await sleep(waitMsForDerivations);
+
+      // Assert
+      expect(mockTour.hasStarted()).toBe(true);
+      expect(content(tooltipText())).toBe("hello world");
+      expect(document.querySelector(`.${helperLayerClassName}`)).not.toBeNull();
+    });
+
     test("should start floating intro with one step", async () => {
       // Arrange & Act
       await mockTour

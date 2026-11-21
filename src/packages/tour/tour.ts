@@ -604,6 +604,10 @@ export class Tour implements Package<TourOptions> {
       this.disableRefreshOnResize();
       this._theme?.destroy();
       this._theme = undefined;
+
+      // the root removes itself from the DOM once the tour has ended,
+      // so drop the reference and let the next start() create a new one
+      this._root = undefined;
     }
 
     return this;
