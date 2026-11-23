@@ -146,6 +146,34 @@ describe("placeTooltip", () => {
     // the viewport width minus the padding on both sides
     expect(result.availableWidth).toBe(980);
   });
+
+  test("keeps the tooltip in the visual viewport of a panned mobile page", async () => {
+    // a 393px wide screen panned 248px to the right on a wider page
+    Object.defineProperty(window, "visualViewport", {
+      value: { offsetLeft: 248, offsetTop: 0, width: 393, height: 800 },
+      configurable: true,
+    });
+
+    try {
+      // starts left of the visible part
+      const { reference, tooltip, arrow } = setup({ left: 200, top: 100 });
+
+      const result = await placeTooltip(
+        reference,
+        tooltip,
+        arrow,
+        "bottom",
+        true,
+        precedence
+      );
+
+      // 10px inside the visible part: 248 + 10 = 200 + x
+      expect(result.x).toBe(58);
+      expect(result.availableWidth).toBe(373);
+    } finally {
+      delete (window as { visualViewport?: unknown }).visualViewport;
+    }
+  });
 });
 
 describe("originOf", () => {

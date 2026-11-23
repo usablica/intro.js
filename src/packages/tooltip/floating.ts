@@ -106,13 +106,27 @@ const platform: Platform = {
   },
 
   // only the viewport: the tooltip lives in a layer of its own under the
-  // target element of the tour (usually body), not in a scroll container
-  getClippingRect: () => ({
-    x: 0,
-    y: 0,
-    width: document.documentElement.clientWidth,
-    height: document.documentElement.clientHeight,
-  }),
+  // target element of the tour (usually body), not in a scroll container.
+  // On mobile, a page wider than the screen is panned inside the layout
+  // viewport, so the part the user sees is the visual viewport
+  getClippingRect: () => {
+    const viewport = window.visualViewport;
+    if (viewport) {
+      return {
+        x: viewport.offsetLeft,
+        y: viewport.offsetTop,
+        width: viewport.width,
+        height: viewport.height,
+      };
+    }
+
+    return {
+      x: 0,
+      y: 0,
+      width: document.documentElement.clientWidth,
+      height: document.documentElement.clientHeight,
+    };
+  },
 
   getDimensions: (element) => ({
     width: (element as HTMLElement).offsetWidth,
