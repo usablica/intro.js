@@ -1185,6 +1185,28 @@ describe("Tour", () => {
       ]);
       expect(outcome).toBe("settled");
     });
+
+    test("is not released by a late render report of the previous step", async () => {
+      // Arrange
+      await mockTour.start();
+      await mockTour.nextStep();
+      // the tooltip of step one reports again, after step two is current
+      mockTour.notifyRendered(0);
+      const pending = mockTour.waitForRender(1000).then(() => "released");
+
+      // Act
+      mockTour.notifyRendered(0);
+
+      // Assert
+      const outcome = await Promise.race([
+        pending,
+        sleep(100).then(() => "waiting"),
+      ]);
+      expect(outcome).toBe("waiting");
+
+      mockTour.notifyRendered(1);
+      expect(await pending).toBe("released");
+    });
   });
 
   describe("onEvent", () => {
