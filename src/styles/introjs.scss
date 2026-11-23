@@ -246,8 +246,11 @@ tr.introjs-showElement {
   // the tooltip itself.
   visibility: visible !important;
   background-color: var(--introjs-bg, #{$white});
-  min-width: 250px;
-  max-width: 300px;
+  // the width must not depend on where the tooltip is placed, or it changes
+  // after Floating UI measured it; never wider than the space size() reports
+  width: max-content;
+  min-width: unquote("min(250px, var(--introjs-tooltip-available-width, 250px))");
+  max-width: unquote("min(300px, var(--introjs-tooltip-available-width, 300px))");
   border-radius: 5px;
   box-shadow: 0 3px 30px rgba($black900, 0.3);
   transition: opacity 0.1s ease-out;

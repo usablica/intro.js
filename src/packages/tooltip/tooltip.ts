@@ -1,14 +1,16 @@
-import getOffset, { Offset } from "../../util/getOffset";
-import getWindowSize from "../../util/getWindowSize";
 import dom, { ChildDom, State } from "../dom";
 import { arrowClassName, tooltipClassName } from "../tour/classNames";
-import { determineAutoPosition, TooltipPosition } from "./tooltipPosition";
+import { TooltipPosition } from "./tooltipPosition";
+import { placeTooltip } from "./placeTooltip";
 
 const { div } = dom.tags;
 
 export const TooltipArrow = (props: {
   tooltipPosition: State<TooltipPosition>;
-  tooltipBottomOverflow: State<boolean>;
+  // set when the tooltip was shifted to stay on screen, so the arrow keeps
+  // pointing at the target
+  arrowX: State<number | undefined>;
+  arrowY: State<number | undefined>;
 }) => {
   const classNames = dom.derive(() => {
     const classNames = [arrowClassName];
@@ -28,23 +30,10 @@ export const TooltipArrow = (props: {
         classNames.push("bottom");
         break;
       case "right":
-        if (props.tooltipBottomOverflow.val) {
-          // In this case, right would have fallen below the bottom of the screen.
-          // Modify so that the bottom of the tooltip connects with the target
-          classNames.push("left-bottom");
-        } else {
-          classNames.push("left");
-        }
+        classNames.push("left");
         break;
       case "left":
-        if (props.tooltipBottomOverflow.val) {
-          // In this case, left would have fallen below the bottom of the screen.
-          // Modify so that the bottom of the tooltip connects with the target
-          classNames.push("right-bottom");
-        } else {
-          classNames.push("right");
-        }
-
+        classNames.push("right");
         break;
       case "floating":
         // no arrow element for floating tooltips
@@ -70,236 +59,22 @@ export const TooltipArrow = (props: {
 
   return div({
     className: () => classNames.val?.filter(Boolean).join(" "),
-    style: () =>
-      `display: ${
+    style: () => {
+      const x = props.arrowX.val;
+      const y = props.arrowY.val;
+      const display = `display: ${
         props.tooltipPosition.val === "floating" ? "none" : "block"
-      };`,
+      };`;
+
+      if (x !== undefined) {
+        return `${display} left: ${x}px; right: auto; margin-left: 0;`;
+      }
+      if (y !== undefined) {
+        return `${display} top: ${y}px; bottom: auto;`;
+      }
+      return display;
+    },
   });
-};
-
-/**
- * Set tooltip right so it doesn't go off the left side of the window
- *
- * @return boolean true, if tooltipLayerStyleRight is ok. false, otherwise.
- */
-function checkLeft(
-  targetOffset: {
-    top: number;
-    left: number;
-    width: number;
-    height: number;
-  },
-  tooltipLayerStyleRight: number,
-  tooltipWidth: number,
-  tooltipLeft: State<string>,
-  tooltipRight: State<string>
-): boolean {
-  if (
-    targetOffset.left +
-      targetOffset.width -
-      tooltipLayerStyleRight -
-      tooltipWidth <
-    0
-  ) {
-    // off the left side of the window
-    tooltipLeft.val = `-${targetOffset.left}px`;
-    return false;
-  }
-  tooltipRight.val = `${tooltipLayerStyleRight}px`;
-  return true;
-}
-
-/**
- * Set tooltip left so it doesn't go off the right side of the window
- *
- * @return boolean true, if tooltipLayerStyleLeft is ok.  false, otherwise.
- */
-function checkRight(
-  targetOffset: {
-    top: number;
-    left: number;
-    width: number;
-    height: number;
-  },
-  windowSize: {
-    width: number;
-    height: number;
-  },
-  tooltipLayerStyleLeft: number,
-  tooltipWidth: number,
-  tooltipLeft: State<string>
-): boolean {
-  if (
-    targetOffset.left + tooltipLayerStyleLeft + tooltipWidth >
-    windowSize.width
-  ) {
-    // off the right side of the window
-    tooltipLeft.val = `${
-      windowSize.width - tooltipWidth - targetOffset.left
-    }px`;
-    return false;
-  }
-
-  tooltipLeft.val = `${tooltipLayerStyleLeft}px`;
-  return true;
-}
-
-const alignTooltip = (
-  position: TooltipPosition,
-  targetOffset: { width: number; height: number; left: number; top: number },
-  windowSize: { width: number; height: number },
-  tooltipWidth: number,
-  tooltipHeight: number,
-  tooltipTop: State<string>,
-  tooltipBottom: State<string>,
-  tooltipLeft: State<string>,
-  tooltipRight: State<string>,
-  tooltipMarginLeft: State<string>,
-  tooltipMarginTop: State<string>,
-  tooltipBottomOverflow: State<boolean>,
-  showStepNumbers: boolean,
-  hintMode: boolean
-) => {
-  tooltipTop.val = "auto";
-  tooltipBottom.val = "auto";
-  tooltipLeft.val = "auto";
-  tooltipRight.val = "auto";
-  tooltipMarginLeft.val = "0";
-  tooltipMarginTop.val = "0";
-
-  let tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipWidth / 2;
-
-  switch (position) {
-    case "top-right-aligned":
-      let tooltipLayerStyleRight = 0;
-      checkLeft(
-        targetOffset,
-        tooltipLayerStyleRight,
-        tooltipWidth,
-        tooltipLeft,
-        tooltipRight
-      );
-      tooltipBottom.val = `${targetOffset.height + 20}px`;
-      break;
-
-    case "top-middle-aligned":
-      // a fix for middle aligned hints
-      if (hintMode) {
-        tooltipLayerStyleLeftRight += 5;
-      }
-
-      if (
-        checkLeft(
-          targetOffset,
-          tooltipLayerStyleLeftRight,
-          tooltipWidth,
-          tooltipLeft,
-          tooltipRight
-        )
-      ) {
-        tooltipRight.val = undefined;
-        checkRight(
-          targetOffset,
-          windowSize,
-          tooltipLayerStyleLeftRight,
-          tooltipWidth,
-          tooltipLeft
-        );
-      }
-      tooltipBottom.val = `${targetOffset.height + 20}px`;
-      break;
-
-    case "top-left-aligned":
-    // top-left-aligned is the same as the default top
-    case "top":
-      const tooltipLayerStyleLeft = hintMode ? 0 : 15;
-
-      checkRight(
-        targetOffset,
-        windowSize,
-        tooltipLayerStyleLeft,
-        tooltipWidth,
-        tooltipLeft
-      );
-      tooltipBottom.val = `${targetOffset.height + 20}px`;
-      break;
-    case "right":
-      tooltipLeft.val = `${targetOffset.width + 20}px`;
-
-      if (tooltipBottomOverflow.val) {
-        // In this case, right would have fallen below the bottom of the screen.
-        // Modify so that the bottom of the tooltip connects with the target
-        tooltipTop.val = `-${tooltipHeight - targetOffset.height - 20}px`;
-      }
-      break;
-    case "left":
-      if (!hintMode && showStepNumbers === true) {
-        tooltipTop.val = "15px";
-      }
-
-      if (tooltipBottomOverflow.val) {
-        // In this case, left would have fallen below the bottom of the screen.
-        // Modify so that the bottom of the tooltip connects with the target
-        tooltipTop.val = `-${tooltipHeight - targetOffset.height - 20}px`;
-      }
-      tooltipRight.val = `${targetOffset.width + 20}px`;
-
-      break;
-    case "floating":
-      //we have to adjust the top and left of layer manually for intro items without element
-      tooltipLeft.val = "50%";
-      tooltipTop.val = "50%";
-      tooltipMarginLeft.val = `-${tooltipWidth / 2}px`;
-      tooltipMarginTop.val = `-${tooltipHeight / 2}px`;
-
-      break;
-    case "bottom-right-aligned":
-      tooltipLayerStyleRight = 0;
-      checkLeft(
-        targetOffset,
-        tooltipLayerStyleRight,
-        tooltipWidth,
-        tooltipLeft,
-        tooltipRight
-      );
-      tooltipTop.val = `${targetOffset.height + 20}px`;
-      break;
-
-    case "bottom-middle-aligned":
-      // a fix for middle aligned hints
-      if (hintMode) {
-        tooltipLayerStyleLeftRight += 5;
-      }
-
-      if (
-        checkLeft(
-          targetOffset,
-          tooltipLayerStyleLeftRight,
-          tooltipWidth,
-          tooltipLeft,
-          tooltipRight
-        )
-      ) {
-        tooltipRight.val = "";
-        checkRight(
-          targetOffset,
-          windowSize,
-          tooltipLayerStyleLeftRight,
-          tooltipWidth,
-          tooltipLeft
-        );
-      }
-      tooltipTop.val = `${targetOffset.height + 20}px`;
-      break;
-
-    // case 'bottom-left-aligned':
-    // Bottom-left-aligned is the same as the default bottom
-    // case 'bottom':
-    // Bottom going to follow the default behavior
-    default:
-      checkRight(targetOffset, windowSize, 0, tooltipWidth, tooltipLeft);
-      tooltipTop.val = `${targetOffset.height + 20}px`;
-  }
 };
 
 export type TooltipProps = {
@@ -326,10 +101,10 @@ export type TooltipProps = {
 export const Tooltip = (
   {
     position: initialPosition,
-    element,
+    element: _element,
     refreshes,
-    hintMode = false,
-    showStepNumbers = false,
+    hintMode: _hintMode = false,
+    showStepNumbers: _showStepNumbers = false,
 
     transitionDuration = 0,
 
@@ -343,119 +118,116 @@ export const Tooltip = (
   }: TooltipProps,
   children?: ChildDom[]
 ) => {
+  // until it is placed, the tooltip grows up and to the left of the
+  // reference layer: overflow on that side never makes the page scrollable
   const top = dom.state<string>("auto");
-  const right = dom.state<string>("auto");
-  const bottom = dom.state<string>("auto");
   const left = dom.state<string>("auto");
+  const right = dom.state<string>("0");
+  const bottom = dom.state<string>("0");
   const marginLeft = dom.state<string>("0");
   const marginTop = dom.state<string>("0");
   const opacity = dom.state<number>(0);
-  // setting a default height for the tooltip instead of 0 to avoid flickering
-  // this default is coming from the CSS class and is overridden after the tooltip is rendered
-  const tooltipHeight = dom.state<number>(250);
-  // max width of the tooltip according to its CSS class
-  // this default is coming from the CSS class and is overridden after the tooltip is rendered
-  const tooltipWidth = dom.state<number>(300);
   const position = dom.state<TooltipPosition>(initialPosition);
-  // windowSize can change if the window is resized
-  const windowSize = dom.state(getWindowSize());
-  const targetOffset = dom.state<Offset>(getOffset(element));
-  const tooltipBottomOverflow = dom.derive<boolean>(
-    () => targetOffset.val!.top + tooltipHeight.val! > windowSize.val!.height
-  );
+  const arrowX = dom.state<number | undefined>(undefined);
+  const arrowY = dom.state<number | undefined>(undefined);
+  // read by min() in the CSS, so themes keep their own sizes. It is part of
+  // the style string, which replaces the whole style attribute on a change
+  const availableWidth = dom.state<number | undefined>(undefined);
 
-  dom.derive(() => {
-    // set the new windowSize and targetOffset if the refreshes signal changes
-    if (refreshes.val !== undefined) {
-      windowSize.val = getWindowSize();
-      targetOffset.val = getOffset(element);
-    }
-  });
-
-  // auto-align tooltip based on position precedence and target offset
-  dom.derive(() => {
-    if (
-      position.val !== undefined &&
-      initialPosition !== "floating" &&
-      autoPosition &&
-      tooltipWidth.val &&
-      tooltipHeight.val &&
-      targetOffset.val &&
-      windowSize.val
-    ) {
-      position.val = determineAutoPosition(
-        positionPrecedence,
-        targetOffset.val,
-        tooltipWidth.val,
-        tooltipHeight.val,
-        initialPosition,
-        windowSize.val
-      );
-    }
-  });
-
-  // align tooltip based on position and target offset
-  dom.derive(() => {
-    if (
-      tooltipWidth.val !== undefined &&
-      tooltipHeight.val !== undefined &&
-      tooltipBottomOverflow.val !== undefined &&
-      position.val !== undefined &&
-      targetOffset.val !== undefined &&
-      windowSize.val !== undefined
-    ) {
-      alignTooltip(
-        position.val,
-        targetOffset.val,
-        windowSize.val,
-        tooltipWidth.val,
-        tooltipHeight.val,
-        top,
-        bottom,
-        left,
-        right,
-        marginLeft,
-        marginTop,
-        tooltipBottomOverflow,
-        showStepNumbers,
-        hintMode
-      );
-    }
+  const arrowElement = TooltipArrow({
+    tooltipPosition: position,
+    arrowX,
+    arrowY,
   });
 
   const tooltip = div(
     {
       style: () =>
-        `top: ${top.val}; right: ${right.val}; bottom: ${bottom.val}; left: ${left.val}; margin-left: ${marginLeft.val}; margin-top: ${marginTop.val};opacity: ${opacity.val}`,
+        `top: ${top.val}; right: ${right.val}; bottom: ${bottom.val}; left: ${
+          left.val
+        }; margin-left: ${marginLeft.val}; margin-top: ${
+          marginTop.val
+        };opacity: ${opacity.val};${
+          availableWidth.val === undefined
+            ? ""
+            : `--introjs-tooltip-available-width: ${availableWidth.val}px;`
+        }`,
       className: () =>
         `${tooltipClassName} introjs-${position.val} ${className || ""}`,
       role: "dialog",
       "aria-label": text,
       onclick: onClick ?? null,
     },
-    [
-      TooltipArrow({
-        tooltipPosition: position,
-        tooltipBottomOverflow: tooltipBottomOverflow,
-      }),
-      [children],
-    ]
+    [arrowElement, [children]]
   );
+
+  const update = async () => {
+    if (initialPosition === "floating") {
+      // centered on the screen, there is no target to place it next to
+      left.val = "50%";
+      top.val = "50%";
+      right.val = "auto";
+      bottom.val = "auto";
+      marginLeft.val = `-${tooltip.offsetWidth / 2}px`;
+      marginTop.val = `-${tooltip.offsetHeight / 2}px`;
+      return;
+    }
+
+    const reference = tooltip.parentElement;
+    if (!reference || !tooltip.isConnected) return;
+
+    const result = await placeTooltip(
+      reference,
+      tooltip,
+      arrowElement,
+      initialPosition,
+      autoPosition,
+      positionPrecedence
+    );
+
+    position.val = result.position;
+    right.val = "auto";
+    bottom.val = "auto";
+    left.val = `${result.x}px`;
+    top.val = `${result.y}px`;
+    marginLeft.val = "0";
+    marginTop.val = "0";
+    arrowX.val = result.arrowX;
+    arrowY.val = result.arrowY;
+    availableWidth.val = result.availableWidth;
+  };
+
+  // the reference layer is moved onto the target in a timeout as well, so
+  // wait for it before measuring
+  const scheduleUpdate = (done?: () => void) =>
+    setTimeout(
+      () =>
+        setTimeout(async () => {
+          await update();
+          // the new position is applied by the batched update scheduled by
+          // the assignments above; a timeout queued after them runs after it
+          setTimeout(() => done?.(), 0);
+        }, 0),
+      1
+    );
+
+  let firstRefresh = true;
+  dom.derive(() => {
+    if (refreshes.val === undefined) return;
+    // the initial render is handled below
+    if (firstRefresh) {
+      firstRefresh = false;
+      return;
+    }
+    scheduleUpdate();
+  });
 
   // apply the transition effect
   setTimeout(() => {
     opacity.val = 1;
   }, transitionDuration);
 
-  setTimeout(() => {
-    // set the correct height and width of the tooltip after it has been rendered
-    tooltipHeight.val = tooltip.offsetHeight;
-    tooltipWidth.val = tooltip.offsetWidth;
-
-    // the new size is applied by the batched update scheduled by the two
-    // assignments above; a timeout queued after them runs after that update
-    setTimeout(() => onRendered?.(), 0);
-  }, 1);
+  scheduleUpdate(onRendered);
 
   return tooltip;
 };
