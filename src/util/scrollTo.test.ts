@@ -1,4 +1,4 @@
-import scrollTo from "./scrollTo";
+import scrollTo, { scrollTooltipIntoView } from "./scrollTo";
 
 const place = (element: HTMLElement, left: number, width: number) => {
   element.getBoundingClientRect = () => new DOMRect(left, 100, width, 40);
@@ -67,5 +67,48 @@ describe("scrollTo", () => {
 
     expect(target.scrollIntoView).not.toHaveBeenCalled();
     expect(window.scrollBy).not.toHaveBeenCalled();
+  });
+
+  describe("scrollTooltipIntoView", () => {
+    const placeVertically = (element: HTMLElement, top: number) => {
+      element.getBoundingClientRect = () => new DOMRect(300, top, 200, 150);
+    };
+
+    test("scrolls a tooltip below the screen into view", () => {
+      // the visible part ends at 800
+      placeVertically(tooltipLayer, 700);
+
+      scrollTooltipIntoView(true, "element", 30, tooltipLayer);
+
+      expect(tooltipLayer.scrollIntoView).toHaveBeenCalledWith({
+        block: "nearest",
+        inline: "nearest",
+      });
+    });
+
+    test("scrolls a tooltip above the screen into view", () => {
+      placeVertically(tooltipLayer, -40);
+
+      scrollTooltipIntoView(true, "element", 30, tooltipLayer);
+
+      expect(tooltipLayer.scrollIntoView).toHaveBeenCalled();
+    });
+
+    test("leaves a visible tooltip alone", () => {
+      placeVertically(tooltipLayer, 100);
+
+      scrollTooltipIntoView(true, "element", 30, tooltipLayer);
+
+      expect(tooltipLayer.scrollIntoView).not.toHaveBeenCalled();
+    });
+
+    test("doesn't scroll when scrolling is off", () => {
+      placeVertically(tooltipLayer, 700);
+
+      scrollTooltipIntoView(true, "off", 30, tooltipLayer);
+      scrollTooltipIntoView(false, "element", 30, tooltipLayer);
+
+      expect(tooltipLayer.scrollIntoView).not.toHaveBeenCalled();
+    });
   });
 });

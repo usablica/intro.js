@@ -22,7 +22,7 @@ import {
 import { TourStep } from "../steps";
 import { dataStepNumberAttribute } from "../dataAttributes";
 import scrollParentToElement from "../../../util/scrollParentToElement";
-import scrollTo from "../../../util/scrollTo";
+import scrollTo, { scrollTooltipIntoView } from "../../../util/scrollTo";
 import { TooltipContent } from "../../tooltip/tooltipContent";
 
 const { h1, div, input, label, ul, li, a } = dom.tags;
@@ -213,9 +213,11 @@ const NextButton = ({
     },
   });
 
-  // wait for the button to be rendered
+  // wait for the button to be rendered. The tooltip may not be placed yet, so
+  // don't let the browser scroll to it: scrollTooltipIntoView() does that
+  // once it is placed
   setTimeout(() => {
-    nextButton.focus();
+    nextButton.focus({ preventScroll: true });
   }, 1);
 
   return nextButton;
@@ -525,6 +527,16 @@ export const TourTooltip = ({
       hintMode: false,
       position,
       text: title || text,
+      onRendered: () => {
+        // only now the tooltip is where the user has to see it
+        scrollTooltipIntoView(
+          scrollToElement,
+          step.scrollTo,
+          scrollPadding,
+          tooltip
+        );
+        props.onRendered?.();
+      },
     },
     children
   );

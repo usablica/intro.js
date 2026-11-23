@@ -48,37 +48,67 @@ export default function scrollTo(
     }
   }
 
-  scrollIntoViewHorizontally(
+  scrollIntoViewIfNeeded(
     scrollTo === "tooltip" ? tooltipLayer : targetElement,
     rect,
-    scrollPadding
+    scrollPadding,
+    false
   );
 }
 
 /**
- * On mobile, a page wider than the screen is panned sideways inside the
- * layout viewport, which window.scrollBy() can't undo: bring the element
- * back into the part of the page the user sees
+ * Once the tooltip is placed next to its target, make sure the user can see
+ * it: on a small screen a tall target leaves no room for it on any side
  */
-function scrollIntoViewHorizontally(
+export function scrollTooltipIntoView(
+  scrollToElement: boolean,
+  scrollTo: ScrollTo,
+  scrollPadding: number,
+  tooltip: HTMLElement
+) {
+  if (!scrollToElement || scrollTo === "off") return;
+
+  scrollIntoViewIfNeeded(
+    tooltip,
+    tooltip.getBoundingClientRect(),
+    scrollPadding,
+    true
+  );
+}
+
+/**
+ * Scroll an element into the part of the page the user sees. On mobile, a
+ * page wider than the screen is panned sideways inside the layout viewport,
+ * which window.scrollBy() can't undo, but scrollIntoView() can
+ */
+function scrollIntoViewIfNeeded(
   element: HTMLElement,
   rect: DOMRect,
-  padding: number
+  padding: number,
+  vertically: boolean
 ) {
   const viewport = window.visualViewport;
   const left = viewport ? viewport.offsetLeft : 0;
+  const top = viewport ? viewport.offsetTop : 0;
   const width = viewport
     ? viewport.width
     : document.documentElement.clientWidth;
+  const height = viewport
+    ? viewport.height
+    : document.documentElement.clientHeight;
 
-  if (rect.left >= left && rect.right <= left + width) return;
-  if (!element.scrollIntoView) return;
+  const outside =
+    rect.left < left ||
+    rect.right > left + width ||
+    (vertically && (rect.top < top || rect.bottom > top + height));
+
+  if (!outside || !element.scrollIntoView) return;
 
   // keep some room around the element, like the vertical scroll does
   const scrollMargin = element.style.scrollMargin;
   element.style.scrollMargin = `${padding}px`;
-  // "nearest" only scrolls as far as needed, and not vertically when the
-  // element is already visible in that direction
+  // "nearest" only scrolls as far as needed, and not in a direction in which
+  // the element is already visible
   element.scrollIntoView({ block: "nearest", inline: "nearest" });
   element.style.scrollMargin = scrollMargin;
 }
