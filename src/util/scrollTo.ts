@@ -47,4 +47,38 @@ export default function scrollTo(
       ); // 30px padding from edge to look nice
     }
   }
+
+  scrollIntoViewHorizontally(
+    scrollTo === "tooltip" ? tooltipLayer : targetElement,
+    rect,
+    scrollPadding
+  );
+}
+
+/**
+ * On mobile, a page wider than the screen is panned sideways inside the
+ * layout viewport, which window.scrollBy() can't undo: bring the element
+ * back into the part of the page the user sees
+ */
+function scrollIntoViewHorizontally(
+  element: HTMLElement,
+  rect: DOMRect,
+  padding: number
+) {
+  const viewport = window.visualViewport;
+  const left = viewport ? viewport.offsetLeft : 0;
+  const width = viewport
+    ? viewport.width
+    : document.documentElement.clientWidth;
+
+  if (rect.left >= left && rect.right <= left + width) return;
+  if (!element.scrollIntoView) return;
+
+  // keep some room around the element, like the vertical scroll does
+  const scrollMargin = element.style.scrollMargin;
+  element.style.scrollMargin = `${padding}px`;
+  // "nearest" only scrolls as far as needed, and not vertically when the
+  // element is already visible in that direction
+  element.scrollIntoView({ block: "nearest", inline: "nearest" });
+  element.style.scrollMargin = scrollMargin;
 }
