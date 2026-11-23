@@ -78,6 +78,22 @@ export async function previousStep(tour: Tour) {
 }
 
 /**
+ * Go to the step at the given index (zero based) on intro
+ *
+ * @api private
+ */
+export async function goToStepIndex(tour: Tour, index: number) {
+  await tour.setCurrentStep(index);
+
+  // the index doesn't exist, beforeChange cancelled it or the tour exited
+  if (tour.getCurrentStep() !== index) return false;
+
+  await showElement(tour, tour.getStep(index));
+
+  return true;
+}
+
+/**
  * Finds all Intro steps from the data-* attributes and the options.steps array
  *
  * @api private

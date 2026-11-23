@@ -1,4 +1,10 @@
-import { fetchSteps, nextStep, previousStep, TourStep } from "./steps";
+import {
+  fetchSteps,
+  goToStepIndex,
+  nextStep,
+  previousStep,
+  TourStep,
+} from "./steps";
 import { Package } from "../package";
 import {
   introAfterChangeCallback,
@@ -97,9 +103,8 @@ export class Tour implements Package<TourOptions> {
    * @param step step number
    */
   async goToStep(step: number) {
-    // step - 2 because steps starts from zero index and nextStep() increments the step
-    this.setCurrentStep(step - 2);
-    await nextStep(this);
+    // step - 1 because steps starts from zero index
+    await goToStepIndex(this, step - 1);
     return this;
   }
 
@@ -112,9 +117,8 @@ export class Tour implements Package<TourOptions> {
       const item = this._steps[i];
 
       if (item.step === stepNumber) {
-        // i - 1 because nextStep() increments the step
-        this.setCurrentStep(i - 1);
-        break;
+        await goToStepIndex(this, i);
+        return this;
       }
     }
 
