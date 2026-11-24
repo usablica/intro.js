@@ -57,6 +57,8 @@
   max-width: initial !important;
   width: auto !important;
   min-width: unset !important;
+  /* a floating tooltip is centered with negative margins: not in a bar */
+  margin: 0 !important;
   border-radius: 0;
   padding: 12px 220px 12px 20px;
   background-color: #ecf0f1;
