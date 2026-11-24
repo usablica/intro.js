@@ -533,7 +533,8 @@ export const TourTooltip = ({
           scrollToElement,
           step.scrollTo,
           scrollPadding,
-          tooltip
+          tooltip,
+          step.element as HTMLElement
         );
         props.onRendered?.();
       },

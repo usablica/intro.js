@@ -58,13 +58,17 @@ export default function scrollTo(
 
 /**
  * Once the tooltip is placed next to its target, make sure the user can see
- * it: on a small screen a tall target leaves no room for it on any side
+ * it: on a small screen a tall target leaves no room for it on any side.
+ * A tooltip that a theme fixes to the screen (like the bottom bar of the
+ * royal theme) can't be placed next to the target: then scroll the target
+ * out from under it instead
  */
 export function scrollTooltipIntoView(
   scrollToElement: boolean,
   scrollTo: ScrollTo,
   scrollPadding: number,
-  tooltip: HTMLElement
+  tooltip: HTMLElement,
+  targetElement?: HTMLElement
 ) {
   if (!scrollToElement || scrollTo === "off") return;
 
@@ -73,6 +77,30 @@ export function scrollTooltipIntoView(
     tooltip.getBoundingClientRect(),
     scrollPadding,
     true
+  );
+
+  if (!targetElement || getComputedStyle(tooltip).position !== "fixed") {
+    return;
+  }
+
+  const tooltipRect = tooltip.getBoundingClientRect();
+  const targetRect = targetElement.getBoundingClientRect();
+  const covered =
+    targetRect.bottom > tooltipRect.top &&
+    targetRect.top < tooltipRect.bottom &&
+    targetRect.right > tooltipRect.left &&
+    targetRect.left < tooltipRect.right;
+
+  if (!covered || tooltipRect.top <= 0) return;
+
+  // move the bottom of the target above the tooltip, but never the top of
+  // the target off the screen
+  window.scrollBy(
+    0,
+    Math.min(
+      targetRect.bottom - tooltipRect.top + scrollPadding,
+      targetRect.top - scrollPadding
+    )
   );
 }
 

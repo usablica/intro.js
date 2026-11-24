@@ -47,6 +47,14 @@
   border-left-color: #ecf0f1;
 }
 
+/* room at the end of the page, so a target at the bottom can be scrolled
+   out from under the bar */
+.introjs-tour::after {
+  content: "";
+  display: block;
+  height: 50vh;
+}
+
 /* Full-width bottom bar */
 .introjs-tooltip {
   position: fixed !important;

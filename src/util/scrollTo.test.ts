@@ -111,4 +111,40 @@ describe("scrollTo", () => {
       expect(tooltipLayer.scrollIntoView).not.toHaveBeenCalled();
     });
   });
+
+  describe("with a tooltip fixed to the screen", () => {
+    const bar = () => {
+      // a bar over the bottom 150px of an 800px high screen
+      tooltipLayer.style.position = "fixed";
+      tooltipLayer.getBoundingClientRect = () => new DOMRect(0, 650, 393, 150);
+    };
+
+    test("scrolls the target out from under it", () => {
+      bar();
+      target.getBoundingClientRect = () => new DOMRect(100, 700, 100, 40);
+
+      scrollTooltipIntoView(true, "element", 30, tooltipLayer, target);
+
+      // the bottom of the target 30px above the bar: 740 - 650 + 30
+      expect(window.scrollBy).toHaveBeenCalledWith(0, 120);
+    });
+
+    test("doesn't scroll the top of a tall target off the screen", () => {
+      bar();
+      target.getBoundingClientRect = () => new DOMRect(100, 100, 100, 700);
+
+      scrollTooltipIntoView(true, "element", 30, tooltipLayer, target);
+
+      expect(window.scrollBy).toHaveBeenCalledWith(0, 70);
+    });
+
+    test("leaves a target above it alone", () => {
+      bar();
+      target.getBoundingClientRect = () => new DOMRect(100, 300, 100, 40);
+
+      scrollTooltipIntoView(true, "element", 30, tooltipLayer, target);
+
+      expect(window.scrollBy).not.toHaveBeenCalled();
+    });
+  });
 });
