@@ -80,4 +80,108 @@ describe("setPositionRelativeTo", () => {
     // Assert
     expect(helperLayer.className).not.toBe("introjs-fixedTooltip");
   });
+
+  describe("at the edges of the page", () => {
+    beforeEach(() => {
+      Object.defineProperty(document.documentElement, "clientWidth", {
+        value: 400,
+        configurable: true,
+      });
+    });
+
+    afterEach(() => {
+      delete (document.documentElement as { clientWidth?: number }).clientWidth;
+    });
+
+    it("doesn't let the padding stick out on the right", () => {
+      // a 100px wide target that ends at the right edge of the page
+      const stepElement = div();
+      stepElement.getBoundingClientRect = getBoundingClientRectSpy(
+        100,
+        40,
+        50,
+        300,
+        90,
+        400
+      );
+      const helperLayer = div();
+
+      setPositionRelativeTo(document.body, helperLayer, stepElement, 10);
+
+      expect(helperLayer.style.left).toBe("295px");
+      // 300 + 100 = 400: the padding is cut on the right only
+      expect(helperLayer.style.width).toBe("105px");
+      expect(helperLayer.style.top).toBe("45px");
+      expect(helperLayer.style.height).toBe("50px");
+    });
+
+    it("doesn't let the padding stick out on the left and at the top", () => {
+      const stepElement = div();
+      stepElement.getBoundingClientRect = getBoundingClientRectSpy(
+        100,
+        40,
+        0,
+        0,
+        40,
+        100
+      );
+      const helperLayer = div();
+
+      setPositionRelativeTo(document.body, helperLayer, stepElement, 10);
+
+      expect(helperLayer.style.left).toBe("0px");
+      expect(helperLayer.style.top).toBe("0px");
+      expect(helperLayer.style.width).toBe("105px");
+      expect(helperLayer.style.height).toBe("45px");
+    });
+
+    it("keeps the padding of a target that is wider than the page", () => {
+      // the page scrolls sideways anyway
+      const stepElement = div();
+      stepElement.getBoundingClientRect = getBoundingClientRectSpy(
+        600,
+        40,
+        50,
+        100,
+        90,
+        700
+      );
+      const helperLayer = div();
+
+      setPositionRelativeTo(document.body, helperLayer, stepElement, 10);
+
+      expect(helperLayer.style.left).toBe("95px");
+      expect(helperLayer.style.width).toBe("610px");
+    });
+
+    it("keeps the padding inside a positioned container", () => {
+      const container = div();
+      container.style.position = "relative";
+      document.body.appendChild(container);
+      const stepElement = div();
+      stepElement.getBoundingClientRect = getBoundingClientRectSpy(
+        100,
+        40,
+        0,
+        0,
+        40,
+        100
+      );
+      container.getBoundingClientRect = getBoundingClientRectSpy(
+        400,
+        400,
+        0,
+        0,
+        400,
+        400
+      );
+      const helperLayer = div();
+
+      setPositionRelativeTo(container, helperLayer, stepElement, 10);
+
+      expect(helperLayer.style.left).toBe("-5px");
+      expect(helperLayer.style.width).toBe("110px");
+      container.remove();
+    });
+  });
 });
