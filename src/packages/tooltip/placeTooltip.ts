@@ -90,8 +90,28 @@ export const placeTooltip = (
       shift({ padding: VIEWPORT_PADDING }),
       size({
         padding: VIEWPORT_PADDING,
-        apply({ availableWidth }) {
-          available = Math.max(0, availableWidth);
+        apply({ availableWidth, elements }) {
+          const floating = elements.floating as HTMLElement;
+          // the CSS clamps the width of the content box: themes with
+          // box-sizing: content-box add their padding and border to it
+          const style = getComputedStyle(floating);
+          const extra =
+            style.boxSizing === "border-box"
+              ? 0
+              : [
+                  style.paddingLeft,
+                  style.paddingRight,
+                  style.borderLeftWidth,
+                  style.borderRightWidth,
+                ].reduce((sum, value) => sum + (parseFloat(value) || 0), 0);
+
+          available = Math.max(0, availableWidth - extra);
+          // set it right away, so the tooltip is measured and placed again
+          // with its new size; the Tooltip keeps it in its style afterwards
+          floating.style.setProperty(
+            "--introjs-tooltip-available-width",
+            `${available}px`
+          );
         },
       }),
       arrow({ element: arrowElement, padding: GAP }),

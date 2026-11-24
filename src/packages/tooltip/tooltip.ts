@@ -118,11 +118,13 @@ export const Tooltip = (
   }: TooltipProps,
   children?: ChildDom[]
 ) => {
-  // until it is placed, the tooltip grows up and to the left of the
-  // reference layer: overflow on that side never makes the page scrollable
+  // until it is placed, the tooltip grows up and towards the start of the
+  // line from the reference layer: overflow on that side never makes the
+  // page scrollable (the left in LTR, the right in RTL)
+  const rtl = getComputedStyle(document.documentElement).direction === "rtl";
   const top = dom.state<string>("auto");
-  const left = dom.state<string>("auto");
-  const right = dom.state<string>("0");
+  const left = dom.state<string>(rtl ? "0" : "auto");
+  const right = dom.state<string>(rtl ? "auto" : "0");
   const bottom = dom.state<string>("0");
   const marginLeft = dom.state<string>("0");
   const marginTop = dom.state<string>("0");
