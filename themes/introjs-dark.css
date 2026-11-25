@@ -121,6 +121,9 @@ tr.introjs-showElement > th {
 
   max-width: min(300px, var(--introjs-tooltip-available-width, 300px));
   color:#fff;
+  /* the title, the text and the header take their colours from these */
+  --introjs-color: #fff;
+  --introjs-bg: #434A54;
   -webkit-transition: opacity 0.1s ease-out;
      -moz-transition: opacity 0.1s ease-out;
       -ms-transition: opacity 0.1s ease-out;
@@ -240,4 +243,8 @@ tr.introjs-showElement > th {
   width: 0;
   left: 50%;
   top: 50%;
+}
+
+.introjs-tooltip .introjs-dontShowAgain label {
+  color: #fff;
 }
