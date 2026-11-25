@@ -16,6 +16,7 @@ import {
   skipButtonClassName,
   tooltipButtonsClassName,
   tooltipHeaderClassName,
+  tooltipHeaderNoTitleClassName,
   tooltipTextClassName,
   tooltipTitleClassName,
 } from "../classNames";
@@ -356,14 +357,23 @@ export const Header = ({
       })
     : null;
 
-  return div({ className: tooltipHeaderClassName }, [
-    titleEl,
-    Button({
-      className: skipButtonClassName,
-      label: skipLabel,
-      onClick: onSkipClick,
-    }),
-  ]);
+  return div(
+    {
+      // without a title the header takes no room: the close button sits in
+      // the corner, next to the text
+      className: title
+        ? tooltipHeaderClassName
+        : `${tooltipHeaderClassName} ${tooltipHeaderNoTitleClassName}`,
+    },
+    [
+      titleEl,
+      Button({
+        className: skipButtonClassName,
+        label: skipLabel,
+        onClick: onSkipClick,
+      }),
+    ]
+  );
 };
 
 const scroll = ({

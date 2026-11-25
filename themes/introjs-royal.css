@@ -144,6 +144,20 @@
   border: none;
   box-shadow: none;
   font-size: 20px;
+  /* in the middle of the bar, between the text and the buttons, with or
+     without a title */
+  top: 50%;
+  right: 175px;
+  transform: translateY(-50%);
+}
+
+.introjs-tooltip-header {
+  position: static;
+}
+
+/* the text already leaves room on the right for the buttons */
+.introjs-tooltip-header-notitle + .introjs-tooltiptext {
+  padding-right: 0;
 }
 
 .introjs-skipbutton:hover,
