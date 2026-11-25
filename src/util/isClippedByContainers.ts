@@ -1,16 +1,14 @@
+type Box = { left: number; top: number; right: number; bottom: number };
+
 /**
- * Whether a point (in viewport coordinates) of an element is cut off by one
- * of the elements around it that clip their content (overflow other than
- * visible, e.g. a scroll container scrolled away from it). The page itself
- * doesn't count: what is outside the screen can be scrolled to.
- *
- * @api private
+ * The boxes (in viewport coordinates) that the elements around an element
+ * clip it to: those with an overflow other than visible, like a scroll
+ * container. The page itself doesn't count: what is outside the screen can
+ * be scrolled to.
  */
-export default function isClippedByContainers(
-  element: HTMLElement,
-  x: number,
-  y: number
-): boolean {
+const clippingBoxes = (element: Element): Box[] => {
+  const boxes: Box[] = [];
+
   for (
     let container = element.parentElement;
     container &&
@@ -32,16 +30,57 @@ export default function isClippedByContainers(
     const box = container.getBoundingClientRect();
     const left = box.left + container.clientLeft;
     const top = box.top + container.clientTop;
-
-    if (
-      x < left ||
-      x > left + container.clientWidth ||
-      y < top ||
-      y > top + container.clientHeight
-    ) {
-      return true;
-    }
+    boxes.push({
+      left,
+      top,
+      right: left + container.clientWidth,
+      bottom: top + container.clientHeight,
+    });
   }
 
-  return false;
+  return boxes;
+};
+
+/**
+ * Whether a point (in viewport coordinates) of an element is cut off by one
+ * of the elements around it that clip their content (e.g. a scroll
+ * container scrolled away from it)
+ *
+ * @api private
+ */
+export default function isClippedByContainers(
+  element: HTMLElement,
+  x: number,
+  y: number
+): boolean {
+  return clippingBoxes(element).some(
+    (box) => x < box.left || x > box.right || y < box.top || y > box.bottom
+  );
+}
+
+/**
+ * The part of an element that the elements around it don't clip, in
+ * viewport coordinates. Its width or height is 0 when nothing of the
+ * element is visible.
+ *
+ * @api private
+ */
+export function visibleRect(element: Element): Box {
+  const rect = element.getBoundingClientRect();
+  let { left, top, right, bottom } = rect;
+
+  // move every edge into every box: a part of the element that is cut off
+  // collapses onto the edge of the box (to an empty box at that edge when
+  // nothing of the element is visible)
+  const clamp = (value: number, min: number, max: number) =>
+    Math.min(Math.max(value, min), max);
+
+  for (const box of clippingBoxes(element)) {
+    left = clamp(left, box.left, box.right);
+    right = clamp(right, box.left, box.right);
+    top = clamp(top, box.top, box.bottom);
+    bottom = clamp(bottom, box.top, box.bottom);
+  }
+
+  return { left, top, right, bottom };
 }
