@@ -184,4 +184,54 @@ describe("setPositionRelativeTo", () => {
       container.remove();
     });
   });
+
+  it("highlights only the part of the target its scroll container shows", () => {
+    // a 200 x 100 container at (0, 0), its target scrolled half out of it
+    const container = div();
+    container.style.overflowX = "auto";
+    container.style.overflowY = "auto";
+    Object.defineProperty(container, "clientWidth", { value: 200 });
+    Object.defineProperty(container, "clientHeight", { value: 100 });
+    container.getBoundingClientRect = () => new DOMRect(0, 0, 200, 100);
+    document.body.appendChild(container);
+
+    const stepElement = div();
+    container.appendChild(stepElement);
+    stepElement.getBoundingClientRect = () => new DOMRect(150, 20, 100, 40);
+    const helperLayer = div();
+
+    setPositionRelativeTo(document.body, helperLayer, stepElement, 10);
+
+    // 150 - 5 .. 200: no padding on the side the container cuts off
+    expect(helperLayer.style.left).toBe("145px");
+    expect(helperLayer.style.width).toBe("55px");
+    expect(helperLayer.style.top).toBe("15px");
+    expect(helperLayer.style.height).toBe("50px");
+    container.remove();
+  });
+
+  it("keeps the padding inside the container of a target at its edge", () => {
+    // a picture larger than its 200 x 100 frame at (0, 0)
+    const frame = div();
+    frame.style.overflowX = "hidden";
+    frame.style.overflowY = "hidden";
+    Object.defineProperty(frame, "clientWidth", { value: 200 });
+    Object.defineProperty(frame, "clientHeight", { value: 100 });
+    frame.getBoundingClientRect = () => new DOMRect(0, 0, 200, 100);
+    document.body.appendChild(frame);
+
+    const picture = div();
+    frame.appendChild(picture);
+    picture.getBoundingClientRect = () => new DOMRect(0, 0, 400, 300);
+    const helperLayer = div();
+
+    setPositionRelativeTo(document.body, helperLayer, picture, 10);
+
+    // exactly the frame: no padding sticking out on any side
+    expect(helperLayer.style.left).toBe("0px");
+    expect(helperLayer.style.top).toBe("0px");
+    expect(helperLayer.style.width).toBe("200px");
+    expect(helperLayer.style.height).toBe("100px");
+    frame.remove();
+  });
 });

@@ -2,6 +2,7 @@ import { style } from "../../../util/style";
 import { overlayClassName } from "../classNames";
 import dom from "../../dom";
 import { Tour } from "../tour";
+import { visibleRect } from "../../../util/isClippedByContainers";
 
 const { div } = dom.tags;
 
@@ -58,9 +59,10 @@ export const setOverlayHole = (
   overlayLayer: HTMLElement,
   target: Element | null | undefined
 ) => {
-  const rect = target?.getBoundingClientRect();
+  // the visible part of the target: not what its scroll containers cut off
+  const rect = target ? visibleRect(target) : undefined;
 
-  if (!rect || rect.width === 0 || rect.height === 0) {
+  if (!rect || rect.right - rect.left === 0 || rect.bottom - rect.top === 0) {
     overlayLayer.style.clipPath = "";
     return;
   }

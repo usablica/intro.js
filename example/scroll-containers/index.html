@@ -52,6 +52,12 @@
         repeating-linear-gradient(0deg, transparent 0 39px, #eaeef2 39px 40px),
         repeating-linear-gradient(90deg, transparent 0 79px, #eaeef2 79px 80px); }
       .grid .item.step { position: absolute; left: 640px; top: 520px; width: 160px; height: 60px; }
+
+      .crop { width: 220px; height: 120px; overflow: hidden; padding: 0; }
+      .crop .picture {
+        width: 420px; height: 260px; display: flex; align-items: center; justify-content: center;
+        background: linear-gradient(135deg, #ddf4ff, #0969da); color: #fff; font-weight: 600;
+      }
     </style>
   </head>
   <body>
@@ -86,7 +92,11 @@
       <div class="sheet"><div class="item step" id="step-grid">bottom right</div></div>
     </div>
 
-    <h2>5. Back to the first box</h2>
+    <h2>5. A picture cropped by its frame</h2>
+    <p>The frame has <code>overflow: hidden</code>: only the part of the picture inside it is highlighted.</p>
+    <div class="box crop" id="crop"><div class="picture" id="step-crop">a picture larger than its frame</div></div>
+
+    <h2>6. Back to the first box</h2>
     <p>The last step goes back to the first item of the row in box 1, which has to scroll back to the left.</p>
     <div style="height: 400px"></div>
 
@@ -104,7 +114,7 @@
           steps: [
             {
               element: "#step-horizontal",
-              intro: "Item 5 was hidden on the right of the row. Try scrolling the row now: the highlight follows it.",
+              intro: "Item 5 was hidden on the right of the row. Try scrolling the row now: the highlight follows it, and ends at the edge of the box when the item is half out of it.",
             },
             {
               element: "#step-vertical",
@@ -117,6 +127,10 @@
             {
               element: "#step-grid",
               intro: "This one was hidden to the right and below.",
+            },
+            {
+              element: "#step-crop",
+              intro: "Only the part of the picture that its frame shows is highlighted.",
             },
             {
               element: "#horizontal .item:first-child",
