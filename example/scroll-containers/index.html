@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Scroll containers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../dist/introjs.css" rel="stylesheet">
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 16px;
+        font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #1f2328;
+        background: #f6f8fa;
+      }
+      h1 { font-size: 20px; margin: 0 0 4px; }
+      h2 { font-size: 15px; margin: 24px 0 6px; }
+      p { margin: 0 0 8px; color: #59636e; max-width: 640px; }
+      button {
+        font: inherit; padding: 6px 12px; border-radius: 6px; cursor: pointer;
+        border: 1px solid #1f883d; background: #1f883d; color: #fff;
+      }
+
+      .box {
+        background: #fff;
+        border: 1px solid #d0d7de;
+        border-radius: 6px;
+        padding: 8px;
+      }
+      .item {
+        display: flex; align-items: center; justify-content: center;
+        background: #eaeef2; border-radius: 4px; color: #59636e;
+      }
+      .item.step { background: #ddf4ff; border: 2px dashed #0969da; color: #0969da; font-weight: 600; }
+
+      /* the case of #1181: a row that scrolls sideways */
+      .horizontal { width: min(420px, 100%); overflow-x: auto; white-space: nowrap; }
+      .horizontal .item { display: inline-flex; width: 160px; height: 70px; margin-right: 8px; }
+
+      .vertical { width: min(420px, 100%); height: 180px; overflow-y: auto; }
+      .vertical .item { height: 60px; margin-bottom: 8px; }
+
+      /* a scrolling list inside a scrolling panel */
+      .outer { width: min(420px, 100%); height: 220px; overflow: auto; }
+      .outer .spacer { height: 260px; color: #59636e; }
+      .inner { width: 300px; max-width: 100%; height: 110px; overflow: auto; white-space: nowrap; margin-bottom: 200px; }
+      .inner .item { display: inline-flex; width: 130px; height: 60px; margin-right: 8px; }
+
+      .grid { width: min(420px, 100%); height: 200px; overflow: auto; }
+      .grid .sheet { width: 900px; height: 700px; position: relative; background:
+        repeating-linear-gradient(0deg, transparent 0 39px, #eaeef2 39px 40px),
+        repeating-linear-gradient(90deg, transparent 0 79px, #eaeef2 79px 80px); }
+      .grid .item.step { position: absolute; left: 640px; top: 520px; width: 160px; height: 60px; }
+    </style>
+  </head>
+  <body>
+    <h1>Targets in scroll containers</h1>
+    <p>Every step of this tour is hidden inside a box that scrolls. intro.js should scroll each box (and the boxes around it) until the step is visible, and keep the highlight on it when you scroll a box yourself during the tour.</p>
+    <p><button id="start">Start the tour</button></p>
+
+    <h2>1. A row that scrolls sideways (#1181)</h2>
+    <div class="box horizontal" id="horizontal">
+      <div class="item">1</div><div class="item">2</div><div class="item">3</div><div class="item">4</div><div class="item step" id="step-horizontal">5</div><div class="item">6</div><div class="item">7</div>
+    </div>
+
+    <h2>2. A list that scrolls down</h2>
+    <div class="box vertical" id="vertical">
+      <div class="item">1</div><div class="item">2</div><div class="item">3</div><div class="item">4</div><div class="item">5</div><div class="item step" id="step-vertical">6</div><div class="item">7</div><div class="item">8</div>
+    </div>
+
+    <h2>3. A row inside a panel that scrolls too</h2>
+    <div class="box outer" id="outer">
+      <div class="spacer">The row is further down in this panel, and the step is at the end of the row.</div>
+      <div class="box inner" id="inner">
+        <div class="item">A</div><div class="item">B</div><div class="item">C</div><div class="item step" id="step-nested">D</div><div class="item">E</div>
+      </div>
+    </div>
+
+    <h2>4. A sheet that scrolls both ways</h2>
+    <div class="box grid" id="grid">
+      <div class="sheet"><div class="item step" id="step-grid">bottom right</div></div>
+    </div>
+
+    <h2>5. Back to the first box</h2>
+    <p>The last step goes back to the first item of the row in box 1, which has to scroll back to the left.</p>
+    <div style="height: 400px"></div>
+
+    <script src="../../dist/intro.js"></script>
+    <script>
+      document.getElementById("start").onclick = function () {
+        // start with every box scrolled to the beginning
+        ["horizontal", "vertical", "outer", "inner", "grid"].forEach(function (id) {
+          var box = document.getElementById(id);
+          box.scrollLeft = 0;
+          box.scrollTop = 0;
+        });
+
+        introJs.tour().setOptions({
+          steps: [
+            {
+              element: "#step-horizontal",
+              intro: "Item 5 was hidden on the right of the row. Try scrolling the row now: the highlight follows it.",
+            },
+            {
+              element: "#step-vertical",
+              intro: "Item 6 was below the bottom of the list.",
+            },
+            {
+              element: "#step-nested",
+              intro: "Item D was hidden twice: down in the panel and on the right of the row.",
+            },
+            {
+              element: "#step-grid",
+              intro: "This one was hidden to the right and below.",
+            },
+            {
+              element: "#horizontal .item:first-child",
+              intro: "And back to item 1 of the first row, which scrolled back to the left.",
+            },
+          ],
+        }).start();
+      };
+    </script>
+  </body>
+</html>

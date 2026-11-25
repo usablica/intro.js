@@ -21,7 +21,7 @@ import {
 } from "../classNames";
 import { TourStep } from "../steps";
 import { dataStepNumberAttribute } from "../dataAttributes";
-import scrollParentToElement from "../../../util/scrollParentToElement";
+import scrollContainersToElement from "../../../util/scrollContainersToElement";
 import scrollTo, { scrollTooltipIntoView } from "../../../util/scrollTo";
 import { TooltipContent } from "../../tooltip/tooltipContent";
 
@@ -377,8 +377,11 @@ const scroll = ({
   scrollToElement: boolean;
   scrollPadding: number;
 }) => {
-  // when target is within a scrollable element
-  scrollParentToElement(scrollToElement, step.element as HTMLElement);
+  // when the target is within scrollable elements
+  scrollContainersToElement(
+    scrollToElement && step.scrollTo !== "off",
+    step.element as HTMLElement
+  );
 
   // change the scroll of the window, if needed
   scrollTo(

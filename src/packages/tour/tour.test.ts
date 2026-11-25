@@ -591,6 +591,57 @@ describe("Tour", () => {
     });
   });
 
+  describe("refresh on the scroll of a container", () => {
+    beforeEach(() => {
+      // earlier tests spy on window.addEventListener, and the
+      // resetAllMocks() above turns those spies into no-ops
+      jest.restoreAllMocks();
+    });
+
+    const scroll = async (target: EventTarget) => {
+      target.dispatchEvent(new Event("scroll"));
+    };
+
+    it("refreshes when a scroll container scrolls", async () => {
+      const tour = new Tour();
+      const refreshSpy = jest.spyOn(tour, "refresh");
+      const container = document.createElement("div");
+      document.body.appendChild(container);
+
+      tour.enableRefreshOnResize();
+      await scroll(container);
+      tour.disableRefreshOnResize();
+
+      expect(refreshSpy).toHaveBeenCalledTimes(1);
+      container.remove();
+    });
+
+    it("doesn't refresh when the page scrolls", async () => {
+      const tour = new Tour();
+      const refreshSpy = jest.spyOn(tour, "refresh");
+
+      tour.enableRefreshOnResize();
+      await scroll(document);
+      tour.disableRefreshOnResize();
+
+      expect(refreshSpy).not.toHaveBeenCalled();
+    });
+
+    it("stops refreshing once disabled", async () => {
+      const tour = new Tour();
+      const refreshSpy = jest.spyOn(tour, "refresh");
+      const container = document.createElement("div");
+      document.body.appendChild(container);
+
+      tour.enableRefreshOnResize();
+      tour.disableRefreshOnResize();
+      await scroll(container);
+
+      expect(refreshSpy).not.toHaveBeenCalled();
+      container.remove();
+    });
+  });
+
   describe("disableRefreshOnResize", () => {
     it('should remove event listener for "resize"', () => {
       // Arrange
