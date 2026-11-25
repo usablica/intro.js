@@ -312,6 +312,17 @@ tr.introjs-showElement {
   color: var(--introjs-color, #{$black900});
 }
 
+// a step without a title: no empty row for the close button, which stays in
+// the top corner and the text makes room for it
+.introjs-tooltip-header-notitle {
+  min-height: 0;
+  padding-top: 0;
+
+  & + .introjs-tooltiptext {
+    padding-right: 45px;
+  }
+}
+
 .introjs-tooltipbuttons {
   border-top: 1px solid $black300;
   padding: 10px;
