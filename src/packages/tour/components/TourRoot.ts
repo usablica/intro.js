@@ -122,7 +122,9 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         currentStep: currentStepSignal.val,
 
         onBulletClick: (stepNumber: number) => {
-          tour.goToStep(stepNumber);
+          // a bullet knows the [data-step] number of its step, which isn't
+          // its position when the numbers have gaps
+          tour.goToStepNumber(stepNumber);
         },
 
         bullets: tour.getOption("showBullets"),
