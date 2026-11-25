@@ -533,6 +533,12 @@ tr.introjs-showElement {
   display: none;
 }
 
+// the element of the hint is scrolled out of view in a scroll container
+.introjs-hint-clipped {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .introjs-fixedhint {
   position: fixed;
 }
