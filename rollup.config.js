@@ -23,6 +23,9 @@ const banner = `/*!
  * https://introjs.com
  *
  * Date: ${new Date().toUTCString()}
+ *
+ * Includes Floating UI (https://floating-ui.com)
+ * Copyright (c) 2021-present Floating UI contributors, MIT License
  */
 `;
 

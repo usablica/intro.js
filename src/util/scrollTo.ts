@@ -47,4 +47,96 @@ export default function scrollTo(
       ); // 30px padding from edge to look nice
     }
   }
+
+  scrollIntoViewIfNeeded(
+    scrollTo === "tooltip" ? tooltipLayer : targetElement,
+    rect,
+    scrollPadding,
+    false
+  );
+}
+
+/**
+ * Once the tooltip is placed next to its target, make sure the user can see
+ * it: on a small screen a tall target leaves no room for it on any side.
+ * A tooltip that a theme fixes to the screen (like the bottom bar of the
+ * royal theme) can't be placed next to the target: then scroll the target
+ * out from under it instead
+ */
+export function scrollTooltipIntoView(
+  scrollToElement: boolean,
+  scrollTo: ScrollTo,
+  scrollPadding: number,
+  tooltip: HTMLElement,
+  targetElement?: HTMLElement
+) {
+  if (!scrollToElement || scrollTo === "off") return;
+
+  scrollIntoViewIfNeeded(
+    tooltip,
+    tooltip.getBoundingClientRect(),
+    scrollPadding,
+    true
+  );
+
+  if (!targetElement || getComputedStyle(tooltip).position !== "fixed") {
+    return;
+  }
+
+  const tooltipRect = tooltip.getBoundingClientRect();
+  const targetRect = targetElement.getBoundingClientRect();
+  const covered =
+    targetRect.bottom > tooltipRect.top &&
+    targetRect.top < tooltipRect.bottom &&
+    targetRect.right > tooltipRect.left &&
+    targetRect.left < tooltipRect.right;
+
+  if (!covered || tooltipRect.top <= 0) return;
+
+  // move the bottom of the target above the tooltip, but never the top of
+  // the target off the screen
+  window.scrollBy(
+    0,
+    Math.min(
+      targetRect.bottom - tooltipRect.top + scrollPadding,
+      targetRect.top - scrollPadding
+    )
+  );
+}
+
+/**
+ * Scroll an element into the part of the page the user sees. On mobile, a
+ * page wider than the screen is panned sideways inside the layout viewport,
+ * which window.scrollBy() can't undo, but scrollIntoView() can
+ */
+function scrollIntoViewIfNeeded(
+  element: HTMLElement,
+  rect: DOMRect,
+  padding: number,
+  vertically: boolean
+) {
+  const viewport = window.visualViewport;
+  const left = viewport ? viewport.offsetLeft : 0;
+  const top = viewport ? viewport.offsetTop : 0;
+  const width = viewport
+    ? viewport.width
+    : document.documentElement.clientWidth;
+  const height = viewport
+    ? viewport.height
+    : document.documentElement.clientHeight;
+
+  const outside =
+    rect.left < left ||
+    rect.right > left + width ||
+    (vertically && (rect.top < top || rect.bottom > top + height));
+
+  if (!outside || !element.scrollIntoView) return;
+
+  // keep some room around the element, like the vertical scroll does
+  const scrollMargin = element.style.scrollMargin;
+  element.style.scrollMargin = `${padding}px`;
+  // "nearest" only scrolls as far as needed, and not in a direction in which
+  // the element is already visible
+  element.scrollIntoView({ block: "nearest", inline: "nearest" });
+  element.style.scrollMargin = scrollMargin;
 }

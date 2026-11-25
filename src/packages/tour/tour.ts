@@ -258,7 +258,9 @@ export class Tour implements Package<TourOptions> {
    */
   notifyRendered(step?: number) {
     this._renderedStep = step;
-    this.releaseRenderWaiters();
+    // a late report from the tooltip of a previous step must not release
+    // the waiters of the current one
+    if (step === this.getCurrentStep()) this.releaseRenderWaiters();
   }
 
   private releaseRenderWaiters() {

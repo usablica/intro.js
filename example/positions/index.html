@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Tooltip positions playground</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../dist/introjs.css" rel="stylesheet">
+    <link id="theme-css" rel="stylesheet" disabled>
+    <link id="rtl-css" href="../../dist/introjs-rtl.css" rel="stylesheet" disabled>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #1f2328;
+        background: #f6f8fa;
+      }
+
+      /* controls */
+      .panel {
+        padding: 12px 16px;
+        background: #fff;
+        border-bottom: 1px solid #d0d7de;
+      }
+      .panel h1 { margin: 0 0 4px; font-size: 18px; }
+      .panel p { margin: 0 0 10px; color: #59636e; }
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        gap: 8px 12px;
+      }
+      .controls label { display: flex; flex-direction: column; gap: 2px; font-weight: 600; font-size: 12px; }
+      .controls label.check { flex-direction: row; align-items: center; gap: 6px; padding-top: 16px; }
+      .controls select { font: inherit; font-weight: normal; padding: 4px; }
+      .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+      .actions button {
+        font: inherit; padding: 6px 12px; border-radius: 6px; cursor: pointer;
+        border: 1px solid #d0d7de; background: #f6f8fa;
+      }
+      .actions button.primary { background: #1f883d; border-color: #1f883d; color: #fff; }
+      /* a fixed height: a growing list would push the target down after
+         intro.js has highlighted it */
+      #results {
+        height: 126px; overflow: auto; margin: 10px 0 0; padding: 4px 8px;
+        list-style: none; font: 12px/1.5 ui-monospace, Menlo, monospace;
+        background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px;
+      }
+      #results .ok { color: #1a7f37; }
+      #results .bad { color: #cf222e; font-weight: 600; }
+
+      /* the stage the target is placed in: the full width of the page */
+      .stage { position: relative; height: 100vh; min-height: 420px; }
+      .stage.far { margin-top: 150vh; }
+      .stage.far::before {
+        content: "↑ the target was 150vh further down, the page had to scroll";
+        position: absolute; top: -40px; left: 16px; color: #59636e;
+      }
+
+      #target {
+        position: absolute;
+        display: flex; align-items: center; justify-content: center;
+        background: #ddf4ff; border: 2px dashed #0969da; color: #0969da;
+        font-weight: 600; text-align: center;
+      }
+      #target.fixed { position: fixed; z-index: 1; }
+      #target.size-small { width: 24px; height: 24px; font-size: 0; }
+      #target.size-medium { width: 120px; height: 48px; }
+      #target.size-large { width: 260px; height: 160px; }
+
+      /* placements */
+      .at-top-left { top: 0; left: 0; }
+      .at-top { top: 0; left: 50%; transform: translateX(-50%); }
+      .at-top-right { top: 0; right: 0; }
+      .at-left { top: 50%; left: 0; transform: translateY(-50%); }
+      .at-center { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+      .at-right { top: 50%; right: 0; transform: translateY(-50%); }
+      .at-bottom-left { bottom: 0; left: 0; }
+      .at-bottom { bottom: 0; left: 50%; transform: translateX(-50%); }
+      .at-bottom-right { bottom: 0; right: 0; }
+      #target.at-wide { top: 40%; left: 0; width: 100%; }
+      #target.at-tall { top: 0; left: 50%; transform: translateX(-50%); height: 150vh; }
+
+      .scrollbox {
+        position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
+        width: min(320px, 90%); height: 220px; overflow: auto;
+        background: #fff; border: 1px solid #d0d7de; padding: 8px;
+      }
+      .scrollbox .spacer { height: 400px; color: #59636e; }
+      .scrollbox #target { position: relative; margin: 0 auto 300px; }
+    </style>
+  </head>
+  <body>
+    <div class="panel">
+      <h1>Tooltip positions playground</h1>
+      <p>Pick a case and press Start. Every step is checked: the tooltip must be on screen, not cover the target, and its arrow must point at the target.</p>
+
+      <div class="controls">
+        <label>Position
+          <select id="position">
+            <option>bottom</option>
+            <option>top</option>
+            <option>left</option>
+            <option>right</option>
+            <option>bottom-left-aligned</option>
+            <option>bottom-middle-aligned</option>
+            <option>bottom-right-aligned</option>
+            <option>top-left-aligned</option>
+            <option>top-middle-aligned</option>
+            <option>top-right-aligned</option>
+            <option>floating</option>
+          </select>
+        </label>
+        <label>Target placement
+          <select id="placement">
+            <option value="top-left">Top left corner</option>
+            <option value="top">Top edge</option>
+            <option value="top-right">Top right corner</option>
+            <option value="left">Left edge</option>
+            <option value="center" selected>Center</option>
+            <option value="right">Right edge</option>
+            <option value="bottom-left">Bottom left corner</option>
+            <option value="bottom">Bottom edge</option>
+            <option value="bottom-right">Bottom right corner</option>
+            <option value="wide">Full width</option>
+            <option value="tall">Taller than the screen</option>
+            <option value="scrollbox">Inside a scroll box</option>
+          </select>
+        </label>
+        <label>Target size
+          <select id="size">
+            <option value="small">Small (24px)</option>
+            <option value="medium" selected>Medium</option>
+            <option value="large">Large</option>
+          </select>
+        </label>
+        <label>Text
+          <select id="text">
+            <option value="short">Short</option>
+            <option value="long">Long</option>
+            <option value="title">Title + long text</option>
+            <option value="html">HTML with an image</option>
+          </select>
+        </label>
+        <label>Theme
+          <select id="theme">
+            <option value="">Default</option>
+            <option>dark</option>
+            <option>flattener</option>
+            <option>modern</option>
+            <option>nassim</option>
+            <option>nazanin</option>
+            <option>royal</option>
+          </select>
+        </label>
+        <label>Mode
+          <select id="mode">
+            <option value="tour">Tour</option>
+            <option value="hint">Hint</option>
+          </select>
+        </label>
+        <label class="check"><input type="checkbox" id="autoPosition" checked> autoPosition</label>
+        <label class="check"><input type="checkbox" id="fixed"> Fixed to the screen</label>
+        <label class="check"><input type="checkbox" id="far"> Far down the page</label>
+        <label class="check"><input type="checkbox" id="rtl"> RTL</label>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="start">Start</button>
+        <button id="all-positions">Run all positions</button>
+        <button id="all-placements">Run all placements</button>
+        <button id="stop">Stop</button>
+        <button id="copy">Copy link to this case</button>
+      </div>
+      <ul id="results"></ul>
+    </div>
+
+    <div class="stage" id="stage"></div>
+
+    <script src="../../dist/intro.js"></script>
+    <script>
+      var $ = function (id) { return document.getElementById(id); };
+      var fields = ["position", "placement", "size", "text", "theme", "mode"];
+      var checks = ["autoPosition", "fixed", "far", "rtl"];
+      var positions = Array.prototype.map.call($("position").options, function (o) { return o.value; })
+        .filter(function (p) { return p !== "floating"; });
+      var placements = Array.prototype.map.call($("placement").options, function (o) { return o.value; });
+
+      var texts = {
+        short: { intro: "A short tooltip." },
+        long: { intro: "A much longer tooltip text that needs a few lines to wrap, so the height of the tooltip matters for where it fits on the screen. It goes on for a while to make it really tall." },
+        title: { title: "A title that is long enough to wrap onto a second line", intro: "With a title the tooltip has a header, and the text below it wraps over a few lines as well." },
+        html: { intro: "<b>HTML</b> content with an image:<br><img src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%2228%22 fill=%22%230969da%22/%3E%3C/svg%3E' width='60' height='60' alt=''>" },
+      };
+      var rtlTexts = {
+        short: { intro: "یک راهنمای کوتاه." },
+        long: { intro: "یک متن راهنمای خیلی طولانی‌تر که باید در چند خط بشکند، تا ارتفاع راهنما در جای قرار گرفتنش روی صفحه مهم باشد. این متن کمی ادامه پیدا می‌کند تا راهنما واقعاً بلند شود." },
+        title: { title: "عنوانی که آن‌قدر طولانی است که به خط دوم می‌رود", intro: "با عنوان، راهنما یک سربرگ دارد و متن زیر آن هم در چند خط می‌شکند." },
+        html: { intro: "محتوای <b>HTML</b> با یک تصویر:<br><img src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%2228%22 fill=%22%230969da%22/%3E%3C/svg%3E' width='60' height='60' alt=''>" },
+      };
+
+      var current = null;
+
+      // the settings live in the URL, so a case can be shared
+      function readUrl() {
+        var params = new URLSearchParams(location.hash.slice(1));
+        fields.forEach(function (f) { if (params.has(f)) $(f).value = params.get(f); });
+        checks.forEach(function (c) { if (params.has(c)) $(c).checked = params.get(c) === "1"; });
+      }
+      function writeUrl() {
+        var params = new URLSearchParams();
+        fields.forEach(function (f) { params.set(f, $(f).value); });
+        checks.forEach(function (c) { params.set(c, $(c).checked ? "1" : "0"); });
+        history.replaceState(null, "", "#" + params.toString());
+      }
+
+      function settings() {
+        var s = {};
+        fields.forEach(function (f) { s[f] = $(f).value; });
+        checks.forEach(function (c) { s[c] = $(c).checked; });
+        return s;
+      }
+
+      function buildStage(s) {
+        var stage = $("stage");
+        stage.className = "stage" + (s.far ? " far" : "");
+        stage.innerHTML = "";
+
+        var target = document.createElement("div");
+        target.id = "target";
+        target.textContent = "target";
+        target.className = "size-" + s.size + (s.fixed && s.placement !== "scrollbox" ? " fixed" : "");
+
+        if (s.placement === "scrollbox") {
+          var box = document.createElement("div");
+          box.className = "scrollbox";
+          var spacer = document.createElement("div");
+          spacer.className = "spacer";
+          spacer.textContent = "Scroll box: the target is further down inside it.";
+          box.appendChild(spacer);
+          box.appendChild(target);
+          stage.appendChild(box);
+        } else {
+          target.className += " at-" + s.placement;
+          stage.appendChild(target);
+        }
+
+        document.documentElement.dir = s.rtl ? "rtl" : "ltr";
+        $("rtl-css").disabled = !s.rtl;
+        var theme = $("theme-css");
+        if (s.theme) {
+          theme.href = "../../themes/introjs-" + s.theme + ".css";
+          theme.disabled = false;
+        } else {
+          theme.disabled = true;
+        }
+        return target;
+      }
+
+      function stop() {
+        if (!current) return Promise.resolve();
+        var instance = current;
+        current = null;
+        return instance.kind === "tour" ? instance.api.exit(true) : Promise.resolve(instance.api.destroy());
+      }
+
+      // checks the tooltip that is on screen now
+      function check(label, target) {
+        var tooltip = document.querySelector(".introjs-tooltip");
+        if (!tooltip) return report(label, ["no tooltip"]);
+
+        var problems = [];
+        var t = tooltip.getBoundingClientRect();
+        var vv = window.visualViewport;
+        var view = vv
+          ? { left: vv.offsetLeft, top: vv.offsetTop, right: vv.offsetLeft + vv.width, bottom: vv.offsetTop + vv.height }
+          : { left: 0, top: 0, right: document.documentElement.clientWidth, bottom: document.documentElement.clientHeight };
+
+        if (t.left < view.left - 1) problems.push("sticks out left by " + Math.round(view.left - t.left) + "px");
+        if (t.right > view.right + 1) problems.push("sticks out right by " + Math.round(t.right - view.right) + "px");
+        if (t.top < view.top - 1) problems.push("sticks out at the top by " + Math.round(view.top - t.top) + "px");
+        if (t.bottom > view.bottom + 1) problems.push("sticks out at the bottom by " + Math.round(t.bottom - view.bottom) + "px");
+        if (document.documentElement.scrollWidth > document.documentElement.clientWidth + 1) {
+          // name the intro.js parts that stick out
+          var width = document.documentElement.clientWidth;
+          var culprits = Array.prototype.filter.call(
+            document.querySelectorAll("[class*='introjs-']"),
+            function (el) { return el.getBoundingClientRect().right + window.scrollX > width + 1; }
+          ).map(function (el) { return "." + el.className.trim().split(/\s+/)[0]; });
+          problems.push("page scrolls sideways" + (culprits.length ? " (" + culprits.filter(function (c, i) { return culprits.indexOf(c) === i; }).join(", ") + ")" : ""));
+        }
+
+        var side = (tooltip.className.match(/introjs-(top|bottom|left|right|floating)/) || [])[1];
+        if (side && side !== "floating") {
+          // a hint tooltip points at the hint dot, not at the element
+          var reference = document.querySelector(".introjs-hint") || target;
+          var r = reference.getBoundingClientRect();
+          var overlapX = Math.min(t.right, r.right) - Math.max(t.left, r.left);
+          var overlapY = Math.min(t.bottom, r.bottom) - Math.max(t.top, r.top);
+          if (overlapX > 2 && overlapY > 2) problems.push("covers the " + (reference === target ? "target" : "hint"));
+
+          var arrow = tooltip.querySelector(".introjs-arrow");
+          if (arrow && getComputedStyle(arrow).display !== "none") {
+            var a = arrow.getBoundingClientRect();
+            var onTarget = side === "top" || side === "bottom"
+              ? a.left + a.width / 2 >= r.left - 1 && a.left + a.width / 2 <= r.right + 1
+              : a.top + a.height / 2 >= r.top - 1 && a.top + a.height / 2 <= r.bottom + 1;
+            if (!onTarget) problems.push("arrow misses the target");
+          }
+        }
+
+        report(label + " → " + (side || "?") + ", " + Math.round(t.width) + "px wide", problems);
+      }
+
+      function report(label, problems) {
+        var li = document.createElement("li");
+        li.className = problems.length ? "bad" : "ok";
+        li.textContent = (problems.length ? "✗ " : "✓ ") + label + (problems.length ? ": " + problems.join(", ") : "");
+        $("results").appendChild(li);
+        // not scrollIntoView(): that would scroll the page away from the target
+        $("results").scrollTop = $("results").scrollHeight;
+      }
+
+      // a tour with one step per case, all on the same target
+      function runTour(cases) {
+        var s = settings();
+        var target = buildStage(s);
+        var t = s.rtl ? rtlTexts[s.text] : texts[s.text];
+
+        var tour = introJs.tour().setOptions({
+          steps: cases.map(function (c) {
+            return {
+              element: c.position === "floating" ? undefined : target,
+              title: t.title,
+              intro: t.intro,
+              position: c.position,
+            };
+          }),
+          autoPosition: s.autoPosition,
+          nextLabel: s.rtl ? "بعدی" : "Next",
+          prevLabel: s.rtl ? "قبلی" : "Back",
+          doneLabel: s.rtl ? "پایان" : "Done",
+        });
+
+        tour.onAfterChange(function () {
+          var c = cases[tour.getCurrentStep()];
+          // after the tooltip has been placed and the page scrolled
+          setTimeout(function () { check(c.label, target); }, 700);
+        });
+
+        current = { kind: "tour", api: tour };
+        return tour.start();
+      }
+
+      function runHint() {
+        var s = settings();
+        var target = buildStage(s);
+        var t = s.rtl ? rtlTexts[s.text] : texts[s.text];
+        var hint = introJs.hint().setOptions({
+          hints: [{ element: target, hint: (t.title ? "<b>" + t.title + "</b><br>" : "") + t.intro, position: s.position }],
+          autoPosition: s.autoPosition,
+        });
+        hint.onHintClick(function () {
+          setTimeout(function () { check("hint, " + s.position, target); }, 700);
+        });
+        current = { kind: "hint", api: hint };
+        return hint.render().then(function () {
+          report("hint added: click the pulsing dot on the target", []);
+        });
+      }
+
+      function start(cases) {
+        writeUrl();
+        $("results").innerHTML = "";
+        return stop().then(function () {
+          return $("mode").value === "hint" ? runHint() : runTour(cases);
+        });
+      }
+
+      $("start").onclick = function () {
+        var p = $("position").value;
+        start([{ position: p, label: p }]);
+      };
+
+      $("all-positions").onclick = function () {
+        $("mode").value = "tour";
+        start(positions.concat("floating").map(function (p) { return { position: p, label: p }; }));
+      };
+
+      // one tour per placement would need a new stage per step, so go
+      // through the placements one tour at a time
+      $("all-placements").onclick = function () {
+        $("mode").value = "tour";
+        $("results").innerHTML = "";
+        var i = 0;
+        var next = function () {
+          if (i >= placements.length) return;
+          $("placement").value = placements[i++];
+          var p = $("position").value;
+          var label = $("placement").value + ", " + p;
+          stop().then(function () {
+            return runTour([{ position: p, label: label }]);
+          }).then(function () {
+            setTimeout(next, 1200);
+          });
+        };
+        next();
+      };
+
+      $("stop").onclick = function () { stop(); };
+
+      $("copy").onclick = function () {
+        writeUrl();
+        if (navigator.clipboard) navigator.clipboard.writeText(location.href);
+        report("link copied: " + location.href, []);
+      };
+
+      fields.concat(checks).forEach(function (f) {
+        $(f).addEventListener("change", function () {
+          writeUrl();
+          buildStage(settings());
+        });
+      });
+
+      readUrl();
+      buildStage(settings());
+    </script>
+  </body>
+</html>
