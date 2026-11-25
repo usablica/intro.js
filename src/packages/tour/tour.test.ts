@@ -990,6 +990,34 @@ describe("Tour", () => {
     });
   });
 
+  describe("bullets", () => {
+    let mockTour: Tour;
+
+    afterEach(async () => {
+      await mockTour.exit();
+    });
+
+    test("a bullet opens its step when the data-step numbers have gaps", async () => {
+      document.body.innerHTML = `<div>
+          <p id='one' data-step='10' data-intro='one'>One</p>
+          <p id='two' data-step='20' data-intro='two'>Two</p>
+          <p id='three' data-step='30' data-intro='three'>Three</p>
+        </div>`;
+      mockTour = getMockTour();
+      await mockTour.start();
+      await sleep(waitMsForDerivations);
+
+      const bullets =
+        document.querySelectorAll<HTMLElement>(".introjs-bullets a");
+      expect(bullets.length).toBe(3);
+
+      bullets[2].click();
+      await sleep(waitMsForDerivations);
+
+      expect(mockTour.getCurrentStep()).toBe(2);
+    });
+  });
+
   describe("setTheme / getTheme", () => {
     beforeEach(() => {
       // other tests in this file may leave a stray .introjs-tour element
