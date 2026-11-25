@@ -57,7 +57,11 @@
   <body>
     <h1>Targets in scroll containers</h1>
     <p>Every step of this tour is hidden inside a box that scrolls. intro.js should scroll each box (and the boxes around it) until the step is visible, and keep the highlight on it when you scroll a box yourself during the tour.</p>
-    <p><button id="start">Start the tour</button></p>
+    <p>
+      <button id="start">Start the tour</button>
+      <button id="hints">Show hints</button>
+    </p>
+    <p>With the hints shown, scroll the boxes: the dot of a step should only show while the step is visible in its box, and an open hint closes when its step is scrolled away.</p>
 
     <h2>1. A row that scrolls sideways (#1181)</h2>
     <div class="box horizontal" id="horizontal">
@@ -120,6 +124,20 @@
             },
           ],
         }).start();
+      };
+
+      var hints;
+      document.getElementById("hints").onclick = function () {
+        if (hints) hints.destroy();
+        hints = introJs.hint().setOptions({
+          hints: [
+            { element: "#step-horizontal", hint: "Item 5 of the row", hintPosition: "middle-middle" },
+            { element: "#step-vertical", hint: "Item 6 of the list", hintPosition: "middle-middle" },
+            { element: "#step-nested", hint: "Item D, in a row in a panel", hintPosition: "middle-middle" },
+            { element: "#step-grid", hint: "The bottom right of the sheet", hintPosition: "middle-middle" },
+          ],
+        });
+        hints.render();
       };
     </script>
   </body>
