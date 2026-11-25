@@ -57,3 +57,11 @@
   border-color: #2c3e50;
   text-decoration: none;
 }
+
+/* after the rules above, which would otherwise make it look clickable */
+.introjs-disabled, .introjs-disabled:hover, .introjs-disabled:focus {
+  background: #ecf0f1;
+  color: #bdc3c7;
+  border-color: #dfe4e6;
+  cursor: default;
+}

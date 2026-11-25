@@ -25,6 +25,9 @@ $background_color_10: rgba(136, 136, 136, 0.24);
   --introjs-btn-active-color: #{$black900};
   --introjs-btn-active-border: #{$black500};
   --introjs-btn-textShadow: #{$white};
+  --introjs-btn-disabled-bg: #{$black100};
+  --introjs-btn-disabled-color: #{$black500};
+  --introjs-btn-disabled-border: #{$black400};
 
   --introjs-arrow-color: #{$white};
   --introjs-overlay-bg: #{$black100};
@@ -44,6 +47,9 @@ $background_color_10: rgba(136, 136, 136, 0.24);
   --introjs-btn-active-color: #{$white};
   --introjs-btn-active-border: #{$black400};
   --introjs-btn-textShadow: #{$black800};
+  --introjs-btn-disabled-bg: #{$black800};
+  --introjs-btn-disabled-color: #{$black500};
+  --introjs-btn-disabled-border: #{$black600};
 
   --introjs-arrow-color: #{$black800};
   --introjs-overlay-bg: #{$black800};
@@ -408,21 +414,14 @@ tr.introjs-showElement {
 }
 
 .introjs-disabled {
-  color: var(--introjs-btn-color, #{$black800});
-  border-color: var(--introjs-btn-border, #{$black400});
-  box-shadow: none;
-  cursor: default;
-  background-color: var(--introjs-btn-bg, #{$black100});
-  background-image: none;
-  text-decoration: none;
-
+  &,
   &:hover,
   &:focus {
-    color: var(--introjs-btn-focus-color, #{$black800});
-    border-color: var(--introjs-btn-border, #{$black400});
+    color: var(--introjs-btn-disabled-color, #{$black500});
+    border-color: var(--introjs-btn-disabled-border, #{$black400});
     box-shadow: none;
     cursor: default;
-    background-color: var(--introjs-btn-focus-bg, #{$black200});
+    background-color: var(--introjs-btn-disabled-bg, #{$black100});
     background-image: none;
     text-decoration: none;
   }
