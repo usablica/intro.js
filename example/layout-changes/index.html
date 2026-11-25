@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Layout changes during a tour</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../dist/introjs.css" rel="stylesheet">
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 16px;
+        font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #1f2328;
+        background: #f6f8fa;
+      }
+      h1 { font-size: 20px; margin: 0 0 4px; }
+      p { margin: 0 0 8px; color: #59636e; max-width: 640px; }
+      button {
+        font: inherit; padding: 6px 12px; border-radius: 6px; cursor: pointer;
+        border: 1px solid #1f883d; background: #1f883d; color: #fff;
+      }
+      button.secondary { border-color: #d0d7de; background: #fff; color: #1f2328; }
+
+      #late {
+        max-width: 480px;
+        transition: height 0.6s ease;
+        overflow: hidden;
+        height: 0;
+        background: linear-gradient(135deg, #ddf4ff, #0969da);
+        border-radius: 6px;
+        color: #fff;
+        display: flex; align-items: center; justify-content: center; font-weight: 600;
+      }
+      #late.loaded { height: 180px; margin-bottom: 16px; }
+
+      .card {
+        max-width: 480px;
+        background: #fff;
+        border: 1px solid #d0d7de;
+        border-radius: 6px;
+        padding: 12px;
+        margin-bottom: 16px;
+      }
+      .card h2 { font-size: 15px; margin: 0 0 6px; }
+      #more { display: none; }
+      #more.open { display: block; }
+    </style>
+  </head>
+  <body>
+    <h1>Layout changes during a tour</h1>
+    <p>Start the tour: two seconds later a picture "loads" above the cards and pushes them down, like a late image or a banner. The highlight and the tooltip should move with the card. In the second step, click "Show more" in the card: the card grows, and the highlight grows with it.</p>
+    <p>
+      <button id="start">Start the tour</button>
+      <button id="reset" class="secondary">Reset the page</button>
+    </p>
+
+    <div id="late">a picture that loaded late</div>
+
+    <div class="card" id="first">
+      <h2>A card</h2>
+      <p>The first step. Wait two seconds.</p>
+    </div>
+
+    <div class="card" id="second">
+      <h2>A card that grows</h2>
+      <p>Click the button below during the tour.</p>
+      <button id="toggle" class="secondary">Show more</button>
+      <div id="more">
+        <p>More text that was hidden. The card is taller now, and the highlight should cover all of it.</p>
+        <p>And another line, to make the difference clear.</p>
+      </div>
+    </div>
+
+    <div style="height: 600px"></div>
+
+    <script src="../../dist/intro.js"></script>
+    <script>
+      var late = document.getElementById("late");
+      var more = document.getElementById("more");
+      var toggle = document.getElementById("toggle");
+      var timer;
+
+      function reset() {
+        clearTimeout(timer);
+        late.classList.remove("loaded");
+        more.classList.remove("open");
+        toggle.textContent = "Show more";
+      }
+
+      toggle.onclick = function () {
+        var open = more.classList.toggle("open");
+        toggle.textContent = open ? "Show less" : "Show more";
+      };
+
+      document.getElementById("reset").onclick = reset;
+
+      document.getElementById("start").onclick = function () {
+        reset();
+        introJs.tour().setOptions({
+          steps: [
+            {
+              element: "#first",
+              intro: "In two seconds a picture loads above this card and pushes it down: this highlight moves along.",
+            },
+            {
+              element: "#second",
+              intro: "Click \"Show more\" in the card: the card grows and the highlight grows with it.",
+            },
+          ],
+        }).start();
+
+        timer = setTimeout(function () {
+          late.classList.add("loaded");
+        }, 2000);
+      };
+    </script>
+  </body>
+</html>
