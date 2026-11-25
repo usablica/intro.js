@@ -5,7 +5,7 @@ module.exports = defineConfig({
   viewportWidth: 1000,
   trashAssetsBeforeRuns: true,
   env: {
-    visualRegressionFailSilently: true,
+    visualRegressionFailSilently: false,
   },
   e2e: {
     screenshotsFolder: "./cypress/snapshots/actual",
