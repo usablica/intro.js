@@ -5,6 +5,7 @@ import { setOption, setOptions } from "../../option";
 import isFunction from "../../util/isFunction";
 import debounce from "../../util/debounce";
 import DOMEvent from "../../util/DOMEvent";
+import observeLayout, { LayoutObserver } from "../../util/observeLayout";
 import { getContainerElement } from "../../util/containerElement";
 import { hideHint, hideHints } from "./hide";
 import { showHint, showHints } from "./show";
@@ -36,6 +37,7 @@ export class Hint implements Package<HintOptions> {
 
   // Event handlers
   private _hintsAutoRefreshFunction?: () => void;
+  private _layoutObserver?: LayoutObserver;
   // The hint close function used when the user clicks outside the hint
   private _windowClickFunction?: () => void;
 
@@ -360,6 +362,40 @@ export class Hint implements Package<HintOptions> {
 
       DOMEvent.on(window, "scroll", this._hintsAutoRefreshFunction, true);
       DOMEvent.on(window, "resize", this._hintsAutoRefreshFunction, true);
+
+      // the elements of the hints move or change their size on the page,
+      // e.g. because content above them was added or an image above loaded
+      let boxes: string | undefined;
+      const check = () => {
+        // where the elements are on the page: scrolling the page doesn't
+        // change it, and the icons are placed on the page
+        const newBoxes = this.getHints()
+          .map(({ element }) => {
+            if (!(element instanceof Element)) return "";
+            const rect = element.getBoundingClientRect();
+            return [
+              rect.left + window.scrollX,
+              rect.top + window.scrollY,
+              rect.width,
+              rect.height,
+            ]
+              .map(Math.round)
+              .join();
+          })
+          .join(";");
+
+        if (boxes !== undefined && newBoxes !== boxes) this.refresh();
+        boxes = newBoxes;
+      };
+
+      this._layoutObserver?.disconnect();
+      this._layoutObserver = observeLayout(
+        check,
+        // the changes to our own icons and dialogs
+        (node) => !!this._root && this._root.contains(node)
+      );
+      // where the elements are now, to compare with
+      check();
     }
 
     return this;
@@ -375,6 +411,9 @@ export class Hint implements Package<HintOptions> {
 
       this._hintsAutoRefreshFunction = undefined;
     }
+
+    this._layoutObserver?.disconnect();
+    this._layoutObserver = undefined;
 
     return this;
   }

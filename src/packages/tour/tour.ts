@@ -6,6 +6,7 @@ import {
   TourStep,
 } from "./steps";
 import { Package } from "../package";
+import observeLayout, { LayoutObserver } from "../../util/observeLayout";
 import {
   introAfterChangeCallback,
   introBeforeChangeCallback,
@@ -69,6 +70,7 @@ export class Tour implements Package<TourOptions> {
   private _keyboardNavigationHandler?: (e: KeyboardEvent) => Promise<void>;
   private _refreshOnResizeHandler?: (e: Event) => void;
   private _refreshOnScrollHandler?: (e: Event) => void;
+  private _layoutObserver?: LayoutObserver;
 
   /**
    * Create a new Tour instance
@@ -498,6 +500,62 @@ export class Tour implements Package<TourOptions> {
   }
 
   /**
+   * Refresh the tour when the element of the current step moves or changes
+   * its size on the page, e.g. because content above it was added or an
+   * image above it loaded
+   */
+  private enableAutoRefresh() {
+    this.disableAutoRefresh();
+
+    let target: Element | undefined;
+    let box: string | undefined;
+
+    const check = () => {
+      const currentStep = this.getCurrentStep();
+      if (currentStep === undefined) return;
+
+      const element = this.getStep(currentStep)?.element;
+      if (!(element instanceof Element) || !element.isConnected) return;
+
+      // where the element is on the page: scrolling the page doesn't
+      // change it, and the layers are placed on the page
+      const rect = element.getBoundingClientRect();
+      const newBox = [
+        rect.left + window.scrollX,
+        rect.top + window.scrollY,
+        rect.width,
+        rect.height,
+      ]
+        .map(Math.round)
+        .join();
+
+      if (element !== target) {
+        // a new step: it was just placed, only watch its size from now on
+        if (target) this._layoutObserver?.unobserve(target);
+        this._layoutObserver?.observe(element);
+        target = element;
+      } else if (newBox !== box) {
+        this.refresh();
+      }
+
+      box = newBox;
+    };
+
+    this._layoutObserver = observeLayout(
+      check,
+      // the changes to our own layers
+      (node) => !!this._root && this._root.contains(node)
+    );
+    // where the target is now, to compare with
+    check();
+  }
+
+  private disableAutoRefresh() {
+    this._layoutObserver?.disconnect();
+    this._layoutObserver = undefined;
+  }
+
+  /**
    * Disable refresh on window resize for the tour
    */
   disableRefreshOnResize() {
@@ -565,6 +623,7 @@ export class Tour implements Package<TourOptions> {
       this.initTheme();
       this.enableKeyboardNavigation();
       this.enableRefreshOnResize();
+      this.enableAutoRefresh();
 
       // the first step is shown before the root exists, so its afterChange
       // callback and "step" event are fired here, once its tooltip is rendered
@@ -630,6 +689,7 @@ export class Tour implements Package<TourOptions> {
     if (await exitIntro(this, force ?? false)) {
       this.disableKeyboardNavigation();
       this.disableRefreshOnResize();
+      this.disableAutoRefresh();
       this._theme?.destroy();
       this._theme = undefined;
 
