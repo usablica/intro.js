@@ -25,7 +25,7 @@ jobs:
     # the screenshots of a failed visual regression test: copy them to
     # cypress/snapshots/base when the change is intended
     - name: Upload Cypress snapshots
-      if: failure()
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: cypress-snapshots
