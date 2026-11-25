@@ -68,6 +68,7 @@ export class Tour implements Package<TourOptions> {
   // Event handlers
   private _keyboardNavigationHandler?: (e: KeyboardEvent) => Promise<void>;
   private _refreshOnResizeHandler?: (e: Event) => void;
+  private _refreshOnScrollHandler?: (e: Event) => void;
 
   /**
    * Create a new Tour instance
@@ -478,6 +479,22 @@ export class Tour implements Package<TourOptions> {
   enableRefreshOnResize() {
     this._refreshOnResizeHandler = (_: Event) => this.refresh();
     DOMEvent.on(window, "resize", this._refreshOnResizeHandler, true);
+
+    // the target moves when a scroll container it is in scrolls (the layers
+    // are placed on the page, so scrolling the page itself moves them along).
+    // Browsers fire scroll at most once per frame, so no need to throttle
+    this._refreshOnScrollHandler = (e: Event) => {
+      const container = e.target;
+      if (
+        container instanceof Element &&
+        container !== document.documentElement &&
+        container !== document.body
+      ) {
+        this.refresh();
+      }
+    };
+    // scroll events don't bubble: listen in the capture phase
+    DOMEvent.on(window, "scroll", this._refreshOnScrollHandler, true);
   }
 
   /**
@@ -487,6 +504,11 @@ export class Tour implements Package<TourOptions> {
     if (this._refreshOnResizeHandler) {
       DOMEvent.off(window, "resize", this._refreshOnResizeHandler, true);
       this._refreshOnResizeHandler = undefined;
+    }
+
+    if (this._refreshOnScrollHandler) {
+      DOMEvent.off(window, "scroll", this._refreshOnScrollHandler, true);
+      this._refreshOnScrollHandler = undefined;
     }
   }
 
