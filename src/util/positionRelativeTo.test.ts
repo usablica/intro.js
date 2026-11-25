@@ -209,4 +209,29 @@ describe("setPositionRelativeTo", () => {
     expect(helperLayer.style.height).toBe("50px");
     container.remove();
   });
+
+  it("keeps the padding inside the container of a target at its edge", () => {
+    // a picture larger than its 200 x 100 frame at (0, 0)
+    const frame = div();
+    frame.style.overflowX = "hidden";
+    frame.style.overflowY = "hidden";
+    Object.defineProperty(frame, "clientWidth", { value: 200 });
+    Object.defineProperty(frame, "clientHeight", { value: 100 });
+    frame.getBoundingClientRect = () => new DOMRect(0, 0, 200, 100);
+    document.body.appendChild(frame);
+
+    const picture = div();
+    frame.appendChild(picture);
+    picture.getBoundingClientRect = () => new DOMRect(0, 0, 400, 300);
+    const helperLayer = div();
+
+    setPositionRelativeTo(document.body, helperLayer, picture, 10);
+
+    // exactly the frame: no padding sticking out on any side
+    expect(helperLayer.style.left).toBe("0px");
+    expect(helperLayer.style.top).toBe("0px");
+    expect(helperLayer.style.width).toBe("200px");
+    expect(helperLayer.style.height).toBe("100px");
+    frame.remove();
+  });
 });

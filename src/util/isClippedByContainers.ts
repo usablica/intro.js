@@ -42,6 +42,24 @@ const clippingBoxes = (element: Element): Box[] => {
 };
 
 /**
+ * The box (in viewport coordinates) that the elements around an element
+ * clip it to, or undefined when none of them clips it
+ *
+ * @api private
+ */
+export function clippingBounds(element: Element): Box | undefined {
+  const boxes = clippingBoxes(element);
+  if (!boxes.length) return undefined;
+
+  return boxes.reduce((bounds, box) => ({
+    left: Math.max(bounds.left, box.left),
+    top: Math.max(bounds.top, box.top),
+    right: Math.min(bounds.right, box.right),
+    bottom: Math.min(bounds.bottom, box.bottom),
+  }));
+}
+
+/**
  * Whether a point (in viewport coordinates) of an element is cut off by one
  * of the elements around it that clip their content (e.g. a scroll
  * container scrolled away from it)

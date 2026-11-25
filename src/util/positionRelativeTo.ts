@@ -2,7 +2,7 @@ import getOffset from "./getOffset";
 import isFixed from "./isFixed";
 import { removeClass, addClass } from "./className";
 import setStyle from "./style";
-import { visibleRect } from "./isClippedByContainers";
+import { clippingBounds } from "./isClippedByContainers";
 
 export const getPositionRelativeTo = (
   relativeElement: HTMLElement,
@@ -25,30 +25,35 @@ export const getPositionRelativeTo = (
 
   const position = getOffset(targetElement, relativeElement);
 
-  // only the part of the target that its scroll containers (or any element
-  // around it that clips its content) don't cut off. On a side that is cut
-  // off the highlight ends at the edge of the container, without padding
-  const rect = targetElement.getBoundingClientRect();
-  const visible = visibleRect(targetElement);
-  const cut = {
-    left: visible.left - rect.left,
-    right: rect.right - visible.right,
-    top: visible.top - rect.top,
-    bottom: rect.bottom - visible.bottom,
-  };
-  const pad = (side: keyof typeof cut) => (cut[side] > 0 ? 0 : padding / 2);
+  let left = position.left - padding / 2;
+  let right = position.right + padding / 2;
+  let top = position.top - padding / 2;
+  let bottom = position.bottom + padding / 2;
+  const target = { ...position };
 
-  const target = {
-    left: position.left + cut.left,
-    right: position.right - cut.right,
-    top: position.top + cut.top,
-    bottom: position.bottom - cut.bottom,
-  };
+  // The highlight must not stick out of the scroll containers of the target
+  // (or any element around it that clips its content): cut it, padding and
+  // all, at their edges, so only the part of the target they show is
+  // highlighted
+  const bounds = clippingBounds(targetElement);
+  if (bounds) {
+    // from viewport coordinates to the coordinates of the layers
+    const rect = targetElement.getBoundingClientRect();
+    const dx = position.left - rect.left;
+    const dy = position.top - rect.top;
+    const clampX = (x: number) =>
+      Math.min(Math.max(x, bounds.left + dx), bounds.right + dx);
+    const clampY = (y: number) =>
+      Math.min(Math.max(y, bounds.top + dy), bounds.bottom + dy);
 
-  let left = target.left - pad("left");
-  let right = target.right + pad("right");
-  let top = target.top - pad("top");
-  const bottom = target.bottom + pad("bottom");
+    left = clampX(left);
+    right = clampX(right);
+    top = clampY(top);
+    bottom = clampY(bottom);
+    target.left = clampX(target.left);
+    target.right = clampX(target.right);
+    target.top = clampY(target.top);
+  }
 
   // The padding must not make the page scrollable: for a target at the edge
   // of the page it would stick out by padding / 2 and the page would scroll
