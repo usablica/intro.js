@@ -45,6 +45,25 @@ describe("Translator", () => {
       expect(translator.translate("buttons.next")).toBe("Suivant");
     });
 
+    it.each([
+      ["fr", "Suivant"],
+      ["de", "Weiter"],
+      ["ES", "Siguiente"],
+      ["ru", "Далее"],
+    ])(
+      "should match the language %s given without a region",
+      (language, expected) => {
+        createMockNavigator(language);
+        const translator = new Translator();
+        expect(translator.translate("buttons.next")).toBe(expected);
+      }
+    );
+
+    it("should not match a prefix of a language name", () => {
+      createMockNavigator("f");
+      expect(new Translator().translate("buttons.next")).toBe("Next");
+    });
+
     it("should fallback to en_US for unsupported languages", () => {
       createMockNavigator("sv-SE");
       const translator = new Translator();

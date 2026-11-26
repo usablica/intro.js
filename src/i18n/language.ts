@@ -49,9 +49,15 @@ export class Translator {
         DefaultLanguage
       ).replace("-", "_");
 
-      const normalizedLang = (Object.keys(languages) as LanguageCode[]).find(
-        (key) => key.toLowerCase() === rawLang.toLowerCase()
-      );
+      const codes = Object.keys(languages) as LanguageCode[];
+      const wanted = rawLang.toLowerCase();
+      const normalizedLang =
+        codes.find((key) => key.toLowerCase() === wanted) ??
+        // a language without a region, like "fr" or "de" (what many
+        // browsers report), matches the built-in language of that name
+        (wanted.includes("_")
+          ? undefined
+          : codes.find((key) => key.toLowerCase().startsWith(`${wanted}_`)));
 
       this._languageCode = normalizedLang ?? DefaultLanguage;
     }
