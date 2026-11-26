@@ -44,6 +44,15 @@
   bottom: -20px;
   left: 20px;
 }
+/* centered and right aligned tooltips have their arrow there as well */
+.introjs-arrow.top-middle, .introjs-arrow.bottom-middle {
+  left: 50%;
+  margin-left: -10px;
+}
+.introjs-arrow.top-right, .introjs-arrow.bottom-right {
+  left: auto;
+  right: 20px;
+}
 .introjs-arrow.left, .introjs-arrow.right {
     top: 20px;
 }

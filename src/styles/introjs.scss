@@ -25,6 +25,9 @@ $background_color_10: rgba(136, 136, 136, 0.24);
   --introjs-btn-active-color: #{$black900};
   --introjs-btn-active-border: #{$black500};
   --introjs-btn-textShadow: #{$white};
+  --introjs-btn-disabled-bg: #{$black100};
+  --introjs-btn-disabled-color: #{$black500};
+  --introjs-btn-disabled-border: #{$black400};
 
   --introjs-arrow-color: #{$white};
   --introjs-overlay-bg: #{$black100};
@@ -44,6 +47,9 @@ $background_color_10: rgba(136, 136, 136, 0.24);
   --introjs-btn-active-color: #{$white};
   --introjs-btn-active-border: #{$black400};
   --introjs-btn-textShadow: #{$black800};
+  --introjs-btn-disabled-bg: #{$black800};
+  --introjs-btn-disabled-color: #{$black500};
+  --introjs-btn-disabled-border: #{$black600};
 
   --introjs-arrow-color: #{$black800};
   --introjs-overlay-bg: #{$black800};
@@ -246,8 +252,11 @@ tr.introjs-showElement {
   // the tooltip itself.
   visibility: visible !important;
   background-color: var(--introjs-bg, #{$white});
-  min-width: 250px;
-  max-width: 300px;
+  // the width must not depend on where the tooltip is placed, or it changes
+  // after Floating UI measured it; never wider than the space size() reports
+  width: max-content;
+  min-width: unquote("min(250px, var(--introjs-tooltip-available-width, 250px))");
+  max-width: unquote("min(300px, var(--introjs-tooltip-available-width, 300px))");
   border-radius: 5px;
   box-shadow: 0 3px 30px rgba($black900, 0.3);
   transition: opacity 0.1s ease-out;
@@ -301,6 +310,17 @@ tr.introjs-showElement {
   padding-top: 10px;
   min-height: 1.5em;
   color: var(--introjs-color, #{$black900});
+}
+
+// a step without a title: no empty row for the close button, which stays in
+// the top corner and the text makes room for it
+.introjs-tooltip-header-notitle {
+  min-height: 0;
+  padding-top: 0;
+
+  & + .introjs-tooltiptext {
+    padding-right: 45px;
+  }
 }
 
 .introjs-tooltipbuttons {
@@ -405,21 +425,14 @@ tr.introjs-showElement {
 }
 
 .introjs-disabled {
-  color: var(--introjs-btn-color, #{$black800});
-  border-color: var(--introjs-btn-border, #{$black400});
-  box-shadow: none;
-  cursor: default;
-  background-color: var(--introjs-btn-bg, #{$black100});
-  background-image: none;
-  text-decoration: none;
-
+  &,
   &:hover,
   &:focus {
-    color: var(--introjs-btn-focus-color, #{$black800});
-    border-color: var(--introjs-btn-border, #{$black400});
+    color: var(--introjs-btn-disabled-color, #{$black500});
+    border-color: var(--introjs-btn-disabled-border, #{$black400});
     box-shadow: none;
     cursor: default;
-    background-color: var(--introjs-btn-focus-bg, #{$black200});
+    background-color: var(--introjs-btn-disabled-bg, #{$black100});
     background-image: none;
     text-decoration: none;
   }
@@ -529,6 +542,12 @@ tr.introjs-showElement {
 
 .introjs-hidehint {
   display: none;
+}
+
+// the element of the hint is scrolled out of view in a scroll container
+.introjs-hint-clipped {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .introjs-fixedhint {

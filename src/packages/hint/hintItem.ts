@@ -52,7 +52,7 @@ export const fetchHintItems = (hint: Hint) => {
       hintItem.hintPosition =
         hintItem.hintPosition || hint.getOption("hintPosition");
       hintItem.hintAnimation =
-        hintItem.hintAnimation || hint.getOption("hintAnimation");
+        hintItem.hintAnimation ?? hint.getOption("hintAnimation");
 
       if (hintItem.element !== null) {
         hint.addHint(hintItem as HintItem);

@@ -37,6 +37,10 @@ export const HintsRoot = ({ hint }: HintsRootProps) => {
       index: i,
       hintItem,
       onClick: getHintClick(hint, i),
+      // the dialog of a hint must not point at an icon that isn't shown
+      onClipped: () => {
+        if (hint.getActiveHintSignal().val === i) hint.hideHintDialog();
+      },
       refreshesSignal: hint.getRefreshesSignal(),
     });
 

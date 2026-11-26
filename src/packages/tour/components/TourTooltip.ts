@@ -16,13 +16,14 @@ import {
   skipButtonClassName,
   tooltipButtonsClassName,
   tooltipHeaderClassName,
+  tooltipHeaderNoTitleClassName,
   tooltipTextClassName,
   tooltipTitleClassName,
 } from "../classNames";
 import { TourStep } from "../steps";
 import { dataStepNumberAttribute } from "../dataAttributes";
-import scrollParentToElement from "../../../util/scrollParentToElement";
-import scrollTo from "../../../util/scrollTo";
+import scrollContainersToElement from "../../../util/scrollContainersToElement";
+import scrollTo, { scrollTooltipIntoView } from "../../../util/scrollTo";
 import { TooltipContent } from "../../tooltip/tooltipContent";
 
 const { h1, div, input, label, ul, li, a } = dom.tags;
@@ -213,9 +214,11 @@ const NextButton = ({
     },
   });
 
-  // wait for the button to be rendered
+  // wait for the button to be rendered. The tooltip may not be placed yet, so
+  // don't let the browser scroll to it: scrollTooltipIntoView() does that
+  // once it is placed
   setTimeout(() => {
-    nextButton.focus();
+    nextButton.focus({ preventScroll: true });
   }, 1);
 
   return nextButton;
@@ -354,14 +357,23 @@ export const Header = ({
       })
     : null;
 
-  return div({ className: tooltipHeaderClassName }, [
-    titleEl,
-    Button({
-      className: skipButtonClassName,
-      label: skipLabel,
-      onClick: onSkipClick,
-    }),
-  ]);
+  return div(
+    {
+      // without a title the header takes no room: the close button sits in
+      // the corner, next to the text
+      className: title
+        ? tooltipHeaderClassName
+        : `${tooltipHeaderClassName} ${tooltipHeaderNoTitleClassName}`,
+    },
+    [
+      titleEl,
+      Button({
+        className: skipButtonClassName,
+        label: skipLabel,
+        onClick: onSkipClick,
+      }),
+    ]
+  );
 };
 
 const scroll = ({
@@ -375,8 +387,11 @@ const scroll = ({
   scrollToElement: boolean;
   scrollPadding: number;
 }) => {
-  // when target is within a scrollable element
-  scrollParentToElement(scrollToElement, step.element as HTMLElement);
+  // when the target is within scrollable elements
+  scrollContainersToElement(
+    scrollToElement && step.scrollTo !== "off",
+    step.element as HTMLElement
+  );
 
   // change the scroll of the window, if needed
   scrollTo(
@@ -525,6 +540,17 @@ export const TourTooltip = ({
       hintMode: false,
       position,
       text: title || text,
+      onRendered: () => {
+        // only now the tooltip is where the user has to see it
+        scrollTooltipIntoView(
+          scrollToElement,
+          step.scrollTo,
+          scrollPadding,
+          tooltip,
+          step.element as HTMLElement
+        );
+        props.onRendered?.();
+      },
     },
     children
   );

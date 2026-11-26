@@ -1,5 +1,12 @@
-import { fetchSteps, nextStep, previousStep, TourStep } from "./steps";
+import {
+  fetchSteps,
+  goToStepIndex,
+  nextStep,
+  previousStep,
+  TourStep,
+} from "./steps";
 import { Package } from "../package";
+import observeLayout, { LayoutObserver } from "../../util/observeLayout";
 import {
   introAfterChangeCallback,
   introBeforeChangeCallback,
@@ -62,6 +69,8 @@ export class Tour implements Package<TourOptions> {
   // Event handlers
   private _keyboardNavigationHandler?: (e: KeyboardEvent) => Promise<void>;
   private _refreshOnResizeHandler?: (e: Event) => void;
+  private _refreshOnScrollHandler?: (e: Event) => void;
+  private _layoutObserver?: LayoutObserver;
 
   /**
    * Create a new Tour instance
@@ -97,9 +106,8 @@ export class Tour implements Package<TourOptions> {
    * @param step step number
    */
   async goToStep(step: number) {
-    // step - 2 because steps starts from zero index and nextStep() increments the step
-    this.setCurrentStep(step - 2);
-    await nextStep(this);
+    // step - 1 because steps starts from zero index
+    await goToStepIndex(this, step - 1);
     return this;
   }
 
@@ -112,9 +120,8 @@ export class Tour implements Package<TourOptions> {
       const item = this._steps[i];
 
       if (item.step === stepNumber) {
-        // i - 1 because nextStep() increments the step
-        this.setCurrentStep(i - 1);
-        break;
+        await goToStepIndex(this, i);
+        return this;
       }
     }
 
@@ -254,7 +261,9 @@ export class Tour implements Package<TourOptions> {
    */
   notifyRendered(step?: number) {
     this._renderedStep = step;
-    this.releaseRenderWaiters();
+    // a late report from the tooltip of a previous step must not release
+    // the waiters of the current one
+    if (step === this.getCurrentStep()) this.releaseRenderWaiters();
   }
 
   private releaseRenderWaiters() {
@@ -472,6 +481,78 @@ export class Tour implements Package<TourOptions> {
   enableRefreshOnResize() {
     this._refreshOnResizeHandler = (_: Event) => this.refresh();
     DOMEvent.on(window, "resize", this._refreshOnResizeHandler, true);
+
+    // the target moves when a scroll container it is in scrolls (the layers
+    // are placed on the page, so scrolling the page itself moves them along).
+    // Browsers fire scroll at most once per frame, so no need to throttle
+    this._refreshOnScrollHandler = (e: Event) => {
+      const container = e.target;
+      if (
+        container instanceof Element &&
+        container !== document.documentElement &&
+        container !== document.body
+      ) {
+        this.refresh();
+      }
+    };
+    // scroll events don't bubble: listen in the capture phase
+    DOMEvent.on(window, "scroll", this._refreshOnScrollHandler, true);
+  }
+
+  /**
+   * Refresh the tour when the element of the current step moves or changes
+   * its size on the page, e.g. because content above it was added or an
+   * image above it loaded
+   */
+  private enableAutoRefresh() {
+    this.disableAutoRefresh();
+
+    let target: Element | undefined;
+    let box: string | undefined;
+
+    const check = () => {
+      const currentStep = this.getCurrentStep();
+      if (currentStep === undefined) return;
+
+      const element = this.getStep(currentStep)?.element;
+      if (!(element instanceof Element) || !element.isConnected) return;
+
+      // where the element is on the page: scrolling the page doesn't
+      // change it, and the layers are placed on the page
+      const rect = element.getBoundingClientRect();
+      const newBox = [
+        rect.left + window.scrollX,
+        rect.top + window.scrollY,
+        rect.width,
+        rect.height,
+      ]
+        .map(Math.round)
+        .join();
+
+      if (element !== target) {
+        // a new step: it was just placed, only watch its size from now on
+        if (target) this._layoutObserver?.unobserve(target);
+        this._layoutObserver?.observe(element);
+        target = element;
+      } else if (newBox !== box) {
+        this.refresh();
+      }
+
+      box = newBox;
+    };
+
+    this._layoutObserver = observeLayout(
+      check,
+      // the changes to our own layers
+      (node) => !!this._root && this._root.contains(node)
+    );
+    // where the target is now, to compare with
+    check();
+  }
+
+  private disableAutoRefresh() {
+    this._layoutObserver?.disconnect();
+    this._layoutObserver = undefined;
   }
 
   /**
@@ -481,6 +562,11 @@ export class Tour implements Package<TourOptions> {
     if (this._refreshOnResizeHandler) {
       DOMEvent.off(window, "resize", this._refreshOnResizeHandler, true);
       this._refreshOnResizeHandler = undefined;
+    }
+
+    if (this._refreshOnScrollHandler) {
+      DOMEvent.off(window, "scroll", this._refreshOnScrollHandler, true);
+      this._refreshOnScrollHandler = undefined;
     }
   }
 
@@ -537,6 +623,7 @@ export class Tour implements Package<TourOptions> {
       this.initTheme();
       this.enableKeyboardNavigation();
       this.enableRefreshOnResize();
+      this.enableAutoRefresh();
 
       // the first step is shown before the root exists, so its afterChange
       // callback and "step" event are fired here, once its tooltip is rendered
@@ -602,8 +689,13 @@ export class Tour implements Package<TourOptions> {
     if (await exitIntro(this, force ?? false)) {
       this.disableKeyboardNavigation();
       this.disableRefreshOnResize();
+      this.disableAutoRefresh();
       this._theme?.destroy();
       this._theme = undefined;
+
+      // the root removes itself from the DOM once the tour has ended,
+      // so drop the reference and let the next start() create a new one
+      this._root = undefined;
     }
 
     return this;

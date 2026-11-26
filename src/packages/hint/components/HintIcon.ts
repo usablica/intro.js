@@ -1,6 +1,7 @@
 import isFixed from "../../../util/isFixed";
 import dom, { State } from "../../dom";
 import {
+  clippedHintClassName,
   fixedHintClassName,
   hideHintClassName,
   hintClassName,
@@ -10,7 +11,8 @@ import {
 } from "../className";
 import { HintItem, HintPosition } from "../hintItem";
 import { dataStepAttribute } from "../dataAttributes";
-import { alignHintPosition } from "../position";
+import { alignHintPosition, hintIconCenter } from "../position";
+import isClippedByContainers from "../../../util/isClippedByContainers";
 
 const { a, div } = dom.tags;
 
@@ -19,10 +21,16 @@ export type HintProps = {
   hintItem: HintItem;
   refreshesSignal: State<number>;
   onClick: (e: any) => void;
+  // called when the icon gets cut off by a scroll container of its element
+  onClipped?: () => void;
 };
 
-const className = (hintItem: HintItem) => {
+const className = (hintItem: HintItem, clipped: boolean) => {
   const classNames = [hintClassName];
+
+  if (clipped) {
+    classNames.push(clippedHintClassName);
+  }
 
   if (!hintItem.hintAnimation) {
     classNames.push(hintNoAnimationClassName);
@@ -46,12 +54,16 @@ export const HintIcon = ({
   index,
   hintItem,
   onClick,
+  onClipped,
   refreshesSignal,
 }: HintProps) => {
+  // the element scrolled out of view inside a scroll container
+  const clipped = dom.state(false);
+
   const hintElement = a(
     {
       [dataStepAttribute]: index.toString(),
-      className: () => className(hintItem),
+      className: () => className(hintItem, !!clipped.val),
       role: "button",
       tabindex: 0,
       "aria-label": hintItem?.hint,
@@ -64,11 +76,16 @@ export const HintIcon = ({
   dom.derive(() => {
     if (refreshesSignal.val === undefined) return;
 
-    alignHintPosition(
-      hintItem.hintPosition as HintPosition,
-      hintElement,
-      hintItem.element as HTMLElement
-    );
+    const element = hintItem.element as HTMLElement;
+    const position = hintItem.hintPosition as HintPosition;
+    alignHintPosition(position, hintElement, element);
+
+    if (!element) return;
+    const center = hintIconCenter(position, element);
+    const isClipped = isClippedByContainers(element, center.x, center.y);
+
+    if (isClipped && !clipped.val) onClipped?.();
+    clipped.val = isClipped;
   });
 
   return hintElement;

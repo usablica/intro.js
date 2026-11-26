@@ -8,6 +8,7 @@ export const tooltipReferenceLayerClassName = "introjs-tooltipReferenceLayer";
 export const helperNumberLayerClassName = "introjs-helperNumberLayer";
 export const tooltipClassName = "introjs-tooltip";
 export const tooltipHeaderClassName = "introjs-tooltip-header";
+export const tooltipHeaderNoTitleClassName = "introjs-tooltip-header-notitle";
 export const tooltipTextClassName = "introjs-tooltiptext";
 export const tooltipTitleClassName = "introjs-tooltip-title";
 export const tooltipButtonsClassName = "introjs-tooltipbuttons";

@@ -22,3 +22,14 @@ jobs:
     - run: npm run test
       env:
         CI: true
+    # the screenshots of a failed visual regression test: copy them to
+    # cypress/snapshots/base when the change is intended
+    - name: Upload Cypress snapshots
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: cypress-snapshots
+        path: |
+          cypress/snapshots/actual
+          cypress/snapshots/diff
+        if-no-files-found: ignore

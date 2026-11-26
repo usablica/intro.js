@@ -47,6 +47,14 @@
   border-left-color: #ecf0f1;
 }
 
+/* room at the end of the page, so a target at the bottom can be scrolled
+   out from under the bar */
+.introjs-tour::after {
+  content: "";
+  display: block;
+  height: 50vh;
+}
+
 /* Full-width bottom bar */
 .introjs-tooltip {
   position: fixed !important;
@@ -57,6 +65,8 @@
   max-width: initial !important;
   width: auto !important;
   min-width: unset !important;
+  /* a floating tooltip is centered with negative margins: not in a bar */
+  margin: 0 !important;
   border-radius: 0;
   padding: 12px 220px 12px 20px;
   background-color: #ecf0f1;
@@ -134,6 +144,20 @@
   border: none;
   box-shadow: none;
   font-size: 20px;
+  /* in the middle of the bar, between the text and the buttons, with or
+     without a title */
+  top: 50%;
+  right: 175px;
+  transform: translateY(-50%);
+}
+
+.introjs-tooltip-header {
+  position: static;
+}
+
+/* the text already leaves room on the right for the buttons */
+.introjs-tooltip-header-notitle + .introjs-tooltiptext {
+  padding-right: 0;
 }
 
 .introjs-skipbutton:hover,

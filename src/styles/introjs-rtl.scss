@@ -7,6 +7,12 @@
   right: auto;
 }
 
+// the close button is on the left: make room for it there
+.introjs-tooltip-header-notitle + .introjs-tooltiptext {
+  padding-right: 20px;
+  padding-left: 45px;
+}
+
 .introjs-tooltip {
   direction: rtl;
 }

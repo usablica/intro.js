@@ -99,6 +99,30 @@ describe("Tour", () => {
       expect(onStartMock).toBeCalledTimes(1);
     });
 
+    test("should start the same tour again after it was exited", async () => {
+      // Arrange
+      mockTour.setOptions({
+        steps: [
+          {
+            intro: "hello world",
+          },
+        ],
+      });
+
+      // Act
+      await mockTour.start();
+      await sleep(waitMsForDerivations);
+      await mockTour.exit();
+      await sleep(waitMsForExitTransition);
+      await mockTour.start();
+      await sleep(waitMsForDerivations);
+
+      // Assert
+      expect(mockTour.hasStarted()).toBe(true);
+      expect(content(tooltipText())).toBe("hello world");
+      expect(document.querySelector(`.${helperLayerClassName}`)).not.toBeNull();
+    });
+
     test("should start floating intro with one step", async () => {
       // Arrange & Act
       await mockTour
@@ -567,6 +591,57 @@ describe("Tour", () => {
     });
   });
 
+  describe("refresh on the scroll of a container", () => {
+    beforeEach(() => {
+      // earlier tests spy on window.addEventListener, and the
+      // resetAllMocks() above turns those spies into no-ops
+      jest.restoreAllMocks();
+    });
+
+    const scroll = async (target: EventTarget) => {
+      target.dispatchEvent(new Event("scroll"));
+    };
+
+    it("refreshes when a scroll container scrolls", async () => {
+      const tour = new Tour();
+      const refreshSpy = jest.spyOn(tour, "refresh");
+      const container = document.createElement("div");
+      document.body.appendChild(container);
+
+      tour.enableRefreshOnResize();
+      await scroll(container);
+      tour.disableRefreshOnResize();
+
+      expect(refreshSpy).toHaveBeenCalledTimes(1);
+      container.remove();
+    });
+
+    it("doesn't refresh when the page scrolls", async () => {
+      const tour = new Tour();
+      const refreshSpy = jest.spyOn(tour, "refresh");
+
+      tour.enableRefreshOnResize();
+      await scroll(document);
+      tour.disableRefreshOnResize();
+
+      expect(refreshSpy).not.toHaveBeenCalled();
+    });
+
+    it("stops refreshing once disabled", async () => {
+      const tour = new Tour();
+      const refreshSpy = jest.spyOn(tour, "refresh");
+      const container = document.createElement("div");
+      document.body.appendChild(container);
+
+      tour.enableRefreshOnResize();
+      tour.disableRefreshOnResize();
+      await scroll(container);
+
+      expect(refreshSpy).not.toHaveBeenCalled();
+      container.remove();
+    });
+  });
+
   describe("disableRefreshOnResize", () => {
     it('should remove event listener for "resize"', () => {
       // Arrange
@@ -904,6 +979,96 @@ describe("Tour", () => {
     });
   });
 
+  describe("goToStep / goToStepNumber", () => {
+    let mockTour: Tour;
+
+    beforeEach(async () => {
+      document.body.innerHTML = `<div>
+          <p id='one'>One</p><p id='two'>Two</p><p id='three'>Three</p><p id='four'>Four</p>
+        </div>`;
+      mockTour = getMockTour();
+      mockTour.setOptions({
+        steps: ["one", "two", "three", "four"].map((id) => ({
+          intro: id,
+          element: `#${id}`,
+        })),
+      });
+      await mockTour.start();
+      await sleep(waitMsForDerivations);
+    });
+
+    afterEach(async () => {
+      await mockTour.exit();
+    });
+
+    test("goToStep should go to the requested step, not the next one", async () => {
+      await mockTour.goToStep(3);
+      expect(mockTour.getCurrentStep()).toBe(2);
+
+      await mockTour.goToStep(1);
+      expect(mockTour.getCurrentStep()).toBe(0);
+    });
+
+    test("goToStepNumber should go to the requested step, not the next one", async () => {
+      await mockTour.goToStepNumber(4);
+      expect(mockTour.getCurrentStep()).toBe(3);
+
+      await mockTour.goToStepNumber(2);
+      expect(mockTour.getCurrentStep()).toBe(1);
+    });
+
+    test("goToStep should call the change callback once for the target step", async () => {
+      const fnChange = jest.fn();
+      mockTour.onChange(fnChange);
+
+      await mockTour.goToStep(4);
+
+      expect(fnChange).toHaveBeenCalledTimes(1);
+      expect(fnChange.mock.calls[0][0]).toBe(document.getElementById("four"));
+    });
+
+    test("goToStep should keep the current step when it does not exist", async () => {
+      await mockTour.goToStep(99);
+      expect(mockTour.getCurrentStep()).toBe(0);
+    });
+
+    test("goToStep should honour beforeChange returning false", async () => {
+      mockTour.onBeforeChange(jest.fn().mockResolvedValue(false));
+
+      await mockTour.goToStep(3);
+
+      expect(mockTour.getCurrentStep()).toBe(0);
+    });
+  });
+
+  describe("bullets", () => {
+    let mockTour: Tour;
+
+    afterEach(async () => {
+      await mockTour.exit();
+    });
+
+    test("a bullet opens its step when the data-step numbers have gaps", async () => {
+      document.body.innerHTML = `<div>
+          <p id='one' data-step='10' data-intro='one'>One</p>
+          <p id='two' data-step='20' data-intro='two'>Two</p>
+          <p id='three' data-step='30' data-intro='three'>Three</p>
+        </div>`;
+      mockTour = getMockTour();
+      await mockTour.start();
+      await sleep(waitMsForDerivations);
+
+      const bullets =
+        document.querySelectorAll<HTMLElement>(".introjs-bullets a");
+      expect(bullets.length).toBe(3);
+
+      bullets[2].click();
+      await sleep(waitMsForDerivations);
+
+      expect(mockTour.getCurrentStep()).toBe(2);
+    });
+  });
+
   describe("setTheme / getTheme", () => {
     beforeEach(() => {
       // other tests in this file may leave a stray .introjs-tour element
@@ -1160,6 +1325,28 @@ describe("Tour", () => {
         sleep(300).then(() => "hung"),
       ]);
       expect(outcome).toBe("settled");
+    });
+
+    test("is not released by a late render report of the previous step", async () => {
+      // Arrange
+      await mockTour.start();
+      await mockTour.nextStep();
+      // the tooltip of step one reports again, after step two is current
+      mockTour.notifyRendered(0);
+      const pending = mockTour.waitForRender(1000).then(() => "released");
+
+      // Act
+      mockTour.notifyRendered(0);
+
+      // Assert
+      const outcome = await Promise.race([
+        pending,
+        sleep(100).then(() => "waiting"),
+      ]);
+      expect(outcome).toBe("waiting");
+
+      mockTour.notifyRendered(1);
+      expect(await pending).toBe("released");
     });
   });
 

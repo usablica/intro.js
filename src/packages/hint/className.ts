@@ -10,3 +10,4 @@ export const hintNoAnimationClassName = "introjs-hint-no-anim";
 export const fixedHintClassName = "introjs-fixedhint";
 export const hintDotClassName = "introjs-hint-dot";
 export const hintPulseClassName = "introjs-hint-pulse";
+export const clippedHintClassName = "introjs-hint-clipped";
