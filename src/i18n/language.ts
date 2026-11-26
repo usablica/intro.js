@@ -36,6 +36,35 @@ export function getAvailableLanguages(): LanguageCode[] {
   return Object.keys(languages) as LanguageCode[];
 }
 
+/**
+ * The built-in language for a language tag from the browser ("fr-FR",
+ * "fr-CA", "fr" or "fr_FR"): the one with the same name, otherwise the one
+ * of the same language in another region (so "fr-CA" and "fr" get "fr_FR")
+ */
+const matchLanguage = (tag: string): LanguageCode | undefined => {
+  const codes = Object.keys(languages) as LanguageCode[];
+  const wanted = tag.trim().replace(/-/g, "_").toLowerCase();
+  if (!wanted) return undefined;
+
+  const language = wanted.split("_")[0];
+  return (
+    codes.find((code) => code.toLowerCase() === wanted) ??
+    codes.find((code) => code.toLowerCase().split("_")[0] === language)
+  );
+};
+
+/**
+ * The languages of the user, most wanted first
+ */
+const browserLanguages = (): string[] => {
+  const list: unknown[] = [
+    ...(navigator.languages ?? []),
+    navigator.language,
+    (navigator as any).userLanguage,
+  ];
+  return list.filter((tag): tag is string => typeof tag === "string");
+};
+
 export class Translator {
   private _languageCode: LanguageCode;
 
@@ -43,17 +72,15 @@ export class Translator {
     if (languageCode && languages[languageCode]) {
       this._languageCode = languageCode;
     } else {
-      const rawLang = (
-        navigator.language ||
-        (navigator as any).userLanguage ||
-        DefaultLanguage
-      ).replace("-", "_");
+      // the first language of the user that is built in, in the region they
+      // asked for if we have it
+      let match: LanguageCode | undefined;
+      for (const tag of browserLanguages()) {
+        match = matchLanguage(tag);
+        if (match) break;
+      }
 
-      const normalizedLang = (Object.keys(languages) as LanguageCode[]).find(
-        (key) => key.toLowerCase() === rawLang.toLowerCase()
-      );
-
-      this._languageCode = normalizedLang ?? DefaultLanguage;
+      this._languageCode = match ?? DefaultLanguage;
     }
   }
 
