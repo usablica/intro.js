@@ -4,11 +4,16 @@ import { Translator, getAvailableLanguages, LanguageCode } from "./language";
 const originalNavigator = global.navigator;
 
 // Mock navigator object
-const createMockNavigator = (language?: string, userLanguage?: string) => {
+const createMockNavigator = (
+  language?: string,
+  userLanguage?: string,
+  languages?: string[]
+) => {
   const mockNavigator: any = {};
 
   if (language !== undefined) mockNavigator.language = language;
   if (userLanguage !== undefined) mockNavigator.userLanguage = userLanguage;
+  if (languages !== undefined) mockNavigator.languages = languages;
 
   if (language === undefined && userLanguage === undefined) {
     mockNavigator.language = "en-US";
@@ -62,6 +67,38 @@ describe("Translator", () => {
     it("should not match a prefix of a language name", () => {
       createMockNavigator("f");
       expect(new Translator().translate("buttons.next")).toBe("Next");
+    });
+
+    it.each([
+      ["fr-CA", "Suivant"],
+      ["es-MX", "Siguiente"],
+      ["es-419", "Siguiente"],
+      ["de-AT", "Weiter"],
+      ["pt-PT", "Próximo"],
+      ["zh-Hant-TW", "下一步"],
+    ])(
+      "should match the language %s in a region that is not built in",
+      (language, expected) => {
+        createMockNavigator(language);
+        expect(new Translator().translate("buttons.next")).toBe(expected);
+      }
+    );
+
+    it("should pick the first built-in language of the user", () => {
+      createMockNavigator("sv-SE", undefined, ["sv-SE", "nb", "de-CH", "fr"]);
+      expect(new Translator().getLanguage()).toBe("de_DE");
+    });
+
+    it("should prefer the exact region over the language alone", () => {
+      createMockNavigator("pt-BR", undefined, ["pt-BR"]);
+      expect(new Translator().getLanguage()).toBe("pt_BR");
+      createMockNavigator("en-GB", undefined, ["en-GB", "fr-FR"]);
+      expect(new Translator().getLanguage()).toBe("en_US");
+    });
+
+    it("should fallback to en_US when none of the languages is built in", () => {
+      createMockNavigator("sv-SE", undefined, ["sv-SE", "nb", ""]);
+      expect(new Translator().getLanguage()).toBe("en_US");
     });
 
     it("should fallback to en_US for unsupported languages", () => {
